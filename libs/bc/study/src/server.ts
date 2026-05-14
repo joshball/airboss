@@ -362,6 +362,20 @@ export {
 	updateNoteInputSchema,
 } from './notes';
 export { deriveNoteTitle, encodeNotesCursor } from './notes-display';
+// Plan-items BC -- command-palette pin-to-today + /today queue (consumer
+// surface tracked as a follow-up).
+export type { PinPlanItemInput } from './plan-items';
+export {
+	getPlanItemsForDate,
+	getTodayPlanItems,
+	markPlanItemComplete,
+	PlanItemNotFoundError,
+	pinPlanItem,
+	pinToToday,
+	reopenPlanItem,
+	unpinPlanItem,
+} from './plan-items';
+export { pinPlanItemSchema, planItemDateSchema } from './plan-items.validation';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export {
 	activatePlan,

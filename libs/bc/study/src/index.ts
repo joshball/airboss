@@ -158,6 +158,7 @@ export type {
 	NewKnowledgeNodeRow,
 	NewMemoryReviewSessionRow,
 	NewNoteRow,
+	NewPlanItemRow,
 	NewReferenceFigureRow,
 	NewReferenceRow,
 	NewReferenceSectionAnnotationRow,
@@ -174,6 +175,7 @@ export type {
 	NewSyllabusNodeRow,
 	NewSyllabusRow,
 	NoteRow,
+	PlanItemRow,
 	ReferenceFigureRow,
 	ReferenceRow,
 	ReferenceSectionAnnotationRow,
@@ -214,6 +216,7 @@ export {
 	knowledgeNodeProgress,
 	memoryReviewSession,
 	note,
+	planItem,
 	reference,
 	referenceFigure,
 	referenceSection,
@@ -375,6 +378,8 @@ export type {
 // Pure display helpers from a separate module so the runtime barrel stays
 // browser-safe (the DB-touching `./notes` cannot be value-re-exported here).
 export { deriveNoteTitle, encodeNotesCursor } from './notes-display';
+// Plan-items BC -- types only; the DB-touching functions live in `./server`.
+export type { PinPlanItemInput } from './plan-items';
 export type { CreatePlanInput, UpdatePlanInput } from './plans';
 export type {
 	ErrataDisplay,

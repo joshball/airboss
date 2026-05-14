@@ -4,6 +4,7 @@ import {
 	CREDENTIAL_ID_PREFIX,
 	GOAL_ID_PREFIX,
 	NOTE_ID_PREFIX,
+	PLAN_ITEM_ID_PREFIX,
 	SYLLABUS_ID_PREFIX,
 	SYLLABUS_NODE_ID_PREFIX,
 	SYLLABUS_NODE_LINK_ID_PREFIX,
@@ -39,6 +40,13 @@ export const generateScenarioId = (): string => createId('rep');
 export const generateTeachingExerciseId = (): string => createId('texr');
 // Study plan + session engine.
 export const generateStudyPlanId = (): string => createId('plan');
+/**
+ * Plan-item row (study BC, command-palette-pin-to-today). One row per
+ * learner pin: knowledge node, reference section, card, or glossary term
+ * placed on a date-scoped queue. See `study.plan_item` schema for the
+ * polymorphic-FK shape.
+ */
+export const generatePlanItemId = (): string => createId(PLAN_ITEM_ID_PREFIX);
 export const generateSessionId = (): string => createId('ses');
 export const generateSessionItemResultId = (): string => createId('sir');
 /** Memory-review session (review-sessions-url layer a "Resume"). */
