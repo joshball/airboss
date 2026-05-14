@@ -75,7 +75,7 @@ describe('ScenarioPanel', () => {
 					question: 'When does KORD shift?',
 					observation: 'TAF carries an FM21Z.',
 					reason: 'Frontal passage projected at 21Z.',
-					knowledgeNodeIds: ['wx-reading-metars-tafs'],
+					knowledgeNodeIds: ['wx-reading-tafs'],
 					mode: 'socratic' as const,
 				},
 			],
