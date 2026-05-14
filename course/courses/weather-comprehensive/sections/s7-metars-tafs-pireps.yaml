@@ -55,7 +55,7 @@ body_md: |
   A METAR plot for an iconic mid-Atlantic morning (renders against the
   authored chart instance via the wx-charts library):
 
-  :::chart slug="wx-metar-plot-grid-2024-01-13-12z"
+  :::chart slug="reference-fixtures/wx-metar-plot-grid-2024-01-13-12z"
   :::
 steps:
 
@@ -94,7 +94,7 @@ steps:
       ceiling, visibility, wind, or weather. Look at the chart and
       ask: where does this airport go IFR, and for how long?
 
-      :::chart slug="wx-taf-timeline-kmem-2026-05-10-1720z"
+      :::chart slug="reference-fixtures/wx-taf-timeline-kmem-2026-05-10-1720z"
       :::
 
       The triage habit: compare the current METAR to the most recent
@@ -116,7 +116,7 @@ steps:
       radar mosaic -- read this against the radar and ask which cells
       have a pilot report nearby and which do not:
 
-      :::chart slug="wx-pirep-plot-grid-2024-05-21-22z"
+      :::chart slug="reference-fixtures/wx-pirep-plot-grid-2024-05-21-22z"
       :::
 
       Read every PIREP within 100 NM of your route, especially the

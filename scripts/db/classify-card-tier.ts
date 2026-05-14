@@ -55,8 +55,8 @@ import { parseDocument, parse as parseYaml, Scalar, YAMLMap, YAMLSeq } from 'yam
 const REPO_ROOT = new URL('../../', import.meta.url).pathname;
 const NODE_GLOB = 'course/knowledge/**/node.md';
 const FRONTMATTER_DELIM = '---';
-const YAML_CARDS_FENCE_OPEN = /^```yaml-cards\s*$/;
-const FENCE_CLOSE = /^```\s*$/;
+const CARDS_DIRECTIVE_OPEN = /^:::cards(?:\s.*)?$/;
+const DIRECTIVE_CLOSE = /^:::\s*$/;
 const HEADING_PATTERN = /^(#{1,6})\s+(.+?)\s*$/;
 
 /**
@@ -210,9 +210,12 @@ function splitFrontmatter(text: string): { yamlText: string; bodyText: string } 
 
 /**
  * Compute the breadcrumb of headings active at a body line index. e.g.
- * `## Practice > ### Cards (spaced repetition)`. The yaml-cards block
- * usually sits under a single explicit heading; we return the full path
- * because some nodes put cards under one heading only.
+ * `## Practice`. Post-migration the `:::cards` block sits directly under
+ * `## Practice` (the legacy `### Cards (spaced repetition)` subheading
+ * was dropped because the directive renders nothing and the heading
+ * referenced authoring scaffolding readers never see); we return the
+ * full path so context survives if an author re-adds an interior
+ * heading later.
  */
 function headingPathAt(bodyLines: readonly string[], lineIdx: number): string {
 	const stack: Array<{ depth: number; text: string }> = [];
@@ -232,9 +235,9 @@ function locateYamlCardsBlocks(bodyLines: readonly string[]): Array<{ open: numb
 	const out: Array<{ open: number; close: number }> = [];
 	let i = 0;
 	while (i < bodyLines.length) {
-		if (YAML_CARDS_FENCE_OPEN.test(bodyLines[i])) {
+		if (CARDS_DIRECTIVE_OPEN.test(bodyLines[i])) {
 			let j = i + 1;
-			while (j < bodyLines.length && !FENCE_CLOSE.test(bodyLines[j])) j++;
+			while (j < bodyLines.length && !DIRECTIVE_CLOSE.test(bodyLines[j])) j++;
 			if (j < bodyLines.length) {
 				out.push({ open: i, close: j });
 				i = j + 1;

@@ -177,13 +177,8 @@ A 737 reporting severe clear icing in a 3,000 ft cloud layer is a
 rebriefable event for any GA airplane on the route. This is the moment to
 re-evaluate descent / climb path.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Field-decode cards build the decode floor;
-UA vs UUA + trigger cards are the urgency rule; the aircraft-type-
-relativity card carries the central understand step.
-
-```yaml-cards
 - front: "PIREP vs forecast: what's the operational difference between a PIREP and an AIRMET/SIGMET?"
   back: |
     PIREP = observation, authored in flight by another pilot, describing
@@ -419,7 +414,7 @@ relativity card carries the central understand step.
       cite: AIM 7-1-19 -- Pilot Weather Reports
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
-```
+:::
 
 ## Connect
 

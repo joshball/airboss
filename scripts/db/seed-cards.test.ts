@@ -1,10 +1,13 @@
 /**
- * Unit tests for the yaml-cards parser in `scripts/db/seed-cards.ts`.
+ * Unit tests for the `:::cards` directive scanner + the shared
+ * `parseCardsYaml` validator. Covers the card-question-tier WP
+ * additions (`question_tier`, `source_authority`, `acs_codes`).
  *
- * Covers the card-question-tier WP additions: optional `question_tier`,
- * `source_authority`, and `acs_codes` fields. Per-field error paths
- * include the relpath + index of the bad yaml-cards entry so authoring
- * slips fail loud at seed time with a clear pointer.
+ * Per-field error paths keep the historical `yaml-cards[<idx>].<field>`
+ * prefix even though the surface fence is now `:::cards` -- the
+ * messages are documented in the card-question-tier WP as the
+ * authoring contract, and changing them would silently invalidate
+ * every grep / runbook that references them.
  */
 
 import { describe, expect, it } from 'vitest';
@@ -13,7 +16,7 @@ import { extractCardsFromBody } from './seed-cards-parser';
 const REL_PATH = 'course/knowledge/test/node.md';
 
 function wrap(yaml: string): string {
-	return ['## Practice', '', '```yaml-cards', yaml, '```', ''].join('\n');
+	return ['## Practice', '', ':::cards', yaml.replace(/\n$/, ''), ':::', ''].join('\n');
 }
 
 describe('extractCardsFromBody (baseline)', () => {
@@ -37,6 +40,34 @@ describe('extractCardsFromBody (baseline)', () => {
 		const body = wrap('- front: "q?"\n  back: "a."\n  cardType: basic\n  kind: calculation\n');
 		const cards = extractCardsFromBody(body, REL_PATH);
 		expect(cards[0].kind).toBe('calculation');
+	});
+
+	it('aggregates cards across multiple :::cards blocks in document order', () => {
+		const body = [
+			'## Practice',
+			'',
+			':::cards',
+			'- front: "first?"',
+			'  back: "1"',
+			'  cardType: basic',
+			':::',
+			'',
+			'Some prose between blocks.',
+			'',
+			':::cards',
+			'- front: "second?"',
+			'  back: "2"',
+			'  cardType: basic',
+			':::',
+			'',
+		].join('\n');
+		const cards = extractCardsFromBody(body, REL_PATH);
+		expect(cards.map((c) => c.front)).toEqual(['first?', 'second?']);
+	});
+
+	it('throws when a :::cards directive is unclosed', () => {
+		const body = ['## Practice', '', ':::cards', '- front: "q?"', '  back: "a."', '  cardType: basic'].join('\n');
+		expect(() => extractCardsFromBody(body, REL_PATH)).toThrow(/unclosed ':::cards' directive/);
 	});
 });
 

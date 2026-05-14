@@ -110,14 +110,8 @@ Pull up the **current surface analysis** on aviationweather.gov. Without reading
 
 A useful self-test: cover the METAR strip. Predict the surface wind and rough sky condition at three airports along your route from the surface analysis alone. Then uncover the METARs and check. The agreement (or disagreement) is the calibration on your reading skill.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The four-marks taxonomy is the recall floor;
-isobar interval + spacing-to-wind is the diagnostic skill; surface-flow
-rotation is the cross-check; the lag and station-model cards keep the
-reading from going stale.
-
-```yaml-cards
 - front: "Four kinds of marks on a surface analysis chart -- name them and what each one shows."
   back: |
     1. Pressure centers (H / L) -- letters at the middle of closed isobars,
@@ -359,7 +353,7 @@ reading from going stale.
       cite: AIM 7-1 -- National Weather Service Aviation Products
     - kind: ac
       cite: AC 00-6B Aviation Weather, Surface Analysis section
-```
+:::
 
 ## Connect
 

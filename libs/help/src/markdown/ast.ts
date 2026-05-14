@@ -77,20 +77,31 @@ export interface HrNode {
 }
 
 /**
- * Component-mounting directive (e.g. `:::chart slug="..."` /
- * `:::scenario slug="..."`). Unlike callouts, directives carry no nested
- * block children -- they identify a Svelte component the renderer should
- * mount, parameterised by the attribute bag. The set of legal `name`
- * values is owned by `MARKDOWN_DIRECTIVE_VALUES` in `@ab/constants`.
+ * Component-mounting (or data-payload) directive (e.g. `:::chart slug="..."` /
+ * `:::scenario slug="..."` / `:::cards ... :::`). Unlike callouts,
+ * directives carry no nested block children -- they identify either a
+ * Svelte component the renderer should mount (parameterised by the
+ * attribute bag) or a data payload the parser has already validated
+ * inline. The set of legal `name` values is owned by
+ * `MARKDOWN_DIRECTIVE_VALUES` in `@ab/constants`.
  *
  * Attributes are stored as a string-keyed string map; per-directive
- * validation (required keys, slug shapes) runs in the parser before this
- * node is emitted, so the renderer can trust the attribute bag's shape.
+ * validation (required keys, slug shapes, payload schema) runs in the
+ * parser before this node is emitted, so the renderer can trust the
+ * attribute bag's shape and -- for body-bearing directives -- the body
+ * payload's syntactic validity.
+ *
+ * `body` is populated for directives listed in
+ * `MARKDOWN_DIRECTIVE_BODY_BEARING` (currently `cards`); the raw text
+ * between opener and `:::` closer lands here verbatim, NOT walked as
+ * nested markdown. Attribute-only directives (`chart`, `scenario`)
+ * leave `body` undefined.
  */
 export interface DirectiveNode {
 	kind: 'directive';
 	name: string;
 	attrs: Record<string, string>;
+	body?: string;
 }
 
 export type MdNode =

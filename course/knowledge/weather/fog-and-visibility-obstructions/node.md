@@ -144,14 +144,8 @@ For frost: any time the overnight temperature was below freezing and
 the airplane was outside, inspect surfaces by hand. If you can't see
 or feel the underlying paint texture cleanly, polish or wait.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Fog-type cards lock the six mechanisms;
-the dissipation-trigger card forces the diagnostic question; the
-frost card carries the aerodynamic-not-cosmetic message; the
-phenomena table is the METAR-decoding skill.
-
-```yaml-cards
 - front: "Radiation fog: formation conditions and typical dissipation trigger."
   back: |
     Clear nights radiate heat to space; surface cools rapidly; the lowest
@@ -414,7 +408,7 @@ phenomena table is the METAR-decoding skill.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
     - kind: aim
       cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
-```
+:::
 
 ## Connect
 

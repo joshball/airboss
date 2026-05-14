@@ -446,9 +446,8 @@ weather impact, and the PIREPs are pilots' confirmation or denial.
 Three independent products agreeing on a polygon is the
 high-confidence operational signal.
 
-### Cards (spaced repetition)
+:::cards
 
-```yaml-cards
 - front: "AIRMET SIERRA -- what does it warn of, and what altitudes does the polygon typically cover?"
   back: |
     IFR conditions (ceiling below 1,000 ft AGL or visibility below 3 SM
@@ -671,7 +670,7 @@ high-confidence operational signal.
       cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
-```
+:::
 
 ## Connect
 

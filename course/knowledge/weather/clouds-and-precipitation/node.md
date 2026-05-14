@@ -143,14 +143,8 @@ freezing level. Any time the freezing level is within 4,000 ft of
 your cruise altitude in precipitation, icing is the active question
 to brief.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. LCL calculation cards build the cloud-base
-estimate; cloud-family and morphology cards lock in the diagnostic
-vocabulary; the precipitation-type cards tie clouds + temperature
-profile to the encoded METAR group.
-
-```yaml-cards
 - front: "Cloud base from temperature/dew point spread -- what's the rule of thumb?"
   back: |
     LCL_AGL (in thousands of feet) ≈ (T - Td) / 4.4, with T and Td in
@@ -371,7 +365,7 @@ profile to the encoded METAR group.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
     - kind: phak
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-```
+:::
 
 ## Connect
 

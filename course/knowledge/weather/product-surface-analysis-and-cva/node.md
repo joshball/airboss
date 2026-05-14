@@ -139,13 +139,8 @@ front passes). Now overlay the CVA: the lows and fronts almost always
 correlate with the MVFR/IFR color shifts. The synoptic picture and the
 ceiling picture are the same story told two ways.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. CVA category cards lock the VFR/MVFR/IFR/
-LIFR thresholds; cadence cards build the planning rhythm; the synoptic-
-vs-ceiling card carries the bookend pedagogy.
-
-```yaml-cards
 - front: "CVA categories -- match each to its ceiling and visibility thresholds."
   back: |
     VFR: ceiling > 3,000 ft AND visibility > 5 SM.
@@ -350,7 +345,7 @@ vs-ceiling card carries the bookend pedagogy.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 25 -- Analysis
     - kind: aim
       cite: AIM 7-1 -- National Weather Service Aviation Products
-```
+:::
 
 ## Connect
 

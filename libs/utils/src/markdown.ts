@@ -1009,12 +1009,46 @@ export function renderMarkdown(md: string, options: RenderMarkdownOptions = {}):
 			continue;
 		}
 
+		// `:::cards` directive (and the historical ```yaml-cards fenced
+		// block it replaces) -- data-only payload, never rendered.
+		//
+		// Cards surface via the spaced-repetition review queue, not inline
+		// on the knowledge node. The seed orchestrator parses the YAML at
+		// build time to materialise `study.card` rows; on the rendered
+		// page we want the YAML to disappear so the prose around the
+		// `## Practice` heading reads as authored.
+		//
+		// The richer `@ab/help` directive parser handles `:::cards`
+		// alongside `:::chart` / `:::scenario` for course-step bodies;
+		// this minimal renderer reproduces just the cards-strip behaviour
+		// so the `/reference/knowledge/[slug]/learn/` page (which uses
+		// `renderMarkdown` from `@ab/utils`) stays in sync.
+		if (line === ':::cards' || line.startsWith(':::cards ')) {
+			closeParagraph();
+			closeList();
+			i++;
+			while (i < lines.length && !/^:::\s*$/.test(lines[i])) i++;
+			if (i < lines.length) i++; // skip closing fence
+			continue;
+		}
+
 		// Fenced code block.
 		const fenceOpen = line.match(/^```\s*([\w-]*)\s*$/);
 		if (fenceOpen) {
 			closeParagraph();
 			closeList();
 			const lang = fenceOpen[1] ?? '';
+			// Historical `yaml-cards` fence stayed in the body during the
+			// migration window; treat it identically to a `:::cards` block
+			// and emit nothing. The `bun run check`-time guard
+			// (`scripts/lint/check-no-yaml-cards-fences.ts`) prevents new
+			// occurrences but the renderer stays safe if one slips back in.
+			if (lang === 'yaml-cards') {
+				i++;
+				while (i < lines.length && !/^```\s*$/.test(lines[i])) i++;
+				if (i < lines.length) i++;
+				continue;
+			}
 			const body: string[] = [];
 			i++;
 			while (i < lines.length && !/^```\s*$/.test(lines[i])) {

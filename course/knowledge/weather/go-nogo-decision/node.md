@@ -206,14 +206,8 @@ your decision changes between today and tomorrow, identify which
 input drove the change. That input is the variable you most need
 to monitor for that route.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The three-branch framing is the recall
-core; PAVE and DECIDE are the named frameworks; the decision-moment
-sequence is the in-flight discipline; the named-driver rule is the
-test for whether the decision is actually defensible.
-
-```yaml-cards
 - front: "Three branches of a go/no-go decision (not two)?"
   back: |
     Go -- conditions and trends are within personal minimums; the worst-case
@@ -443,7 +437,7 @@ test for whether the decision is actually defensible.
   source_authority:
     - kind: other
       cite: FAA-H-8083-2A Risk Management Handbook
-```
+:::
 
 ## Connect
 

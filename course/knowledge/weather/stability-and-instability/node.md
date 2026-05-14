@@ -131,14 +131,8 @@ and reports of dust devils, the air column is unstable to whatever
 height the cloud bases reach. That's enough to brief and enough to
 predict the ride at altitude.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The three-cases stability comparison is the
-recall core; ELR vs adiabatic-rate cards are the diagnostic vocabulary;
-surface-sign cards are the everyday brief; CAPE card extends to the
-sounding reader.
-
-```yaml-cards
 - front: "Dry adiabatic rate vs moist adiabatic rate -- values and what makes them differ?"
   back: |
     Dry adiabatic rate: ~3 deg C per 1,000 ft. The rate at which a dry
@@ -377,7 +371,7 @@ sounding reader.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
     - kind: phak
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-```
+:::
 
 ## Connect
 

@@ -140,14 +140,8 @@ front. If yes, build a timeline: when does the front cross the
 airport? What conditions before, during, after? Match to the table
 above.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The airmass-source-region cards build the
-character vocabulary; the per-front tables train the pre/passage/post
-sequence; scenario cards force the chart-into-story reading the body
-emphasises.
-
-```yaml-cards
 - front: "Air mass source region: Continental Polar (cP). Where does it form and what character does it bring?"
   back: |
     Sourced from the Canadian interior. Cold and dry. Brings clear, cold,
@@ -369,7 +363,7 @@ emphasises.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
     - kind: phak
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-```
+:::
 
 ## Connect
 

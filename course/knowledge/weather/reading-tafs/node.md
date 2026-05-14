@@ -506,13 +506,8 @@ arrives. Persistent agreement means the forecaster has a good read
 on the local regime -- their next change group is probably
 trustworthy.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Validity-window and decode cards build the
-floor; change-group precedence and triage cards train the operational
-read.
-
-```yaml-cards
 - front: "TAF change groups: a {{c1::FM}} group hard-replaces the prevailing forecast; a {{c2::TEMPO}} group layers a temporary excursion onto it; {{c3::PROB30 / PROB40}} indicates an unlikely-but-possible alternate."
   back: |
     FM, TEMPO, and PROB are the TAF's forecaster-confidence vocabulary.
@@ -745,7 +740,7 @@ read.
       cite: AC 00-45H Aviation Weather Services
     - kind: aim
       cite: AIM 7-1-29 -- METAR / TAF Decode Key
-```
+:::
 
 ## Connect
 

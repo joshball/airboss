@@ -197,14 +197,8 @@ without ice present makes the timing real. Most icing fatalities
 are pilots who delayed the 180 because the situation was
 "developing."
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Three-icing-types cards build the
-diagnostic vocabulary; temperature-band and avoidance-hierarchy cards
-build the operational decision rules; the escape-tree card is the
-in-flight muscle memory.
-
-```yaml-cards
 - front: "Three icing types -- name them by formation droplet size and flight signature."
   back: |
     Rime ice: small supercooled droplets freeze on contact, trapping air.
@@ -418,7 +412,7 @@ in-flight muscle memory.
       cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
     - kind: aim
       cite: AIM 7-1-21 -- Icing
-```
+:::
 
 ## Connect
 

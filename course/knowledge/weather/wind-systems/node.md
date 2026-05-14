@@ -143,14 +143,8 @@ to a ridge of comparable height to your cruise altitude, you'd be in
 mountain-wave territory -- check your route against ridges and plan
 the crossing geometry.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Crosswind-component cards build the
-performance calculation; mountain-wave and microburst cards carry the
-hazard rules; the friction-layer / windshear cards integrate with the
-brief.
-
-```yaml-cards
 - front: "Crosswind component mental model -- the 30/60/90 rule."
   back: |
     Crosswind component = wind speed * sin(angle between wind and runway).
@@ -397,7 +391,7 @@ brief.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 10 -- Wind
     - kind: aim
       cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
-```
+:::
 
 ## Connect
 

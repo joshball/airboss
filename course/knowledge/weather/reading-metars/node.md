@@ -512,13 +512,8 @@ preview -- whatever is hitting them now hits you in roughly the time
 it takes the synoptic system to cover 100 NM. The pair-read habit
 is how pilots build forecasting intuition that beats the TAF.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The decode cards (Stage 1) build the
-alphabet; the gotcha and synoptic cards (Stages 2-3) train the triage
-habit the body emphasises is the actual goal.
-
-```yaml-cards
 - front: "What does the SPECI type indicator on a METAR tell you (vs. plain METAR)?"
   back: |
     SPECI = a special, off-cycle observation, issued because something changed
@@ -808,7 +803,7 @@ habit the body emphasises is the actual goal.
       cite: AC 00-45H Aviation Weather Services
     - kind: aim
       cite: AIM 7-1-29 -- METAR / TAF Decode Key
-```
+:::
 
 ## Connect
 

@@ -52,7 +52,7 @@ body_md: |
   A real radar mosaic from a severe-weather day (renders against the
   authored chart instance via the wx-charts library):
 
-  :::chart slug="wx-radar-mosaic-2024-05-21-22z"
+  :::chart slug="reference-fixtures/wx-radar-mosaic-2024-05-21-22z"
   :::
 
   Read the chart with the question: where would I have to be to

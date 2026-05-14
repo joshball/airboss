@@ -447,9 +447,8 @@ risk category up), then which SIGMETs appear, then which cells show
 on NEXRAD. The sequence builds intuition for "lead time before
 convection."
 
-### Cards (spaced repetition)
+:::cards
 
-```yaml-cards
 - front: "Non-convective SIGMET trigger conditions -- name the four hazards."
   back: |
     1. Severe icing not associated with thunderstorms.
@@ -685,7 +684,7 @@ convection."
       cite: AIM 7-1-6 -- Inflight Aviation Weather Advisories
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
-```
+:::
 
 ## Connect
 

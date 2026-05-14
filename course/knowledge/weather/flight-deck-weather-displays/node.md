@@ -143,13 +143,8 @@ echo (20 NM is the standard), and your "I'm landing if X" trigger.
 The pre-decided rules survive the moment when the cockpit picture
 disagrees with the windshield.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The age-problem cards are the safety floor;
-display-source cards build the comparison set; strategic-vs-tactical
-is the operational rule the NTSB makes explicit.
-
-```yaml-cards
 - front: "Why is NEXRAD mosaic imagery in the cockpit actually older than the displayed age indicator suggests?"
   back: |
     Three latency layers stack: (1) NEXRAD radar sweep itself takes 4-6
@@ -354,7 +349,7 @@ is the operational rule the NTSB makes explicit.
       cite: AC 00-63A Use of Cockpit Displays of Digital Weather and Aeronautical Information
     - kind: aim
       cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
-```
+:::
 
 ## Connect
 

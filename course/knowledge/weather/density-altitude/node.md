@@ -193,14 +193,8 @@ ISA at PA = 15 - 2 x PA/1000. Deviation = OAT - ISA. DA = PA +
 120 x deviation. The math is fast with practice; doing it on
 every takeoff makes it muscle memory.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Calculation cards drill the four-step
-formula chain; recall cards lock in the rules of thumb; one cloze
-card holds the conceptual chain (less density -> less lift / less
-thrust / less HP).
-
-```yaml-cards
 - front: "Compute pressure altitude. Field elevation 6,752 ft, altimeter setting 30.10."
   back: |
     PA = field elevation + (29.92 - altimeter) x 1,000
@@ -418,7 +412,7 @@ thrust / less HP).
       cite: AC 61-84B Role of Preflight Preparation
     - kind: aim
       cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
-```
+:::
 
 ## Connect
 
