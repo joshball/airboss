@@ -74,7 +74,7 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
   - `<TOCRender mode="rail">` uses `onclickcapture` to intercept anchor clicks — worth refactoring
   - ACS subtree shared layout is chrome-only (area/task TOC has different shape)
   - Explicit `scrollIntoView({block:'nearest'})` on TOC active entry and `onnavigate` mobile auto-close not wired
-- **`graph-index.md` auto-regen drift** — modified every `bun run db reset`, never committed. Add to `.gitignore` or make deterministic in seeder.
+- **~~`graph-index.md` auto-regen drift~~** — added to `.gitignore` + `git rm --cached` + sentinel banner updated to call out the git-ignored status. The file is purely derived (no build/runtime consumers) so the cleanest answer was to stop tracking it. Resolved.
 
 ---
 
