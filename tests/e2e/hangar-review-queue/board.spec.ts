@@ -98,12 +98,16 @@ test.describe('review board: filters + URL persistence', () => {
 
 test.describe('review board: loader refresh', () => {
 	test('Refresh button posts to ?/runLoader and surfaces a success toast', async ({ page }) => {
+		// The Refresh button drives the same WP/bug rescan as the admin
+		// loader page (see `admin.spec.ts`); under parallel webServer load
+		// the action consistently exceeds the 30s default per-test budget.
+		test.setTimeout(120_000);
 		await page.goto(ROUTES.HANGAR_REVIEW);
 		const refresh = page.getByRole('button', { name: /^Refresh$/ });
 		await Promise.all([
 			page.waitForResponse(
 				(res) => res.request().method() === 'POST' && res.url().includes('?/runLoader'),
-				{ timeout: 60_000 },
+				{ timeout: 90_000 },
 			),
 			refresh.click(),
 		]);

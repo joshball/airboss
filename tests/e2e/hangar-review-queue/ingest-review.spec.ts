@@ -21,20 +21,43 @@
 
 import { expect, test } from '@playwright/test';
 import { eq, inArray } from 'drizzle-orm';
+import { drizzle } from 'drizzle-orm/postgres-js';
+import postgres from 'postgres';
 import { ingestIssue, ingestOverride } from '../../../libs/bc/ingest-review/src/schema';
-import { INGEST_REVIEW, QUERY_PARAMS, ROUTES } from '../../../libs/constants/src';
-import { db } from '../../../libs/db/src/connection';
+import { DEV_DB_URL_E2E, INGEST_REVIEW, QUERY_PARAMS, ROUTES } from '../../../libs/constants/src';
 import { createId, generateAuthId } from '../../../libs/utils/src';
+
+// Pin every DB write at the e2e database. The webServer entries spawn
+// every SvelteKit process pinned at `airboss_e2e`, but bun auto-loads
+// `.env` from cwd into the playwright runner process so `db` from
+// `@ab/db/connection` would otherwise route to the developer's working
+// DB.
+//
+// Use a fresh postgres client per call (open + query + close) so a
+// module-scoped pool can't be killed mid-test by an unrelated transient
+// (idle reaper / TCP reset / etc) -- earlier attempts to share the pool
+// across the spec consistently surfaced `CONNECTION_ENDED` on the 3rd
+// insert under parallel webServer load.
+async function withDb<T>(fn: (db: ReturnType<typeof drizzle>) => Promise<T>): Promise<T> {
+	const client = postgres(DEV_DB_URL_E2E, { max: 1, idle_timeout: 0 });
+	const db = drizzle(client);
+	try {
+		return await fn(db);
+	} finally {
+		await client.end();
+	}
+}
 
 const TEST_TAG = generateAuthId().slice(-12);
 
 const seededIssueIds: string[] = [];
 
 test.afterAll(async () => {
-	if (seededIssueIds.length > 0) {
-		// Cascade-deletes attached overrides through the FK.
+	if (seededIssueIds.length === 0) return;
+	// Cascade-deletes attached overrides through the FK.
+	await withDb(async (db) => {
 		await db.delete(ingestIssue).where(inArray(ingestIssue.id, seededIssueIds));
-	}
+	});
 });
 
 async function seedIssue(opts: {
@@ -47,23 +70,25 @@ async function seedIssue(opts: {
 	seededIssueIds.push(id);
 	const externalId = opts.externalId ?? `e2e_${TEST_TAG}_${Math.random().toString(36).slice(2, 8)}`;
 	const now = new Date();
-	await db.insert(ingestIssue).values({
-		id,
-		corpus: INGEST_REVIEW.CORPUSES.HANDBOOK,
-		sourceId: 'ifh',
-		edition: 'FAA-H-8083-15B',
-		pageNum: opts.pageNum ?? 83,
-		kind: INGEST_REVIEW.KINDS.HANDBOOK_CAPTION_ORPHAN,
-		externalId,
-		payload: {
-			captionText: opts.caption ?? 'Figure 4-7. Koch chart sample.',
-			mode: 'image-extracted-elsewhere',
-			sectionCode: '4',
-			candidateSnapshot: [],
-		},
-		status: opts.status ?? INGEST_REVIEW.STATUS.UNRESOLVED,
-		firstSeenAt: now,
-		lastSeenAt: now,
+	await withDb(async (db) => {
+		await db.insert(ingestIssue).values({
+			id,
+			corpus: INGEST_REVIEW.CORPUSES.HANDBOOK,
+			sourceId: 'ifh',
+			edition: 'FAA-H-8083-15B',
+			pageNum: opts.pageNum ?? 83,
+			kind: INGEST_REVIEW.KINDS.HANDBOOK_CAPTION_ORPHAN,
+			externalId,
+			payload: {
+				captionText: opts.caption ?? 'Figure 4-7. Koch chart sample.',
+				mode: 'image-extracted-elsewhere',
+				sectionCode: '4',
+				candidateSnapshot: [],
+			},
+			status: opts.status ?? INGEST_REVIEW.STATUS.UNRESOLVED,
+			firstSeenAt: now,
+			lastSeenAt: now,
+		});
 	});
 	return id;
 }
@@ -140,10 +165,12 @@ test.describe('/ingest-review/[issueId] detail page', () => {
 		// returns `{ ok: true }` without redirect by design -- the queue
 		// row re-loads on next navigation.)
 		await expect
-			.poll(async () => {
-				const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
-				return rows[0]?.status;
-			})
+			.poll(async () =>
+				withDb(async (db) => {
+					const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
+					return rows[0]?.status;
+				}),
+			)
 			.toBe(INGEST_REVIEW.STATUS.DISMISSED);
 
 		// Reopen.
@@ -155,10 +182,12 @@ test.describe('/ingest-review/[issueId] detail page', () => {
 			page.getByRole('button', { name: /^Reopen$/ }).click(),
 		]);
 		await expect
-			.poll(async () => {
-				const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
-				return rows[0]?.status;
-			})
+			.poll(async () =>
+				withDb(async (db) => {
+					const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
+					return rows[0]?.status;
+				}),
+			)
 			.toBe(INGEST_REVIEW.STATUS.UNRESOLVED);
 	});
 
@@ -174,14 +203,18 @@ test.describe('/ingest-review/[issueId] detail page', () => {
 		]);
 
 		await expect
-			.poll(async () => {
-				const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
-				return rows[0]?.status;
-			})
+			.poll(async () =>
+				withDb(async (db) => {
+					const rows = await db.select().from(ingestIssue).where(eq(ingestIssue.id, issueId));
+					return rows[0]?.status;
+				}),
+			)
 			.toBe(INGEST_REVIEW.STATUS.RESOLVED);
 
 		// One override row with empty payload.
-		const overrides = await db.select().from(ingestOverride).where(eq(ingestOverride.issueId, issueId));
+		const overrides = await withDb(async (db) =>
+			db.select().from(ingestOverride).where(eq(ingestOverride.issueId, issueId)),
+		);
 		expect(overrides).toHaveLength(1);
 		expect(overrides[0]?.action).toBe(INGEST_REVIEW.ACTIONS.MARK_NO_FIGURE);
 		expect(overrides[0]?.payload).toEqual({});

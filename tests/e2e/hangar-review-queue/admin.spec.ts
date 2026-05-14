@@ -45,12 +45,17 @@ test.describe('loader admin', () => {
 	});
 
 	test('Run loader now refreshes the last-run summary', async ({ page }) => {
+		// The loader form action drives a full WP/bug rescan synchronously on
+		// the server; under parallel webServer load this consistently lands
+		// in the 30-45s range, blowing past the default 30s per-test budget.
+		// Extend so the assertion can wait for the action to finish.
+		test.setTimeout(120_000);
 		await page.goto(ROUTES.HANGAR_REVIEW_ADMIN_LOADER);
 		// Capture the "Ran at" timestamp before, run the loader, confirm the
 		// "Ran at" cell exists and the success status announces.
 		await Promise.all([
 			page.waitForResponse((res) => res.request().method() === 'POST' && res.url().includes('?/runLoader'), {
-				timeout: 60_000,
+				timeout: 90_000,
 			}),
 			page.getByRole('button', { name: /run loader now/i }).click(),
 		]);
