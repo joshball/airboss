@@ -69,7 +69,7 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 ## Small mechanical follow-ups
 
 - **~~5 specless legacy WP directories~~ + ~~4 abandoned WPs~~** → shipped as PR #947 (archived 2 specless + 4 abandoned to `.archive/`). Resolved.
-- **Deprecated `LIBRARY_*` route constants** — cleanup PR once verified no external callers (probably zero — greenfield). Single small PR.
+- **~~Deprecated `LIBRARY_*` route constants~~** → resolved 2026-05-14. 12 dead constants dropped (PR #976); the remaining 6 with live callers are scoped under WP [`flightbag-citation-url-migration`](../work-packages/flightbag-citation-url-migration/spec.md) (PR #979) — implementation deferred. Per CLAUDE.md "no legacy in airboss," not eligible for "@deprecated" lingering; tracked via WP instead.
 - **WP 2 reader UX follow-ups** (flagged during agent work):
   - `<TOCRender mode="rail">` uses `onclickcapture` to intercept anchor clicks — worth refactoring
   - ACS subtree shared layout is chrome-only (area/task TOC has different shape)
