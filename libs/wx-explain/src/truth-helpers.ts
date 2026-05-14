@@ -18,8 +18,7 @@ export function kmBetween(lon1: number, lat1: number, lon2: number, lat2: number
 	const dLat = (lat2 - lat1) * DEG_TO_RAD;
 	const dLon = (lon2 - lon1) * DEG_TO_RAD;
 	const a =
-		Math.sin(dLat / 2) ** 2 +
-		Math.cos(lat1 * DEG_TO_RAD) * Math.cos(lat2 * DEG_TO_RAD) * Math.sin(dLon / 2) ** 2;
+		Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * DEG_TO_RAD) * Math.cos(lat2 * DEG_TO_RAD) * Math.sin(dLon / 2) ** 2;
 	const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 	return EARTH_RADIUS_KM * c;
 }
@@ -110,14 +109,7 @@ function closestSegmentToPoint(points: [number, number][], lon: number, lat: num
 	return best;
 }
 
-function pointToSegmentDistanceKm(
-	px: number,
-	py: number,
-	ax: number,
-	ay: number,
-	bx: number,
-	by: number,
-): number {
+function pointToSegmentDistanceKm(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {
 	const apx = px - ax;
 	const apy = py - ay;
 	const abx = bx - ax;

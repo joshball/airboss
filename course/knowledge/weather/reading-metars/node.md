@@ -228,6 +228,10 @@ decision? Those are the drivers. Watch them.
 Each of these is a real-shape METAR; decode every group, then read
 the synoptic story.
 
+> Browse the full catalog of every realistic METAR shape (52 examples
+> across 39 token families, each round-tripped through `parseMetar`):
+> [encoded-text catalog -- METAR](../encoded-text-catalog/metar.md).
+
 #### Example 1: calm clear morning
 
 ```text

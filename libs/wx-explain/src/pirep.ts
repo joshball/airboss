@@ -103,8 +103,7 @@ export function explainPirep(parsed: ParsedPirep, truth?: TruthModel): TokenAnno
 		out.push({
 			token: parsed.turbulence.intensity,
 			family: 'pirep-turb',
-			decode:
-				TURB_DECODE[parsed.turbulence.intensity] ?? `turbulence intensity: ${parsed.turbulence.intensity}`,
+			decode: TURB_DECODE[parsed.turbulence.intensity] ?? `turbulence intensity: ${parsed.turbulence.intensity}`,
 		});
 	}
 	if (parsed.icing !== null) {

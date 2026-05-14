@@ -52,7 +52,8 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		example: 'bun run wx-scenario check-round-trip --all',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.CHECK_CATALOG]: {
-		summary: 'Validate the encoded-text catalog (round-trip every example, check catalog.json freshness). Wired into `bun run check`.',
+		summary:
+			'Validate the encoded-text catalog (round-trip every example, check catalog.json freshness). Wired into `bun run check`.',
 		example: 'bun run wx-scenario check-catalog',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.DRILL]: {

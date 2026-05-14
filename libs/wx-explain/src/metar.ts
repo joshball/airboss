@@ -144,14 +144,16 @@ function describeClouds(parsed: ParsedMetar): TokenAnnotation[] {
 			token = cover;
 			decode = label;
 		} else if (cover === 'VV') {
-			const hundreds = layer.heightFtAgl !== null ? String(Math.floor(layer.heightFtAgl / 100)).padStart(3, '0') : 'xxx';
+			const hundreds =
+				layer.heightFtAgl !== null ? String(Math.floor(layer.heightFtAgl / 100)).padStart(3, '0') : 'xxx';
 			token = `VV${hundreds}`;
 			decode =
 				layer.heightFtAgl !== null
 					? `${label}: ${layer.heightFtAgl} ft (sky completely obscured)`
 					: `${label} (sky completely obscured)`;
 		} else {
-			const hundreds = layer.heightFtAgl !== null ? String(Math.floor(layer.heightFtAgl / 100)).padStart(3, '0') : 'xxx';
+			const hundreds =
+				layer.heightFtAgl !== null ? String(Math.floor(layer.heightFtAgl / 100)).padStart(3, '0') : 'xxx';
 			token = `${cover}${hundreds}`;
 			decode = layer.heightFtAgl !== null ? `${label} layer at ${layer.heightFtAgl} ft AGL` : `${label} layer`;
 			if ((cover === 'BKN' || cover === 'OVC') && ceilingFt === null && layer.heightFtAgl !== null) {
