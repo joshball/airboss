@@ -3,10 +3,10 @@ id: bug-palette-pin-to-today
 title: "Palette Pin-to-today action stays disabled until mine.plan pin API exists"
 product: study
 severity: minor
-status: open
+status: fixed
 discovered_pr: 857
 discovered_date: 2026-05-12
-fix_pr: null
+fix_pr: 985
 fix_wp: command-palette
 tags:
   - palette
@@ -60,3 +60,26 @@ When a user request or PRD names "I want to pin this for today's session" as a g
 - PR #857 -- Phase 3 introduced the placeholder
 - PR #940 -- Phase 4 considered wiring this via the command registry; left it as-is
 - Work package: [command-palette](../work-packages/command-palette/spec.md)
+
+## Resolution
+
+This bug was stale documentation, not real broken behavior. The pin-to-today
+flow was wired end-to-end before the bug was filed:
+
+- API exists: `pinToToday(...)` is a real exported function at
+  [libs/bc/study/src/plan-items.ts:170](../../libs/bc/study/src/plan-items.ts).
+  It wraps the lower-level `pinPlanItem` and is exposed via the
+  `@ab/bc-study/server` barrel.
+- Button is wired (not disabled): the "Pin to today" action in
+  [libs/help/src/ui/PaletteDetailPane.svelte:266](../../libs/help/src/ui/PaletteDetailPane.svelte)
+  is rendered inside an `{#if pinPayload}` guard and only disabled while a
+  request is pending or after a successful pin, not as a permanent
+  placeholder.
+- Route handler exists and calls the BC: `POST /api/plan-items` at
+  [apps/study/src/routes/api/plan-items/+server.ts](../../apps/study/src/routes/api/plan-items/+server.ts)
+  imports `pinToToday` from `@ab/bc-study/server` (line 17) and invokes it
+  in its POST handler (line 50).
+
+The "Why disabled" / "Fix" / "Trigger to revisit" sections above describe
+state that no longer matches the codebase. Closing as fixed; no further work
+needed.
