@@ -16,7 +16,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 **Reason:** The F-departing-weak-cold front (cold, intensity weak, moving 90deg at 8 kt) has already crossed KFAT. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 11C, dewpoint drop -9C, wind shift from 320deg to 0deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-dense-fog-radiation-central-valley-front-crossing-KSCK -- metar (KSCK)
 
@@ -28,7 +28,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 **Reason:** The F-departing-weak-cold front (cold, intensity weak, moving 90deg at 8 kt) has already crossed KSCK. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 11C, dewpoint drop -9C, wind shift from 320deg to 0deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-dense-fog-radiation-central-valley-front-crossing-KMOD -- metar (KMOD)
 
@@ -40,7 +40,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 **Reason:** The F-departing-weak-cold front (cold, intensity weak, moving 90deg at 8 kt) has already crossed KMOD. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 11C, dewpoint drop -9C, wind shift from 320deg to 0deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-dense-fog-radiation-central-valley-front-crossing-KMER -- metar (KMER)
 
@@ -52,7 +52,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 **Reason:** The F-departing-weak-cold front (cold, intensity weak, moving 90deg at 8 kt) has already crossed KMER. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 11C, dewpoint drop -9C, wind shift from 320deg to 0deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-dense-fog-radiation-central-valley-front-crossing-KPRB -- metar (KPRB)
 
@@ -64,7 +64,7 @@ Nocturnal radiation fog over the California Central Valley. Weak ridge overhead 
 
 **Reason:** The F-departing-weak-cold front (cold, intensity weak, moving 90deg at 8 kt) has already crossed KPRB. The cP air now over the field replaces the mT sector that was there before passage: temperature drop 11C, dewpoint drop -9C, wind shift from 320deg to 0deg. Every change traces back to one event: a different air mass is now over the field.
 
-**References:** `wx-airmasses-and-fronts`, `wx-reading-metars-tafs`
+**References:** `wx-airmasses-and-fronts`, `wx-reading-metars`
 
 ### wxc-dense-fog-radiation-central-valley-post-frontal-gust-KSCK -- metar (KSCK)
 
@@ -90,7 +90,7 @@ Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet`.
 
 **Reason:** The HZ-valley-floor-lifr hazard zone is a ifr pocket bounded by the synoptic features that produced it (Dense radiation fog under the nocturnal surface inversion -- saturated boundary layer collapses to visibility under 1/2 SM until the post-noon mixing-height rise lifts the trapped layer). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-dense-fog-radiation-central-valley-airmet-sierra-HZ-coast-range-obscuration -- airmet (WAUS41-WXENGINE-HZ-coast-range-obscuration)
 
@@ -104,7 +104,7 @@ Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/airmet-sigmet`.
 
 **Reason:** The HZ-coast-range-obscuration hazard zone is a mountain-obscuration pocket bounded by the synoptic features that produced it (Mountain obscuration along the Coast Range west of the Central Valley -- fog top abuts the ridge line; the upwind side stays in stratus). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-dense-fog-radiation-central-valley-isobar-gradient -- chart-feature (isobar-pack)
 
@@ -132,7 +132,7 @@ Pinned to chart `wx-scenarios/dense-fog-radiation-central-valley/pirep-plot`.
 
 **Reason:** The KMER PIREP is inside the HZ-valley-floor-lifr hazard zone (severity severe, 0-300ft MSL). Three independent products agree: the AIRMET Sierra polygon covering HZ-valley-floor-lifr, the synoptic truth that produced the polygon (Dense radiation fog under the nocturnal surface inversion -- saturated boundary layer collapses to visibility under 1/2 SM until the post-noon mixing-height rise lifts the trapped layer), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.
 
-**References:** `wx-product-pireps`, `wx-product-airmets-sigmets`
+**References:** `wx-product-pireps`, `wx-product-airmets`
 
 ### wxc-dense-fog-radiation-central-valley-diurnal-inversion -- chart-feature (nocturnal-inversion)
 

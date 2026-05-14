@@ -165,7 +165,7 @@ function printHelp(): void {
 			'',
 			'  --dry-run        (default) Print what would change; do not write.',
 			'  --apply          Write changes to disk.',
-			'  --node <slug>    Restrict to one node by frontmatter id (e.g. wx-reading-metars-tafs).',
+			'  --node <slug>    Restrict to one node by frontmatter id (e.g. wx-reading-metars).',
 			'',
 		].join('\n'),
 	);

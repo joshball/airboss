@@ -33,7 +33,8 @@ minimum_cert: private
 study_priority: critical
 requires:
   - airspace-classes-and-dimensions
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
 deepens: []
 applied_by:
   - wx-go-nogo-decision
@@ -446,7 +447,8 @@ Assume total closure rate above 10,000 MSL can approach 500 kt. Convert to ft/se
 ### Linked nodes for further exploration
 
 - `airspace-classes-and-dimensions` -- what each class is and where it starts and ends in three dimensions. Prerequisite.
-- `wx-reading-metars-tafs` -- how to read the reported visibility and ceiling you are comparing against these minimums. Prerequisite.
+- `wx-reading-metars` -- how to read the reported visibility and ceiling you are comparing against these minimums. Prerequisite.
+- `wx-reading-tafs` -- how to forecast where the minimums will be at arrival time, including TEMPO / PROB excursions. Prerequisite.
 - `wx-ceiling-visibility-trends` -- how to interpret trend data (BECMG, TEMPO, PROB30) when planning VFR. Related.
 - `wx-go-nogo-decision` -- the broader ADM framework where these minimums are one input among several. Applied-by.
 - `plan-vfr-cross-country` -- the operational context where minimums interact with fuel, alternates, and time. Applied-by.

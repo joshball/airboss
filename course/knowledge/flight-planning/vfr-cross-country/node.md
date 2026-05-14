@@ -16,7 +16,8 @@ study_priority: critical
 requires:
   - airspace-classes-and-dimensions
   - airspace-vfr-weather-minimums
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
   - wx-go-nogo-decision
   - perf-weight-and-balance
   - perf-takeoff-landing-distance

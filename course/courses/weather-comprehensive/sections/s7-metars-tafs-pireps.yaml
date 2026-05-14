@@ -61,19 +61,33 @@ steps:
 
   - code: s7.1
     ordinal: 1
-    title: Reading METARs and TAFs
+    title: Reading METARs
     body_md: |
-      A METAR is a snapshot; a TAF is a forecast for a 5-statute-mile
-      radius around the reporting station. Together they're the most
-      airport-specific weather products you'll read.
+      A METAR is a snapshot of conditions at a single airport at a
+      single time, issued near the top of every hour and encoded in a
+      fixed-order group sequence. It's the most-read product in
+      aviation and the canonical example of the encoded-text family.
 
       The pilot-relevant lines: [wind](/reference/knowledge/wx-wind-systems)
       (with gust spread),
       [visibility](/reference/knowledge/wx-fog-and-visibility-obstructions),
       ceiling, weather phenomena, altimeter. The triage habit is to
-      compare the current METAR to the most recent TAF amendment --
-      if reality is already running ahead of the forecast, the
-      forecast is suspect for the rest of its valid period.
+      ask which three of the eleven groups would change your decision
+      if they shifted by a step -- those are the drivers; the rest are
+      confirmation. On a near-saturation morning, the temperature /
+      dew-point spread is almost always one of the three.
+    knowledge_node_id: wx-reading-metars
+
+  - code: s7.2
+    ordinal: 2
+    title: Reading TAFs
+    body_md: |
+      A TAF is a forecast for a 5-statute-mile radius around the
+      reporting station, valid 24 or 30 hours and issued every 6
+      hours. It shares the METAR alphabet but adds the
+      forecaster-confidence vocabulary: FM (hard reset), TEMPO (brief
+      excursion), PROB30 / PROB40 (probability), BECMG (gradual
+      transition).
 
       A TAF read as a timeline rather than a wall of encoded text --
       every FM, TEMPO, and PROB block becomes a visible change in
@@ -82,10 +96,15 @@ steps:
 
       :::chart slug="wx-taf-timeline-kmem-2026-05-10-1720z"
       :::
-    knowledge_node_id: wx-reading-metars-tafs
 
-  - code: s7.2
-    ordinal: 2
+      The triage habit: compare the current METAR to the most recent
+      TAF amendment -- if reality is already running ahead of the
+      forecast, the forecast is suspect for the rest of its valid
+      period and an AMD is probably overdue.
+    knowledge_node_id: wx-reading-tafs
+
+  - code: s7.3
+    ordinal: 3
     title: PIREPs - reading and filing
     body_md: |
       Every other product in this section is generated. PIREPs are

@@ -18,7 +18,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Reason:** Tango polygon HZ-lee-wave-tango encloses from 0ft to 28000ft MSL. The mechanism is named in the hazard source: Severe lee-wave turbulence column east of the Front Range -- amplified by the H-great-basin/L-lee-trough pressure gradient and the 95-kt jet axis. Two physical sources stack in this band: mechanical turbulence in the cold-advection boundary layer below, and ageostrophic descent on the cold side of the jet exit aloft. Together they produce continuous chop through the polygon's altitude span; expect ride quality to degrade entering the polygon and recover above the upper bound.
 
-**References:** `wx-product-airmets-sigmets`, `wx-turbulence-types`
+**References:** `wx-product-airmets`, `wx-turbulence-types`
 
 ### wxc-mountain-wave-rockies-airmet-zulu-HZ-rotor-zulu -- airmet (WAUS41-WXENGINE-HZ-rotor-zulu)
 
@@ -32,7 +32,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Reason:** Zulu polygon HZ-rotor-zulu encloses from 5000ft to 12000ft MSL. Icing requires supercooled liquid water above the freezing level -- the band's lower bound tracks the freezing-level surface, and the upper bound caps where temperatures drop below ~-15C (most droplets glaciate). Inside the polygon, expect rime/clear icing on airframe surfaces; the AIRMET source (Moderate icing in the rotor cloud east of the divide -- supercooled drops trapped in the wave-driven rotor circulation) names the specific producing mechanism so the polygon's altitude bounds and severity make sense.
 
-**References:** `wx-product-airmets-sigmets`, `wx-icing-types-and-avoidance`
+**References:** `wx-product-airmets`, `wx-icing-types-and-avoidance`
 
 ### wxc-mountain-wave-rockies-airmet-sierra-HZ-upwind-mtn-obscuration -- airmet (WAUS41-WXENGINE-HZ-upwind-mtn-obscuration)
 
@@ -46,7 +46,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/airmet-sigmet`.
 
 **Reason:** The HZ-upwind-mtn-obscuration hazard zone is a mountain-obscuration pocket bounded by the synoptic features that produced it (Mountain obscuration in upwind mP air piling against the windward slopes of the Front Range -- light orographic stratus and snow showers). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.
 
-**References:** `wx-product-airmets-sigmets`, `wx-fog-and-visibility-obstructions`
+**References:** `wx-product-airmets`, `wx-fog-and-visibility-obstructions`
 
 ### wxc-mountain-wave-rockies-isobar-gradient -- chart-feature (isobar-pack)
 
@@ -74,7 +74,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/prog-12hr`.
 
 **Reason:** Convective cell C-rotor-north stands inside inside HZ-lee-wave-tango. Cells in this peak-dBZ range (18 dBZ) reach the tropopause when peakDbz exceeds 50; this cell's vertical extent feeds the embedded turbulence and icing the AIRMETs cover. Three concrete hazards stack at the cell: (1) updraft turbulence inside the rain core, (2) downdraft + microburst risk at the leading edge, (3) embedded lightning. Stay 16km clear of the cell at flight altitudes the AIRMETs cover.
 
-**References:** `wx-thunderstorm-hazards`, `wx-product-airmets-sigmets`
+**References:** `wx-thunderstorm-hazards`, `wx-product-airmets`, `wx-product-sigmets`
 
 ### wxc-mountain-wave-rockies-convective-cell-C-rotor-south -- chart-feature (cell-C-rotor-south)
 
@@ -88,7 +88,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/prog-12hr`.
 
 **Reason:** Convective cell C-rotor-south stands inside inside HZ-lee-wave-tango. Cells in this peak-dBZ range (18 dBZ) reach the tropopause when peakDbz exceeds 50; this cell's vertical extent feeds the embedded turbulence and icing the AIRMETs cover. Three concrete hazards stack at the cell: (1) updraft turbulence inside the rain core, (2) downdraft + microburst risk at the leading edge, (3) embedded lightning. Stay 16km clear of the cell at flight altitudes the AIRMETs cover.
 
-**References:** `wx-thunderstorm-hazards`, `wx-product-airmets-sigmets`
+**References:** `wx-thunderstorm-hazards`, `wx-product-airmets`, `wx-product-sigmets`
 
 ### wxc-mountain-wave-rockies-pirep-corroboration-KAPA -- pirep (KAPA)
 
@@ -102,7 +102,7 @@ Pinned to chart `wx-scenarios/mountain-wave-rockies/pirep-plot`.
 
 **Reason:** The KAPA PIREP is inside the HZ-lee-wave-tango hazard zone (severity severe, 0-28000ft MSL). Three independent products agree: the AIRMET Tango polygon covering HZ-lee-wave-tango, the synoptic truth that produced the polygon (Severe lee-wave turbulence column east of the Front Range -- amplified by the H-great-basin/L-lee-trough pressure gradient and the 95-kt jet axis), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.
 
-**References:** `wx-product-pireps`, `wx-product-airmets-sigmets`
+**References:** `wx-product-pireps`, `wx-product-airmets`
 
 ### wxc-mountain-wave-rockies-jet-exit -- fb-row (jet-max-fl)
 

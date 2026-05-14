@@ -19,8 +19,10 @@ applied_by:
   - plan-ifr-cross-country
 taught_by: []
 related:
-  - wx-reading-metars-tafs
-  - wx-product-airmets-sigmets
+  - wx-reading-metars
+  - wx-reading-tafs
+  - wx-product-airmets
+  - wx-product-sigmets
 
 modalities: [reading, cards]
 estimated_time_minutes: 25

@@ -11,8 +11,10 @@ stability: evolving
 minimum_cert: private
 study_priority: critical
 requires:
-  - wx-reading-metars-tafs
-  - wx-product-airmets-sigmets
+  - wx-reading-metars
+  - wx-reading-tafs
+  - wx-product-airmets
+  - wx-product-sigmets
 deepens: []
 applied_by:
   - wx-go-nogo-decision

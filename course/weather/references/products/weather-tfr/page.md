@@ -22,7 +22,7 @@ authoritative_sources:
     section: notams.aim.faa.gov
     note: Authoritative source for the NOTAM text that creates the TFR.
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - weather-notam
   - airmet

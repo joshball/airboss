@@ -16,7 +16,7 @@ authoritative_sources:
     section: Chapter 26
     note: Aviation Weather Handbook, Advisories chapter; G-AIRMET described alongside AIRMET / SIGMET / CWA.
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
 related_products:
   - airmet
   - sigmet

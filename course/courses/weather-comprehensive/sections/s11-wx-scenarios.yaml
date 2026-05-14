@@ -244,7 +244,7 @@ steps:
       - code: s11.1.3
         ordinal: 3
         title: Analysis - discovery prompts
-        knowledge_node_id: wx-reading-metars-tafs
+        knowledge_node_id: wx-reading-metars
         body_md: |
           The truth-aware engine produces a Socratic callout for each
           element of the briefing that carries decision weight. The

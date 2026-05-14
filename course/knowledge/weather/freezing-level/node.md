@@ -20,7 +20,8 @@ applied_by:
 taught_by: []
 related:
   - wx-product-winds-aloft
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
+  - wx-product-sigmets
 
 modalities: [reading, cards]
 estimated_time_minutes: 25

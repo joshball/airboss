@@ -48,8 +48,9 @@ mastery_criteria: >
 # Wind and Temperature Aloft Forecast (FB)
 
 The FB is a member of the encoded-text family (see
-[wx-reading-metars-tafs](../reading-metars-tafs/node.md) for the full
-family pattern). The three-stage ladder applies, with the FB's own
+[wx-reading-metars](../reading-metars/node.md) for the canonical
+family treatment; [wx-reading-tafs](../reading-tafs/node.md) for the
+forecast variant). The three-stage ladder applies, with the FB's own
 twist on each stage:
 
 - **Decode** -- the six-digit groups, the >100 KT convention, the

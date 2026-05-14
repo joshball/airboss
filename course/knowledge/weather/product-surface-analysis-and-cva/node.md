@@ -49,8 +49,8 @@ mastery_criteria: >
 
 The surface analysis is the synoptic-symbol cousin in the
 encoded-text family (see
-[wx-reading-metars-tafs](../reading-metars-tafs/node.md)). Same
-three-stage skill ladder, different alphabet:
+[wx-reading-metars](../reading-metars/node.md) for the canonical
+family treatment). Same three-stage skill ladder, different alphabet:
 
 - **Decode** -- the chart symbols (H / L pressure centers, isobars,
   cold / warm / occluded / stationary front symbols, station models

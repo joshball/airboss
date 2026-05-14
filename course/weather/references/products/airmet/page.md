@@ -16,7 +16,7 @@ authoritative_sources:
     section: Chapter 26, §26.3
     note: Aviation Weather Handbook, Advisories chapter, AIRMET subsection.
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
 related_products:
   - sigmet
   - convective-sigmet
@@ -61,16 +61,16 @@ What it replaces or supplements: AIRMETs are the area-hazard layer of the briefi
 
 An AIRMET bulletin is structured text. The header identifies which region and which AIRMET type; the body identifies the affected area, the hazard, the altitude band, the motion, and the outlook.
 
-| Field          | Example                          | Meaning                                                                 |
-| -------------- | -------------------------------- | ----------------------------------------------------------------------- |
-| Header         | `WAUS41 KKCI 131445`             | Product code WA, US region 41, issuing office KKCI (AWC Kansas City), issuance day/time 131445Z. |
-| Type + region  | `SFOS WA 131445`                 | SIERRA AIRMET for the San Francisco region, issued 131445Z.             |
-| Reference     | `AIRMET SIERRA UPDT 3 FOR IFR AND MTN OBSCN VALID UNTIL 132100` | Update number 3, hazards SIERRA covers, valid until 132100Z.            |
-| Affected area  | `FROM 60WSW YQB TO ...`          | A series of VOR/fix radials and distances defining the polygon boundary. |
-| Conditions     | `CIG BLW 010 VIS BLW 3SM BR`     | Ceiling below 1,000 ft, visibility below 3 SM in mist.                  |
-| Altitude band  | `BTN 060 AND 100`                | Between 6,000 ft and 10,000 ft MSL (when applicable, e.g. icing layer). |
-| Motion         | `MOV E 15KT` or `STNRY`          | Moving east at 15 KT, or stationary.                                    |
-| Condition trend| `CONDS CONTG BYD 21Z THRU 03Z`   | Conditions continuing beyond the valid time -- this is the outlook.     |
+| Field           | Example                                                         | Meaning                                                                                          |
+| --------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Header          | `WAUS41 KKCI 131445`                                            | Product code WA, US region 41, issuing office KKCI (AWC Kansas City), issuance day/time 131445Z. |
+| Type + region   | `SFOS WA 131445`                                                | SIERRA AIRMET for the San Francisco region, issued 131445Z.                                      |
+| Reference       | `AIRMET SIERRA UPDT 3 FOR IFR AND MTN OBSCN VALID UNTIL 132100` | Update number 3, hazards SIERRA covers, valid until 132100Z.                                     |
+| Affected area   | `FROM 60WSW YQB TO ...`                                         | A series of VOR/fix radials and distances defining the polygon boundary.                         |
+| Conditions      | `CIG BLW 010 VIS BLW 3SM BR`                                    | Ceiling below 1,000 ft, visibility below 3 SM in mist.                                           |
+| Altitude band   | `BTN 060 AND 100`                                               | Between 6,000 ft and 10,000 ft MSL (when applicable, e.g. icing layer).                          |
+| Motion          | `MOV E 15KT` or `STNRY`                                         | Moving east at 15 KT, or stationary.                                                             |
+| Condition trend | `CONDS CONTG BYD 21Z THRU 03Z`                                  | Conditions continuing beyond the valid time -- this is the outlook.                              |
 
 A bulletin can contain multiple AIRMETs (e.g. SIERRA for IFR plus SIERRA for mountain obscuration), each in its own block with its own polygon, altitude band, and motion.
 
@@ -179,6 +179,7 @@ The go/no-go drivers:
 
 ## Related knowledge nodes
 
-For the pedagogical (discovery-walk) treatment of AIRMETs alongside their sibling advisories, see:
+For the pedagogical (discovery-walk) treatment of AIRMETs and their sibling SIGMET advisories, see:
 
-- [AIRMETs, SIGMETs, and Convective SIGMETs](../../../../knowledge/weather/product-airmets-sigmets/node.md)
+- [AIRMETs (Sierra, Tango, Zulu)](../../../../knowledge/weather/product-airmets/node.md)
+- [SIGMETs and Convective SIGMETs](../../../../knowledge/weather/product-sigmets/node.md)

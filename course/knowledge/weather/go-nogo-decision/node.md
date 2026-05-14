@@ -14,7 +14,8 @@ minimum_cert: private
 # study_priority: critical (safety/checkride hot) | standard (default) | stretch (adjacent).
 study_priority: critical
 requires:
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
   - airspace-vfr-weather-minimums
   - wx-thunderstorm-hazards
   - wx-icing-types-and-avoidance

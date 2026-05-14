@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Chapter 26 (Section 26.2 -- SIGMET)'
     note: 'Modern consolidated treatment of the SIGMET product.'
 related_knowledge_nodes:
-  - wx-product-airmets-sigmets
+  - wx-product-sigmets
 related_products:
   - wx-ref-airmet
   - wx-ref-convective-sigmet
@@ -54,19 +54,19 @@ The product is encoded text with a polygon (lat/long vertex list) and an altitud
 
 The non-convective SIGMET is fixed-format encoded text. Field-by-field:
 
-| Field          | Example                              | Meaning                                                                                                                                                       |
-| -------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Product header | `WSUS01 KKCI`                        | `WS` = SIGMET, `US01` = US region/series, `KKCI` = issuing office (AWC, Kansas City).                                                                          |
-| Bulletin name  | `SIGC` / `SIGE` / `SIGW`             | Region the SIGMET applies to: Central, Eastern, Western US. (Convective uses `WST` / `MKCC`/`MKCE`/`MKCW`.)                                                  |
-| Designator     | `SIGMET PAPA 2`                      | Alphabetic name (NOVEMBER through YANKEE, excluding SIERRA / TANGO / ZULU which are AIRMET letters) plus sequence number for that designator series.         |
-| Valid period   | `VALID 131800/132200`                | DDHHMM start / DDHHMM end, UTC. Up to 4 hours (6 for volcanic ash / tropical cyclone).                                                                       |
-| FIR (intl)     | `KZDV DENVER FIR`                    | For international ICAO SIGMETs the Flight Information Region is named. US SIGMETs use the AWC region letter instead.                                          |
-| Hazard         | `SEV TURB`                           | `SEV ICE`, `SEV TURB`, `SEV MTN WAVE`, `VA` (volcanic ash), `DS` (duststorm), `SS` (sandstorm).                                                              |
-| Area / polygon | `FROM 40N110W TO 42N108W TO 38N104W` | Vertex list defining the affected polygon. Read carefully -- the polygon can be irregular.                                                                    |
-| Altitude band  | `BTN FL280 AND FL410`                | Affected altitudes, MSL/flight levels. May say `SFC/FL180`, `FRZLVL/FL120`, etc.                                                                              |
-| Intensity      | `SEV`                                | Severity word repeated for clarity (`SEV` severe, `EXTRM` extreme).                                                                                            |
-| Motion         | `MOV E 40KT`                         | Direction and speed of the hazard polygon. `STNR` = stationary.                                                                                                |
-| Outlook        | `CONDS CONTG BYD 22Z`                | Continuation forecast past the valid time, when the issuer expects the hazard to persist.                                                                      |
+| Field          | Example                              | Meaning                                                                                                                                              |
+| -------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Product header | `WSUS01 KKCI`                        | `WS` = SIGMET, `US01` = US region/series, `KKCI` = issuing office (AWC, Kansas City).                                                                |
+| Bulletin name  | `SIGC` / `SIGE` / `SIGW`             | Region the SIGMET applies to: Central, Eastern, Western US. (Convective uses `WST` / `MKCC`/`MKCE`/`MKCW`.)                                          |
+| Designator     | `SIGMET PAPA 2`                      | Alphabetic name (NOVEMBER through YANKEE, excluding SIERRA / TANGO / ZULU which are AIRMET letters) plus sequence number for that designator series. |
+| Valid period   | `VALID 131800/132200`                | DDHHMM start / DDHHMM end, UTC. Up to 4 hours (6 for volcanic ash / tropical cyclone).                                                               |
+| FIR (intl)     | `KZDV DENVER FIR`                    | For international ICAO SIGMETs the Flight Information Region is named. US SIGMETs use the AWC region letter instead.                                 |
+| Hazard         | `SEV TURB`                           | `SEV ICE`, `SEV TURB`, `SEV MTN WAVE`, `VA` (volcanic ash), `DS` (duststorm), `SS` (sandstorm).                                                      |
+| Area / polygon | `FROM 40N110W TO 42N108W TO 38N104W` | Vertex list defining the affected polygon. Read carefully -- the polygon can be irregular.                                                           |
+| Altitude band  | `BTN FL280 AND FL410`                | Affected altitudes, MSL/flight levels. May say `SFC/FL180`, `FRZLVL/FL120`, etc.                                                                     |
+| Intensity      | `SEV`                                | Severity word repeated for clarity (`SEV` severe, `EXTRM` extreme).                                                                                  |
+| Motion         | `MOV E 40KT`                         | Direction and speed of the hazard polygon. `STNR` = stationary.                                                                                      |
+| Outlook        | `CONDS CONTG BYD 22Z`                | Continuation forecast past the valid time, when the issuer expects the hazard to persist.                                                            |
 
 US SIGMET designator letters (NOVEMBER through YANKEE, excluding SIERRA / TANGO / ZULU) are reserved per region and reused across the alphabet as the day progresses. The letter is not a hazard tag -- it's a serial label so that updates ("SIGMET PAPA 2" supersedes "PAPA 1") can be tracked.
 
@@ -175,4 +175,5 @@ A SIGMET that intersects your route corridor at your altitude during your time-o
 
 For the pedagogical (discovery-walk) treatment of this product, see:
 
-- [AIRMETs, SIGMETs, and Convective SIGMETs](../../../../knowledge/weather/product-airmets-sigmets/node.md)
+- [SIGMETs and Convective SIGMETs](../../../../knowledge/weather/product-sigmets/node.md)
+- [AIRMETs (Sierra, Tango, Zulu)](../../../../knowledge/weather/product-airmets/node.md)

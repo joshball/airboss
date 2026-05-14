@@ -16,7 +16,7 @@ authoritative_sources:
     section: 'Aviation Weather Handbook, Surface Observations chapter'
     note: 'Pilot-pitch treatment with sample METARs and the operational reasoning behind each group.'
 related_knowledge_nodes:
-  - wx-reading-metars-tafs
+  - wx-reading-metars
 related_products:
   - taf
   - speci
@@ -42,21 +42,21 @@ A METAR (Meteorological Aerodrome Report) is a snapshot of conditions at a singl
 
 A METAR is a fixed-order sequence of groups. Read in order, every time. The full canonical sequence:
 
-| #  | Group           | Example      | Meaning                                                                                              |
-| -- | --------------- | ------------ | ---------------------------------------------------------------------------------------------------- |
-| 1  | Type indicator  | `METAR`      | Routine hourly report. `SPECI` = special, off-cycle (something changed).                             |
-| 2  | Station ID      | `KJFK`       | Four-letter ICAO identifier. `K` prefix in the continental US.                                       |
-| 3  | Date/time       | `121753Z`    | Day of month (12) + hour (17) + minute (53), always Zulu.                                            |
-| 4  | Modifier        | `AUTO`       | `AUTO` = automated station, no human observer. `COR` = corrected previous report. Omitted if none.  |
-| 5  | Wind            | `23015G24KT` | Direction 230 true, speed 15 KT, gusting 24 KT. `VRB` for variable below 6 KT. `00000KT` = calm.     |
-| 5a | Variable wind   | `180V230`    | Direction varying through more than 60 degrees, between 180 and 230. Appears after the wind group.  |
-| 6  | Visibility      | `6SM`        | Statute miles in the US. `M1/4SM` = less than 1/4 SM. Fractions like `1 1/2SM` are common.            |
-| 6a | RVR             | `R04R/2000FT`| Runway visual range for runway 04R, 2,000 ft. Appears at instrument-approach airports when low vis.  |
-| 7  | Present weather | `-RA BR`     | Intensity (`-` light, none = moderate, `+` heavy) + descriptor + phenomenon. Multiple groups allowed.|
-| 8  | Sky condition   | `BKN040`     | Coverage + height in hundreds of feet AGL. Ascending. Multiple layers allowed. `CB`/`TCU` suffix.   |
-| 9  | Temp / dew pt   | `19/18`      | Degrees Celsius, slash-separated. `M` prefix for negative (`M03/M05` = -3 / -5).                     |
-| 10 | Altimeter       | `A3002`      | `A` prefix, four digits = inches of mercury times 100 (`A3002` = 30.02 inHg).                        |
-| 11 | Remarks         | `RMK AO2 SLP168 T01940183` | Sea-level pressure, sensor type, hourly precip, pressure tendency, peak wind, free text. |
+| #   | Group           | Example                    | Meaning                                                                                               |
+| --- | --------------- | -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| 1   | Type indicator  | `METAR`                    | Routine hourly report. `SPECI` = special, off-cycle (something changed).                              |
+| 2   | Station ID      | `KJFK`                     | Four-letter ICAO identifier. `K` prefix in the continental US.                                        |
+| 3   | Date/time       | `121753Z`                  | Day of month (12) + hour (17) + minute (53), always Zulu.                                             |
+| 4   | Modifier        | `AUTO`                     | `AUTO` = automated station, no human observer. `COR` = corrected previous report. Omitted if none.    |
+| 5   | Wind            | `23015G24KT`               | Direction 230 true, speed 15 KT, gusting 24 KT. `VRB` for variable below 6 KT. `00000KT` = calm.      |
+| 5a  | Variable wind   | `180V230`                  | Direction varying through more than 60 degrees, between 180 and 230. Appears after the wind group.    |
+| 6   | Visibility      | `6SM`                      | Statute miles in the US. `M1/4SM` = less than 1/4 SM. Fractions like `1 1/2SM` are common.            |
+| 6a  | RVR             | `R04R/2000FT`              | Runway visual range for runway 04R, 2,000 ft. Appears at instrument-approach airports when low vis.   |
+| 7   | Present weather | `-RA BR`                   | Intensity (`-` light, none = moderate, `+` heavy) + descriptor + phenomenon. Multiple groups allowed. |
+| 8   | Sky condition   | `BKN040`                   | Coverage + height in hundreds of feet AGL. Ascending. Multiple layers allowed. `CB`/`TCU` suffix.     |
+| 9   | Temp / dew pt   | `19/18`                    | Degrees Celsius, slash-separated. `M` prefix for negative (`M03/M05` = -3 / -5).                      |
+| 10  | Altimeter       | `A3002`                    | `A` prefix, four digits = inches of mercury times 100 (`A3002` = 30.02 inHg).                         |
+| 11  | Remarks         | `RMK AO2 SLP168 T01940183` | Sea-level pressure, sensor type, hourly precip, pressure tendency, peak wind, free text.              |
 
 The dense parts in detail:
 
@@ -189,4 +189,4 @@ What changes the go/no-go: ceiling and visibility below your minimums, wind beyo
 
 For the pedagogical (discovery-walk) treatment of this product, see:
 
-- [Reading METARs and TAFs](../../../../knowledge/weather/reading-metars-tafs/node.md) -- the three-stage decode / understand / triage ladder that this reference page is the answer key for.
+- [Reading METARs](../../../../knowledge/weather/reading-metars/node.md) -- the three-stage decode / understand / triage ladder that this reference page is the answer key for.

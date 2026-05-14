@@ -19,7 +19,8 @@ applied_by:
   - plan-ifr-cross-country
 taught_by: []
 related:
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
+  - wx-product-sigmets
   - wx-personal-minimums
 
 modalities: [reading, drill]

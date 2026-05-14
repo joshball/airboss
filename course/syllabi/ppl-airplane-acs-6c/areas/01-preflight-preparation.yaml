@@ -158,9 +158,12 @@ knowledge_links:
       notes: Sources resolve to a briefing flow; the procedural counterpart.
 
   I.C.K2:
-    - node_id: wx-reading-metars-tafs
+    - node_id: wx-reading-metars
       weight: 0.7
-      notes: K2a (METAR) and K2c (TAF) decode -- direct match.
+      notes: K2a METAR decode -- direct match.
+    - node_id: wx-reading-tafs
+      weight: 0.7
+      notes: K2c TAF decode -- direct match.
     - node_id: wx-product-pireps
       weight: 0.6
       notes: K2a PIREPs -- decode + when to file/use.
@@ -176,9 +179,12 @@ knowledge_links:
     - node_id: wx-product-convective-outlook
       weight: 0.5
       notes: K2f Convective Outlook (AC).
-    - node_id: wx-product-airmets-sigmets
+    - node_id: wx-product-airmets
       weight: 0.9
-      notes: K2g AIRMET / SIGMET / Convective SIGMET decode and use.
+      notes: K2g AIRMET decode and use (Sierra / Tango / Zulu).
+    - node_id: wx-product-sigmets
+      weight: 0.9
+      notes: K2g SIGMET and Convective SIGMET decode and use.
 
   I.C.K3:
     - node_id: wx-stability-and-instability

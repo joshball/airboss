@@ -11,7 +11,8 @@ stability: evolving
 minimum_cert: private
 study_priority: critical
 requires:
-  - wx-reading-metars-tafs
+  - wx-reading-metars
+  - wx-reading-tafs
 deepens: []
 applied_by:
   - wx-go-nogo-decision
@@ -19,7 +20,8 @@ applied_by:
   - plan-ifr-cross-country
 taught_by: []
 related:
-  - wx-product-airmets-sigmets
+  - wx-product-airmets
+  - wx-product-sigmets
   - wx-product-surface-analysis-and-cva
 
 modalities: [reading, cards]
@@ -50,8 +52,9 @@ mastery_criteria: >
 # Graphical Forecasts for Aviation (GFA)
 
 The GFA is the graphical-product cousin in the encoded-text family
-(see [wx-reading-metars-tafs](../reading-metars-tafs/node.md)). The
-three-stage skill ladder still applies, with the encoding shifted
+(see [wx-reading-metars](../reading-metars/node.md) for the canonical
+family treatment). The three-stage skill ladder still applies, with
+the encoding shifted
 from text symbols to color-coded layers:
 
 - **Decode** -- the layer set (clouds, weather, cig/vis, precip,

@@ -19,7 +19,7 @@ authoritative_sources:
     section: 'Aviation Weather Handbook, Surface Observations chapter'
     note: 'Pilot-pitch treatment of METAR/SPECI with worked examples and the operational reasoning behind off-cycle reports.'
 related_knowledge_nodes:
-  - wx-reading-metars-tafs
+  - wx-reading-metars
 related_products:
   - metar
   - taf
