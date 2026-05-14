@@ -8,7 +8,7 @@ Single entry point for "what should I work on?" in airboss.
 
 Recently shipped:
 
-- `command-palette` -- Phases 3 -> 3.5a/3.5b/3.5c -> 4 -> 5 shipped (PRs #857, #930, #933, #936, #940, #942). Cmd+Shift+P live with intent classifier, composite ranker, per-intent panels, phrase-FTS passage search, per-app command registries, and Cmd+P quick-open + recents. Walkthrough owed.
+- `command-palette` -- Phases 1, 2, 3, 3.5a, 3.5b, 3.5c, 4, 5 all shipped end-to-end (13 PRs: WP #822, Phase 2 #831, Phase 3 #857, hotfixes #921 + #925, 3.5 docs #929, Phase 3.5a #930, 3.5b #933, 3.5c #936, FTS-deviation track #937, Phase 4 #940, Phase 5 #942, punt-backlog tracking #957). Cmd+K live with intent classifier, composite ranker, per-intent panels, top-hits strip, vertical type-nav, book-level collapse, doc-code autocomplete and a generic `@ab/autocomplete` lib. Cmd+Shift+P live with per-app command registries (study, sim, hangar, flightbag). Cmd+P live with quickopen + recency-weighted recents. Walkthrough: [2026-05-13-command-palette](walkthroughs/2026-05-13-command-palette.md).
 - `course-tree-arbitrary-depth` -- Phases A/B/C/D/E shipped (PRs #934, #935, #938, #943, #944). N-deep schema + recursive validators + lens helper + renderer prev/next nav + aggregate cert overlay with leaf-only study-plan selection. Walkthrough owed.
 - `wx-charts` -- ADR 027 layout migration complete (PRs #915, #922, #923, #927), CONUS hunchback root-caused (PRs #924, #926), `/api/charts` route serving SVGs (#928), `:::chart` and `:::scenario` markdown directives wired (#932). Browser-hydration leaks in `@ab/sources` runtime barrel closed (PRs #921, #925).
 - `wx-engine` -- Phases A-F shipped end-to-end (PRs #824, #825, #827, #830, #837, #839; final close #842). Six production scenarios, CLI dispatcher, round-trip check wired into `bun run check`, `:::scenario` directive contract. `agent_review_status: done`; walkthrough owed.
@@ -21,7 +21,7 @@ In flight:
 - `xc-viewer-v1` WP authored (PR #829) -- universal pre-flight stage first slice: one sectional region, three airports, one route, one C172N spec, the `frontal-xc-march` wx-engine scenario, mounted in a course step via `:::xc-viewer`. Spec status `draft`; awaiting human sign-off before Phase A starts. Depends on the now-shipped wx-engine.
 - `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged. Test suite green-up landed (#939, 558 -> 0 failures) and validator green-up landed (#941, TBD wiki-link + 5 orphan help pages). Underlying hydration leak / `hangar.docs_search_index` Postgres crash still need one focused investigation.
 
-Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, command-palette, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course.
+Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course.
 
 ## Live views
 

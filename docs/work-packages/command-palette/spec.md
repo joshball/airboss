@@ -4,7 +4,7 @@ title: Global search + command palette (Cmd+K / Cmd+P / Cmd+Shift+P)
 product: platform
 category: platform
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-11
 owner: agent
@@ -21,6 +21,7 @@ legacy_fields:
   related:
     - docs/work/plans/2026-05-10-command-palette-design.md
     - docs/work/plans/2026-05-10-palette-mockup.html
+shipped_prs: [822, 831, 857, 921, 925, 929, 930, 933, 936, 937, 940, 942, 957]
 ---
 
 # Global search + command palette
