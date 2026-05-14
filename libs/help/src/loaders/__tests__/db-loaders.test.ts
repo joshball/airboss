@@ -27,6 +27,7 @@ import {
 	DOMAINS,
 	PLAN_STATUSES,
 	REFERENCE_KINDS,
+	REFERENCE_SECTION_LEVELS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import {
@@ -44,6 +45,7 @@ import { loadAimSections } from '../aim-sections';
 import { loadCards } from '../cards';
 import { loadCfrSections } from '../cfr-sections';
 import { loadCourses } from '../courses';
+import { loadGlossaryTerms } from '../glossary-terms';
 import { loadHandbookSections } from '../handbook-sections';
 import { loadKnowledgeNodes } from '../knowledge-nodes';
 import { loadPlans } from '../plans';
@@ -63,6 +65,7 @@ const SEC_HANDBOOK_ID = generateReferenceSectionId();
 const SEC_CFR_ID = generateReferenceSectionId();
 const SEC_CFR49_ID = generateReferenceSectionId();
 const SEC_AIM_ID = generateReferenceSectionId();
+const SEC_GLOSSARY_ID = generateReferenceSectionId();
 
 const KNODE_ID = `kn-${SUITE_TAG}-zephyrlift`;
 const COURSE_ID = `crs-${SUITE_TAG}-zephyrcourse`;
@@ -77,6 +80,10 @@ const PLAN_OTHER_ID = generateStudyPlanId();
 
 // A non-collision needle that should only match seeded rows.
 const NEEDLE = 'zephyrlift';
+
+// AIM Pilot/Controller Glossary entries carry a `glossary/<slug>` code shape;
+// `glossary-terms.ts` strips the prefix when building the href.
+const GLOSSARY_SLUG = `${NEEDLE}-term`;
 
 const HOST_AUTHED: PaletteHost = { surface: 'global', userId: TEST_USER_ID };
 const HOST_ANON: PaletteHost = { surface: 'global', userId: undefined };
@@ -241,6 +248,28 @@ beforeAll(async () => {
 			sourceLocator: 'AIM 5-2-1',
 			contentMd: `AIM body text with ${NEEDLE} keyword.`,
 			contentHash: `hash-${SUITE_TAG}-aim`,
+			hasFigures: false,
+			hasTables: false,
+			seedOrigin: SUITE_TAG,
+			createdAt: now,
+			updatedAt: now,
+		},
+		{
+			// Pilot/Controller Glossary entry. `level='glossary'` flips the
+			// row out of the AIM-section loader and into the glossary-terms
+			// loader, with a different href and `airboss.glossary` type.
+			id: SEC_GLOSSARY_ID,
+			referenceId: REF_AIM_ID,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.GLOSSARY,
+			ordinal: 2,
+			depth: 0,
+			code: `glossary/${GLOSSARY_SLUG}`,
+			airbossRef: `airboss-ref:aim/glossary/${GLOSSARY_SLUG}`,
+			title: `${NEEDLE} term (PCG)`,
+			sourceLocator: `PCG ${GLOSSARY_SLUG}`,
+			contentMd: `Pilot/Controller Glossary definition mentioning ${NEEDLE} explicitly.`,
+			contentHash: `hash-${SUITE_TAG}-glossary`,
 			hasFigures: false,
 			hasTables: false,
 			seedOrigin: SUITE_TAG,
@@ -444,6 +473,7 @@ afterAll(async () => {
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_CFR_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_CFR49_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_AIM_ID));
+	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_GLOSSARY_ID));
 	await db.delete(reference).where(eq(reference.id, REF_HANDBOOK_ID));
 	await db.delete(reference).where(eq(reference.id, REF_CFR_ID));
 	await db.delete(reference).where(eq(reference.id, REF_CFR49_ID));
@@ -514,6 +544,45 @@ describe('loadAimSections', () => {
 
 	it('returns empty when needle is blank', async () => {
 		const out = await loadAimSections(parseQuery(''), HOST_AUTHED);
+		expect(out).toEqual([]);
+	});
+
+	it('never surfaces glossary-level rows (their loader owns them)', async () => {
+		// Glossary rows have code='glossary/<slug>' which 404s through
+		// LIBRARY_REGULATIONS_SECTION. The AIM loader filters them out so
+		// the only surfaces them is `loadGlossaryTerms`.
+		const out = await loadAimSections(parseQuery(NEEDLE), HOST_AUTHED);
+		const leak = out.find((r) => r.id === SEC_GLOSSARY_ID);
+		expect(leak).toBeUndefined();
+	});
+});
+
+describe('loadGlossaryTerms', () => {
+	it('returns the seeded glossary entry on a free-text title needle', async () => {
+		const out = await loadGlossaryTerms(parseQuery(NEEDLE), HOST_AUTHED);
+		const hit = out.find((r) => r.id === SEC_GLOSSARY_ID);
+		expect(hit).toBeDefined();
+		expect(hit?.type).toBe('airboss.glossary');
+		expect(hit?.title).toContain(NEEDLE);
+	});
+
+	it('routes through REFERENCE_GLOSSARY_ID with the slug (not the raw glossary/<slug> code)', async () => {
+		const out = await loadGlossaryTerms(parseQuery(NEEDLE), HOST_AUTHED);
+		const hit = out.find((r) => r.id === SEC_GLOSSARY_ID);
+		expect(hit).toBeDefined();
+		expect(hit?.href).toBe(`/reference/glossary/${encodeURIComponent(GLOSSARY_SLUG)}`);
+	});
+
+	it('never surfaces non-glossary section rows (level scoping)', async () => {
+		const out = await loadGlossaryTerms(parseQuery(NEEDLE), HOST_AUTHED);
+		const ids = out.map((r) => r.id);
+		expect(ids).not.toContain(SEC_AIM_ID);
+		expect(ids).not.toContain(SEC_HANDBOOK_ID);
+		expect(ids).not.toContain(SEC_CFR_ID);
+	});
+
+	it('returns empty when needle is blank', async () => {
+		const out = await loadGlossaryTerms(parseQuery(''), HOST_AUTHED);
 		expect(out).toEqual([]);
 	});
 });
