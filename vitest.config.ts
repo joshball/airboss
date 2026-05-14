@@ -115,6 +115,11 @@ const domAliases = {
 export default defineConfig({
 	resolve: { alias: aliases },
 	test: {
+		// Drops + recreates `airboss_unit_test`, runs the seed pipeline.
+		// Runs once per `bun test` invocation so DB-touching tests never
+		// see the developer's `airboss` dev dataset. `vitest.setup.ts`
+		// pins DATABASE_URL to the unit-test DB.
+		globalSetup: ['./vitest.globalSetup.ts'],
 		coverage: {
 			provider: 'v8',
 			include: ['libs/**/*.ts'],

@@ -1,15 +1,22 @@
 /**
- * Vitest setup -- load the dev `.env` into `process.env` before any test
- * module is imported.
+ * Vitest setup -- load the dev `.env` into `process.env`, then FORCE
+ * DATABASE_URL to point at the dedicated `airboss_unit_test` database.
  *
  * vite only exposes `VITE_`-prefixed env vars to `import.meta.env`; our
  * libs read raw `process.env` (DATABASE_URL, BETTER_AUTH_SECRET, ...) and
  * drizzle-orm/postgres-js errors out at import time when DATABASE_URL is
  * missing. This mirrors how `bun` auto-loads `.env` when running scripts.
+ *
+ * The DATABASE_URL override is the load-bearing line: it runs BEFORE any
+ * test module imports `@ab/db/connection`, so tests connect to the
+ * isolated test DB even if the developer's shell has DATABASE_URL set
+ * to the dev DB. `vitest.globalSetup.ts` provisions that DB once per
+ * `bun test` invocation.
  */
 
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { DEV_DB_URL_UNIT, ENV_VARS } from '@ab/constants';
 
 function loadEnvFile(path: string): void {
 	let raw: string;
@@ -43,3 +50,8 @@ loadEnvFile(resolve(process.cwd(), '.env'));
 // test suite against the dev-DB defaults. The no-overwrite rule above keeps
 // real `.env` entries winning when both files exist.
 loadEnvFile(resolve(process.cwd(), '.env.example'));
+
+// Force the test suite onto the isolated unit-test DB regardless of what
+// the developer's shell or .env files set. globalSetup has already dropped
+// + recreated + seeded this database.
+process.env[ENV_VARS.DATABASE_URL] = DEV_DB_URL_UNIT;
