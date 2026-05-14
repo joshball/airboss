@@ -35,6 +35,27 @@ references:
     subjects: [human-factors]
     primary_cert: null
 
+  - slug: faa-p-8740-25
+    kind: other
+    edition: unspecified
+    title: Personal Minimums Checklist (FAA-P-8740-25)
+    publisher: FAA
+    subjects: [human-factors, weather]
+    primary_cert: null
+
+  # PPL Practical Test Standards (legacy, superseded by Private ACS but
+  # still cited in places where ACS tolerances trace back to PTS lineage).
+  # `kind: pts` would push it into the regulations spine; we keep it on
+  # the topic spine via `subjects` instead so the cert spine reflects the
+  # current ACS, not the retired PTS.
+  - slug: faa-s-8081-14
+    kind: other
+    edition: unspecified
+    title: Private Pilot Practical Test Standards (FAA-S-8081-14)
+    publisher: FAA
+    subjects: [certification]
+    primary_cert: null
+
   - slug: faa-order-8260-3
     kind: other
     edition: 8260.3C

@@ -45,14 +45,18 @@ describe('reshapeLegacyCitation', () => {
 		expect(result.citation.note).toBe('AOA definition.');
 	});
 
-	it('handbook: AFH -> slug=afh, edition lifted from source', () => {
+	it('handbook: AFH always resolves to the authored edition (no inline override)', () => {
+		// PHAK/AFH/AvWx pin to the authored edition slug to prevent legacy
+		// citations missing the edition letter (`FAA-H-8083-3`) from
+		// upserting duplicate synthetic rows. The inline tag in `source`
+		// is ignored.
 		const result = reshapeLegacyCitation({
 			source: 'AFH (FAA-H-8083-3B)',
 			detail: 'Chapter 4 -- Slow Flight, Stalls, and Spins',
 			note: '',
 		});
 		expect(result.resolved.documentSlug).toBe('afh');
-		expect(result.resolved.edition).toBe('FAA-H-8083-3B');
+		expect(result.resolved.edition).toBe('FAA-H-8083-3C');
 		expect(result.citation.kind).toBe('handbook');
 	});
 
@@ -82,29 +86,27 @@ describe('reshapeLegacyCitation', () => {
 	});
 
 	it('handbook: AIH variants resolve to canonical handbooks-extras (slug, edition)', () => {
-		// Pinned to `(aviation-instructor, 8083-9)` -- the row seeded by
-		// `libs/sources/src/handbooks-extras/ingest.ts`. Predecessor rows
-		// (`(aih, FAA-H-8083-9B)`) were retired in the references cleanup
-		// sweep; a regression here would re-create the synthetic dupe.
+		// Pinned to `(aviation-instructor, FAA-H-8083-9)` -- the row seeded
+		// by `libs/sources/src/handbooks-extras/ingest.ts`. A regression
+		// here would re-create the synthetic dupe at a different edition
+		// slug.
 		for (const source of ['AIH (FAA-H-8083-9B)', "Aviation Instructor's Handbook", 'AIH']) {
 			const result = reshapeLegacyCitation({ source, detail: 'Chapter 2', note: '' });
 			expect(result.resolved.documentSlug).toBe('aviation-instructor');
-			expect(result.resolved.edition).toBe('8083-9');
+			expect(result.resolved.edition).toBe('FAA-H-8083-9');
 		}
 	});
 
 	it('handbook: Risk Management Handbook resolves to canonical handbooks-extras (slug, edition)', () => {
-		// Pinned to `(risk-management, 8083-2A)` -- the row seeded by
-		// `libs/sources/src/handbooks-extras/ingest.ts`. Predecessor rows
-		// (`(faa-h-8083-2, FAA-H-8083-2A)`) were retired in the references
-		// cleanup sweep.
+		// Pinned to `(risk-management, FAA-H-8083-2A)` -- the row seeded by
+		// `libs/sources/src/handbooks-extras/ingest.ts`.
 		const result = reshapeLegacyCitation({
 			source: 'FAA-H-8083-2A',
 			detail: 'Risk Management Handbook',
 			note: '',
 		});
 		expect(result.resolved.documentSlug).toBe('risk-management');
-		expect(result.resolved.edition).toBe('8083-2A');
+		expect(result.resolved.edition).toBe('FAA-H-8083-2A');
 	});
 
 	it('cfr: 14 CFR 91.3 -> kind=cfr, locator title/part/section', () => {
@@ -318,6 +320,21 @@ describe('extractCfrLocator', () => {
 		const result = extractCfrLocator('FAR Part 91', '');
 		expect(result.title).toBe(14);
 		expect(result.part).toBe(91);
+	});
+
+	// Regression: `14 CFR 23` (airworthiness standards source) used to
+	// resolve to `part: 14` because the bare-digit fallback matched the
+	// title number before the part. The `CFR <part>` matcher fires first
+	// now and pulls 23 out of the canonical `<title> CFR <part>` pattern.
+	// Without this guard the migration upserts a stray `14cfr14` synthetic
+	// reference row (off-corpus since PR #682 dropped Part 14 from the
+	// YAML), which then trips the CFR seed-shape contract test.
+	it('parses "14 CFR 23" as part 23, not part 14', () => {
+		expect(extractCfrLocator('14 CFR 23', '')).toEqual({ title: 14, part: 23, section: '' });
+	});
+
+	it('parses "14 CFR 25" as part 25', () => {
+		expect(extractCfrLocator('14 CFR 25', '')).toEqual({ title: 14, part: 25, section: '' });
 	});
 });
 
