@@ -92,7 +92,7 @@ After each walk: `bun run wp set <slug> human-review signed-off`, then `bun run 
 
 ### Tracking system overhaul
 
-- **Per-PR log auto-emission** — `bun run track log <pr>` works manually; post-merge hook to call it automatically was named in spec but not built.
+- **~~Per-PR log auto-emission~~** → shipped as `bun run track ship-pr <pr>`. Wraps `gh pr merge --squash --delete-branch` + `bun run track log <pr>` in one step. Local-machine command rather than git hook (no CI to hook into; parsing the squash commit message in a `post-merge` hook is fragile). Manual fallback `bun run track log <pr>` still works after any other merge path.
 - **Rolling-archive scheduled job** — `scripts/tracking/archive.ts` exists and is tested. Wiring into launchd scheduler deliberately deferred. Run manually with `bun run track archive --apply`.
 
 ### Command palette

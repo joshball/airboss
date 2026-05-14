@@ -13,6 +13,7 @@
  *   bun run track status           # full dashboard
  *   bun run track next             # what to work on, with reasoning
  *   bun run track ship <wp-id>     # walk -> sign-off -> ship -> regen -> format -> log
+ *   bun run track ship-pr <pr>     # gh pr merge --squash --delete-branch + track log <pr>
  *   bun run track generate         # emit BOARD/ROADMAPs/SHIPPED
  *   bun run track format           # markdown formatter (dirty by default)
  *   bun run track archive          # rolling archive (dry-run by default)
@@ -144,6 +145,14 @@ function commandHelp(): number {
 		`                      docs/log/. Run after every merge to keep SHIPPED.md`,
 		`                      fresh.`,
 		'',
+		`  ${green('ship-pr <pr-number>')}  Merge a PR (\`gh pr merge --squash --delete-branch\`)`,
+		`                      and immediately emit the log entry. The canonical`,
+		`                      "merge + auto-emit log" path. Replaces the post-merge`,
+		`                      hook the tracking-system-overhaul spec named but didn't`,
+		`                      build (no CI to hook into; merges happen on this`,
+		`                      machine). Flags: ${bold('--admin')} (admin override),`,
+		`                      ${bold('--yes')} / ${bold('-y')} (skip confirmation).`,
+		'',
 		`  ${green('oos-audit')}           Report WPs with "Out of scope" / "Deferred" sections in`,
 		`                      spec.md or tasks.md but no OUT-OF-SCOPE.md. The`,
 		`                      backlog gauge for the WP out-of-scope extraction`,
@@ -210,7 +219,10 @@ function commandHelp(): number {
 		`  bun run track ship some-wp-id       ${dim('# explicit, with prompt')}`,
 		`  bun run track ship some-wp-id -y    ${dim('# skip confirmation')}`,
 		'',
-		`  ${dim('# After merging a PR')}`,
+		`  ${dim('# Merge a PR and auto-emit its log entry (preferred)')}`,
+		`  bun run track ship-pr 712           ${dim('# gh pr merge + track log in one step')}`,
+		'',
+		`  ${dim('# Or, if you merged via gh pr merge directly:')}`,
 		`  bun run track log 712               ${dim('# emit docs/log/2026-...-PR-712-...md')}`,
 		'',
 		`  ${dim('# Surface a bug for later')}`,
@@ -591,7 +603,8 @@ async function commandShip(argv: readonly string[]): Promise<number> {
 	console.log(bold(`  git add ${specRel} docs/work/BOARD.md docs/work/SHIPPED.md docs/products/*/ROADMAP.md`));
 	console.log(bold(`  git commit -m "ship ${id}"`));
 	console.log('');
-	console.log(`After merge: ${bold(`bun run track log <pr-number>`)} to record the PR.`);
+	console.log(`Merge + log in one step: ${bold(`bun run track ship-pr <pr-number>`)}`);
+	console.log(`Or, if merging some other way: ${bold(`bun run track log <pr-number>`)} after.`);
 	return 0;
 }
 
@@ -611,6 +624,172 @@ function commandArchive(argv: readonly string[]): number {
 
 function commandLog(argv: readonly string[]): number {
 	return runBun(['scripts/log-pr.ts', ...argv]);
+}
+
+// ---- ship-pr -------------------------------------------------------------
+
+/**
+ * Merge a PR via `gh pr merge --squash --delete-branch` then immediately
+ * emit its log entry via `bun run track log <pr>`. The local replacement for
+ * the post-merge hook described in tracking-system-overhaul/spec.md §3.
+ *
+ * There is no CI; merges happen on this machine. Wrapping the two commands
+ * here is the simplest reliable trigger -- a git hook would have to extract
+ * the PR number from the squash commit message and depends on the operator
+ * running `git pull` locally before the hook can find it.
+ *
+ * Behavior:
+ *   1. `gh pr view <pr>` to confirm the PR exists and isn't already merged.
+ *   2. Confirmation prompt (skip with --yes / -y).
+ *   3. `gh pr merge <pr> --squash --delete-branch` (passes through --admin).
+ *   4. On success, `bun run track log <pr>` to emit the log entry.
+ *   5. If merge fails: propagate the failure, do not run log.
+ *   6. If log fails after merge succeeded: warn but exit 0 (the log can be
+ *      emitted later manually with `bun run track log <pr>`).
+ */
+interface ShipPrFlags {
+	yes: boolean;
+	admin: boolean;
+}
+
+function parseShipPrFlags(argv: readonly string[]): { pr: string | null; flags: ShipPrFlags } {
+	let pr: string | null = null;
+	const flags: ShipPrFlags = { yes: false, admin: false };
+	for (const arg of argv) {
+		if (arg === '--yes' || arg === '-y') {
+			flags.yes = true;
+			continue;
+		}
+		if (arg === '--admin') {
+			flags.admin = true;
+			continue;
+		}
+		if (arg === '--help' || arg === '-h') {
+			console.log('Usage: bun run track ship-pr <pr-number> [--yes] [--admin]');
+			console.log('');
+			console.log('Merges a PR (gh pr merge --squash --delete-branch) and emits its log entry.');
+			console.log('Flags:');
+			console.log('  --yes / -y   Skip the confirmation prompt');
+			console.log('  --admin      Pass --admin to gh pr merge (override branch protection)');
+			process.exit(0);
+		}
+		if (arg.startsWith('--')) {
+			console.error(`track ship-pr: unknown flag "${arg}"`);
+			process.exit(1);
+		}
+		if (pr !== null) {
+			console.error(`track ship-pr: only one pr-number allowed`);
+			process.exit(1);
+		}
+		pr = arg;
+	}
+	return { pr, flags };
+}
+
+interface PrViewState {
+	number: number;
+	title: string;
+	state: string;
+	mergedAt: string | null;
+	mergeStateStatus: string;
+	mergeable: string;
+	reviewDecision: string;
+	url: string;
+}
+
+function fetchPrState(prNumber: number): PrViewState {
+	const result = spawnSync(
+		'gh',
+		[
+			'pr',
+			'view',
+			String(prNumber),
+			'--json',
+			'number,title,state,mergedAt,mergeStateStatus,mergeable,reviewDecision,url',
+		],
+		{ encoding: 'utf8' },
+	);
+	if (result.status !== 0) {
+		throw new Error(`gh pr view ${prNumber} failed: ${result.stderr.trim()}`);
+	}
+	return JSON.parse(result.stdout) as PrViewState;
+}
+
+async function commandShipPr(argv: readonly string[]): Promise<number> {
+	const { pr, flags } = parseShipPrFlags(argv);
+	if (pr === null) {
+		console.error('track ship-pr: missing required <pr-number>');
+		console.error('Usage: bun run track ship-pr <pr-number> [--yes] [--admin]');
+		return 1;
+	}
+	if (!/^\d+$/.test(pr)) {
+		console.error(`track ship-pr: PR number must be a positive integer, got "${pr}"`);
+		return 1;
+	}
+
+	// Step 1: confirm the PR exists and is mergeable.
+	let state: PrViewState;
+	try {
+		state = fetchPrState(Number.parseInt(pr, 10));
+	} catch (err) {
+		console.error(red(err instanceof Error ? err.message : String(err)));
+		return 1;
+	}
+	if (state.state === 'MERGED') {
+		console.log(yellow(`PR #${state.number} is already merged (${state.mergedAt ?? 'unknown date'}).`));
+		console.log(dim(`If the log entry is missing, run: bun run track log ${state.number}`));
+		return 0;
+	}
+	if (state.state === 'CLOSED') {
+		console.error(red(`PR #${state.number} is closed without merging. Refusing to ship.`));
+		return 1;
+	}
+
+	console.log(bold(`Ship PR #${state.number}`));
+	console.log(`  title:           ${state.title}`);
+	console.log(`  state:           ${state.state}`);
+	console.log(`  mergeable:       ${state.mergeable}`);
+	console.log(`  reviewDecision:  ${state.reviewDecision === '' ? '(none)' : state.reviewDecision}`);
+	console.log(`  url:             ${state.url}`);
+	console.log('');
+	console.log(dim('Will run: gh pr merge --squash --delete-branch' + (flags.admin ? ' --admin' : '')));
+	console.log(dim(`Then:     bun run track log ${state.number}`));
+	console.log('');
+
+	if (!flags.yes) {
+		await confirmOrAbort('Merge and emit log entry?');
+	}
+
+	// Step 2: merge.
+	const mergeArgs = ['pr', 'merge', String(state.number), '--squash', '--delete-branch'];
+	if (flags.admin) mergeArgs.push('--admin');
+	console.log(dim(`gh ${mergeArgs.join(' ')}`));
+	const merge = spawnSync('gh', mergeArgs, { cwd: repoRoot(), stdio: 'inherit' });
+	if (merge.status !== 0) {
+		console.error(red(`gh pr merge failed (exit ${merge.status ?? 'unknown'}). Not emitting log entry.`));
+		return merge.status ?? 1;
+	}
+
+	// Step 3: emit log entry. If this fails, surface a warning but exit 0 --
+	// the merge already succeeded and the log can be backfilled by re-running
+	// `bun run track log <pr>` manually.
+	console.log('');
+	console.log(dim(`Emitting log entry: bun scripts/log-pr.ts ${state.number}`));
+	const log = runBun(['scripts/log-pr.ts', String(state.number)]);
+	if (log !== 0) {
+		console.error('');
+		console.error(yellow(`Log emission failed (exit ${log}). The merge succeeded.`));
+		console.error(yellow(`Re-run manually: bun run track log ${state.number}`));
+		return 0;
+	}
+
+	console.log('');
+	console.log(green(`✓ PR #${state.number} merged and logged.`));
+	console.log(dim(`URL: ${state.url}`));
+	console.log('');
+	console.log(`Next: ${bold('git pull')} to bring the squash commit into your local main,`);
+	console.log(`then stage and commit the new docs/log/ entry in your next PR.`);
+	return 0;
 }
 
 function commandOosAudit(argv: readonly string[]): number {
@@ -653,6 +832,9 @@ switch (head) {
 		break;
 	case 'log':
 		exitCode = commandLog(rest);
+		break;
+	case 'ship-pr':
+		exitCode = await commandShipPr(rest);
 		break;
 	case 'oos-audit':
 		exitCode = commandOosAudit(rest);

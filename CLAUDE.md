@@ -186,7 +186,7 @@ For everything that doesn't earn a WP: a session todo at `docs/work/todos/YYYYMM
 
 Three top-level commands cover everything:
 
-- **`bun run track`** -- workflow umbrella (`status`, `next`, `ship`, `generate`, `format`, `archive`, `log`). Run with no args for the full help index. Use `track ship` (interactive) to walk + close a WP.
+- **`bun run track`** -- workflow umbrella (`status`, `next`, `ship`, `ship-pr`, `generate`, `format`, `archive`, `log`). Run with no args for the full help index. Use `track ship` (interactive) to walk + close a WP. Use `track ship-pr <pr>` to merge a PR via `gh pr merge --squash --delete-branch` and auto-emit its `docs/log/` entry in one step (the canonical merge path; replaces the post-merge hook the tracking spec named but never built).
 - **`bun run wp`** -- work-package CLI (`list`, `show`, `set`, `next`, `blocked`). Use directly for fine-grained mutations and queries.
 - **`bun run bug`** -- bug CLI (`list`, `show`, `new`, `set`, `index`). Same shape as `wp`, lighter schema.
 

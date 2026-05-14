@@ -147,7 +147,7 @@ summary: |
 ---
 ```
 
-Auto-emitted by a post-merge hook (or `bun scripts/log-pr.ts <number>`). Backfilled from `gh pr list` for historical PRs.
+Auto-emitted by `bun run track ship-pr <number>` (the merge command that runs `gh pr merge --squash --delete-branch` and then `bun scripts/log-pr.ts <number>` in one step). The post-merge git hook described in earlier drafts of this spec was not built: there is no CI to hook into, merges happen on the operator's machine, and wrapping `gh pr merge` directly is simpler and more reliable than parsing the squash commit message in a `post-merge` hook. Manual fallback: `bun run track log <pr>` after any other merge path. Backfilled from `gh pr list` for historical PRs.
 
 ### 4. Query surface: CLI, app, agents (one data source)
 
