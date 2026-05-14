@@ -179,6 +179,14 @@ export const ROUTES = {
 	 * Returns `{ ok: true }` on success. Auth-gated.
 	 */
 	API_PAGE_EXPLAINER: '/api/page-explainer',
+	/**
+	 * Pin-to-today endpoint. `POST { kind, targetId, title, href, notes? }`
+	 * inserts one row on `study.plan_item` scoped to the calling user's
+	 * local-calendar today. Idempotent: re-pinning the same
+	 * `(kind, target, date)` returns the existing row. The command palette
+	 * detail-pane "Pin to today" button posts here.
+	 */
+	API_PLAN_ITEMS: '/api/plan-items',
 
 	/**
 	 * `POST` endpoint where the root layout's `window.onerror` /
