@@ -30,11 +30,12 @@ body_md: |
 
   ---
 
-  Pull up tomorrow's surface analysis. You see a cold front sweeping
+  Pull up tomorrow's surface analysis. You see a
+  [cold front](/reference/knowledge/wx-airmasses-and-fronts) sweeping
   east through your route, a high pressure system parked over the
   destination, isobars tightly packed across the middle leg. Without
-  reading any TAF or METAR, what do you already know about how the day
-  will look?
+  reading any [TAF](/reference/knowledge/wx-reading-metars-tafs) or
+  METAR, what do you already know about how the day will look?
 
   This is the synoptic story -- the big-picture air-mass behavior that
   drives every product you'll read in later sections. Get the frame
@@ -103,10 +104,13 @@ steps:
     body_md: |
       Two air parcels at the same altitude can carry wildly different
       flight implications depending on what happens when you nudge one
-      upward. Stable air resists vertical motion -- smooth ride, layered
-      clouds, steady visibility, but trapped pollution and fog risk.
-      Unstable air amplifies vertical motion -- bumpy ride, cumulus
-      build-ups, showers, and (if it goes far enough) thunderstorms.
+      upward. Stable air resists vertical motion -- smooth ride,
+      [layered clouds](/reference/knowledge/wx-clouds-and-precipitation),
+      steady visibility, but trapped pollution and
+      [fog](/reference/knowledge/wx-fog-and-visibility-obstructions)
+      risk. Unstable air amplifies vertical motion -- bumpy ride,
+      cumulus build-ups, showers, and (if it goes far enough)
+      [thunderstorms](/reference/knowledge/wx-thunderstorm-hazards).
 
       The lapse rate is the diagnostic. Lift a parcel; compare its
       cooling rate to the surrounding air. If it stays warmer it keeps

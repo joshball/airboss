@@ -37,17 +37,20 @@ body_md: |
   ---
 
   Sections 2-6 built the synoptic story; this section is where the
-  story meets the printed page. METARs, TAFs, and PIREPs are the
-  three workhorse products you will read on every flight, and reading
-  them well is a three-stage skill: decode the symbols, understand
-  the picture they describe, triage what matters for this flight.
+  story meets the printed page.
+  [METARs, TAFs](/reference/knowledge/wx-reading-metars-tafs), and
+  [PIREPs](/reference/knowledge/wx-product-pireps) are the three
+  workhorse products you will read on every flight, and reading them
+  well is a three-stage skill: decode the symbols, understand the
+  picture they describe, triage what matters for this flight.
 
   The decode stage is mechanical -- it's the alphabet. The understand
   stage is where pilots get stuck because the products are written
   for a meteorologist, not a pilot, and require the synoptic frame
   from earlier sections to make sense. The triage stage separates a
   pilot who can read every line from a pilot who can identify the
-  three lines that change the go/no-go decision.
+  three lines that change the
+  [go/no-go decision](/reference/knowledge/wx-go-nogo-decision).
 
   A METAR plot for an iconic mid-Atlantic morning (renders against the
   authored chart instance via the wx-charts library):
@@ -55,6 +58,7 @@ body_md: |
   :::chart slug="wx-metar-plot-grid-2024-01-13-12z"
   :::
 steps:
+
   - code: s7.1
     ordinal: 1
     title: Reading METARs and TAFs
@@ -63,7 +67,9 @@ steps:
       radius around the reporting station. Together they're the most
       airport-specific weather products you'll read.
 
-      The pilot-relevant lines: wind (with gust spread), visibility,
+      The pilot-relevant lines: [wind](/reference/knowledge/wx-wind-systems)
+      (with gust spread),
+      [visibility](/reference/knowledge/wx-fog-and-visibility-obstructions),
       ceiling, weather phenomena, altimeter. The triage habit is to
       compare the current METAR to the most recent TAF amendment --
       if reality is already running ahead of the forecast, the
@@ -95,10 +101,12 @@ steps:
       :::
 
       Read every PIREP within 100 NM of your route, especially the
-      ones that mention turbulence, icing, or cloud tops -- those are
-      the conditions hardest to forecast and most useful to know. And
-      then file your own. The PIREP system only works if pilots feed
-      it; the urgent (UUA) one you file at 11,500 about moderate
-      mixed icing might be the data point that turns another pilot
-      around at 9,500.
+      ones that mention
+      [turbulence](/reference/knowledge/wx-turbulence-types),
+      [icing](/reference/knowledge/wx-icing-types-and-avoidance), or
+      cloud tops -- those are the conditions hardest to forecast and
+      most useful to know. And then file your own. The PIREP system
+      only works if pilots feed it; the urgent (UUA) one you file at
+      11,500 about moderate mixed icing might be the data point that
+      turns another pilot around at 9,500.
     knowledge_node_id: wx-product-pireps

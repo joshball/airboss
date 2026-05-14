@@ -36,12 +36,13 @@ body_md: |
   amount of pilot skill that compensates for a wing that has stopped
   being a wing.
 
-  Icing is a probability problem the pilot manages through avoidance,
-  not penetration. The "out" -- a layer above, a layer below, a turn
-  back into clear air, a descent into above-freezing temperatures --
-  must exist before you commit to the icing-prone air, not after. The
-  most dangerous icing flights are the ones where the pilot intended
-  to "just take a look" and discovered the look was a commitment.
+  [Icing](/reference/knowledge/wx-icing-types-and-avoidance) is a
+  probability problem the pilot manages through avoidance, not
+  penetration. The "out" -- a layer above, a layer below, a turn back
+  into clear air, a descent into above-freezing temperatures -- must
+  exist before you commit to the icing-prone air, not after. The most
+  dangerous icing flights are the ones where the pilot intended to
+  "just take a look" and discovered the look was a commitment.
 
   An icing potential chart for the same December weather day as the
   surface analysis in s2 (placeholder slug; resolves to live SVG when
@@ -50,26 +51,30 @@ body_md: |
   :::chart slug="wx-icing-cip-2024-12-23-12z"
   :::
 
-  Read the chart with two questions: where is the freezing level, and
-  where is liquid water above it?
+  Read the chart with two questions: where is the
+  [freezing level](/reference/knowledge/wx-freezing-level), and where
+  is liquid water above it?
 steps:
+
   - code: s6.1
     ordinal: 1
     title: Icing types and avoidance
     body_md: |
       Three ice forms cover most of what general aviation will see.
-      Rime is granular, white, opaque, accumulating slowly in stratus;
-      it spoils airflow but doesn't dramatically change the wing shape.
+      Rime is granular, white, opaque, accumulating slowly in
+      [stratus](/reference/knowledge/wx-clouds-and-precipitation); it
+      spoils airflow but doesn't dramatically change the wing shape.
       Clear is glassy, hard to see, accumulating fast in cumulus or
       freezing rain; it can re-shape the wing in minutes. Mixed is
       both at once and combines the worst of each.
 
       The avoidance rule chains: avoid visible moisture in temperatures
       from +2 C to -20 C; if you're already in it, climb above the
-      moisture or descend below the freezing level; if neither out
-      exists, turn around now while you still have the control
-      authority to do so. Anti-ice and de-ice equipment buy you
-      minutes, not hours.
+      moisture or descend below the
+      [freezing level](/reference/knowledge/wx-freezing-level); if
+      neither out exists, turn around now while you still have the
+      control authority to do so. Anti-ice and de-ice equipment buy
+      you minutes, not hours.
 
       Where CIP (the section opener) is current icing, FIP is the
       forecast counterpart -- same gridded scalar field, projected
@@ -86,8 +91,9 @@ steps:
     ordinal: 2
     title: Freezing level
     body_md: |
-      Icing requires two ingredients in the same air: liquid water and
-      a temperature at or below freezing. The freezing level is where
+      [Icing](/reference/knowledge/wx-icing-types-and-avoidance)
+      requires two ingredients in the same air: liquid water and a
+      temperature at or below freezing. The freezing level is where
       the second ingredient starts. Above it, any cloud you fly through
       is a candidate; below it, you can be in cloud all day without
       ice. Knowing where the freezing level sits along your route is
