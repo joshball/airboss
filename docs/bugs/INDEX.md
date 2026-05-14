@@ -2,7 +2,7 @@
 
 # Bugs
 
-8 open bugs of 11 total.
+6 open bugs of 11 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -36,10 +36,8 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 - [bug-flightbag-ssr-stream-closed](bug-flightbag-ssr-stream-closed.md) -- Flightbag SSR crashes on parallel handbook section requests
 
-### Platform (open: 3)
+### Platform (open: 1)
 
 #### Minor
 
 - [bug-palette-phase4-dropped-commands](bug-palette-phase4-dropped-commands.md) -- Palette Phase 4 dropped 3 commands awaiting upstream routes (PR #940)
-- [bug-seed-creates-14cfr14-orphan](bug-seed-creates-14cfr14-orphan.md) -- Seed pipeline creates 14cfr14 reference row that's off-corpus since PR
-- [bug-seed-creates-orphan-handbook-refs](bug-seed-creates-orphan-handbook-refs.md) -- Seed pipeline creates 6 handbook/other refs unreachable from any library spine

@@ -3,7 +3,7 @@ id: bug-seed-creates-orphan-handbook-refs
 title: Seed pipeline creates 6 handbook/other refs unreachable from any library spine
 product: platform
 severity: minor
-status: open
+status: fixed
 discovered_pr: null
 discovered_date: 2026-05-14
 fix_pr: null
