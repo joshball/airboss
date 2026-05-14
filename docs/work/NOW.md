@@ -8,17 +8,20 @@ Single entry point for "what should I work on?" in airboss.
 
 Recently shipped:
 
-- `command-palette` -- Phases 3 -> 3.5a/3.5b/3.5c -> 4 shipped (PRs #857, #930, #933, #936, #940). Cmd+Shift+P live with intent classifier, composite ranker, per-intent panels, phrase-FTS passage search, and per-app command registries. Walkthrough owed.
+- `command-palette` -- Phases 3 -> 3.5a/3.5b/3.5c -> 4 -> 5 shipped (PRs #857, #930, #933, #936, #940, #942). Cmd+Shift+P live with intent classifier, composite ranker, per-intent panels, phrase-FTS passage search, per-app command registries, and Cmd+P quick-open + recents. Walkthrough owed.
 - `course-tree-arbitrary-depth` -- Phases A/B/C/D/E shipped (PRs #934, #935, #938, #943, #944). N-deep schema + recursive validators + lens helper + renderer prev/next nav + aggregate cert overlay with leaf-only study-plan selection. Walkthrough owed.
 - `wx-charts` -- ADR 027 layout migration complete (PRs #915, #922, #923, #927), CONUS hunchback root-caused (PRs #924, #926), `/api/charts` route serving SVGs (#928), `:::chart` and `:::scenario` markdown directives wired (#932). Browser-hydration leaks in `@ab/sources` runtime barrel closed (PRs #921, #925).
-- `wx-engine` -- shipped end-to-end (six production scenarios, CLI, `:::scenario` contract). Walkthrough owed; run `/ball-review-full` over libs/wx-engine + scripts/wx-scenario + data/wx-scenarios per tasks.md "Final close", fix findings, then flip status.
+- `wx-engine` -- Phases A-F shipped end-to-end (PRs #824, #825, #827, #830, #837, #839; final close #842). Six production scenarios, CLI dispatcher, round-trip check wired into `bun run check`, `:::scenario` directive contract. `agent_review_status: done`; walkthrough owed.
+- `card-question-tier` -- Phase 1 schema + seeder + pilot shipped (#855), Phase 2 backfill across remaining course cards via inference rules (#949), `cardType=calculation -> basic` fix on 12 weather cards (#843), interactive `classify-card-tier` CLI for hand-classification (#954). Phase 3 UI surfaces (FAA-vs-CFI panel, tier filter, ACS lens, source-authority badge) deferred to dedicated WPs. Walkthrough owed.
+- `weather-comprehensive` course -- 250 weather cards live across the course tree; weather products reference encyclopedia shipped at `/reference/wx/products` (PRs #956, #960, #964); WX Scenarios section landed in the course (#948); citation migrate now pins AvWx (FAA-H-8083-28B) chapters (#946, #955). Walkthrough owed.
 
 In flight:
 
 - `course-reader-and-editor` WP authored (PRs #760, #761) -- dual UI on top of course-primitive: study reader + hangar editor + Courses tab on `/program/goals/[id]`. Spec status `draft` pending walkthrough; `/ball-wp-build` dispatches once human review signs off.
+- `xc-viewer-v1` WP authored (PR #829) -- universal pre-flight stage first slice: one sectional region, three airports, one route, one C172N spec, the `frontal-xc-march` wx-engine scenario, mounted in a course step via `:::xc-viewer`. Spec status `draft`; awaiting human sign-off before Phase A starts. Depends on the now-shipped wx-engine.
 - `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged. Test suite green-up landed (#939, 558 -> 0 failures) and validator green-up landed (#941, TBD wiki-link + 5 orphan help pages). Underlying hydration leak / `hangar.docs_search_index` Postgres crash still need one focused investigation.
 
-Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, command-palette, course-tree-arbitrary-depth.
+Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, command-palette, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course.
 
 ## Live views
 
