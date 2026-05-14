@@ -1,8 +1,10 @@
 <script lang="ts">
+import { ROUTES } from '@ab/constants';
 import { urlForReference } from '@ab/sources';
 import type { SearchResult } from '../schema/result-types';
 import { accentFor } from './palette-accent';
 import { airbossRefForResult, isFlightbagHref } from './palette-flightbag';
+import { pinPayloadForResult } from './palette-pin';
 
 /**
  * Right-side detail pane for the command palette (Variant C, production).
@@ -14,9 +16,9 @@ import { airbossRefForResult, isFlightbagHref } from './palette-flightbag';
  *   2. Open (the default navigation)
  *   3. Search inside (sets `doc:<code>` chip; calls onSearchInside)
  *   4. Cite this (copies `airboss-ref:` URI to clipboard; transient toast)
- *   5. Pin to today (disabled placeholder -- needs an `@ab/bc-study` pin
- *      API that does not exist today; reintroduced when plans grow a
- *      pin-to-today operation)
+ *   5. Pin to today (POSTs to `/api/plan-items` to add the result to
+ *      today's queue on `study.plan_item`; hidden for result types
+ *      without a stable underlying-entity id)
  *
  * Visibility is owned by the parent palette: this component renders
  * nothing when `result` is null. Toggling via `Cmd+\` and the narrow-
@@ -46,9 +48,31 @@ let { result, onOpen, onSearchInside }: Props = $props();
 
 let copied = $state(false);
 let copyTimer = $state<number | null>(null);
+let pinned = $state(false);
+let pinError = $state(false);
+let pinPending = $state(false);
+let pinTimer = $state<number | null>(null);
 
 const accent = $derived<string>(result ? accentFor(result.type) : 'cmd');
 const refUri = $derived(result ? airbossRefForResult(result) : null);
+const pinPayload = $derived(result ? pinPayloadForResult(result) : null);
+
+// Reset pin feedback whenever the highlighted result changes. The
+// "Pinned" confirmation is per-result, not per-component lifetime.
+$effect(() => {
+	// Touch the discriminator so the effect re-runs on result swaps; the
+	// $derived `pinPayload` would re-fire too, but it would also re-fire
+	// on inert key shuffles (cluster collapse), and we want to keep the
+	// feedback visible across those.
+	const _ = result?.id ?? null;
+	pinned = false;
+	pinError = false;
+	pinPending = false;
+	if (pinTimer !== null) {
+		window.clearTimeout(pinTimer);
+		pinTimer = null;
+	}
+});
 const flightbagPath = $derived<string | null>(
 	(() => {
 		if (!result) return null;
@@ -127,6 +151,35 @@ async function handleCite(): Promise<void> {
 		// fallback. The button stays clickable; the user can retry.
 	}
 }
+
+async function handlePin(): Promise<void> {
+	if (!result || !pinPayload || pinPending) return;
+	pinPending = true;
+	pinError = false;
+	try {
+		const res = await fetch(ROUTES.API_PLAN_ITEMS, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify(pinPayload),
+		});
+		if (!res.ok) throw new Error(`pin failed: ${res.status}`);
+		pinned = true;
+		if (pinTimer !== null) window.clearTimeout(pinTimer);
+		pinTimer = window.setTimeout(() => {
+			pinned = false;
+			pinTimer = null;
+		}, 2400);
+	} catch {
+		pinError = true;
+		if (pinTimer !== null) window.clearTimeout(pinTimer);
+		pinTimer = window.setTimeout(() => {
+			pinError = false;
+			pinTimer = null;
+		}, 2400);
+	} finally {
+		pinPending = false;
+	}
+}
 </script>
 
 <aside
@@ -186,22 +239,34 @@ async function handleCite(): Promise<void> {
 				{copied ? 'Copied' : 'Cite this'}
 			</button>
 			<!--
-				Pin to today: stays disabled until study-side plans expose a
-				"pin a card / rep / reference to today's plan" API. The
-				command-palette WP Phase 4 confirmed no such helper exists in
-				`@ab/bc-study` today; reintroduce when `mine.plan` supports
-				the pin-to-today operation (tracked as an OUT-OF-SCOPE follow-up
-				on the command-palette WP).
+				Pin to today: POSTs to `/api/plan-items` which writes a row on
+				`study.plan_item` scoped to the user's local-calendar today.
+				The button is hidden when the result has no mappable pin
+				target (web tools, commands, doc-level rows without a stable
+				underlying entity id). Idempotent on the BC side: a second
+				click for the same (user, kind, target, today) returns the
+				existing row, so we don't have to dedupe client-side.
 			-->
-			<button
-				type="button"
-				class="action"
-				disabled
-				data-testid="palette-detail-pin"
-				title="Available when plans support pin-to-today (tracked on the command-palette WP)"
-			>
-				Pin to today
-			</button>
+			{#if pinPayload}
+				<button
+					type="button"
+					class="action"
+					disabled={pinPending || pinned}
+					onclick={handlePin}
+					data-testid="palette-detail-pin"
+					title={pinError ? 'Pinning failed; click to retry' : 'Add to today’s queue'}
+				>
+					{#if pinned}
+						Pinned
+					{:else if pinError}
+						Pin failed - retry
+					{:else if pinPending}
+						Pinning&hellip;
+					{:else}
+						Pin to today
+					{/if}
+				</button>
+			{/if}
 		</div>
 	{/if}
 </aside>

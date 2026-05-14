@@ -383,6 +383,33 @@ CREATE TABLE "study"."note" (
 	CONSTRAINT "note_follow_up_done_requires_follow_up_check" CHECK ("follow_up_done_at" IS NULL OR "follow_up_md" != '')
 );
 --> statement-breakpoint
+CREATE TABLE "study"."plan_item" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"pinned_for_date" date NOT NULL,
+	"kind" text NOT NULL,
+	"knowledge_node_id" text,
+	"reference_section_id" text,
+	"card_id" text,
+	"glossary_term" text,
+	"title" text NOT NULL,
+	"href" text NOT NULL,
+	"notes" text DEFAULT '' NOT NULL,
+	"pinned_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"completed_at" timestamp with time zone,
+	"seed_origin" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "plan_item_kind_check" CHECK ("kind" IN ('knowledge_node', 'reference_section', 'card', 'glossary')),
+	CONSTRAINT "plan_item_knowledge_node_fk_invariant" CHECK (("kind" = 'knowledge_node') = ("knowledge_node_id" IS NOT NULL)),
+	CONSTRAINT "plan_item_reference_section_fk_invariant" CHECK (("kind" = 'reference_section') = ("reference_section_id" IS NOT NULL)),
+	CONSTRAINT "plan_item_card_fk_invariant" CHECK (("kind" = 'card') = ("card_id" IS NOT NULL)),
+	CONSTRAINT "plan_item_glossary_fk_invariant" CHECK (("kind" = 'glossary') = ("glossary_term" IS NOT NULL)),
+	CONSTRAINT "plan_item_title_length_check" CHECK (char_length("title") > 0 AND char_length("title") <= 200),
+	CONSTRAINT "plan_item_href_length_check" CHECK (char_length("href") > 0 AND char_length("href") <= 1024),
+	CONSTRAINT "plan_item_notes_length_check" CHECK (char_length("notes") <= 2000)
+);
+--> statement-breakpoint
 CREATE TABLE "study"."reference" (
 	"id" text PRIMARY KEY NOT NULL,
 	"kind" text NOT NULL,
@@ -904,7 +931,7 @@ CREATE TABLE "hangar"."source" (
 	"deleted_at" timestamp with time zone,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
-	CONSTRAINT "hangar_source_type_check" CHECK ("type" IN ('cfr', 'aim', 'pcg', 'ac', 'acs', 'phak', 'afh', 'ifh', 'poh', 'ntsb', 'gajsc', 'aopa', 'faa-safety', 'sop', 'authored', 'derived', 'sectional')),
+	CONSTRAINT "hangar_source_type_check" CHECK ("type" IN ('cfr', 'aim', 'pcg', 'ac', 'acs', 'phak', 'afh', 'ifh', 'avwx', 'iph', 'rmh', 'aih', 'hfh', 'gfh', 'bfh', 'poh', 'ntsb', 'gajsc', 'aopa', 'faa-safety', 'sop', 'authored', 'derived', 'sectional')),
 	CONSTRAINT "hangar_source_downloaded_pair_check" CHECK (("checksum" IS NULL) = ("downloaded_at" IS NULL))
 );
 --> statement-breakpoint
@@ -1079,6 +1106,9 @@ ALTER TABLE "study"."note" ADD CONSTRAINT "note_reference_section_id_reference_s
 ALTER TABLE "study"."note" ADD CONSTRAINT "note_course_id_course_id_fk" FOREIGN KEY ("course_id") REFERENCES "study"."course"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."note" ADD CONSTRAINT "note_goal_id_goal_id_fk" FOREIGN KEY ("goal_id") REFERENCES "study"."goal"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."note" ADD CONSTRAINT "note_syllabus_node_id_syllabus_node_id_fk" FOREIGN KEY ("syllabus_node_id") REFERENCES "study"."syllabus_node"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."plan_item" ADD CONSTRAINT "plan_item_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."plan_item" ADD CONSTRAINT "plan_item_reference_section_id_reference_section_id_fk" FOREIGN KEY ("reference_section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "study"."plan_item" ADD CONSTRAINT "plan_item_card_id_card_id_fk" FOREIGN KEY ("card_id") REFERENCES "study"."card"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_figure" ADD CONSTRAINT "reference_figure_section_id_reference_section_id_fk" FOREIGN KEY ("section_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_reference_id_reference_id_fk" FOREIGN KEY ("reference_id") REFERENCES "study"."reference"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "study"."reference_section" ADD CONSTRAINT "reference_section_parent_id_reference_section_id_fk" FOREIGN KEY ("parent_id") REFERENCES "study"."reference_section"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -1205,6 +1235,9 @@ CREATE INDEX "note_syllabus_idx" ON "study"."note" USING btree ("syllabus_node_i
 CREATE INDEX "note_tags_gin_idx" ON "study"."note" USING gin ("tags");--> statement-breakpoint
 CREATE INDEX "note_follow_up_open_idx" ON "study"."note" USING btree ("user_id","created_at") WHERE follow_up_md != '' AND follow_up_done_at IS NULL AND archived_at IS NULL;--> statement-breakpoint
 CREATE INDEX "note_user_open_idx" ON "study"."note" USING btree ("user_id","created_at") WHERE archived_at IS NULL;--> statement-breakpoint
+CREATE INDEX "plan_item_user_date_idx" ON "study"."plan_item" USING btree ("user_id","pinned_for_date");--> statement-breakpoint
+CREATE INDEX "plan_item_user_open_idx" ON "study"."plan_item" USING btree ("user_id","pinned_for_date") WHERE completed_at IS NULL;--> statement-breakpoint
+CREATE INDEX "plan_item_user_kind_date_idx" ON "study"."plan_item" USING btree ("user_id","kind","pinned_for_date");--> statement-breakpoint
 CREATE UNIQUE INDEX "reference_doc_edition_unique" ON "study"."reference" USING btree ("document_slug","edition");--> statement-breakpoint
 CREATE INDEX "reference_kind_idx" ON "study"."reference" USING btree ("kind");--> statement-breakpoint
 CREATE INDEX "reference_subjects_gin_idx" ON "study"."reference" USING gin ("subjects");--> statement-breakpoint

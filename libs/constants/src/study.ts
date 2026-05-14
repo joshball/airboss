@@ -986,6 +986,53 @@ export const PLAN_STATUS_LABELS: Record<PlanStatus, string> = {
 	[PLAN_STATUSES.ARCHIVED]: 'Archived',
 };
 
+// -------- Plan items (pin-to-today) --------
+
+/**
+ * Plan-item kind discriminator. A plan-item is a learner-pinned entry on a
+ * date-scoped queue ("today's plan"). Each kind binds a different
+ * underlying entity through a dedicated optional FK column on
+ * `study.plan_item` -- the schema mirrors the `note` / `card_draft`
+ * polymorphic-FK pattern instead of carrying a single opaque `target_id`.
+ *
+ * - `knowledge_node`     -- airboss knowledge graph node.
+ * - `reference_section`  -- handbook / CFR / AC / AIM section row.
+ * - `card`               -- a study card row.
+ * - `glossary`           -- glossary term slug.
+ *
+ * Wired in the command palette's detail-pane "Pin to today" action; the
+ * /today consumer surface is a follow-up.
+ */
+export const PLAN_ITEM_KINDS = {
+	KNOWLEDGE_NODE: 'knowledge_node',
+	REFERENCE_SECTION: 'reference_section',
+	CARD: 'card',
+	GLOSSARY: 'glossary',
+} as const;
+
+export type PlanItemKind = (typeof PLAN_ITEM_KINDS)[keyof typeof PLAN_ITEM_KINDS];
+
+export const PLAN_ITEM_KIND_VALUES = Object.values(PLAN_ITEM_KINDS);
+
+export const PLAN_ITEM_KIND_LABELS: Record<PlanItemKind, string> = {
+	[PLAN_ITEM_KINDS.KNOWLEDGE_NODE]: 'Knowledge node',
+	[PLAN_ITEM_KINDS.REFERENCE_SECTION]: 'Reference section',
+	[PLAN_ITEM_KINDS.CARD]: 'Card',
+	[PLAN_ITEM_KINDS.GLOSSARY]: 'Glossary term',
+};
+
+/** Hard cap on the snapshot title stored on a plan-item row. */
+export const PLAN_ITEM_TITLE_MAX_LENGTH = 200;
+
+/** Hard cap on the snapshot href stored on a plan-item row. */
+export const PLAN_ITEM_HREF_MAX_LENGTH = 1024;
+
+/** Hard cap on free-text notes on a plan-item row. */
+export const PLAN_ITEM_NOTES_MAX_LENGTH = 2000;
+
+/** ULID prefix for plan-item rows (`pitm_<ulid>`). */
+export const PLAN_ITEM_ID_PREFIX = 'pitm';
+
 // -------- Engine targeting -- engine-goal-cutover --------
 
 /**

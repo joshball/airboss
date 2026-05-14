@@ -73,10 +73,14 @@ import {
 	NOTE_BODY_MAX_LENGTH,
 	NOTE_EXCERPT_MAX_LENGTH,
 	NOTE_FOLLOW_UP_MAX_LENGTH,
-	NOTE_TAG_MAX_LENGTH,
 	NOTE_TAGS_MAX,
 	NOTE_TITLE_MAX_LENGTH,
 	PHASE_OF_FLIGHT_VALUES,
+	PLAN_ITEM_HREF_MAX_LENGTH,
+	PLAN_ITEM_KIND_VALUES,
+	PLAN_ITEM_KINDS,
+	PLAN_ITEM_NOTES_MAX_LENGTH,
+	PLAN_ITEM_TITLE_MAX_LENGTH,
 	PLAN_STATUS_VALUES,
 	PLAN_STATUSES,
 	QUESTION_TIER_VALUES,
@@ -2868,3 +2872,128 @@ export const referenceSectionAnnotation = studySchema.table(
 
 export type ReferenceSectionAnnotationRow = typeof referenceSectionAnnotation.$inferSelect;
 export type NewReferenceSectionAnnotationRow = typeof referenceSectionAnnotation.$inferInsert;
+
+// ---------------------------------------------------------------------------
+// Plan items (command-palette pin-to-today).
+//
+// One row per learner pin: a knowledge node, reference section, card, or
+// glossary term placed on a date-scoped queue ("today's plan"). The
+// command palette's detail-pane "Pin to today" button writes here; the
+// /today consumer surface that reads this is a follow-up.
+//
+// Polymorphic-FK shape (mirrors `note` / `card_draft`):
+//   - `kind`  text discriminator (one of `PLAN_ITEM_KIND_VALUES`)
+//   - per-kind optional FK column; CHECK constraints enforce
+//     "exactly the matching FK column is populated" by kind. Like
+//     `note.knowledgeNodeId`, the `knowledgeNodeId` column is a free-form
+//     text id with no Drizzle FK (the knowledge-node delete contract isn't
+//     stable enough to wire a cascade here).
+//
+// `pinned_for_date` is a plain DATE (not timestamp). The queue is "what
+// am I working on today?", not "what time did I pin it?"; today_index
+// reads use date equality.
+//
+// `title` + `href` snapshot the pinned entity's display label and reader
+// route at pin time so the /today consumer doesn't have to JOIN four
+// tables to render a row. The source-of-truth lookup (e.g. node title)
+// still wins on reads that surface live edits, but the snapshot is
+// always good enough for a queue render.
+// ---------------------------------------------------------------------------
+export const planItem = studySchema.table(
+	'plan_item',
+	{
+		id: text('id').primaryKey(), // pitm_<ULID>
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+
+		/**
+		 * Date this pin is scoped to. The /today read query uses an equality
+		 * filter on the learner's local-calendar today. Stored as a plain
+		 * `date` (no time component) for time-zone-stable rendering.
+		 */
+		pinnedForDate: date('pinned_for_date', { mode: 'string' }).notNull(),
+
+		/** One of `PLAN_ITEM_KIND_VALUES`. */
+		kind: text('kind').notNull(),
+
+		// -- Per-kind optional FKs. Exactly one is set per row; the CHECK
+		// constraint pairs `kind` with the right populated column. --
+
+		/**
+		 * Free-form knowledge-graph node id (mirror of `note.knowledgeNodeId`
+		 * shape). Wired without a Drizzle FK so the knowledge-node delete
+		 * contract isn't disturbed.
+		 */
+		knowledgeNodeId: text('knowledge_node_id'),
+		referenceSectionId: text('reference_section_id').references(() => referenceSection.id, { onDelete: 'cascade' }),
+		cardId: text('card_id').references(() => card.id, { onDelete: 'cascade' }),
+		/** Glossary term slug (`@ab/aviation` registry). No FK -- the glossary lives in code. */
+		glossaryTerm: text('glossary_term'),
+
+		/** Display title snapshot. Survives downstream edits / deletes. */
+		title: text('title').notNull(),
+		/** Reader-route snapshot. Used by the /today consumer to navigate. */
+		href: text('href').notNull(),
+
+		/** Free-form learner notes about why this item is pinned. */
+		notes: text('notes').notNull().default(''),
+
+		/** Pin / unpin / complete lifecycle. NULL while pending. */
+		pinnedAt: timestamp('pinned_at', { withTimezone: true }).defaultNow().notNull(),
+		completedAt: timestamp('completed_at', { withTimezone: true }),
+
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		// Hot path: "today's plan items for this user" -- (user, date) with
+		// open-first ordering via the partial index below.
+		userDateIdx: index('plan_item_user_date_idx').on(t.userId, t.pinnedForDate),
+		// Open / pending rows only ("not yet completed"). Partial keeps the
+		// index tight; the /today consumer's default view is "open today".
+		userOpenIdx: index('plan_item_user_open_idx').on(t.userId, t.pinnedForDate).where(sql`completed_at IS NULL`),
+		// Per-kind reverse-lookup ("is this card / node / section already
+		// pinned for today?") -- used by the palette's optimistic update
+		// to avoid double-pinning.
+		userKindDateIdx: index('plan_item_user_kind_date_idx').on(t.userId, t.kind, t.pinnedForDate),
+
+		kindCheck: check('plan_item_kind_check', sql.raw(`"kind" IN (${inList(PLAN_ITEM_KIND_VALUES)})`)),
+		// Per-kind FK invariants. Exactly the matching FK column for the row's
+		// `kind` is populated; every other FK column is NULL. The fifth shape
+		// ("everything NULL") is rejected by the kind check above (each kind
+		// requires its own column).
+		knowledgeNodeFkInvariant: check(
+			'plan_item_knowledge_node_fk_invariant',
+			sql.raw(`("kind" = '${PLAN_ITEM_KINDS.KNOWLEDGE_NODE}') = ("knowledge_node_id" IS NOT NULL)`),
+		),
+		referenceSectionFkInvariant: check(
+			'plan_item_reference_section_fk_invariant',
+			sql.raw(`("kind" = '${PLAN_ITEM_KINDS.REFERENCE_SECTION}') = ("reference_section_id" IS NOT NULL)`),
+		),
+		cardFkInvariant: check(
+			'plan_item_card_fk_invariant',
+			sql.raw(`("kind" = '${PLAN_ITEM_KINDS.CARD}') = ("card_id" IS NOT NULL)`),
+		),
+		glossaryFkInvariant: check(
+			'plan_item_glossary_fk_invariant',
+			sql.raw(`("kind" = '${PLAN_ITEM_KINDS.GLOSSARY}') = ("glossary_term" IS NOT NULL)`),
+		),
+
+		titleLengthCheck: check(
+			'plan_item_title_length_check',
+			sql.raw(`char_length("title") > 0 AND char_length("title") <= ${PLAN_ITEM_TITLE_MAX_LENGTH}`),
+		),
+		hrefLengthCheck: check(
+			'plan_item_href_length_check',
+			sql.raw(`char_length("href") > 0 AND char_length("href") <= ${PLAN_ITEM_HREF_MAX_LENGTH}`),
+		),
+		notesLengthCheck: check(
+			'plan_item_notes_length_check',
+			sql.raw(`char_length("notes") <= ${PLAN_ITEM_NOTES_MAX_LENGTH}`),
+		),
+	}),
+);
+
+export type PlanItemRow = typeof planItem.$inferSelect;
+export type NewPlanItemRow = typeof planItem.$inferInsert;

@@ -25,6 +25,7 @@ export {
 	generateHangarSyncLogId,
 	generateKnowledgeNodeProgressId,
 	generateNoteId,
+	generatePlanItemId,
 	generateReferenceFigureId,
 	generateReferenceId,
 	generateReferenceSectionErrataId,
