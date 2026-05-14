@@ -82,20 +82,21 @@ Three top-level commands. Daily-use entry points.
 
 The umbrella. Workflow-shaped. Use this most of the time.
 
-| Subcommand                 | What it does                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `track` (no args)          | Same as `track help`                                                                                    |
-| `track help`               | Comprehensive help (commands + workflows)                                                               |
-| `track status`             | Dashboard: WP counts by state, open bugs, recent PRs, hints                                             |
-| `track next`               | Lists WPs ready to walk (signed-off + deps shipped + human-review pending), with reasoning              |
-| `track ship`               | Interactive flow: pick from `next` list, walk, sign-off, ship, regenerate, format. Composes everything. |
-| `track ship <wp-id>`       | Same as above but skips the picker                                                                      |
-| `track ship <wp-id> --yes` | Skip the confirmation prompt entirely                                                                   |
-| `track generate`           | Re-emit BOARD.md, SHIPPED.md, per-product ROADMAP.md                                                    |
-| `track format [paths]`     | Markdown formatter (table align, blank lines, fence tags). Default = dirty files.                       |
-| `track archive`            | Rolling archive preview (60-day default, dry-run)                                                       |
-| `track archive --apply`    | Execute the archive                                                                                     |
-| `track log <pr-number>`    | Emit one log entry from `gh pr view <pr>`                                                               |
+| Subcommand                  | What it does                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `track` (no args)           | Same as `track help`                                                                                    |
+| `track help`                | Comprehensive help (commands + workflows)                                                               |
+| `track status`              | Dashboard: WP counts by state, open bugs, recent PRs, hints                                             |
+| `track next`                | Lists WPs ready to walk (signed-off + deps shipped + human-review pending), with reasoning              |
+| `track ship`                | Interactive flow: pick from `next` list, walk, sign-off, ship, regenerate, format. Composes everything. |
+| `track ship <wp-id>`        | Same as above but skips the picker                                                                      |
+| `track ship <wp-id> --yes`  | Skip the confirmation prompt entirely                                                                   |
+| `track generate`            | Re-emit BOARD.md, SHIPPED.md, per-product ROADMAP.md                                                    |
+| `track format [paths]`      | Markdown formatter (table align, blank lines, fence tags). Default = dirty files.                       |
+| `track archive`             | Rolling archive preview (60-day default, dry-run)                                                       |
+| `track archive --apply`     | Execute the archive                                                                                     |
+| `track log <pr-number>`     | Emit one log entry from `gh pr view <pr>`                                                               |
+| `track ship-pr <pr-number>` | `gh pr merge --squash --delete-branch` + `track log <pr>` in one step. The merge command.               |
 
 ### `bun run wp`
 
@@ -221,6 +222,14 @@ bun run wp list --tag references --status '!shipped' --md
 `category: content` will catch most reference work too — they overlap. Tags are free-form so you can slice however you want.
 
 ### "I just merged a PR"
+
+The preferred merge path is `track ship-pr`, which merges via `gh` and emits the log entry in one step:
+
+```bash
+bun run track ship-pr 712          # gh pr merge --squash --delete-branch + emit log
+```
+
+If you merged via some other path (web UI, `gh pr merge` directly), emit the log entry manually:
 
 ```bash
 bun run track log 712              # emits docs/log/2026-05-08-PR-712-...md
