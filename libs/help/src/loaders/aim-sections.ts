@@ -13,9 +13,9 @@
  */
 
 import { reference, referenceSection } from '@ab/bc-study';
-import { LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, ROUTES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
-import { and, eq, ilike, or, type SQL } from 'drizzle-orm';
+import { and, eq, ilike, ne, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, SearchResult } from '../schema/result-types';
 import { bodySnippet, bucketByMatch, buildIlikePattern, type LoaderDb, MIN_BODY_NEEDLE_LENGTH } from './_shared';
@@ -49,7 +49,18 @@ export async function loadAimSections(
 		})
 		.from(referenceSection)
 		.innerJoin(reference, eq(reference.id, referenceSection.referenceId))
-		.where(and(eq(reference.kind, REFERENCE_KINDS.AIM), or(...fieldMatches)))
+		.where(
+			and(
+				eq(reference.kind, REFERENCE_KINDS.AIM),
+				// Pilot/Controller Glossary entries (level='glossary', code='glossary/<slug>')
+				// have their own loader -- `glossary-terms.ts` -- because they route to
+				// `/reference/glossary/<slug>` rather than `/library/regulations/aim/...`.
+				// Routing them through this loader produces a 404 because
+				// `parseRegulationSection` rejects the `glossary/<slug>` code shape.
+				ne(referenceSection.level, REFERENCE_SECTION_LEVELS.GLOSSARY),
+				or(...fieldMatches),
+			),
+		)
 		.orderBy(reference.documentSlug, referenceSection.code)
 		.limit(LOADER_LIMIT);
 

@@ -23,6 +23,7 @@ import { loadCards } from './cards';
 import { loadCfrSections } from './cfr-sections';
 import { loadCourses } from './courses';
 import { loadFtsPassages } from './fts-passages';
+import { loadGlossaryTerms } from './glossary-terms';
 import { loadHandbookSections } from './handbook-sections';
 import { loadKnowledgeNodes } from './knowledge-nodes';
 import { loadPlans } from './plans';
@@ -30,7 +31,17 @@ import { loadReps } from './reps';
 
 const log = createLogger('palette');
 
-type LoaderName = 'handbook' | 'cfr' | 'aim' | 'knodes' | 'cards' | 'reps' | 'plans' | 'courses' | 'fts-passages';
+type LoaderName =
+	| 'handbook'
+	| 'cfr'
+	| 'aim'
+	| 'glossary'
+	| 'knodes'
+	| 'cards'
+	| 'reps'
+	| 'plans'
+	| 'courses'
+	| 'fts-passages';
 
 /**
  * Fan out every DB-backed loader for the active intent. For I-1 / I-2 (scoped
@@ -57,6 +68,7 @@ export async function loadPaletteInjected(rawQuery: string, host: PaletteHost): 
 				loadHandbookSections(parsed, host),
 				loadCfrSections(parsed, host),
 				loadAimSections(parsed, host),
+				loadGlossaryTerms(parsed, host),
 				loadKnowledgeNodes(parsed, host),
 			];
 
@@ -70,7 +82,7 @@ export async function loadPaletteInjected(rawQuery: string, host: PaletteHost): 
 
 	const names: readonly LoaderName[] = usePhraseFts
 		? ['fts-passages', 'cards', 'reps', 'plans', 'courses']
-		: ['handbook', 'cfr', 'aim', 'knodes', 'cards', 'reps', 'plans', 'courses'];
+		: ['handbook', 'cfr', 'aim', 'glossary', 'knodes', 'cards', 'reps', 'plans', 'courses'];
 	const merged: SearchResult[] = [];
 	for (let i = 0; i < settled.length; i += 1) {
 		const result = settled[i];
