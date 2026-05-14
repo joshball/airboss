@@ -2,6 +2,40 @@ code: s7
 ordinal: 7
 title: Reading weather products - METARs, TAFs, PIREPs
 body_md: |
+  **Before you start.** This section assumes you are comfortable with
+  the synoptic story from s2 through s6: air masses, fronts,
+  stability, clouds, convection, and icing. The products in this
+  section describe the same atmosphere; reading them well requires
+  the picture from the earlier sections to be the frame. If any of
+  those concepts feel shaky, go back; do not try to memorize METAR
+  syntax in isolation.
+
+  This section teaches the three text-based reports a pilot reads on
+  every flight:
+  [METAR](/reference/knowledge/wx-reading-metars-tafs) (current
+  airport conditions),
+  [TAF](/reference/knowledge/wx-reading-metars-tafs) (terminal
+  forecast for a 5 SM radius around the station), and
+  [PIREP](/reference/knowledge/wx-product-pireps) (pilot report from
+  the air).
+
+  Terms you will see referenced but not fully taught here:
+
+  - The graphical / regional products
+    ([GFA](/reference/knowledge/wx-product-gfa),
+    [AIRMET / SIGMET](/reference/knowledge/wx-product-airmets-sigmets),
+    [winds aloft](/reference/knowledge/wx-product-winds-aloft),
+    [convective outlook](/reference/knowledge/wx-product-convective-outlook)):
+    these zoom out to the region; taught in s8.
+  - The [TAF timeline](/reference/knowledge/wx-reading-metars-tafs)
+    chart: a visualization of the FM / TEMPO / PROB blocks; the
+    underlying TAF reading skill is taught in s7.1 below.
+  - [Severe-weather day worked example](/reference/knowledge/wx-thunderstorm-hazards):
+    the radar mosaic from s5 reappears here paired with PIREPs;
+    treat the cross-reference as practice, not as new material.
+
+  ---
+
   Sections 2-6 built the synoptic story; this section is where the
   story meets the printed page. METARs, TAFs, and PIREPs are the
   three workhorse products you will read on every flight, and reading

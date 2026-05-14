@@ -2,6 +2,34 @@ code: s2
 ordinal: 2
 title: Air masses, fronts, and stability
 body_md: |
+  **Before you start.** This section assumes you have read s1 and
+  understand that weather is the input to a go/no-go decision; nothing
+  else carries over. It teaches the synoptic story: air masses,
+  fronts, the surface analysis chart, and stability / instability.
+  Everything in s3 through s9 is downstream of this section, so this
+  is the highest-leverage frame in the course.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [TAF](/reference/knowledge/wx-reading-metars-tafs) and
+    [METAR](/reference/knowledge/wx-reading-metars-tafs): the airport
+    text reports. Taught in s7.
+  - [AIRMET / SIGMET](/reference/knowledge/wx-product-airmets-sigmets):
+    the hazard polygon products. Taught in s8.5.
+  - [Surface analysis](/reference/knowledge/wx-product-surface-analysis-and-cva)
+    as a product (vs the symbol-reading skill, which has its own
+    [chart-type reading node](/reference/knowledge/wx-chart-type-surface-analysis)):
+    revisited in s8.2.
+  - [Frontal-XC scenario s11.1](/courses/weather-comprehensive/s11.1):
+    the worked truth example whose chart we embed below. You can read
+    the full scenario after finishing s2 if you want the synoptic
+    story end-to-end on one route.
+
+  Read the section to build the picture; you do not need the products
+  yet.
+
+  ---
+
   Pull up tomorrow's surface analysis. You see a cold front sweeping
   east through your route, a high pressure system parked over the
   destination, isobars tightly packed across the middle leg. Without

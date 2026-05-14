@@ -2,6 +2,29 @@ code: s3
 ordinal: 3
 title: Clouds, precipitation, and visibility
 body_md: |
+  **Before you start.** This section assumes you have read s2 and
+  understand
+  [air masses, fronts](/reference/knowledge/wx-airmasses-and-fronts),
+  and
+  [stability / instability](/reference/knowledge/wx-stability-and-instability)
+  as the lifting mechanism for vertical motion. It teaches the
+  visible consequences of that motion: what cloud shapes mean,
+  what precipitation types tell you about the column above your
+  flight path, and what reduces visibility on the surface.
+
+  Terms you will see referenced but not fully taught here:
+
+  - [Freezing rain](/reference/knowledge/wx-icing-types-and-avoidance):
+    introduced as the most dangerous icing setup. Taught fully in s6.
+  - [METAR](/reference/knowledge/wx-reading-metars-tafs) ceiling and
+    visibility lines: how the obstructions you read about in s3.2
+    show up in the airport report. Taught in s7.
+
+  Build the cloud-and-visibility picture from physics here; the
+  product readouts catch up in s7 and s8.
+
+  ---
+
   A cloud is the visible answer to a question the atmosphere already
   asked: where did the rising air cool to its dew point? The shape of
   the cloud tells you which mechanism lifted the air, how stable the
