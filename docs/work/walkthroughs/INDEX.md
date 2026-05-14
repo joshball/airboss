@@ -16,14 +16,23 @@ the feature is retired.
 
 ## Index
 
-| Feature                                            | Status  | Walkthrough                                                | Work package                                                       |
-| -------------------------------------------------- | ------- | ---------------------------------------------------------- | ------------------------------------------------------------------ |
-| Spaced Memory Items                                | shipped | [spaced-memory-items.md](spaced-memory-items.md)           | [work-packages/spaced-memory-items/](../work-packages/spaced-memory-items/) |
-| Decision Reps                                      | planned | --                                                         | [work-packages/decision-reps/](../work-packages/decision-reps/)    |
-| Calibration Tracker                                | planned | --                                                         | [work-packages/calibration-tracker/](../work-packages/calibration-tracker/) |
-| Knowledge Graph                                    | planned | --                                                         | [work-packages/knowledge-graph/](../work-packages/knowledge-graph/) |
-| Study Plan + Session Engine                        | planned | --                                                         | [work-packages/study-plan-and-session-engine/](../work-packages/study-plan-and-session-engine/) |
-| Learning Dashboard                                 | planned | --                                                         | [work-packages/learning-dashboard/](../work-packages/learning-dashboard/) |
+| Feature                               | Status        | Walkthrough                                                                                            | Work package                                                                                    |
+| ------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Spaced Memory Items                   | shipped       | [spaced-memory-items.md](spaced-memory-items.md)                                                       | [work-packages/spaced-memory-items/](../work-packages/spaced-memory-items/)                     |
+| Architecture tour (2026-05-13 flight) | living        | [20260513-flight/00-architecture-tour.md](20260513-flight/00-architecture-tour.md)                     | --                                                                                              |
+| Cert Dashboard                        | shipped       | [20260513-flight/01-cert-dashboard.md](20260513-flight/01-cert-dashboard.md)                           | [work-packages/cert-dashboard/](../work-packages/cert-dashboard/)                               |
+| Lens UI                               | in flight     | [20260513-flight/02-lens-ui.md](20260513-flight/02-lens-ui.md)                                         | [work-packages/lens-ui/](../work-packages/lens-ui/)                                             |
+| Goal Composer                         | in flight     | [20260513-flight/03-goal-composer.md](20260513-flight/03-goal-composer.md)                             | [work-packages/goal-composer/](../work-packages/goal-composer/)                                 |
+| Course Tree -- Arbitrary Depth        | shipped       | [20260513-flight/04-course-tree-arbitrary-depth.md](20260513-flight/04-course-tree-arbitrary-depth.md) | [work-packages/course-tree-arbitrary-depth/](../work-packages/course-tree-arbitrary-depth/)     |
+| Weather Engine                        | shipped       | [20260513-flight/05-wx-engine.md](20260513-flight/05-wx-engine.md)                                     | [work-packages/wx-engine/](../work-packages/wx-engine/)                                         |
+| Command Palette                       | shipped (3.5) | [20260513-flight/06-command-palette.md](20260513-flight/06-command-palette.md)                         | [work-packages/command-palette/](../work-packages/command-palette/)                             |
+| Decision Reps                         | planned       | --                                                                                                     | [work-packages/decision-reps/](../work-packages/decision-reps/)                                 |
+| Calibration Tracker                   | planned       | --                                                                                                     | [work-packages/calibration-tracker/](../work-packages/calibration-tracker/)                     |
+| Knowledge Graph                       | planned       | --                                                                                                     | [work-packages/knowledge-graph/](../work-packages/knowledge-graph/)                             |
+| Study Plan + Session Engine           | planned       | --                                                                                                     | [work-packages/study-plan-and-session-engine/](../work-packages/study-plan-and-session-engine/) |
+| Learning Dashboard                    | planned       | --                                                                                                     | [work-packages/learning-dashboard/](../work-packages/learning-dashboard/)                       |
+
+The 2026-05-13 set was written as offline reading for a long flight. Reading plan: [20260513-flight/READING-ORDER.md](20260513-flight/READING-ORDER.md).
 
 ## Template
 
