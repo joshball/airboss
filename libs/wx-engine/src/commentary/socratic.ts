@@ -101,7 +101,7 @@ export function deriveCommentary(
 				question: `What changed at ${icao} when the ${coldFront.id} front passed -- compare its METAR to the warm-sector stations.`,
 				observation: `${icao} now sits in the ${currentMass.classification} mass (${describeAirMass(currentMass)}); the warm-sector stations report the ${warmSector.classification} mass (${describeAirMass(warmSector)}).`,
 				reason: `The ${coldFront.id} front (${coldFront.kind}, intensity ${coldFront.intensity}, moving ${coldFront.motionDegTrue}deg at ${coldFront.motionKt} kt) has already crossed ${icao}. The ${currentMass.classification} air now over the field replaces the ${warmSector.classification} sector that was there before passage: temperature drop ${warmSector.surfaceTempC - currentMass.surfaceTempC}C, dewpoint drop ${warmSector.surfaceDewpointC - currentMass.surfaceDewpointC}C, wind shift from ${warmSector.surfaceWindDirDeg}deg to ${currentMass.surfaceWindDirDeg}deg. Every change traces back to one event: a different air mass is now over the field.`,
-				knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-reading-metars-tafs'],
+				knowledgeNodeIds: ['wx-airmasses-and-fronts', 'wx-reading-metars'],
 			});
 		}
 	}
@@ -173,7 +173,7 @@ export function deriveCommentary(
 				question: `How does the FM${fmHour} transition in ${arrivalIcao}'s TAF change your arrival plan?`,
 				observation: `${arrivalIcao} TAF: \`${arrivalTaf.raw}\``,
 				reason: `${arrivalIcao} is currently ${frontInfo}. The FM group marks the forecast time the ${coldFront !== null ? coldFront.id : 'cold front'} reaches the field${coldFront !== null ? ` (motion ${coldFront.motionDegTrue}deg at ${coldFront.motionKt}kt)` : ''}. After the FM hour the ceiling and visibility drop, the wind veers and gusts, and you're flying through ${coldSector !== null ? coldSector.classification : 'post-frontal'} air -- denser, drier, colder. Arrive before the FM hour and the airport stays in ${warmSector !== null ? warmSector.classification : 'warm-sector'} conditions; arrive after and you're landing in the post-frontal regime.`,
-				knowledgeNodeIds: ['wx-reading-metars-tafs', 'wx-airmasses-and-fronts'],
+				knowledgeNodeIds: ['wx-reading-tafs', 'wx-airmasses-and-fronts'],
 			});
 		}
 	}
@@ -229,7 +229,7 @@ export function deriveCommentary(
 			question: `How does the ${pirep.parsed.station} PIREP corroborate the AIRMET ${family} polygon?`,
 			observation: `\`${pirep.raw}\``,
 			reason: `The ${pirep.parsed.station} PIREP is inside the ${hz.id} hazard zone (severity ${hz.severity}, ${hz.altitudeBandFtMsl.min}-${hz.altitudeBandFtMsl.max ?? 'and above'}ft MSL). Three independent products agree: the AIRMET ${family} polygon covering ${hz.id}, the synoptic truth that produced the polygon (${hz.source}), and the pilot's report from inside it. Convergent independent evidence is the gold standard pre-flight signal -- treat it as confirmation, not coincidence.`,
-			knowledgeNodeIds: ['wx-product-pireps', 'wx-product-airmets-sigmets'],
+			knowledgeNodeIds: ['wx-product-pireps', 'wx-product-airmets'],
 		});
 	}
 
@@ -295,7 +295,7 @@ function airmetCallout(
 			question: `What does this AIRMET Sierra (${hz.id}) tell you about ceiling and visibility along the route?`,
 			observation: `AIRMET ${familyTag} covers ${hz.id} ${altBand}; severity ${severity}. Source: ${hz.source}.`,
 			reason: `The ${hz.id} hazard zone is a ${hz.kind} pocket bounded by the synoptic features that produced it (${hz.source}). The Sierra family triggers on ceiling below 1000ft AGL or visibility below 3SM; inside this polygon those minima are forecast to fail. Three impacts: (1) VFR is locked out under the polygon; (2) the cloud deck is uniform (the same stable inversion that traps the moisture caps it horizontally); (3) the polygon shrinks or grows with the synoptic state -- track the parent feature, not just the AIRMET itself.`,
-			knowledgeNodeIds: ['wx-product-airmets-sigmets', 'wx-fog-and-visibility-obstructions'],
+			knowledgeNodeIds: ['wx-product-airmets', 'wx-fog-and-visibility-obstructions'],
 		};
 	}
 
@@ -307,7 +307,7 @@ function airmetCallout(
 			question: `Where is the AIRMET Tango polygon ${hz.id} centered relative to the jet axis -- and what mechanism stacks the turbulence?`,
 			observation: `AIRMET ${familyTag} covers ${hz.id} ${altBand}; severity ${severity}. Source: ${hz.source}.`,
 			reason: `Tango polygon ${hz.id} encloses ${altBand}. The mechanism is named in the hazard source: ${hz.source}. Two physical sources stack in this band: mechanical turbulence in the cold-advection boundary layer below, and ageostrophic descent on the cold side of the jet exit aloft. Together they produce continuous chop through the polygon's altitude span; expect ride quality to degrade entering the polygon and recover above the upper bound.`,
-			knowledgeNodeIds: ['wx-product-airmets-sigmets', 'wx-turbulence-types'],
+			knowledgeNodeIds: ['wx-product-airmets', 'wx-turbulence-types'],
 		};
 	}
 
@@ -319,7 +319,7 @@ function airmetCallout(
 		question: `What altitude band does the AIRMET Zulu cover for ${hz.id}, and how does the freezing-level shape that band?`,
 		observation: `AIRMET ${familyTag} covers ${hz.id} ${altBand}; severity ${severity}. Source: ${hz.source}.`,
 		reason: `Zulu polygon ${hz.id} encloses ${altBand}. Icing requires supercooled liquid water above the freezing level -- the band's lower bound tracks the freezing-level surface, and the upper bound caps where temperatures drop below ~-15C (most droplets glaciate). Inside the polygon, expect rime/clear icing on airframe surfaces; the AIRMET source (${hz.source}) names the specific producing mechanism so the polygon's altitude bounds and severity make sense.`,
-		knowledgeNodeIds: ['wx-product-airmets-sigmets', 'wx-icing-types-and-avoidance'],
+		knowledgeNodeIds: ['wx-product-airmets', 'wx-icing-types-and-avoidance'],
 	};
 }
 
@@ -345,7 +345,7 @@ function convectiveCellCallout(
 		question: `What altitude band does the convective cell ${cell.id} extend through, and which AIRMET polygons does it overlap?`,
 		observation: `Cell ${cell.id} at ${formatLonLat([cell.lon, cell.lat])}, radius ${cell.radiusKm}km, peak ${cell.peakDbz} dBZ; ${airmetSummary}.`,
 		reason: `Convective cell ${cell.id} stands inside ${airmetSummary}. Cells in this peak-dBZ range (${cell.peakDbz} dBZ) reach the tropopause when peakDbz exceeds 50; this cell's vertical extent feeds the embedded turbulence and icing the AIRMETs cover. Three concrete hazards stack at the cell: (1) updraft turbulence inside the rain core, (2) downdraft + microburst risk at the leading edge, (3) embedded lightning. Stay ${cell.radiusKm * 2}km clear of the cell at flight altitudes the AIRMETs cover.`,
-		knowledgeNodeIds: ['wx-thunderstorm-hazards', 'wx-product-airmets-sigmets'],
+		knowledgeNodeIds: ['wx-thunderstorm-hazards', 'wx-product-airmets', 'wx-product-sigmets'],
 	};
 }
 
