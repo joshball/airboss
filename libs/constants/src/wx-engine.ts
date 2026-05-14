@@ -55,6 +55,8 @@ export const WX_SCENARIO_SUBCOMMANDS = {
 	LIST: 'list',
 	VALIDATE: 'validate',
 	CHECK_ROUND_TRIP: 'check-round-trip',
+	DRILL: 'drill',
+	CHECK_CATALOG: 'check-catalog',
 } as const;
 
 export const WX_SCENARIO_SUBCOMMAND_VALUES = Object.values(WX_SCENARIO_SUBCOMMANDS);

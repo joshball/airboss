@@ -502,6 +502,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: 'Pure stat; no parsing.',
 		links: ['libs/help/src/glossary/'],
 	},
+	'wx-catalog-check': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Validate the encoded-text catalog (round-trip every example + catalog.json freshness)',
+		what: 'Runs `bun run wx-scenario check-catalog`. Loads the five product markdown files under course/knowledge/weather/encoded-text-catalog/, extracts the trailing `yaml-catalog` fence from each, round-trips every METAR/TAF/PIREP/FB example through the parsers in @ab/wx-charts (zero-warning gate), and checks that the on-disk catalog.json matches what would be regenerated now. AIRMET/SIGMET examples skip the round-trip (no parser in v1).',
+		why: 'The catalog is the source of truth for the wx-explain library and the drill generator. A stale catalog.json or a broken example silently produces wrong annotations downstream; this gate catches both before they ship.',
+		how: '`bun scripts/wx-scenario.ts check-catalog` (which delegates to `bun tools/catalog-build/bin.ts --check`).',
+		links: ['tools/catalog-build/bin.ts', 'course/knowledge/weather/encoded-text-catalog/', 'libs/wx-explain/'],
+	},
 	'wx-scenario-round-trip': {
 		tier: 'fast',
 		scopable: false,
@@ -1392,6 +1401,23 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 			if (files.length === 0) return { exitCode: 0, stdout: 'no files in scope', stderr: '', skipCache: true };
 			return shellRun('bun', ['tools/md-format/bin.ts', '--check', ...files]);
 		},
+	});
+
+	defs.push({
+		name: 'wx-catalog-check',
+		tier: 'fast',
+		// Relevance: any catalog markdown edit, any tools/catalog-build edit, or any
+		// wx-charts parser change (parsers are the round-trip target).
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					f.startsWith('course/knowledge/weather/encoded-text-catalog/') ||
+					f.startsWith('tools/catalog-build/') ||
+					f.startsWith('scripts/wx-scenario/check-catalog') ||
+					f.startsWith('libs/wx-charts/'),
+			),
+		fn: () => shellRun('bun', ['scripts/wx-scenario.ts', 'check-catalog']),
 	});
 
 	defs.push({

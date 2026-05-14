@@ -246,6 +246,10 @@ deviations to test against.
 
 ### Worked examples
 
+> Browse the full catalog of every realistic TAF shape (27 examples
+> across 28 token families, each round-tripped through `parseTaf`):
+> [encoded-text catalog -- TAF](../encoded-text-catalog/taf.md).
+
 #### Example 1: steady-state forecast (no change groups)
 
 ```text
