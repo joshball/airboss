@@ -1085,7 +1085,27 @@ async function dirtyFiles(profile: Profile): Promise<string[]> {
 		if (t === '') continue;
 		set.add(t);
 	}
-	return [...set];
+
+	// Drop paths that are gitignored on the current branch. The diff against
+	// HEAD / origin/main legitimately contains entries that became gitignored
+	// in the same branch (e.g. a `git rm --cached` + new `.gitignore` rule for
+	// a derived artifact); those paths can also exist on disk as regenerated
+	// build output, which trips per-file linters that consult the dirty set
+	// + `fileExists`. Excluding them at the source keeps every downstream
+	// step honest. `git check-ignore` exits 0 if any of its args are ignored
+	// and prints the ignored ones, exit 1 if none, exit 128 on usage error;
+	// `--no-index` checks the rules even for tracked paths.
+	const all = [...set];
+	if (all.length === 0) return all;
+	const checkIgnore = await $`git check-ignore --no-index ${all}`.cwd(REPO_ROOT).nothrow().quiet();
+	const ignored = new Set<string>();
+	if (checkIgnore.exitCode === 0 || checkIgnore.exitCode === 1) {
+		for (const path of checkIgnore.stdout.toString().split('\n')) {
+			const t = path.trim();
+			if (t !== '') ignored.add(t);
+		}
+	}
+	return all.filter((f) => !ignored.has(f));
 }
 
 function filterByExt(files: readonly string[], exts: readonly string[]): string[] {
