@@ -138,26 +138,30 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
 		regex: /\b(?:PHAK|Pilot's Handbook of Aeronautical Knowledge|FAA-H-8083-25[A-Z]?)\b/i,
 		slug: 'phak',
+		// Pin to the authored row (`FAA-H-8083-25C`) so legacy citations
+		// missing the edition letter (`source: FAA-H-8083-25`) don't upset a
+		// duplicate synthetic row at the editionless slug. The authored row
+		// carries `primary_cert` + `subjects`; the synthetic dupe is an
+		// orphan with no library spine.
 		defaultEdition: 'FAA-H-8083-25C',
+		pinDefaultEdition: true,
 		title: "Pilot's Handbook of Aeronautical Knowledge",
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/phak',
 	},
 	{
 		regex: /\b(?:AFH|Airplane Flying Handbook|FAA-H-8083-3[A-Z]?)\b/i,
 		slug: 'afh',
+		// Pin to authored row -- see phak comment above.
 		defaultEdition: 'FAA-H-8083-3C',
+		pinDefaultEdition: true,
 		title: 'Airplane Flying Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/airplane_handbook',
 	},
 	{
 		regex: /\b(?:AIH|Aviation Instructor's Handbook|FAA-H-8083-9[A-Z]?)\b/i,
-		// Matches the canonical row seeded by the handbooks-extras pipeline
-		// (`libs/sources/src/handbooks-extras/ingest.ts`). The legacy
-		// `(aih, FAA-H-8083-9B)` pair was retired with
-		// `course/references/handbooks-noningested.yaml` -- using it here
-		// would re-create a synthetic dupe of the authored row.
 		slug: 'aviation-instructor',
-		defaultEdition: '8083-9',
+		// Pin to authored row (`FAA-H-8083-9`).
+		defaultEdition: 'FAA-H-8083-9',
 		pinDefaultEdition: true,
 		title: "Aviation Instructor's Handbook",
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_instructors_handbook',
@@ -165,11 +169,8 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
 		regex: /\b(?:IPH|Instrument Procedures Handbook|FAA-H-8083-16[A-Z]?)\b/i,
 		slug: 'iph',
-		// Matches the edition slug emitted by the handbooks-extras ingest
-		// pipeline (`libs/sources/src/handbooks-extras/ingest.ts`), so the
-		// migration resolves to the authored row instead of creating a
-		// duplicate synthetic one keyed on the long FAA tag.
-		defaultEdition: '8083-16B',
+		// Pin to authored row (`FAA-H-8083-16B`).
+		defaultEdition: 'FAA-H-8083-16B',
 		pinDefaultEdition: true,
 		title: 'Instrument Procedures Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_procedures_handbook',
@@ -177,9 +178,10 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
 		regex: /\b(?:Instrument Flying Handbook|IFH|FAA-H-8083-15[A-Z]?)\b/i,
 		slug: 'ifh',
-		// See note on iph above -- aligned with the extras pipeline's
-		// edition slug to prevent duplicate synthetic rows.
-		defaultEdition: '8083-15B',
+		// Pin to authored row (`FAA-H-8083-15B`). The legacy short-form
+		// edition (`8083-15B`) was retired -- using it here would create a
+		// duplicate synthetic row with no library spine.
+		defaultEdition: 'FAA-H-8083-15B',
 		pinDefaultEdition: true,
 		title: 'Instrument Flying Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook',
@@ -187,18 +189,19 @@ const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
 		regex: /\b(?:AvWx|Aviation Weather Handbook|FAA-H-8083-28[A-Z]?)\b/i,
 		slug: 'avwx',
+		// Pin to authored row -- see phak comment above.
 		defaultEdition: 'FAA-H-8083-28B',
+		pinDefaultEdition: true,
 		title: 'Aviation Weather Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook',
 	},
 	{
 		regex: /\bFAA-H-8083-2[A-Z]?\b/i,
-		// Matches the canonical row seeded by the handbooks-extras pipeline.
-		// The legacy `(faa-h-8083-2, FAA-H-8083-2A)` pair was retired with
-		// `course/references/handbooks-noningested.yaml` -- using it here
-		// would re-create a synthetic dupe of the authored row.
 		slug: 'risk-management',
-		defaultEdition: '8083-2A',
+		// Pin to authored row (`FAA-H-8083-2A`). The legacy short-form
+		// edition (`8083-2A`) was retired -- using it here would create a
+		// duplicate synthetic row with no library spine.
+		defaultEdition: 'FAA-H-8083-2A',
 		pinDefaultEdition: true,
 		title: 'Risk Management Handbook',
 		url: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/risk_management_handbook',
@@ -250,7 +253,12 @@ export function extractCfrLocator(source: string, detail: string): { title: numb
 	if (sectionMatch) {
 		return { title: cfrTitle, part: Number.parseInt(sectionMatch[1], 10), section: sectionMatch[2] };
 	}
-	// Bare "<part>" or "Part NN" without a section -- emit part with empty section.
+	// "CFR <part>" -- pull the part out of the canonical `<title> CFR <part>`
+	// pattern. Done before the generic `Part NN` / bare-digit fallbacks so
+	// `14 CFR 23` resolves to part 23, not the title digit 14.
+	const cfrPartMatch = haystack.match(/\bCFR\s+(\d{1,3})\b/i);
+	if (cfrPartMatch) return { title: cfrTitle, part: Number.parseInt(cfrPartMatch[1], 10), section: '' };
+	// "Part NN" without a section -- emit part with empty section.
 	const partMatch = haystack.match(/\bPart\s+(\d{1,3})\b/i);
 	if (partMatch) return { title: cfrTitle, part: Number.parseInt(partMatch[1], 10), section: '' };
 	const bareMatch = haystack.match(/\b(\d{1,3})\b/);
@@ -623,10 +631,11 @@ function matchSpecificOtherPublication(source: string): ResolvedReference | null
 			url: 'https://www.aopa.org/training-and-safety/air-safety-institute',
 		};
 	}
-	// FAA-P-8740-NN pilot safety brochures. Slug is per-brochure; this
-	// recognizer covers `FAA-P-8740-36` (Aviation Decision Making) which is
-	// the only one currently cited. Future brochures get their own row.
-	const safetyBrochureMatch = source.match(/\bFAA-P-8740-(\d+)\b/i);
+	// FAA-P-8740-NN pilot safety brochures. Matches both the canonical
+	// hyphenated form (`FAA-P-8740-36`) and the spelled-out variant
+	// (`FAA Pamphlet P-8740-25`) so legacy citations using either notation
+	// resolve to the same per-brochure slug.
+	const safetyBrochureMatch = source.match(/\bFAA(?:-|\s+Pamphlet\s+)P-8740-(\d+)\b/i);
 	if (safetyBrochureMatch !== null) {
 		const number = safetyBrochureMatch[1];
 		return {
