@@ -3,10 +3,10 @@ id: bug-flightbag-library-smoke-pre-existing
 title: "Flightbag library Playwright smoke ERR_INVALID_REDIRECT -- pre-existing untriaged"
 product: flightbag
 severity: minor
-status: open
+status: fixed
 discovered_pr: null
 discovered_date: 2026-05-13
-fix_pr: null
+fix_pr: 985
 fix_wp: null
 tags:
   - flightbag
@@ -56,3 +56,28 @@ Minor -- the smoke is a regression net for `node:fs` / `Buffer` hydration leaks 
 
 - WP-flightbag-reader-ux (PR #841) -- introduced the `/library/*` retirement that may have invalidated the smoke route
 - `docs/agents/debug-playbooks/browser-hydration.md` -- the playbook the smoke spec backs up
+
+## Resolution
+
+This bug describes a historical state of the smoke spec. On current main,
+[`tests/e2e/browser-hydration-smoke.spec.ts`](../../tests/e2e/browser-hydration-smoke.spec.ts)
+declares:
+
+```ts
+const SMOKE_ROUTES: readonly string[] = [ROUTES.MEMORY, ROUTES.MEMORY_REVIEW, ROUTES.LEARN, ROUTES.REPS];
+```
+
+`/library` is not in the list. The spec's preamble (lines 25-29) explicitly
+documents the removal: per ADR 023 + WP-FLIGHTBAG-READER-UX Phase 2, the
+study `/library/*` route is a 301 to flightbag, so this study-side smoke
+can't navigate it -- equivalent flightbag pages are covered by
+`flightbag/representative-pages.spec.ts`.
+
+No `ERR_INVALID_REDIRECT` can fire from this smoke today because the route
+isn't visited. The smoke could not be re-run from this worktree (no `.env`
+populated), but a runtime re-execution wasn't necessary: the source already
+proves the offending case is absent.
+
+If `/library` reintroduces a hydration regression later (or the smoke gains
+a flightbag-side `/library` case that flakes), file a new bug with the
+current symptom rather than reopening this one.

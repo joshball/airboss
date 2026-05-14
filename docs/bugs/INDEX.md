@@ -2,7 +2,7 @@
 
 # Bugs
 
-10 open bugs of 11 total.
+8 open bugs of 11 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -10,7 +10,7 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 ## Per-product
 
-### Study (open: 4)
+### Study (open: 3)
 
 #### Major
 
@@ -19,7 +19,6 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 #### Minor
 
 - [bug-palette-fts-third-source](bug-palette-fts-third-source.md) -- Palette FTS: add course_step.body_md as third FTS source once table stabilises (PR #936)
-- [bug-palette-pin-to-today](bug-palette-pin-to-today.md) -- Palette Pin-to-today action stays disabled until mine.plan pin API exists (PR #857)
 
 #### Nit
 
@@ -31,15 +30,11 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 - [bug-worker-test-flake](bug-worker-test-flake.md) -- hangar-jobs worker.test.ts flakes ~1 in 4 full-suite runs
 
-### Flightbag (open: 2)
+### Flightbag (open: 1)
 
 #### Major
 
 - [bug-flightbag-ssr-stream-closed](bug-flightbag-ssr-stream-closed.md) -- Flightbag SSR crashes on parallel handbook section requests
-
-#### Minor
-
-- [bug-flightbag-library-smoke-pre-existing](bug-flightbag-library-smoke-pre-existing.md) -- Flightbag library Playwright smoke ERR_INVALID_REDIRECT -- pre-existing untriaged
 
 ### Platform (open: 3)
 
