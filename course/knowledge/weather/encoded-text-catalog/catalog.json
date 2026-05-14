@@ -1,0 +1,6485 @@
+{
+	"generatedAt": "2026-05-14T13:24:34.960Z",
+	"products": {
+		"metar": {
+			"product": "metar",
+			"tokenFamilies": [
+				{
+					"slug": "type-routine",
+					"label": "METAR (routine)",
+					"decode": "Routine hourly observation, issued near H+55.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, METAR vs SPECI distinction"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-ord",
+						"metar-routine-dfw",
+						"metar-routine-fll"
+					]
+				},
+				{
+					"slug": "type-speci",
+					"label": "SPECI (special / off-cycle)",
+					"decode": "Off-cycle observation issued when a reportable change occurs between routine reports.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, SPECI triggers"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-speci-ord-tsra",
+						"metar-speci-mdw-front",
+						"metar-speci-sfo-fog"
+					]
+				},
+				{
+					"slug": "modifier-auto",
+					"label": "AUTO (automated station)",
+					"decode": "Automated station with no human observer; pair with RMK AO1 / AO2 to know if precipitation can be discriminated.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, modifier group + RMK station type"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "AO1 / AO2 capability matrix"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-auto-sfo",
+						"metar-auto-smo",
+						"metar-auto-far"
+					]
+				},
+				{
+					"slug": "modifier-cor",
+					"label": "COR (corrected)",
+					"decode": "The previous observation was wrong; this report supersedes it.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, correction handling"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-cor-jfk",
+						"metar-cor-ord",
+						"metar-cor-den"
+					]
+				},
+				{
+					"slug": "wind-calm",
+					"label": "Calm",
+					"decode": "Direction zero, speed zero. Encoded `00000KT`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, wind group, calm convention"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-sfo-calm",
+						"metar-msp-calm",
+						"metar-boi-calm"
+					]
+				},
+				{
+					"slug": "wind-steady",
+					"label": "Steady direction + speed",
+					"decode": "Three-digit direction (degrees true) + two-digit speed (knots) + `KT`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, wind group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-dfw",
+						"metar-routine-ord",
+						"metar-jfk-cruise"
+					]
+				},
+				{
+					"slug": "wind-gust",
+					"label": "Gust group",
+					"decode": "G suffix + two-digit gust value when peak in last 10 min exceeds the 2-min mean by 10+ KT.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, wind gust reporting threshold"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mdw-gusty",
+						"metar-jan-gust",
+						"metar-den-gust"
+					]
+				},
+				{
+					"slug": "wind-vrb-low",
+					"label": "Variable direction (VRB) - low wind",
+					"decode": "Speed below 6 KT and direction cannot be resolved. Encoded `VRB` + two-digit speed.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, variable wind below 6 KT"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-hwo-vrb",
+						"metar-mia-vrb",
+						"metar-tpa-vrb"
+					]
+				},
+				{
+					"slug": "wind-vrb-range",
+					"label": "Variable range (nnnVnnn)",
+					"decode": "Primary direction varies > 60 deg with speed > 6 KT. Separate group `dirVdir` follows the wind group.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, variable wind range"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mdw-vrb-range",
+						"metar-jan-vrb-range",
+						"metar-cys-vrb-range"
+					]
+				},
+				{
+					"slug": "visibility-above-10",
+					"label": "Above 10 SM",
+					"decode": "Always encoded `10SM`; US METARs never report higher.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, visibility group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-ord",
+						"metar-routine-dfw",
+						"metar-msp-clear-cold"
+					]
+				},
+				{
+					"slug": "visibility-whole",
+					"label": "Whole-mile",
+					"decode": "Statute miles, integer, with `SM` suffix.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, visibility group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mem-rain",
+						"metar-ord-vis7",
+						"metar-mci-vcts"
+					]
+				},
+				{
+					"slug": "visibility-fractional",
+					"label": "Fractional - below 3 SM",
+					"decode": "Pure fractions or mixed whole-plus-fraction with mandatory space. `1 1/2SM`, `3/4SM`, `1/4SM`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, fractional visibility"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-buf-snow",
+						"metar-far-fog",
+						"metar-far-fog-mless"
+					]
+				},
+				{
+					"slug": "visibility-m-less-than",
+					"label": "Less-than (M) prefix",
+					"decode": "The `M` prefix means \"less than.\" `M1/4SM` = visibility less than 1/4 SM (the lowest reportable prevailing visibility).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, low-visibility reporting convention"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-far-fog-mless",
+						"metar-ict-heavy-snow",
+						"metar-sfo-dense-fog"
+					]
+				},
+				{
+					"slug": "wx-light",
+					"label": "Light intensity (-)",
+					"decode": "The `-` prefix marks light intensity. Common with `-RA`, `-SN`, `-SHSN`, `-FZRA`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, weather group intensity prefix"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mem-rain",
+						"metar-grr-fzra",
+						"metar-buf-snow"
+					]
+				},
+				{
+					"slug": "wx-moderate",
+					"label": "Moderate intensity (no prefix)",
+					"decode": "Bare phenomenon = moderate intensity. `RA`, `TSRA`, `SN`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, weather group intensity defaults"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-ord-rain-moderate",
+						"metar-mia-tsra",
+						"metar-msp-moderate-snow"
+					]
+				},
+				{
+					"slug": "wx-heavy",
+					"label": "Heavy intensity (+)",
+					"decode": "The `+` prefix marks heavy intensity. `+TSRA`, `+SN`, `+FC`.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, weather group intensity prefix"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-okc-tsra",
+						"metar-ict-heavy-snow",
+						"metar-dfw-front"
+					]
+				},
+				{
+					"slug": "wx-vicinity",
+					"label": "Vicinity (VC)",
+					"decode": "The `VC` prefix = phenomenon observed within 5-10 SM of the station but not at the station.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, vicinity prefix"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mci-vcts",
+						"metar-fll-vcts",
+						"metar-msy-vcsh"
+					]
+				},
+				{
+					"slug": "wx-descriptor-combo",
+					"label": "Descriptor + phenomenon combos",
+					"decode": "Descriptors `TS`, `SH`, `FZ`, `BL`, `DR`, `MI`, `BC`, `PR` compose with the phenomenon list. Common combos memorized on sight (`+TSRA`, `FZRA`, `+FC`, `MIFG`).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, weather group descriptor + phenomenon table"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-okc-tsra",
+						"metar-grr-fzra",
+						"metar-ict-heavy-snow"
+					]
+				},
+				{
+					"slug": "wx-br-vs-fg",
+					"label": "BR vs FG (mist vs fog boundary)",
+					"decode": "BR (mist) = visibility 5/8 to 7 SM. FG (fog) = visibility under 5/8 SM. The boundary matters for approach minima.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, mist vs fog reporting threshold"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-jan-mist",
+						"metar-far-fog",
+						"metar-ict-heavy-snow"
+					]
+				},
+				{
+					"slug": "sky-clear",
+					"label": "Clear variants (SKC / CLR)",
+					"decode": "SKC = human-observer clear sky. CLR = automated station reporting no clouds below 12,000 ft. NSC = international \"no significant cloud.\"",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, sky condition - clear coding"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-sfo-calm",
+						"metar-boi-calm",
+						"metar-bgr-cold"
+					]
+				},
+				{
+					"slug": "sky-single-layer",
+					"label": "Single-layer",
+					"decode": "One cover + height pair. Cover ascending; height in hundreds of feet AGL.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, sky condition layers"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-fll",
+						"metar-msp-clear-cold",
+						"metar-smo-marine"
+					]
+				},
+				{
+					"slug": "sky-multi-layer",
+					"label": "Multi-layer",
+					"decode": "Multiple cover + height pairs, ascending. The ceiling is the lowest BKN or OVC layer.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, sky condition - ceiling definition"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mdw-gusty",
+						"metar-mci-vcts",
+						"metar-ase-mountain"
+					]
+				},
+				{
+					"slug": "sky-cb",
+					"label": "Cumulonimbus (CB) suffix",
+					"decode": "A `CB` suffix after the layer height marks an active thunderstorm cell. Almost always paired with TS in the weather group.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, convective cloud annotation"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-okc-tsra",
+						"metar-dfw-front",
+						"metar-mia-tsra"
+					]
+				},
+				{
+					"slug": "sky-tcu",
+					"label": "Towering cumulus (TCU) suffix",
+					"decode": "A `TCU` suffix after the layer height marks a cell building toward thunderstorm but not yet producing lightning.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, convective cloud annotation"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mco-tcu",
+						"metar-msy-tcu",
+						"metar-fll-vcts"
+					]
+				},
+				{
+					"slug": "sky-vv",
+					"label": "Vertical visibility (VV)",
+					"decode": "Substitutes for the sky-condition group when the sky is obscured (dense fog, heavy snow, volcanic ash). `VV002` = vertical visibility 200 ft.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, obscured-sky reporting"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-far-fog",
+						"metar-far-fog-mless",
+						"metar-ict-heavy-snow"
+					]
+				},
+				{
+					"slug": "temp-positive",
+					"label": "Both positive",
+					"decode": "Temp / dew point both > 0 deg C. Slash-separated, no M prefix.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, temperature / dew point group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-fll",
+						"metar-mia-vrb",
+						"metar-okc-tsra"
+					]
+				},
+				{
+					"slug": "temp-negative",
+					"label": "Both negative",
+					"decode": "Both endpoints get the M prefix. `M08/M14` = -8 / -14 deg C.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, temperature / dew point group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-bgr-cold",
+						"metar-buf-snow",
+						"metar-ict-heavy-snow"
+					]
+				},
+				{
+					"slug": "temp-cross-zero",
+					"label": "Cross-zero (one side +, one side -)",
+					"decode": "Temperature positive, dew point negative (or vice versa). Common around frontal passages.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, temperature / dew point group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mdw-gusty",
+						"metar-msp-clear-cold",
+						"metar-ase-mountain"
+					]
+				},
+				{
+					"slug": "temp-narrow-spread",
+					"label": "Narrow spread (saturation)",
+					"decode": "Temp - dew point of 1-2 deg C. Mist territory; a half-degree of cooling produces fog.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, operational reading of the temp / dew spread"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-jan-mist",
+						"metar-smo-marine",
+						"metar-okc-tsra"
+					]
+				},
+				{
+					"slug": "altimeter-standard",
+					"label": "Standard / near-standard",
+					"decode": "A + four digits = inHg x 100. A2992 = 29.92 inHg (standard).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, altimeter group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-routine-fll",
+						"metar-jfk-cruise",
+						"metar-routine-ord"
+					]
+				},
+				{
+					"slug": "altimeter-low",
+					"label": "Low (deepening low / trough)",
+					"decode": "Sub-standard altimeter signals approaching or deepening low pressure.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, altimeter group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-mdw-gusty",
+						"metar-okc-tsra",
+						"metar-buf-snow"
+					]
+				},
+				{
+					"slug": "altimeter-high",
+					"label": "High (strong surface high)",
+					"decode": "Above-standard altimeter signals a building or established surface high.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, altimeter group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-far-fog",
+						"metar-bgr-cold",
+						"metar-msp-clear-cold"
+					]
+				},
+				{
+					"slug": "altimeter-q-group",
+					"label": "International Q-group (hectopascals)",
+					"decode": "A `Q` group + four digits = pressure in hectopascals (e.g., Q1023 = 1023 hPa).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, international altimeter forms"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-eddf-cavok",
+						"metar-egll-cavok",
+						"metar-lfpg-international"
+					]
+				},
+				{
+					"slug": "cavok",
+					"label": "CAVOK (international)",
+					"decode": "Single token replacing visibility + weather + sky-condition when visibility >= 10 km, no cloud below 5000 ft (or MSA), no significant weather.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3, international CAVOK"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"metar-eddf-cavok",
+						"metar-egll-cavok",
+						"metar-eddm-cavok"
+					]
+				}
+			],
+			"examples": [
+				{
+					"slug": "metar-routine-ord",
+					"product": "metar",
+					"raw": "KORD 121153Z 24008KT 10SM SKC 12/04 A3010",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-steady",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "ORD under a surface high in cool dry air; standard altimeter, calm-confidence morning.",
+					"triageDrivers": [
+						"spread",
+						"wind",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-routine-dfw",
+					"product": "metar",
+					"raw": "KDFW 121153Z 18012KT 10SM SKC 24/18 A3005",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-steady",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "DFW with steady southerly flow in maritime tropical air ahead of an upper trough.",
+					"triageDrivers": [
+						"wind",
+						"spread",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-routine-fll",
+					"product": "metar",
+					"raw": "KFLL 121553Z 09008KT 10SM SCT025 BKN250 26/22 A2992",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-steady",
+						"visibility-above-10",
+						"sky-single-layer",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Subtropical air over south Florida; 4-deg spread + scattered cumulus is a typical pre-convective morning.",
+					"triageDrivers": [
+						"spread",
+						"sky cover",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-speci-ord-tsra",
+					"product": "metar",
+					"raw": "SPECI KORD 121823Z 09015G28KT 2SM TSRA BKN035CB 22/20 A2978",
+					"tokenFamilies": [
+						"type-speci",
+						"wind-gust",
+						"visibility-whole",
+						"wx-moderate",
+						"wx-descriptor-combo",
+						"sky-cb",
+						"temp-positive",
+						"altimeter-low"
+					],
+					"synoptic": "Off-cycle issuance triggered by thunderstorm onset at ORD with sub-VFR visibility.",
+					"triageDrivers": [
+						"weather",
+						"sky CB",
+						"gust factor"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-speci-mdw-front",
+					"product": "metar",
+					"raw": "SPECI KMDW 121315Z 31022G35KT 5SM BKN025 OVC050 04/M02 A2965",
+					"tokenFamilies": [
+						"type-speci",
+						"wind-gust",
+						"visibility-whole",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-low"
+					],
+					"synoptic": "SPECI at frontal passage - wind shift to 310 with 35-kt gusts, ceiling drops to 2,500 broken.",
+					"triageDrivers": [
+						"gust factor",
+						"ceiling",
+						"wind shift"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-speci-sfo-fog",
+					"product": "metar",
+					"raw": "SPECI KSFO 121615Z 28010KT 2SM BR OVC008 14/13 A2998",
+					"tokenFamilies": [
+						"type-speci",
+						"wind-steady",
+						"visibility-whole",
+						"wx-br-vs-fg",
+						"sky-single-layer",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "SPECI issued as visibility crosses 3 SM downward at SFO under the marine layer.",
+					"triageDrivers": [
+						"visibility trend",
+						"spread",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-auto-sfo",
+					"product": "metar",
+					"raw": "KSFO 121153Z AUTO 00000KT 10SM SKC 10/06 A3018",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-auto",
+						"wind-calm",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-positive",
+						"altimeter-high"
+					],
+					"synoptic": "Calm clear morning at SFO under a building surface high.",
+					"triageDrivers": [
+						"spread",
+						"sky",
+						"wind"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-auto-smo",
+					"product": "metar",
+					"raw": "KSMO 121553Z AUTO 24007KT 8SM OVC008 18/17 A2998",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-auto",
+						"wind-steady",
+						"visibility-whole",
+						"sky-single-layer",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Santa Monica marine stratus deck reinforced by onshore flow.",
+					"triageDrivers": [
+						"ceiling",
+						"spread",
+						"wind direction"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-auto-far",
+					"product": "metar",
+					"raw": "KFAR 121753Z AUTO 36006KT 1/4SM FG VV002 M01/M02 A3025",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-auto",
+						"wind-steady",
+						"visibility-fractional",
+						"wx-br-vs-fg",
+						"sky-vv",
+						"temp-cross-zero",
+						"altimeter-high"
+					],
+					"synoptic": "Fargo radiation fog under a strong surface high with subfreezing temps.",
+					"triageDrivers": [
+						"visibility",
+						"VV002",
+						"freezing temp"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-cor-jfk",
+					"product": "metar",
+					"raw": "KJFK 121153Z COR 22010KT 10SM FEW250 18/12 A3000",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-cor",
+						"wind-steady",
+						"visibility-above-10",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Corrected JFK report; prior had wind direction transposed.",
+					"triageDrivers": [
+						"wind direction",
+						"spread",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-cor-ord",
+					"product": "metar",
+					"raw": "KORD 121253Z COR 24010G18KT 8SM SCT030 BKN080 14/08 A3005",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-cor",
+						"wind-gust",
+						"visibility-whole",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Corrected ORD report; prior missed the gust group.",
+					"triageDrivers": [
+						"gust factor",
+						"ceiling",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-cor-den",
+					"product": "metar",
+					"raw": "KDEN 121753Z COR 18020G32KT 10SM FEW080 SCT150 22/M02 A2985",
+					"tokenFamilies": [
+						"type-routine",
+						"modifier-cor",
+						"wind-gust",
+						"visibility-above-10",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-low"
+					],
+					"synoptic": "Denver corrected report; pre-frontal southerly surge with wide spread (dry).",
+					"triageDrivers": [
+						"gust factor",
+						"density altitude",
+						"altimeter trend"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-routine-sfo-calm",
+					"product": "metar",
+					"raw": "KSFO 121153Z 00000KT 10SM SKC 10/06 A3018",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-calm",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-positive",
+						"altimeter-high"
+					],
+					"synoptic": "SFO under a surface high; calm wind + clear sky = radiation cooling overnight.",
+					"triageDrivers": [
+						"spread",
+						"sky",
+						"wind"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-msp-calm",
+					"product": "metar",
+					"raw": "KMSP 121253Z 00000KT 10SM FEW250 M01/M03 A3018",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-calm",
+						"visibility-above-10",
+						"sky-single-layer",
+						"temp-cross-zero",
+						"altimeter-high"
+					],
+					"synoptic": "Twin Cities calm clear cold morning; high cirrus + cold dome.",
+					"triageDrivers": [
+						"temperature",
+						"wind",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-boi-calm",
+					"product": "metar",
+					"raw": "KBOI 130653Z 00000KT 10SM CLR M02/M08 A3022",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-calm",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-negative",
+						"altimeter-high"
+					],
+					"synoptic": "Boise pre-dawn calm clear under a strong winter high.",
+					"triageDrivers": [
+						"temperature",
+						"wind",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-jfk-cruise",
+					"product": "metar",
+					"raw": "KJFK 121753Z 26010KT 10SM FEW250 22/12 A3003",
+					"tokenFamilies": [
+						"type-routine",
+						"wind-steady",
+						"visibility-above-10",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "New York with steady SW flow under a passing ridge; mid-summer cumulus aloft.",
+					"triageDrivers": [
+						"wind",
+						"spread",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mdw-gusty",
+					"product": "metar",
+					"raw": "KMDW 121753Z 28019G31KT 240V310 7SM FEW040 SCT080 BKN150 06/M03 A2987",
+					"tokenFamilies": [
+						"wind-gust",
+						"wind-vrb-range",
+						"visibility-whole",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-low"
+					],
+					"synoptic": "Midway in post-frontal cold sector; well-mixed boundary-layer turbulence with directional variability.",
+					"triageDrivers": [
+						"gust factor",
+						"crosswind",
+						"altimeter trend"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-jan-gust",
+					"product": "metar",
+					"raw": "KJAN 121153Z 23008G14KT 6SM BR BKN012 19/18 A3002",
+					"tokenFamilies": [
+						"wind-gust",
+						"wind-vrb-range",
+						"visibility-whole",
+						"wx-br-vs-fg",
+						"sky-single-layer",
+						"temp-positive",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Jackson MS in maritime tropical air; mist + 1-deg spread at the ragged edge of fog.",
+					"triageDrivers": [
+						"spread",
+						"BR",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-den-gust",
+					"product": "metar",
+					"raw": "KDEN 122053Z 31015G28KT 10SM FEW150 SCT220 18/M04 A2992",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-above-10",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-standard"
+					],
+					"synoptic": "Denver afternoon with NW boundary-layer mixing on the lee of the Rockies.",
+					"triageDrivers": [
+						"gust factor",
+						"density altitude",
+						"altimeter"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-hwo-vrb",
+					"product": "metar",
+					"raw": "KHWO 121253Z VRB04KT 10SM SKC 25/22 A3007",
+					"tokenFamilies": [
+						"wind-vrb-low",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "South Florida pre-dawn calm; variable light wind under a tropical air mass.",
+					"triageDrivers": [
+						"wind",
+						"spread",
+						"runway choice"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mia-vrb",
+					"product": "metar",
+					"raw": "KMIA 121553Z VRB03KT 10SM FEW040 28/24 A3004",
+					"tokenFamilies": [
+						"wind-vrb-low",
+						"visibility-above-10",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Miami mid-morning with sub-6-kt wind in tropical air; sea-breeze front not yet established.",
+					"triageDrivers": [
+						"wind",
+						"spread",
+						"sea-breeze timing"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-tpa-vrb",
+					"product": "metar",
+					"raw": "KTPA 121253Z VRB02KT 8SM SCT025 24/22 A3005",
+					"tokenFamilies": [
+						"wind-vrb-low",
+						"visibility-whole",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Tampa early morning with variable light wind and tropical humidity (8 SM in HZ-class haze).",
+					"triageDrivers": [
+						"spread",
+						"ceiling",
+						"wind"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mdw-vrb-range",
+					"product": "metar",
+					"raw": "KMDW 121753Z 28019G31KT 240V310 7SM FEW040 BKN150 06/M03 A2987",
+					"tokenFamilies": [
+						"wind-gust",
+						"wind-vrb-range",
+						"visibility-whole",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-low"
+					],
+					"synoptic": "Variant of the Midway gusty crosswind exemplar without the SCT080 layer; same post-frontal story.",
+					"triageDrivers": [
+						"gust factor",
+						"crosswind",
+						"wind variability"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-jan-vrb-range",
+					"product": "metar",
+					"raw": "KJAN 121153Z 23008G14KT 200V260 6SM BR BKN012 19/18 A3002",
+					"tokenFamilies": [
+						"wind-gust",
+						"wind-vrb-range",
+						"visibility-whole",
+						"wx-br-vs-fg",
+						"sky-single-layer",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Jackson with mist + directional variability at the ragged edge of fog.",
+					"triageDrivers": [
+						"spread",
+						"wind variability",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-cys-vrb-range",
+					"product": "metar",
+					"raw": "KCYS 121953Z 26022G34KT 230V300 10SM FEW100 BKN200 18/M02 A2984",
+					"tokenFamilies": [
+						"wind-gust",
+						"wind-vrb-range",
+						"visibility-above-10",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-low"
+					],
+					"synoptic": "Cheyenne with strong westerlies in a deepening low; mountain-lee directional unsteadiness.",
+					"triageDrivers": [
+						"gust factor",
+						"density altitude",
+						"wind variability"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-msp-clear-cold",
+					"product": "metar",
+					"raw": "KMSP 121253Z 30010KT 10SM FEW250 M01/M03 A3018",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-above-10",
+						"sky-single-layer",
+						"temp-cross-zero",
+						"altimeter-high"
+					],
+					"synoptic": "Twin Cities cold-dome morning; NW flow + cold dry air under a winter high.",
+					"triageDrivers": [
+						"temperature",
+						"wind",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mem-rain",
+					"product": "metar",
+					"raw": "KMEM 121753Z 14010KT 5SM -RA BR BKN015 OVC035 18/16 A2995",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-light",
+						"wx-br-vs-fg",
+						"sky-multi-layer",
+						"temp-positive",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Memphis stratiform rain with overrunning warm air; 2-deg spread keeps the column saturated.",
+					"triageDrivers": [
+						"ceiling",
+						"visibility",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-ord-vis7",
+					"product": "metar",
+					"raw": "KORD 121153Z 24008KT 7SM SCT040 12/04 A3010",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Chicago with hazy 7 SM under cool dry NW flow; no precipitation, no IFR risk.",
+					"triageDrivers": [
+						"spread",
+						"sky cover",
+						"wind"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mci-vcts",
+					"product": "metar",
+					"raw": "KMCI 122153Z 19014KT 7SM VCTS FEW035 SCT100 BKN200 28/22 A2992",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-vicinity",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Kansas City with thunderstorm in the vicinity; pre-frontal southerly surge.",
+					"triageDrivers": [
+						"VC thunderstorm",
+						"ceiling",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-buf-snow",
+					"product": "metar",
+					"raw": "KBUF 121453Z 28018G29KT 1 1/2SM -SHSN BLSN OVC015 M04/M07 A2965",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-fractional",
+						"wx-light",
+						"wx-descriptor-combo",
+						"sky-single-layer",
+						"temp-negative",
+						"altimeter-low"
+					],
+					"synoptic": "Buffalo in active lake-effect snow off Lake Erie; OVC015 in light shower + blowing snow.",
+					"triageDrivers": [
+						"visibility",
+						"weather",
+						"gust factor"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-far-fog",
+					"product": "metar",
+					"raw": "KFAR 121753Z 36006KT 1/4SM FG VV002 M01/M02 A3025",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-fractional",
+						"wx-br-vs-fg",
+						"sky-vv",
+						"temp-cross-zero",
+						"altimeter-high"
+					],
+					"synoptic": "Fargo radiation fog under a strong surface high; 1/4 SM with VV002 + freezing-edge temp.",
+					"triageDrivers": [
+						"visibility",
+						"VV",
+						"freezing temp"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-far-fog-mless",
+					"product": "metar",
+					"raw": "KFAR 121853Z 36004KT M1/4SM FG VV001 M02/M02 A3025",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-m-less-than",
+						"wx-br-vs-fg",
+						"sky-vv",
+						"temp-negative",
+						"altimeter-high"
+					],
+					"synoptic": "Fargo fog tightening; visibility under 1/4 SM and VV001 (100 ft).",
+					"triageDrivers": [
+						"visibility",
+						"VV",
+						"freezing temp"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-grr-fzra",
+					"product": "metar",
+					"raw": "KGRR 121753Z 09015G22KT 3SM -FZRA OVC008 M02/M03 A2989",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-whole",
+						"wx-light",
+						"wx-descriptor-combo",
+						"sky-single-layer",
+						"temp-cross-zero",
+						"altimeter-standard"
+					],
+					"synoptic": "Grand Rapids freezing rain on overrunning warm air; warm nose aloft, subfreezing surface.",
+					"triageDrivers": [
+						"weather (FZRA)",
+						"ceiling",
+						"surface temp"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-ord-rain-moderate",
+					"product": "metar",
+					"raw": "KORD 122153Z 21010KT 5SM RA OVC020 16/14 A2994",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-moderate",
+						"sky-single-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Chicago stratiform moderate rain in advance of an organized low; OVC020 holds steady.",
+					"triageDrivers": [
+						"ceiling",
+						"visibility",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mia-tsra",
+					"product": "metar",
+					"raw": "KMIA 121753Z 14012KT 4SM TSRA BKN035CB OVC080 26/22 A2998",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-moderate",
+						"wx-descriptor-combo",
+						"sky-cb",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Miami afternoon air-mass thunderstorm in tropical maritime air.",
+					"triageDrivers": [
+						"weather (TSRA)",
+						"CB",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-msp-moderate-snow",
+					"product": "metar",
+					"raw": "KMSP 130753Z 35008KT 1SM SN BR OVC015 M04/M05 A3000",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-moderate",
+						"wx-br-vs-fg",
+						"sky-single-layer",
+						"temp-negative",
+						"altimeter-standard"
+					],
+					"synoptic": "Twin Cities moderate snow with mist; cyclonic system over the Upper Midwest.",
+					"triageDrivers": [
+						"visibility",
+						"weather",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-okc-tsra",
+					"product": "metar",
+					"raw": "KOKC 122253Z 17012G24KT 4SM +TSRA BKN025CB OVC050 24/22 A2978",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-whole",
+						"wx-heavy",
+						"wx-descriptor-combo",
+						"sky-cb",
+						"sky-multi-layer",
+						"temp-positive",
+						"temp-narrow-spread",
+						"altimeter-low"
+					],
+					"synoptic": "Oklahoma City heavy thunderstorm with rain; mesoscale convective system in southerly surge.",
+					"triageDrivers": [
+						"+TSRA",
+						"CB",
+						"peak wind"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-ict-heavy-snow",
+					"product": "metar",
+					"raw": "KICT 121953Z 02006KT M1/4SM +SN FZFG VV003 M08/M09 A2985",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-m-less-than",
+						"wx-heavy",
+						"wx-descriptor-combo",
+						"wx-br-vs-fg",
+						"sky-vv",
+						"temp-negative",
+						"altimeter-standard"
+					],
+					"synoptic": "Wichita heavy snow with freezing fog; arctic air mass under a deep upper trough.",
+					"triageDrivers": [
+						"+SN",
+						"FZFG",
+						"VV003"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-dfw-front",
+					"product": "metar",
+					"raw": "KDFW 122253Z 16018G30KT 2SM +TSRA BKN030CB OVC080 26/23 A2982",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-whole",
+						"wx-heavy",
+						"wx-descriptor-combo",
+						"sky-cb",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-low"
+					],
+					"synoptic": "DFW frontal passage line; pre-frontal southerly surge with thunderstorm line at the front.",
+					"triageDrivers": [
+						"+TSRA",
+						"gust factor",
+						"CB"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-fll-vcts",
+					"product": "metar",
+					"raw": "KFLL 122153Z 12012KT 9SM VCTS FEW035 SCT060 BKN200 28/23 A3001",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-vicinity",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Ft Lauderdale with thunderstorm in the vicinity; sea-breeze convection over the Everglades.",
+					"triageDrivers": [
+						"VC thunderstorm",
+						"ceiling",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-msy-vcsh",
+					"product": "metar",
+					"raw": "KMSY 122053Z 14010KT 9SM VCSH SCT040 BKN100 28/24 A3000",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"wx-vicinity",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "New Orleans with showers in the vicinity; afternoon convective trigger but cells not over the field.",
+					"triageDrivers": [
+						"VCSH",
+						"ceiling",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-jan-mist",
+					"product": "metar",
+					"raw": "KJAN 121153Z 23008G14KT 6SM BR BKN012 19/18 A3002",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-whole",
+						"wx-br-vs-fg",
+						"sky-single-layer",
+						"temp-positive",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Jackson maritime tropical air; mist + 1-deg spread at the ragged edge of fog.",
+					"triageDrivers": [
+						"spread",
+						"BR",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-mco-tcu",
+					"product": "metar",
+					"raw": "KMCO 122053Z 11010KT 9SM SCT030TCU BKN090 30/24 A3001",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"sky-tcu",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "Orlando afternoon with towering cumulus over the field; convective imminence signal.",
+					"triageDrivers": [
+						"TCU",
+						"spread",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-msy-tcu",
+					"product": "metar",
+					"raw": "KMSY 122153Z 15012KT 8SM SCT035TCU BKN120 30/24 A3000",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"sky-tcu",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "New Orleans late afternoon TCU; sea-breeze convergence with maritime instability.",
+					"triageDrivers": [
+						"TCU",
+						"spread",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-bgr-cold",
+					"product": "metar",
+					"raw": "KBGR 121253Z 31008KT 10SM SKC M08/M14 A3022",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-above-10",
+						"sky-clear",
+						"temp-negative",
+						"altimeter-high"
+					],
+					"synoptic": "Bangor under a continental polar air mass; NW flow, deep cold dome, no clouds.",
+					"triageDrivers": [
+						"temperature",
+						"wind",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-ase-mountain",
+					"product": "metar",
+					"raw": "KASE 121953Z 26015G25KT 7SM FEW100 SCT150 BKN200 14/M02 A3019",
+					"tokenFamilies": [
+						"wind-gust",
+						"visibility-whole",
+						"sky-multi-layer",
+						"temp-cross-zero",
+						"altimeter-high"
+					],
+					"synoptic": "Aspen with westerly downslope flow in dry post-frontal air; 16-deg spread = dry.",
+					"triageDrivers": [
+						"gust factor",
+						"density altitude",
+						"mountain wave"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-smo-marine",
+					"product": "metar",
+					"raw": "KSMO 121553Z 24007KT 8SM OVC008 18/17 A2998",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-whole",
+						"sky-single-layer",
+						"temp-positive",
+						"temp-narrow-spread",
+						"altimeter-standard"
+					],
+					"synoptic": "Santa Monica Pacific marine stratus; onshore flow reinforcing the deck.",
+					"triageDrivers": [
+						"ceiling",
+						"spread",
+						"wind direction"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-sfo-dense-fog",
+					"product": "metar",
+					"raw": "KSFO 121355Z 24003KT M1/4SM FG VV001 11/11 A3010",
+					"tokenFamilies": [
+						"wind-steady",
+						"visibility-m-less-than",
+						"wx-br-vs-fg",
+						"sky-vv",
+						"temp-positive",
+						"altimeter-standard"
+					],
+					"synoptic": "San Francisco advection fog at saturation (0-deg spread); VV001 closes the field for VFR.",
+					"triageDrivers": [
+						"visibility",
+						"VV",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-eddf-cavok",
+					"product": "metar",
+					"raw": "EDDF 121753Z 27010KT CAVOK 18/04 Q1023",
+					"tokenFamilies": [
+						"wind-steady",
+						"cavok",
+						"temp-positive",
+						"altimeter-q-group"
+					],
+					"synoptic": "Frankfurt under a surface high; CAVOK collapses three groups into one, pressure in hPa.",
+					"triageDrivers": [
+						"pressure pattern",
+						"wind",
+						"temperature"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-egll-cavok",
+					"product": "metar",
+					"raw": "EGLL 121750Z 22014KT CAVOK 15/08 Q1018",
+					"tokenFamilies": [
+						"wind-steady",
+						"cavok",
+						"temp-positive",
+						"altimeter-q-group"
+					],
+					"synoptic": "London Heathrow under a passing ridge with SW flow; CAVOK + hectopascals.",
+					"triageDrivers": [
+						"wind",
+						"pressure",
+						"runway preference"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-eddm-cavok",
+					"product": "metar",
+					"raw": "EDDM 121620Z 24008KT CAVOK 22/12 Q1018",
+					"tokenFamilies": [
+						"wind-steady",
+						"cavok",
+						"temp-positive",
+						"altimeter-q-group"
+					],
+					"synoptic": "Munich afternoon under a slack pressure pattern; CAVOK + warm dry air.",
+					"triageDrivers": [
+						"pressure",
+						"wind",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "metar-lfpg-international",
+					"product": "metar",
+					"raw": "LFPG 121730Z 26008KT 9999 FEW040 BKN250 16/09 Q1019",
+					"tokenFamilies": [
+						"wind-steady",
+						"sky-multi-layer",
+						"temp-positive",
+						"altimeter-q-group"
+					],
+					"synoptic": "Paris CDG with 9999 visibility group (international form for >= 10 km) and Q-pressure.",
+					"triageDrivers": [
+						"pressure",
+						"wind",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 3 - Surface Aviation Weather Observations (METAR / SPECI)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				}
+			]
+		},
+		"taf": {
+			"product": "taf",
+			"tokenFamilies": [
+				{
+					"slug": "header-routine",
+					"label": "Routine TAF",
+					"decode": "Four-times-daily issuance at 00 / 06 / 12 / 18 Z with a 24-30 hour validity window.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, TAF issuance cycle"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-ord-vfr",
+						"taf-bgr-cold-clear",
+						"taf-mia-vfr"
+					]
+				},
+				{
+					"slug": "header-amd",
+					"label": "Amended TAF (AMD)",
+					"decode": "Off-cycle issuance superseding the prior TAF because conditions diverged enough to require a new forecast.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, amendment triggers"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-amd-dfw",
+						"taf-amd-msp",
+						"taf-amd-sea"
+					]
+				},
+				{
+					"slug": "header-cor",
+					"label": "Corrected TAF (COR)",
+					"decode": "The prior TAF was wrong (transcription / missed group). The COR replaces it, validity unchanged.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, correction handling"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-cor-jfk",
+						"taf-cor-bos",
+						"taf-cor-clt"
+					]
+				},
+				{
+					"slug": "validity-window",
+					"label": "DDHH/DDHH validity window",
+					"decode": "Day + hour, twice. First pair = start; second pair = end. 24-30 hour window at major airports.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, validity-period encoding"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-ord-vfr",
+						"taf-mia-21h",
+						"taf-bgr-cold-clear"
+					]
+				},
+				{
+					"slug": "initial-vfr",
+					"label": "Initial body (prevailing) - VFR",
+					"decode": "The body following the validity range describes the prevailing forecast at window start. Holds until first change group.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, prevailing forecast structure"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-ord-vfr",
+						"taf-bgr-cold-clear",
+						"taf-boi-vfr"
+					]
+				},
+				{
+					"slug": "fm-from",
+					"label": "FM (from) - definite shift",
+					"decode": "FM + DDhhmm marks a definite lasting change. The new body replaces the prevailing until the next FM (or validity end).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, FM group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-fm-stl",
+						"taf-fm-multi",
+						"taf-marine-fm"
+					]
+				},
+				{
+					"slug": "tempo-transient",
+					"label": "TEMPO - transient excursion",
+					"decode": "TEMPO + DDHH/DDHH marks brief excursions (< 1 hour, less than half the period). The prevailing returns when the window ends.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, TEMPO group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-tempo-tsra",
+						"taf-tempo-fog",
+						"taf-tempo-mia-vcts"
+					]
+				},
+				{
+					"slug": "prob30",
+					"label": "PROB30 - 30% probability",
+					"decode": "PROB30 + DDHH/DDHH marks a 30-50% chance of the named condition during the window. Reserved for significant weather where confidence is below the FM threshold.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, PROB groups"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-prob30-ict",
+						"taf-prob30-okc",
+						"taf-prob30-msy"
+					]
+				},
+				{
+					"slug": "prob40",
+					"label": "PROB40 - 40% probability",
+					"decode": "PROB40 + DDHH/DDHH. Same shape as PROB30 with a 40-50% confidence range.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, PROB groups"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-prob40-buf",
+						"taf-prob40-grr",
+						"taf-prob40-msp"
+					]
+				},
+				{
+					"slug": "becmg",
+					"label": "BECMG - becoming",
+					"decode": "BECMG + DDHH/DDHH marks a gradual transition. By window end the new condition is prevailing. Used for slow changes (gradual fronts / clearing).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4, BECMG group"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					],
+					"examples": [
+						"taf-becmg-msp",
+						"taf-becmg-ord",
+						"taf-becmg-sea"
+					]
+				}
+			],
+			"examples": [
+				{
+					"slug": "taf-ord-vfr",
+					"product": "taf",
+					"raw": "TAF KORD 121120Z 1212/1318 27015G25KT 6SM FEW250",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr"
+					],
+					"synoptic": "ORD post-frontal cold sector under a surface high; clean VFR with no change groups.",
+					"triageDrivers": [
+						"wind",
+						"ceiling",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-bgr-cold-clear",
+					"product": "taf",
+					"raw": "TAF KBGR 121120Z 1212/1318 31010KT 6SM SKC",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr"
+					],
+					"synoptic": "Bangor in continental polar air; calm-confidence clear forecast.",
+					"triageDrivers": [
+						"temperature",
+						"wind",
+						"sky"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-mia-vfr",
+					"product": "taf",
+					"raw": "TAF KMIA 121120Z 1212/1318 09010KT 6SM SCT040 BKN250",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr"
+					],
+					"synoptic": "Miami in trade-wind easterlies under a Bermuda high; scattered cumulus and high cirrus.",
+					"triageDrivers": [
+						"wind",
+						"ceiling",
+						"sea-breeze timing"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-amd-dfw",
+					"product": "taf",
+					"raw": "TAF AMD KDFW 121800Z 1218/1324 27020G30KT 6SM SCT030 BKN100",
+					"tokenFamilies": [
+						"header-amd",
+						"validity-window"
+					],
+					"synoptic": "DFW afternoon amendment; morning TAF underplayed the post-frontal wind.",
+					"triageDrivers": [
+						"amendment trigger",
+						"wind",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-amd-msp",
+					"product": "taf",
+					"raw": "TAF AMD KMSP 122000Z 1220/1324 33020G35KT 4SM -SN BKN030",
+					"tokenFamilies": [
+						"header-amd",
+						"validity-window"
+					],
+					"synoptic": "Twin Cities amendment after onset of light snow with NW gusts to 35.",
+					"triageDrivers": [
+						"amendment trigger",
+						"weather",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-amd-sea",
+					"product": "taf",
+					"raw": "TAF AMD KSEA 121600Z 1216/1318 19015KT 5SM -RA OVC025",
+					"tokenFamilies": [
+						"header-amd",
+						"validity-window"
+					],
+					"synoptic": "Seattle amendment after stratiform rain arrived earlier than the morning TAF predicted.",
+					"triageDrivers": [
+						"amendment trigger",
+						"ceiling",
+						"visibility"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-cor-jfk",
+					"product": "taf",
+					"raw": "TAF COR KJFK 121120Z 1212/1318 22014KT 6SM FEW250",
+					"tokenFamilies": [
+						"header-cor",
+						"validity-window"
+					],
+					"synoptic": "JFK correction; prior had wind direction transposed.",
+					"triageDrivers": [
+						"wind",
+						"sky",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-cor-bos",
+					"product": "taf",
+					"raw": "TAF COR KBOS 121120Z 1212/1318 24012KT 6SM SCT030 BKN100",
+					"tokenFamilies": [
+						"header-cor",
+						"validity-window"
+					],
+					"synoptic": "Boston correction; prior missed the broken layer.",
+					"triageDrivers": [
+						"ceiling",
+						"wind",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-cor-clt",
+					"product": "taf",
+					"raw": "TAF COR KCLT 121120Z 1212/1318 19010KT 6SM FEW040 BKN200",
+					"tokenFamilies": [
+						"header-cor",
+						"validity-window"
+					],
+					"synoptic": "Charlotte correction; prior had a transcription error in the sky group.",
+					"triageDrivers": [
+						"sky",
+						"wind",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-mia-21h",
+					"product": "taf",
+					"raw": "TAF KMIA 121120Z 1212/0918 09010KT 6SM SCT040 BKN250",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr"
+					],
+					"synoptic": "Miami with a 22-hour window spanning a calendar boundary (12-1212 to 13-0918 captured here within the FAA DDHH convention; parser anchors month).",
+					"triageDrivers": [
+						"wind",
+						"ceiling",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-boi-vfr",
+					"product": "taf",
+					"raw": "TAF KBOI 121120Z 1212/1318 28008KT 6SM FEW250",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr"
+					],
+					"synoptic": "Boise under a surface high with light westerlies; clean VFR.",
+					"triageDrivers": [
+						"wind",
+						"sky",
+						"spread"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-fm-stl",
+					"product": "taf",
+					"raw": "TAF KSTL 121120Z 1212/1318 18015G22KT 6SM BKN040 FM121900 27020G30KT 6SM SCT030 BKN100",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"fm-from"
+					],
+					"synoptic": "St Louis cold-front passage at 19Z; pre-frontal southerly flow shifts to NW with stronger gusts.",
+					"triageDrivers": [
+						"FM timing",
+						"wind shift",
+						"gust factor"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-fm-multi",
+					"product": "taf",
+					"raw": "TAF KMSP 121120Z 1212/1318 18012KT 6SM SCT040 FM121800 21015G25KT 6SM BKN050 FM130200 28012KT 6SM SKC",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"fm-from"
+					],
+					"synoptic": "Twin Cities with two FM groups: pre-frontal back to 210/15G25 at 18Z, then post-frontal clearing at 02Z.",
+					"triageDrivers": [
+						"FM timing",
+						"wind sequence",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-marine-fm",
+					"product": "taf",
+					"raw": "TAF KSMO 121120Z 1212/1318 24007KT 4SM BR OVC008 FM121800 25010KT 6SM SCT025 BKN150",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"fm-from"
+					],
+					"synoptic": "Santa Monica marine layer dissipates at 18Z as surface heating mixes out the inversion.",
+					"triageDrivers": [
+						"FM accuracy",
+						"ceiling lift",
+						"visibility"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-tempo-tsra",
+					"product": "taf",
+					"raw": "TAF KDFW 121120Z 1212/1318 18015KT 6SM SCT040 TEMPO 1218/1222 4SM TSRA BKN035CB",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"tempo-transient"
+					],
+					"synoptic": "DFW afternoon convective trigger inside a pre-frontal southerly surge.",
+					"triageDrivers": [
+						"TEMPO window",
+						"TSRA",
+						"CB"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-tempo-fog",
+					"product": "taf",
+					"raw": "TAF KFAR 121120Z 1212/1318 36006KT 6SM SKC TEMPO 1300/1306 1SM FG VV003",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"tempo-transient"
+					],
+					"synoptic": "Fargo with overnight radiation fog forming around 00-06Z then lifting.",
+					"triageDrivers": [
+						"TEMPO window",
+						"fog timing",
+						"alternate planning"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-tempo-mia-vcts",
+					"product": "taf",
+					"raw": "TAF KMIA 121120Z 1212/1318 09010KT 6SM SCT040 BKN250 TEMPO 1218/1223 9SM VCTS SCT040CB",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"tempo-transient"
+					],
+					"synoptic": "Miami afternoon TEMPO for vicinity thunderstorm in tropical maritime air.",
+					"triageDrivers": [
+						"TEMPO window",
+						"VCTS",
+						"CB"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob30-ict",
+					"product": "taf",
+					"raw": "TAF KICT 121120Z 1212/1318 19012KT 6SM SCT040 PROB30 1306/1310 1SM TSRA BKN025CB",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob30"
+					],
+					"synoptic": "Wichita pre-frontal southerly flow with overnight convection possible but not certain.",
+					"triageDrivers": [
+						"PROB30 window",
+						"IFR risk",
+						"alternate"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob30-okc",
+					"product": "taf",
+					"raw": "TAF KOKC 121120Z 1212/1318 18015G22KT 6SM SCT050 PROB30 1300/1306 4SM TSRA BKN035CB",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob30"
+					],
+					"synoptic": "Oklahoma City overnight with 30% chance of thunderstorm at the head of a mesoscale convective complex.",
+					"triageDrivers": [
+						"PROB30 window",
+						"TSRA",
+						"CB"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob30-msy",
+					"product": "taf",
+					"raw": "TAF KMSY 121120Z 1212/1318 14010KT 6SM SCT040 PROB30 1218/1224 3SM TSRA BKN030CB",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob30"
+					],
+					"synoptic": "New Orleans afternoon PROB30 for sea-breeze-trigger thunderstorm.",
+					"triageDrivers": [
+						"PROB30 window",
+						"TSRA",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob40-buf",
+					"product": "taf",
+					"raw": "TAF KBUF 121120Z 1212/1318 27018G25KT 4SM -SN BKN020 PROB40 1218/1224 1SM +SN VV008",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob40"
+					],
+					"synoptic": "Buffalo lake-effect with light snow most of the window; PROB40 for a heavier band.",
+					"triageDrivers": [
+						"PROB40 window",
+						"visibility floor",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob40-grr",
+					"product": "taf",
+					"raw": "TAF KGRR 121120Z 1212/1318 09015G22KT 5SM -RA OVC020 PROB40 1218/1224 3SM -FZRA OVC008",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob40"
+					],
+					"synoptic": "Grand Rapids overrunning warm air; 40% chance the warm nose erodes and FZRA develops.",
+					"triageDrivers": [
+						"PROB40 window",
+						"FZRA risk",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-prob40-msp",
+					"product": "taf",
+					"raw": "TAF KMSP 121120Z 1212/1318 33012G22KT 6SM BKN025 PROB40 1306/1312 1SM -SN BKN008",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"prob40"
+					],
+					"synoptic": "Twin Cities with PROB40 for snow band lowering ceiling to 800 ft overnight.",
+					"triageDrivers": [
+						"PROB40 window",
+						"ceiling",
+						"visibility"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-becmg-msp",
+					"product": "taf",
+					"raw": "TAF KMSP 121120Z 1212/1318 27015KT 6SM BKN040 BECMG 1306/1308 24010KT 6SM SCT050",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"becmg"
+					],
+					"synoptic": "Twin Cities gradual clearing overnight as cold sector ridges in.",
+					"triageDrivers": [
+						"BECMG window",
+						"ceiling",
+						"wind shift"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-becmg-ord",
+					"product": "taf",
+					"raw": "TAF KORD 121120Z 1212/1318 28012KT 6SM OVC020 BECMG 1218/1220 25008KT 6SM BKN060",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"becmg"
+					],
+					"synoptic": "Chicago gradual mid-afternoon lift as deck rises and breaks.",
+					"triageDrivers": [
+						"BECMG window",
+						"ceiling lift",
+						"wind easing"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-becmg-sea",
+					"product": "taf",
+					"raw": "TAF KSEA 121120Z 1212/1318 19010KT 4SM -RA BKN015 BECMG 1218/1220 22008KT 6SM SCT025 BKN150",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"becmg"
+					],
+					"synoptic": "Seattle gradual clearing after light rain pushes inland.",
+					"triageDrivers": [
+						"BECMG window",
+						"visibility",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				},
+				{
+					"slug": "taf-ase-mountain",
+					"product": "taf",
+					"raw": "TAF KASE 121120Z 1212/1318 26020G35KT 6SM FEW100 SCT150 BKN200 FM122200 28015G28KT 6SM SCT100 BKN180",
+					"tokenFamilies": [
+						"header-routine",
+						"validity-window",
+						"initial-vfr",
+						"fm-from"
+					],
+					"synoptic": "Aspen westerly downslope through the day, easing slightly after 22Z.",
+					"triageDrivers": [
+						"gust factor",
+						"mountain wave",
+						"ceiling (operationally non-binding)"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 4 - Aerodrome Forecasts (TAF)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-29 - Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)"
+						}
+					]
+				}
+			]
+		},
+		"pirep": {
+			"product": "pirep",
+			"tokenFamilies": [
+				{
+					"slug": "kind-ua",
+					"label": "UA (routine)",
+					"decode": "Routine pilot report. Not safety-critical; informational for the next aircraft along that track.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 routine vs urgent"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-cruise",
+						"pirep-ua-sfo-wind",
+						"pirep-ua-mia-sky"
+					]
+				},
+				{
+					"slug": "kind-uua",
+					"label": "UUA (urgent)",
+					"decode": "Urgent pilot report. Severe icing / turbulence / hail / shear / volcanic ash / tornadoes / waterspouts.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 urgent report criteria"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-uua-grr-icing",
+						"pirep-uua-den-turb",
+						"pirep-uua-ord-sev-icing"
+					]
+				},
+				{
+					"slug": "location-bare-station",
+					"label": "Bare station ICAO",
+					"decode": "/OV STATION - report at the station itself.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 position encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-cruise",
+						"pirep-ua-msp-trc-icing",
+						"pirep-ua-jfk-cruise"
+					]
+				},
+				{
+					"slug": "location-radial-distance",
+					"label": "Station + radial + distance",
+					"decode": "/OV STA + 3-digit radial + 2-3 digit distance NM. Position relative to a known fix.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 position encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-ord-radial",
+						"pirep-ua-sfo-wind",
+						"pirep-uua-den-turb"
+					]
+				},
+				{
+					"slug": "location-icao-radial",
+					"label": "4-letter ICAO + radial + distance",
+					"decode": "/OV KSTA + radial + distance. Less common; Canadian / European cross-border reports.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 position encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-loc-icao-radial",
+						"pirep-loc-kbos",
+						"pirep-loc-kyyz"
+					]
+				},
+				{
+					"slug": "time-hhmm",
+					"label": "HHMM (Z)",
+					"decode": "Four-digit UTC time. No Z suffix in the encoded form.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 time encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-cruise",
+						"pirep-ua-mia-sky",
+						"pirep-ua-sfo-wind"
+					]
+				},
+				{
+					"slug": "altitude-fl",
+					"label": "Altitude (FL or DURC/DURD)",
+					"decode": "FLnnn in hundreds of feet. DURC = during climb; DURD = during descent (vertical slice).",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 altitude encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-cruise",
+						"pirep-ua-jfk-cruise",
+						"pirep-uua-ord-sev-icing"
+					]
+				},
+				{
+					"slug": "aircraft-type",
+					"label": "Aircraft type",
+					"decode": "4-letter ICAO aircraft code. Type matters because turbulence / icing severity is relative to airframe.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 aircraft type"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-cruise",
+						"pirep-ua-jfk-cruise",
+						"pirep-uua-den-turb"
+					]
+				},
+				{
+					"slug": "sky-single-layer",
+					"label": "Sky single layer",
+					"decode": "One cover + base-top pair. /SK BKN090 = broken at 9,000 ft, no top reported.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 sky cover encoding"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-mia-sky-single",
+						"pirep-ua-cruise",
+						"pirep-ua-cle-sct"
+					]
+				},
+				{
+					"slug": "sky-multi-layer",
+					"label": "Sky multi-layer with tops",
+					"decode": "Multiple cover + base-top pairs. /SK SCT040-060 BKN090 = scattered 4,000-6,000, broken 9,000 base.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 multi-layer + tops"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-mia-sky",
+						"pirep-ua-ord-tops",
+						"pirep-ua-ord-radial"
+					]
+				},
+				{
+					"slug": "temp-ta",
+					"label": "Temperature (Celsius)",
+					"decode": "/TA + integer C. M (or -) prefix for negative. /TA M02 = -2 C.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 TA group"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-ord-radial",
+						"pirep-uua-grr-icing",
+						"pirep-ua-msp-trc-icing"
+					]
+				},
+				{
+					"slug": "wind-wv",
+					"label": "Wind (direction + speed)",
+					"decode": "/WV 3-digit dir + 2-3 digit speed + optional KT. Direction is degrees true.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 WV group"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-sfo-wind",
+						"pirep-uua-den-shear",
+						"pirep-ua-ord-jet"
+					]
+				},
+				{
+					"slug": "turb-light",
+					"label": "Turbulence - LGT",
+					"decode": "Light turbulence. Brief erratic changes in altitude / attitude / less than 1/3 G excursions.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-23 LGT"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-jfk-cruise",
+						"pirep-ua-cruise-mod",
+						"pirep-ua-light-chop"
+					]
+				},
+				{
+					"slug": "turb-mod",
+					"label": "Turbulence - MOD",
+					"decode": "Moderate turbulence. Loose objects rattle; 1/3 to 1 G excursions; difficulty walking.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-23 MOD"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-ord-radial",
+						"pirep-ua-cruise-mod",
+						"pirep-ua-jet-mod"
+					]
+				},
+				{
+					"slug": "turb-sev",
+					"label": "Turbulence - SEV (UUA)",
+					"decode": "Severe turbulence. Aircraft thrown violently about; momentary loss of control; > 1 G excursions. UUA.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-23 SEV"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-uua-den-turb",
+						"pirep-uua-ord-sev-turb",
+						"pirep-uua-den-shear"
+					]
+				},
+				{
+					"slug": "turb-extm",
+					"label": "Turbulence - EXTM (UUA)",
+					"decode": "Extreme turbulence. Aircraft practically impossible to control; structural damage likely. UUA.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-23 EXTM"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-uua-ase-extm",
+						"pirep-uua-den-rockies-extm",
+						"pirep-uua-asp-mtn"
+					]
+				},
+				{
+					"slug": "icing-trc",
+					"label": "Icing - TRC (trace)",
+					"decode": "Trace icing. Ice perceptible; rate of accumulation slightly greater than sublimation. Not hazardous unless prolonged.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-22 TRC"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-msp-trc-icing",
+						"pirep-ua-ord-trc-rime",
+						"pirep-ua-clt-trc"
+					]
+				},
+				{
+					"slug": "icing-lgt",
+					"label": "Icing - LGT",
+					"decode": "Light icing. May create problem if flight in icing prolonged > 1 hr; pilot can manage with deicing / heat / altitude change.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-22 LGT"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-grr-light",
+						"pirep-ua-ord-light-mx",
+						"pirep-ua-clt-light"
+					]
+				},
+				{
+					"slug": "icing-mod",
+					"label": "Icing - MOD",
+					"decode": "Moderate icing. Encounters become potentially hazardous; even short encounters need course / altitude change.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-22 MOD"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-uua-grr-icing",
+						"pirep-uua-grr-mx",
+						"pirep-uua-clt-mod"
+					]
+				},
+				{
+					"slug": "icing-sev",
+					"label": "Icing - SEV (UUA)",
+					"decode": "Severe icing. Deicing / anti-icing fails to control; immediate diversion is necessary. UUA.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-22 SEV"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-uua-ord-sev-icing",
+						"pirep-uua-mke-sev-icing",
+						"pirep-uua-cle-sev-icing"
+					]
+				},
+				{
+					"slug": "icing-type",
+					"label": "Icing type (RIME / CLR / MX)",
+					"decode": "RIME = white opaque (small droplets, slow accretion). CLR = clear (large droplets, fast). MX = mixed.",
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-22 icing type"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					],
+					"examples": [
+						"pirep-ua-msp-trc-icing",
+						"pirep-ua-ord-light-mx",
+						"pirep-uua-ord-sev-icing"
+					]
+				}
+			],
+			"examples": [
+				{
+					"slug": "pirep-ua-cruise",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD /TM 1745 /FL080 /TP C172 /SK BKN050",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-single-layer"
+					],
+					"synoptic": "GA aircraft west of ORD reporting broken cumulus base 5,000 ft.",
+					"triageDrivers": [
+						"sky cover",
+						"altitude vs ceiling",
+						"time"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-sfo-wind",
+					"product": "pirep",
+					"raw": "KSFO UA /OV SFO180015 /TM 2200 /FL050 /TP B738 /WV 27045KT /TA 02",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"wind-wv"
+					],
+					"synoptic": "737 south of SFO at 5,000 ft; westerly 45-kt wind verifying the FB forecast.",
+					"triageDrivers": [
+						"wind direction",
+						"wind speed",
+						"temp"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-mia-sky",
+					"product": "pirep",
+					"raw": "KMIA UA /OV MIA270030 /TM 1600 /FL090 /TP C402 /SK SCT040-060 BKN090",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-multi-layer"
+					],
+					"synoptic": "C402 west of MIA reporting scattered cumulus tops at 6,000 with broken layer above.",
+					"triageDrivers": [
+						"tops",
+						"ceiling",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-grr-icing",
+					"product": "pirep",
+					"raw": "KGRR UUA /OV GRR /TM 1530 /FL060 /TP PA28 /TA M04 /IC MOD RIME 050-070",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-mod",
+						"icing-type"
+					],
+					"synoptic": "PA-28 in moderate rime ice between 5,000 and 7,000 ft west of Lake Michigan.",
+					"triageDrivers": [
+						"icing intensity",
+						"icing band",
+						"temp"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-den-turb",
+					"product": "pirep",
+					"raw": "KDEN UUA /OV DEN180030 /TM 2030 /FL220 /TP CRJ7 /TB SEV 200-240",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-sev"
+					],
+					"synoptic": "CRJ-700 south of Denver in severe turbulence between FL200 and FL240.",
+					"triageDrivers": [
+						"turbulence intensity",
+						"altitude band",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-ord-sev-icing",
+					"product": "pirep",
+					"raw": "KORD UUA /OV ORD180040 /TM 1820 /FL090 /TP B738 /TA M08 /IC SEV CLR 080-100",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-sev",
+						"icing-type"
+					],
+					"synoptic": "737 south of ORD with severe clear ice 8,000-10,000 ft; deep supercooled drizzle layer.",
+					"triageDrivers": [
+						"icing intensity",
+						"type (clear)",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-loc-icao-radial",
+					"product": "pirep",
+					"raw": "KCLE UA /OV CLE090030 /TM 1745 /FL080 /TP C172",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type"
+					],
+					"synoptic": "GA aircraft east of CLE; minimal block coverage (no weather group).",
+					"triageDrivers": [
+						"position",
+						"altitude",
+						"type"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-loc-kbos",
+					"product": "pirep",
+					"raw": "KBOS UA /OV BOS240020 /TM 1500 /FL060 /TP PA28 /SK BKN050",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-single-layer"
+					],
+					"synoptic": "PA-28 southwest of BOS at 6,000; broken stratus base 5,000.",
+					"triageDrivers": [
+						"ceiling",
+						"altitude vs ceiling",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-loc-kyyz",
+					"product": "pirep",
+					"raw": "KYYZ UA /OV YYZ090040 /TM 1600 /FL090 /TP CRJ2 /SK OVC080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-single-layer"
+					],
+					"synoptic": "CRJ east of Toronto Pearson; overcast base 8,000 with cruise at 9,000.",
+					"triageDrivers": [
+						"ceiling",
+						"route",
+						"IFR planning"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-msp-trc-icing",
+					"product": "pirep",
+					"raw": "KMSP UA /OV MSP /TM 1600 /FL070 /TP C172 /IC TRC RIME 060-080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"icing-trc",
+						"icing-type"
+					],
+					"synoptic": "C172 at MSP reporting trace rime ice 6,000-8,000; non-known-ice airframe at decision point.",
+					"triageDrivers": [
+						"icing intensity",
+						"type",
+						"decision point"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-jfk-cruise",
+					"product": "pirep",
+					"raw": "KJFK UA /OV JFK /TM 1500 /FL340 /TP A320 /TB LGT",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-light"
+					],
+					"synoptic": "A320 at FL340 over JFK reporting light turbulence; informational only.",
+					"triageDrivers": [
+						"turbulence intensity",
+						"altitude",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-cruise-mod",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD /TM 1900 /FL350 /TP B752 /TB MOD 300-360 /RM CONTINUOUS LIGHT CHOP",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-mod"
+					],
+					"synoptic": "757 at FL350 over ORD reporting moderate turbulence with continuous light chop in remarks.",
+					"triageDrivers": [
+						"turbulence intensity",
+						"altitude band",
+						"remarks"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-ord-radial",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD090020 /TM 1745 /FL080 /TP C172 /SK BKN050-080 /TA M02 /TB MOD",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-multi-layer",
+						"temp-ta",
+						"turb-mod"
+					],
+					"synoptic": "172 east of ORD; tops 8,000 in moderate turbulence with -2 C.",
+					"triageDrivers": [
+						"turbulence",
+						"tops",
+						"temp"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-ord-tops",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD180020 /TM 1900 /FL050 /TP B738 /SK OVC020-050",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-multi-layer"
+					],
+					"synoptic": "737 climbing through OVC020 with tops at 5,000 ft south of ORD.",
+					"triageDrivers": [
+						"tops",
+						"ceiling",
+						"climb planning"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-cle-sct",
+					"product": "pirep",
+					"raw": "KCLE UA /OV CLE060015 /TM 1530 /FL050 /TP PA28 /SK SCT035",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-single-layer"
+					],
+					"synoptic": "PA-28 east of CLE; scattered base 3,500 ft, VFR-friendly cumulus.",
+					"triageDrivers": [
+						"sky cover",
+						"altitude",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-mia-sky-single",
+					"product": "pirep",
+					"raw": "KMIA UA /OV MIA270030 /TM 1600 /FL090 /TP C402 /SK BKN090",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"sky-single-layer"
+					],
+					"synoptic": "C402 west of MIA at 9,000 ft; single broken layer at cruise altitude.",
+					"triageDrivers": [
+						"sky cover",
+						"altitude vs ceiling",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-ord-jet",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD060015 /TM 1700 /FL340 /TP A320 /WV 28085KT /TA M58",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"wind-wv",
+						"temp-ta"
+					],
+					"synoptic": "A320 at FL340 east of ORD with 85-kt jet-stream wind; FB verification report.",
+					"triageDrivers": [
+						"wind speed",
+						"altitude",
+						"temp"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-den-shear",
+					"product": "pirep",
+					"raw": "KDEN UUA /OV DEN240020 /TM 1900 /FL150 /TP C525 /TA M15 /WV 24065KT /TB SEV 120-160",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"wind-wv",
+						"turb-sev"
+					],
+					"synoptic": "Citation in mountain-wave severe turbulence west of Denver; 65-kt cross-mountain wind at FL150.",
+					"triageDrivers": [
+						"turbulence",
+						"wind shear",
+						"mountain wave"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-ord-sev-turb",
+					"product": "pirep",
+					"raw": "KORD UUA /OV ORD120015 /TM 2200 /FL310 /TP B738 /TB SEV 290-330",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-sev"
+					],
+					"synoptic": "737 at FL310 east of ORD in severe turbulence; jet-stream upper-trough signature.",
+					"triageDrivers": [
+						"turbulence",
+						"altitude band",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-ase-extm",
+					"product": "pirep",
+					"raw": "KASE UUA /OV ASE240010 /TM 1830 /FL170 /TP C525 /TA M20 /TB EXTM 150-200",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"turb-extm"
+					],
+					"synoptic": "Citation in extreme turbulence in Aspen mountain wave; structural-damage territory.",
+					"triageDrivers": [
+						"turbulence (EXTM)",
+						"mountain wave",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-den-rockies-extm",
+					"product": "pirep",
+					"raw": "KDEN UUA /OV DEN270040 /TM 1845 /FL200 /TP B752 /TB EXTM 180-220",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-extm"
+					],
+					"synoptic": "757 in extreme turbulence west of Denver; deep lee wave signature.",
+					"triageDrivers": [
+						"turbulence",
+						"mountain wave",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-asp-mtn",
+					"product": "pirep",
+					"raw": "KASE UUA /OV ASE020012 /TM 2000 /FL160 /TP CRJ2 /TB EXTM 140-180",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-extm"
+					],
+					"synoptic": "CRJ east of Aspen in extreme rotor turbulence; downstream of mountain crest.",
+					"triageDrivers": [
+						"turbulence",
+						"rotor",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-light-chop",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD /TM 1900 /FL360 /TP B752 /TB LGT",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-light"
+					],
+					"synoptic": "757 reporting persistent light chop at FL360 over ORD.",
+					"triageDrivers": [
+						"turbulence",
+						"altitude",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-jet-mod",
+					"product": "pirep",
+					"raw": "KDEN UA /OV DEN /TM 2100 /FL330 /TP B738 /TB MOD",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"turb-mod"
+					],
+					"synoptic": "737 at FL330 over Denver reporting moderate turbulence in jet-stream area.",
+					"triageDrivers": [
+						"turbulence",
+						"altitude",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-ord-trc-rime",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD180010 /TM 1730 /FL060 /TP C402 /TA M02 /IC TRC RIME 040-080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-trc",
+						"icing-type"
+					],
+					"synoptic": "C402 south of ORD with trace rime ice 4,000-8,000; non-known-ice airframe.",
+					"triageDrivers": [
+						"icing",
+						"temp",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-clt-trc",
+					"product": "pirep",
+					"raw": "KCLT UA /OV CLT /TM 1800 /FL080 /TP PA28 /TA M03 /IC TRC RIME 070-090",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-trc",
+						"icing-type"
+					],
+					"synoptic": "PA-28 over CLT with trace rime in cool-side overrunning warm air.",
+					"triageDrivers": [
+						"icing",
+						"temp",
+						"altitude"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-grr-light",
+					"product": "pirep",
+					"raw": "KGRR UA /OV GRR /TM 1600 /FL050 /TP PA28 /IC LGT RIME 050-080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"icing-lgt",
+						"icing-type"
+					],
+					"synoptic": "PA-28 over Grand Rapids with light rime ice 5,000-8,000.",
+					"triageDrivers": [
+						"icing intensity",
+						"altitude band",
+						"type"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-ord-light-mx",
+					"product": "pirep",
+					"raw": "KORD UA /OV ORD180010 /TM 1730 /FL060 /TP C402 /TA M02 /IC LGT MX 040-080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-lgt",
+						"icing-type"
+					],
+					"synoptic": "C402 south of ORD with light mixed ice 4,000-8,000; supercooled liquid + ice crystals.",
+					"triageDrivers": [
+						"icing intensity",
+						"type (mixed)",
+						"altitude"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-ua-clt-light",
+					"product": "pirep",
+					"raw": "KCLT UA /OV CLT060015 /TM 1900 /FL060 /TP PA28 /IC LGT RIME 060-080",
+					"tokenFamilies": [
+						"kind-ua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"icing-lgt",
+						"icing-type"
+					],
+					"synoptic": "PA-28 east of CLT in light rime icing band.",
+					"triageDrivers": [
+						"icing intensity",
+						"altitude",
+						"type"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-grr-mx",
+					"product": "pirep",
+					"raw": "KGRR UUA /OV GRR /TM 1530 /FL060 /TP PA28 /TA M04 /IC MOD MX 050-070",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-bare-station",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-mod",
+						"icing-type"
+					],
+					"synoptic": "PA-28 with moderate mixed ice 5,000-7,000; forced descent for non-known-ice airframe.",
+					"triageDrivers": [
+						"icing intensity",
+						"type",
+						"altitude band"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-clt-mod",
+					"product": "pirep",
+					"raw": "KCLT UUA /OV CLT270025 /TM 2030 /FL090 /TP PA32 /TA M02 /IC MOD RIME 080-110",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-mod",
+						"icing-type"
+					],
+					"synoptic": "PA-32 west of CLT in moderate rime icing band overrunning warm air.",
+					"triageDrivers": [
+						"icing intensity",
+						"altitude",
+						"route"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-mke-sev-icing",
+					"product": "pirep",
+					"raw": "KMKE UUA /OV MKE270015 /TM 1530 /FL060 /TP C402 /TA M06 /IC SEV MX 050-090",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-sev",
+						"icing-type"
+					],
+					"synoptic": "C402 west of MKE in severe mixed ice 5,000-9,000; lake-effect freezing drizzle layer.",
+					"triageDrivers": [
+						"icing severity",
+						"mixed",
+						"immediate diversion"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				},
+				{
+					"slug": "pirep-uua-cle-sev-icing",
+					"product": "pirep",
+					"raw": "KCLE UUA /OV CLE090030 /TM 1700 /FL070 /TP CRJ2 /TA M06 /IC SEV CLR 060-090",
+					"tokenFamilies": [
+						"kind-uua",
+						"location-radial-distance",
+						"time-hhmm",
+						"altitude-fl",
+						"aircraft-type",
+						"temp-ta",
+						"icing-sev",
+						"icing-type"
+					],
+					"synoptic": "CRJ east of CLE with severe clear ice 6,000-9,000; SLD layer over Lake Erie.",
+					"triageDrivers": [
+						"icing severity",
+						"type (clear)",
+						"immediate diversion"
+					],
+					"references": [
+						{
+							"source": "AIM",
+							"detail": "7-1-21 - Reporting Pilot Reports"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-22 - Icing intensity scale"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-23 - Turbulence intensity scale"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 8 - PIREP format and submission"
+						}
+					]
+				}
+			]
+		},
+		"fb": {
+			"product": "fb",
+			"tokenFamilies": [
+				{
+					"slug": "header",
+					"label": "Bulletin header",
+					"decode": "FB WBC issuance source + 'DATA BASED ON' model run + 'VALID' window + 'FOR USE' range + 'TEMPS NEG ABV 24000' sign-convention banner.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 bulletin structure"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-boi-single",
+						"fb-multi-station",
+						"fb-mountain-pre-frontal"
+					]
+				},
+				{
+					"slug": "altitude-columns",
+					"label": "Altitude columns",
+					"decode": "Standard FAA set 3000, 6000, 9000, 12000, 18000, 24000, 30000, 34000, 39000 ft MSL. Not every station reports every altitude.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 altitude column convention"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-boi-single",
+						"fb-multi-station",
+						"fb-jet-stream"
+					]
+				},
+				{
+					"slug": "row-4-char",
+					"label": "4-char row (temp omitted)",
+					"decode": "Below ~5,000 ft AGL the 3000 column drops temperature; cell is direction + speed only (4 chars).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 low-altitude reporting"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-boi-single",
+						"fb-multi-station",
+						"fb-mountain-pre-frontal"
+					]
+				},
+				{
+					"slug": "row-6-char",
+					"label": "6-char row (with temperature)",
+					"decode": "Standard cell. Below FL240 temp carries explicit sign (+/-); at FL240 and above sign is implied negative.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 standard cell"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-boi-single",
+						"fb-multi-station",
+						"fb-jet-stream"
+					]
+				},
+				{
+					"slug": "light-variable",
+					"label": "Light and variable (9900)",
+					"decode": "Direction 99 + speed 00 = wind cannot be pinned (calm or weakly defined). Parser surfaces directionDeg null, speedKt 0.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 light-and-variable convention"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-mountain-pre-frontal"
+					]
+				},
+				{
+					"slug": "high-wind-trick",
+					"label": "High wind (> 99 KT) - add-50 encoding",
+					"decode": "When wind speed > 99 KT, FAA adds 50 to direction digit and subtracts 100 from speed. Direction values >= 50 in the encoded cell are the tell.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 high-wind encoding"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-boi-single",
+						"fb-jet-stream",
+						"fb-multi-station"
+					]
+				},
+				{
+					"slug": "tropical-pattern",
+					"label": "Tropical / low-latitude profile",
+					"decode": "Light easterlies at low altitudes (trade winds), strengthening westerlies aloft (sub-tropical jet).",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 typical patterns"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					],
+					"examples": [
+						"fb-multi-station"
+					]
+				}
+			],
+			"examples": [
+				{
+					"slug": "fb-boi-single",
+					"product": "fb",
+					"raw": "FB WBC\nDATA BASED ON 121200Z\nVALID 121800Z  FOR USE 1700-2100Z. TEMPS NEG ABV 24000\n\nFT  3000    6000    9000   12000   18000   24000  30000  34000  39000\nBOI 2417   2420+04 2425+00 2531-05 2545-15 2563-25 257139 257950 269161\n",
+					"tokenFamilies": [
+						"header",
+						"altitude-columns",
+						"row-4-char",
+						"row-6-char",
+						"high-wind-trick"
+					],
+					"synoptic": "Boise single-station westerly profile in zonal flow; speeds climb to jet-level 90+ KT at FL390.",
+					"triageDrivers": [
+						"route winds",
+						"cruise altitude",
+						"fuel"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					]
+				},
+				{
+					"slug": "fb-multi-station",
+					"product": "fb",
+					"raw": "FB WBC\nDATA BASED ON 121200Z\nVALID 121800Z  FOR USE 1700-2100Z. TEMPS NEG ABV 24000\n\nFT  3000    6000    9000   12000   18000   24000  30000  34000  39000\nORD 2615   2620+02 2625-03 2630-08 2640-18 2655-28 266040 266248 266059\nJFK 2412   2418+05 2422+00 2428-05 2440-15 2452-26 265441 265450 264461\nMIA 1008   1012+18 1015+14 1018+10 1025+00 1035-15 105030 105540 106555\n",
+					"tokenFamilies": [
+						"header",
+						"altitude-columns",
+						"row-4-char",
+						"row-6-char",
+						"high-wind-trick",
+						"tropical-pattern"
+					],
+					"synoptic": "Three-station eastern US profile showing the latitude gradient; MIA shows tropical easterlies at low levels.",
+					"triageDrivers": [
+						"route-aware winds",
+						"cruise altitude",
+						"fuel"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					]
+				},
+				{
+					"slug": "fb-mountain-pre-frontal",
+					"product": "fb",
+					"raw": "FB WBC\nDATA BASED ON 121200Z\nVALID 121800Z  FOR USE 1700-2100Z. TEMPS NEG ABV 24000\n\nFT  3000    6000    9000   12000   18000   24000  30000  34000  39000\nDEN 9900   9900+04 2710-05 2715-10 2725-22 2740-35 275747 275550 274961\n",
+					"tokenFamilies": [
+						"header",
+						"altitude-columns",
+						"row-4-char",
+						"row-6-char",
+						"light-variable"
+					],
+					"synoptic": "Denver pre-frontal col; light-and-variable at low altitudes, westerly aloft strengthening with altitude.",
+					"triageDrivers": [
+						"vertical wind shear",
+						"mountain wave",
+						"cruise"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					]
+				},
+				{
+					"slug": "fb-jet-stream",
+					"product": "fb",
+					"raw": "FB WBC\nDATA BASED ON 121200Z\nVALID 121800Z  FOR USE 1700-2100Z. TEMPS NEG ABV 24000\n\nFT  3000    6000    9000   12000   18000   24000  30000  34000  39000\nMSP 3018   3022+02 3030-03 3038-08 3050-18 3070-28 307640 718950 729060\n",
+					"tokenFamilies": [
+						"header",
+						"altitude-columns",
+						"row-4-char",
+						"row-6-char",
+						"high-wind-trick"
+					],
+					"synoptic": "Twin Cities entering the jet stream; FL340 and FL390 cells engage the add-50 high-wind encoding.",
+					"triageDrivers": [
+						"jet entrance turbulence",
+						"cruise altitude",
+						"fuel"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 5 - Winds and Temperatures Aloft Forecast (FB)"
+						},
+						{
+							"source": "FMH-1",
+							"detail": "Chapter 6 - FB encoding"
+						}
+					]
+				}
+			]
+		},
+		"airmetSigmet": {
+			"product": "airmet-sigmet",
+			"tokenFamilies": [
+				{
+					"slug": "sierra-ifr",
+					"label": "AIRMET Sierra - IFR",
+					"decode": "Widespread IFR (ceiling under 1,000 ft AGL or visibility under 3 SM) over more than 50% of an area. Six-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, AIRMET Sierra phenomena"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 d.1 - AIRMET Sierra"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-sierra-ifr-pacnw",
+						"airmet-sierra-combined-pacnw",
+						"composite-frontal-plains"
+					]
+				},
+				{
+					"slug": "sierra-mtn-obs",
+					"label": "AIRMET Sierra - mountain obscuration",
+					"decode": "Clouds, precipitation, or fog obscuring mountains across an area. Six-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, mountain obscuration phenomenon"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-sierra-mtn-obs-sierranv",
+						"airmet-sierra-combined-pacnw"
+					]
+				},
+				{
+					"slug": "tango-turb",
+					"label": "AIRMET Tango - moderate turbulence",
+					"decode": "Widespread moderate turbulence below FL180 (or above when not convective). Six-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, AIRMET Tango phenomena"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 d.2 - AIRMET Tango"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-tango-turb-highplains"
+					]
+				},
+				{
+					"slug": "tango-stg-wnd",
+					"label": "AIRMET Tango - strong surface winds",
+					"decode": "Sustained surface winds > 30 KT over an area. Six-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, sustained surface winds threshold"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-tango-stg-wnd-soca"
+					]
+				},
+				{
+					"slug": "tango-llws",
+					"label": "AIRMET Tango - low-level wind shear",
+					"decode": "Non-convective LLWS below 2,000 ft AGL, typically from a low-level jet over a stable surface layer.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, LLWS reporting"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-tango-llws-oktx"
+					]
+				},
+				{
+					"slug": "zulu-ice",
+					"label": "AIRMET Zulu - moderate icing",
+					"decode": "Moderate icing between the freezing level and FL180. Six-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, AIRMET Zulu phenomena"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 d.3 - AIRMET Zulu"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-zulu-ice-ohvalley",
+						"composite-pacnw-stagnant"
+					]
+				},
+				{
+					"slug": "zulu-frzlvl",
+					"label": "AIRMET Zulu - freezing levels",
+					"decode": "Forecast altitude of the 0 deg C isotherm across the AIRMET region.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, freezing-level surface"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"airmet-zulu-frzlvl-conus",
+						"composite-pacnw-stagnant"
+					]
+				},
+				{
+					"slug": "sigmet-va",
+					"label": "SIGMET - volcanic ash",
+					"decode": "Volcanic ash cloud erupted or forecast, with location and forecast motion. Four-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, non-convective SIGMET phenomena - volcanic ash"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 c.1 - SIGMET"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"sigmet-india-3-redoubt-va",
+						"composite-va-sevturb-alaska"
+					]
+				},
+				{
+					"slug": "sigmet-sev-turb",
+					"label": "SIGMET - severe turbulence (non-convective)",
+					"decode": "Severe turbulence due to mountain wave, clear-air, or other non-convective driver. Four-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, severe-turbulence SIGMET"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"sigmet-alfa-2-mtnwv-rockies",
+						"composite-va-sevturb-alaska"
+					]
+				},
+				{
+					"slug": "sigmet-sev-ice",
+					"label": "SIGMET - severe icing",
+					"decode": "Severe icing forecast, typically due to supercooled large droplets in a warm conveyor belt.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, severe-icing SIGMET"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"sigmet-lima-1-sev-ice-bos"
+					]
+				},
+				{
+					"slug": "sigmet-sev-llws",
+					"label": "SIGMET - severe / widespread LLWS",
+					"decode": "LLWS that exceeds the AIRMET Tango envelope. Issued by some FIRs (ZAB / ZLA / etc.) when LLJ shear is severe.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, severe-LLWS SIGMET"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"sigmet-mike-1-llws-abq"
+					]
+				},
+				{
+					"slug": "wst-area",
+					"label": "Convective SIGMET - area",
+					"decode": "Cluster of cells covering >= 3,000 sq mi with >= 40% coverage. Hourly issuance at H+55, 2-hour validity.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, Convective SIGMET area form"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 b - Convective SIGMET"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"wst-23c-area-plains",
+						"composite-frontal-plains"
+					]
+				},
+				{
+					"slug": "wst-line",
+					"label": "Convective SIGMET - line",
+					"decode": "Continuous line of cells >= 60 NM long with >= 40% coverage. Squall-line shape.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, Convective SIGMET line form"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"wst-24c-line-redriver"
+					]
+				},
+				{
+					"slug": "wst-embedded",
+					"label": "Convective SIGMET - embedded",
+					"decode": "Cells embedded in a broader stratiform area; not visually avoidable. The IFR-flight problem.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, Convective SIGMET embedded form"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"wst-25c-embed-arklamiss"
+					]
+				},
+				{
+					"slug": "wst-outlook",
+					"label": "Convective SIGMET - outlook",
+					"decode": "Two-to-six-hour outlook for developing convection. Heads-up, not an active advisory.",
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7, Convective SIGMET outlook"
+						},
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					],
+					"examples": [
+						"wst-outlook-1-iowamo"
+					]
+				}
+			],
+			"examples": [
+				{
+					"slug": "airmet-sierra-ifr-pacnw",
+					"product": "airmet-sigmet",
+					"raw": "SFOS WA 121445\nAIRMET SIERRA UPDT 2 FOR IFR VALID UNTIL 122100\nAIRMET IFR... WA OR\nFROM 40NNE HQM TO 50WSW SEA TO 30SSE GEG TO 30W EUG TO 40NNE HQM\nCIG BLW 010 AND/OR VIS BLW 3SM PCPN/BR. CONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"sierra-ifr"
+					],
+					"synoptic": "Stagnant cool-season pattern over the Pacific Northwest; stratus and fog dropping ceiling under 1,000 ft over a broad area.",
+					"triageDrivers": [
+						"polygon overlap with route",
+						"ceiling threshold",
+						"validity vs ETA"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-sierra-mtn-obs-sierranv",
+					"product": "airmet-sigmet",
+					"raw": "SFOS WA 121445\nAIRMET SIERRA UPDT 2 FOR MTN OBSCN VALID UNTIL 122100\nAIRMET MTN OBSCN... CA NV\nFROM 40W RNO TO 40NE FAT TO 50ESE BIH TO 40SSW LAS TO 40W RNO\nMTNS OBSC BY CLDS/PCPN/BR. CONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"sierra-mtn-obs"
+					],
+					"synoptic": "Upslope flow against the Sierra Nevada / White Mountains hiding terrain under low cloud bases.",
+					"triageDrivers": [
+						"terrain clearance",
+						"off-airport routing",
+						"conditions trend"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-sierra-combined-pacnw",
+					"product": "airmet-sigmet",
+					"raw": "SFOS WA 121445\nAIRMET SIERRA UPDT 1 FOR IFR AND MTN OBSCN VALID UNTIL 122100\nAIRMET IFR AND MTN OBSCN... WA OR ID\nFROM 40NNE HQM TO 50WSW SEA TO 30E GEG TO 30SE BOI TO 40W EUG TO 40NNE HQM\nCIG BLW 010 AND/OR VIS BLW 3SM PCPN/BR. MTNS OBSC BY CLDS/PCPN/BR.\nCONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"sierra-ifr",
+						"sierra-mtn-obs"
+					],
+					"synoptic": "Pacific Northwest cool-season system with stratus over the lowlands and obscured Cascades and Bitterroots.",
+					"triageDrivers": [
+						"polygon overlap",
+						"terrain",
+						"ceiling"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-tango-turb-highplains",
+					"product": "airmet-sigmet",
+					"raw": "KCIT WA 121445\nAIRMET TANGO UPDT 2 FOR TURB AND STG SFC WND VALID UNTIL 122100\nAIRMET TURB... CO KS NE WY\nFROM 30NW BFF TO 40E LBL TO 30S ALS TO 30NW BFF\nOCNL MOD TURB BTN FL240 AND FL370.\nCONDS DVLPG AFT 18Z. CONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"tango-turb"
+					],
+					"synoptic": "Jet stream entrance region over the High Plains; mid-level turbulence along the upper-level jet.",
+					"triageDrivers": [
+						"altitude band",
+						"jet axis",
+						"validity"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-tango-stg-wnd-soca",
+					"product": "airmet-sigmet",
+					"raw": "SFOT WA 121445\nAIRMET TANGO UPDT 1 FOR STG SFC WND VALID UNTIL 122100\nAIRMET STG SFC WND... CA\nFROM 30N PRB TO 30E SBA TO 20W LAX TO 30N PRB\nSUSTAINED SFC WND GTR THAN 30KT. CONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"tango-stg-wnd"
+					],
+					"synoptic": "Pacific cold front clearing southern California with strong post-frontal NW flow in the lee of the Transverse Ranges.",
+					"triageDrivers": [
+						"surface wind",
+						"crosswind component",
+						"gust factor"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-tango-llws-oktx",
+					"product": "airmet-sigmet",
+					"raw": "KCIT WA 130845\nAIRMET TANGO UPDT 1 FOR LLWS VALID UNTIL 131500\nAIRMET LLWS... OK TX\nFROM 30SW OKC TO 40NE ABI TO 40SW CDS TO 30SW OKC\nLLWS PSBL BTN SFC AND 2000 FT AGL DUE TO LLJ.\nCONDS ENDG BTN 12Z-15Z.\n",
+					"tokenFamilies": [
+						"tango-llws"
+					],
+					"synoptic": "Nightly low-level jet over the southern Plains with > 10 KT shear in the lowest 2,000 ft.",
+					"triageDrivers": [
+						"departure timing",
+						"LLJ axis",
+						"LLWS termination"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-zulu-ice-ohvalley",
+					"product": "airmet-sigmet",
+					"raw": "KCIT WA 121445\nAIRMET ZULU UPDT 2 FOR ICE AND FRZLVL VALID UNTIL 122100\nAIRMET ICE... IL IN OH KY WV\nFROM 30W ORD TO 30E DAY TO 30S HVQ TO 30S LOZ TO 30W EVV TO 30W ORD\nMOD ICE BTN FRZLVL AND FL180. FRZLVL 060 SFC IN N TO 100 IN S.\nCONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"zulu-ice",
+						"zulu-frzlvl"
+					],
+					"synoptic": "Warm conveyor belt over the Ohio Valley with supercooled liquid above the warm air aloft.",
+					"triageDrivers": [
+						"icing-eligible altitudes",
+						"freezing level",
+						"exit routing"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "airmet-zulu-frzlvl-conus",
+					"product": "airmet-sigmet",
+					"raw": "KCIT WA 121445\nAIRMET ZULU UPDT 2 FRZLVL... CONUS\nFRZLVL RANGING FROM SFC IN N WI/MN TO 120 IN SRN TX.\nMULTIPLE FRZLVLS DUE TO INVERSIONS POSS IN ID/MT/WY.\n",
+					"tokenFamilies": [
+						"zulu-frzlvl"
+					],
+					"synoptic": "Continental freezing-level surface sloping from surface in the upper Midwest to 12,000 ft over south Texas.",
+					"triageDrivers": [
+						"climb floor",
+						"multi-FRZLVL terrain",
+						"inversion latitude"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "sigmet-india-3-redoubt-va",
+					"product": "airmet-sigmet",
+					"raw": "PAWU WS 130430\nSIGMET INDIA 3 VALID UNTIL 130830\nANCHORAGE FIR VA ERUPTION OF MT REDOUBT VOLCANO LOC N6029 W15225\nAT 0345Z. VA CLD OBS AT 0400Z LOC FROM N6030 W15230 TO N6045 W15145\nTO N6115 W15030 TO N6045 W14930 SFC/FL250. MOV E 25KT.\nCONDS NC.\n",
+					"tokenFamilies": [
+						"sigmet-va"
+					],
+					"synoptic": "Mt Redoubt eruption producing an ash plume drifting east through the Anchorage FIR.",
+					"triageDrivers": [
+						"ring avoidance",
+						"plume motion",
+						"altitude band SFC-FL250"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "sigmet-alfa-2-mtnwv-rockies",
+					"product": "airmet-sigmet",
+					"raw": "KKCI WS 121800\nSIGMET ALFA 2 VALID UNTIL 122200\nSLC FIR SEV TURB FCST WI AREA BOUNDED BY\n30NE GTF TO 50E HLN TO 60SE LWT TO 40N BIL TO 30NE GTF\nBTN FL280 AND FL410. DUE TO MTN WAVE.\nCONDS CONTG BYD 22Z.\n",
+					"tokenFamilies": [
+						"sigmet-sev-turb"
+					],
+					"synoptic": "Strong westerly flow over the northern Rockies producing breaking mountain wave aloft.",
+					"triageDrivers": [
+						"altitude band",
+						"mountain-wave geometry",
+						"route reroute"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "sigmet-lima-1-sev-ice-bos",
+					"product": "airmet-sigmet",
+					"raw": "KKCI WS 121800\nSIGMET LIMA 1 VALID UNTIL 122200\nZBW FIR SEV ICE FCST WI AREA BOUNDED BY\n40W BUF TO 40N BDL TO 30S BDL TO 40SW BUF TO 40W BUF\nBTN FL050 AND FL120. DUE TO SLW IN WARM CONVEYOR BELT.\nCONDS CONTG BYD 22Z.\n",
+					"tokenFamilies": [
+						"sigmet-sev-ice"
+					],
+					"synoptic": "Warm conveyor belt over the Northeast with SLW producing severe icing in the FL050-120 layer.",
+					"triageDrivers": [
+						"polygon avoidance",
+						"altitude band",
+						"conveyor-belt orientation"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "sigmet-mike-1-llws-abq",
+					"product": "airmet-sigmet",
+					"raw": "KKCI WS 121200\nSIGMET MIKE 1 VALID UNTIL 121600\nZAB FIR SEV LLWS FCST WI AREA BOUNDED BY\n40NW ABQ TO 40NE ABQ TO 30SE ABQ TO 30SW ABQ TO 40NW ABQ\nBLW 020. DUE TO STG LLJ.\nCONDS ENDG AFT 14Z.\n",
+					"tokenFamilies": [
+						"sigmet-sev-llws"
+					],
+					"synoptic": "Strong overnight LLJ over central New Mexico producing severe shear below 2,000 ft AGL.",
+					"triageDrivers": [
+						"departure timing",
+						"climb profile",
+						"shear axis"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "wst-23c-area-plains",
+					"product": "airmet-sigmet",
+					"raw": "MKCC WST 121955\nCONVECTIVE SIGMET 23C VALID UNTIL 122155\nKS NE OK\nFROM 30NW ICT-30S TOP-50E AMA\nAREA TS MOV FROM 24025KT. TOPS TO FL450. HAIL TO 1 IN PSBL. WIND GUSTS TO 50KT PSBL.\n",
+					"tokenFamilies": [
+						"wst-area"
+					],
+					"synoptic": "Cluster of thunderstorms over the southern Plains moving NE in the warm sector ahead of a cold front.",
+					"triageDrivers": [
+						"polygon avoidance",
+						"cell motion",
+						"hail / wind threats"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "wst-24c-line-redriver",
+					"product": "airmet-sigmet",
+					"raw": "MKCC WST 121955\nCONVECTIVE SIGMET 24C VALID UNTIL 122155\nTX OK\nFROM 20NW SPS-30E ADM-20S ADM\nLINE TS 50NM WIDE MOV FROM 26035KT. TOPS TO FL480. HAIL TO 2 IN PSBL.\nTORNADOES PSBL. WIND GUSTS TO 65KT PSBL.\n",
+					"tokenFamilies": [
+						"wst-line"
+					],
+					"synoptic": "Squall line along the dryline across north Texas with severe surface threats.",
+					"triageDrivers": [
+						"line orientation",
+						"hail / tornado threats",
+						"line motion"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "wst-25c-embed-arklamiss",
+					"product": "airmet-sigmet",
+					"raw": "MKCC WST 121955\nCONVECTIVE SIGMET 25C VALID UNTIL 122155\nAR LA MS\nFROM 30W LIT-30E MEM-20S MLU-30W MLU-30W LIT\nEMBD AREA TS MOV FROM 22020KT. TOPS TO FL400. HAIL TO 1 IN PSBL.\nWIND GUSTS TO 50KT PSBL.\n",
+					"tokenFamilies": [
+						"wst-embedded"
+					],
+					"synoptic": "Embedded thunderstorms within stratiform precipitation over the lower Mississippi Valley.",
+					"triageDrivers": [
+						"embedded - cannot visually avoid",
+						"IFR routing",
+						"deviation budget"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "wst-outlook-1-iowamo",
+					"product": "airmet-sigmet",
+					"raw": "MKCC WST 121955\nCONVECTIVE SIGMET 1 OUTLOOK VALID 122200-130200\nFROM 50NW DSM-30E DSM-30E STL-50W STL\nWST ISSUANCES PSBL. REF AC. AREAS OF TS DVLPG IN ADVANCE OF FRONT.\n",
+					"tokenFamilies": [
+						"wst-outlook"
+					],
+					"synoptic": "Developing convection forecast ahead of an approaching cold front over the upper Midwest.",
+					"triageDrivers": [
+						"pre-issuance heads-up",
+						"departure replanning",
+						"frontal timing"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "composite-frontal-plains",
+					"product": "airmet-sigmet",
+					"raw": "KCIT WA 121445\nAIRMET SIERRA UPDT 2 FOR IFR VALID UNTIL 122100\nAIRMET IFR... TX OK KS\nFROM 30NW DFW TO 30SE OKC TO 50S ICT TO 60SW ABI TO 30NW DFW\nCIG BLW 010 AND/OR VIS BLW 3SM PCPN/BR.\n",
+					"tokenFamilies": [
+						"sierra-ifr",
+						"wst-area"
+					],
+					"synoptic": "Springtime cold front through the southern Plains with broad pre-frontal IFR and post-frontal convection.",
+					"triageDrivers": [
+						"overlapping rings",
+						"altitude band",
+						"frontal motion"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "composite-pacnw-stagnant",
+					"product": "airmet-sigmet",
+					"raw": "SFOZ WA 121445\nAIRMET ZULU UPDT 1 FOR ICE AND FRZLVL VALID UNTIL 122100\nAIRMET ICE... WA OR\nFROM 40NNE HQM TO 50E SEA TO 30E PDX TO 40W EUG TO 40NNE HQM\nMOD ICE BTN FRZLVL AND 100. FRZLVL SFC TO 040.\nLCL SEV ICE PSBL IN SLW DUE TO FRZ DRIZZLE.\nCONDS CONTG BYD 21Z THRU 03Z.\n",
+					"tokenFamilies": [
+						"zulu-ice",
+						"zulu-frzlvl"
+					],
+					"synoptic": "Stagnant Pacific Northwest pattern with stratus, embedded freezing drizzle, and surface-skimming freezing level.",
+					"triageDrivers": [
+						"SLW risk",
+						"freezing level proximity to surface",
+						"conditions trend"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				},
+				{
+					"slug": "composite-va-sevturb-alaska",
+					"product": "airmet-sigmet",
+					"raw": "PAWU WS 130430\nSIGMET INDIA 3 VALID UNTIL 130830\nANCHORAGE FIR VA ERUPTION OF MT REDOUBT VOLCANO LOC N6029 W15225\nAT 0345Z. VA CLD OBS AT 0400Z LOC FROM N6030 W15230 TO N6045 W15145\nTO N6115 W15030 TO N6045 W14930 SFC/FL250. MOV E 25KT.\nASSOCIATED SEV TURB POSS WI 30NM OF PLUME.\nCONDS NC.\n",
+					"tokenFamilies": [
+						"sigmet-va",
+						"sigmet-sev-turb"
+					],
+					"synoptic": "Mt Redoubt active eruption with overlapping ash and severe-turbulence advisories.",
+					"triageDrivers": [
+						"ring avoidance",
+						"buffer for SEV TURB",
+						"plume motion"
+					],
+					"references": [
+						{
+							"source": "AC 00-45H",
+							"detail": "Chapter 7 - In-flight Weather Advisories (AIRMET / SIGMET / Convective SIGMET)"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-6 - In-flight Weather Advisories"
+						},
+						{
+							"source": "AIM",
+							"detail": "7-1-12 - Pilot Weather Reports and AIRMET / SIGMET broadcast services"
+						}
+					]
+				}
+			]
+		}
+	}
+}

@@ -1,0 +1,328 @@
+#!/usr/bin/env bun
+/**
+ * catalog-build -- encoded-text catalog builder.
+ *
+ * Reads the five product markdown files under
+ * `course/knowledge/weather/encoded-text-catalog/`, extracts the trailing
+ * `yaml-catalog` fence from each, round-trips every METAR / TAF / PIREP / FB
+ * example through the parsers in `@ab/wx-charts`, and writes
+ * `course/knowledge/weather/encoded-text-catalog/catalog.json` matching the
+ * `EncodedTextCatalog` shape.
+ *
+ * Usage:
+ *   bun tools/catalog-build/bin.ts             # build (write catalog.json)
+ *   bun tools/catalog-build/bin.ts --check     # validate only (exit non-zero on stale / parse failure)
+ *
+ * AIRMET / SIGMET examples skip the parser round-trip (no parser in v1).
+ */
+
+import { readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { parseFbGrid, parseMetar, parsePirep, parseTaf } from '@ab/wx-charts';
+import { parse as parseYaml } from 'yaml';
+
+const REPO_ROOT = resolve(import.meta.dir, '..', '..');
+const CATALOG_DIR = resolve(REPO_ROOT, 'course/knowledge/weather/encoded-text-catalog');
+
+type ProductSlug = 'metar' | 'taf' | 'pirep' | 'fb' | 'airmet-sigmet';
+
+const PRODUCT_FILES: { slug: ProductSlug; file: string; key: 'metar' | 'taf' | 'pirep' | 'fb' | 'airmetSigmet' }[] = [
+	{ slug: 'metar', file: 'metar.md', key: 'metar' },
+	{ slug: 'taf', file: 'taf.md', key: 'taf' },
+	{ slug: 'pirep', file: 'pirep.md', key: 'pirep' },
+	{ slug: 'fb', file: 'fb.md', key: 'fb' },
+	{ slug: 'airmet-sigmet', file: 'airmet-sigmet.md', key: 'airmetSigmet' },
+];
+
+export interface SourceRef {
+	source: string;
+	detail: string;
+}
+
+export interface TokenFamily {
+	slug: string;
+	label: string;
+	decode: string;
+	references: SourceRef[];
+	examples: string[];
+}
+
+export interface CatalogExample {
+	slug: string;
+	product: ProductSlug;
+	raw: string;
+	tokenFamilies: string[];
+	synoptic: string;
+	triageDrivers: string[];
+	references: SourceRef[];
+}
+
+export interface ProductCatalog {
+	product: ProductSlug;
+	tokenFamilies: TokenFamily[];
+	examples: CatalogExample[];
+}
+
+export interface EncodedTextCatalog {
+	generatedAt: string;
+	products: {
+		metar: ProductCatalog;
+		taf: ProductCatalog;
+		pirep: ProductCatalog;
+		fb: ProductCatalog;
+		airmetSigmet: ProductCatalog;
+	};
+}
+
+interface RawManifest {
+	product: ProductSlug;
+	references_default?: SourceRef[];
+	token_families: {
+		slug: string;
+		label: string;
+		decode: string;
+		references?: SourceRef[];
+		examples: string[];
+	}[];
+	examples: {
+		slug: string;
+		raw: string;
+		token_families: string[];
+		synoptic: string;
+		triage_drivers: string[];
+		references?: SourceRef[];
+	}[];
+}
+
+function extractCatalogFence(markdown: string, file: string): string {
+	// Match the last fenced block tagged ```yaml-catalog ... ```
+	const lines = markdown.split('\n');
+	let inFence = false;
+	let captured: string[] | null = null;
+	const buffer: string[] = [];
+	for (const line of lines) {
+		if (!inFence && line.trim() === '```yaml-catalog') {
+			inFence = true;
+			buffer.length = 0;
+			continue;
+		}
+		if (inFence && line.trim() === '```') {
+			captured = [...buffer];
+			inFence = false;
+			continue;
+		}
+		if (inFence) {
+			buffer.push(line);
+		}
+	}
+	if (!captured) {
+		throw new Error(`${file}: no \`\`\`yaml-catalog fence found.`);
+	}
+	return captured.join('\n');
+}
+
+function isRawManifest(value: unknown): value is RawManifest {
+	if (typeof value !== 'object' || value === null) return false;
+	const v = value as Record<string, unknown>;
+	return typeof v.product === 'string' && Array.isArray(v.token_families) && Array.isArray(v.examples);
+}
+
+async function loadManifest(productSlug: ProductSlug, file: string): Promise<RawManifest> {
+	const path = resolve(CATALOG_DIR, file);
+	const md = await readFile(path, 'utf8');
+	const yamlText = extractCatalogFence(md, file);
+	const parsed: unknown = parseYaml(yamlText);
+	if (!isRawManifest(parsed)) {
+		throw new Error(`${file}: yaml-catalog block did not produce a valid manifest shape.`);
+	}
+	if (parsed.product !== productSlug) {
+		throw new Error(`${file}: manifest declares product='${parsed.product}', expected '${productSlug}'.`);
+	}
+	return parsed;
+}
+
+function mergeReferences(defaults: SourceRef[] | undefined, local: SourceRef[] | undefined): SourceRef[] {
+	const merged: SourceRef[] = [];
+	const seen = new Set<string>();
+	for (const ref of [...(local ?? []), ...(defaults ?? [])]) {
+		const key = `${ref.source}::${ref.detail}`;
+		if (seen.has(key)) continue;
+		seen.add(key);
+		merged.push(ref);
+	}
+	return merged;
+}
+
+interface RoundTripFailure {
+	product: ProductSlug;
+	exampleSlug: string;
+	warnings: string[];
+	error?: string;
+}
+
+function roundTripExample(product: ProductSlug, slug: string, raw: string): RoundTripFailure | null {
+	if (product === 'airmet-sigmet') return null;
+	try {
+		let warnings: string[];
+		switch (product) {
+			case 'metar':
+				warnings = parseMetar(raw).warnings;
+				break;
+			case 'taf':
+				warnings = parseTaf(raw).warnings;
+				break;
+			case 'pirep':
+				warnings = parsePirep(raw).warnings;
+				break;
+			case 'fb':
+				warnings = parseFbGrid(raw).warnings;
+				break;
+		}
+		if (warnings.length > 0) {
+			return { product, exampleSlug: slug, warnings };
+		}
+		return null;
+	} catch (err) {
+		return {
+			product,
+			exampleSlug: slug,
+			warnings: [],
+			error: err instanceof Error ? err.message : String(err),
+		};
+	}
+}
+
+function toProductCatalog(manifest: RawManifest): { catalog: ProductCatalog; failures: RoundTripFailure[] } {
+	const defaults = manifest.references_default;
+	const tokenFamilies: TokenFamily[] = manifest.token_families.map((tf) => ({
+		slug: tf.slug,
+		label: tf.label,
+		decode: tf.decode,
+		references: mergeReferences(defaults, tf.references),
+		examples: tf.examples,
+	}));
+	const failures: RoundTripFailure[] = [];
+	const examples: CatalogExample[] = manifest.examples.map((ex) => {
+		const failure = roundTripExample(manifest.product, ex.slug, ex.raw);
+		if (failure) failures.push(failure);
+		return {
+			slug: ex.slug,
+			product: manifest.product,
+			raw: ex.raw,
+			tokenFamilies: ex.token_families,
+			synoptic: ex.synoptic,
+			triageDrivers: ex.triage_drivers,
+			references: mergeReferences(defaults, ex.references),
+		};
+	});
+	return {
+		catalog: { product: manifest.product, tokenFamilies, examples },
+		failures,
+	};
+}
+
+interface BuildResult {
+	catalog: EncodedTextCatalog;
+	failures: RoundTripFailure[];
+}
+
+export async function buildCatalog(): Promise<BuildResult> {
+	const products: Partial<EncodedTextCatalog['products']> = {};
+	const allFailures: RoundTripFailure[] = [];
+	for (const { slug, file, key } of PRODUCT_FILES) {
+		const manifest = await loadManifest(slug, file);
+		const { catalog, failures } = toProductCatalog(manifest);
+		products[key] = catalog;
+		allFailures.push(...failures);
+	}
+	const catalog: EncodedTextCatalog = {
+		generatedAt: new Date().toISOString(),
+		products: products as EncodedTextCatalog['products'],
+	};
+	return { catalog, failures: allFailures };
+}
+
+function formatFailures(failures: RoundTripFailure[]): string {
+	const lines: string[] = [];
+	for (const f of failures) {
+		lines.push(`  [${f.product}] ${f.exampleSlug}`);
+		if (f.error) lines.push(`    error: ${f.error}`);
+		for (const w of f.warnings) lines.push(`    warning: ${w}`);
+	}
+	return lines.join('\n');
+}
+
+interface CliArgs {
+	check: boolean;
+	help: boolean;
+}
+
+function parseArgs(argv: readonly string[]): CliArgs {
+	const out: CliArgs = { check: false, help: false };
+	for (const a of argv) {
+		if (a === '--check') out.check = true;
+		else if (a === '--help' || a === '-h' || a === 'help') out.help = true;
+		else {
+			console.error(`catalog-build: unknown argument '${a}'.`);
+			process.exit(2);
+		}
+	}
+	return out;
+}
+
+function printHelp(): void {
+	console.log('catalog-build -- encoded-text catalog builder');
+	console.log('');
+	console.log('Usage:');
+	console.log('  bun tools/catalog-build/bin.ts           Build catalog.json');
+	console.log('  bun tools/catalog-build/bin.ts --check   Validate only (exit non-zero on stale / parse failure)');
+}
+
+async function main(): Promise<void> {
+	const args = parseArgs(process.argv.slice(2));
+	if (args.help) {
+		printHelp();
+		return;
+	}
+	const { catalog, failures } = await buildCatalog();
+	const outPath = resolve(CATALOG_DIR, 'catalog.json');
+	const serialized = `${JSON.stringify(catalog, null, '\t')}\n`;
+	if (failures.length > 0) {
+		console.error(`catalog-build: ${failures.length} round-trip failure(s):`);
+		console.error(formatFailures(failures));
+		process.exit(1);
+	}
+	if (args.check) {
+		// Compare against on-disk; ignore generatedAt (it changes every run).
+		let existing: string | null = null;
+		try {
+			existing = await readFile(outPath, 'utf8');
+		} catch {
+			existing = null;
+		}
+		if (existing === null) {
+			console.error('catalog-build --check: catalog.json missing. Run `bun tools/catalog-build/bin.ts` to regenerate.');
+			process.exit(1);
+		}
+		const stripGeneratedAt = (s: string): string => s.replace(/"generatedAt":\s*"[^"]*",?\n?/, '');
+		if (stripGeneratedAt(existing) !== stripGeneratedAt(serialized)) {
+			console.error('catalog-build --check: catalog.json is stale. Run `bun tools/catalog-build/bin.ts` to regenerate.');
+			process.exit(1);
+		}
+		console.log('catalog-build --check: OK');
+		return;
+	}
+	await writeFile(outPath, serialized);
+	const totalExamples = Object.values(catalog.products).reduce((sum, p) => sum + p.examples.length, 0);
+	const totalFamilies = Object.values(catalog.products).reduce((sum, p) => sum + p.tokenFamilies.length, 0);
+	console.log(`catalog-build: wrote ${outPath}`);
+	console.log(`  ${totalExamples} examples across ${totalFamilies} token families in 5 products`);
+}
+
+// Run only when invoked as a script (not when imported as a module).
+if (import.meta.main) {
+	main().catch((err) => {
+		console.error(err instanceof Error ? (err.stack ?? err.message) : String(err));
+		process.exit(1);
+	});
+}

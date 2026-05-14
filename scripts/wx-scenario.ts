@@ -23,7 +23,9 @@
 
 import { WX_SCENARIO_SUBCOMMANDS } from '@ab/constants';
 import { runBuild } from './wx-scenario/build';
+import { runCheckCatalog } from './wx-scenario/check-catalog';
 import { runCheckRoundTrip } from './wx-scenario/check-round-trip';
+import { runDrill } from './wx-scenario/drill';
 import { runList } from './wx-scenario/list';
 import { runValidate } from './wx-scenario/validate';
 
@@ -49,6 +51,14 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		summary: 'Walk every scenario, run the full validate suite. Wired into `bun run check`.',
 		example: 'bun run wx-scenario check-round-trip --all',
 	},
+	[WX_SCENARIO_SUBCOMMANDS.CHECK_CATALOG]: {
+		summary: 'Validate the encoded-text catalog (round-trip every example, check catalog.json freshness). Wired into `bun run check`.',
+		example: 'bun run wx-scenario check-catalog',
+	},
+	[WX_SCENARIO_SUBCOMMANDS.DRILL]: {
+		summary: 'Generate a pack of practice products (METAR / TAF / PIREP / FB / AIRMET) with per-token annotations',
+		example: 'bun run wx-scenario drill --count 20 --products metar,taf --output /tmp/sample-drill',
+	},
 };
 
 async function main(): Promise<void> {
@@ -73,6 +83,12 @@ async function main(): Promise<void> {
 			return;
 		case WX_SCENARIO_SUBCOMMANDS.CHECK_ROUND_TRIP:
 			await runCheckRoundTrip(rest);
+			return;
+		case WX_SCENARIO_SUBCOMMANDS.CHECK_CATALOG:
+			await runCheckCatalog(rest);
+			return;
+		case WX_SCENARIO_SUBCOMMANDS.DRILL:
+			await runDrill(rest);
 			return;
 		default:
 			console.error(`wx-scenario: unknown command '${command}'.`);

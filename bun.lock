@@ -460,6 +460,16 @@
         "vitest": "catalog:",
       },
     },
+    "libs/wx-explain": {
+      "name": "@ab/wx-explain",
+      "version": "0.1.0",
+      "dependencies": {
+        "@ab/wx-charts": "workspace:*",
+      },
+      "devDependencies": {
+        "vitest": "catalog:",
+      },
+    },
   },
   "catalog": {
     "@sveltejs/adapter-node": "^5.2.12",
@@ -528,6 +538,8 @@
     "@ab/wx-charts": ["@ab/wx-charts@workspace:libs/wx-charts"],
 
     "@ab/wx-engine": ["@ab/wx-engine@workspace:libs/wx-engine"],
+
+    "@ab/wx-explain": ["@ab/wx-explain@workspace:libs/wx-explain"],
 
     "@adobe/css-tools": ["@adobe/css-tools@4.4.4", "", {}, "sha512-Elp+iwUx5rN5+Y8xLt5/GRoG20WGoDCQ/1Fb+1LiGtvwbDavuSk0jhD/eZdckHAuzcDzccnkv+rEjyWfRx18gg=="],
 

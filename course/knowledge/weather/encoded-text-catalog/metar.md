@@ -778,14 +778,14 @@ token_families:
     examples: [metar-buf-snow, metar-far-fog, metar-far-fog-mless]
   - slug: visibility-m-less-than
     label: Less-than (M) prefix
-    decode: `M` means "less than." `M1/4SM` = visibility less than 1/4 SM (the lowest reportable prevailing visibility).
+    decode: 'The `M` prefix means "less than." `M1/4SM` = visibility less than 1/4 SM (the lowest reportable prevailing visibility).'
     references:
       - source: AC 00-45H
         detail: Chapter 3, low-visibility reporting convention
     examples: [metar-far-fog-mless, metar-ict-heavy-snow, metar-sfo-dense-fog]
   - slug: wx-light
     label: Light intensity (-)
-    decode: `-` prefix marks light intensity. Common with `-RA`, `-SN`, `-SHSN`, `-FZRA`.
+    decode: 'The `-` prefix marks light intensity. Common with `-RA`, `-SN`, `-SHSN`, `-FZRA`.'
     references:
       - source: AC 00-45H
         detail: Chapter 3, weather group intensity prefix
@@ -799,21 +799,21 @@ token_families:
     examples: [metar-ord-rain-moderate, metar-mia-tsra, metar-msp-moderate-snow]
   - slug: wx-heavy
     label: Heavy intensity (+)
-    decode: `+` prefix marks heavy intensity. `+TSRA`, `+SN`, `+FC`.
+    decode: 'The `+` prefix marks heavy intensity. `+TSRA`, `+SN`, `+FC`.'
     references:
       - source: AC 00-45H
         detail: Chapter 3, weather group intensity prefix
     examples: [metar-okc-tsra, metar-ict-heavy-snow, metar-dfw-front]
   - slug: wx-vicinity
     label: Vicinity (VC)
-    decode: `VC` prefix = phenomenon observed within 5-10 SM of the station but not at the station.
+    decode: 'The `VC` prefix = phenomenon observed within 5-10 SM of the station but not at the station.'
     references:
       - source: AC 00-45H
         detail: Chapter 3, vicinity prefix
     examples: [metar-mci-vcts, metar-fll-vcts, metar-msy-vcsh]
   - slug: wx-descriptor-combo
     label: Descriptor + phenomenon combos
-    decode: `TS`, `SH`, `FZ`, `BL`, `DR`, `MI`, `BC`, `PR` descriptors compose with the phenomenon list. Common combos memorized on sight (`+TSRA`, `FZRA`, `+FC`, `MIFG`).
+    decode: 'Descriptors `TS`, `SH`, `FZ`, `BL`, `DR`, `MI`, `BC`, `PR` compose with the phenomenon list. Common combos memorized on sight (`+TSRA`, `FZRA`, `+FC`, `MIFG`).'
     references:
       - source: AC 00-45H
         detail: Chapter 3, weather group descriptor + phenomenon table
@@ -848,14 +848,14 @@ token_families:
     examples: [metar-mdw-gusty, metar-mci-vcts, metar-ase-mountain]
   - slug: sky-cb
     label: Cumulonimbus (CB) suffix
-    decode: `CB` after the layer height marks an active thunderstorm cell. Almost always paired with TS in the weather group.
+    decode: 'A `CB` suffix after the layer height marks an active thunderstorm cell. Almost always paired with TS in the weather group.'
     references:
       - source: AC 00-45H
         detail: Chapter 3, convective cloud annotation
     examples: [metar-okc-tsra, metar-dfw-front, metar-mia-tsra]
   - slug: sky-tcu
     label: Towering cumulus (TCU) suffix
-    decode: `TCU` after the layer height marks a cell building toward thunderstorm but not yet producing lightning.
+    decode: 'A `TCU` suffix after the layer height marks a cell building toward thunderstorm but not yet producing lightning.'
     references:
       - source: AC 00-45H
         detail: Chapter 3, convective cloud annotation
@@ -918,7 +918,7 @@ token_families:
     examples: [metar-far-fog, metar-bgr-cold, metar-msp-clear-cold]
   - slug: altimeter-q-group
     label: International Q-group (hectopascals)
-    decode: `Q` + four digits = pressure in hectopascals (e.g., Q1023 = 1023 hPa).
+    decode: 'A `Q` group + four digits = pressure in hectopascals (e.g., Q1023 = 1023 hPa).'
     references:
       - source: AC 00-45H
         detail: Chapter 3, international altimeter forms

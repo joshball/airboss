@@ -423,7 +423,7 @@ examples:
   - slug: taf-fm-multi
     raw: TAF KMSP 121120Z 1212/1318 18012KT 6SM SCT040 FM121800 21015G25KT 6SM BKN050 FM130200 28012KT 6SM SKC
     token_families: [header-routine, validity-window, initial-vfr, fm-from]
-    synoptic: Twin Cities with two FM groups: pre-frontal back to 210/15G25 at 18Z, then post-frontal clearing at 02Z.
+    synoptic: 'Twin Cities with two FM groups: pre-frontal back to 210/15G25 at 18Z, then post-frontal clearing at 02Z.'
     triage_drivers: [FM timing, wind sequence, ceiling]
   - slug: taf-marine-fm
     raw: TAF KSMO 121120Z 1212/1318 24007KT 4SM BR OVC008 FM121800 25010KT 6SM SCT025 BKN150

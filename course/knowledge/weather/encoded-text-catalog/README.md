@@ -39,7 +39,39 @@ Each product file has the same skeleton:
 2. **Composite canonical examples** - full products that exercise multiple families at once. Each carries a one-sentence synoptic story and a list of triage drivers.
 3. **A trailing `yaml-catalog` fence** - structured metadata the build script reads. The metadata is the source of truth; the prose around it is authored to match.
 
-Run `bun run wx-scenario check-catalog` to validate every METAR / TAF / PIREP / FB example round-trips through `parseMetar` / `parseTaf` / `parsePirep` / `parseFbGrid` from `@ab/wx-charts` with zero warnings. Failing examples block `bun run check`.
+### The `yaml-catalog` manifest format
+
+Every product file closes with a single fenced block tagged `yaml-catalog`. The build script ([`tools/catalog-build/bin.ts`](../../../../tools/catalog-build/bin.ts)) parses this block as YAML and merges all five into `catalog.json`. Shape:
+
+```yaml
+product: metar | taf | pirep | fb | airmet-sigmet
+references_default:
+  - source: AC 00-45H
+    detail: Chapter 3 - ...
+token_families:
+  - slug: wind-gust
+    label: Gust group
+    decode: G suffix + two-digit gust value when peak exceeds the 2-min mean by 10+ KT.
+    references:
+      - source: AC 00-45H
+        detail: Chapter 3, wind gust threshold
+    examples: [metar-mdw-gusty, metar-jan-gust, metar-den-gust]
+examples:
+  - slug: metar-mdw-gusty
+    raw: KMDW 121753Z 28019G31KT 240V310 7SM FEW040 SCT080 BKN150 06/M03 A2987
+    token_families: [wind-gust, wind-vrb-range, ...]
+    synoptic: Midway in post-frontal cold sector...
+    triage_drivers: [gust factor, crosswind, altimeter trend]
+```
+
+The `raw` field is a plain string for single-line products (METAR / TAF / FB / PIREP) and a multiline YAML scalar (`raw: |`) for AIRMET / SIGMET bulletins. Build script behavior:
+
+1. Reads all five product markdown files.
+2. Extracts the trailing `yaml-catalog` block from each.
+3. Round-trip-parses every METAR / TAF / PIREP / FB example through the appropriate parser from `@ab/wx-charts`. Any parser warnings fail the build. AIRMET / SIGMET examples skip the round-trip (no parser in v1).
+4. Emits `catalog.json` matching the `EncodedTextCatalog` shape consumed by `@ab/wx-explain` and the drill generator.
+
+Run `bun run wx-scenario check-catalog` to validate without writing (the gate wired into `bun run check`). Run `bun tools/catalog-build/bin.ts` to regenerate `catalog.json` after editing any product markdown.
 
 ## Discovery-first pedagogy
 

@@ -154,7 +154,7 @@ references_default:
 token_families:
   - slug: header
     label: Bulletin header
-    decode: 'FB WBC' issuance source + 'DATA BASED ON' model run + 'VALID' window + 'FOR USE' range + 'TEMPS NEG ABV 24000' sign-convention banner.
+    decode: "FB WBC issuance source + 'DATA BASED ON' model run + 'VALID' window + 'FOR USE' range + 'TEMPS NEG ABV 24000' sign-convention banner."
     references:
       - source: AC 00-45H
         detail: Chapter 5 bulletin structure
