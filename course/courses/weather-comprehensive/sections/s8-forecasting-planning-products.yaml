@@ -86,7 +86,7 @@ steps:
       IFR/MVFR and ask: which feature on the surface analysis is
       causing it?
 
-      :::chart slug="wx-cva-2024-01-13-12z"
+      :::chart slug="reference-fixtures/wx-cva-2024-01-13-12z"
       :::
     knowledge_node_id: wx-product-surface-analysis-and-cva
 
@@ -116,7 +116,7 @@ steps:
       imaginary flight across this region, then look only at that
       layer and ignore the rest:
 
-      :::chart slug="wx-gfa-2024-12-23-15z"
+      :::chart slug="reference-fixtures/wx-gfa-2024-12-23-15z"
       :::
 
       A water-vapor satellite image from the same December 23 setup
@@ -125,7 +125,7 @@ steps:
       a synoptic context layer alongside the GFA when you're trying
       to understand why a forecast looks the way it does:
 
-      :::chart slug="wx-satellite-wv-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-satellite-wv-2024-12-23-12z"
       :::
     knowledge_node_id: wx-product-gfa
 
@@ -151,7 +151,7 @@ steps:
       wind at the nearest station, and ask whether the temperature
       column puts you in icing range:
 
-      :::chart slug="wx-winds-aloft-fb-2024-05-21-18z"
+      :::chart slug="reference-fixtures/wx-winds-aloft-fb-2024-05-21-18z"
       :::
     knowledge_node_id: wx-product-winds-aloft
 
@@ -179,14 +179,14 @@ steps:
       ask: which of these polygons is a frontal consequence, and
       which is something else?
 
-      :::chart slug="wx-airmet-sigmet-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-airmet-sigmet-2024-12-23-12z"
       :::
 
       The icing G-AIRMET is the graphical, time-sliced descendant of
       the textual AIRMET Zulu -- six-hour forecast windows showing
       where icing is expected and at what altitudes:
 
-      :::chart slug="wx-icing-gairmet-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-icing-gairmet-2024-12-23-12z"
       :::
     knowledge_node_id: wx-product-airmets
 
@@ -236,6 +236,6 @@ steps:
       a planned afternoon flight intersect it? At what point in the
       day does the outlook say the risk peaks?
 
-      :::chart slug="wx-convective-outlook-day1-2024-05-21"
+      :::chart slug="reference-fixtures/wx-convective-outlook-day1-2024-05-21"
       :::
     knowledge_node_id: wx-product-convective-outlook

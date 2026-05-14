@@ -136,13 +136,8 @@ the briefed weather meet your floor at every leg, with margin for
 forecast deterioration? If yes, go. If marginal, identify the
 specific concern and the trigger that would make you turn around.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Why-minimums-exist cards lock the rationale;
-the table-shape card builds the structure; the three operating rules
-are the discipline; the scenario card walks the trip-pressure case.
-
-```yaml-cards
 - front: "Personal minimums vs. legal minimums -- what's the difference and why does it matter?"
   back: |
     Legal minimums are the regulatory floor for any pilot. Personal minimums
@@ -352,7 +347,7 @@ are the discipline; the scenario card walks the trip-pressure case.
       cite: FAA-H-8083-2 Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
     - kind: aim
       cite: AIM 7-1-3 -- Use of Aviation Weather Products
-```
+:::
 
 ## Connect
 

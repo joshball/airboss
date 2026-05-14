@@ -132,12 +132,8 @@ Walk a real preflight: you're flying KPAO -> KMRY tomorrow, departing at
 Each answer is one product, one source, one cycle. The decision quality
 is bounded by the staleness of whichever product you trust.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The originator-vs-relayer split is the
-foundation cog. Product-to-source mapping cards lock the K1 recall set.
-
-```yaml-cards
 - front: "Two-class split per the K1 element: 'NWS-originated' vs 'Flight Service mediated'. What's the operational difference?"
   back: |
     NWS-originated products are produced by the Aviation Weather Center
@@ -333,7 +329,7 @@ foundation cog. Product-to-source mapping cards lock the K1 recall set.
       cite: AIM 7-1 -- National Weather Service Aviation Products
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
-```
+:::
 
 ## Connect
 

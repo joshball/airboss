@@ -243,11 +243,8 @@ Default muscle memory: AIM first for the table, CFR second for the fine print.
 
 ## Practice
 
-### Cards (spaced repetition)
+:::cards
 
-Authored inline. `bun run knowledge seed --user <email>` materializes these as `study.card` rows linked to this node, and they flow through the normal `/memory/review` FSRS queue. The numeric table is the factual pillar; the `-why` cards exist to keep the reasoning resident in memory, not just the values.
-
-```yaml-cards
 - front: "VFR weather minimums in Class B: visibility and cloud clearance?"
   back: "3 SM visibility, clear of clouds. (No 500/1000/2000 buffer -- ATC separates all traffic inside Class B, so the surprise-emergence geometry the buffer protects against has already been handled.)"
   cardType: basic
@@ -404,7 +401,7 @@ Authored inline. `bun run knowledge seed --user <email>` materializes these as `
       cite: AIM 3-1-4 -- Basic VFR weather minimums
     - kind: ac
       cite: AC 00-6B Aviation Weather -- visibility and cloud reporting definitions.
-```
+:::
 
 ### Reps (scenario-based decision practice)
 

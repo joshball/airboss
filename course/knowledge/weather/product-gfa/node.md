@@ -142,13 +142,8 @@ ETA and toggle the cig/vis layer. If the route passes through yellow
 (MVFR) or red (IFR) blocks at any forecast hour you'll be airborne, the
 GFA has just identified the hazard window.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Layer-set and color-convention cards are
-the decode floor; the front-end model card is the understand layer;
-the triage card pinpoints the dominant layer for each flight.
-
-```yaml-cards
 - front: "Layers in the GFA tool -- name the seven and one thing each shows."
   back: |
     Clouds: ceiling, tops, sky cover at selectable altitudes.
@@ -370,7 +365,7 @@ the triage card pinpoints the dominant layer for each flight.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 28 -- Aviation Weather Tools, Section 28.2 (Graphical Forecasts for Aviation (GFA) Tool)
     - kind: aim
       cite: AIM 7-1 -- National Weather Service Aviation Products
-```
+:::
 
 ## Connect
 

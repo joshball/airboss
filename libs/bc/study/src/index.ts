@@ -22,6 +22,18 @@
 // Browser-safe value exports (no DB connection import in their module)
 // ----------------------------------------------------------------------
 
+// Pure validator for the `:::cards` directive payload (and the
+// historical `` ```yaml-cards `` fenced block it replaces). Shared by
+// the markdown block parser (`libs/help/`) and the seed orchestrator
+// so authoring slips fail at parse time with the same per-card path
+// the seeder fires at `bun run db seed cards`. Browser-safe.
+export {
+	type ParsedCard,
+	parseAcsCodes,
+	parseCardsYaml,
+	parseQuestionTier,
+	parseSourceAuthority,
+} from './cards-yaml';
 // Course YAML authoring schemas (course-primitive WP Phase 6). Pure Zod;
 // browser-safe. Loaders / form actions on a future authoring surface
 // validate uploaded course YAML against these without dragging the

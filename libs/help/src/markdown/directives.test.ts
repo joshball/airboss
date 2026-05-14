@@ -49,6 +49,64 @@ describe('block parser -- :::chart directive', () => {
 	});
 });
 
+describe('block parser -- :::cards directive', () => {
+	it('parses a body-bearing :::cards block and captures the YAML body verbatim', () => {
+		const src = [
+			':::cards',
+			'- front: "What does VFR stand for?"',
+			'  back: "Visual Flight Rules."',
+			'  cardType: basic',
+			':::',
+		].join('\n');
+		const ast = parseBlocks(src);
+		expect(ast).toHaveLength(1);
+		const node = firstDirective(ast);
+		expect(node.name).toBe('cards');
+		expect(node.body).toContain('- front: "What does VFR stand for?"');
+		expect(node.body).toContain('cardType: basic');
+		// The YAML body is NOT walked as nested markdown.
+		expect(node.body).not.toMatch(/<p>/);
+	});
+
+	it('does NOT reject a body on a :::cards block (it is body-bearing)', () => {
+		const src = [':::cards', '- front: "q?"', '  back: "a."', '  cardType: basic', ':::'].join('\n');
+		expect(() => parseBlocks(src)).not.toThrow();
+	});
+
+	it('rejects an unclosed :::cards directive', () => {
+		const src = [':::cards', '- front: "q?"', '  back: "a."', '  cardType: basic'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/Unclosed directive ':::cards'/);
+	});
+
+	it('rejects an empty :::cards body', () => {
+		expect(() => parseBlocks(':::cards\n:::')).toThrow(/body is empty/);
+	});
+
+	it('rejects a :::cards body that is not a YAML sequence', () => {
+		const src = [':::cards', 'not a sequence', ':::'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/body validation failed/);
+	});
+
+	it('rejects a :::cards entry with a malformed source_authority kind', () => {
+		const src = [
+			':::cards',
+			'- front: "q?"',
+			'  back: "a."',
+			'  cardType: basic',
+			'  source_authority:',
+			'    - kind: noaa',
+			'      cite: x',
+			':::',
+		].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/SOURCE_AUTHORITY_KIND_VALUES/);
+	});
+
+	it('rejects a :::cards entry missing front', () => {
+		const src = [':::cards', '- back: "a."', '  cardType: basic', ':::'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/yaml-cards\[0\]\.front is required/);
+	});
+});
+
 describe('block parser -- :::scenario directive', () => {
 	it('parses a registered scenario slug', () => {
 		const ast = parseBlocks(':::scenario slug="frontal-xc-march"\n:::');

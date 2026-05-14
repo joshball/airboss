@@ -152,14 +152,8 @@ is forecast wind error. If point IFR is forecast, the limit is METAR
 station coverage. Pre-naming the dominant limitation lets you
 calibrate the rest of the brief against it.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. R2's three families (equipment, reports/
-forecasts, inflight resources) are the recall skeleton; the per-product
-failure modes are the diagnostic skill; the operational rules are the
-mitigation set.
-
-```yaml-cards
 - front: "Three families of weather limitation per ACS R2 -- name them and one example each."
   back: |
     R2a -- onboard weather equipment: e.g. onboard radar shows precipitation,
@@ -399,7 +393,7 @@ mitigation set.
       cite: AC 00-45H Aviation Weather Services
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
-```
+:::
 
 ## Connect
 

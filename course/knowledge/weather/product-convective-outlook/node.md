@@ -141,14 +141,8 @@ risk category. If yes, read the discussion text. If you can't articulate
 why the SPC drew the polygons where they did, you don't yet trust the
 forecast -- you're just reading a colored map.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The five-tier category list is the decode
-floor; the day-window cadence locks the planning horizon; the
-strategic-vs-tactical layering card connects the AC into the
-convective brief.
-
-```yaml-cards
 - front: "SPC convective outlook risk categories -- list the five tiers in order of severity."
   back: |
     1. General Thunderstorms (TSTM) -- ordinary convection expected.
@@ -352,7 +346,7 @@ convective brief.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
     - kind: aim
       cite: AIM 7-1 -- National Weather Service Aviation Products
-```
+:::
 
 ## Connect
 

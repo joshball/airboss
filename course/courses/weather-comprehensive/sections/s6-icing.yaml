@@ -48,7 +48,7 @@ body_md: |
   surface analysis in s2 (placeholder slug; resolves to live SVG when
   the wx-charts CIP renderer ships):
 
-  :::chart slug="wx-icing-cip-2024-12-23-12z"
+  :::chart slug="reference-fixtures/wx-icing-cip-2024-12-23-12z"
   :::
 
   Read the chart with two questions: where is the
@@ -83,7 +83,7 @@ steps:
       worsen over the next six hours, and would that change a
       decision we made at briefing?
 
-      :::chart slug="wx-icing-fip-2024-12-23-18z"
+      :::chart slug="reference-fixtures/wx-icing-fip-2024-12-23-18z"
       :::
     knowledge_node_id: wx-icing-types-and-avoidance
 
@@ -107,6 +107,6 @@ steps:
       an out), and where would a climb actually leave the icing
       layer behind?
 
-      :::chart slug="wx-freezing-level-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-freezing-level-2024-12-23-12z"
       :::
     knowledge_node_id: wx-freezing-level

@@ -52,6 +52,13 @@ const parsed = $derived.by((): { ok: true; ast: MdNode[] } | { ok: false; messag
 				<CourseStepChart slug={node.attrs.slug} />
 			{:else if node.name === MARKDOWN_DIRECTIVE_NAMES.SCENARIO}
 				<ScenarioPanel slug={node.attrs.slug as WxScenario} />
+			{:else if node.name === MARKDOWN_DIRECTIVE_NAMES.CARDS}
+				<!--
+					`:::cards` is data-only: the YAML body feeds the spaced-rep
+					seeder at build time. Cards surface via the review queue,
+					not inline on the node, so the renderer emits nothing.
+					The parser has already validated the payload at parse time.
+				-->
 			{:else}
 				<div class="unknown-directive" data-directive={node.name}>
 					Unknown directive <code>:::{node.name}</code>.

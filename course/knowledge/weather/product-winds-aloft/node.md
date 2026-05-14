@@ -147,14 +147,8 @@ crosswind / half tailwind component -- modest help. At 18,000 the wind
 shifts and accelerates; for a turbocharged airplane the math becomes a
 serious tailwind problem.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The encoding-convention cards (>100 KT,
-implicit-negative temperature) are the decode traps the body explicitly
-flags; calculation cards walk the format; the triage card connects to
-altitude selection.
-
-```yaml-cards
 - front: "Decode an FB entry: 731960 at the 30,000 ft level."
   back: |
     Speed > 100 KT convention triggers: direction code 73 means add 50
@@ -376,7 +370,7 @@ altitude selection.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)
     - kind: aim
       cite: AIM 7-1 -- National Weather Service Aviation Products
-```
+:::
 
 ## Connect
 

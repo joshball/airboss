@@ -150,14 +150,8 @@ would put me above-freezing without descending into terrain? Write
 down the answer. If the answer is "no such altitude exists," that's
 your no-go signal regardless of what the icing forecast itself says.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The three-question position framework is
-the diagnostic core; the chart-spec card locks in the format; the
-trend / FB cross-check cards integrate with the rest of the icing
-brief.
-
-```yaml-cards
 - front: "What does 'freezing level' mean and why does its position drive the icing-escape decision?"
   back: |
     The freezing level is the altitude where the temperature of the air
@@ -424,7 +418,7 @@ brief.
       cite: AC 91-74B Pilot Guide, Flight in Icing Conditions
     - kind: aim
       cite: AIM 7-1-21 -- Icing
-```
+:::
 
 ## Connect
 

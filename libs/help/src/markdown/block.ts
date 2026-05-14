@@ -21,7 +21,10 @@
  * is treated as a paragraph line.
  */
 
+import { parseCardsYaml } from '@ab/bc-study';
 import {
+	MARKDOWN_DIRECTIVE_BODY_BEARING,
+	MARKDOWN_DIRECTIVE_NAMES,
 	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
 	MARKDOWN_DIRECTIVE_VALUES,
 	type MarkdownDirectiveName,
@@ -34,6 +37,7 @@ import { ESCAPABLE, parseInline } from './inline';
 
 const CALLOUT_VARIANT_SET = new Set<string>(CALLOUT_VARIANTS);
 const DIRECTIVE_NAME_SET = new Set<string>(MARKDOWN_DIRECTIVE_VALUES);
+const DIRECTIVE_BODY_BEARING_SET: ReadonlySet<string> = MARKDOWN_DIRECTIVE_BODY_BEARING;
 const WX_SCENARIO_SLUG_SET = new Set<string>(WX_SCENARIO_VALUES);
 
 export class MarkdownParseError extends Error {
@@ -109,18 +113,45 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 			const variantName = calloutOpen[1].toLowerCase();
 			const remainder = calloutOpen[2];
 
-			// Component-mount directive. Parse `key="value"` attributes from the
-			// opener line, validate per-directive (required keys, slug shapes),
-			// require a `:::` close on the next non-blank line, and emit a
-			// `directive` AST node. Directives carry no inner body.
+			// Directive: `:::name [key="value" ...]` opener, `:::` closer.
+			// Two families:
+			//
+			//   - Attribute-only (chart, scenario): MUST close on the next
+			//     non-blank line. Any body content is rejected because the
+			//     renderer mounts a component parameterised by attrs alone.
+			//   - Body-bearing (cards): the lines between opener and closer
+			//     are collected verbatim into `node.body` and handed to the
+			//     per-directive validator (e.g. `parseCardsYaml`). The body
+			//     is NOT walked as nested markdown -- it's a typed payload.
+			//
+			// Both share the `:::name` opener; `DIRECTIVE_BODY_BEARING_SET`
+			// distinguishes the path.
 			if (DIRECTIVE_NAME_SET.has(variantName)) {
 				const attrs = parseDirectiveAttrs(remainder, baseLineNo + i + 1);
-				validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1);
 				const bodyStart = i + 1;
+				const bodyBearing = DIRECTIVE_BODY_BEARING_SET.has(variantName);
+				if (bodyBearing) {
+					let j = bodyStart;
+					const bodyLines: string[] = [];
+					while (j < end && !/^:::\s*$/.test(lines[j])) {
+						bodyLines.push(lines[j]);
+						j += 1;
+					}
+					if (j >= end) {
+						throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, baseLineNo + i + 1);
+					}
+					const body = bodyLines.join('\n');
+					validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1, body);
+					out.push({ kind: 'directive', name: variantName, attrs, body });
+					i = j + 1;
+					continue;
+				}
+				validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1);
 				let j = bodyStart;
 				while (j < end && !/^:::\s*$/.test(lines[j])) {
 					// Tolerate a single blank line between opener and close; reject
-					// any actual content (a directive body is undefined behaviour).
+					// any actual content (an attribute-only directive's body is
+					// undefined behaviour).
 					if (lines[j].trim().length !== 0) {
 						throw new MarkdownParseError(
 							`Directive ':::${variantName}' must not contain a body; close with ':::' immediately.`,
@@ -421,20 +452,29 @@ function parseDirectiveAttrs(rest: string, line: number): Record<string, string>
 }
 
 /**
- * Per-directive validation: required attribute keys + value shape.
+ * Per-directive validation: required attribute keys + value shape +
+ * (for body-bearing directives) payload schema.
  *
  * Runs after `parseDirectiveAttrs` so we know the attribute bag is at
  * least syntactically well-formed. The slug checks here mirror the
  * runtime helpers (`WX_CHART_SLUG_REGEX`, `WX_SCENARIO_VALUES`) so an
- * authored typo fails at parse time, not at render.
+ * authored typo fails at parse time, not at render. `:::cards` parses
+ * its body via the shared `parseCardsYaml` (re-exported from
+ * `@ab/bc-study`) so the markdown parser and the seed orchestrator
+ * agree on schema.
  */
-function validateDirective(name: MarkdownDirectiveName, attrs: Record<string, string>, line: number): void {
+function validateDirective(
+	name: MarkdownDirectiveName,
+	attrs: Record<string, string>,
+	line: number,
+	body?: string,
+): void {
 	for (const required of MARKDOWN_DIRECTIVE_REQUIRED_ATTRS[name]) {
 		if (!(required in attrs) || attrs[required].length === 0) {
 			throw new MarkdownParseError(`Directive ':::${name}' is missing required attribute '${required}'`, line);
 		}
 	}
-	if (name === 'chart') {
+	if (name === MARKDOWN_DIRECTIVE_NAMES.CHART) {
 		const slug = attrs.slug;
 		if (!WX_CHART_SLUG_REGEX.test(slug)) {
 			throw new MarkdownParseError(
@@ -443,10 +483,27 @@ function validateDirective(name: MarkdownDirectiveName, attrs: Record<string, st
 			);
 		}
 	}
-	if (name === 'scenario') {
+	if (name === MARKDOWN_DIRECTIVE_NAMES.SCENARIO) {
 		const slug = attrs.slug;
 		if (!WX_SCENARIO_SLUG_SET.has(slug)) {
 			throw new MarkdownParseError(`Directive ':::scenario' slug '${slug}' is not a registered wx scenario`, line);
+		}
+	}
+	if (name === MARKDOWN_DIRECTIVE_NAMES.CARDS) {
+		// Body is always defined for body-bearing directives -- the parser
+		// path that calls validateDirective with a body sets it from the
+		// captured lines. An empty body is rejected here so an empty
+		// `:::cards\n:::` opener fails at parse time instead of silently
+		// emitting zero cards.
+		const payload = body ?? '';
+		if (payload.trim().length === 0) {
+			throw new MarkdownParseError(`Directive ':::cards' body is empty; expected a YAML sequence of cards.`, line);
+		}
+		try {
+			parseCardsYaml(payload, `:::cards (line ${line})`);
+		} catch (err) {
+			const message = err instanceof Error ? err.message : String(err);
+			throw new MarkdownParseError(`Directive ':::cards' body validation failed: ${message}`, line);
 		}
 	}
 }

@@ -403,6 +403,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/lint/bugs.ts`.',
 		links: ['scripts/lint/bugs.ts', 'docs/bugs/'],
 	},
+	'cards-directive': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Block legacy ```yaml-cards fences in course/knowledge/**',
+		what: 'Walks every course/knowledge/**/node.md and fails if any file still contains a ```yaml-cards fenced block. The authoring contract is :::cards ... ::: -- the historical fence renders as a code block and dumps the YAML to the page.',
+		why: 'Without this guard, a re-paste of legacy authoring scaffolding silently produces a card-count divergence (the seeder scans :::cards, not the fence) AND leaks YAML to readers. This is the static gate; the dynamic gate is the markdown parser rejecting the wrong shape.',
+		how: '`bun scripts/lint/cards-directive.ts`.',
+		links: ['scripts/lint/cards-directive.ts', 'scripts/migrations/2026-05-yaml-cards-to-directive.ts'],
+	},
 	'tracking-generate': {
 		tier: 'fast',
 		scopable: false,
@@ -1314,6 +1323,26 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		tier: 'fast',
 		relevantWhen: (d) => anyMatch(d, (f) => f.startsWith('docs/bugs/') && f.endsWith('.md')),
 		fn: () => shellRun('bun', ['scripts/lint/bugs.ts']),
+	});
+
+	defs.push({
+		name: 'cards-directive',
+		tier: 'fast',
+		// Trigger on any knowledge-node body change (the migration target)
+		// AND on any change to the scanner / validator surface so a parser
+		// regression that re-permits the legacy fence is caught locally.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					(f.startsWith('course/knowledge/') && f.endsWith('.md')) ||
+					f === 'scripts/db/seed-cards-parser.ts' ||
+					f === 'scripts/db/seed-cards.ts' ||
+					f === 'libs/bc/study/src/cards-yaml.ts' ||
+					f === 'libs/help/src/markdown/block.ts' ||
+					f === 'scripts/lint/cards-directive.ts',
+			),
+		fn: () => shellRun('bun', ['scripts/lint/cards-directive.ts']),
 	});
 
 	defs.push({

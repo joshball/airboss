@@ -68,7 +68,7 @@ mastery_criteria: >
 
 ## Practice
 
-<!-- Skeleton. Add inline cards in a ```yaml-cards fenced block when authoring. -->
+<!-- Skeleton. Add inline cards in a :::cards directive block when authoring. -->
 
 ## Connect
 

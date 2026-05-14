@@ -189,13 +189,8 @@ A pilot who didn't pre-plan diverts loses time finding one in
 flight; a pilot who did pre-plan turns toward one immediately when
 a cell builds.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Three-cell-stages and six-hazards are
-the recall floor; the 20 NM rule and "never penetrate a line" are
-the operational rules; scenario cards train the decision habit.
-
-```yaml-cards
 - front: "What are the three stages of a thunderstorm cell, and what dominates each one?"
   back: |
     Cumulus (10-30 min): all upward motion, vertical buildup, conditionally
@@ -453,7 +448,7 @@ the operational rules; scenario cards train the decision habit.
     explicitly (it folds into "thunderstorm avoidance"); CFIs reinforce it
     because the visual cue ("no cell directly overhead, must be safe")
     misleads pilots into the hail-fall zone.
-```
+:::
 
 ## Connect
 

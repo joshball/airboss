@@ -85,7 +85,7 @@ steps:
       -- six-hour forecast windows of where moderate-or-greater
       turbulence is expected:
 
-      :::chart slug="wx-turbulence-gairmet-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-turbulence-gairmet-2024-12-23-12z"
       :::
 
       GTG (Graphical Turbulence Guidance) refines that picture into
@@ -93,7 +93,7 @@ steps:
       Use the G-AIRMET for "is there any turbulence concern on this
       route?" and GTG for "exactly which altitudes are smooth?":
 
-      :::chart slug="wx-turbulence-gtg-2024-12-23-12z"
+      :::chart slug="reference-fixtures/wx-turbulence-gtg-2024-12-23-12z"
       :::
     knowledge_node_id: wx-turbulence-types
 

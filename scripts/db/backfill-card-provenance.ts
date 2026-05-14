@@ -80,8 +80,8 @@ import { parseDocument, parse as parseYaml, Scalar, YAMLMap, YAMLSeq } from 'yam
 const REPO_ROOT = new URL('../../', import.meta.url).pathname;
 const NODE_GLOB = 'course/knowledge/**/node.md';
 const FRONTMATTER_DELIM = '---';
-const YAML_CARDS_FENCE_OPEN = /^```yaml-cards\s*$/;
-const FENCE_CLOSE = /^```\s*$/;
+const CARDS_DIRECTIVE_OPEN = /^:::cards(?:\s.*)?$/;
+const DIRECTIVE_CLOSE = /^:::\s*$/;
 const TIER_FAA_TAGS = new Set(['faa-written', 'private-pilot-written']);
 const TIER_CFI_TAGS = new Set(['cfi-fundamentals', 'cfi-elements-of-instruction']);
 
@@ -340,18 +340,18 @@ interface NodeProcessResult {
 }
 
 /**
- * Locate every yaml-cards fenced block in a body's line stream and
- * return [startLine, endLine) ranges. `startLine` points at the opening
- * fence, `endLine` at the closing fence. Both are inclusive when used
- * with `slice` semantics where appropriate.
+ * Locate every `:::cards` directive block in a body's line stream and
+ * return [openLine, closeLine] ranges. `open` points at the `:::cards`
+ * opener, `close` at the terminating `:::` line. Both indices are
+ * inclusive; the inner YAML body sits on lines `open+1 .. close-1`.
  */
 function locateYamlCardsBlocks(bodyLines: readonly string[]): Array<{ open: number; close: number }> {
 	const out: Array<{ open: number; close: number }> = [];
 	let i = 0;
 	while (i < bodyLines.length) {
-		if (YAML_CARDS_FENCE_OPEN.test(bodyLines[i])) {
+		if (CARDS_DIRECTIVE_OPEN.test(bodyLines[i])) {
 			let j = i + 1;
-			while (j < bodyLines.length && !FENCE_CLOSE.test(bodyLines[j])) j++;
+			while (j < bodyLines.length && !DIRECTIVE_CLOSE.test(bodyLines[j])) j++;
 			if (j < bodyLines.length) {
 				out.push({ open: i, close: j });
 				i = j + 1;

@@ -50,7 +50,7 @@ body_md: |
   temperature -- colder tops are higher tops, and higher tops mean
   more vertical development:
 
-  :::chart slug="wx-satellite-ir-2024-12-23-12z"
+  :::chart slug="reference-fixtures/wx-satellite-ir-2024-12-23-12z"
   :::
 
   The visible image (six hours later, when the sun is up) shows the
@@ -59,7 +59,7 @@ body_md: |
   that combination mean for the cloud type and the flight through
   it?
 
-  :::chart slug="wx-satellite-vis-2024-12-23-18z"
+  :::chart slug="reference-fixtures/wx-satellite-vis-2024-12-23-18z"
   :::
 steps:
 

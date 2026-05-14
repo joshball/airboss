@@ -138,13 +138,8 @@ moderate turbulence, identify the type, the avoidance option (climb,
 descend, deviate, delay), and the cost. The pre-decided avoidance
 beats the panicked one.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. Each turbulence type is a cause-cue-avoidance
-triad; the intensity-definition card builds the PIREP read; the
-classification drill scenario locks in the diagnostic step.
-
-```yaml-cards
 - front: "Mechanical turbulence: cause, forecast cue, and standard avoidance."
   back: |
     Cause: surface friction and obstacles disturb the flow. Strongest in
@@ -368,7 +363,7 @@ classification drill scenario locks in the diagnostic step.
       cite: AIM 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
     - kind: other
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
-```
+:::
 
 ## Connect
 

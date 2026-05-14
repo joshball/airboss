@@ -141,13 +141,8 @@ question is really "what's the planning horizon?" An outlook briefing
 for tomorrow; a standard for today's afternoon flight; an abbreviated
 to update a brief from this morning before a 1500L departure.
 
-### Cards (spaced repetition)
+:::cards
 
-Cards mined from the body. The briefing-types cards lock in
-horizon-to-type mapping; the eight-bucket cards train the procedural
-walk; the outputs cards anchor the bridge to go/no-go.
-
-```yaml-cards
 - front: "Standard briefing per AIM 7-1-4: when do you request one and what does it include?"
   back: |
     Request a standard briefing for an imminent flight (within the next 6
@@ -410,7 +405,7 @@ walk; the outputs cards anchor the bridge to go/no-go.
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
     - kind: cfr
       cite: 14 CFR 91.103 Preflight Action
-```
+:::
 
 ## Connect
 
