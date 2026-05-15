@@ -30,7 +30,7 @@ const libraryHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 <section class="page">
 	<PageHeader
 		title={NAV_LABELS.REFERENCE}
-		subtitle="Look things up -- the knowledge graph, the glossary, and the FAA library."
+		subtitle="Look things up -- the knowledge graph, the glossary, weather products, and the FAA library."
 	/>
 
 	<PageExplainer pageKey={PAGE_EXPLAINER_KEYS.REFERENCE}>
@@ -38,7 +38,8 @@ const libraryHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 		<Tooltip for="knowledge-node">knowledge graph</Tooltip>
 		groups every aviation concept the platform knows about; the
 		<Tooltip for="glossary-drawer">glossary</Tooltip>
-		defines the terms used across the rest of the app. Both stay reachable even before you set a goal.
+		defines the terms used across the rest of the app; the weather products pages decode every aviation weather
+		report and forecast. All stay reachable even before you set a goal.
 	</PageExplainer>
 
 	<div class="ref-grid">
@@ -52,6 +53,12 @@ const libraryHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);
 			<Card>
 				<h2>{NAV_LABELS.REFERENCE_GLOSSARY}</h2>
 				<p>The canonical glossary. Hover any term in the app for the short form; this page lists everything.</p>
+			</Card>
+		</a>
+		<a class="ref-card" href={ROUTES.REFERENCE_WX_PRODUCTS}>
+			<Card>
+				<h2>{NAV_LABELS.REFERENCE_WX_PRODUCTS}</h2>
+				<p>Decode tables, annotated examples, and citations for every aviation weather product.</p>
 			</Card>
 		</a>
 		<a class="ref-card" href={libraryHref}>
