@@ -10,7 +10,7 @@
  * `@ab/wx-drill` re-exports types only.
  */
 
-export { type CatalogFamiliesByProduct } from './sample';
-export { type ScenarioSnapshot, snapshotScenario } from './snapshot';
-export { type CatalogLoadOptions, loadCatalogFamilies } from './catalog-loader';
 export { buildAllScenarioSnapshots } from './build-snapshots';
+export { type CatalogLoadOptions, loadCatalogFamilies } from './catalog-loader';
+export type { CatalogFamiliesByProduct } from './sample';
+export { type ScenarioSnapshot, snapshotScenario } from './snapshot';

@@ -203,12 +203,11 @@ function coverageSampleCount(coverage: DrillCoverage): number {
 	return coverage === 'random' ? 1 : 6;
 }
 
+export type { ScenarioSnapshot };
 /**
  * Re-export so tests can drive the sampler with synthetic snapshots without
  * importing the server snapshot module.
  */
 export { mulberry32, pick };
-
-export type { ScenarioSnapshot };
 
 export type DrillPackInputScenarios = 'all' | WxScenario[];

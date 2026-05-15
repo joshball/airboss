@@ -11,9 +11,9 @@
  * this barrel, ensuring sampler behaviour stays identical across surfaces.
  */
 
-export { buildPack, type BuildPackInput, type CatalogFamiliesByProduct } from './sample';
 export { mulberry32, pick } from './prng';
 export { renderDrillMarkdown } from './render-md';
+export { type BuildPackInput, buildPack, type CatalogFamiliesByProduct } from './sample';
 export type { ScenarioSnapshot } from './snapshot';
 export type {
 	DrillCoverage,

@@ -1,7 +1,7 @@
 /**
  * Server-side DB queries for `@ab/bc-wx-practice`. Hits the postgres driver
  * directly via `@ab/db/connection`. Imported only from `+page.server.ts`,
- * `+server.ts`, `apps/*/src/lib/server/**`, and scripts.
+ * `+server.ts`, `apps/[STAR]/src/lib/server/[STARSTAR]`, and scripts.
  *
  * The pure state-machine + sampler + grader live one level up
  * (`../state-machine.ts`, etc.) so the runtime barrel can re-export them
@@ -13,15 +13,15 @@ import { db as defaultDb } from '@ab/db/connection';
 import { createId } from '@ab/utils';
 import { and, desc, eq } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
-import {
-	wxPracticeAttempt,
-	type WxPracticeAttemptRow,
-	wxPracticeMastery,
-	type WxPracticeMasteryRow,
-	wxPracticeSession,
-	type WxPracticeSessionRow,
-} from '../schema';
 import { masteryKey } from '../sampler';
+import {
+	type WxPracticeAttemptRow,
+	type WxPracticeMasteryRow,
+	type WxPracticeSessionRow,
+	wxPracticeAttempt,
+	wxPracticeMastery,
+	wxPracticeSession,
+} from '../schema';
 import { applyAttempt, type MasterySnapshot, type MasteryTransition } from '../state-machine';
 
 type Db = PgDatabase<PgQueryResultHKT, Record<string, never>>;
@@ -78,7 +78,11 @@ export async function endSession(input: EndSessionInput, db: Db = defaultDb): Pr
 	return row ?? null;
 }
 
-export async function getSession(sessionId: string, userId: string, db: Db = defaultDb): Promise<WxPracticeSessionRow | null> {
+export async function getSession(
+	sessionId: string,
+	userId: string,
+	db: Db = defaultDb,
+): Promise<WxPracticeSessionRow | null> {
 	const [row] = await db
 		.select()
 		.from(wxPracticeSession)
@@ -248,7 +252,10 @@ export async function summarizeSession(sessionId: string, userId: string, db: Db
 		.where(and(eq(wxPracticeAttempt.sessionId, sessionId), eq(wxPracticeAttempt.userId, userId)))
 		.orderBy(desc(wxPracticeAttempt.shownAt));
 
-	const perFamilyMap = new Map<string, { product: string; family: string; subFamily: string | null; attempts: number; correct: number }>();
+	const perFamilyMap = new Map<
+		string,
+		{ product: string; family: string; subFamily: string | null; attempts: number; correct: number }
+	>();
 	let correctCount = 0;
 	let totalMs = 0;
 	let minMs: number | null = null;

@@ -11,6 +11,21 @@
 // connection import is what drags postgres in). Type re-exports erase at
 // compile time.
 
+// ---- Grader (pure) ----
+export {
+	defaultQuestionForm,
+	type GradeAttemptInput,
+	type GradeAttemptResult,
+	gradeAttempt,
+} from './grader';
+// ---- Sampler (pure) ----
+export {
+	type DrillToken,
+	masteryKey,
+	type SampledItem,
+	type SamplerInput,
+	sampleSession,
+} from './sampler';
 // ---- Schema (browser-safe: Drizzle table metadata, no connection) ----
 export {
 	type WxPracticeAttemptInsert,
@@ -24,7 +39,12 @@ export {
 	wxPracticeSchema,
 	wxPracticeSession,
 } from './schema';
-
+// ---- Server-only modules: types re-exported here, values in `/server` ----
+export type {
+	EndSessionInput,
+	RecordAttemptInput,
+	StartSessionInput,
+} from './server/queries';
 // ---- State machine (pure) ----
 export {
 	type ApplyAttemptInput,
@@ -33,27 +53,3 @@ export {
 	type MasterySnapshot,
 	type MasteryTransition,
 } from './state-machine';
-
-// ---- Sampler (pure) ----
-export {
-	type DrillToken,
-	masteryKey,
-	type SampledItem,
-	sampleSession,
-	type SamplerInput,
-} from './sampler';
-
-// ---- Grader (pure) ----
-export {
-	defaultQuestionForm,
-	gradeAttempt,
-	type GradeAttemptInput,
-	type GradeAttemptResult,
-} from './grader';
-
-// ---- Server-only modules: types re-exported here, values in `/server` ----
-export type {
-	EndSessionInput,
-	RecordAttemptInput,
-	StartSessionInput,
-} from './server/queries';

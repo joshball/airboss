@@ -1352,4 +1352,49 @@ CREATE UNIQUE INDEX "editions_source_label_uq" ON "sources_registry"."editions" 
 CREATE INDEX "editions_source_label_superseded_idx" ON "sources_registry"."editions" USING btree ("source_id","edition_label") WHERE retired_at IS NOT NULL;--> statement-breakpoint
 CREATE INDEX "promotion_batches_corpus_date_idx" ON "sources_registry"."promotion_batches" USING btree ("corpus","promotion_date" DESC NULLS LAST);--> statement-breakpoint
 CREATE INDEX "promotion_batches_previous_batch_idx" ON "sources_registry"."promotion_batches" USING btree ("previous_batch_id");--> statement-breakpoint
-CREATE INDEX "promotion_batches_reviewer_date_idx" ON "sources_registry"."promotion_batches" USING btree ("reviewer_id","promotion_date" DESC NULLS LAST);
+CREATE INDEX "promotion_batches_reviewer_date_idx" ON "sources_registry"."promotion_batches" USING btree ("reviewer_id","promotion_date" DESC NULLS LAST);CREATE TABLE "study"."wx_practice_attempt" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"session_id" text NOT NULL,
+	"product" text NOT NULL,
+	"raw_example" text NOT NULL,
+	"family" text NOT NULL,
+	"sub_family" text,
+	"token_shown" text NOT NULL,
+	"question_form" text NOT NULL,
+	"correct" boolean NOT NULL,
+	"answer" text NOT NULL,
+	"response_ms" integer NOT NULL,
+	"shown_at" timestamp with time zone DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "study"."wx_practice_mastery" (
+	"user_id" text NOT NULL,
+	"product" text NOT NULL,
+	"family" text NOT NULL,
+	"sub_family" text DEFAULT '' NOT NULL,
+	"attempts" integer DEFAULT 0 NOT NULL,
+	"correct" integer DEFAULT 0 NOT NULL,
+	"recent_ring" boolean[] DEFAULT '{}' NOT NULL,
+	"streak_across_sessions" integer DEFAULT 0 NOT NULL,
+	"state" text DEFAULT 'active' NOT NULL,
+	"last_seen_at" timestamp with time zone,
+	"last_updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "wx_practice_mastery_user_id_product_family_sub_family_pk" PRIMARY KEY("user_id","product","family","sub_family")
+);
+--> statement-breakpoint
+CREATE TABLE "study"."wx_practice_session" (
+	"id" text PRIMARY KEY NOT NULL,
+	"user_id" text NOT NULL,
+	"started_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"ended_at" timestamp with time zone,
+	"products" text[] NOT NULL,
+	"tier" integer NOT NULL,
+	"focus_families" text[],
+	"item_count" integer NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "study"."wx_practice_attempt" ADD CONSTRAINT "wx_practice_attempt_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."wx_practice_attempt" ADD CONSTRAINT "wx_practice_attempt_session_id_wx_practice_session_id_fk" FOREIGN KEY ("session_id") REFERENCES "study"."wx_practice_session"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."wx_practice_mastery" ADD CONSTRAINT "wx_practice_mastery_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;--> statement-breakpoint
+ALTER TABLE "study"."wx_practice_session" ADD CONSTRAINT "wx_practice_session_user_id_bauth_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."bauth_user"("id") ON DELETE cascade ON UPDATE cascade;

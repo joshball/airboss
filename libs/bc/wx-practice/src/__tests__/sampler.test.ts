@@ -32,7 +32,11 @@ const TOKENS: DrillToken[] = [
 	},
 ];
 
-function masteryRow(family: string, state: MasterySnapshot['state'], opts: Partial<MasterySnapshot> = {}): MasterySnapshot {
+function masteryRow(
+	family: string,
+	state: MasterySnapshot['state'],
+	opts: Partial<MasterySnapshot> = {},
+): MasterySnapshot {
 	return {
 		userId: 'usr_a',
 		product: 'metar',

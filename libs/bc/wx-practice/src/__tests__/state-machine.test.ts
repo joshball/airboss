@@ -3,11 +3,7 @@
  * active loop with synthetic inputs.
  */
 
-import {
-	WX_PRACTICE_MASTERY_STATES,
-	WX_PRACTICE_PROMOTION_STREAK,
-	WX_PRACTICE_RECOVERY_STREAK,
-} from '@ab/constants';
+import { WX_PRACTICE_MASTERY_STATES, WX_PRACTICE_PROMOTION_STREAK, WX_PRACTICE_RECOVERY_STREAK } from '@ab/constants';
 import { describe, expect, it } from 'vitest';
 import { applyAttempt, type MasterySnapshot } from '../state-machine';
 

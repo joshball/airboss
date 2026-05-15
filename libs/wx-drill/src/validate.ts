@@ -33,11 +33,13 @@ export function validateDrillPack(pack: DrillPack): DrillValidationResult {
 		if (item.product === 'metar') {
 			checked += 1;
 			const parsed = parseMetarSafe(item.raw);
-			if (parsed.kind === 'err') failures.push({ index: item.index, product: 'metar', raw: item.raw, reason: parsed.reason });
+			if (parsed.kind === 'err')
+				failures.push({ index: item.index, product: 'metar', raw: item.raw, reason: parsed.reason });
 		} else if (item.product === 'taf') {
 			checked += 1;
 			const parsed = parseTafSafe(item.raw);
-			if (parsed.kind === 'err') failures.push({ index: item.index, product: 'taf', raw: item.raw, reason: parsed.reason });
+			if (parsed.kind === 'err')
+				failures.push({ index: item.index, product: 'taf', raw: item.raw, reason: parsed.reason });
 		}
 		// PIREP / FB / AIRMET intentionally skipped -- see header.
 	}
