@@ -62,7 +62,7 @@ function main(): void {
 		`cards-directive: found ${findings.length} legacy 'yaml-cards' fence${findings.length === 1 ? '' : 's'}.\n`,
 	);
 	process.stderr.write(
-		`Replace with ':::cards ... :::' (see scripts/migrations/2026-05-yaml-cards-to-directive.ts).\n\n`,
+		`Replace with ':::cards ... :::' (see scripts/migrations/.archive/2026-05-yaml-cards-to-directive.ts).\n\n`,
 	);
 	for (const f of findings) {
 		process.stderr.write(`  ${f.path}:${f.line}\n`);

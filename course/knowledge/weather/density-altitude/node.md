@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Density Altitude
 
-## Context
+:::phase name="context"
 
 It's a 96 deg F afternoon at Big Bear Airport (KL35), elevation
 6,752 ft, runway 4,500 ft. You've got three passengers, full fuel,
@@ -68,7 +68,8 @@ temperature, and (to a smaller degree) humidity into one number
 that says, "today, your airplane thinks the runway is at this
 elevation."
 
-## Problem
+:::
+:::phase name="problem"
 
 Three failure modes dominate density-altitude accidents:
 
@@ -90,7 +91,8 @@ on a hot or hot-and-high day before takeoff, and refuse the
 takeoff if the airplane's expected performance doesn't clear the
 obstacle margin you've decided to keep.
 
-## Discover
+:::
+:::phase name="discover"
 
 Air at altitude has fewer molecules per cubic foot than air at
 sea level. Hot air has fewer molecules per cubic foot than cold
@@ -133,7 +135,8 @@ At 6,000 ft on a 30 deg C day, ISA is roughly 3 deg C, so you're
 altitude *above* the pressure altitude. Your airplane thinks the
 runway is at 9,200 ft.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The relationship, computed:
 
@@ -173,7 +176,8 @@ because the effect is small relative to temperature, but a high-
 humidity day at high DA is worth an extra margin in the runway-
 length calculation.
 
-## Practice
+:::
+:::phase name="practice"
 
 For three runways you'll fly into in the next year (start with
 your home airport, then the highest one you fly to, then the
@@ -414,7 +418,8 @@ every takeoff makes it muscle memory.
       cite: AIM 7-5-6 -- Potential Flight Hazards (High Density Altitude)
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Density altitude lives at the intersection of weather and
 aerodynamics. Atmospheric stability (s2) and surface temperatures
@@ -433,7 +438,8 @@ density-altitude calculation that would have prevented the
 accident takes 60 seconds at the runup. The 60 seconds is the
 work; the habit is to actually do it.
 
-## Verify
+:::
+:::phase name="verify"
 
 For a flight you've actually flown into a high or hot airport,
 reconstruct the density altitude at takeoff. Compare your actual
@@ -442,3 +448,5 @@ that DA. Where did the airplane match the chart? Where did it
 fall short? The calibration of "POH plus N%" for your typical
 technique and your specific airplane is what you carry into the
 next flight.
+
+:::

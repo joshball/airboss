@@ -93,7 +93,7 @@ mastery_criteria: >-
 
 # Uncoordinated Flight -- Slips and Skids
 
-## Context
+:::phase name="context"
 
 A pilot tightens a base-to-final turn with right rudder. The wings are banked 30 degrees right; the rudder is pushed right. The ball slides to the left side of the cage. The airplane is now skidding -- yawed into the turn, wing low, nose pulled toward the runway by the rudder pressure rather than the bank.
 
@@ -105,7 +105,8 @@ This is the canonical pattern fatality. NTSB statistics describe it under hundre
 
 The instrument that would have caught it is one inch in diameter and called the inclinometer ball. The recovery technique is one phrase: step on the ball.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are flying a Cessna 172 in a 30-degree banked left turn at 65 KIAS, descending toward final. You notice the runway is to the right of where you wanted to roll out. Your instinct is to add right rudder to "swing the nose toward the runway."
 
@@ -113,7 +114,8 @@ What does the airplane do? What does the inclinometer show? Where does the insid
 
 Write your answer before reading on.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What does the inclinometer ball actually show?
 
@@ -201,7 +203,8 @@ This is not theoretical. This is the most common pattern fatality. The instrumen
 - Skidding-turn-at-low-altitude is the dominant pattern fatality mechanism.
 - Forward slip and side-slip are legitimate intentional uses of cross-control.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -274,7 +277,8 @@ In descending order:
 3. **PHAK Aerodynamics of Flight** -- the inclinometer physics and the slip / skid distinction.
 4. **POH** -- airplane-specific stall behavior and any spin-recovery procedures (often "intentional spins prohibited" for normal-category trainers).
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -302,7 +306,8 @@ In descending order:
 - `drill:uc-slip-on-call` -- CFI calls "forward slip"; pilot enters and exits a slip cleanly.
 - `drill:uc-overshoot-call` -- CFI says "you are overshooting"; pilot answers "go around" reflexively, not "tighten."
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -323,7 +328,8 @@ In descending order:
 - `proc-ground-reference-maneuvers` -- low-altitude maneuvering where coordination matters most.
 - `perf-crosswind-component` -- the legitimate side-slip use case.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -354,3 +360,5 @@ Evaluation criteria:
 - The CFII is direct: most pattern fatalities are skidding stalls. NTSB reports describe exactly the geometry the student is practicing. Fix it now or do not solo.
 
 The pedagogical move is to convert the abstract "skidding is bad" into a felt experience (the demo at altitude) and a behavioral non-negotiable (go around at the first sign of overshoot at pattern altitude). Both are needed.
+
+:::

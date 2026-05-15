@@ -50,30 +50,38 @@ mastery_criteria: >
 
 # Airspace Classes and Dimensions
 
-## Context
+:::phase name="context"
 
 <!-- Skeleton -- content not yet authored. Why understanding airspace shapes matters before any regulation discussion. -->
 
-## Problem
+:::
+:::phase name="problem"
 
 <!-- Skeleton. -->
 
-## Discover
+:::
+:::phase name="discover"
 
 <!-- Skeleton. -->
 
-## Reveal
+:::
+:::phase name="reveal"
 
 <!-- Skeleton. -->
 
-## Practice
+:::
+:::phase name="practice"
 
 <!-- Skeleton. Add inline cards in a :::cards directive block when authoring. -->
 
-## Connect
+:::
+:::phase name="connect"
 
 <!-- Skeleton. -->
 
-## Verify
+:::
+:::phase name="verify"
 
 <!-- Skeleton. -->
+
+:::

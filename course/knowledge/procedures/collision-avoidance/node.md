@@ -89,7 +89,7 @@ mastery_criteria: >-
 
 # Collision Avoidance and See-and-Avoid
 
-## Context
+:::phase name="context"
 
 Two airplanes on a collision course do not look like they are approaching each other. They look like they are sitting still on each other's windshield. The closing geometry that produces a midair is exactly the geometry that produces no relative motion: both pilots see a stationary speck that does not grow until the last few seconds, when it goes from invisible to filling the windshield.
 
@@ -97,7 +97,8 @@ This is the visual signature of every collision. It is also the signature of "I 
 
 The job of see-and-avoid is to detect the not-moving target before its visual angle grows large enough that recognition produces no useful response time. That requires a deliberate, sector-by-sector scan, head-and-eyes-together, with foveal dwell. It is the most underrated cockpit skill -- because when it works, nothing happens.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are at 4,500 MSL on a 270-degree heading in cruise. You see a small dark speck on your windshield, slightly above the horizon, about 2 inches to the right of your nose reference. You watch it for 30 seconds. It has not moved relative to the windshield reference. Its size has approximately doubled.
 
@@ -105,7 +106,8 @@ What is happening? What is your action plan in the next 30 seconds?
 
 Write your answer before reading on. Then ask: how would the picture change if the target were moving 1 inch to the right of the reference per minute?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What is the collision geometry?
 
@@ -221,7 +223,8 @@ Do not freeze. Do not assume the other pilot sees you. Do not split-the-differen
 - ADS-B and TIS supplement the scan; they do not replace it.
 - Recovery is visible, predictable, and definitive -- never split-the-difference.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -278,7 +281,8 @@ In descending order:
 3. **AIM 4-4-15 and 8-1-6** -- visual responsibility and vision in flight.
 4. **PHAK Aeromedical chapter** -- foveal vision, peripheral motion detection.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -304,7 +308,8 @@ In descending order:
 - `drill:ca-scan-tempo` -- CFI watches pilot's eyes for 30 seconds; pilot must demonstrate sector-by-sector dwell, not continuous sweep.
 - `drill:ca-blind-spot-name` -- given an airplane and a turn direction, pilot names the blind spot and the defeat technique.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -322,7 +327,8 @@ In descending order:
 - `proc-traffic-pattern` -- where collision avoidance is tested under real traffic load.
 - `aero-load-factor-and-bank-angle` -- because a steep turn is a collision-avoidance maneuver if you spot traffic late.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -352,3 +358,5 @@ Evaluation criteria:
 - The CFI is direct: the airplane that hits you will be the one you swept past without dwelling.
 
 The pedagogical move is to make the discrete saccade visible as a deliberate motion, not a continuous one. Most students confuse "looking around" with "scanning."
+
+:::

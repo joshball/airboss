@@ -95,7 +95,7 @@ mastery_criteria: >-
 
 # Center of Gravity and Stability
 
-## Context
+:::phase name="context"
 
 Every airplane balances on its center of gravity. Push CG forward, and the airplane is heavy in the front -- stable, slow to respond, hard to flare. Push CG aft, and the airplane is light in the front -- quick, unstable, sensitive to stick input. Move CG outside the published envelope, and the airplane may not be controllable at all. Stalls may not recover. Pitching moments may exceed elevator authority. The airplane was certified inside an envelope; outside, certification did not test it.
 
@@ -105,7 +105,8 @@ For PPL students, CG is W&B math. For instrument students, CG plus turbulence is
 
 This node is about the why. The math is in `perf-weight-and-balance`. The handling implications live here.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are scheduled to fly a Cessna 172 with three pilot friends to a destination 200 NM away. Total cabin weight: pilot 175, copilot 200, two back-seat passengers each 195. Baggage: 60 lb in the aft baggage compartment. Full fuel (40 gallons usable, 240 lb).
 
@@ -117,7 +118,8 @@ Why? What changed about the airplane between calm cruise and the flare? And what
 
 Write your answer before reading on. Then ask: what would happen if a fifth pilot had been added (assume MTOW is still respected via fuel reduction)?
 
-## Discover
+:::
+:::phase name="discover"
 
 The relationship between CG and handling is mostly elegant once you see it. Work through.
 
@@ -222,7 +224,8 @@ Most light-single forward CG limits are set by elevator authority during landing
 - Fuel burn shifts CG depending on tank position relative to CG.
 - A legal takeoff CG can become an illegal cruise CG if loading is near limits and fuel burns asymmetrically.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -230,15 +233,15 @@ Most light-single forward CG limits are set by elevator authority during landing
 
 ### The forward / aft CG handling table
 
-| Aspect                       | Forward CG                         | Aft CG                               |
-| ---------------------------- | ---------------------------------- | ------------------------------------ |
-| Static stability             | Strong positive                    | Weak positive (or negative if out)   |
-| Stick force per G            | High                               | Low                                  |
-| Stall behaviour              | Pronounced break, easy recovery    | Mild break, slow / hard recovery     |
-| Landing flare                | Difficult; risk of running out of elevator | Easy; risk of over-rotation / balloon |
-| Cruise speed                 | Slightly slower (more tail downforce, more induced drag) | Slightly faster |
-| Trim usage                   | Heavy                              | Light                                |
-| Pitch sensitivity            | Sluggish                           | Quick                                |
+| Aspect            | Forward CG                                               | Aft CG                                |
+| ----------------- | -------------------------------------------------------- | ------------------------------------- |
+| Static stability  | Strong positive                                          | Weak positive (or negative if out)    |
+| Stick force per G | High                                                     | Low                                   |
+| Stall behaviour   | Pronounced break, easy recovery                          | Mild break, slow / hard recovery      |
+| Landing flare     | Difficult; risk of running out of elevator               | Easy; risk of over-rotation / balloon |
+| Cruise speed      | Slightly slower (more tail downforce, more induced drag) | Slightly faster                       |
+| Trim usage        | Heavy                                                    | Light                                 |
+| Pitch sensitivity | Sluggish                                                 | Quick                                 |
 
 ### CG envelope shape (typical)
 
@@ -283,7 +286,8 @@ In descending order:
 - The latest weighing (usually an inspection record or AFM page); empty weight changes over time.
 - Type-specific W&B apps (Foreflight, Garmin Pilot) for fast computation; verify against POH numbers periodically.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -348,7 +352,8 @@ New CG: 115,275 / 2,535 = 45.5.
 
 CG barely shifts because fuel arm (48) is near the loaded CG (45.6). If fuel were at arm 35 (forward) or 60 (aft), the migration would be larger.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -367,7 +372,8 @@ CG barely shifts because fuel arm (48) is near the loaded CG (45.6). If fuel wer
 - `aero-slow-flight` -- CG affects slow-flight handling (stick forces, stall behaviour).
 - `perf-weight-and-balance` -- the parent W&B node; this node is the handling and stability part.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -407,3 +413,5 @@ Evaluation criteria:
 - Discusses W&B planning: students often fly near-aft-CG by accident; a forward-loaded reference flight per type would help calibrate handling expectations.
 
 The pedagogical move is to convert "ballooning" from a flare-technique problem into a CG-feel problem. The fix is awareness, not more flare practice in the same loading.
+
+:::

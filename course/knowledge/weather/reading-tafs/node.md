@@ -83,7 +83,7 @@ The TAF is shorter than the METAR family, but it's denser in
 decision-relevant content per word -- almost every line, change-group
 or not, is operationally load-bearing.
 
-## Context
+:::phase name="context"
 
 You're standing at the fuel pump at 0530. You've just decoded the
 destination METAR (wind 230 at 8 gusting 14, vis 6 SM in mist, ceiling
@@ -107,7 +107,8 @@ This is the forecast-reading habit: don't read the TAF as a single
 forecast. Read it as a *probability distribution over time*, and check
 whether your flight survives every credible draw.
 
-## Problem
+:::
+:::phase name="problem"
 
 A METAR is one number per group at one time. A TAF is a forecast across
 a 24- or 30-hour window, partitioned into time blocks, each with its
@@ -129,7 +130,8 @@ Mixing those up changes the operational read. A TEMPO that the pilot
 reads as a FM treats a brief excursion as a hard reset and over-plans
 fuel; a PROB30 read as a FM aborts a flight that should have launched.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Stage 1: Decode
 
@@ -242,7 +244,8 @@ over-plans every flight. The middle is the right read: the prevailing
 is the working number, and the change groups are the credible
 deviations to test against.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### Worked examples
 
@@ -487,7 +490,8 @@ is duration (less than half the window), not probability.
 | TAF AMD   | Amended TAF (off-cycle issuance because the in-force forecast was wrong). | Use in preference to the prior routine TAF.      |
 | TAF COR   | Corrected TAF (replaces a previously issued TAF for the same validity).   | Use in preference to the prior TAF.              |
 
-## Practice
+:::
+:::phase name="practice"
 
 For each of the next ten TAFs you read, mark the arrival hour for a
 hypothetical flight and answer two questions: (1) what is the prevailing
@@ -746,7 +750,8 @@ trustworthy.
       cite: AIM 7-1-29 -- METAR / TAF Decode Key
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 The TAF lives in the encoded-text family alongside the METAR; the same
 three-stage ladder applies, with the TAF's additions concentrated in
@@ -776,7 +781,8 @@ The TAF also pairs structurally with:
 - **AIRMETs / SIGMETs / GFA** -- the en-route + above-the-surface
   picture the TAF doesn't cover.
 
-## Verify
+:::
+:::phase name="verify"
 
 Pull the TAF for an airport you fly often and watch it across a 24-hour
 period. Note when amendments arrive, what triggered them (compare to
@@ -790,3 +796,5 @@ convection), write the timeline on paper. Each change group on its
 own line, with start and end Zulu hours. Mark your planned arrival
 hour. Confirm the worst-case excursion at that hour. The hand-drawn
 timeline is the fastest reading drill that exists for TAFs.
+
+:::

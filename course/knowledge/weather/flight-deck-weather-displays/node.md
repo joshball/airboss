@@ -51,7 +51,7 @@ mastery_criteria: >
 
 # Flight Deck Weather Displays
 
-## Context
+:::phase name="context"
 
 You're 30 NM south of a building line of cumulonimbus that your EFB
 shows as a cluster of yellow and orange returns -- moderate to heavy
@@ -61,7 +61,8 @@ SIGMET, line of severe thunderstorms, hail and severe turbulence,
 moving 050 at 30." You glance back at the EFB; the cells now block
 your chosen path. The picture you flew into was 8 minutes old.
 
-## Problem
+:::
+:::phase name="problem"
 
 In-cockpit weather displays are the most operationally consequential
 weather technology of the past 20 years -- and the most dangerous
@@ -71,7 +72,8 @@ the misuse pattern explicitly. Understanding what the displays are
 and what they aren't is foundational risk management for any modern
 GA pilot.
 
-## Discover
+:::
+:::phase name="discover"
 
 The age problem in one paragraph: ADS-B FIS-B NEXRAD mosaic imagery
 is delivered to the cockpit on a refresh cycle of 5-10 minutes, but
@@ -89,7 +91,8 @@ the cell actually is. The "gap" you flew toward closed before you
 got there. This is the core mechanism of NEXRAD-induced thunderstorm
 penetrations.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Display sources by data freshness:
 
@@ -128,7 +131,8 @@ Other cockpit weather products and their gotchas:
 - Pilot reports: if visible on the display, near-current; small N
   problem (depends on whether anyone has flown nearby recently).
 
-## Practice
+:::
+:::phase name="practice"
 
 On your next EFB session, find the data age indicator for the NEXRAD
 overlay. Read the EFB's documentation: does the indicator show the
@@ -351,7 +355,8 @@ disagrees with the windshield.
       cite: AIM 7-1-11 -- Weather Observing Programs (FIS-B); 7-1-12 -- Datalink Weather
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node directly serves K4. It also serves R2a (limitations of
 onboard weather equipment) -- the equipment-limitations node names
@@ -359,10 +364,13 @@ the gotchas; this node names the displays. Both are operationally
 upstream of the go/no-go node, which has to integrate cockpit
 display data alongside the rest of the brief.
 
-## Verify
+:::
+:::phase name="verify"
 
 For three minutes the next time you fly: track an aviationweather.gov
 real-time radar in a separate browser while the cockpit ADS-B feed
 updates. Note the discrepancies in cell position. The discrepancy
 size in minutes is your personal calibration of how stale the
 cockpit data is.
+
+:::

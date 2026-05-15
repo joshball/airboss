@@ -23,8 +23,10 @@
 
 import { parseCardsYaml } from '@ab/bc-study';
 import {
+	KNOWLEDGE_PHASE_VALUES,
 	MARKDOWN_DIRECTIVE_BODY_BEARING,
 	MARKDOWN_DIRECTIVE_NAMES,
+	MARKDOWN_DIRECTIVE_NESTED_MARKDOWN_BODY,
 	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
 	MARKDOWN_DIRECTIVE_VALUES,
 	type MarkdownDirectiveName,
@@ -38,7 +40,9 @@ import { ESCAPABLE, parseInline } from './inline';
 const CALLOUT_VARIANT_SET = new Set<string>(CALLOUT_VARIANTS);
 const DIRECTIVE_NAME_SET = new Set<string>(MARKDOWN_DIRECTIVE_VALUES);
 const DIRECTIVE_BODY_BEARING_SET: ReadonlySet<string> = MARKDOWN_DIRECTIVE_BODY_BEARING;
+const DIRECTIVE_NESTED_MARKDOWN_BODY_SET: ReadonlySet<string> = MARKDOWN_DIRECTIVE_NESTED_MARKDOWN_BODY;
 const WX_SCENARIO_SLUG_SET = new Set<string>(WX_SCENARIO_VALUES);
+const KNOWLEDGE_PHASE_VALUE_SET = new Set<string>(KNOWLEDGE_PHASE_VALUES);
 
 export class MarkdownParseError extends Error {
 	constructor(
@@ -105,27 +109,37 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 			continue;
 		}
 
-		// Callout block (`:::variant [title]`) or component-mount directive
-		// (`:::chart slug="..."` / `:::scenario slug="..."`). Both share the
-		// `:::ident` opener; the directive name distinguishes which path runs.
+		// Callout block (`:::variant [title]`) or component-mount /
+		// data-payload / nested-markdown directive (`:::chart slug="..."` /
+		// `:::scenario slug="..."` / `:::cards ... :::` /
+		// `:::phase name="..." ... :::`). All share the `:::ident` opener;
+		// the directive name distinguishes which path runs.
 		const calloutOpen = /^:::\s*([a-z][a-z-]*)\s*(.*)$/i.exec(line);
 		if (calloutOpen && calloutOpen[1].toLowerCase() !== 'end') {
 			const variantName = calloutOpen[1].toLowerCase();
 			const remainder = calloutOpen[2];
 
 			// Directive: `:::name [key="value" ...]` opener, `:::` closer.
-			// Two families:
+			// Three families:
 			//
 			//   - Attribute-only (chart, scenario): MUST close on the next
 			//     non-blank line. Any body content is rejected because the
 			//     renderer mounts a component parameterised by attrs alone.
-			//   - Body-bearing (cards): the lines between opener and closer
-			//     are collected verbatim into `node.body` and handed to the
-			//     per-directive validator (e.g. `parseCardsYaml`). The body
-			//     is NOT walked as nested markdown -- it's a typed payload.
+			//   - Data-payload body (cards): the lines between opener and
+			//     closer are collected verbatim into `node.body` and handed
+			//     to the per-directive validator (e.g. `parseCardsYaml`).
+			//     The body is a typed payload (YAML); it is NOT walked as
+			//     nested markdown.
+			//   - Nested-markdown body (phase): the body IS authored
+			//     markdown. We capture it into `node.body` AND recursively
+			//     parse it through the same block parser, populating
+			//     `node.children` with the resulting `MdNode[]`. Splitters
+			//     consume `body`; renderers consume `children`.
 			//
-			// Both share the `:::name` opener; `DIRECTIVE_BODY_BEARING_SET`
-			// distinguishes the path.
+			// All share the `:::name` opener;
+			// `DIRECTIVE_BODY_BEARING_SET` selects body vs no-body, and
+			// `DIRECTIVE_NESTED_MARKDOWN_BODY_SET` selects nested-markdown
+			// vs typed-payload within the body-bearing branch.
 			if (DIRECTIVE_NAME_SET.has(variantName)) {
 				const attrs = parseDirectiveAttrs(remainder, baseLineNo + i + 1);
 				const bodyStart = i + 1;
@@ -141,8 +155,25 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 						throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, baseLineNo + i + 1);
 					}
 					const body = bodyLines.join('\n');
-					validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1, body);
-					out.push({ kind: 'directive', name: variantName, attrs, body });
+					validateDirective(
+						variantName as MarkdownDirectiveName,
+						attrs,
+						baseLineNo + i + 1,
+						body,
+						baseLineNo + bodyStart,
+					);
+					// Nested-markdown directives (e.g. `:::phase`) get the body
+					// walked through the same block parser so renderers can mount
+					// a real AST without re-parsing. `body` stays set in parallel
+					// so splitters that consume the raw text (e.g., the knowledge
+					// node phase splitter in `@ab/bc-study`) don't need to walk
+					// the AST back to a string.
+					if (DIRECTIVE_NESTED_MARKDOWN_BODY_SET.has(variantName)) {
+						const children = parseBlockRange(lines, bodyStart, j, baseLineNo);
+						out.push({ kind: 'directive', name: variantName, attrs, body, children });
+					} else {
+						out.push({ kind: 'directive', name: variantName, attrs, body });
+					}
 					i = j + 1;
 					continue;
 				}
@@ -453,7 +484,7 @@ function parseDirectiveAttrs(rest: string, line: number): Record<string, string>
 
 /**
  * Per-directive validation: required attribute keys + value shape +
- * (for body-bearing directives) payload schema.
+ * (for body-bearing directives) payload schema or body shape.
  *
  * Runs after `parseDirectiveAttrs` so we know the attribute bag is at
  * least syntactically well-formed. The slug checks here mirror the
@@ -461,13 +492,22 @@ function parseDirectiveAttrs(rest: string, line: number): Record<string, string>
  * authored typo fails at parse time, not at render. `:::cards` parses
  * its body via the shared `parseCardsYaml` (re-exported from
  * `@ab/bc-study`) so the markdown parser and the seed orchestrator
- * agree on schema.
+ * agree on schema. `:::phase` validates the `name` attribute against
+ * `KNOWLEDGE_PHASE_VALUES` and rejects H1/H2 headings inside the body
+ * (the phase title itself is auto-rendered as an H3 by the knowledge
+ * node renderer, sourced from `KNOWLEDGE_PHASE_LABELS`).
+ *
+ * `bodyStartIndex` is the 0-based index of the first body line in the
+ * caller's `lines` array; it's used to compute absolute line numbers
+ * for in-body errors (e.g., a disallowed heading). When the directive
+ * has no body, the parameter is ignored.
  */
 function validateDirective(
 	name: MarkdownDirectiveName,
 	attrs: Record<string, string>,
 	line: number,
 	body?: string,
+	bodyStartIndex?: number,
 ): void {
 	for (const required of MARKDOWN_DIRECTIVE_REQUIRED_ATTRS[name]) {
 		if (!(required in attrs) || attrs[required].length === 0) {
@@ -504,6 +544,32 @@ function validateDirective(
 		} catch (err) {
 			const message = err instanceof Error ? err.message : String(err);
 			throw new MarkdownParseError(`Directive ':::cards' body validation failed: ${message}`, line);
+		}
+	}
+	if (name === MARKDOWN_DIRECTIVE_NAMES.PHASE) {
+		const phaseName = attrs.name;
+		if (!KNOWLEDGE_PHASE_VALUE_SET.has(phaseName)) {
+			const allowed = [...KNOWLEDGE_PHASE_VALUE_SET].join(', ');
+			throw new MarkdownParseError(`Directive ':::phase' name "${phaseName}" is not one of: ${allowed}`, line);
+		}
+		// H1/H2 are reserved for the page shell and the knowledge-node
+		// phase splitter respectively; inside a `:::phase` body the highest
+		// allowed heading is H3. Walk the raw body lines so the error can
+		// cite the exact authored line.
+		const bodyText = body ?? '';
+		if (bodyText.length > 0) {
+			const bodyLines = bodyText.split('\n');
+			for (let k = 0; k < bodyLines.length; k++) {
+				const bl = bodyLines[k] ?? '';
+				const headingMatch = /^(#{1,2})\s+(.*)$/.exec(bl);
+				if (!headingMatch) continue;
+				const headingText = headingMatch[2].trim();
+				const absoluteLine = (bodyStartIndex ?? 0) + k + 1;
+				throw new MarkdownParseError(
+					`Directive ':::phase' (name="${phaseName}") body contains disallowed heading "${headingMatch[1]} ${headingText}"; use ### or deeper.`,
+					absoluteLine,
+				);
+			}
 		}
 	}
 }

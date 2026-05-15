@@ -56,7 +56,7 @@ mastery_criteria: >
 
 # Freezing Level
 
-## Context
+:::phase name="context"
 
 You're planning a winter cross-country in a non-deiced piston single.
 The icing forecast (CIP / FIP) shows moderate icing along your route
@@ -68,7 +68,8 @@ the freezing level, and is it high enough above the terrain to give
 you a below-freezing-level altitude that's both flyable and clear of
 the icing layer?
 
-## Problem
+:::
+:::phase name="problem"
 
 "Below the freezing level" is the canonical icing escape, but it is
 only an escape when there's actually an above-freezing layer between
@@ -78,7 +79,8 @@ it can be at 6,000 feet. Same icing forecast, two completely
 different decisions. The freezing-level chart is the product that
 turns "is there an out?" from a guess into a read.
 
-## Discover
+:::
+:::phase name="discover"
 
 The freezing level is where the temperature of the air column passes
 through 0 deg C. Two facts make it useful:
@@ -108,7 +110,8 @@ band, with peak severity around -2 C to -10 C). The FB is the
 station-by-station, altitude-by-altitude version of the same data
 the freezing-level chart smooths into a contour.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The freezing-level chart is published as part of the AC 00-45H
 graphical forecast suite. Standard contour interval is 4,000 feet
@@ -137,7 +140,8 @@ Layer this against:
   Appalachian ridges is much different from one over the coastal
   plain.
 
-## Practice
+:::
+:::phase name="practice"
 
 For a planned flight, walk the route on a freezing-level chart and
 record three values: lowest freezing level, highest freezing level,
@@ -420,7 +424,8 @@ your no-go signal regardless of what the icing forecast itself says.
       cite: AIM 7-1-21 -- Icing
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 The freezing-level chart is one input to the icing go/no-go that the
 icing-types-and-avoidance node frames. CIP / FIP tell you where icing
@@ -433,7 +438,8 @@ specific stations and altitudes. When the chart and the FB
 disagree, the FB wins for point-source decisions and the chart wins
 for the synoptic picture.
 
-## Verify
+:::
+:::phase name="verify"
 
 Pick a recent winter day and pull the freezing-level forecast that
 was valid for that day. Compare it to the actual radiosonde
@@ -441,3 +447,5 @@ soundings (KIAD, KOMA, KFFC, etc.) for that day. How accurate was
 the freezing-level forecast? Where did it err? In which kind of
 synoptic setup is the chart most reliable, and in which is it
 something to verify against PIREPs as you fly?
+
+:::

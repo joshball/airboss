@@ -410,7 +410,16 @@ const STEP_HELP: Record<string, StepHelp> = {
 		what: 'Walks every course/knowledge/**/node.md and fails if any file still contains a ```yaml-cards fenced block. The authoring contract is :::cards ... ::: -- the historical fence renders as a code block and dumps the YAML to the page.',
 		why: 'Without this guard, a re-paste of legacy authoring scaffolding silently produces a card-count divergence (the seeder scans :::cards, not the fence) AND leaks YAML to readers. This is the static gate; the dynamic gate is the markdown parser rejecting the wrong shape.',
 		how: '`bun scripts/lint/cards-directive.ts`.',
-		links: ['scripts/lint/cards-directive.ts', 'scripts/migrations/2026-05-yaml-cards-to-directive.ts'],
+		links: ['scripts/lint/cards-directive.ts', 'scripts/migrations/.archive/2026-05-yaml-cards-to-directive.ts'],
+	},
+	'phase-directive': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Block legacy ## Context/Problem/... H2 phase headings in course/knowledge/**',
+		what: 'Walks every course/knowledge/**/node.md and fails if any file still contains an H2 phase heading (## Context / ## Problem / ## Discover / ## Reveal / ## Practice / ## Connect / ## Verify). The authoring contract is :::phase name="<lowercase>" ... ::: -- the runtime splitter only recognises the directive shape.',
+		why: 'An H2 phase heading silently produces zero buckets in splitContentPhases and downgrades the node to lifecycle=skeleton -- the visible regression is a node whose phase cards are all "Not yet authored." This guard catches the regression at parse time before it reaches the DB.',
+		how: '`bun scripts/lint/phase-directive.ts`.',
+		links: ['scripts/lint/phase-directive.ts', 'scripts/migrations/.archive/2026-05-h2-phases-to-directive.ts'],
 	},
 	'tracking-generate': {
 		tier: 'fast',
@@ -1352,6 +1361,26 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 					f === 'scripts/lint/cards-directive.ts',
 			),
 		fn: () => shellRun('bun', ['scripts/lint/cards-directive.ts']),
+	});
+
+	defs.push({
+		name: 'phase-directive',
+		tier: 'fast',
+		// Trigger on any knowledge-node body change (where the migration
+		// target lives) AND on any change to the parser / splitter / lint
+		// surface so a regression that re-permits H2 phase headings is
+		// caught locally.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					(f.startsWith('course/knowledge/') && f.endsWith('.md')) ||
+					f === 'libs/bc/study/src/knowledge.ts' ||
+					f === 'libs/help/src/markdown/block.ts' ||
+					f === 'libs/constants/src/markdown-directives.ts' ||
+					f === 'scripts/lint/phase-directive.ts',
+			),
+		fn: () => shellRun('bun', ['scripts/lint/phase-directive.ts']),
 	});
 
 	defs.push({

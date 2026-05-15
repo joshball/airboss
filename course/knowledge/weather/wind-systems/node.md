@@ -51,7 +51,7 @@ mastery_criteria: >
 
 # Wind -- Crosswind, Tailwind, Shear, Mountain Wave
 
-## Context
+:::phase name="context"
 
 You're descending through 4,000 ft on the lee side of the Sierras in
 late afternoon. Reported surface winds are 20 KT out of the west.
@@ -60,7 +60,8 @@ spikes to 1,500 fpm. You add power, push the nose down, watch the VSI
 recover at 2,000 ft below where you started losing altitude. Mountain
 wave -- and you got the trough side, not the crest.
 
-## Problem
+:::
+:::phase name="problem"
 
 Wind is the most operationally consequential weather phenomenon at the
 GA scale. It dictates runway choice, ground speed, fuel reserve,
@@ -68,7 +69,8 @@ turbulence character, and -- in the worst cases -- aircraft
 controllability. A weather brief that doesn't develop a clear picture
 of the wind environment at every altitude of flight is incomplete.
 
-## Discover
+:::
+:::phase name="discover"
 
 Build the wind picture from the ground up:
 
@@ -101,7 +103,8 @@ Now overlay the special cases:
   Crests give updrafts; troughs give violent downdrafts and rotor
   turbulence below cap clouds.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Indicators by source:
 
@@ -130,7 +133,8 @@ after the descending column hits the ground. Standard guidance is to
 stay 5 NM from any visible thunderstorm and to delay approach if a
 cell is within 20 NM of the airport.
 
-## Practice
+:::
+:::phase name="practice"
 
 For a flight tomorrow, compute the forecast crosswind component on
 the active runway at your destination at your ETA. Then compute the
@@ -393,17 +397,21 @@ the crossing geometry.
       cite: AIM 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Wind ties into the crosswind-component performance node and the
 turbulence-types node. The shear and mountain-wave subsections feed
 the go/no-go node directly. PIREPs are the primary truth-up for
 forecast wind hazards; AIRMETs / SIGMETs are the forecast layer.
 
-## Verify
+:::
+:::phase name="verify"
 
 For three flights this month, compute crosswind components by hand
 before takeoff and again before landing. Cross-check against the
 airplane's actual handling on the runway. The number-to-feel
 mapping calibrates fast and is the foundation of competent crosswind
 landings.
+
+:::

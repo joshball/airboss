@@ -85,7 +85,7 @@ mastery_criteria: >-
 
 # Rate and Radius of Turn
 
-## Context
+:::phase name="context"
 
 Two airplanes both bank to 30 degrees. One is a Cessna 172 at 90 KIAS. The other is a Citation at 200 KIAS. They both make a 360-degree turn.
 
@@ -100,7 +100,8 @@ The pilot who does not know why these two airplanes turn so differently cannot:
 
 This node is the math that anchors traffic pattern judgment, ground reference maneuvering, and IFR procedure turn planning. It composes on `aero-load-factor-and-bank-angle` (which gives load factor for a given bank); rate and radius give the time and space the bank produces.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are flying a Cessna 172 at 90 KIAS in a 30-degree banked level turn. Compute:
 
@@ -115,7 +116,8 @@ Then redo at 30 degrees of bank, 180 KIAS. What changed by what ratio?
 
 Write out the math before reading on.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What is the math behind turn rate?
 
@@ -276,7 +278,8 @@ The tangent function captures the geometric relationship between the horizontal 
 - Ground radius uses groundspeed; varies with wind in turns.
 - Base-to-final geometry depends on radius from the pilot's airspeed.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -347,7 +350,8 @@ In descending order:
 3. **AFH Performance Maneuvers chapter** -- application to steep turns and GRM.
 4. **IFH** -- standard-rate-turn convention for IFR work.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -372,7 +376,8 @@ In descending order:
 - `drill:rrt-radius-quick` -- given V_kt and bank, pilot estimates radius using the V² × 0.09 / tan(bank) shortcut in 10 seconds.
 - `drill:rrt-radius-double-bank` -- given a baseline radius, pilot computes the radius after doubling tan(bank) without recomputing from scratch.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -392,7 +397,8 @@ In descending order:
 - `nav-holding-pattern-entries` -- standard rate is the IFR turn convention.
 - `perf-crosswind-component` -- wind affects groundspeed; groundspeed affects ground radius.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -422,3 +428,5 @@ Evaluation criteria:
 - The CFI is firm: the base-to-final stall is the dominant pattern fatality. The student's habit of "tighten with rudder" is the exact behavior NTSB describes in those reports. Fix it now.
 
 The pedagogical move is to ground the lead-time judgment in the math (so the student sees why early turn entry matters) and to make the rudder-tighten habit a hard "no" (because the alternative is the canonical fatal accident).
+
+:::

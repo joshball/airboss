@@ -101,7 +101,7 @@ mastery_criteria: >-
 
 # 180-Degree Turn (Inadvertent IMC Escape)
 
-## Context
+:::phase name="context"
 
 The 180-degree turn is the single most important survival maneuver in VFR aviation. It is also the simplest. You see deteriorating weather ahead. You turn the airplane around and go back to where the weather was acceptable. That is the entire procedure. The reason it kills pilots is not that they cannot fly the maneuver. It is that they do not commit to it.
 
@@ -111,7 +111,8 @@ The 180 happens before that point. It happens when ceilings are 1,500 AGL and tr
 
 This node is about the maneuver, the trigger conditions, and -- mostly -- the discipline of executing it.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are 90 NM into a 130 NM VFR cross-country. Forecast was VFR; reality has been deteriorating. You have descended from 5,500 to 3,500 to stay below cloud. You are now over flat terrain at 2,500 MSL, 1,000 AGL. Visibility is reading 5 miles ahead but you can only see clearly to about 3-4 miles. The cloud bases ahead look like they may be at 2,000 MSL or lower; you cannot tell with confidence. Your destination is 40 NM ahead. The airport you departed from is 90 NM behind, with reported VFR conditions. There are two airports in between with reported VFR conditions, both within 25 NM behind you.
 
@@ -119,7 +120,8 @@ What do you do?
 
 Write your answer before reading on. Then ask: at what point during this flight should you have turned? What were the cues you missed?
 
-## Discover
+:::
+:::phase name="discover"
 
 The 180 decomposes into three problems: when, how, and how-aggressively. Work through each.
 
@@ -216,7 +218,8 @@ The 180 is not a maneuver problem. It is an ADM problem. The maneuver costs you 
 - The post-turn destination is "nearest known-VMC airport," not the original destination.
 - The hard part is the decision, not the maneuver.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -224,16 +227,16 @@ The 180 is not a maneuver problem. It is an ADM problem. The maneuver costs you 
 
 ### The triggers, ranked
 
-| Trigger                                          | Urgency  |
-| ------------------------------------------------ | -------- |
-| Visibility below 3 SM                            | High     |
-| Ceiling within 500 ft of altitude                | High     |
-| Already in cloud                                 | Critical |
-| Scud forming below cruise altitude               | High     |
-| Lower ceiling at next reporting station          | Medium   |
-| Terrain rising into cloud                        | High     |
-| Forecast has been wrong by significant margin    | Medium   |
-| Uncertainty about the picture ahead              | Medium   |
+| Trigger                                       | Urgency  |
+| --------------------------------------------- | -------- |
+| Visibility below 3 SM                         | High     |
+| Ceiling within 500 ft of altitude             | High     |
+| Already in cloud                              | Critical |
+| Scud forming below cruise altitude            | High     |
+| Lower ceiling at next reporting station       | Medium   |
+| Terrain rising into cloud                     | High     |
+| Forecast has been wrong by significant margin | Medium   |
+| Uncertainty about the picture ahead           | Medium   |
 
 Any one of these is sufficient. Two or more is past time to turn.
 
@@ -290,7 +293,8 @@ In descending order:
 - The accident database -- read at least three VFR-into-IMC fatal accident reviews (NTSB.gov). The pattern is the lesson.
 - Your IFR-rated CFI's hood time -- even if you are not pursuing IR, 5-10 hours of hood time substantially improves survival in inadvertent IMC.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -346,7 +350,8 @@ The 180, executed at the trigger: takes 60 seconds and returns the airplane to k
 
 The trade is 60 seconds vs. ~30 minutes-to-ground. The 180 is the highest-leverage maneuver in VFR aviation.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -368,7 +373,8 @@ The trade is 60 seconds vs. ~30 minutes-to-ground. The 180 is the highest-levera
 - `aero-coordination-rudder` -- the turn must be coordinated; uncoordinated in disorientation territory compounds risk.
 - `proc-adm-hazardous-attitudes` -- continuation bias and macho are the ADM patterns to recognise and override.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -408,3 +414,5 @@ Evaluation criteria:
 - Optionally: schedules a hood lesson covering the 180 on instruments, so if the student does press the next time and ends up in IMC, they have at least one survival skill.
 
 The pedagogical move is to convert "I made it" into "I learned what to look for next time" without losing the student's confidence. The student's takeaway from this conversation should be respect for the trigger conditions, not fear of weather flying generally.
+
+:::

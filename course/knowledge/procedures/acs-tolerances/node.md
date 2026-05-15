@@ -86,7 +86,7 @@ mastery_criteria: >-
 
 # ACS Maneuver Tolerances
 
-## Context
+:::phase name="context"
 
 The Airman Certification Standards (ACS) is the document the examiner uses to grade your checkride. For each task, the ACS publishes numerical tolerances -- the specific deviations the examiner can accept and still award a passing grade.
 
@@ -98,13 +98,15 @@ These numbers are not arbitrary. They are the boundary between "the pilot has co
 
 The tolerance is also the ceiling, not the target. A pilot who flies 80-foot deviations on every steep turn is "passing" but missing the deeper standard. The target is zero deviation; the tolerance allows for the realities of turbulence, scan latency, and small corrections that have not yet completed.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are flying steep turns at 3,500 MSL. Halfway through the second turn, you notice your altitude is at 3,580 MSL -- 80 feet high. You have 80 seconds left in the maneuver. What do you do, in what order, and how big are your corrections?
 
 Write your answer before reading on. Then ask: at what point does an in-tolerance deviation become a teaching opportunity worth a verbal "I'm 80 high, correcting"?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What are the standard tolerances for Area V?
 
@@ -194,7 +196,8 @@ Treat the tolerance as a ceiling, not a target. Aim for zero deviation; accept s
 - The pilot's internal target should be tighter than the ACS ceiling.
 - Verbalising deviations and corrections demonstrates control to the examiner.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -249,7 +252,8 @@ In descending order:
 2. **AFH chapters on each maneuver** -- the technique for staying inside tolerance.
 3. **POH** -- airplane-specific recommended airspeeds and any maneuver constraints.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -273,7 +277,8 @@ In descending order:
 - `drill:acs-correction` -- CFI calls out a deviation ("you're 80 high"); pilot responds with the correction and the verbal acknowledgement in 3 seconds.
 - `drill:acs-prediction` -- during a steep turn, pilot calls out the expected altitude in 2 seconds; CFI verifies against actual.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -292,7 +297,8 @@ In descending order:
 - `aero-load-factor-and-bank-angle` -- why bank ±5° matters (load-factor consequences of overbank).
 - `proc-maneuvering-airspeeds` -- the recommended airspeed that becomes the ±10 kt baseline.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -325,3 +331,5 @@ Evaluation criteria:
 - The CFI is direct: "You are passing the test, but you are not flying the airplane. There's a difference."
 
 The pedagogical move is to make the systematic direction visible to the student (it was invisible because they were not measuring), to give them a concrete fix (trim during roll-in), and to elevate the standard above the ACS floor.
+
+:::

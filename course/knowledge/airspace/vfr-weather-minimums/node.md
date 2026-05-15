@@ -100,7 +100,7 @@ mastery_criteria: >
 
 # VFR Weather Minimums
 
-## Context
+:::phase name="context"
 
 You are halfway through a VFR cross-country, 3,500 MSL over gently rising terrain, heading toward a towered field 45 nm away. The morning has been clear and smooth. Over the last twenty minutes the sky has started to fill in: scattered cumulus below you, a broken deck building ahead, visibility softening into a pale haze. The METAR you pulled before departure showed 10 SM and few clouds at 5,000. That METAR is now ninety minutes old. You have not talked to anyone yet.
 
@@ -117,7 +117,8 @@ Before looking up a single number, sit with the forces in play:
 
 The VFR weather minimums are the engineering answer to that problem. The reg is 14 CFR 91.155. But the reg is downstream of the reasoning -- the reasoning came first, and the reasoning is the part you actually need when the weather is getting worse and you are not sure what the numbers were again.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are that VFR pilot. 3,500 MSL. Class E airspace (you verified this on the chart -- the magenta shading stops at the field, and you are above 1,200 AGL anyway). Eight miles from destination. Scattered cumulus drifting across your course at your altitude; a broken deck another 500 ft above. Ground visibility at the field is reported at 5 SM in haze. In the air, looking forward, you would call it somewhere between 3 and 5 miles.
 
@@ -129,7 +130,8 @@ Three questions, in order:
 
 Question 3 is the one that matters. Memorizing a table is fragile. Reconstructing the table from the physics is durable.
 
-## Discover
+:::
+:::phase name="discover"
 
 Work through these before reading the Reveal section. If you jump ahead, the discovery phase cannot do its job -- the numbers will look arbitrary rather than derived.
 
@@ -182,7 +184,8 @@ Given your reasoning in question 4, write out -- *before looking* -- your predic
 
 When you check against the Reveal section, notice which ones you predicted correctly from physics and which ones surprised you. The ones that surprised you are the ones to examine -- there is a design reason the regulator chose those specific values.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The regulation: 14 CFR 91.155
 
@@ -241,7 +244,8 @@ When you are at an unfamiliar airport or transitioning between classes:
 
 Default muscle memory: AIM first for the table, CFR second for the fine print.
 
-## Practice
+:::
+:::phase name="practice"
 
 :::cards
 
@@ -430,7 +434,8 @@ An IFR aircraft on a stabilized approach is descending through a cloud base at 5
 
 Assume total closure rate above 10,000 MSL can approach 500 kt. Convert to ft/sec. Multiply by a 12-second reaction window (slightly longer because threats at altitude are often harder to visually acquire). Express the result in statute miles. Compare to the 5 SM requirement. Does the reg appear to build in margin, or is it cutting it close?
 
-## Connect
+:::
+:::phase name="connect"
 
 ### "What changes if..." prompts
 
@@ -454,7 +459,8 @@ Assume total closure rate above 10,000 MSL can approach 500 kt. Convert to ft/se
 - `airspace-special-use` -- MOAs, restricted areas, prohibited areas that overlay these classes. Related.
 - `teach-vfr-weather-minimums` -- the CFI-level pedagogical node for teaching this topic to a student. Taught-by.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel application scenario
 
@@ -496,3 +502,5 @@ The student is looking at the table and seeing what the table shows them -- that
 The pedagogical hook is **not** "here is the reason the numbers are the same." The hook is "the numbers being the same is the least interesting thing about these two rows -- the interesting thing is what each row exists to protect against." A student who learns to ask "what problem is this number solving?" instead of "what is this number?" has learned the durable version of the minimums.
 
 Score yourself (or your student) on whether the response hits all five moves, and whether the final probing question actually requires the student to reason rather than recite.
+
+:::

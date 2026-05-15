@@ -92,7 +92,7 @@ mastery_criteria: >-
 
 # Marker Beacon Recognition
 
-## Context
+:::phase name="context"
 
 Marker beacons are small VHF transmitters set on the ground along the approach path of an ILS. They emit a 75 MHz signal upward in a narrow vertical fan beam; an airplane flying over the beam (and tuned to receive it) hears a tone in the headset and sees a colored light on the panel for a few seconds. The beacon does not provide course guidance; it provides a position fix. "When you hear the tone and see the light, you are over this point."
 
@@ -102,7 +102,8 @@ Marker beacons are increasingly being decommissioned. New ILS installations ofte
 
 This node is about the perceptual skill of recognising marker beacons in flight, the factual content of the three types, and the connection to the broader ILS approach structure.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are flying an ILS to a Class C airport. You have just been cleared for the approach. The plate shows an outer marker at 5.4 NM from threshold, FAF altitude 2,800 MSL. As you intercept the localiser and approach the FAF, you hear a low-frequency tone in your headset that resembles a steady "boop, boop, boop" pattern. You see a purple light flash on the panel. Your DME shows 5.4 NM from threshold; your altitude is 2,800.
 
@@ -110,17 +111,18 @@ What just happened? What does it confirm? What is your next action?
 
 Write your answer before reading on. Then ask: what would you do if the marker fired but the DME and altitude did not match?
 
-## Discover
+:::
+:::phase name="discover"
 
 The recognition decomposes into the three types and what each tells you. Work through.
 
 ### Q1. What are the three marker types?
 
-| Marker | Tone (Hz) | Light color | Audio pattern        | Distance from threshold |
-| ------ | --------- | ----------- | -------------------- | ----------------------- |
-| Outer  | 400 Hz    | Purple/Blue | --- (continuous dashes) | 5-7 NM                |
-| Middle | 1,300 Hz  | Amber       | -.-.- (dot-dash alternating) | 0.5-0.7 NM (3,500 ft) |
-| Inner  | 3,000 Hz  | White       | ... (continuous dots, very fast) | 0.1 NM (1,000 ft) |
+| Marker | Tone (Hz) | Light color | Audio pattern                    | Distance from threshold |
+| ------ | --------- | ----------- | -------------------------------- | ----------------------- |
+| Outer  | 400 Hz    | Purple/Blue | --- (continuous dashes)          | 5-7 NM                  |
+| Middle | 1,300 Hz  | Amber       | -.-.- (dot-dash alternating)     | 0.5-0.7 NM (3,500 ft)   |
+| Inner  | 3,000 Hz  | White       | ... (continuous dots, very fast) | 0.1 NM (1,000 ft)       |
 
 Note: the audio Morse pattern (dots, dashes) is encoded in the audio tone; the actual tone frequency is one of the three above (400, 1300, 3000). In the cockpit, you hear the tone with the modulation pattern. Pilots learn the tones by ear.
 
@@ -190,7 +192,8 @@ If a marker that you are expecting does not fire:
 - Use markers as a cross-check, not as the primary reference.
 - A missing marker may be decommissioned, NOTAMed, or your radio may be off / not enabled.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -198,13 +201,13 @@ If a marker that you are expecting does not fire:
 
 ### The three markers in detail
 
-| Property                | Outer (OM)   | Middle (MM)         | Inner (IM)        |
-| ----------------------- | ------------ | ------------------- | ----------------- |
-| Audio frequency         | 400 Hz       | 1,300 Hz            | 3,000 Hz          |
-| Modulation              | Continuous dashes | Dot-dash alternating | Continuous dots (fast) |
-| Light color             | Purple/Blue  | Amber               | White             |
-| Distance from threshold | 5-7 NM       | 2,500-3,500 ft (0.5-0.7 NM) | ~1,000 ft (0.1 NM) |
-| Used in                 | CAT I, II, III | CAT I, II, III   | CAT II, III only  |
+| Property                | Outer (OM)        | Middle (MM)                 | Inner (IM)             |
+| ----------------------- | ----------------- | --------------------------- | ---------------------- |
+| Audio frequency         | 400 Hz            | 1,300 Hz                    | 3,000 Hz               |
+| Modulation              | Continuous dashes | Dot-dash alternating        | Continuous dots (fast) |
+| Light color             | Purple/Blue       | Amber                       | White                  |
+| Distance from threshold | 5-7 NM            | 2,500-3,500 ft (0.5-0.7 NM) | ~1,000 ft (0.1 NM)     |
+| Used in                 | CAT I, II, III    | CAT I, II, III              | CAT II, III only       |
 
 ### Recognition: by ear
 
@@ -255,7 +258,8 @@ In descending order:
 - Listen to ILS approaches with marker monitoring enabled (live ATC or simulator) -- learn the tones by ear.
 - Practice on the actual airplane: with a CFII, fly several ILS approaches with attention to the markers; the auditory fingerprint is acquired in 3-5 exposures.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -329,7 +333,8 @@ GS angle = atan(1950 / 32,800)
 
 Slightly higher than the standard 3-degree GS; consistent with terrain-adjusted GS at some airports.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -348,7 +353,8 @@ Slightly higher than the standard 3-degree GS; consistent with terrain-adjusted 
 - `proc-instrument-cross-check` -- the scan that includes marker monitoring.
 - `nav-gps-rnav-concepts` -- the modern replacement for marker-based fixes.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -383,3 +389,5 @@ Evaluation criteria:
 - The CFII names the trap: candidates who treat redundancy as duplication often miss the moment when the redundancy disagrees and saves them. Build the call-out habit.
 
 The pedagogical move is to convert "the marker is unnecessary because I have DME" into "the marker is a free additional check that I should use." The candidate's logic is sound but their model is incomplete.
+
+:::

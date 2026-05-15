@@ -394,22 +394,107 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
 		.where(inArray(knowledgeNode.id, ids as string[]));
 }
 
-/** Lifecycle derivation from a node's markdown body. Counts unique H2 phase
- * headings ("## Context", "## Problem", ...) and maps to the skeleton /
- * started / complete lifecycle. Kept in the BC so UI, build script, and tests
- * all resolve lifecycle the same way.
+/**
+ * Canonical phase slugs the splitter recognises inside a `:::phase` opener.
+ * Kept local so this module stays free of `@ab/help` (which imports back
+ * into `@ab/bc-study` via `parseCardsYaml` -- a `@ab/help` import here
+ * would close a cycle). The set is identical to `KNOWLEDGE_PHASE_VALUES`
+ * from `@ab/constants`.
+ */
+const PHASE_NAMES: ReadonlySet<string> = new Set([
+	'context',
+	'problem',
+	'discover',
+	'reveal',
+	'practice',
+	'connect',
+	'verify',
+]);
+
+/**
+ * Match a `:::phase name="<value>"` opener. Quoted-value-only is the
+ * single supported attribute syntax (matches `@ab/help`'s
+ * `parseDirectiveAttrs`). The matcher tolerates trailing whitespace and
+ * additional attributes (which validation will reject upstream); the
+ * name capture stays correct in either case.
+ */
+const PHASE_OPENER_RE = /^:::phase\s+name="([^"]+)"(?:\s|$)/;
+const DIRECTIVE_CLOSER_RE = /^:::\s*$/;
+
+/**
+ * Walk a knowledge-node `content_md` body and yield each `:::phase` slice
+ * as `{ name, body }`. The body is the lines between opener and closer,
+ * joined with `\n` and trimmed; everything outside a `:::phase` block is
+ * ignored (frontmatter has already been stripped upstream). Lines that
+ * happen to contain `:::` inside a phase body (e.g., nested `:::cards`)
+ * never reach the outer splitter: the outer parser hands us a body that
+ * is itself markdown, and we only match `^:::phase ...` and the bare
+ * `^:::$` closer. A nested directive's `:::` closer matches the bare
+ * pattern, so we count nesting depth instead.
+ */
+function* iteratePhaseSlices(contentMd: string): Generator<{ name: string; body: string }> {
+	const lines = contentMd.split(/\r?\n/);
+	let i = 0;
+	while (i < lines.length) {
+		const line = lines[i];
+		const openMatch = line === undefined ? null : PHASE_OPENER_RE.exec(line);
+		if (!openMatch) {
+			i += 1;
+			continue;
+		}
+		const phaseName = openMatch[1];
+		const bodyLines: string[] = [];
+		let depth = 1;
+		i += 1;
+		while (i < lines.length && depth > 0) {
+			const cur = lines[i];
+			if (cur === undefined) {
+				i += 1;
+				continue;
+			}
+			if (DIRECTIVE_CLOSER_RE.test(cur)) {
+				depth -= 1;
+				if (depth === 0) {
+					i += 1;
+					break;
+				}
+				bodyLines.push(cur);
+				i += 1;
+				continue;
+			}
+			// Any opener `:::name` (callout, chart, scenario, cards, phase, ...)
+			// bumps depth so we find the matching closer rather than the
+			// nested block's. The exception is the `end` keyword (used by
+			// callout closers in some authoring traditions) which the parser
+			// treats as a non-directive; we leave it alone.
+			if (/^:::\s*[a-z][a-z-]*/i.test(cur) && !/^:::\s*end\b/i.test(cur)) {
+				depth += 1;
+			}
+			bodyLines.push(cur);
+			i += 1;
+		}
+		yield { name: phaseName, body: bodyLines.join('\n').trim() };
+	}
+}
+
+/** Lifecycle derivation from a node's markdown body. Counts unique
+ * `:::phase name="..."` directives and maps to the skeleton / started /
+ * complete lifecycle. Kept in the BC so UI, build script, and tests all
+ * resolve lifecycle the same way.
+ *
+ * Unknown phase names are ignored here -- the parser (and the build-
+ * knowledge-index validator) rejects unknown names at parse time, so
+ * by the time content reaches the runtime this scan only sees canonical
+ * names. The defensive filter mirrors the splitter so a malformed file
+ * doesn't inflate the lifecycle count.
  */
 export function lifecycleFromContent(contentMd: string): NodeLifecycle {
-	const phaseLabels = new Set(['context', 'problem', 'discover', 'reveal', 'practice', 'connect', 'verify']);
 	const found = new Set<string>();
-	for (const line of contentMd.split(/\r?\n/)) {
-		const m = line.match(/^##\s+(.+?)\s*$/);
-		if (!m) continue;
-		const label = m[1].trim().toLowerCase();
-		if (phaseLabels.has(label)) found.add(label);
+	for (const slice of iteratePhaseSlices(contentMd)) {
+		if (PHASE_NAMES.has(slice.name)) found.add(slice.name);
 	}
 	if (found.size === 0) return NODE_LIFECYCLES.SKELETON;
-	if (found.size >= phaseLabels.size) return NODE_LIFECYCLES.COMPLETE;
+	if (found.size >= PHASE_NAMES.size) return NODE_LIFECYCLES.COMPLETE;
 	return NODE_LIFECYCLES.STARTED;
 }
 
@@ -417,17 +502,14 @@ export function lifecycleFromContent(contentMd: string): NodeLifecycle {
  * Parse the content_md body into seven phase buckets keyed by canonical
  * phase slug. Missing phases are represented as `null` so the UI can render
  * "Not yet authored" placeholders without a secondary lookup.
+ *
+ * Each canonical-phase `:::phase name="X"` block contributes its body
+ * (the raw markdown between opener and closer, trimmed) to bucket `X`.
+ * Duplicate `:::phase name="X"` directives are forgiving here -- last
+ * write wins -- because the build-time validator already rejects them.
+ * Non-canonical phase names are dropped on the runtime path.
  */
 export function splitContentPhases(contentMd: string): Record<string, string | null> {
-	const canonical: Record<string, string> = {
-		context: 'context',
-		problem: 'problem',
-		discover: 'discover',
-		reveal: 'reveal',
-		practice: 'practice',
-		connect: 'connect',
-		verify: 'verify',
-	};
 	const buckets: Record<string, string | null> = {
 		context: null,
 		problem: null,
@@ -437,28 +519,11 @@ export function splitContentPhases(contentMd: string): Record<string, string | n
 		connect: null,
 		verify: null,
 	};
-	const lines = contentMd.split(/\r?\n/);
-	let currentPhase: string | null = null;
-	let accum: string[] = [];
-	const flush = () => {
-		if (currentPhase !== null) {
-			const text = accum.join('\n').trim();
-			if (text.length > 0) buckets[currentPhase] = text;
-			accum = [];
-		}
-	};
-	for (const line of lines) {
-		const m = line.match(/^##\s+(.+?)\s*$/);
-		if (m) {
-			flush();
-			const label = m[1].trim().toLowerCase();
-			const phase = canonical[label] ?? null;
-			currentPhase = phase;
-			continue;
-		}
-		if (currentPhase !== null) accum.push(line);
+	for (const slice of iteratePhaseSlices(contentMd)) {
+		if (!PHASE_NAMES.has(slice.name)) continue;
+		if (slice.body.length === 0) continue;
+		buckets[slice.name] = slice.body;
 	}
-	flush();
 	return buckets;
 }
 

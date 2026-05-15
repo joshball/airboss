@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Thunderstorm Hazards
 
-## Context
+:::phase name="context"
 
 It's late afternoon in summer along the Gulf Coast. The TAF for your
 destination shows VCTS (vicinity thunderstorm) through your ETA. The
@@ -66,7 +66,8 @@ movement, growth, and embedded turbulence? If the answer is yes
 with margin, you fly with continuous monitoring. If the answer is
 "yes, barely," you don't.
 
-## Problem
+:::
+:::phase name="problem"
 
 A thunderstorm is the single weather phenomenon for which the FAA
 publishes a numeric clearance distance, because every
@@ -81,7 +82,8 @@ The pilot job is to internalize *why* 20 NM, *what* the cell does
 during your transit, and *how* the avoidance decision degrades from
 "plenty of room" to "trapped" faster than most pilots expect.
 
-## Discover
+:::
+:::phase name="discover"
 
 A thunderstorm cell isn't a static feature; it's a 30-90 minute
 weather system with its own life cycle. Three stages, each with a
@@ -149,7 +151,8 @@ gust front at 10-15 NM. Embedded turbulence at 5-10 NM. The 20 NM
 margin is the envelope that contains all of them with operational
 buffer.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The standard pilot rules, distilled:
 
@@ -175,7 +178,8 @@ The cells generate their own outflow and inflow that bend nearby
 cells toward the line, closing the gap. And lightning crosses the
 gap whether or not radar shows precipitation.
 
-## Practice
+:::
+:::phase name="practice"
 
 For the next severe-weather day in your area, watch a developing
 cell on radar from cumulus through dissipating stage. Time the
@@ -450,7 +454,8 @@ a cell builds.
     misleads pilots into the hail-fall zone.
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node feeds the go/no-go decision (a Convective SIGMET on the
 route is the primary "stop" trigger) and the convective-outlook
@@ -465,7 +470,8 @@ unreadable without the cell taxonomy in this node. A pilot decoding
 list of words; a pilot with this physics gets an immediate stop
 signal.
 
-## Verify
+:::
+:::phase name="verify"
 
 For a current Convective SIGMET, decode the cell formation it
 describes (line / scattered / area / isolated), and articulate
@@ -473,3 +479,5 @@ which of the six hazards above are most likely along the polygon
 boundary, at the polygon center, and below the indicated tops. If
 you can name the dominant hazard at each location, you can
 articulate the exclusion zone the SIGMET is asking you to honor.
+
+:::

@@ -117,7 +117,7 @@ mastery_criteria: >-
 
 # Partial Panel
 
-## Context
+:::phase name="context"
 
 You are 30 minutes into a real IFR flight at 8,000 in solid IMC. You have been hand-flying because the autopilot is acting up, and the workload is high but manageable. Your scan is steady; the airplane is in trim; ATC is reasonable. You glance at the attitude indicator. It shows about a 10-degree right bank. You roll left to correct. The AI does not move. You roll further. The turn coordinator now shows a half-deflection left turn. The airspeed is climbing. The altimeter is descending. Something has gone very wrong, and the most authoritative-looking instrument on the panel -- the one with the airplane symbol on it -- is the one that is lying to you.
 
@@ -127,7 +127,8 @@ Vacuum-pump failures in older singles are the canonical case. Six-pack airplanes
 
 Pilots die on partial panel for predictable reasons. They keep glancing at the failed instrument and trying to interpret the lie as truth. They miss the cross-check that would have caught the failure earlier. They get behind the airplane and let attitude wander into unusual-attitude territory. The training response is rote, but the in-flight response requires that the rote actions be available without thinking, because the brain that should be making them is busy being scared.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are a freshly-rated instrument pilot, 15 hours of actual since checkride. You are in IMC at 6,000 on a routine cross-country. ATC has cleared you direct to a fix and amended your altitude to 7,000. As you initiate the climb, you notice the AI shows a slight nose-up attitude (correct) but the DG is drifting slowly to the right despite no rudder input. The compass card is showing roughly the same heading. The turn coordinator shows wings level.
 
@@ -135,7 +136,8 @@ What do you do in the next 30 seconds, in order, and why?
 
 Write your answer before reading on. Then ask: how would you have caught this failure earlier? What does your cross-check look like at this moment?
 
-## Discover
+:::
+:::phase name="discover"
 
 The partial-panel response decomposes into four problems: detection, identification, scan rebuild, and management. Work through each.
 
@@ -143,15 +145,15 @@ The partial-panel response decomposes into four problems: detection, identificat
 
 A clean failure is rare. Instruments do not usually go dark; they drift, lock, or freeze. The drift is the dangerous failure mode because the instrument still looks plausible.
 
-| Instrument        | Common failure modes                                                              |
-| ----------------- | --------------------------------------------------------------------------------- |
-| Attitude indicator| Slow precession (drifting bank or pitch); freezing; flag annunciation if equipped |
-| Directional gyro  | Slow drift if uncaged or vacuum-degraded; lock if vacuum fails                    |
-| Turn coordinator  | Battery/bus fail; tumbling on intense aerobatics                                  |
-| Airspeed indicator| Pitot block (rises like an altimeter); drain/static leak; reading low             |
-| Altimeter         | Static block (frozen); alternate-static cabin-pressure offset                     |
-| VSI               | Static block (lags); rapid static change creates unreliable trend                 |
-| Magnetic compass  | Northerly turning error (lead/lag); acceleration/deceleration error               |
+| Instrument         | Common failure modes                                                              |
+| ------------------ | --------------------------------------------------------------------------------- |
+| Attitude indicator | Slow precession (drifting bank or pitch); freezing; flag annunciation if equipped |
+| Directional gyro   | Slow drift if uncaged or vacuum-degraded; lock if vacuum fails                    |
+| Turn coordinator   | Battery/bus fail; tumbling on intense aerobatics                                  |
+| Airspeed indicator | Pitot block (rises like an altimeter); drain/static leak; reading low             |
+| Altimeter          | Static block (frozen); alternate-static cabin-pressure offset                     |
+| VSI                | Static block (lags); rapid static change creates unreliable trend                 |
+| Magnetic compass   | Northerly turning error (lead/lag); acceleration/deceleration error               |
 
 Detection comes from cross-check, not from staring at one instrument. Two instruments that disagree means at least one is lying. Three that agree, with the suspect one disagreeing, identifies which.
 
@@ -229,7 +231,8 @@ You take all of those. You are not bothering them. They train for this. The PIC 
 - Cover the failed instrument so it stops distracting.
 - In IMC, declare. ATC will offload workload.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -237,15 +240,15 @@ You take all of those. You are not bothering them. They train for this. The PIC 
 
 ### Common failure scenarios and replacement instruments
 
-| Failed instrument        | Source                | Replace with                                 | Watch for                                                       |
-| ------------------------ | --------------------- | -------------------------------------------- | --------------------------------------------------------------- |
-| Attitude indicator       | Vacuum (typical)      | Airspeed + altimeter (pitch); TC + compass (bank) | Pre-failure precession; flag annunciation if equipped       |
-| Directional gyro         | Vacuum                | Magnetic compass; timed turns                | Drift over time; uncaged behavior                               |
-| Turn coordinator         | Electrical            | AI bank reference; rudder ball still works  | Bank/yaw rate cues lost; harder in IMC                          |
-| Airspeed                 | Pitot pressure        | Pitch attitude + power                       | Pitot block: airspeed rises with altitude; pitot ice common     |
-| Altimeter                | Static pressure       | Pitch + power; alternate static if equipped | Static block: altimeter freezes; alt static raises indicated alt|
-| VSI                      | Static pressure       | Trend from altimeter; pitch attitude         | Lag in normal operation; freezes with static block              |
-| Magnetic compass         | Earth's field         | DG (if working); GPS heading                | Acceleration/deceleration errors; bank-induced errors           |
+| Failed instrument  | Source           | Replace with                                      | Watch for                                                        |
+| ------------------ | ---------------- | ------------------------------------------------- | ---------------------------------------------------------------- |
+| Attitude indicator | Vacuum (typical) | Airspeed + altimeter (pitch); TC + compass (bank) | Pre-failure precession; flag annunciation if equipped            |
+| Directional gyro   | Vacuum           | Magnetic compass; timed turns                     | Drift over time; uncaged behavior                                |
+| Turn coordinator   | Electrical       | AI bank reference; rudder ball still works        | Bank/yaw rate cues lost; harder in IMC                           |
+| Airspeed           | Pitot pressure   | Pitch attitude + power                            | Pitot block: airspeed rises with altitude; pitot ice common      |
+| Altimeter          | Static pressure  | Pitch + power; alternate static if equipped       | Static block: altimeter freezes; alt static raises indicated alt |
+| VSI                | Static pressure  | Trend from altimeter; pitch attitude              | Lag in normal operation; freezes with static block               |
+| Magnetic compass   | Earth's field    | DG (if working); GPS heading                      | Acceleration/deceleration errors; bank-induced errors            |
 
 ### The pitot-static failure subset
 
@@ -284,7 +287,8 @@ In descending order:
 - ACS / PTS task elements for the instrument rating -- they tell you what an examiner will test, which is also what an instrument pilot should be able to do.
 - Your airplane's panel -- map which instrument has which power source. Know what fails together.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -347,7 +351,8 @@ Apply both: subtract 5 KIAS from indicated, subtract 75 feet from indicated alti
 
 POH numbers override these illustrative figures.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -370,7 +375,8 @@ POH numbers override these illustrative figures.
 - `nav-localiser-and-glide-slope-tracking` -- partial-panel ILS is the harder-than-checkride exercise. Vectoring to a non-precision approach is usually preferable in real IMC.
 - `nav-marker-beacon-recognition` -- on partial panel, every workload-reducing cue helps. The OM/MM beep tells you where you are without map work.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -404,3 +410,5 @@ Evaluation criteria:
 - The exercise the CFII assigns: hood time with the DG covered (literal sticky note) for the next 30 minutes of the lesson, including timed turns and an approach.
 - The CFII uses the moment as a partial-panel discipline lesson, not a competence rebuke; the candidate did identify the failure correctly, they just did not commit to the rebuilt scan.
 - The candidate leaves the lesson with a physical artifact (a sticky note, a piece of cockpit tape) to keep in their iPad case for real-world use.
+
+:::

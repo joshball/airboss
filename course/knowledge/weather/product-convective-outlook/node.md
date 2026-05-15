@@ -69,7 +69,7 @@ strict METAR / TAF sense -- but the same three-stage skill applies:
 (Family pattern reference:
 [wx-reading-metars](../reading-metars/node.md).)
 
-## Context
+:::phase name="context"
 
 It's Tuesday night and you're planning a Saturday flight. METARs and
 TAFs only cover ~30 hours; the GFA caps at +15. You can't get a tactical
@@ -77,7 +77,8 @@ forecast for Saturday. But you can get a strategic one: the Storm
 Prediction Center's Day 4-8 Convective Outlook (AC) will tell you
 roughly where severe storms are most likely four to eight days out.
 
-## Problem
+:::
+:::phase name="problem"
 
 Convective weather is the single biggest cause of weather-related GA
 accidents. The SIGMETs and Convective SIGMETs that warn you operate on a
@@ -86,7 +87,8 @@ accidents. The SIGMETs and Convective SIGMETs that warn you operate on a
 doesn't tell you "go" or "no-go" -- it tells you "this trip merits
 extra caution starting now," which is its own kind of decision.
 
-## Discover
+:::
+:::phase name="discover"
 
 Open spc.noaa.gov and look at today's Day 1 outlook (now -> 12Z
 tomorrow). It's a categorical map with five tiers of severe-weather
@@ -109,7 +111,8 @@ the confidence is lower. The Day 4-8 outlook is a single product with
 a percent-probability map rather than categorical labels because the
 forecast skill is too soft for clean categories that far out.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Update cadence:
 
@@ -133,7 +136,8 @@ If yes, the rest of the convective tools (Convective SIGMET, NEXRAD,
 storm-scale interrogation) move from background reading to active
 monitoring, ideally before the wheels leave the ground.
 
-## Practice
+:::
+:::phase name="practice"
 
 For your next planned cross-country: pull the Day 1, Day 2, Day 3 SPC
 outlooks. Identify whether the route or destination falls under any
@@ -348,7 +352,8 @@ forecast -- you're just reading a colored map.
       cite: AIM 7-1 -- National Weather Service Aviation Products
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 The convective outlook is the strategic layer above the Convective
 SIGMET (tactical, 0-2 hour) and NEXRAD radar (real-time). All three are
@@ -356,7 +361,8 @@ talking about the same convection at three time horizons. The
 thunderstorm-hazards node covers what to do when convection is present;
 this node covers when to start watching for it.
 
-## Verify
+:::
+:::phase name="verify"
 
 Compare yesterday's Day 1 convective outlook to yesterday's actual
 Convective SIGMETs. The polygons should overlap heavily (the SPC's
@@ -364,3 +370,5 @@ Day 1 forecast is generally skillful). When they don't, the discussion
 text should explain the surprise. Building a sense of when SPC is
 right and when SPC is wrong is the meta-skill behind using this
 product well.
+
+:::

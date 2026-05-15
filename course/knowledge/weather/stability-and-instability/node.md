@@ -48,7 +48,7 @@ mastery_criteria: >
 
 # Atmospheric Stability and Instability
 
-## Context
+:::phase name="context"
 
 Two flights leave the same airport at the same hour. One pilot reports
 a glass-smooth climb to cruise; the other, an hour later, gets pummeled
@@ -57,7 +57,8 @@ airplane. The atmosphere stabilized at sunset and destabilized at
 sunrise. Stability is the parameter that controls almost everything
 else weather-related you'll experience aloft.
 
-## Problem
+:::
+:::phase name="problem"
 
 Cloud type, precipitation pattern, turbulence character, visibility,
 and the convective hazard inventory all depend on whether the air
@@ -66,7 +67,8 @@ read stability from the products available -- METARs, soundings,
 graphics -- and to predict what the day is going to feel like at 5,000
 ft from what the surface tells you at 1,500 ft.
 
-## Discover
+:::
+:::phase name="discover"
 
 A parcel of air rising adiabatically (no heat exchanged with its
 surroundings) cools at a fixed rate -- about 3 degrees C per 1,000 ft
@@ -94,7 +96,8 @@ the difference between the moist adiabatic rate and the steeper ELR.
 Cumulus, towering cumulus, cumulonimbus -- the convective cloud
 sequence -- is the visible signature of conditional instability.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Operational table:
 
@@ -114,7 +117,8 @@ Cooler weather comes after sunset because radiational cooling
 re-stabilizes the surface; thunderstorms that built all afternoon often
 fade after dark precisely because the stability profile shifts.
 
-## Practice
+:::
+:::phase name="practice"
 
 Pull a current sounding (Skew-T) for any airport from the Storm
 Prediction Center site. Trace the environmental temperature curve and
@@ -373,7 +377,8 @@ predict the ride at altitude.
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Stability is the parent concept under almost every other K3 leaf:
 clouds (K3f), precipitation (K3d), turbulence (K3g), thunderstorms
@@ -382,9 +387,12 @@ and unstable atmospheres. The frontal-passage node depends on
 stability change across the front. Recognizing stability is the meta
 skill that makes the rest of the weather phenomena interpretable.
 
-## Verify
+:::
+:::phase name="verify"
 
 For three different days this week, predict cloud type and turbulence
 character from the morning METAR before takeoff. Cross-check against
 the actual cruise-altitude experience. Calibrate. The skill develops
 fast once predicted vs actual is your own data.
+
+:::

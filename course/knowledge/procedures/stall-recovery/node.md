@@ -106,7 +106,7 @@ mastery_criteria: >-
 
 # Stall Recovery
 
-## Context
+:::phase name="context"
 
 A stall is the simplest emergency in aviation and the one student pilots are most likely to mishandle. The simplicity is deceptive. Stall is exceeding critical angle of attack; recovery is reducing angle of attack. That is two sentences, and they fit on a card. The thing they leave out is the half-second of disorientation in which a pilot looking at the altimeter, with the stall horn screaming and the airplane buffeting and the nose dropping unexpectedly, has to override two strong instincts at the same time: the instinct to pull up on the controls (because the nose is low) and the instinct to add power (because the airplane is sinking).
 
@@ -116,7 +116,8 @@ The FAA acknowledged this in the 2010s by formally changing the recovery guidanc
 
 This node is about the recovery itself, the cues that should trigger it before the airplane stalls (every recovery from an imminent stall is cheaper than recovery from a full break), and the muscle memory that has to win the next time the airplane goes mushy and the stall horn fires.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are at 3,500 AGL practising power-on stalls in a Cessna 172S. You set takeoff configuration (10 degrees of flap), pitch up, and add full power. As the airspeed bleeds toward stall, the airplane buffets, the stall horn sounds, and the left wing drops about 10 degrees. The nose continues to fall through level. The altimeter shows 3,400.
 
@@ -124,7 +125,8 @@ What are your control inputs in the next 2 seconds, and in what order? Be specif
 
 Write your answer before reading on. Then ask yourself: what would change if you were 600 AGL instead of 3,500 AGL? What would change if instead of practising you were on a base-to-final turn?
 
-## Discover
+:::
+:::phase name="discover"
 
 The recovery is dictated by the physics. Work through these in order.
 
@@ -167,14 +169,14 @@ Some POHs add specific items (raise flaps in stages once positive rate of climb 
 
 Pre-stall cues, in roughly the order they appear:
 
-| Cue                          | What it feels like                                                       |
-| ---------------------------- | ------------------------------------------------------------------------ |
-| Mushy controls               | Yoke pressure required is increasing for the same response               |
-| Reduced control authority    | Aileron and rudder feel sluggish; the airplane is slow to respond        |
-| Buffet                       | Tail buffet first in many singles; then airframe and yoke buffeting      |
-| Stall warning horn / light   | Activated by the stall vane on the leading edge; precedes break          |
-| Sink rate increasing         | VSI moving down even with attitude high                                  |
-| Airspeed below 1.3 Vso       | The number that approach speed is built around                           |
+| Cue                        | What it feels like                                                  |
+| -------------------------- | ------------------------------------------------------------------- |
+| Mushy controls             | Yoke pressure required is increasing for the same response          |
+| Reduced control authority  | Aileron and rudder feel sluggish; the airplane is slow to respond   |
+| Buffet                     | Tail buffet first in many singles; then airframe and yoke buffeting |
+| Stall warning horn / light | Activated by the stall vane on the leading edge; precedes break     |
+| Sink rate increasing       | VSI moving down even with attitude high                             |
+| Airspeed below 1.3 Vso     | The number that approach speed is built around                      |
 
 A pilot who recovers at the first cue (mushy controls or buffet) loses 0-10 feet. A pilot who recovers at the stall warning horn loses 30-100 feet. A pilot who recovers at the break loses 200+ feet. A pilot who pulls at the break is in a developing spin.
 
@@ -186,7 +188,8 @@ A pilot who recovers at the first cue (mushy controls or buffet) loses 0-10 feet
 - Pre-stall cues let you recover with negligible altitude loss. Recovery from full break costs hundreds of feet.
 - The FAA shifted from "minimum altitude loss" to "reduce AOA first" because the old wording trained the wrong instinct.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -218,13 +221,13 @@ A pilot who recovers at the first cue (mushy controls or buffet) loses 0-10 feet
 
 ### Imminent vs. full-break
 
-| Stage                  | Cue triggering recovery                       | Typical altitude loss (light single)            |
-| ---------------------- | --------------------------------------------- | ----------------------------------------------- |
-| Mushy controls         | Yoke effort increasing, airframe slow         | 0-20 ft                                         |
-| Stall warning horn     | Audible / visual warning                      | 30-80 ft                                        |
-| Buffet                 | Tail or airframe shake                        | 50-150 ft                                       |
-| Full break, wings level| Nose drops; airframe shudders                 | 100-300 ft                                      |
-| Full break with wing drop | Rapid roll toward dropped wing             | 200-500+ ft, spin risk if uncoordinated         |
+| Stage                     | Cue triggering recovery               | Typical altitude loss (light single)    |
+| ------------------------- | ------------------------------------- | --------------------------------------- |
+| Mushy controls            | Yoke effort increasing, airframe slow | 0-20 ft                                 |
+| Stall warning horn        | Audible / visual warning              | 30-80 ft                                |
+| Buffet                    | Tail or airframe shake                | 50-150 ft                               |
+| Full break, wings level   | Nose drops; airframe shudders         | 100-300 ft                              |
+| Full break with wing drop | Rapid roll toward dropped wing        | 200-500+ ft, spin risk if uncoordinated |
 
 Numbers vary by aircraft, weight, altitude, and pilot. The trend is the point: every step further into the stall costs more altitude and more workload to recover.
 
@@ -250,7 +253,8 @@ In descending order:
 - AFH -- the chapter covering stalls. Read the demonstration profiles for your training stalls so you know what your CFI is asking for.
 - POH Section 5 -- Performance, for stall speed table at various weight, configuration, and bank.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -311,7 +315,8 @@ If pre-stall cues are missed, full break in a 45-degree bank typically dumps the
 
 Total altitude loss in this regime is commonly 200-500 ft. At 700 AGL on a base turn, that is enough to put the airplane into the trees.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -332,7 +337,8 @@ Total altitude loss in this regime is commonly 200-500 ft. At 700 AGL on a base 
 - `proc-engine-failure-after-takeoff` -- the EFATO turnback's signature kill is a skidded stall in the turn back. Stall recovery technique is the muscle memory you wish you had practised.
 - `aero-slow-flight` -- slow flight is sustained operation near stall. The control feel and rudder discipline learned in slow flight train the AOA awareness needed for recovery.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -367,3 +373,5 @@ Evaluation criteria:
 - Plans the next flight to deliberately set up imminent stalls (not full break) so the student can rehearse the new first move at low cost.
 
 The pedagogical move is to recognise that the wrong sequence is more durable than no sequence -- the only fix is to deliberately overwrite it, not to add to it.
+
+:::

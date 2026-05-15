@@ -93,7 +93,7 @@ mastery_criteria: >-
 
 # Attention Management and Situational Awareness
 
-## Context
+:::phase name="context"
 
 A private pilot enters a 45-degree banked steep turn at 3,500 MSL, 100 KIAS. Sixty degrees through the turn, the CFI asks "what's our heading now?" The pilot looks at the heading indicator, then realises they have rolled out to 30 degrees of bank, lost 200 feet, and have no idea where the practice area boundary is.
 
@@ -101,7 +101,8 @@ Nothing about the airplane has failed. The wing is producing lift. The engine is
 
 This is the failure mode the ACS Area V is designed to expose. Steep turns and ground reference maneuvers are not interesting because they are aerodynamically novel. They are interesting because they force the pilot to keep four or five channels open at once: bank angle, altitude, airspeed, ground track, and traffic. A pilot who can only run one channel at a time will fail Area V no matter how clean their stick-and-rudder skills are.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are practising turns around a point at 800 feet AGL with a 15-knot wind from the west. You have rolled in to a 30-degree bank on the upwind side. The CFI tells you, mid-maneuver, that there is a glider tow plane departing the field 1.5 NM north of your position. Their position relative to your turn changes throughout your 360.
 
@@ -109,7 +110,8 @@ What channels are you running right now? Which one is most likely to drop first?
 
 Write your answer before reading on. Then ask: how does your scan change between the upwind side of the turn (where groundspeed is lowest and bank shallowest) and the downwind side (where groundspeed is highest and bank steepest)?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What does "division of attention" actually mean?
 
@@ -210,7 +212,8 @@ Each of these is a flag. The action is to roll wings level, climb if low, exit t
 - The scan in a ground reference maneuver weights the outside picture more heavily.
 - The internal voice clue is the early warning. Listen for it.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -269,7 +272,8 @@ In descending order:
 3. **AC 60-22** -- the canonical ADM advisory circular.
 4. **AC 90-66C** -- non-towered operations (incorporates much of the practical SA guidance for pattern flying).
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -293,7 +297,8 @@ In descending order:
 - `drill:atn-priority-call` -- CFI fires three simultaneous demands. Pilot must verbalise the priority order they will execute in.
 - `drill:atn-scan-call` -- during a steep turn, CFI watches the pilot's eyes. Pilot must demonstrate the rotation continuously for the full 360.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -313,7 +318,8 @@ In descending order:
 - `proc-instrument-cross-check` -- the IFR analog of the VFR scan rotation.
 - `aero-load-factor-and-bank-angle` -- the maneuver that fragments attention is the same maneuver that punishes attention failure aerodynamically.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -343,3 +349,5 @@ Evaluation criteria:
 - The CFI is patient but firm: this is the difference between flying the airplane and flying the airplane in the real world. The checkride examiner will deliberately distract them.
 
 The pedagogical move is to make distraction the practice, not the obstacle. The student who only practices in silence will never be ready for the cockpit they actually fly in.
+
+:::

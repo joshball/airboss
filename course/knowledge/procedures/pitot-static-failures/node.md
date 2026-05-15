@@ -107,7 +107,7 @@ mastery_criteria: >-
 
 # Pitot-Static Failures
 
-## Context
+:::phase name="context"
 
 You depart on an IFR flight in light icing conditions. Pitot heat is on. Twenty minutes into cruise, you notice your airspeed has climbed from a steady 130 KIAS to 145 KIAS over the past minute, despite no change in power and a stable altimeter. The VSI is steady at zero. You scan the AI -- still showing level. You add a hint of forward elevator to slow down; airspeed continues to climb. You retract throttle; airspeed keeps climbing. The airplane is now flying a constant pitch attitude with falling power, and the airspeed is going up.
 
@@ -117,7 +117,8 @@ Pitot-static failures kill in two ways. The minor way is the pilot makes a contr
 
 This node is about understanding the physics so the failure is diagnosable in real time, executing the right response, and never trusting an airspeed reading that disagrees with attitude and power.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are in IMC at 6,000 in a Cessna 172. Outside air temp is -2 C. You have been in cloud for 15 minutes; pitot heat is on, alternate static is closed. You notice your airspeed indicator suddenly drop from 100 KIAS to 60 KIAS over about 3 seconds, with no change in attitude or power. The altimeter and VSI are steady; AI shows wings level and slight nose-up.
 
@@ -125,7 +126,8 @@ What has just happened? What do you do in the next 10 seconds? After diagnosis, 
 
 Write your answer before reading on. Then ask: what would your indications be if it were a static block instead of a pitot block? What if the pitot drain were also blocked?
 
-## Discover
+:::
+:::phase name="discover"
 
 The system has three failure axes (pitot, static, and the redundancy of alternate static). The instruments have predictable behavior under each. Work through it.
 
@@ -198,12 +200,12 @@ This is rare but not unheard of -- a single icing event in cloud can pack ice on
 
 Cross-check is the diagnostic tool:
 
-| Failure                | ASI                               | Altimeter | VSI       |
-| ---------------------- | --------------------------------- | --------- | --------- |
-| Pitot block, drain open| Reads zero                        | Normal    | Normal    |
-| Pitot block, sealed    | Reads like backwards altimeter    | Normal    | Normal    |
-| Static block           | Reads near-normal at level, drifts in climb/descent | Frozen | Frozen |
-| Combined block         | Erratic                           | Frozen    | Frozen    |
+| Failure                 | ASI                                                 | Altimeter | VSI    |
+| ----------------------- | --------------------------------------------------- | --------- | ------ |
+| Pitot block, drain open | Reads zero                                          | Normal    | Normal |
+| Pitot block, sealed     | Reads like backwards altimeter                      | Normal    | Normal |
+| Static block            | Reads near-normal at level, drifts in climb/descent | Frozen    | Frozen |
+| Combined block          | Erratic                                             | Frozen    | Frozen |
 
 Plus the AI is working in all of these (assuming separate vacuum). So the cross-check signature is: AI says you are level, the pressure instruments disagree.
 
@@ -238,7 +240,8 @@ Plus the AI is working in all of these (assuming separate vacuum). So the cross-
 - Cross-check identifies the failure; AI working is the safety anchor.
 - Preflight (pitot cover, ports clear, pitot heat ground-test) prevents most cases. The accident database is overwhelmingly preventable causes.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -246,12 +249,12 @@ Plus the AI is working in all of these (assuming separate vacuum). So the cross-
 
 ### Failure signature table
 
-| Failure                       | ASI behavior                                            | Altimeter | VSI       | First action                                   |
-| ----------------------------- | ------------------------------------------------------- | --------- | --------- | ---------------------------------------------- |
-| Pitot ram blocked, drain open | Bleeds to zero over seconds                             | Normal    | Normal    | Pitot heat ON; fly pitch+power                 |
-| Pitot ram blocked, drain blocked | Tracks altitude (rises in climb, falls in descent) | Normal    | Normal    | Pitot heat ON; fly pitch+power; ignore ASI     |
-| Static blocked                | Roughly normal level; drifts in climb/descent           | Frozen    | Frozen    | Alternate static ON; apply POH correction      |
-| Combined pitot + static blocked | Erratic                                              | Frozen    | Frozen    | Pitch+power flying; declare; nearest airport   |
+| Failure                          | ASI behavior                                       | Altimeter | VSI    | First action                                 |
+| -------------------------------- | -------------------------------------------------- | --------- | ------ | -------------------------------------------- |
+| Pitot ram blocked, drain open    | Bleeds to zero over seconds                        | Normal    | Normal | Pitot heat ON; fly pitch+power               |
+| Pitot ram blocked, drain blocked | Tracks altitude (rises in climb, falls in descent) | Normal    | Normal | Pitot heat ON; fly pitch+power; ignore ASI   |
+| Static blocked                   | Roughly normal level; drifts in climb/descent      | Frozen    | Frozen | Alternate static ON; apply POH correction    |
+| Combined pitot + static blocked  | Erratic                                            | Frozen    | Frozen | Pitch+power flying; declare; nearest airport |
 
 ### The Birgenair / AeroPeru pattern
 
@@ -297,7 +300,8 @@ In descending order:
 - POH Section 7 -- description of the pitot-static system: where the pitot is, where the static ports are, what is heated, what is not.
 - AFM supplement for any aftermarket avionics or AI installation that may add backup data.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -354,7 +358,8 @@ If ATC clears you to maintain 6,000:
 
 POH numbers vary by airplane; these are illustrative.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -375,7 +380,8 @@ POH numbers vary by airplane; these are illustrative.
 - `proc-stall-recovery` -- if the lying ASI fooled you into a slow-flight stall.
 - `wx-icing-types-and-avoidance` -- the most common cause in IFR flight.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -412,3 +418,5 @@ Evaluation criteria:
 - Avoids dramatising; the failure mode is well-known, the recovery is well-defined, and the pilot is teachable.
 
 The pedagogical move is to convert a near-miss into a teachable moment without either glamorising "I just kept flying" or overcorrecting into "you should have done X immediately." The pilot's first action (don't chase the ASI) was correct; the second action (continue without notifying or diverting) was not.
+
+:::

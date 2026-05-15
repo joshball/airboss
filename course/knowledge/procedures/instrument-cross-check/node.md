@@ -103,7 +103,7 @@ mastery_criteria: >-
 
 # Instrument Cross-Check (Scan)
 
-## Context
+:::phase name="context"
 
 The scan is the entire skill of instrument flight. Approach plates, hold entries, ATC clearances -- all of it sits on top of the scan. If the scan does not work, nothing else matters. The airplane drifts off altitude, off heading, into an unusual attitude, into a stall, into terrain. Pilots in IMC die because the scan broke down, not because they did not know the procedure.
 
@@ -113,7 +113,8 @@ The textbook framing -- selective radial scan, primary and supporting instrument
 
 This node is the foundation under partial-panel, unusual-attitude recovery, and spatial-disorientation prevention. None of those work without a functioning scan.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are hand-flying ILS to runway 17R, three miles from the FAF, established on the localiser, glideslope alive but not yet centered, gear and approach flaps down. ATC calls: "Cessna 12345, contact tower 118.7 at the marker. Maintain 110 knots until five-mile final." You acknowledge.
 
@@ -123,7 +124,8 @@ What broke about your scan during those 15 seconds? What do you do in the next 5
 
 Write your answer before reading on. Then ask: what would you do differently next time you anticipate a frequency change at a busy point in the approach?
 
-## Discover
+:::
+:::phase name="discover"
 
 The scan rests on three ideas: what to look at, in what order, and how to know when it is broken. Work through each.
 
@@ -159,12 +161,12 @@ Crucially, you are not staring at any one instrument. The eye lands, samples, mo
 
 A different framing for the same problem: per maneuver, identify which instrument is the primary reference for each axis of control (pitch, bank, power) and which are supporting. Examples for a typical maneuver:
 
-| Maneuver         | Primary pitch | Primary bank | Primary power | Supporting                                |
-| ---------------- | ------------- | ------------ | ------------- | ----------------------------------------- |
-| Straight-level   | Altimeter     | DG           | Airspeed      | AI, VSI, TC, MP / RPM                     |
-| Constant-airspeed climb | Airspeed | DG          | MP / RPM      | AI, VSI, altimeter (trend)                |
-| Constant-rate descent | VSI       | DG          | MP / RPM      | AI, airspeed, altimeter                   |
-| Standard-rate turn | Altimeter   | TC           | Airspeed      | AI, DG, compass                           |
+| Maneuver                | Primary pitch | Primary bank | Primary power | Supporting                 |
+| ----------------------- | ------------- | ------------ | ------------- | -------------------------- |
+| Straight-level          | Altimeter     | DG           | Airspeed      | AI, VSI, TC, MP / RPM      |
+| Constant-airspeed climb | Airspeed      | DG           | MP / RPM      | AI, VSI, altimeter (trend) |
+| Constant-rate descent   | VSI           | DG           | MP / RPM      | AI, airspeed, altimeter    |
+| Standard-rate turn      | Altimeter     | TC           | Airspeed      | AI, DG, compass            |
 
 In practice, primary instruments are the ones you look at most often. Supporting instruments confirm the trend. The AI is always present (because it is the centerpiece for the radial scan); it just plays a supporting role for any specific axis.
 
@@ -174,11 +176,11 @@ The two framings are complementary, not competing. Selective radial scan tells y
 
 Three classic failure modes (FAA literature; AOPA materials):
 
-| Failure   | What happens                                                | Symptom in flight                                                  |
-| --------- | ----------------------------------------------------------- | ------------------------------------------------------------------ |
-| Fixation  | Eye locks onto one instrument; rest of panel goes ignored  | Altitude bleeds while pilot stares at localiser; or vice versa     |
-| Omission  | Instrument never gets sampled in a cycle                   | Drift or trend goes unnoticed for 30-60 seconds                    |
-| Emphasis  | One instrument is over-weighted; trend confirmation skipped| Pilot chases AI bank changes that VSI and altimeter do not confirm |
+| Failure  | What happens                                                | Symptom in flight                                                  |
+| -------- | ----------------------------------------------------------- | ------------------------------------------------------------------ |
+| Fixation | Eye locks onto one instrument; rest of panel goes ignored   | Altitude bleeds while pilot stares at localiser; or vice versa     |
+| Omission | Instrument never gets sampled in a cycle                    | Drift or trend goes unnoticed for 30-60 seconds                    |
+| Emphasis | One instrument is over-weighted; trend confirmation skipped | Pilot chases AI bank changes that VSI and altimeter do not confirm |
 
 All three are caused by attention overload. The fix is not "scan harder" -- the brain cannot scan harder under load. The fix is to reduce load (autopilot on, ATC vectors instead of own-nav, slow the airplane down, ask for a hold so you can think) and to use trim aggressively so the airplane does not need micro-corrections during the scan failure window.
 
@@ -200,7 +202,8 @@ The verbalisation is the trick. You are forcing yourself to commit a trend to me
 - Scan errors come from attention overload. The fix is load reduction (trim, autopilot, ATC offload), not effort.
 - High workload demands explicit pre/post sampling with verbalisation; trust your scan less when the brain is busy elsewhere.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -220,25 +223,25 @@ Approximate, not literal. The point is the AI is the recurring node. Each cycle 
 
 ### Primary / supporting per maneuver
 
-| Maneuver               | Pitch primary       | Bank primary | Power primary |
-| ---------------------- | ------------------- | ------------ | ------------- |
-| Straight-level         | Altimeter           | DG           | Airspeed      |
-| Climb (Vy)             | Airspeed            | DG           | MP / RPM      |
-| Climb (rate)           | VSI                 | DG           | MP / RPM      |
-| Cruise descent         | VSI                 | DG           | Airspeed      |
-| Approach descent       | Glideslope (or VSI) | Localiser    | Airspeed      |
-| Standard-rate turn     | Altimeter           | TC           | Airspeed      |
-| Steep turn (50+ bank)  | Altimeter           | AI           | Airspeed      |
+| Maneuver              | Pitch primary       | Bank primary | Power primary |
+| --------------------- | ------------------- | ------------ | ------------- |
+| Straight-level        | Altimeter           | DG           | Airspeed      |
+| Climb (Vy)            | Airspeed            | DG           | MP / RPM      |
+| Climb (rate)          | VSI                 | DG           | MP / RPM      |
+| Cruise descent        | VSI                 | DG           | Airspeed      |
+| Approach descent      | Glideslope (or VSI) | Localiser    | Airspeed      |
+| Standard-rate turn    | Altimeter           | TC           | Airspeed      |
+| Steep turn (50+ bank) | Altimeter           | AI           | Airspeed      |
 
 The pattern: in any maneuver, identify what controls each axis (pitch, bank, power), and what number you are trying to hold or change on each axis. The number defines the primary instrument.
 
 ### The three scan errors and their fixes
 
-| Error    | Recognition                                       | Fix                                                                |
-| -------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| Fixation | One instrument worth a 5-second stare             | Force the eye away; trim, then verbalise current state             |
-| Omission | An instrument has not been sampled in 30+ sec     | Slow the workload; reduce inputs; engage AP if available           |
-| Emphasis | Acting on AI alone without confirming with rate   | Add a half-second on VSI / altimeter as confirmation               |
+| Error    | Recognition                                     | Fix                                                      |
+| -------- | ----------------------------------------------- | -------------------------------------------------------- |
+| Fixation | One instrument worth a 5-second stare           | Force the eye away; trim, then verbalise current state   |
+| Omission | An instrument has not been sampled in 30+ sec   | Slow the workload; reduce inputs; engage AP if available |
+| Emphasis | Acting on AI alone without confirming with rate | Add a half-second on VSI / altimeter as confirmation     |
 
 ### What a working scan produces
 
@@ -264,7 +267,8 @@ In descending order:
 - ACS task IV elements -- the candidate must hold tolerances. The tolerance is also the operational standard.
 - AC 61-27 (archived) for the historical depth on scan development; not authoritative today but contextually rich.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -308,7 +312,8 @@ If a clearance amendment takes 10 seconds head-down and the airplane drifts 30 f
 
 If the airplane drifts more than 100 feet during the head-down moment, the trim was not adequate or the amendment took too long. Recovery is harder than prevention.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -328,7 +333,8 @@ If the airplane drifts more than 100 feet during the head-down moment, the trim 
 - `proc-pitot-static-failures` -- many failures show up first as a scan inconsistency.
 - `proc-stall-recovery` -- low-airspeed scan must include a check for the imminent stall before the airplane is in it.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -364,3 +370,5 @@ Evaluation criteria:
 - The CFII does not chastise; the trap is universal and known. The lesson is calibration, not effort.
 
 The pedagogical move is to read scan from control inputs alone -- the candidate's eye behavior is invisible from the right seat, but the airplane's behavior reveals what got under-sampled.
+
+:::

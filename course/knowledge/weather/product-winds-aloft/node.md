@@ -67,7 +67,7 @@ twist on each stage:
   often the same thing), and at which altitude does the temperature
   column put you below freezing. The other rows are confirmation.
 
-## Context
+:::phase name="context"
 
 You're flying KMRY -> KSAC with a 220-degree course at 5,500 ft. The
 winds-aloft forecast for the nearest reporting station says: 6,000 ft
@@ -77,7 +77,8 @@ ground speed is going to be ~140 KT, your fuel burn drops, your ETA
 shifts left. Now do the same flight at 9,000 ft where the wind is
 2860+05 -- different decision.
 
-## Problem
+:::
+:::phase name="problem"
 
 Wind aloft drives ground speed, fuel burn, ETA, and en route weather
 exposure. The FB encodes the forecast in a compact format that, once
@@ -86,7 +87,8 @@ encoding has two traps: the >100 KT convention and the inverted-temp
 convention. Both bite on checkrides and in real flight planning if not
 internalized.
 
-## Discover
+:::
+:::phase name="discover"
 
 Decode this FB entry for the 30,000 ft level: `731960`. Six digits.
 First three are direction + speed; last two (or three) are temperature.
@@ -104,7 +106,8 @@ Why the conventions? Because the original FB was teletype-format with
 strict 6-character columns. The encoding choices were teletype-era
 compromises that survived. The rules are arbitrary; the format is not.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Decoding rules in full:
 
@@ -125,7 +128,8 @@ Forecast altitudes vary by region: 3,000, 6,000, 9,000, 12,000,
 18,000, 24,000, 30,000, 34,000, 39,000 ft for CONUS. Issued twice
 daily (FB1 / FB2) with valid times across 6, 12, and 24 hour blocks.
 
-## Practice
+:::
+:::phase name="practice"
 
 Decode this FB for KOAK at the time of your 1500Z departure to KSEA:
 
@@ -372,7 +376,8 @@ serious tailwind problem.
       cite: AIM 7-1 -- National Weather Service Aviation Products
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 The FB feeds the navigation log: every leg's ground speed and ETE
 depends on the forecast wind at the planned altitude. It also feeds
@@ -381,10 +386,13 @@ strong enough to push you below the legal reserve, you reroute or
 refuel. The K2 element calls out the FB; this node is its decode
 discipline.
 
-## Verify
+:::
+:::phase name="verify"
 
 Decode an FB for a route you'd actually fly tomorrow at three
 candidate altitudes. Compute ground speed at each. Pick the altitude
 that optimizes ground speed within the airplane's performance and the
 day's icing / turbulence picture. If you do this for every flight, the
 encoding becomes muscle memory.
+
+:::

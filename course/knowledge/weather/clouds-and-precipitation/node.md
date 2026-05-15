@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Clouds, Temperature/Moisture, and Precipitation
 
-## Context
+:::phase name="context"
 
 You taxi out at 0700Z on a humid morning. The METAR reports temperature
 20C, dew point 18C, sky clear. By the time you reach the runway,
@@ -59,7 +59,8 @@ synoptic picture: the sun heated the surface 1 degree, a parcel rose,
 hit the LCL, and turned into cloud. The temperature/moisture state of
 the column always determined where the cloud base would be.
 
-## Problem
+:::
+:::phase name="problem"
 
 Clouds are visible water -- the optical signature of the atmospheric
 moisture state crossing condensation. Reading them correctly requires
@@ -68,7 +69,8 @@ visible water heavy enough to fall. Both are direct consequences of
 the temperature / dew point relationship and the lifting mechanism in
 play.
 
-## Discover
+:::
+:::phase name="discover"
 
 Start with a basic equation: a parcel of air rising adiabatically cools
 at ~3C / 1,000 ft (dry rate) until it reaches saturation -- when its
@@ -103,7 +105,8 @@ The morphology is diagnostic. Stratus says stable air; cumulus says
 unstable; towering cumulus says strongly unstable; cumulonimbus says
 the unstable column has reached the tropopause.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Precipitation type follows from cloud type and the temperature
 profile under it:
@@ -130,7 +133,8 @@ typically drops vis to 4-6 SM; moderate rain to 2-3 SM; heavy rain
 to under 1 SM. Snow drops vis faster: light snow can already be
 1-2 SM, moderate snow under 1 SM, heavy snow near zero.
 
-## Practice
+:::
+:::phase name="practice"
 
 For your next flight, predict cloud base from the surface
 temperature/dew point spread, then check actual against METAR or
@@ -367,7 +371,8 @@ to brief.
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node is the parent of K3i (icing -- which is "freezing
 precipitation in cloud") and K3h (thunderstorms -- "convective
@@ -375,10 +380,13 @@ clouds with vertical development to the tropopause"). The stability
 node feeds it; the airmasses-and-fronts node provides the lifting
 mechanisms that drive cloud formation.
 
-## Verify
+:::
+:::phase name="verify"
 
 Pick a METAR with sky condition and precipitation. Without seeing the
 sky, describe the cloud type that produced the reported precipitation
 form. Then describe the parent stability state. The chain METAR ->
 clouds -> stability is the inverse of the brief-then-fly direction
 and tests the same understanding.
+
+:::

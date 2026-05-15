@@ -226,54 +226,75 @@ function splitFrontmatter(text: string): { yaml: string; body: string } | null {
 }
 
 /**
- * Scan the markdown body for `## PhaseLabel` headings and collect the body
- * text under each. Unknown H2 headings are a parse error (caught upstream by
- * validation). Title-only H1 at the top is tolerated; everything between H1
- * and the first H2 is discarded.
+ * Scan the markdown body for `:::phase name="..."` directive blocks and
+ * collect the body text inside each. Unknown phase names are surfaced
+ * via `unknownHeadings` (the build script's validation pass rejects
+ * them); duplicate canonical-phase blocks are surfaced via `duplicates`.
+ *
+ * Why this scanner stays in the build script rather than calling
+ * `splitContentPhases` from `@ab/bc-study`: the BC splitter silently
+ * drops unknown phase names (runtime is forgiving), and the build
+ * wants strict validation. Title-only H1 / arbitrary prose outside a
+ * `:::phase` wrapper is tolerated and discarded.
+ *
+ * Lines inside a phase wrapper are captured verbatim; nested
+ * directives (e.g. `:::cards`) match the bare `:::` closer pattern,
+ * so we count nesting depth to find the matching outer closer.
  */
 function splitPhases(body: string): { phases: Map<string, string>; unknownHeadings: string[]; duplicates: string[] } {
-	const phaseByLabel = new Map<string, string>();
-	for (const phase of KNOWLEDGE_PHASE_ORDER) {
-		phaseByLabel.set(KNOWLEDGE_PHASE_LABELS[phase].toLowerCase(), phase);
-	}
+	const canonicalPhaseNames = new Set<string>(KNOWLEDGE_PHASE_ORDER);
 
 	const phases = new Map<string, string>();
 	const unknownHeadings: string[] = [];
 	const duplicates: string[] = [];
 
-	let currentPhase: string | null = null;
-	const accum: string[] = [];
-	const flush = () => {
-		if (currentPhase !== null) {
-			const text = accum.join('\n').trim();
-			if (text.length > 0) {
-				if (phases.has(currentPhase)) {
-					duplicates.push(currentPhase);
-				} else {
-					phases.set(currentPhase, text);
-				}
-			}
-			accum.length = 0;
-		}
-	};
+	const lines = body.split(/\r?\n/);
+	const phaseOpenerRe = /^:::phase\s+name="([^"]+)"(?:\s|$)/;
+	const closerRe = /^:::\s*$/;
+	const anyOpenerRe = /^:::\s*[a-z][a-z-]*/i;
 
-	for (const rawLine of body.split(/\r?\n/)) {
-		const h2Match = rawLine.match(/^##\s+(.+?)\s*$/);
-		if (h2Match) {
-			flush();
-			const label = h2Match[1].trim().toLowerCase();
-			const phase = phaseByLabel.get(label);
-			if (phase) {
-				currentPhase = phase;
-			} else {
-				currentPhase = null;
-				unknownHeadings.push(h2Match[1].trim());
-			}
+	let i = 0;
+	while (i < lines.length) {
+		const line = lines[i] ?? '';
+		const openMatch = phaseOpenerRe.exec(line);
+		if (!openMatch) {
+			i += 1;
 			continue;
 		}
-		if (currentPhase !== null) accum.push(rawLine);
+		const phaseName = openMatch[1];
+		const bodyLines: string[] = [];
+		let depth = 1;
+		i += 1;
+		while (i < lines.length && depth > 0) {
+			const cur = lines[i] ?? '';
+			if (closerRe.test(cur)) {
+				depth -= 1;
+				if (depth === 0) {
+					i += 1;
+					break;
+				}
+				bodyLines.push(cur);
+				i += 1;
+				continue;
+			}
+			if (anyOpenerRe.test(cur) && !/^:::\s*end\b/i.test(cur)) {
+				depth += 1;
+			}
+			bodyLines.push(cur);
+			i += 1;
+		}
+		const text = bodyLines.join('\n').trim();
+		if (!canonicalPhaseNames.has(phaseName)) {
+			unknownHeadings.push(phaseName);
+			continue;
+		}
+		if (text.length === 0) continue;
+		if (phases.has(phaseName)) {
+			duplicates.push(phaseName);
+		} else {
+			phases.set(phaseName, text);
+		}
 	}
-	flush();
 	return { phases, unknownHeadings, duplicates };
 }
 

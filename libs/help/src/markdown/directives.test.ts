@@ -107,6 +107,76 @@ describe('block parser -- :::cards directive', () => {
 	});
 });
 
+describe('block parser -- :::phase directive', () => {
+	it('parses a canonical-phase directive and exposes both body and children', () => {
+		const src = [':::phase name="context"', 'Some prose.', '', '- list item', ':::'].join('\n');
+		const ast = parseBlocks(src);
+		expect(ast).toHaveLength(1);
+		const node = firstDirective(ast);
+		expect(node.name).toBe('phase');
+		expect(node.attrs.name).toBe('context');
+		expect(node.body).toContain('Some prose.');
+		expect(node.body).toContain('- list item');
+		expect(node.children).toBeDefined();
+		// The children AST has the prose paragraph and the list as
+		// nested nodes (parser produced a real AST, not raw text).
+		expect((node.children ?? []).some((c) => c.kind === 'paragraph')).toBe(true);
+		expect((node.children ?? []).some((c) => c.kind === 'list')).toBe(true);
+	});
+
+	it('accepts every canonical phase name', () => {
+		for (const name of ['context', 'problem', 'discover', 'reveal', 'practice', 'connect', 'verify']) {
+			const ast = parseBlocks(`:::phase name="${name}"\nbody.\n:::`);
+			const node = firstDirective(ast);
+			expect(node.attrs.name).toBe(name);
+		}
+	});
+
+	it('rejects an unknown phase name', () => {
+		expect(() => parseBlocks(':::phase name="bogus"\nbody.\n:::')).toThrow(/not one of:/);
+	});
+
+	it('rejects a phase missing its name attribute', () => {
+		expect(() => parseBlocks(':::phase\nbody.\n:::')).toThrow(/missing required attribute 'name'/);
+	});
+
+	it('rejects H1 inside a phase body', () => {
+		const src = [':::phase name="context"', '# Disallowed top heading', '', 'Some prose.', ':::'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/contains disallowed heading/);
+	});
+
+	it('rejects H2 inside a phase body (the splitter previously used H2 to mark phase boundaries)', () => {
+		const src = [':::phase name="context"', '## Sub-section', '', 'Some prose.', ':::'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/contains disallowed heading/);
+	});
+
+	it('accepts H3+ headings inside a phase body', () => {
+		const src = [
+			':::phase name="reveal"',
+			'### Worked example',
+			'',
+			'Body prose.',
+			'',
+			'#### Detail',
+			'',
+			'More.',
+			':::',
+		].join('\n');
+		expect(() => parseBlocks(src)).not.toThrow();
+	});
+
+	it('reports the absolute line number of a disallowed heading', () => {
+		const src = ['', ':::phase name="context"', 'first body line', '## bad heading', ':::'].join('\n');
+		// line 4 in the input (1-based)
+		expect(() => parseBlocks(src)).toThrow(/line 4/);
+	});
+
+	it('rejects an unclosed phase directive', () => {
+		const src = [':::phase name="context"', 'body line', ''].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/Unclosed directive/);
+	});
+});
+
 describe('block parser -- :::scenario directive', () => {
 	it('parses a registered scenario slug', () => {
 		const ast = parseBlocks(':::scenario slug="frontal-xc-march"\n:::');

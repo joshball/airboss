@@ -52,30 +52,38 @@ mastery_criteria: >
 
 # Lesson Planning
 
-## Context
+:::phase name="context"
 
 <!-- Skeleton. -->
 
-## Problem
+:::
+:::phase name="problem"
 
 <!-- Skeleton. -->
 
-## Discover
+:::
+:::phase name="discover"
 
 <!-- Skeleton. -->
 
-## Reveal
+:::
+:::phase name="reveal"
 
 <!-- Skeleton. -->
 
-## Practice
+:::
+:::phase name="practice"
 
 <!-- Skeleton. -->
 
-## Connect
+:::
+:::phase name="connect"
 
 <!-- Skeleton. -->
 
-## Verify
+:::
+:::phase name="verify"
 
 <!-- Skeleton. -->
+
+:::

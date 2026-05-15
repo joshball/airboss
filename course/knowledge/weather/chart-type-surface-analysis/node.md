@@ -54,17 +54,19 @@ mastery_criteria: >
 
 This node is about the **reading skill** -- the mechanics of decoding what's drawn on a surface analysis chart and converting it into a flight-relevant picture. For the role of the surface analysis in the broader product family (alongside the CVA, prog charts, and the briefing workflow), see [wx-product-surface-analysis-and-cva](../product-surface-analysis-and-cva/node.md).
 
-## Context
+:::phase name="context"
 
 You open today's briefing and the first thing on the screen is a surface analysis chart. Black isobars curling around a closed `L` over the Great Lakes, blue triangles marching east across Iowa, station-model circles scattered along the coasts with their tiny wind barbs and temperatures. Two pilots look at the same chart. One sees clutter and clicks past it to the METAR strip. The other reads the chart for ninety seconds and walks away with a sentence: "low pressure deepening over Michigan, cold front sweeping through tonight, tight gradient on the back side -- expect strong gusty northwest winds tomorrow at the destination." Same image, two completely different briefings. The difference is whether the pilot has the reading skill.
 
-## Problem
+:::
+:::phase name="problem"
 
 A surface analysis chart compresses the state of the lower atmosphere across a whole continent into one image. Pressure centers, frontal boundaries, isobars, dozens of station observations. Read it well and it is the fastest way to build the synoptic picture for a flight. Read it poorly and it is impossible to know what to do with -- so most low-time pilots skip it, brief from METARs and TAFs alone, and miss the structural reason the weather is doing what it is doing.
 
 The chart is dense by design. The skill is knowing which marks to look at first and what each one is telling you.
 
-## Discover
+:::
+:::phase name="discover"
 
 Look at a current surface analysis. Before you read anything, ask: what are the four kinds of marks on this chart?
 
@@ -82,7 +84,8 @@ Pick a frontal symbol. Look at the symbols on each side. Cold front: behind the 
 
 Pick the isobar spacing along your planned route. Mentally measure: are isobars one or two route-widths apart, or are they crammed together? Crammed = expect 25 kt+ surface winds along that segment. Spread out = light and variable.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The chart's authoritative spec lives in **AC 00-45H, Aviation Weather Services** -- the Surface Analysis Chart section defines the symbol set, isobar interval, station model layout, and the 3-hourly issue schedule. **FAA-H-8083-28B Chapter 25 (Analysis)** is the modern handbook treatment; it walks through chart production at the Weather Prediction Center and introduces the Unified Surface Analysis (the WPC product extended to the full continental and oceanic domain). **AIM 7-1** lists the surface analysis among the operational National Weather Service Aviation Products consumed during preflight briefing.
 
@@ -100,7 +103,8 @@ The chart is **hand-drawn by a human meteorologist** -- it is *analyzed*, not co
 | Station model        | Circle + wind barb + temp / dewpoint / pressure / sky / wx | Miniature METAR; reads exactly the same fields.                        |
 | Update cadence       | Every 3 hours (00, 03, 06, 09, 12, 15, 18, 21Z)            | Match the chart's issue time against the time you expect to be flying. |
 
-## Practice
+:::
+:::phase name="practice"
 
 Pull up the **current surface analysis** on aviationweather.gov. Without reading any METARs first, do the following three drills in order:
 
@@ -355,12 +359,16 @@ A useful self-test: cover the METAR strip. Predict the surface wind and rough sk
       cite: AC 00-6B Aviation Weather, Surface Analysis section
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node sits below [wx-product-surface-analysis-and-cva](../product-surface-analysis-and-cva/node.md), which covers the chart's role in the briefing workflow (paired with the CVA, the prog chart, and the rest of the family). It requires [wx-airmasses-and-fronts](../airmasses-and-fronts/node.md) -- you cannot triage frontal symbols on a chart if you don't know what each front type does to the weather. It is applied by every cross-country planning node ([plan-vfr-cross-country](../../flight-planning/vfr-cross-country/node.md)) and the [wx-go-nogo-decision](../go-nogo-decision/node.md), because the surface analysis is where the synoptic frame is built and the synoptic frame drives the decision.
 
 The deeper progression: once the chart-reading is automatic, the next layer is **time integration** -- comparing the current surface analysis against the 12-hour and 24-hour prog charts and seeing the system propagate. That is where the chart stops being a snapshot and starts being a forecast you build in your head. The prog charts and GFA layers ([wx-product-gfa](../product-gfa/node.md)) carry that forward.
 
-## Verify
+:::
+:::phase name="verify"
 
 Pick a real cross-country flight (yours, or one you find in an example briefing). Pull the surface analysis for the planned departure time and the prog chart for the ETA. Without reading any METAR or TAF, write a one-paragraph weather story: where the pressure centers are at departure, where the fronts are, which way the gradient is oriented along the route, what shifts between departure and arrival. Then read the METARs and TAFs in order along the route and check. If the chart-derived story matches the point observations and forecasts within reason, the reading skill is calibrated. If not, look at which step broke: did you miss the front, mis-call the gradient, or mis-read a station model? Fix the specific decoding gap and run the drill again next briefing.
+
+:::

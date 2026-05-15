@@ -125,7 +125,7 @@ mastery_criteria: >-
 
 # Engine Failure After Takeoff
 
-## Context
+:::phase name="context"
 
 Two hundred feet AGL. The runway is behind you. The stall warning is off, the airspeed is climbing through 70, the nose is up, the cowling is pointed at sky. Then the noise changes. Maybe the engine coughs. Maybe it goes quiet. Maybe it is still turning but the airplane is not climbing anymore and the VSI is bleeding through zero.
 
@@ -135,7 +135,8 @@ The instinct is overwhelming. The runway is right there, behind you, paved and f
 
 This node is about why it kills, when the turnback is actually defensible (rarely), and what the default response should be (almost always: land ahead, wings level, best glide). It is a reg-absent topic. No CFR tells you what to do. The answer comes from physics, POH procedures, safety research, and the accumulated pattern-recognition of thirty years of accident data.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are departing runway 27 in a Cessna 172, standard day, no wind. Rotation at 55 KIAS, Vy 74. At 200 feet AGL, roughly 2,000 feet of runway behind you, the engine loses power. You still have some noise but the airplane is clearly not going to climb. Ahead of you, within the next 3,000 feet of ground track, are low trees and then a housing development. The runway you just left is behind you and a gentle turn would put you back toward it.
 
@@ -149,7 +150,8 @@ Write your answer before you read on. Pick one of:
 
 Then note why you picked it. Then read the Discover phase. Your job in Discover is not to find out if you were right; it is to find out how much you can actually know about the answer from physics alone, before anybody tells you the rule.
 
-## Discover
+:::
+:::phase name="discover"
 
 Work through these questions in order. Do the math roughly; back-of-envelope is the point. The goal is to arrive at the answer yourself.
 
@@ -234,7 +236,8 @@ Look at the approach end obstacles for every runway you take off from. If you ca
 - The killer in the turnback is not the geometry; it is the stall in the bank, induced by startle, pull, and a pilot whose eyes are on the runway instead of the airspeed indicator.
 - You cannot rule-follow your way to safety here. You reason, you pre-brief, you know your airplane, or you land ahead.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 There is no single regulation. That is the point of this node. The canonical answer is synthesized from POH, FAA guidance, safety research, and physics.
 
@@ -251,13 +254,13 @@ There is no single regulation. That is the point of this node. The canonical ans
 
 ### The physics summary
 
-| Effect                          | Magnitude at 45 deg bank | Implication                                                                     |
-| ------------------------------- | ------------------------ | ------------------------------------------------------------------------------- |
-| Load factor                     | 1.414 G                  | Pilot feels heavier; airplane's effective weight is higher                      |
-| Stall speed multiplier          | ~1.19x                   | A clean stall at 48 KIAS becomes ~57 KIAS in the turn                           |
-| Turn rate at 68 KIAS TAS        | ~16 deg/sec              | 180-degree turn takes ~11 seconds in the turn itself                            |
-| Altitude loss in the turn only  | ~120 feet                | Not counting startle, pitch-down, rollout, glide to runway, offset correction   |
-| Realistic total loss            | 400-1000+ feet AGL       | Depends on aircraft, pilot, delay, conditions. TODO(verify) narrow this range.  |
+| Effect                         | Magnitude at 45 deg bank | Implication                                                                    |
+| ------------------------------ | ------------------------ | ------------------------------------------------------------------------------ |
+| Load factor                    | 1.414 G                  | Pilot feels heavier; airplane's effective weight is higher                     |
+| Stall speed multiplier         | ~1.19x                   | A clean stall at 48 KIAS becomes ~57 KIAS in the turn                          |
+| Turn rate at 68 KIAS TAS       | ~16 deg/sec              | 180-degree turn takes ~11 seconds in the turn itself                           |
+| Altitude loss in the turn only | ~120 feet                | Not counting startle, pitch-down, rollout, glide to runway, offset correction  |
+| Realistic total loss           | 400-1000+ feet AGL       | Depends on aircraft, pilot, delay, conditions. TODO(verify) narrow this range. |
 
 ### POH guidance (generic, not aircraft-specific)
 
@@ -304,7 +307,8 @@ In descending order of weight for your specific decision today:
 
 If their answer is vague or enthusiastic without numbers, trust the default: land ahead.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -393,7 +397,8 @@ Vs_turn(bank) = Vs * sqrt(1 / cos(bank))
 
 Note: at 60 degrees of bank, the C172's clean level stall speed equals best-glide. If the pilot is gliding at best glide and rolls to 60 degrees of bank to tighten the turn back to the runway, they are on the stall.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -416,7 +421,8 @@ Note: at 60 degrees of bank, the C172's clean level stall speed equals best-glid
 - `teach-common-student-errors-stalls` -- the CFI-side of this node; the stall-in-a-turn is the pattern that connects student training failures to the EFATO graveyard.
 - `teach-evaluating-student-judgment` -- how a CFI tests whether a student's turnback reasoning is real or performative.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -457,3 +463,5 @@ Example of the debrief question (not the only right answer):
 > "You just flew a turnback from 600 AGL in a 172 at roughly 1,800 pounds, into a 5-kt headwind, fully briefed, expecting the failure. What altitude would you want to be at to fly that same maneuver at 2,300 pounds, 6,500 feet density altitude, at the end of a long cross-country when you are tired, with a passenger on board, and no warning? Let's go measure it together next flight."
 
 That move -- turning the anecdote into a measurement -- is the pedagogical point of the whole node at CFI level.
+
+:::

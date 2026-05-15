@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Air Masses and Fronts
 
-## Context
+:::phase name="context"
 
 You're looking at a surface analysis chart with a cold front draped
 across your planned route, expected to pass through your destination
@@ -60,7 +60,8 @@ clears beautifully behind. A late-winter Arctic cold front produces a
 day of low ceilings, snow showers, and blowing dust. Same chart symbol,
 totally different decision.
 
-## Problem
+:::
+:::phase name="problem"
 
 Synoptic-scale weather patterns are the framework underneath every
 local product. Air masses set the character of the air; fronts are
@@ -68,7 +69,8 @@ where those characters fight. Knowing which front type is approaching,
 what airmass is replacing what, and what sequence of weather to expect
 turns a chart into a story you can plan against.
 
-## Discover
+:::
+:::phase name="discover"
 
 Air masses get their character from their source region:
 
@@ -104,7 +106,8 @@ each with a distinct symbol and weather signature:
   airmasses; weather on both sides, slow to clear. Often the seed of
   a developing low.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Cold-front pre/post weather table:
 
@@ -126,7 +129,8 @@ Cold-front weather is intense and brief. Warm-front weather is mild
 but extensive. The IFR approach in warm-frontal stratus may be
 flyable; the VFR approach through a cold-front squall line is not.
 
-## Practice
+:::
+:::phase name="practice"
 
 Find a current surface analysis with at least one front. For each
 front: identify the type, the airmasses on either side, the direction
@@ -365,7 +369,8 @@ above.
       cite: FAA-H-8083-25 Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node parents almost every weather-route decision. The clouds and
 precipitation node tells you what specifically forms; this node tells
@@ -373,7 +378,8 @@ you why and where. The convective-outlook and thunderstorm nodes
 inherit the frontal trigger mechanism. The surface-analysis node is
 the visual diagnostic.
 
-## Verify
+:::
+:::phase name="verify"
 
 Watch a frontal passage on a real surface analysis sequence (the
 3-hourly archive on aviationweather.gov). Track how the front moved,
@@ -381,3 +387,5 @@ how the METARs along its path responded, and whether the textbook
 sequence (above) actually played out. Real frontal passages don't
 always match the schematic; the calibration of "how much is the
 textbook reliable" comes from watching real ones.
+
+:::

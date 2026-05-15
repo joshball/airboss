@@ -88,7 +88,7 @@ mastery_criteria: >-
 
 # Alternate Static Source
 
-## Context
+:::phase name="context"
 
 The static port is a small hole on the side of the fuselage that lets the airplane's instruments sample atmospheric pressure at altitude. It is also a target. Water gets in. Ice forms over it. A protective cover gets left on. A wash crew puts tape over it and forgets to remove it. When that happens, the airplane is flying with a static reference frozen at the value when the block formed, and the altimeter, VSI, and (less obviously) the airspeed indicator are all lying.
 
@@ -98,7 +98,8 @@ This node is the procedural mate of `proc-pitot-static-failures`. The diagnosis 
 
 The procedure is short. The discipline is not. Pilots who reach for the alternate static valve under high workload sometimes forget to apply the correction, fly the airplane to the indicated altitude (which is now offset), and find themselves at an actual altitude that is wrong. ATC catches it. Sometimes terrain catches it.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are at 5,000 in IMC, hand-flying, when you notice the altimeter has been showing 5,000 for the last three minutes. The VSI is showing zero. You are climbing toward 7,000 per ATC clearance. You verify by checking your GPS-derived altitude on the iPad: actual altitude is 6,400 and rising at 500 fpm. The airspeed indicator is showing what looks like a slightly low cruise number for the power setting.
 
@@ -106,7 +107,8 @@ Static is blocked. You decide to open the alternate static valve. What do you do
 
 Write your answer before reading on. Then ask: at the moment you open the valve, what happens to the altimeter reading? What target indicated altitude do you fly to maintain ATC's 7,000?
 
-## Discover
+:::
+:::phase name="discover"
 
 The procedure decomposes into four questions: when, what happens when you open it, what offsets to apply, and how to fly the airplane afterward.
 
@@ -138,11 +140,11 @@ If you do not apply correction, you will fly the airplane down to bring the alti
 
 POH-specific. Typical light single (C172, PA28) at cruise altitudes:
 
-| Item       | Direction | Typical magnitude  |
-| ---------- | --------- | ------------------ |
-| Altitude   | Reads HIGH | 50-100 feet        |
-| Airspeed   | Reads HIGH | 4-8 KIAS           |
-| VSI        | Reads briefly elevated, settles | Few hundred fpm transient |
+| Item     | Direction                       | Typical magnitude         |
+| -------- | ------------------------------- | ------------------------- |
+| Altitude | Reads HIGH                      | 50-100 feet               |
+| Airspeed | Reads HIGH                      | 4-8 KIAS                  |
+| VSI      | Reads briefly elevated, settles | Few hundred fpm transient |
 
 So if ATC asks you to maintain 5,000 and the actual offset is +75 feet, you fly to an indicated altitude of 5,075. If your target IAS is 100 and the offset is +6, you fly to 106 indicated.
 
@@ -177,7 +179,8 @@ After you have selected alternate static, you fly the airplane on offsets to a l
 - Without an alternate static valve, the POH-specified improvisation (breaking the VSI face glass) is the option in some airplanes; in others, you fly attitude + power.
 - After landing, the airplane goes to maintenance; the failure is not "fixed" by closing the valve.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -238,7 +241,8 @@ In descending order:
 - POH Section 5 -- "Airspeed Calibration" or "Altimeter / Airspeed Correction" -- the offset table.
 - The valve itself -- find it in the airplane on the ground, before you need it. It may be hidden under the radio stack, behind the yoke, or on the lower instrument panel.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -297,7 +301,8 @@ You: "Cessna 12345, on alternate static, altitude offset plus 75, level at six-t
 
 That is the right radio call. ATC understands; they will continue handling you with the offset known.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -314,7 +319,8 @@ That is the right radio call. ATC understands; they will continue handling you w
 - `proc-instrument-cross-check` -- the cross-check that both detected the failure and now confirms the correction.
 - `nav-partial-panel` -- alternate static is one element of degraded-instrument flight discipline.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -350,3 +356,5 @@ Evaluation criteria:
 - Frames the broader lesson: emergency procedures with numbers (offsets, V-speeds, glide ratios, fuel planning) are memorise-the-numbers problems, not look-up problems. The POH is the source of truth; your memory is the access path under workload.
 
 The pedagogical move is to treat the candidate's confidence in "I'd look it up" as a workload misunderstanding, not a knowledge gap. Fix it by changing the access path, not by drilling more.
+
+:::

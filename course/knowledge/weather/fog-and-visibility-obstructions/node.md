@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Fog, Frost, and Visibility Obstructions
 
-## Context
+:::phase name="context"
 
 Sunrise on a clear, calm October morning at a Sacramento Valley
 airport. Last night's METAR reported 12C / 11C, wind calm. This
@@ -57,7 +57,8 @@ morning the airport is reporting BR (mist) at 1.5 SM visibility, and
 the FBO's customer is taxiing back to wait it out. Yesterday morning
 under nearly the same conditions, the same airport stayed clear. Why?
 
-## Problem
+:::
+:::phase name="problem"
 
 Visibility obstructions -- fog, mist, frost, and the loose family of
 particulate phenomena (haze / smoke / dust / volcanic ash) -- shape
@@ -66,7 +67,8 @@ window for many GA airports. Each forms by a different mechanism,
 behaves on a different time scale, and dissipates by a different
 trigger.
 
-## Discover
+:::
+:::phase name="discover"
 
 Fog is cloud at the surface. The same condensation mechanism: an air
 parcel cooled to (or moistened up to) saturation. The category split
@@ -99,7 +101,8 @@ The common diagnostic question: what saturates the lowest air layer
 (precipitation-induced, steam)? Knowing that selects the dissipation
 trigger.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Frost is condensation below freezing, depositing as ice crystals on
 exposed surfaces. The aerodynamic problem is not the weight (frost is
@@ -132,7 +135,8 @@ turbine blades, capable of total engine flameout (KLM 867, BA 9). FAA
 guidance is strict avoidance even for piston aircraft -- ash damages
 windscreens, pitots, and oil systems too.
 
-## Practice
+:::
+:::phase name="practice"
 
 For tomorrow's morning METAR + TAF, predict whether fog will form. The
 diagnostic: temperature/dew point spread < 4C (or converging through
@@ -410,7 +414,8 @@ or feel the underlying paint texture cleanly, polish or wait.
       cite: AIM 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node parents K3j (fog/mist), K3k (frost), and K3l (visibility
 obstructions) -- three sub-letters of K3 that all describe what
@@ -418,10 +423,13 @@ makes the airport unflyable from the visibility direction. The
 clouds-and-precipitation node provides the moisture-and-cooling
 framework; this node specializes it to the surface-layer cases.
 
-## Verify
+:::
+:::phase name="verify"
 
 For three different mornings this month, predict before bed whether
 the destination will be fogged in at sunrise. Cross-check the
 morning METAR. Calibration: the prediction is reliable to within an
 hour for radiation fog, less so for advection (depends on flow
 shifts).
+
+:::
