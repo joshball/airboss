@@ -19,7 +19,7 @@ const helpFlags = new Set(['help', '-h', '--help']);
 // before vitest traverses app tests (each app's `tsconfig.json` extends it).
 // Fresh worktrees never have these until `bunx svelte-kit sync` runs once.
 async function ensureSvelteKitSync(): Promise<void> {
-	const apps = ['apps/study', 'apps/sim', 'apps/hangar'];
+	const apps = ['apps/study', 'apps/sim', 'apps/hangar', 'apps/flightbag'];
 	for (const app of apps) {
 		if (existsSync(`${app}/.svelte-kit/tsconfig.json`)) continue;
 		console.log(`> svelte-kit sync (${app})`);
@@ -39,6 +39,7 @@ Subcommands:
   e2e               Run Playwright e2e suite (bunx playwright test)
   e2e:ui            Run Playwright in interactive UI mode
   e2e:install       Install Playwright browsers (one-time)
+  integration       Run flightbag coverage sweep (Playwright HTTP-only, 32 workers)
   help              Show this help
 
 Any trailing arguments are passed through to the underlying runner.
@@ -51,7 +52,8 @@ Examples:
   bun run test e2e                     Run all e2e tests
   bun run test e2e auth                Run e2e specs matching "auth"
   bun run test e2e:ui                  Open Playwright UI mode
-  bun run test e2e:install             Install Playwright browsers`);
+  bun run test e2e:install             Install Playwright browsers
+  bun run test integration             Run flightbag coverage sweep`);
 }
 
 if (first && helpFlags.has(first)) {
@@ -73,6 +75,12 @@ if (first === 'watch') {
 	await run(['bunx', 'playwright', 'test', '--ui', ...rest]);
 } else if (first === 'e2e:install') {
 	await run(['bunx', 'playwright', 'install', ...(rest.length ? rest : ['chromium'])]);
+} else if (first === 'integration') {
+	// Flightbag coverage sweep -- HTTP-only, 32 workers, dedicated DB and
+	// vite process (see `playwright.config.ts` -> `flightbag-coverage` project
+	// and `flightbag-integration` webServer entry). The project filter scopes
+	// the run to the integration spec; the e2e projects do not boot.
+	await run(['bunx', 'playwright', 'test', '--project=flightbag-coverage', ...rest]);
 } else {
 	await ensureSvelteKitSync();
 	await run(['bunx', 'vitest', 'run', ...args]);

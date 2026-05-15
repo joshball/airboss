@@ -56,6 +56,21 @@ export const UNIT_DB_NAME = 'airboss_unit_test' as const;
 export const DEV_DB_URL_UNIT =
 	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${UNIT_DB_NAME}` as const;
 
+/**
+ * Dedicated database name for the flightbag integration coverage suite.
+ * Lives on the same local Postgres instance as the dev DB. Playwright's
+ * `globalSetup` (in `tests/integration/`) drops + recreates this database
+ * and runs the seed pipeline once per `bun run test integration` invocation.
+ * Isolated from `airboss_e2e` so the integration sweep (32 parallel workers
+ * hammering every reader URL) can coexist with an e2e run against the same
+ * machine without cross-talk.
+ */
+export const INTEGRATION_DB_NAME = 'airboss_integration' as const;
+
+/** Connection string for the integration test database. */
+export const DEV_DB_URL_INTEGRATION =
+	`postgresql://${DEV_DB.USER}:${DEV_DB.PASSWORD}@${DEV_DB.HOST}:${PORTS.DB}/${INTEGRATION_DB_NAME}` as const;
+
 /** Regex matching connection strings that point at a local dev database. */
 export const DEV_DB_HOST_PATTERN = /@(localhost|127\.0\.0\.1|airboss-db)(:|\/)/;
 

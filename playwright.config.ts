@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig, devices } from '@playwright/test';
-import { DEV_DB_URL_E2E, ENV_VARS, PORTS } from './libs/constants/src';
+import { DEV_DB_URL_E2E, DEV_DB_URL_INTEGRATION, ENV_VARS, PORTS } from './libs/constants/src';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -13,10 +13,17 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const studyPort = PORTS.STUDY_E2E;
 const hangarPort = PORTS.HANGAR_E2E;
 const flightbagPort = PORTS.FLIGHTBAG_E2E;
+// Integration ports = dev ports + 7. The flightbag integration sweep runs
+// against its own vite process, against `airboss_integration`, on a port
+// disjoint from both `bun run dev` (9640) and the e2e flightbag project
+// (9643). See `tests/integration/flightbag-coverage.spec.ts`.
+const flightbagIntegrationPort = PORTS.FLIGHTBAG_INTEGRATION;
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${studyPort}`;
 const flightbagBaseURL = process.env.PLAYWRIGHT_FLIGHTBAG_BASE_URL ?? `http://127.0.0.1:${flightbagPort}`;
 const hangarBaseURL = process.env.PLAYWRIGHT_HANGAR_BASE_URL ?? `http://127.0.0.1:${hangarPort}`;
+const flightbagIntegrationBaseURL =
+	process.env.FLIGHTBAG_INTEGRATION_BASE_URL ?? `http://127.0.0.1:${flightbagIntegrationPort}`;
 
 // Bun auto-loads `.env` based on the spawned process's cwd. Playwright
 // launches each webServer with `cwd: 'apps/<app>'`, where no .env exists,
@@ -66,6 +73,15 @@ const e2eEnv = {
 	[ENV_VARS.HANGAR_JOBS_WORKER]: 'off',
 };
 
+// The integration sweep targets `airboss_integration` on its own port. Same
+// shape as `e2eEnv`, different DATABASE_URL so the flightbag-integration
+// webServer below renders pages out of the integration DB.
+const integrationEnv = {
+	...rootEnv,
+	[ENV_VARS.DATABASE_URL]: DEV_DB_URL_INTEGRATION,
+	[ENV_VARS.HANGAR_JOBS_WORKER]: 'off',
+};
+
 export default defineConfig({
 	testDir: './tests/e2e',
 	outputDir: './tests/e2e/.out',
@@ -77,7 +93,13 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
-	reporter: process.env.CI ? [['github'], ['list']] : 'list',
+	// The custom `tests/integration/reporter.ts` filters by project name, so
+	// it's a no-op for the e2e projects and only writes its markdown report
+	// when the `flightbag-coverage` project runs. Layering it next to the
+	// existing list/github reporters keeps both suites visible.
+	reporter: process.env.CI
+		? [['github'], ['list'], ['./tests/integration/reporter.ts']]
+		: [['list'], ['./tests/integration/reporter.ts']],
 	timeout: 30_000,
 	expect: { timeout: 5_000 },
 	use: {
@@ -175,13 +197,80 @@ export default defineConfig({
 			},
 			testMatch: /hangar-review-queue\/unauthed\/.*\.spec\.ts/,
 		},
+		{
+			// Flightbag coverage sweep -- HTTP-only request fixture (no browser
+			// context), 32 workers, no auth, no storage state. Iterates every
+			// reader URL derived from `notSupersededInRegistry()` references
+			// and asserts each one responds with a non-error status and a
+			// non-empty body. The integration spec lives outside `tests/e2e/`
+			// so the e2e project filters never sweep it up.
+			//
+			// Pointed at the dedicated `flightbag-integration` webServer below
+			// so the e2e flightbag project (also on its own webServer) can
+			// continue to run unaffected by this project's traffic.
+			name: 'flightbag-coverage',
+			testDir: './tests/integration',
+			testMatch: /flightbag-coverage\.spec\.ts/,
+			workers: 32,
+			fullyParallel: true,
+			use: {
+				baseURL: flightbagIntegrationBaseURL,
+				// The sweep uses Playwright's `request` fixture (no `page`); the
+				// shorter timeout below catches a stalled SSR before the global
+				// 30s test timeout chews through wall-clock budget on a hung
+				// page.
+				actionTimeout: 10_000,
+				navigationTimeout: 10_000,
+			},
+		},
 	],
 	// Each webServer launches a dedicated vite process on the e2e port,
 	// pointed at the e2e DB. `reuseExistingServer: false` so we never
 	// silently bind to a `bun run dev` instance that's holding the
 	// developer's working DB open -- that's exactly the cross-talk this
 	// whole isolation pass is here to prevent.
-	webServer: [
+	//
+	// When `--project=flightbag-coverage` is the only project requested
+	// (the integration sweep), the e2e webServers are skipped so we don't
+	// pay the 2-minute warm-up for vite processes the sweep never touches.
+	// Detect by walking `process.argv` for the project flag -- Playwright
+	// applies the same parse to its CLI args.
+	webServer: chooseWebServers(),
+});
+
+function projectArgs(): readonly string[] {
+	const args = process.argv;
+	const out: string[] = [];
+	for (let i = 0; i < args.length; i += 1) {
+		const arg = args[i];
+		if (arg === undefined) continue;
+		if (arg === '--project' || arg === '-p') {
+			const next = args[i + 1];
+			if (next !== undefined) out.push(next);
+		} else if (arg.startsWith('--project=')) {
+			out.push(arg.slice('--project='.length));
+		}
+	}
+	return out;
+}
+
+function chooseWebServers() {
+	const requested = projectArgs();
+	// Only the integration project requested -> boot the integration vite
+	// process only. Skip the e2e study/flightbag/hangar webServers.
+	if (requested.length > 0 && requested.every((p) => p === 'flightbag-coverage')) {
+		return [
+			{
+				command: 'bun run dev',
+				cwd: 'apps/flightbag',
+				url: flightbagIntegrationBaseURL,
+				reuseExistingServer: false,
+				timeout: 120_000,
+				env: { ...integrationEnv, PORT: String(flightbagIntegrationPort) },
+			},
+		];
+	}
+	return [
 		{
 			command: 'bun run dev',
 			cwd: 'apps/study',
@@ -206,5 +295,18 @@ export default defineConfig({
 			timeout: 120_000,
 			env: { ...e2eEnv, PORT: String(hangarPort) },
 		},
-	],
-});
+		{
+			// Flightbag integration -- dedicated vite process pointed at
+			// `airboss_integration`. The `flightbag-coverage` project drives
+			// 32 parallel workers against it; running it on its own port
+			// (PORTS.FLIGHTBAG_INTEGRATION = 9647) keeps the e2e flightbag
+			// webServer at 9643 free for `representative-pages.spec.ts`.
+			command: 'bun run dev',
+			cwd: 'apps/flightbag',
+			url: flightbagIntegrationBaseURL,
+			reuseExistingServer: false,
+			timeout: 120_000,
+			env: { ...integrationEnv, PORT: String(flightbagIntegrationPort) },
+		},
+	];
+}

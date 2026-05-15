@@ -19,6 +19,7 @@ coverage/
 # Playwright
 /tests/e2e/.auth/
 /tests/e2e/.out/
+/tests/integration/.out/
 /playwright-report/
 /test-results/
 
