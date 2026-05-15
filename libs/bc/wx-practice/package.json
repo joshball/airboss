@@ -1,0 +1,32 @@
+{
+	"name": "@ab/bc-wx-practice",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		},
+		"./schema": {
+			"types": "./src/schema.ts",
+			"default": "./src/schema.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/utils": "workspace:*",
+		"@ab/wx-explain": "workspace:*",
+		"drizzle-orm": "catalog:"
+	},
+	"devDependencies": {
+		"vitest": "catalog:"
+	},
+	"version": "0.1.0"
+}

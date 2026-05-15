@@ -1,0 +1,26 @@
+{
+	"name": "@ab/wx-drill",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*",
+		"@ab/wx-charts": "workspace:*",
+		"@ab/wx-engine": "workspace:*",
+		"@ab/wx-explain": "workspace:*"
+	},
+	"devDependencies": {
+		"vitest": "catalog:"
+	},
+	"version": "0.1.0"
+}

@@ -359,6 +359,14 @@ export const ROUTES = {
 	REFERENCE_WX_PRODUCTS: '/reference/wx/products',
 	REFERENCE_WX_PRODUCT: (slug: string) => `/reference/wx/products/${slug}` as const,
 
+	// Practice surface -- encoded-text fluency drills. Backed by `@ab/bc-wx-practice`
+	// (mastery ledger + state machine) and `@ab/wx-drill` (sampler / pack
+	// generator). See `docs/work/plans/2026-05-14-wx-drill-and-practice.md`.
+	PRACTICE_WX_DRILL: '/practice/wx/drill',
+	PRACTICE_WX_DRILL_START: '/practice/wx/drill/start',
+	PRACTICE_WX_DRILL_SUBMIT: '/practice/wx/drill/submit',
+	PRACTICE_WX_DRILL_END: '/practice/wx/drill/end',
+
 	/**
 	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/calibration` to
 	 * `/insights/calibration`. Prefer `INSIGHTS_CALIBRATION`. Hooks-level
@@ -945,6 +953,7 @@ export const NAV_LABELS = {
 	REFERENCE_KNOWLEDGE: 'Knowledge',
 	REFERENCE_GLOSSARY: 'Glossary',
 	REFERENCE_WX_PRODUCTS: 'Weather products',
+	PRACTICE_WX_DRILL: 'Weather drill',
 	/** Placeholder for the flight-logging surface (WP 2). */
 	FLIGHT: 'Flight',
 	/**
