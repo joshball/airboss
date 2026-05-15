@@ -68,6 +68,19 @@ export const QUERY_PARAMS = {
 	TAGS: 'tags',
 	/** Free-text search query. */
 	SEARCH: 'q',
+	/**
+	 * Comma-separated token-family filter on the wx product examples page
+	 * (`/reference/wx/products/<slug>/examples`). Multiple families
+	 * AND-combine -- an example matches only when it exercises EVERY listed
+	 * family. Slugs come from `course/knowledge/weather/encoded-text-catalog/catalog.json`.
+	 */
+	FAMILIES: 'families',
+	/**
+	 * Slug of the single expanded example on the wx product examples page.
+	 * Cards collapse by default; click "Decode" to set `?expand=<slug>` and
+	 * render the token-walk annotations server-side via `@ab/wx-explain`.
+	 */
+	EXPAND: 'expand',
 	/** 1-based page number for paginated browse. */
 	PAGE: 'page',
 	/** Items-per-page for paginated browse (one of `BROWSE_PAGE_SIZE_VALUES`). */
@@ -358,6 +371,24 @@ export const ROUTES = {
 	// `course/weather/references/products/<slug>/page.md`.
 	REFERENCE_WX_PRODUCTS: '/reference/wx/products',
 	REFERENCE_WX_PRODUCT: (slug: string) => `/reference/wx/products/${slug}` as const,
+	/**
+	 * Browsable catalog page for one weather product. Lists every encoded
+	 * example from `course/knowledge/weather/encoded-text-catalog/catalog.json`
+	 * with token-family filter chips, search, and click-to-decode (via
+	 * `@ab/wx-explain`). Drill Phase 2.
+	 */
+	REFERENCE_WX_PRODUCT_EXAMPLES: (slug: string) => `/reference/wx/products/${slug}/examples` as const,
+	/**
+	 * Drill loop placeholder (Drill Phase 3). Route does not exist yet; the
+	 * examples page surfaces a disabled "Drill this now" button that points
+	 * here so the constant is grep-able the moment the route ships.
+	 */
+	PRACTICE_WX_DRILL: '/practice/wx/drill',
+	/**
+	 * Mastery dashboard placeholder (Drill Phase 3b). Forward-declared so
+	 * routes can link to it before the page lands.
+	 */
+	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	// Practice surface -- encoded-text fluency drills. Backed by `@ab/bc-wx-practice`
 	// (mastery ledger + state machine) and `@ab/wx-drill` (sampler / pack

@@ -234,6 +234,9 @@ the synoptic story.
 > Browse the full catalog of every realistic METAR shape (52 examples
 > across 39 token families, each round-tripped through `parseMetar`):
 > [encoded-text catalog -- METAR](../encoded-text-catalog/metar.md).
+> The same examples are also browsable interactively, with token-family
+> filter chips and click-to-decode token walks, on the study app:
+> [Browse all catalog examples -- METAR](/reference/wx/products/metar/examples).
 
 #### Example 1: calm clear morning
 

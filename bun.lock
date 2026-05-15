@@ -498,6 +498,7 @@
       "version": "0.1.0",
       "dependencies": {
         "@ab/wx-charts": "workspace:*",
+        "@ab/wx-engine": "workspace:*",
       },
       "devDependencies": {
         "vitest": "catalog:",

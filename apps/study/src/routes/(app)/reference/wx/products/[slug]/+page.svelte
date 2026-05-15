@@ -9,6 +9,8 @@ const product = $derived(data.product);
 const bodyHtml = $derived(data.bodyHtml);
 const relatedProductLinks = $derived(data.relatedProductLinks);
 const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
+const examplesHref = $derived(data.examplesHref);
+const drillHref = $derived(data.drillHref);
 </script>
 
 <svelte:head>
@@ -39,6 +41,24 @@ const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
 			<span class="badge tier tier-{product.tier}">Tier {product.tier}</span>
 			<span class="badge status status-{product.status}">{product.status}</span>
 		</div>
+		{#if examplesHref}
+			<div class="practice-actions" data-testid="wx-product-practice-actions">
+				<a class="practice-btn primary" href={examplesHref} data-testid="wx-product-browse-examples">
+					Browse examples
+				</a>
+				<a
+					class="practice-btn disabled"
+					href={drillHref}
+					aria-disabled="true"
+					tabindex="-1"
+					title="Drill practice ships in Phase 3"
+					onclick={(e) => e.preventDefault()}
+					data-testid="wx-product-drill-disabled"
+				>
+					Drill this now <span class="badge-soon">soon</span>
+				</a>
+			</div>
+		{/if}
 	</header>
 
 	<div class="layout">
@@ -175,6 +195,56 @@ const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
 		display: flex;
 		gap: var(--space-xs);
 		flex-wrap: wrap;
+	}
+
+	.practice-actions {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin-top: var(--space-xs);
+	}
+
+	.practice-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		font-size: var(--type-ui-label-size);
+		font-weight: 600;
+		border-radius: var(--radius-md);
+		border: 1px solid transparent;
+		text-decoration: none;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.practice-btn.primary {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
+		color: var(--action-default-hover);
+	}
+
+	.practice-btn.primary:hover {
+		background: var(--action-default-edge);
+		color: var(--ink-inverse);
+	}
+
+	.practice-btn.disabled {
+		background: var(--surface-muted);
+		border-color: var(--edge-default);
+		color: var(--ink-faint);
+		cursor: not-allowed;
+		pointer-events: none;
+	}
+
+	.badge-soon {
+		font-size: var(--type-ui-caption-size);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+		background: var(--surface-sunken);
+		color: var(--ink-faint);
+		padding: 0 var(--space-2xs);
+		border-radius: var(--radius-xs);
+		font-weight: 600;
 	}
 
 	.badge {
