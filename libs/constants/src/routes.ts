@@ -117,6 +117,20 @@ export const QUERY_PARAMS = {
 	/** Render-mode override on /references dev page. */
 	MODE: 'mode',
 	/**
+	 * `/practice/wx/mastery` and `/practice/wx/drill` product filter (one of
+	 * `metar` / `taf` / `pirep` / `fb` / `airmet`). Both routes share the key
+	 * so a "Drill these families" link from the dashboard preserves the
+	 * active product into the drill page.
+	 */
+	PRODUCT: 'product',
+	/** `/practice/wx/mastery` state filter -- comma-separated list of
+	 * `active` / `passive` / `demoted` / `never-seen`. Empty list means
+	 * "show no rows" (preserve the explicit user choice). */
+	STATE: 'state',
+	/** `/practice/wx/mastery` sort key -- one of `attempts` / `ratio` /
+	 * `last-seen` / `label`. */
+	SORT: 'sort',
+	/**
 	 * Active view selector on the `/notes` index. Closed value set lives in
 	 * `NOTES_VIEW_VALUES`; the loader rejects out-of-set values by falling
 	 * back to `NOTES_VIEW_DEFAULT`.
