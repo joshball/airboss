@@ -252,6 +252,9 @@ deviations to test against.
 > Browse the full catalog of every realistic TAF shape (27 examples
 > across 28 token families, each round-tripped through `parseTaf`):
 > [encoded-text catalog -- TAF](../encoded-text-catalog/taf.md).
+> The same examples are also browsable interactively, with token-family
+> filter chips and click-to-decode token walks, on the study app:
+> [Browse all catalog examples -- TAF](/reference/wx/products/taf/examples).
 
 #### Example 1: steady-state forecast (no change groups)
 

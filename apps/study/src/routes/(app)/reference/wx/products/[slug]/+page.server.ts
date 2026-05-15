@@ -2,6 +2,7 @@ import { requireAuth } from '@ab/auth';
 import { ROUTES } from '@ab/constants';
 import { dedupeFirstHeading, renderMarkdown } from '@ab/utils';
 import { error } from '@sveltejs/kit';
+import { isWxCatalogProductSlug } from '../../_lib/wx-catalog.server';
 import { getKnowledgeWeatherDirToIdMap, getWxProduct } from '../../_lib/wx-products.server';
 import type { PageServerLoad } from './$types';
 
@@ -69,6 +70,12 @@ export const load: PageServerLoad = async (event) => {
 		href: ROUTES.REFERENCE_WX_PRODUCT(rp.slug),
 	}));
 
+	// Drill Phase 2 examples surface -- the URL is mounted only when the
+	// product's slug matches one of the catalog product slugs. Every other
+	// product (CVA, prog charts, etc.) gets `examplesHref: null` so the
+	// header skips the "Browse examples" affordance.
+	const examplesHref = isWxCatalogProductSlug(product.slug) ? ROUTES.REFERENCE_WX_PRODUCT_EXAMPLES(product.slug) : null;
+
 	return {
 		product: {
 			slug: product.slug,
@@ -84,5 +91,7 @@ export const load: PageServerLoad = async (event) => {
 		bodyHtml,
 		relatedProductLinks,
 		relatedKnowledgeLinks,
+		examplesHref,
+		drillHref: ROUTES.PRACTICE_WX_DRILL,
 	};
 };

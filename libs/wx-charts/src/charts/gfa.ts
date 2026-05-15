@@ -43,7 +43,7 @@ import { buildChrome } from '../chrome';
 import { renderGraticule } from '../graticule';
 import { composeChart, type LayerBandMap } from '../layers';
 import { CHART_MARGIN, type FitTarget, lambertProjection, SVG_HEIGHT, SVG_WIDTH } from '../projection';
-import { GFA_PALETTE, type GfaPolygonKind } from '../raster/palettes';
+import { GFA_PALETTE, type GfaPolygonEntry, type GfaPolygonKind } from '../raster/palettes';
 import { type PolygonOverlay, renderPolygonOverlays } from '../symbology/polygons';
 import type { ChartRenderInput, ChartRenderResult, ChartSpec } from '../types';
 
@@ -161,7 +161,12 @@ function renderGfaLegend(activeKinds: ReadonlySet<GfaPolygonKind>, altitudeBand:
 	const ordered = Object.entries(POLYGON_DRAW_ORDER)
 		.sort((a, b) => a[1] - b[1])
 		.map(([k]) => k as GfaPolygonKind);
-	const entries: Array<{ kind: GfaPolygonKind; entry: (typeof GFA_PALETTE)[GfaPolygonKind] }> = [];
+	// Widen the per-entry palette literal to the parent `GfaPolygonEntry`
+	// interface so the legend renderer can read `entry.dasharray` against
+	// kinds that don't define it (it's an optional field on the interface;
+	// the `as const` narrowing on `GFA_PALETTE` would otherwise drop the
+	// property from non-dashed variants).
+	const entries: Array<{ kind: GfaPolygonKind; entry: GfaPolygonEntry }> = [];
 	for (const kind of ordered) {
 		if (!activeKinds.has(kind)) continue;
 		entries.push({ kind, entry: GFA_PALETTE[kind] });
@@ -254,7 +259,9 @@ export async function renderGfa(input: ChartRenderInput<GfaSpec>): Promise<Chart
 	const overlays: PolygonOverlay[] = [];
 	const activeKinds = new Set<GfaPolygonKind>();
 	for (const polygon of sortedPolygons) {
-		const palette = GFA_PALETTE[polygon.kind];
+		// Same widening as the legend loop above: `as const` narrows
+		// `dasharray` off the variants that don't define it.
+		const palette: GfaPolygonEntry = GFA_PALETTE[polygon.kind];
 		activeKinds.add(polygon.kind);
 		overlays.push({
 			id: polygon.id,

@@ -9,6 +9,8 @@ const product = $derived(data.product);
 const bodyHtml = $derived(data.bodyHtml);
 const relatedProductLinks = $derived(data.relatedProductLinks);
 const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
+const examplesHref = $derived(data.examplesHref);
+const drillHref = $derived(data.drillHref);
 </script>
 
 <svelte:head>
@@ -39,6 +41,16 @@ const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
 			<span class="badge tier tier-{product.tier}">Tier {product.tier}</span>
 			<span class="badge status status-{product.status}">{product.status}</span>
 		</div>
+		{#if examplesHref}
+			<div class="practice-actions" data-testid="wx-product-practice-actions">
+				<a class="practice-btn primary" href={examplesHref} data-testid="wx-product-browse-examples">
+					Browse examples
+				</a>
+				<a class="practice-btn" href={drillHref} data-testid="wx-product-drill">
+					Drill this now
+				</a>
+			</div>
+		{/if}
 	</header>
 
 	<div class="layout">
@@ -175,6 +187,37 @@ const relatedKnowledgeLinks = $derived(data.relatedKnowledgeLinks);
 		display: flex;
 		gap: var(--space-xs);
 		flex-wrap: wrap;
+	}
+
+	.practice-actions {
+		display: flex;
+		gap: var(--space-sm);
+		flex-wrap: wrap;
+		margin-top: var(--space-xs);
+	}
+
+	.practice-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-xs);
+		padding: var(--space-sm) var(--space-md);
+		font-size: var(--type-ui-label-size);
+		font-weight: 600;
+		border-radius: var(--radius-md);
+		border: 1px solid transparent;
+		text-decoration: none;
+		transition: background var(--motion-fast), border-color var(--motion-fast);
+	}
+
+	.practice-btn.primary {
+		background: var(--action-default-wash);
+		border-color: var(--action-default-edge);
+		color: var(--action-default-hover);
+	}
+
+	.practice-btn.primary:hover {
+		background: var(--action-default-edge);
+		color: var(--ink-inverse);
 	}
 
 	.badge {

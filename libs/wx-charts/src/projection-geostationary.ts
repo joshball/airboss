@@ -52,6 +52,7 @@
  * Browser-safe: pure d3-geo + d3-geo-projection. No Node imports.
  */
 
+/// <reference path="./d3-geo-projection.d.ts" />
 import { type GeoProjection } from 'd3-geo';
 import { geoSatellite } from 'd3-geo-projection';
 

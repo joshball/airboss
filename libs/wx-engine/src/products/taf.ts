@@ -195,7 +195,7 @@ export function deriveTaf(
 		} else if (p.kind === 'FM') {
 			const fmTag = `FM${formatDdHhMm(new Date(p.start.timestamp))}`;
 			periodLines.push(`${fmTag} ${formatPeriodBody(p.start)}`);
-		} else {
+		} else if (p.kind === 'PROB30' || p.kind === 'TEMPO' || p.kind === 'BECMG') {
 			const range = `${formatDdHh(new Date(p.start.timestamp))}/${formatDdHh(new Date(p.end.timestamp))}`;
 			const cloudToken = p.start.cloudCover === 'SKC' ? 'SKC' : 'BKN045CB';
 			periodLines.push(`${p.kind} ${range} 4SM ${p.weather.join(' ')} ${cloudToken}`);

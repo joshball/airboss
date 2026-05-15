@@ -10,7 +10,8 @@
 		"./package.json": "./package.json"
 	},
 	"dependencies": {
-		"@ab/wx-charts": "workspace:*"
+		"@ab/wx-charts": "workspace:*",
+		"@ab/wx-engine": "workspace:*"
 	},
 	"devDependencies": {
 		"vitest": "catalog:"
