@@ -1,21 +1,22 @@
 /**
  * FTS-passages loader integration test. Real Postgres -- the loader emits
- * `websearch_to_tsquery` / `ts_rank_cd` / `ts_headline` against
- * `study.reference_section.content_md` and `study.knowledge_node.content_md`,
- * so a mock would silently pass while the actual SQL regressed.
+ * `websearch_to_tsquery` / `ts_rank_cd` / `ts_headline` against three
+ * sources (`study.reference_section.content_md`,
+ * `study.knowledge_node.content_md`, and `study.course_step.body_md`), so a
+ * mock would silently pass while the actual SQL regressed.
  *
  * Suite shape mirrors `db-loaders.test.ts`: seed a tagged set of fixtures in
  * `beforeAll`, tear them down in FK-safe order in `afterAll`, exercise each
  * source + the merge path in independent `it` blocks.
  *
- * Fixtures use a wordy phrase ("turbulence avoidance dusk twilight illumination")
- * so the `websearch_to_tsquery` parser actually has tokens to rank. The
- * test asserts: results returned, highlight markup present, rank ordering
+ * Fixtures use a wordy phrase ("twilightturbulence illumination minima") so
+ * the `websearch_to_tsquery` parser actually has tokens to rank. The test
+ * asserts: results returned, highlight markup present, rank ordering
  * stable, empty needle returns `[]`.
  */
 
-import { knowledgeNode, reference, referenceSection } from '@ab/bc-study';
-import { REFERENCE_KINDS } from '@ab/constants';
+import { course, courseStep, knowledgeNode, reference, referenceSection } from '@ab/bc-study';
+import { COURSE_KINDS, COURSE_STATUSES, COURSE_STEP_LEVELS, REFERENCE_KINDS } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateReferenceSectionId } from '@ab/utils';
 import { eq } from 'drizzle-orm';
@@ -28,6 +29,12 @@ const REF_CFR_ID = `ref-${SUITE_TAG}-cfr`;
 const SEC_HANDBOOK_ID = generateReferenceSectionId();
 const SEC_CFR_ID = generateReferenceSectionId();
 const KNODE_ID = `kn-${SUITE_TAG}-twilightturbulence`;
+const COURSE_ID = `course-${SUITE_TAG}`;
+// Course slug must match `^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$` -- strip
+// internal hyphens from the suite tag tail to satisfy the shape check.
+const COURSE_SLUG = `fts-course-${SUITE_TAG.replace(/-/g, '').slice(-12)}`.toLowerCase();
+const COURSE_STEP_SECTION_ID = `cs-${SUITE_TAG}-section`;
+const COURSE_STEP_SECTION_CODE = 's1';
 
 // A phrase the parser will tokenise into multiple distinct terms; the
 // `to_tsvector('english', ...)` strips stopwords ("the", "and") so the body
@@ -134,9 +141,44 @@ beforeAll(async () => {
 		createdAt: now,
 		updatedAt: now,
 	});
+
+	// Seed one course + one section-level course_step carrying body_md so the
+	// loader's third source has something to find. A section is a legal
+	// course_step shape: NULL parent_id + NULL knowledge_node_id + is_leaf=false
+	// (enforced by `course_step_consistency_check`).
+	await db.insert(course).values({
+		id: COURSE_ID,
+		slug: COURSE_SLUG,
+		kind: COURSE_KINDS.INSTRUCTOR,
+		title: 'FTS Test Course',
+		description: 'Course used to seed fts-passages tests.',
+		status: COURSE_STATUSES.ACTIVE,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
+	});
+
+	await db.insert(courseStep).values({
+		id: COURSE_STEP_SECTION_ID,
+		courseId: COURSE_ID,
+		parentId: null,
+		level: COURSE_STEP_LEVELS.SECTION,
+		ordinal: 0,
+		code: COURSE_STEP_SECTION_CODE,
+		title: 'Night-flying section',
+		bodyMd: `Authored course-step body. ${PHRASE} is referenced inline so the FTS test can hit the course_step source.`,
+		knowledgeNodeId: null,
+		isLeaf: false,
+		contentHash: null,
+		seedOrigin: SUITE_TAG,
+		createdAt: now,
+		updatedAt: now,
+	});
 });
 
 afterAll(async () => {
+	await db.delete(courseStep).where(eq(courseStep.id, COURSE_STEP_SECTION_ID));
+	await db.delete(course).where(eq(course.id, COURSE_ID));
 	await db.delete(knowledgeNode).where(eq(knowledgeNode.id, KNODE_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_HANDBOOK_ID));
 	await db.delete(referenceSection).where(eq(referenceSection.id, SEC_CFR_ID));
@@ -174,15 +216,14 @@ describe('loadFtsPassages', () => {
 
 	it('orders merged rows by ts_rank_cd descending', async () => {
 		const out = await loadFtsPassages({ needle: PHRASE });
-		// All seeded rows should be present; verify the array is sorted by
-		// rank (we can't compare exact rank values across sources, but the
-		// sort is stable, so consecutive items must have non-increasing
-		// position when score is tied -- a weak invariant; the strong
-		// invariant we assert is "the loader does not crash and returns
-		// the expected number of merged hits").
-		const seededIds = new Set([SEC_HANDBOOK_ID, SEC_CFR_ID]);
+		// All seeded rows from the three sources (handbook section, CFR
+		// section, course step) should be present. The strong invariant we
+		// assert is "the loader merges across every source and returns the
+		// expected number of merged hits"; cross-source rank ordering is a
+		// `ts_rank_cd` artifact that we trust Postgres to compute.
+		const seededIds = new Set([SEC_HANDBOOK_ID, SEC_CFR_ID, COURSE_STEP_SECTION_ID]);
 		const seededHits = out.filter((r) => seededIds.has(r.id));
-		expect(seededHits.length).toBe(2);
+		expect(seededHits.length).toBe(3);
 	});
 
 	it('returns an empty array for an empty needle', async () => {
@@ -212,5 +253,51 @@ describe('loadFtsPassages', () => {
 		const out = await loadFtsPassages({ needle: PHRASE });
 		const handbookHit = out.find((r) => r.id === SEC_HANDBOOK_ID);
 		expect(handbookHit?.clusterKey).toMatch(/^fts-phak-/);
+	});
+});
+
+describe('loadFtsPassages - course_step source', () => {
+	it('returns the seeded course step on a phrase needle', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE });
+		const hit = out.find((r) => r.id === COURSE_STEP_SECTION_ID);
+		expect(hit).toBeDefined();
+		expect(hit?.type).toBe('airboss.lesson');
+		expect(hit?.passageHighlight).toBeDefined();
+		expect(hit?.passageHighlight).toMatch(/<mark>/);
+		expect(hit?.passageHighlight).toMatch(/<\/mark>/);
+	});
+
+	it('builds the course-step href from ROUTES.COURSE_STEP', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE });
+		const hit = out.find((r) => r.id === COURSE_STEP_SECTION_ID);
+		expect(hit?.href).toBe(`/courses/${COURSE_SLUG}/${COURSE_STEP_SECTION_CODE}`);
+	});
+
+	it('populates the row title with the course-step code + title', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE });
+		const hit = out.find((r) => r.id === COURSE_STEP_SECTION_ID);
+		expect(hit?.title).toBe(`${COURSE_STEP_SECTION_CODE} - Night-flying section`);
+	});
+
+	it('uses the parent course id as clusterKey for collapse', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE });
+		const hit = out.find((r) => r.id === COURSE_STEP_SECTION_ID);
+		expect(hit?.clusterKey).toBe(COURSE_ID);
+	});
+
+	it('maps section-level course steps to depth 0', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE });
+		const hit = out.find((r) => r.id === COURSE_STEP_SECTION_ID);
+		expect(hit?.depth).toBe(0);
+	});
+
+	it('returns an empty array for an empty needle (course-step source path)', async () => {
+		const out = await loadFtsPassages({ needle: '' });
+		expect(out).toEqual([]);
+	});
+
+	it('respects the limit option across all sources including course_step', async () => {
+		const out = await loadFtsPassages({ needle: PHRASE, limit: 1 });
+		expect(out.length).toBeLessThanOrEqual(1);
 	});
 });

@@ -3,10 +3,10 @@ id: bug-palette-fts-third-source
 title: 'Palette FTS: add course_step.body_md as third FTS source once table stabilises'
 product: study
 severity: minor
-status: open
+status: fixed
 discovered_pr: 936
 discovered_date: 2026-05-13
-fix_pr: null
+fix_pr: 988
 fix_wp: command-palette
 tags:
   - palette
@@ -54,3 +54,16 @@ Verify by typing a phrase that's known to appear in a course step body but NOT i
 - PR #936 -- the FTS loader (scope-deviated here)
 - PR #934 / #935 -- course-tree-arbitrary-depth (the upstream blocker)
 - Work package: [command-palette](../work-packages/command-palette/spec.md)
+
+## Resolution
+
+`libs/help/src/loaders/fts-passages.ts` now queries `study.course_step.body_md`
+joined to `study.course` as a third parallel FTS source, mirroring the existing
+`reference_section` + `knowledge_node` queries. Course-step hits map to
+`SearchResultType: 'airboss.lesson'`, build their `href` via
+`ROUTES.COURSE_STEP(slug, code)`, and cluster on `course_id` so future
+course-root + step collapse bonds correctly. Archived courses are excluded;
+rows with empty `body_md` are filtered out at the SQL level. The integration
+test now seeds a course + section-level course_step and asserts the loader
+returns the row with `<mark>` highlight markup, correct href, and correct
+clusterKey.
