@@ -117,6 +117,23 @@ export const QUERY_PARAMS = {
 	/** Render-mode override on /references dev page. */
 	MODE: 'mode',
 	/**
+	 * `/practice/wx/mastery` and `/practice/wx/drill` product filter (one of
+	 * `metar` / `taf` / `pirep` / `fb` / `airmet`). Both routes share the key
+	 * so a "Drill these families" link from the dashboard preserves the
+	 * active product into the drill page.
+	 */
+	PRODUCT: 'product',
+	/** `/practice/wx/mastery` state filter -- comma-separated list of
+	 * `active` / `passive` / `demoted` / `never-seen`. Empty list means
+	 * "show no rows" (preserve the explicit user choice). */
+	STATE: 'state',
+	/** `/practice/wx/mastery` sort key -- one of `attempts` / `ratio` /
+	 * `last-seen` / `label`. */
+	SORT: 'sort',
+	/** `/practice/wx/drill` -- comma-separated family slug list pre-seeded
+	 * from the mastery dashboard's "Drill my weak families" button. */
+	FAMILIES: 'families',
+	/**
 	 * Active view selector on the `/notes` index. Closed value set lives in
 	 * `NOTES_VIEW_VALUES`; the loader rejects out-of-set values by falling
 	 * back to `NOTES_VIEW_DEFAULT`.
@@ -386,6 +403,13 @@ export const ROUTES = {
 	PRACTICE_WX_DRILL_START: '/practice/wx/drill/start',
 	PRACTICE_WX_DRILL_SUBMIT: '/practice/wx/drill/submit',
 	PRACTICE_WX_DRILL_END: '/practice/wx/drill/end',
+	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
+
+	// Practice surfaces -- encoded-text-family fluency drilling (METAR / TAF /
+	// PIREP / FB / AIRMET). The drill route runs interactive token-walk
+	// sessions; the mastery dashboard shows per-token-family state. Both are
+	// part of the wx-drill-and-practice plan.
+	PRACTICE_WX_DRILL: '/practice/wx/drill',
 	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	/**
