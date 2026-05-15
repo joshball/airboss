@@ -13,7 +13,7 @@
  */
 import { readFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import type { WxPracticeProduct } from '$lib/types/wx-practice-mastery-contract';
+import type { WxProduct } from '@ab/constants';
 
 // `_lib` is 9 directories deep relative to the repo root:
 // apps/study/src/routes/(app)/practice/wx/mastery/_lib -> 9 `..` segments.
@@ -29,7 +29,7 @@ export interface CatalogTokenFamily {
 
 /** Subset of the catalog the dashboard needs (one entry per product). */
 export interface CatalogProduct {
-	readonly product: WxPracticeProduct;
+	readonly product: WxProduct;
 	readonly families: ReadonlyArray<CatalogTokenFamily>;
 }
 
@@ -38,7 +38,7 @@ export interface CatalogProduct {
  * `airmetSigmet`. The dashboard contract collapses `airmetSigmet` -> `airmet`
  * to match the FROZEN `@ab/bc-wx-practice` enum.
  */
-const PRODUCT_KEY_MAP: ReadonlyMap<string, WxPracticeProduct> = new Map([
+const PRODUCT_KEY_MAP: ReadonlyMap<string, WxProduct> = new Map([
 	['metar', 'metar'],
 	['taf', 'taf'],
 	['pirep', 'pirep'],
@@ -88,7 +88,7 @@ export async function loadWxPracticeCatalog(): Promise<ReadonlyArray<CatalogProd
 }
 
 /** Find a single product's family list. Returns an empty array if missing. */
-export async function loadFamiliesForProduct(product: WxPracticeProduct): Promise<ReadonlyArray<CatalogTokenFamily>> {
+export async function loadFamiliesForProduct(product: WxProduct): Promise<ReadonlyArray<CatalogTokenFamily>> {
 	const all = await loadWxPracticeCatalog();
 	const hit = all.find((p) => p.product === product);
 	return hit ? hit.families : [];

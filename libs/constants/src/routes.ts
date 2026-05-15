@@ -130,9 +130,6 @@ export const QUERY_PARAMS = {
 	/** `/practice/wx/mastery` sort key -- one of `attempts` / `ratio` /
 	 * `last-seen` / `label`. */
 	SORT: 'sort',
-	/** `/practice/wx/drill` -- comma-separated family slug list pre-seeded
-	 * from the mastery dashboard's "Drill my weak families" button. */
-	FAMILIES: 'families',
 	/**
 	 * Active view selector on the `/notes` index. Closed value set lives in
 	 * `NOTES_VIEW_VALUES`; the loader rejects out-of-set values by falling
@@ -403,13 +400,6 @@ export const ROUTES = {
 	PRACTICE_WX_DRILL_START: '/practice/wx/drill/start',
 	PRACTICE_WX_DRILL_SUBMIT: '/practice/wx/drill/submit',
 	PRACTICE_WX_DRILL_END: '/practice/wx/drill/end',
-	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
-
-	// Practice surfaces -- encoded-text-family fluency drilling (METAR / TAF /
-	// PIREP / FB / AIRMET). The drill route runs interactive token-walk
-	// sessions; the mastery dashboard shows per-token-family state. Both are
-	// part of the wx-drill-and-practice plan.
-	PRACTICE_WX_DRILL: '/practice/wx/drill',
 	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	/**

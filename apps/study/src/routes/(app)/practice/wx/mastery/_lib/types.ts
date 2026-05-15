@@ -3,14 +3,32 @@
  * client-side helpers). Browser-safe -- this file imports only types and
  * never reaches `node:*`.
  */
-import type { WxPracticeMasteryRow, WxPracticeProduct, WxPracticeState } from '$lib/types/wx-practice-mastery-contract';
+import type { WxPracticeMasteryRow } from '@ab/bc-wx-practice';
+import {
+	WX_PRACTICE_MASTERY_STATE_VALUES,
+	WX_PRACTICE_MASTERY_STATES,
+	WX_PRODUCTS,
+	type WxPracticeMasteryState,
+	type WxProduct,
+} from '@ab/constants';
+
+/**
+ * Narrow the BC's `string` state column to the typed union. Defaults to
+ * `active` for any unrecognized value so a corrupt row never poisons the
+ * dashboard.
+ */
+function narrowState(raw: string): WxPracticeMasteryState {
+	return (WX_PRACTICE_MASTERY_STATE_VALUES as readonly string[]).includes(raw)
+		? (raw as WxPracticeMasteryState)
+		: WX_PRACTICE_MASTERY_STATES.ACTIVE;
+}
 
 /**
  * Display state used by the dashboard. Adds `never-seen` to the canonical
  * three-state contract -- never-seen rows have no mastery row yet, so the
  * BC's state enum cannot represent them. The dashboard composes the union.
  */
-export type WxMasteryDisplayState = WxPracticeState | 'never-seen';
+export type WxMasteryDisplayState = WxPracticeMasteryState | 'never-seen';
 
 /** All sort keys exposed via `?sort=`. */
 export const WX_MASTERY_SORT_KEYS = ['attempts', 'ratio', 'last-seen', 'label'] as const;
@@ -19,19 +37,19 @@ export const DEFAULT_WX_MASTERY_SORT: WxMasterySortKey = 'attempts';
 
 /** All product values exposed via `?product=`. */
 export const WX_MASTERY_PRODUCTS = [
-	'metar',
-	'taf',
-	'pirep',
-	'fb',
-	'airmet',
-] as const satisfies ReadonlyArray<WxPracticeProduct>;
-export const DEFAULT_WX_MASTERY_PRODUCT: WxPracticeProduct = 'metar';
+	WX_PRODUCTS.METAR,
+	WX_PRODUCTS.TAF,
+	WX_PRODUCTS.PIREP,
+	WX_PRODUCTS.FB,
+	WX_PRODUCTS.AIRMET,
+] as const satisfies ReadonlyArray<WxProduct>;
+export const DEFAULT_WX_MASTERY_PRODUCT: WxProduct = WX_PRODUCTS.METAR;
 
 /** All state filter values exposed via `?state=`. */
 export const WX_MASTERY_STATE_FILTERS = [
-	'active',
-	'passive',
-	'demoted',
+	WX_PRACTICE_MASTERY_STATES.ACTIVE,
+	WX_PRACTICE_MASTERY_STATES.PASSIVE,
+	WX_PRACTICE_MASTERY_STATES.DEMOTED,
 	'never-seen',
 ] as const satisfies ReadonlyArray<WxMasteryDisplayState>;
 
@@ -40,7 +58,7 @@ export const WX_MASTERY_STATE_FILTERS = [
  * mastery row?)` so the client never has to do the join.
  */
 export interface WxMasteryDisplayRow {
-	readonly product: WxPracticeProduct;
+	readonly product: WxProduct;
 	readonly family: string;
 	readonly label: string;
 	readonly attempts: number;
@@ -53,7 +71,7 @@ export interface WxMasteryDisplayRow {
 
 /** Per-product nav tab summary. */
 export interface WxMasteryProductTab {
-	readonly product: WxPracticeProduct;
+	readonly product: WxProduct;
 	readonly label: string;
 	readonly familyCount: number;
 	readonly attemptedCount: number;
@@ -74,7 +92,7 @@ export interface WxMasterySummary {
  * server-side so the URL is the single source of truth.
  */
 export interface WxMasteryPageData {
-	readonly product: WxPracticeProduct;
+	readonly product: WxProduct;
 	readonly stateFilters: ReadonlyArray<WxMasteryDisplayState>;
 	readonly sort: WxMasterySortKey;
 	readonly rows: ReadonlyArray<WxMasteryDisplayRow>;
@@ -84,7 +102,7 @@ export interface WxMasteryPageData {
 }
 
 /** Human-friendly product label. */
-export function productLabel(p: WxPracticeProduct): string {
+export function productLabel(p: WxProduct): string {
 	switch (p) {
 		case 'metar':
 			return 'METAR';
@@ -114,7 +132,7 @@ export function stateLabel(s: WxMasteryDisplayState): string {
 }
 
 /** Parse the `?product=` query param. Unknown values fall back to the default. */
-export function parseProductParam(value: string | null): WxPracticeProduct {
+export function parseProductParam(value: string | null): WxProduct {
 	if (value === null) return DEFAULT_WX_MASTERY_PRODUCT;
 	const matched = WX_MASTERY_PRODUCTS.find((p) => p === value.toLowerCase());
 	return matched ?? DEFAULT_WX_MASTERY_PRODUCT;
@@ -150,7 +168,7 @@ export function parseSortParam(value: string | null): WxMasterySortKey {
 export function composeDisplayRows(
 	catalog: ReadonlyArray<{ readonly slug: string; readonly label: string }>,
 	mastery: ReadonlyArray<WxPracticeMasteryRow>,
-	product: WxPracticeProduct,
+	product: WxProduct,
 ): ReadonlyArray<WxMasteryDisplayRow> {
 	const masteryByFamily = new Map<string, WxPracticeMasteryRow>();
 	for (const row of mastery) {
@@ -184,8 +202,8 @@ export function composeDisplayRows(
 			attempts: row.attempts,
 			correct: row.correct,
 			ratio,
-			state: row.state,
-			lastSeenAt: row.lastSeenAt,
+			state: narrowState(row.state),
+			lastSeenAt: row.lastSeenAt === null ? null : row.lastSeenAt.toISOString(),
 		};
 	});
 }

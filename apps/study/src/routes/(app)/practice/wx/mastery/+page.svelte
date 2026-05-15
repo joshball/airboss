@@ -1,6 +1,6 @@
 <script lang="ts">
+import type { WxProduct } from '@ab/constants';
 import { QUERY_PARAMS, ROUTES } from '@ab/constants';
-import type { WxPracticeProduct } from '$lib/types/wx-practice-mastery-contract';
 import {
 	relativeLastSeen,
 	stateLabel,
@@ -31,7 +31,7 @@ const isEmpty = $derived(summary.attemptedFamilies === 0);
  * so the URL stays the single source of truth.
  */
 function buildHref(overrides: {
-	product?: WxPracticeProduct;
+	product?: WxProduct;
 	state?: ReadonlyArray<WxMasteryDisplayState> | null;
 	sort?: WxMasterySortKey;
 }): string {

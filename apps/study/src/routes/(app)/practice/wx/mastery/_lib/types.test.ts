@@ -1,5 +1,5 @@
+import type { WxPracticeMasteryRow } from '@ab/bc-wx-practice';
 import { describe, expect, it } from 'vitest';
-import type { WxPracticeMasteryRow } from '$lib/types/wx-practice-mastery-contract';
 import {
 	composeDisplayRows,
 	filterRowsByState,
@@ -24,14 +24,14 @@ function mkRow(family: string, overrides: Partial<WxPracticeMasteryRow> = {}): W
 		userId: 'usr_test',
 		product: 'metar',
 		family,
-		subFamily: null,
+		subFamily: '',
 		attempts: 10,
 		correct: 5,
 		recentRing: [],
 		streakAcrossSessions: 0,
 		state: 'active',
 		lastSeenAt: null,
-		lastUpdatedAt: '2026-05-14T00:00:00.000Z',
+		lastUpdatedAt: new Date('2026-05-14T00:00:00.000Z'),
 		...overrides,
 	};
 }
@@ -113,7 +113,12 @@ describe('composeDisplayRows', () => {
 
 	it('joins mastery rows to catalog families on the family slug', () => {
 		const mastery: WxPracticeMasteryRow[] = [
-			mkRow('wind', { attempts: 10, correct: 7, state: 'active', lastSeenAt: '2026-05-13T12:00:00.000Z' }),
+			mkRow('wind', {
+				attempts: 10,
+				correct: 7,
+				state: 'active',
+				lastSeenAt: new Date('2026-05-13T12:00:00.000Z'),
+			}),
 		];
 		const rows = composeDisplayRows(catalog, mastery, 'metar');
 		const wind = rows.find((r) => r.family === 'wind');
