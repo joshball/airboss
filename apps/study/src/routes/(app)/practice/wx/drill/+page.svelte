@@ -423,6 +423,7 @@ function questionPrompt(item: SessionItem): string {
 					}}
 				>
 					<p class="question">{questionPrompt(currentItem)}</p>
+					<!-- svelte-ignore a11y_autofocus -- this is the primary input the user is expected to fill on a drill question; auto-focus mirrors the per-token flashcard pattern in the reps page -->
 					<input
 						type="text"
 						class="answer-input"
@@ -508,72 +509,69 @@ function questionPrompt(item: SessionItem): string {
 .page {
 	max-width: 64rem;
 	margin: 0 auto;
-	padding: 1.5rem;
+	padding: var(--space-lg);
 }
 .hd {
-	margin-bottom: 2rem;
+	margin-bottom: var(--space-xl);
 }
 .lead {
-	color: var(--text-muted, #666);
-	margin-top: 0.5rem;
+	color: var(--ink-muted);
+	margin-top: var(--space-xs);
 }
 .block {
 	border: none;
 	padding: 0;
-	margin-bottom: 1.5rem;
+	margin-bottom: var(--space-lg);
 }
 .block legend {
 	font-weight: 600;
-	margin-bottom: 0.5rem;
+	margin-bottom: var(--space-xs);
 }
 .chips {
 	display: flex;
-	gap: 0.5rem;
+	gap: var(--space-xs);
 	flex-wrap: wrap;
 }
 .chip {
-	padding: 0.5rem 0.85rem;
-	border: 1px solid var(--border, #ccc);
-	border-radius: 999px;
-	background: var(--surface, #fff);
+	padding: var(--space-xs) var(--space-sm);
+	border: 1px solid var(--edge-default);
+	border-radius: var(--radius-pill);
+	background: var(--surface-panel);
 	cursor: pointer;
-	font-size: 0.9rem;
+	font-size: var(--type-ui-body-size, 0.9rem);
 }
 .chip.on {
-	background: var(--brand, #2563eb);
-	color: white;
-	border-color: var(--brand, #2563eb);
+	background: var(--action-link);
+	color: var(--ink-inverse);
+	border-color: var(--action-link);
 }
 .chip.small {
-	padding: 0.25rem 0.6rem;
-	font-size: 0.8rem;
+	padding: var(--space-3xs) var(--space-xs);
 }
 .family-group {
-	margin-top: 0.75rem;
+	margin-top: var(--space-sm);
 	width: 100%;
 }
 .family-group h4 {
-	margin: 0 0 0.25rem 0;
-	font-size: 0.85rem;
-	color: var(--text-muted, #666);
+	margin: 0 0 var(--space-3xs) 0;
+	color: var(--ink-muted);
 }
 .tier-label {
-	font-size: 0.85rem;
-	color: var(--text-muted, #666);
-	margin-top: 0.25rem;
+	color: var(--ink-muted);
+	margin-top: var(--space-3xs);
 }
 .actions {
 	display: flex;
-	gap: 1rem;
+	gap: var(--space-md);
 	align-items: center;
-	margin: 1.5rem 0;
+	margin: var(--space-lg) 0;
 }
 button.primary {
-	padding: 0.6rem 1.25rem;
-	background: var(--brand, #2563eb);
-	color: white;
+	padding: var(--space-sm) var(--space-md);
+	background: var(--action-link);
+	color: var(--ink-inverse);
 	border: none;
-	border-radius: 6px;
+	border-radius: var(--radius-sm);
 	font-weight: 600;
 	cursor: pointer;
 }
@@ -584,124 +582,120 @@ button.primary:disabled {
 button.text {
 	background: none;
 	border: none;
-	color: var(--brand, #2563eb);
+	color: var(--action-link);
 	cursor: pointer;
 	text-decoration: underline;
 }
 .error {
-	color: var(--danger, #c00);
+	color: var(--signal-danger);
 }
 .mastery-snapshot table,
 .per-family table {
 	width: 100%;
 	border-collapse: collapse;
-	margin-top: 0.75rem;
+	margin-top: var(--space-sm);
 }
 .mastery-snapshot th,
 .mastery-snapshot td,
 .per-family th,
 .per-family td {
-	padding: 0.4rem 0.6rem;
-	border-bottom: 1px solid var(--border-faint, #eee);
+	padding: var(--space-xs) var(--space-sm);
+	border-bottom: 1px solid var(--edge-subtle);
 	text-align: left;
 }
 
 .session .meta {
 	display: flex;
 	justify-content: space-between;
-	margin-bottom: 1rem;
-	color: var(--text-muted, #666);
+	margin-bottom: var(--space-md);
+	color: var(--ink-muted);
 }
 .product-display {
-	padding: 1rem;
-	background: var(--surface-2, #f5f5f7);
-	border-radius: 6px;
-	margin-bottom: 1rem;
+	padding: var(--space-md);
+	background: var(--surface-sunken);
+	border-radius: var(--radius-md);
+	margin-bottom: var(--space-md);
 }
 .product-label {
-	font-size: 0.8rem;
 	font-weight: 600;
-	color: var(--text-muted, #666);
-	letter-spacing: 0.05em;
-	margin-bottom: 0.5rem;
+	color: var(--ink-muted);
+	letter-spacing: var(--letter-spacing-wide, 0.05em);
+	margin-bottom: var(--space-xs);
 }
 .raw {
-	font-family: ui-monospace, SFMono-Regular, monospace;
-	font-size: 1.1rem;
-	background: var(--surface, #fff);
-	padding: 0.75rem;
-	border-radius: 4px;
+	font-family: var(--font-family-mono);
+	background: var(--surface-panel);
+	padding: var(--space-sm);
+	border-radius: var(--radius-sm);
 	overflow-x: auto;
-	margin: 0 0 0.75rem 0;
+	margin: 0 0 var(--space-sm) 0;
 	white-space: pre-wrap;
 	word-break: break-word;
 }
 .token-callout code {
-	background: var(--surface, #fff);
-	padding: 0.15rem 0.4rem;
-	border-radius: 4px;
-	font-family: ui-monospace, monospace;
+	background: var(--surface-panel);
+	padding: var(--space-3xs) var(--space-xs);
+	border-radius: var(--radius-sm);
+	font-family: var(--font-family-mono);
 }
 .quiz {
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem;
+	gap: var(--space-sm);
 }
 .question {
-	font-size: 1.1rem;
 	font-weight: 500;
 }
 .answer-input {
-	padding: 0.6rem;
-	border: 1px solid var(--border, #ccc);
-	border-radius: 4px;
-	font-size: 1rem;
+	padding: var(--space-sm);
+	border: 1px solid var(--edge-default);
+	border-radius: var(--radius-sm);
 }
 .rationale {
-	padding: 1rem;
-	border-radius: 6px;
-	border-left: 4px solid var(--border, #ccc);
+	padding: var(--space-md);
+	border-radius: var(--radius-md);
+	border-left: 4px solid var(--edge-default);
 }
 .rationale.correct {
-	background: var(--success-bg, #e6f7e6);
-	border-left-color: var(--success, #2a8f2a);
+	background: var(--signal-success-wash);
+	border-left-color: var(--signal-success-edge);
 }
 .rationale.incorrect {
-	background: var(--danger-bg, #fbeae9);
-	border-left-color: var(--danger, #c00);
+	background: var(--signal-danger-wash);
+	border-left-color: var(--signal-danger-edge);
 }
 .verdict {
 	font-weight: 600;
-	margin: 0 0 0.5rem 0;
+	margin: 0 0 var(--space-xs) 0;
 }
 .rationale-text {
-	margin: 0 0 0.5rem 0;
+	margin: 0 0 var(--space-xs) 0;
 }
 .transition {
-	margin: 0.5rem 0;
+	margin: var(--space-xs) 0;
 	font-style: italic;
-	color: var(--text-muted, #666);
+	color: var(--ink-muted);
 }
 .visible-card {
-	padding: 1rem;
-	background: var(--surface-2, #f5f5f7);
-	border-radius: 6px;
+	padding: var(--space-md);
+	background: var(--surface-sunken);
+	border-radius: var(--radius-md);
 }
 .passive-note {
-	color: var(--text-muted, #666);
-	margin-bottom: 0.5rem;
+	color: var(--ink-muted);
+	margin-bottom: var(--space-xs);
 }
 .summary {
-	padding: 1rem 0;
+	padding: var(--space-md) 0;
 }
 .totals {
 	display: grid;
 	grid-template-columns: max-content 1fr;
-	gap: 0.4rem 1rem;
-	margin: 1rem 0;
+	gap: var(--space-xs) var(--space-md);
+	margin: var(--space-md) 0;
 }
 .totals dt {
-	color: var(--text-muted, #666);
+	color: var(--ink-muted);
 }
 .totals dd {
 	margin: 0;
@@ -709,6 +703,6 @@ button.text {
 }
 .transitions ul {
 	list-style: disc;
-	margin: 0.5rem 0 1rem 1.5rem;
+	margin: var(--space-xs) 0 var(--space-md) var(--space-lg);
 }
 </style>

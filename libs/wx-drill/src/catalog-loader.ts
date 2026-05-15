@@ -8,8 +8,11 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { CatalogFamiliesByProduct } from './sample';
+
+const HERE = dirname(fileURLToPath(import.meta.url));
 
 interface RawCatalogFamily {
 	slug: string;
@@ -35,7 +38,7 @@ export interface CatalogLoadOptions {
 }
 
 export function loadCatalogFamilies(opts: CatalogLoadOptions = {}): CatalogFamiliesByProduct {
-	const repoRoot = opts.repoRoot ?? resolve(import.meta.dir, '..', '..', '..');
+	const repoRoot = opts.repoRoot ?? resolve(HERE, '..', '..', '..');
 	const catalogPath = resolve(repoRoot, 'course/knowledge/weather/encoded-text-catalog/catalog.json');
 	const raw = readFileSync(catalogPath, 'utf8');
 	const parsed = JSON.parse(raw) as RawCatalog;

@@ -9,10 +9,8 @@
 // `@ab/bc-wx-practice/server`).
 
 // Pure helpers (also exported from `@ab/bc-wx-practice`).
-export { defaultQuestionForm, gradeAttempt, type GradeAttemptInput, type GradeAttemptResult } from './grader';
-export { type DrillToken, masteryKey, type SampledItem, sampleSession, type SamplerInput } from './sampler';
-export { applyAttempt, type ApplyAttemptInput, type ApplyAttemptResult, type MasterySnapshot, type MasteryTransition } from './state-machine';
-
+export { defaultQuestionForm, type GradeAttemptInput, type GradeAttemptResult, gradeAttempt } from './grader';
+export { type DrillToken, masteryKey, type SampledItem, type SamplerInput, sampleSession } from './sampler';
 // Server-only queries.
 export {
 	buildMasteryMap,
@@ -31,3 +29,10 @@ export {
 	startSession,
 	summarizeSession,
 } from './server/queries';
+export {
+	type ApplyAttemptInput,
+	type ApplyAttemptResult,
+	applyAttempt,
+	type MasterySnapshot,
+	type MasteryTransition,
+} from './state-machine';
