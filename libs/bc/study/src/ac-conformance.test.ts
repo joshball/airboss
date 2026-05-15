@@ -13,7 +13,7 @@
  * without needing a re-ingest with a populated cache.
  */
 
-import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -22,25 +22,30 @@ import { acManifestSchema, handbookWarningsFileSchema } from './manifest-validat
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(HERE, '..', '..', '..', '..');
 const AC_ROOT = join(REPO_ROOT, 'ac');
+const AC_INDEX = join(AC_ROOT, 'index.json');
 
+/**
+ * Production AC trees only -- read from the committed `ac/index.json`
+ * manifest, NOT by scanning the directory.
+ *
+ * `scripts/db/seed-references-from-manifest.test.ts` writes synthetic AC
+ * fixture trees (`ac/999-<token>-1/`, `ac/888-<token>-9/`) directly under
+ * `ac/` and tears them down per-test. A directory scan races those
+ * fixtures: the conformance shim's collection phase catches a half-built
+ * tree that has a `manifest.json` but no sibling `warnings.json`, and the
+ * conformance assertion fails non-deterministically. Synthetic fixtures
+ * are never registered in `index.json`, so keying off the manifest makes
+ * this test immune to the race.
+ */
 function listAcTrees(): { docSlug: string; revision: string }[] {
+	if (!existsSync(AC_INDEX)) return [];
+	const index = JSON.parse(readFileSync(AC_INDEX, 'utf-8')) as {
+		entries?: { doc_slug: string; revision: string }[];
+	};
 	const out: { docSlug: string; revision: string }[] = [];
-	if (!existsSync(AC_ROOT)) return out;
-	for (const docSlug of readdirSync(AC_ROOT)) {
-		const docDir = join(AC_ROOT, docSlug);
-		try {
-			if (!statSync(docDir).isDirectory()) continue;
-		} catch {
-			continue;
-		}
-		try {
-			for (const revision of readdirSync(docDir)) {
-				if (existsSync(join(docDir, revision, 'manifest.json'))) {
-					out.push({ docSlug, revision });
-				}
-			}
-		} catch {
-			// Skip non-directory entries.
+	for (const entry of index.entries ?? []) {
+		if (existsSync(join(AC_ROOT, entry.doc_slug, entry.revision, 'manifest.json'))) {
+			out.push({ docSlug: entry.doc_slug, revision: entry.revision });
 		}
 	}
 	return out;
