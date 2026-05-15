@@ -46,16 +46,8 @@ const drillHref = $derived(data.drillHref);
 				<a class="practice-btn primary" href={examplesHref} data-testid="wx-product-browse-examples">
 					Browse examples
 				</a>
-				<a
-					class="practice-btn disabled"
-					href={drillHref}
-					aria-disabled="true"
-					tabindex="-1"
-					title="Drill practice ships in Phase 3"
-					onclick={(e) => e.preventDefault()}
-					data-testid="wx-product-drill-disabled"
-				>
-					Drill this now <span class="badge-soon">soon</span>
+				<a class="practice-btn" href={drillHref} data-testid="wx-product-drill">
+					Drill this now
 				</a>
 			</div>
 		{/if}
@@ -226,25 +218,6 @@ const drillHref = $derived(data.drillHref);
 	.practice-btn.primary:hover {
 		background: var(--action-default-edge);
 		color: var(--ink-inverse);
-	}
-
-	.practice-btn.disabled {
-		background: var(--surface-muted);
-		border-color: var(--edge-default);
-		color: var(--ink-faint);
-		cursor: not-allowed;
-		pointer-events: none;
-	}
-
-	.badge-soon {
-		font-size: var(--type-ui-caption-size);
-		text-transform: uppercase;
-		letter-spacing: var(--letter-spacing-caps);
-		background: var(--surface-sunken);
-		color: var(--ink-faint);
-		padding: 0 var(--space-2xs);
-		border-radius: var(--radius-xs);
-		font-weight: 600;
 	}
 
 	.badge {

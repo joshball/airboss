@@ -78,15 +78,15 @@ test.describe('reference -- wx product examples (METAR)', () => {
 		await expect(cards.first().getByTestId(/example-raw-/)).toContainText('TSRA');
 	});
 
-	test('product detail page exposes Browse-examples and disabled Drill buttons', async ({ page }) => {
+	test('product detail page exposes Browse-examples and Drill buttons', async ({ page }) => {
 		await page.goto(ROUTES.REFERENCE_WX_PRODUCT('metar'));
 
 		const browse = page.getByTestId('wx-product-browse-examples');
 		await expect(browse).toBeVisible();
 		await expect(browse).toHaveAttribute('href', ROUTES.REFERENCE_WX_PRODUCT_EXAMPLES('metar'));
 
-		const drill = page.getByTestId('wx-product-drill-disabled');
+		const drill = page.getByTestId('wx-product-drill');
 		await expect(drill).toBeVisible();
-		await expect(drill).toHaveAttribute('aria-disabled', 'true');
+		await expect(drill).toHaveAttribute('href', ROUTES.PRACTICE_WX_DRILL);
 	});
 });

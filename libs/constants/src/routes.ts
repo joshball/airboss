@@ -378,17 +378,6 @@ export const ROUTES = {
 	 * `@ab/wx-explain`). Drill Phase 2.
 	 */
 	REFERENCE_WX_PRODUCT_EXAMPLES: (slug: string) => `/reference/wx/products/${slug}/examples` as const,
-	/**
-	 * Drill loop placeholder (Drill Phase 3). Route does not exist yet; the
-	 * examples page surfaces a disabled "Drill this now" button that points
-	 * here so the constant is grep-able the moment the route ships.
-	 */
-	PRACTICE_WX_DRILL: '/practice/wx/drill',
-	/**
-	 * Mastery dashboard placeholder (Drill Phase 3b). Forward-declared so
-	 * routes can link to it before the page lands.
-	 */
-	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	// Practice surface -- encoded-text fluency drills. Backed by `@ab/bc-wx-practice`
 	// (mastery ledger + state machine) and `@ab/wx-drill` (sampler / pack
@@ -397,6 +386,7 @@ export const ROUTES = {
 	PRACTICE_WX_DRILL_START: '/practice/wx/drill/start',
 	PRACTICE_WX_DRILL_SUBMIT: '/practice/wx/drill/submit',
 	PRACTICE_WX_DRILL_END: '/practice/wx/drill/end',
+	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	/**
 	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/calibration` to
