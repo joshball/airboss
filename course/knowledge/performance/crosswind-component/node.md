@@ -73,7 +73,7 @@ mastery_criteria: >-
 
 # Crosswind Component
 
-## Context
+:::phase name="context"
 
 Every landing uses this. Every single one. The wind is almost never exactly down the runway, so every approach you have ever flown involved -- implicitly or explicitly -- a crosswind component calculation. On a calm day it is trivial. On a gusting day, on a short runway, in an unfamiliar airplane, it is the number that decides whether you continue the approach or go somewhere else.
 
@@ -81,7 +81,8 @@ Picture short final, Runway 27, gusting from 310. The tower calls the wind. You 
 
 This node is about building that number into your bones. It is also about what the POH number actually means -- because "max demonstrated crosswind" is one of the most persistently misunderstood values in light aircraft operation, and if you teach, you will face this misconception.
 
-## Problem
+:::
+:::phase name="problem"
 
 Concrete scenario:
 
@@ -98,7 +99,8 @@ Questions:
 
 You should be able to answer all five in under a minute, in your head. If you cannot yet, that is what this node is for.
 
-## Discover
+:::
+:::phase name="discover"
 
 Do not read ahead. Work through these questions with a pencil first.
 
@@ -123,7 +125,8 @@ Do not read ahead. Work through these questions with a pencil first.
 
    Only after you have filled it in should you compare with the Reveal.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The formulas
 
@@ -196,7 +199,8 @@ What the number is **not**, in general:
 - **Crosswind technique:** AFH Chapter 8 (Approaches and Landings), crosswind approach and landing.
 - **Wind reporting conventions:** AIM Chapter 7 Section 2; reminder that ATIS/METAR surface wind is magnetic at controlled/reporting airports but sometimes true in DUATS/winds-aloft products. Always sanity-check.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Calculation prompts
 
@@ -228,7 +232,8 @@ What the number is **not**, in general:
 
 - `activity:crosswind-component` -- drag the wind around a compass rose relative to a fixed runway heading; live-update the crosswind and headwind components with visual decomposition. See `libs/activities/crosswind-component/`.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -246,7 +251,8 @@ What the number is **not**, in general:
 - `proc-crosswind-landing-technique` -- crab, sideslip, and the transition.
 - `proc-go-around` -- the decision to abandon the approach when the math changes on short final.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel calculation scenario
 
@@ -271,3 +277,5 @@ A student pilot tells you, with confidence, "I can't legally land if the crosswi
 
 <!-- TODO(verify): confirm specific C172 POH locates "15 kt max demonstrated crosswind" in Section 4, not Section 2. Several C172 model years vary and the precise section number should be checked against the specific serial/year POH the learner is using. -->
 <!-- TODO(verify): confirm the 0.2*Vso certification minimum under 14 CFR 23.233 is stated as a demonstration requirement in the current revision; this has been the historical rule but the Part 23 rewrite (amendment 23-64) restructured Part 23 and the current citation may be in the consensus standards (ASTM F3173 family). Citation may need updating to point to the current Part 23 section or the incorporated consensus standard. -->
+
+:::

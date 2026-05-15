@@ -54,7 +54,7 @@ mastery_criteria: >
 
 # Weather Go / No-Go Decision
 
-## Context
+:::phase name="context"
 
 The same trip that opened section 1 of the course: a friend asks
 you to fly them to a wedding three states away on Saturday. You're
@@ -70,7 +70,8 @@ different defensible answers. The decision isn't "is the weather
 flyable?" It's "is the weather flyable for me, in this airplane,
 on this route, today?"
 
-## Problem
+:::
+:::phase name="problem"
 
 The go/no-go decision is the synthesis target for everything else
 in the weather course. Air masses, fronts, products, in-flight
@@ -95,7 +96,8 @@ named driver is what makes the decision defensible -- to yourself
 when the trip-pressure builds, and to whoever was counting on the
 trip if it doesn't happen.
 
-## Discover
+:::
+:::phase name="discover"
 
 A go/no-go decision has three branches, not two:
 
@@ -156,7 +158,8 @@ name the worst-case along the route, ask if the flight survives
 the worst case with reserves, and ask what trend would change the
 answer in the next two hours.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The go/no-go isn't a single moment; it's a sequence of moments,
 each a chance to recommit or to reverse:
@@ -191,7 +194,8 @@ The trip pressure framework: every decision should produce a
 specific named driver. "Embedded thunderstorms in convective SIGMET
 on the middle leg" is a driver; "weather looks bad" is not.
 
-## Practice
+:::
+:::phase name="practice"
 
 For your next planned cross-country, walk the brief from synoptic
 to point. At each layer write down (a) the hazard or condition
@@ -439,7 +443,8 @@ to monitor for that route.
       cite: FAA-H-8083-2A Risk Management Handbook
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node is the synthesis target for the weather course. Every
 preceding node feeds it: the synoptic story (s2), the hazards
@@ -453,7 +458,8 @@ shift. A summer afternoon flight is convection-dominated; a winter
 cross-country is icing-dominated; a marginal-VFR night flight is
 ceiling-dominated. The framework holds; the named drivers change.
 
-## Verify
+:::
+:::phase name="verify"
 
 For a flight you have already flown, walk the brief from memory
 and reconstruct the decision. Did you go because the brief
@@ -465,3 +471,5 @@ For a flight that turned out worse than briefed, walk the brief
 again. What input would have changed your call if it had been
 weighted higher? Whichever input that is, it's the variable the
 brief most needs to surface for you next time.
+
+:::

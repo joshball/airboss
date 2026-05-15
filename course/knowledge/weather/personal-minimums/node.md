@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Personal Weather Minimums
 
-## Context
+:::phase name="context"
 
 You're a 200-hour PPL flying yourself, your spouse, and your
 in-laws home from a $300 hamburger 90 minutes after sunset. The
@@ -59,7 +59,8 @@ flying experience. The decision now is not whether the weather is
 legal -- it is whether the weather is within the floor you set when
 you weren't being judged by your in-laws.
 
-## Problem
+:::
+:::phase name="problem"
 
 Legal minimums are the floor for the regulatory environment, not the
 floor for any specific pilot. The mismatch is biggest where it
@@ -68,7 +69,8 @@ pressure pushing the decision toward "go." Personal minimums are the
 pre-committed numerical floor a pilot adopts to remove the moment-of-
 decision negotiation.
 
-## Discover
+:::
+:::phase name="discover"
 
 Why do personal minimums exist? Three forcing functions:
 
@@ -86,7 +88,8 @@ The minimums you set should reflect not what's legal but what leaves
 you margin to handle the unexpected -- a deteriorating ceiling, a
 shift in wind, a missed approach -- without the day going bad.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The FAA's Personal Minimums Checklist (P-8740-25) suggests setting
 floors for each of the operational variables and adjusting them for
@@ -123,7 +126,8 @@ Three rules of operation:
    after every IPC, after every 100 hours) -- not after every
    borderline trip.
 
-## Practice
+:::
+:::phase name="practice"
 
 Build your minimums table now, before the next flight. For each row,
 write the number you'd defend to another CFI, not the number that
@@ -349,7 +353,8 @@ specific concern and the trigger that would make you turn around.
       cite: AIM 7-1-3 -- Use of Aviation Weather Products
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node serves R1b. It feeds the go/no-go decision node directly
 -- personal minimums are the numerical input to the framework that
@@ -358,9 +363,12 @@ covers the cognitive failure modes (anti-authority, machismo,
 invulnerability, impulsivity, resignation) that drive minimum-
 override decisions.
 
-## Verify
+:::
+:::phase name="verify"
 
 Show your written personal minimums to another instructor. Ask:
 "are these floors defensible for my experience level?" Adjust based
 on the answer. The minimums you can defend to a peer are the
 minimums you can defend to yourself in the moment.
+
+:::

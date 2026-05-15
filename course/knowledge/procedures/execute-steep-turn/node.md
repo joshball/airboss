@@ -96,7 +96,7 @@ mastery_criteria: >-
 
 # Executing a Steep Turn
 
-## Context
+:::phase name="context"
 
 A steep turn is the simplest performance maneuver to describe and one of the harder to fly well. Roll into a 45-degree banked level turn, hold the bank and altitude for a full 360, roll out on the entry heading. Repeat in the opposite direction.
 
@@ -106,7 +106,8 @@ The pilot who fights each variable independently loses; they make corrections th
 
 This node is the procedure for the maneuver. It composes on `aero-load-factor-and-bank-angle` (the physics), `proc-maneuvering-airspeeds` (Va and the recommended airspeed), `proc-clear-the-area` (the prefix), and `proc-acs-tolerances` (the success criteria).
 
-## Problem
+:::
+:::phase name="problem"
 
 You are about to demonstrate a steep turn for your CFI. Walk through the maneuver from "clear the area" to "complete the second-direction turn." Specifically:
 
@@ -119,7 +120,8 @@ You are about to demonstrate a steep turn for your CFI. Walk through the maneuve
 
 Write your answer before reading on.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What is the entry checklist?
 
@@ -250,7 +252,8 @@ The abort technique: roll wings level, climb if low, breathe, restart with a cle
 - Second-direction turn reveals coordination weaknesses.
 - Abort and re-set when conditions exceed recoverable tolerances.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -329,7 +332,8 @@ In descending order:
 3. **ACS PPL-A V.A** -- the tolerances and required performance.
 4. **PHAK Aerodynamics chapter** -- the load-factor and stall-margin background.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -356,7 +360,8 @@ In descending order:
 - `drill:est-correction-call` -- CFI calls a deviation; pilot responds with the correction direction and magnitude in 3 seconds.
 - `drill:est-scan-watch` -- CFI watches pilot's eyes for a full 360; verifies the rotation continues throughout (no fixation).
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -379,7 +384,8 @@ In descending order:
 - `aero-uncoordinated-flight` -- the kill chain to avoid (rudder to tighten).
 - `proc-stall-recovery` -- the recovery if accelerated stall develops.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -413,3 +419,5 @@ Evaluation criteria:
 - The CFI is patient but specific: "You are not bad at left turns; you just have not practiced left turns as much. Let's fix the practice asymmetry."
 
 The pedagogical move is to refuse the framing of "good at right, bad at left" and reframe as "right is consolidated, left needs more reps." The maneuver is not asymmetric in the airplane; it is asymmetric in the student's training history. Repetition with attention closes the gap.
+
+:::

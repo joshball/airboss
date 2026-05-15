@@ -88,7 +88,7 @@ mastery_criteria: >-
 
 # Coordination and Rudder Use
 
-## Context
+:::phase name="context"
 
 Rudder is the most-neglected control on a light single. New pilots use it because they have to (they cannot make the airplane go straight without it during takeoff and rotation). Once airborne, they often forget about it. The rudder pedals sit at their feet, available, ignored, while the pilot manages bank and pitch with the yoke. The airplane usually flies acceptably this way; coordinated flight in cruise is mostly self-correcting in a stable airframe, and small uncoordinated states do not produce dramatic consequences.
 
@@ -98,7 +98,8 @@ NTSB accident reports use the phrase "stall/spin from skidding turn" almost as a
 
 This node is about the rudder discipline that prevents the failure mode. Rudder use in cruise (small, mostly P-factor and slipstream), in slow flight (significant, continuous), in turns (coordination via balanced rudder-aileron), in slips (intentional uncoordinated for a purpose), and in the pattern (the survival skill).
 
-## Problem
+:::
+:::phase name="problem"
 
 You are flying a Cessna 172 in the pattern. You are on a left base at 800 AGL. You overshoot the runway centerline; you have rolled wings level after the turn but are 50 feet right of the centerline, and the runway threshold is approaching fast. You decide to "kick it back" with rudder while you finish lining up.
 
@@ -106,7 +107,8 @@ What happens to the airplane in the next 10 seconds, and what should you do inst
 
 Write your answer before reading on. Then ask: at what altitude, in this configuration, would the airplane be unrecoverable from the skidding stall?
 
-## Discover
+:::
+:::phase name="discover"
 
 The discipline decomposes into four asymmetric-yaw sources, three coordinated-flight scenarios, and two intentionally-uncoordinated cases. Work through.
 
@@ -114,12 +116,12 @@ The discipline decomposes into four asymmetric-yaw sources, three coordinated-fl
 
 In a single-engine propeller airplane (clockwise propeller, viewed from pilot's seat):
 
-| Source             | Cause                                                              | Direction (typical)        | Rudder correction |
-| ------------------ | ------------------------------------------------------------------ | -------------------------- | ----------------- |
-| Adverse yaw        | Lowered aileron has more lift but more drag; raised aileron less drag | Yaws OPPOSITE roll direction (e.g., yaw right while rolling left) | Rudder INTO the turn |
-| P-factor           | At high AOA, descending blade has higher AOA than ascending blade; more thrust on right | Yaws LEFT at high AOA + power | Right rudder |
-| Slipstream         | Spiraling propwash hits left side of vertical stab | Yaws LEFT, more pronounced at low airspeed + power | Right rudder |
-| Gyroscopic precession | When prop axis is pitched (e.g., raising tail on takeoff), gyroscopic effect yaws the plane | Yaws LEFT when tail rises (clockwise prop) | Right rudder |
+| Source                | Cause                                                                                       | Direction (typical)                                               | Rudder correction    |
+| --------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | -------------------- |
+| Adverse yaw           | Lowered aileron has more lift but more drag; raised aileron less drag                       | Yaws OPPOSITE roll direction (e.g., yaw right while rolling left) | Rudder INTO the turn |
+| P-factor              | At high AOA, descending blade has higher AOA than ascending blade; more thrust on right     | Yaws LEFT at high AOA + power                                     | Right rudder         |
+| Slipstream            | Spiraling propwash hits left side of vertical stab                                          | Yaws LEFT, more pronounced at low airspeed + power                | Right rudder         |
+| Gyroscopic precession | When prop axis is pitched (e.g., raising tail on takeoff), gyroscopic effect yaws the plane | Yaws LEFT when tail rises (clockwise prop)                        | Right rudder         |
 
 So in a typical climb-out (high AOA, full power), the airplane wants to yaw left. Right rudder pressure is constant. Pilots who fly without right rudder in climb are flying in a slip; they are bleeding climb performance and burning more fuel.
 
@@ -203,7 +205,8 @@ Both are habits that come from primary training where rudder was taught as the "
 - Skids are uncoordinated turns; they kill in the pattern via snap-stall geometry.
 - Pilots who skid have a re-trainable habit; the fix is roll-out, not rudder.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -307,7 +310,8 @@ In descending order:
 - Your training airplane on the ground: stand outside, look at the rudder pedals and ailerons, and verify what they do mechanically. The mental model is right when the linkage is clear.
 - An hour of tailwheel time, if available; tailwheel airplanes punish bad rudder habits and reward good ones.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -375,7 +379,8 @@ C172 forward slip at 65 KIAS (short final speed):
 
 The slip is high-drag and effective. A pilot can lose 500 feet in 30-40 seconds without overspeed risk.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -397,7 +402,8 @@ The slip is high-drag and effective. A pilot can lose 500 feet in 30-40 seconds 
 - `proc-180-degree-turn` -- the turn must be coordinated; uncoordinated 180 in IMC compounds disorientation.
 - `proc-spatial-disorientation" -- uncoordinated flight produces vestibular cues that aggravate disorientation.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -433,3 +439,5 @@ Evaluation criteria:
 - Optionally: schedule a half-hour of coordinated-flight drill in a sim or chair-flying with explicit timing of rudder + aileron.
 
 The pedagogical move is to make rudder and aileron a single mental command, not two sequential ones. The student's hands are competent; their timing is off; the fix is rebuilding the action as a unit.
+
+:::

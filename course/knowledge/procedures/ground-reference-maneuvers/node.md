@@ -90,7 +90,7 @@ mastery_criteria: >-
 
 # Ground Reference Maneuvers
 
-## Context
+:::phase name="context"
 
 Why does the FAA make a private pilot fly turns around a barn at 800 feet? The maneuver is not preparing them for any specific later flight skill. There is no real-world flight that requires concentric circles around a fixed point.
 
@@ -102,7 +102,8 @@ The maneuver is preparing them for every flight. It is a forcing function for th
 
 Ground reference is taught at private level because every later certificate assumes the pilot can do all three. Without these habits, the rectangular pattern at the home airport is a ground reference maneuver with worse consequences.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are setting up for turns around a point over a road intersection at 800 AGL. The wind is 270 at 15 knots. Your indicated airspeed is 90 KIAS. As you turn, your groundspeed varies between 75 and 105 KIAS depending on heading.
 
@@ -110,7 +111,8 @@ Where in the turn do you bank steepest, and why? At what bank angle? At what poi
 
 Write your answer before reading on. Then ask: what happens to your turn radius if your bank stays constant at 30 degrees throughout the turn?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What is the actual purpose of ground reference maneuvers?
 
@@ -218,7 +220,8 @@ Coordination is checked via the inclinometer (the ball) and via seat-of-the-pant
 - Entry is at the high-workload sector (downwind), 600-1,000 AGL.
 - Coordination is non-negotiable; skidding at low altitude is the canonical kill chain.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -279,7 +282,8 @@ In descending order:
 3. **PHAK Aerodynamics chapter** -- the math of bank-vs-radius.
 4. **POH** -- maneuvering speed (Va) -- maintain airspeed below Va during the maneuver.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -306,7 +310,8 @@ In descending order:
 - `drill:grm-altitude-hold` -- pilot demonstrates altitude hold within ±100 ft for a full 360 turn around a point.
 - `drill:grm-coordination` -- CFI watches the ball; pilot must maintain ball-center for the full maneuver.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -328,7 +333,8 @@ In descending order:
 - `aero-coordination-rudder` -- coordination is non-negotiable; skidding kills.
 - `aero-load-factor-and-bank-angle` -- the physics of the bank tradeoff.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -358,3 +364,5 @@ Evaluation criteria:
 - The CFI is patient: this is the first time the student has had to control to a perceptual reference, not a number on the panel. It takes several flights to internalise.
 
 The pedagogical move is to convert the goal from "bank to a number" to "make the airplane do this thing on the ground." The shift is from inside-the-cockpit thinking to outside-the-window thinking, and that shift is the entire point of the maneuver.
+
+:::

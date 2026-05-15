@@ -97,7 +97,7 @@ mastery_criteria: >-
 
 # Spatial Disorientation
 
-## Context
+:::phase name="context"
 
 Your inner ear lies. It evolved to keep upright primates from falling over while walking on flat ground. It works in a 1G environment with a visual horizon, where vestibular cues, body cues, and visual cues all agree most of the time. In an airplane in IMC at night, in cloud, in a slow turn, in turbulence, those cues disagree. Your body picks the one that feels most plausible. It is usually the wrong one. Pilots who follow it die in a graveyard spiral, a stalled climb, or a controlled flight into terrain.
 
@@ -107,7 +107,8 @@ Spatial disorientation is the failure mode that the entire instrument-flying tra
 
 This node covers the physiology (so you can predict which illusions to expect), the recovery (so you can survive them when they happen), and the prevention (so they happen less often).
 
-## Problem
+:::
+:::phase name="problem"
 
 You are a 100-hour PPL with no instrument training, on a cross-country in late afternoon. The forecast was VFR but reports along the route showed deteriorating ceilings. About 80 NM from your destination, you encounter unexpected cloud below your cruise altitude. You climb to stay clear, and within five minutes you are in cloud. Your airplane has an attitude indicator and a turn coordinator. You have no autopilot.
 
@@ -117,7 +118,8 @@ What has happened, and what do you do in the next 30 seconds?
 
 Write your answer before reading on. Then ask: what did you do wrong before this moment that put you here? And what is the absolute floor for what you must do RIGHT NOW to survive?
 
-## Discover
+:::
+:::phase name="discover"
 
 The illusions have specific physiologies. Knowing them lets you predict and resist them.
 
@@ -199,7 +201,8 @@ In descending order of effectiveness:
 - The cognitive override -- trusting the panel over your body -- is the survival skill.
 - Prevention is not just better technique; it is choosing the right flight in the first place.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -207,16 +210,16 @@ In descending order of effectiveness:
 
 ### Common illusion types
 
-| Illusion         | Trigger                                          | Body's report                  | Real situation              |
-| ---------------- | ------------------------------------------------ | ------------------------------ | --------------------------- |
-| The leans        | Slow roll into turn, then rollout                | Banked the wrong way           | Wings actually level        |
-| Graveyard spiral | Constant turn in IMC, canals adapt               | Wings level                    | In a tightening descending spiral |
-| Somatogravic     | Linear acceleration / deceleration               | Pitched up (accel) or down (decel) | Pitch unchanged       |
-| Coriolis         | Head turn during constant rotation               | Roll/pitch/yaw simultaneously  | Just a head turn            |
-| Inversion        | Sudden negative-G after climb                    | Inverted                       | Just decelerating climb     |
-| Elevator         | Updraft / downdraft                              | Pitch change                   | Vertical airmass movement   |
-| False horizon    | Sloping clouds, terrain, lights                  | Bank or pitch reference        | No real horizon             |
-| Autokinesis      | Steady light against dark background (night)     | Light is moving                | Light is fixed              |
+| Illusion         | Trigger                                      | Body's report                      | Real situation                    |
+| ---------------- | -------------------------------------------- | ---------------------------------- | --------------------------------- |
+| The leans        | Slow roll into turn, then rollout            | Banked the wrong way               | Wings actually level              |
+| Graveyard spiral | Constant turn in IMC, canals adapt           | Wings level                        | In a tightening descending spiral |
+| Somatogravic     | Linear acceleration / deceleration           | Pitched up (accel) or down (decel) | Pitch unchanged                   |
+| Coriolis         | Head turn during constant rotation           | Roll/pitch/yaw simultaneously      | Just a head turn                  |
+| Inversion        | Sudden negative-G after climb                | Inverted                           | Just decelerating climb           |
+| Elevator         | Updraft / downdraft                          | Pitch change                       | Vertical airmass movement         |
+| False horizon    | Sloping clouds, terrain, lights              | Bank or pitch reference            | No real horizon                   |
+| Autokinesis      | Steady light against dark background (night) | Light is moving                    | Light is fixed                    |
 
 ### The graveyard spiral recovery
 
@@ -258,7 +261,8 @@ In descending order:
 - AOPA ASI's spatial disorientation course (online; free) -- specific accident reviews.
 - Your CFII's debriefs -- the candidate's lived experience under the hood, named.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -316,7 +320,8 @@ CFII estimate (informal): ~20-30 hours of hood time, with deliberate disorientat
 
 Initial instrument training builds the foundation. Currency keeps it sharp. Out-of-currency instrument-rated pilots in IMC are at higher risk than current ones, even though both have the rating.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -336,7 +341,8 @@ Initial instrument training builds the foundation. Currency keeps it sharp. Out-
 - `nav-partial-panel` -- if AI is failed, recovery from disorientation is harder; rate-instrument flying.
 - `aero-load-factor-and-bank-angle` -- the spiral builds load factor as it tightens; pulls become unsafe.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -372,3 +378,5 @@ Evaluation criteria:
 - Does not discharge the student; assigns a self-study reading on AC 60-4A and PHAK Ch 17 before the next lesson.
 
 The pedagogical move is to convert "I quit" into "I need a different approach" by separating the physiology (normal, addressable) from the willingness (which is the actual gating issue). The student who is willing to retry with a different cadence will adapt; the student who has been talked out of retrying will not.
+
+:::

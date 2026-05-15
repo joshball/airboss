@@ -1032,6 +1032,39 @@ export function renderMarkdown(md: string, options: RenderMarkdownOptions = {}):
 			continue;
 		}
 
+		// `:::phase name="..."` directive -- structural wrapper around a
+		// knowledge-node phase body. The phase title is rendered upstream
+		// (the page emits a `<h3>` from `KNOWLEDGE_PHASE_LABELS` per
+		// phase). For the minimal renderer the directive is invisible:
+		// we drop the opener line and the matching closer, and let the
+		// main loop continue rendering the body lines as ordinary
+		// markdown. The richer `@ab/help` parser walks `:::phase` into a
+		// nested AST; this renderer only sees a knowledge-node phase
+		// body once the upstream splitter has already removed the
+		// wrapper, so this branch is mostly defence in depth -- if a
+		// caller renders an un-split body (e.g., docs browser stumbling
+		// onto a knowledge node), the directive markers don't leak as
+		// text.
+		if (line === ':::phase' || line.startsWith(':::phase ')) {
+			closeParagraph();
+			closeList();
+			i++;
+			continue;
+		}
+
+		// Standalone `:::` closer. Bare `:::` on its own line is the
+		// closer for an opened directive (callout / phase / cards).
+		// `:::cards` consumes its own closer; the orphan-closer case
+		// here covers `:::phase` (whose body we deliberately leave for
+		// the main loop to render) plus defence in depth for any other
+		// directive whose closer would otherwise emit as `<p>:::</p>`.
+		if (/^:::\s*$/.test(line)) {
+			closeParagraph();
+			closeList();
+			i++;
+			continue;
+		}
+
 		// Fenced code block.
 		const fenceOpen = line.match(/^```\s*([\w-]*)\s*$/);
 		if (fenceOpen) {

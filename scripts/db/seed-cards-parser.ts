@@ -10,7 +10,7 @@
  * slips fail loud here AND at parse time on the rendered page.
  *
  * The historical `` ```yaml-cards `` fenced-block syntax is gone --
- * the migration script `scripts/migrations/2026-05-yaml-cards-to-directive.ts`
+ * the migration script `scripts/migrations/.archive/2026-05-yaml-cards-to-directive.ts`
  * replaced every occurrence in the corpus with `:::cards ... :::` and the
  * `bun run check` step `cards-directive` blocks any new `yaml-cards`
  * fences from sneaking back in. If you're staring at a "no cards found"

@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Turbulence Types and Causes
 
-## Context
+:::phase name="context"
 
 A line of cumulus runs perpendicular to your route at 6,000 ft. Below
 them: light. Through them: bumpy. Above them: smooth. The next day at
@@ -57,7 +57,8 @@ the same altitude over the same terrain, the air is solidly smooth.
 Same altitude, same airspeed, same airplane. The difference is what
 type of turbulence was active and what its source was.
 
-## Problem
+:::
+:::phase name="problem"
 
 "Turbulence" is a category, not a phenomenon. Mechanical, convective,
 clear-air, mountain-wave, wake, and shear-induced turbulence have
@@ -65,7 +66,8 @@ different causes, different signatures, and different avoidance
 strategies. Treating them all as one obscures the avoidance options
 and the forecast cues.
 
-## Discover
+:::
+:::phase name="discover"
 
 Mechanical turbulence: surface friction and obstacles disturb the
 flow. Strongest in low-level wind, near terrain or buildings. Forecast
@@ -104,7 +106,8 @@ microburst outflow, and below the friction layer at sunrise / sunset.
 Forecast cue: PIREPs reporting airspeed loss/gain on approach,
 strong low-level wind shifts in TAFs.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Intensity definitions per AIM 7-1-23 are aircraft-and-load relative,
 not absolute. Roughly:
@@ -125,7 +128,8 @@ Reporting thresholds for UUA (urgent PIREP): severe / extreme
 turbulence triggers urgency. Moderate is reportable as a routine UA
 and worth filing.
 
-## Practice
+:::
+:::phase name="practice"
 
 Pull a current GFA. Toggle the turbulence layer. Identify the type
 based on synoptic context: is the area shaded near terrain (likely
@@ -365,7 +369,8 @@ beats the panicked one.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 19 -- Turbulence
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Turbulence intersects every other K3 phenomenon: it's the kinetic
 signature of unstable air (K3a), of strong wind systems (K3b), of
@@ -373,7 +378,8 @@ convective storms (K3h), of mountain wave (K3b again). The
 go/no-go node consumes turbulence-type understanding to weight the
 forecast appropriately.
 
-## Verify
+:::
+:::phase name="verify"
 
 Identify the primary turbulence type associated with each of these
 forecast scenarios, with a 5-second answer:
@@ -387,3 +393,5 @@ forecast scenarios, with a 5-second answer:
 
 (Mechanical, convective, mountain-wave, CAT, wake.) If the
 classification is automatic, the avoidance choice flows.
+
+:::

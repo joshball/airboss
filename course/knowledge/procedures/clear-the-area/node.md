@@ -81,7 +81,7 @@ mastery_criteria: >-
 
 # Clearing the Area Before Maneuvers
 
-## Context
+:::phase name="context"
 
 You are about to enter a 360-degree steep turn at 3,500 MSL. For the next 60 seconds, you will be turning continuously, your nose dropping in and out of every quadrant of the sky. Anywhere you look, the airplane will eventually be a few seconds later.
 
@@ -89,13 +89,15 @@ If another airplane is at 3,500 MSL within a mile or two of your position, you a
 
 This is why every maneuver in the AFH starts with a clearing procedure. It is not a checkride box-tick. It is the only chance you have to claim the airspace before you stop being able to maintain a wings-level scan.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are at 3,500 MSL over a sparsely populated practice area. There is a Cherokee 1 NM east of you at an unknown altitude (you saw them earlier but lost track). You want to demonstrate a steep turn. Walk through what you do in the next 60 seconds before the turn.
 
 What is your scan pattern? Which direction do you turn first, and why? What altitudes do you check, and how many separate scan sweeps do you make? At what point would you abort and find a new altitude?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. Why does the FAA require clearing turns before performance maneuvers?
 
@@ -176,7 +178,8 @@ The maneuver area is a choice, not a default. A good pilot picks a fresh locatio
 - Foveal vision requires sector-by-sector dwell, not continuous sweeping.
 - The clear is also a relocate-or-stay decision, not just a sky-check.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -229,7 +232,8 @@ In descending order:
 3. **FAA-H-8083-3 (AFH)** -- the maneuver chapters specify clearing requirements per maneuver.
 4. **POH** -- minimum altitudes for specific airplane (some POHs publish recovery-altitude guidance).
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -251,7 +255,8 @@ In descending order:
 - `drill:clear-procedure` -- pilot recites the full procedure (altitude check, entry heading, two 90s, scan pattern, decision) in 30 seconds.
 - `drill:clear-blind-spot-name` -- given an airplane class and a turn direction, pilot names the worst blind spot and the mitigation.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -268,7 +273,8 @@ In descending order:
 - `proc-attention-management` -- the clear is a deliberate prefix to a maneuver; attention-management is the running cost.
 - `proc-traffic-pattern` -- pattern flying does not have "clearing turns" but the same see-and-be-seen discipline applies on every leg.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -298,3 +304,5 @@ Evaluation criteria:
 - The CFI is direct: "If the maneuver kills you because you did not see the other airplane, the verbal procedure did not save you. Move your eyes."
 
 The pedagogical move is to convert "doing the procedure" from a narration habit into a perceptual one.
+
+:::

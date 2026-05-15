@@ -95,7 +95,7 @@ mastery_criteria: >-
 
 # Overspeed Recovery
 
-## Context
+:::phase name="context"
 
 Vne is a hard limit. Below Vne, the airplane is certified to fly. At Vne, structural margin is at the rated limit. Above Vne, the airplane is in territory the certification did not cover -- flutter onset, control reversal, structural failure of the airframe under aerodynamic load, or some combination. Pilots who fly past Vne and recover are usually flying a stronger airplane than its certification rating, and they are usually unaware of how close they came.
 
@@ -105,7 +105,8 @@ The recovery is short: reduce power, raise the nose smoothly, do not exceed stru
 
 This node lives next to `proc-unusual-attitude-recovery`. Nose-low unusual attitudes that go uncorrected become overspeed events. Once airspeed is past Vno (top of the green arc, into the yellow), every additional knot of indicated airspeed is borrowed against the airframe's gust margin. Past Vne, the borrowing is over.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are descending IMC from 9,000 to 4,000 in a Cessna 172. Vne is 163 KIAS (typical for the type; verify your POH). You set up a 1,000 fpm descent at 100 KIAS with reduced power, no flaps. About four minutes into the descent, you look up from a chart to find the airplane in a 35-degree right bank, nose 15 degrees below the horizon, airspeed at 155 KIAS, altitude passing 5,200 and dropping at 2,500 fpm.
 
@@ -113,7 +114,8 @@ What is your sequence in the next 5 seconds, and what do you watch for during th
 
 Write your answer before reading on. Then ask: what changes in your recovery if airspeed has already crossed Vne by the time you act?
 
-## Discover
+:::
+:::phase name="discover"
 
 The recovery decomposes into limits, sequence, and traps. Work each.
 
@@ -125,13 +127,13 @@ Above Vne, the airplane has departed its certified envelope. Recovery is theoret
 
 ### Q2. What does the airspeed indicator color coding tell you?
 
-| Band             | Meaning                                                                | Speed range                          |
-| ---------------- | ---------------------------------------------------------------------- | ------------------------------------ |
-| White arc        | Flap operating range; Vso (lower) to Vfe (upper)                       | Vso to Vfe                           |
-| Green arc        | Normal operating range; Vs (lower) to Vno (upper)                      | Vs to Vno                            |
-| Yellow arc       | Caution range; Vno to Vne. Smooth air only; turbulence forbidden       | Vno to Vne                           |
-| Red line         | Vne. Never exceed.                                                     | At Vne                               |
-| Blue line (twin) | Vyse, single-engine best rate of climb                                 | Type-specific                        |
+| Band             | Meaning                                                          | Speed range   |
+| ---------------- | ---------------------------------------------------------------- | ------------- |
+| White arc        | Flap operating range; Vso (lower) to Vfe (upper)                 | Vso to Vfe    |
+| Green arc        | Normal operating range; Vs (lower) to Vno (upper)                | Vs to Vno     |
+| Yellow arc       | Caution range; Vno to Vne. Smooth air only; turbulence forbidden | Vno to Vne    |
+| Red line         | Vne. Never exceed.                                               | At Vne        |
+| Blue line (twin) | Vyse, single-engine best rate of climb                           | Type-specific |
 
 The bands are not just decoration. Yellow says "smooth air only" because turbulence at this speed can spike load factor past limits. Red is non-negotiable. A pilot in yellow with rising airspeed should be reducing power or pitching up RIGHT NOW.
 
@@ -181,7 +183,8 @@ Some retractable airplanes have specific procedures for using gear as a speedbra
 - Spiral instability builds overspeed silently in IMC; trained pilot or autopilot keeps it bounded.
 - Smooth elevator inputs prevent structural overload during the pull.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -189,17 +192,17 @@ Some retractable airplanes have specific procedures for using gear as a speedbra
 
 ### V-speed reference (typical, illustrative -- POH wins)
 
-| V-speed | Definition                                       | Typical C172 | Typical PA28-181 |
-| ------- | ------------------------------------------------ | ------------ | ---------------- |
-| Vso     | Stall speed, full flaps, MTOW                    | 40 KIAS      | 49 KIAS          |
-| Vs      | Stall speed, clean, MTOW                         | 48 KIAS      | 55 KIAS          |
-| Vy      | Best rate of climb                               | 74 KIAS      | 79 KIAS          |
-| Vx      | Best angle of climb                              | 60 KIAS      | 64 KIAS          |
-| Va      | Maneuvering, MTOW (decreases with weight)        | 99 KIAS      | 113 KIAS         |
-| Vno     | Max structural cruising; top of green            | 129 KIAS     | 125 KIAS         |
-| Vne     | Never exceed; red line                           | 163 KIAS     | 154 KIAS         |
-| Vfe     | Max flap extension                               | 85-110 KIAS  | 103 KIAS         |
-| Vle     | Max landing gear operation/extended (retract)    | n/a          | n/a              |
+| V-speed | Definition                                    | Typical C172 | Typical PA28-181 |
+| ------- | --------------------------------------------- | ------------ | ---------------- |
+| Vso     | Stall speed, full flaps, MTOW                 | 40 KIAS      | 49 KIAS          |
+| Vs      | Stall speed, clean, MTOW                      | 48 KIAS      | 55 KIAS          |
+| Vy      | Best rate of climb                            | 74 KIAS      | 79 KIAS          |
+| Vx      | Best angle of climb                           | 60 KIAS      | 64 KIAS          |
+| Va      | Maneuvering, MTOW (decreases with weight)     | 99 KIAS      | 113 KIAS         |
+| Vno     | Max structural cruising; top of green         | 129 KIAS     | 125 KIAS         |
+| Vne     | Never exceed; red line                        | 163 KIAS     | 154 KIAS         |
+| Vfe     | Max flap extension                            | 85-110 KIAS  | 103 KIAS         |
+| Vle     | Max landing gear operation/extended (retract) | n/a          | n/a              |
 
 POH numbers vary by year, model, and configuration. These are illustrative.
 
@@ -266,7 +269,8 @@ In descending order:
 - POH Section 4 / 5 -- maneuvering speed at various weights (if published).
 - POH Section 7 -- flap and gear systems descriptions including extension speeds.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -329,7 +333,8 @@ Starting from 5-degree bank, 100 KIAS, level cruise, no input:
 
 From level cruise to Vne penetration in ~60-90 seconds without intervention. Pilot's cross-check needs to catch the bank well before that.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -350,7 +355,8 @@ From level cruise to Vne penetration in ~60-90 seconds without intervention. Pil
 - `proc-pitot-static-failures` -- false overspeed indications from a lying ASI.
 - `proc-instrument-cross-check` -- the active discipline that catches the spiral before it becomes overspeed.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -386,3 +392,5 @@ Evaluation criteria:
 - The CFII does not punish the student's caution; they reframe what part of the recovery should be aggressive.
 
 The pedagogical move is to separate "smooth" (which applies to the pull) from "aggressive" (which applies to the power reduction). The student conflated them.
+
+:::

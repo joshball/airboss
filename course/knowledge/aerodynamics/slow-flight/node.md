@@ -104,7 +104,7 @@ mastery_criteria: >-
 
 # Slow Flight
 
-## Context
+:::phase name="context"
 
 Slow flight is the airplane operating at the slow edge of its envelope: just above stall, mushy on the controls, demanding rudder, eating power to hold altitude. It is also where most landings are flown. Approach speed in a typical light single is about 1.3 times stall speed (Vso), which puts the airplane firmly in the slow-flight regime for the last quarter mile of every flight. A pilot who is uncomfortable in slow flight is uncomfortable in the flare; a pilot who is comfortable in slow flight has the airplane fully under their feet.
 
@@ -114,7 +114,8 @@ The FAA training maneuver for slow flight, in the post-2017 Airman Certification
 
 This node is about feeling the airplane in this regime, knowing why it behaves differently, and connecting that behavior to the demands of the landing pattern.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are practising slow flight at 3,500 AGL in a Cessna 172. Configuration: full flaps, gear (where applicable -- C172 is fixed), 50 KIAS, full power. The airplane is just above stall warning. You are holding altitude, and you need to turn 90 degrees right to a new heading.
 
@@ -122,7 +123,8 @@ What do you do, and what should you watch for during the turn?
 
 Write your answer before reading on. Then ask: what would change if you tried to maintain the same airspeed but added a steeper bank?
 
-## Discover
+:::
+:::phase name="discover"
 
 Slow flight handling is governed by physics that diverges from cruise behavior. Work through.
 
@@ -201,7 +203,8 @@ The order matters: pitch down + power up = airplane accelerates while you accept
 - The pattern (approach, short-field, soft-field) puts the airplane in slow-flight territory regularly.
 - Recovery is pitch down, power up, flaps up in stages.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -283,7 +286,8 @@ In descending order:
 - ACS task elements -- knows what tolerances will be graded.
 - Your airplane's POH -- check the published approach speeds and flap-extension speeds.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -339,7 +343,8 @@ C172 right rudder forward of neutral at slow-flight cruise (full power, full fla
 
 The number is illustrative; the principle is rudder demand is significant and continuous.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -359,7 +364,8 @@ The number is illustrative; the principle is rudder demand is significant and co
 - `aero-four-forces` -- equilibrium during slow flight is a different solution to the same equation.
 - `proc-stall-recovery` -- when slow-flight technique fails and stall occurs.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -395,3 +401,5 @@ Evaluation criteria:
 - The CFII names the trap: pitch-airspeed thinking is right for cruise and wrong for slow flight; many students do not learn the inversion and wander in the maneuver.
 
 The pedagogical move is to identify the mental model, not the technique. The student's hands are correct; their model is wrong.
+
+:::

@@ -88,7 +88,7 @@ mastery_criteria: >-
 
 # Maneuvering Airspeeds and Va
 
-## Context
+:::phase name="context"
 
 The ACS for steep turns requires you to "establish the manufacturer's recommended airspeed; or if one is not available, an airspeed not to exceed the maneuvering speed (VA)." Two questions arise immediately:
 
@@ -99,7 +99,8 @@ If you cannot answer either, you cannot start the maneuver legally. If you can a
 
 This node is the airspeed reasoning behind every maneuver in Area V (and most of Area VII as well). It composes on `aero-load-factor-and-bank-angle` (the V-G diagram) and feeds `proc-execute-steep-turn` (the practical execution).
 
-## Problem
+:::
+:::phase name="problem"
 
 You are about to do steep turns in a Cessna 172 at MTOW. The POH gives Va = 99 KIAS at MTOW. The "Performance Maneuvers" section recommends 95 KIAS for steep turns. You are at 1,800 lb (well below MTOW of 2,300 lb).
 
@@ -107,7 +108,8 @@ What airspeed do you fly? Why? What is Va at 1,800 lb? Does the recommended airs
 
 Write your answer before reading on.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Q1. What is Va?
 
@@ -236,7 +238,8 @@ This is exactly why the POH recommends 95 KIAS for steep turns. The airspeed lea
 - Steep turns at recommended airspeed protect against pilot-induced structural overload.
 - The pilot must know Va for their airplane and adjust for weight.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -286,7 +289,8 @@ In descending order:
 3. **ACS PPL-A V.A.S2** -- the regulatory floor (use POH or do not exceed Va).
 4. **PHAK Aerodynamics chapter** -- the V-G diagram and Va explanation.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -310,7 +314,8 @@ In descending order:
 - `drill:va-recall` -- pilot states Va for their airplane at MTOW in 5 seconds.
 - `drill:va-weight-recall` -- given a weight, pilot computes Va_w in 10 seconds.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -329,7 +334,8 @@ In descending order:
 - `proc-ground-reference-maneuvers` -- where airspeed selection is below Va.
 - `perf-weight-and-balance` -- the weight that determines Va_w.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -360,3 +366,5 @@ Evaluation criteria:
 - The CFI is patient: this is a depth-of-understanding gap, not a procedural error. The student is not going to hurt anyone immediately by flying 95 at 1,950 lb in smooth air. But they will get caught when the next airplane has different numbers, or when turbulence hits, or when an examiner asks "why 95?"
 
 The pedagogical move is to convert a memorised number into a derived one. Once the student computes Va themselves, the airspeed is not arbitrary -- it is owned.
+
+:::

@@ -76,7 +76,7 @@ from text symbols to color-coded layers:
   carefully across the time horizon you'll fly. Other layers are
   confirmation.
 
-## Context
+:::phase name="context"
 
 You're planning a 250 NM cross-country that takes you from clear coastal
 air across a forecast frontal passage into clear continental air. The
@@ -84,7 +84,8 @@ TAFs at your departure and destination both look fine -- but the route
 between them passes through an area with no terminal, and your METARs
 are silent on what's happening there. Where do you look?
 
-## Problem
+:::
+:::phase name="problem"
 
 METARs and TAFs are tied to airports. PIREPs are tied to where pilots
 are flying. Surface analysis charts are point-in-time. None of them
@@ -92,7 +93,8 @@ answers "what will it look like 90 NM north of nothing in three hours?"
 The Graphical Forecast for Aviation (GFA) was built to fill that gap --
 a continuous 2D forecast field you can scrub through time.
 
-## Discover
+:::
+:::phase name="discover"
 
 Open aviationweather.gov/gfa and walk the controls:
 
@@ -109,7 +111,8 @@ once was for the Area Forecast (FA) -- the GFA replaced the textual FA
 in 2017 because the spatial picture is the right form for area-scale
 weather questions.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Layer summary:
 
@@ -129,7 +132,8 @@ SIGMETs, the FIP/CIP icing model, the GTG turbulence model, and the
 NDFD weather grids into one front-end. So when you read GFA you are
 implicitly reading those underlying products at a higher abstraction.
 
-## Practice
+:::
+:::phase name="practice"
 
 For tomorrow's flight, scrub the GFA at +6 hours over your planned
 route at three layers: surface (winds), cruise altitude (clouds, icing,
@@ -367,7 +371,8 @@ GFA has just identified the hazard window.
       cite: AIM 7-1 -- National Weather Service Aviation Products
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 GFA is the spatial integration of the underlying weather products. It
 inherits AIRMET / SIGMET hazards, the FIP/CIP icing forecast, the GTG
@@ -375,10 +380,13 @@ turbulence forecast, and NDFD weather grids. Reading the GFA without
 understanding what feeds it produces overconfidence; the K2g node on
 AIRMETs/SIGMETs is the depth complement to this node's breadth.
 
-## Verify
+:::
+:::phase name="verify"
 
 Walk a real route on the GFA tool from the departure to the destination,
 hour by hour from now to ETA. Identify every layer that changes color
 along the path. For each change, name the underlying product or model
 that drove the change. If you can't, you don't yet know what the GFA is
 showing you -- you're just reading colors.
+
+:::

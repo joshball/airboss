@@ -49,7 +49,7 @@ mastery_criteria: >
 
 # Icing Types and Avoidance
 
-## Context
+:::phase name="context"
 
 You're at 7,000 feet IFR, in cloud, OAT showing -3 C. The
 windscreen is dry. Five minutes later there's a translucent film
@@ -66,7 +66,8 @@ in the wrong direction simultaneously, and pilot skill doesn't get
 any of them back. The avoidance habit is built before the flight,
 not in cloud at -3 C with the autopilot trimming down.
 
-## Problem
+:::
+:::phase name="problem"
 
 Icing kills airplanes by changing the wing into something it isn't.
 A wing is an aerodynamic shape designed to produce lift at a
@@ -91,7 +92,8 @@ setup before commit, and have an *out* (a layer above, a layer
 below, a heading that returns to clear) before entering the
 icing-prone region. No-out becomes no-go.
 
-## Discover
+:::
+:::phase name="discover"
 
 Icing requires two ingredients in the same air: liquid water (or
 supercooled droplets) and a temperature at or below freezing. The
@@ -147,7 +149,8 @@ The avoidance hierarchy:
    180 degree turn into the air you came from is the surest
    reversal because you know that air was clear five minutes ago.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Equipment caveats:
 
@@ -181,7 +184,8 @@ A condensed escape decision tree:
 | Moderate ice, declared emergency authority | Whatever altitude / heading clears the airframe           |
 | Severe ice                                 | 180 + descent + declare; this is a known accident pattern |
 
-## Practice
+:::
+:::phase name="practice"
 
 For a winter cross-country in the planning phase: pull the FB,
 freezing-level chart, AIRMET ZULU, GFA icing layer, and recent
@@ -414,7 +418,8 @@ are pilots who delayed the 180 because the situation was
       cite: AIM 7-1-21 -- Icing
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node is one input to the go/no-go decision. It depends on
 freezing-level reading (wx-freezing-level), winds aloft for
@@ -428,7 +433,8 @@ PIREPs use the same decode / understand / triage ladder as METAR /
 TAF. A pilot who reads "ZULU MOD ICE FRZLVL SFC" without the
 underlying icing physics has a fragment, not a brief.
 
-## Verify
+:::
+:::phase name="verify"
 
 For a recent winter day in your area, find a known icing accident
 or near-accident. Walk the day's icing forecast, AIRMETs, PIREPs,
@@ -436,3 +442,5 @@ and FB. Could the conditions have been recognized in advance? Was
 there an out the pilot didn't take? When the answer is "yes, the
 brief showed it," that's the calibration to bring to your next
 brief.
+
+:::

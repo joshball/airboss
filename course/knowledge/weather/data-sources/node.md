@@ -50,7 +50,7 @@ mastery_criteria: >
 
 # Weather Data Sources for Flight Planning
 
-## Context
+:::phase name="context"
 
 You sit down the night before a 200 NM cross-country and open three tabs:
 1800wxbrief.com (Leidos Flight Service), aviationweather.gov (the Aviation
@@ -58,7 +58,8 @@ Weather Center), and ForeFlight. They each show overlapping but slightly
 different pictures: a TAF on one site is current, on another is one cycle
 old. Why? Whose product is whose?
 
-## Problem
+:::
+:::phase name="problem"
 
 The "weather" you read is never raw atmosphere; it's an artifact produced
 by a specific agency, on a specific schedule, with a specific intent.
@@ -66,7 +67,8 @@ Confusing the publisher of a product with its relayer is the source of
 half the "but my EFB said..." anecdotes. To brief well you need a mental
 map of who originates what, who relays it, and where each link can fail.
 
-## Discover
+:::
+:::phase name="discover"
 
 Start with the question: which of those three tabs publishes original
 weather, and which only re-render it?
@@ -93,7 +95,8 @@ broader coverage and somewhat fresher products. Flight Watch (122.0) was
 discontinued in 2015; the modern equivalent is Flight Service on the
 appropriate frequency.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Map the agency to the product:
 
@@ -113,7 +116,8 @@ For the K1 element on the checkride, the examiner wants you to name two
 classes of source ("NWS-originated" vs "Flight Service mediated"), not
 recite vendor names.
 
-## Practice
+:::
+:::phase name="practice"
 
 Walk a real preflight: you're flying KPAO -> KMRY tomorrow, departing at
 1500Z.
@@ -331,7 +335,8 @@ is bounded by the staleness of whichever product you trust.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Sources of Weather Information
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Sources feed every other Task C node: K2 is "what each product looks like
 when you read it," K3 is "the underlying meteorology each product
@@ -339,9 +344,12 @@ encodes," R2 is "where each product lies to you," and S1 is "actually
 running through a briefing." This node is the index that ties them
 together.
 
-## Verify
+:::
+:::phase name="verify"
 
 Self-check: name the originating agency for each of METAR, TAF, AIRMET,
 SIGMET, GFA, FB, PIREP, CWA, Convective SIGMET, NEXRAD. Then name the
 mechanism that delivers it to your aircraft both pre-flight and in-flight.
 If you can map all ten products in under 60 seconds, you own K1.
+
+:::

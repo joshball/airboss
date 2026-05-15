@@ -53,7 +53,7 @@ mastery_criteria: >
 
 # Weather Briefing Execution
 
-## Context
+:::phase name="context"
 
 You're flying tomorrow morning. You open ForeFlight, glance at the
 METAR strip and the TAF, see "VFR all day," and call it briefed. Your
@@ -62,7 +62,8 @@ your route at cruise?" You don't know. The brief was incomplete --
 not because the products were unavailable, but because the procedure
 wasn't.
 
-## Problem
+:::
+:::phase name="problem"
 
 A weather brief is a procedure, not a glance. The pilot who runs the
 procedure consistently catches the hazards a glance misses: the
@@ -71,7 +72,8 @@ AIRMET that runs perpendicular to the planned cross-country, the
 freezing level that drops across a frontal boundary at the same
 altitude that becomes IFR on the back side. Procedure beats vibes.
 
-## Discover
+:::
+:::phase name="discover"
 
 Three briefing types per AIM 7-1-4, each appropriate to a different
 planning horizon:
@@ -109,7 +111,8 @@ For a Flight Service phone briefing (1-800-WX-BRIEF / 1800wxbrief.com)
 the same eight buckets show up in the same order. Walk the briefer
 through your route once and the brief flows.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 The 91.103 floor is "all available information concerning that
 flight." For any flight not in the vicinity of the airport this
@@ -128,7 +131,8 @@ A good brief produces three written outputs:
 The third output is the bridge to the personal-minimums node and the
 go/no-go decision.
 
-## Practice
+:::
+:::phase name="practice"
 
 For your next flight, run the eight-bucket brief on aviationweather.gov
 and your EFB. Time it. The first time it'll take 25-30 minutes; the
@@ -407,7 +411,8 @@ to update a brief from this morning before a 1500L departure.
       cite: 14 CFR 91.103 Preflight Action
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node serves S1 directly: the skill is "use available aviation
 weather resources to obtain an adequate weather briefing." It feeds
@@ -415,10 +420,13 @@ S3 (correlate to make a go/no-go decision) by producing the input the
 go/no-go node consumes. The data-sources node tells you who publishes
 what; this node tells you how to walk through them in order.
 
-## Verify
+:::
+:::phase name="verify"
 
 Run a brief end-to-end for a 200 NM cross-country tomorrow. Produce
 the three outputs above. Show the result to another pilot or CFI. If
 they can defend the go/no-go decision from your written brief alone,
 the procedure produced a usable artifact. If they can't, find the
 missing bucket.
+
+:::

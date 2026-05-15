@@ -67,7 +67,7 @@ flight, which makes them the highest-fidelity record of what an
 airframe is actually feeling at altitude. The pilot habit is to grow
 the system by filing as well as consuming.
 
-## Context
+:::phase name="context"
 
 You're climbing to your filed altitude over the central valley and the
 ride goes from glassy-smooth to a series of jolts that pop your kneeboard
@@ -75,7 +75,8 @@ off the yoke. You ask Center for ride reports; the controller comes back
 with: "UA /OV PXN360010/TM 1845/FL085/TP C172/TB MOD CHOP/RM CONTINUOUS."
 What did she just tell you?
 
-## Problem
+:::
+:::phase name="problem"
 
 PIREPs are the only weather product authored by pilots, and the only
 real-time turbulence / icing / cloud-base report that matches the actual
@@ -84,7 +85,8 @@ predict; observations (METARs) describe ground-level state; PIREPs
 describe what flight-level air is actually doing right now. To use them
 you have to read them quickly and to grow them you have to file them.
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Stage 1: Decode
 
@@ -128,7 +130,8 @@ moderate is a Citation light, the time-of-day is the strong cue,
 and the report shifts from "climb out of it" to "expect bumps for
 five minutes; ride them out."
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Standard PIREP fields, ordered:
 
@@ -158,7 +161,8 @@ when no hazardous conditions exist." Flight Service ingests the report;
 it then becomes a public NWS product and feeds back into briefings,
 EFB displays, and ATC ride-report queries.
 
-## Practice
+:::
+:::phase name="practice"
 
 Decode this PIREP yourself, then check:
 
@@ -416,7 +420,8 @@ re-evaluate descent / climb path.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 PIREPs ground every other weather product. An AIRMET ZULU (icing) becomes
 real when a PIREP confirms it; absent confirming PIREPs an AIRMET is a
@@ -424,9 +429,12 @@ forecast hypothesis. The go/no-go node depends heavily on PIREPs as the
 "truth-up" check on the forecast picture. The K1 source map shows where
 PIREPs come from; this node shows what they look like and when to file.
 
-## Verify
+:::
+:::phase name="verify"
 
 Decode three random PIREPs from aviationweather.gov without a key in
 under three minutes total. File one PIREP yourself in the next 10 hours
 of flight, even if conditions are benign -- a `UA /OV xxx/TM xxxx/FL xxx
 /TP xxx/SK CLR/RM SMOOTH` is a valid, useful report.
+
+:::

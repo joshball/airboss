@@ -77,31 +77,40 @@ export interface HrNode {
 }
 
 /**
- * Component-mounting (or data-payload) directive (e.g. `:::chart slug="..."` /
- * `:::scenario slug="..."` / `:::cards ... :::`). Unlike callouts,
- * directives carry no nested block children -- they identify either a
- * Svelte component the renderer should mount (parameterised by the
- * attribute bag) or a data payload the parser has already validated
- * inline. The set of legal `name` values is owned by
+ * Component-mounting (or data-payload, or nested-markdown) directive
+ * (e.g. `:::chart slug="..."` / `:::scenario slug="..."` /
+ * `:::cards ... :::` / `:::phase name="..." ... :::`). Unlike callouts,
+ * directives identify either a Svelte component the renderer should
+ * mount (parameterised by the attribute bag), a data payload the parser
+ * has already validated inline, or a structural wrapper whose body is
+ * nested markdown. The set of legal `name` values is owned by
  * `MARKDOWN_DIRECTIVE_VALUES` in `@ab/constants`.
  *
  * Attributes are stored as a string-keyed string map; per-directive
- * validation (required keys, slug shapes, payload schema) runs in the
- * parser before this node is emitted, so the renderer can trust the
- * attribute bag's shape and -- for body-bearing directives -- the body
- * payload's syntactic validity.
+ * validation (required keys, slug shapes, payload schema, body shape)
+ * runs in the parser before this node is emitted, so the renderer can
+ * trust the attribute bag's shape and -- for body-bearing directives --
+ * the body payload's syntactic validity.
  *
  * `body` is populated for directives listed in
- * `MARKDOWN_DIRECTIVE_BODY_BEARING` (currently `cards`); the raw text
- * between opener and `:::` closer lands here verbatim, NOT walked as
- * nested markdown. Attribute-only directives (`chart`, `scenario`)
- * leave `body` undefined.
+ * `MARKDOWN_DIRECTIVE_BODY_BEARING` (currently `cards`, `phase`); the
+ * raw text between opener and `:::` closer lands here verbatim.
+ *
+ * `children` is populated ONLY for directives in
+ * `MARKDOWN_DIRECTIVE_NESTED_MARKDOWN_BODY` (currently `phase`); the
+ * parser recursively walks the body through the same block parser and
+ * stores the resulting `MdNode[]` here so renderers can walk a real
+ * AST without re-parsing. Data-payload directives (e.g. `cards`) leave
+ * `children` undefined because the body is a typed data block, not
+ * authored markdown. Attribute-only directives (`chart`, `scenario`)
+ * leave both `body` and `children` undefined.
  */
 export interface DirectiveNode {
 	kind: 'directive';
 	name: string;
 	attrs: Record<string, string>;
 	body?: string;
+	children?: MdNode[];
 }
 
 export type MdNode =

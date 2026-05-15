@@ -104,7 +104,7 @@ mastery_criteria: >-
 
 # Localiser and Glide Slope Tracking
 
-## Context
+:::phase name="context"
 
 The ILS is the single most important precision approach in aviation. It is the approach that most jet, turboprop, and IFR-rated GA pilots fly on a regular basis. Its design is elegant: two narrow radio beams cross in space, defining a final-approach corridor down to a runway threshold, and a third (the marker beacons in older installations) tells you when you have crossed defined fixes along the corridor. A pilot who is in the beams is in the corridor; a pilot who is out of the beams is somewhere else. There is no ambiguity, no interpretation, no judgment about position. The beams say where you are.
 
@@ -114,7 +114,8 @@ This node is about reading the needles, bracketing them in wind, knowing when to
 
 LPV approaches (RNAV / GPS-based vertical guidance) increasingly supplement and replace ILS at many airports. The tracking technique is similar; the equipment differs. This node covers ILS specifically; LPV concepts overlap in `nav-gps-rnav-concepts`.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are vectored for the ILS to runway 17 at a Class D airport. ATC has cleared you for the ILS, gave you a heading of 110, and asked you to intercept the localiser. You are inbound at 4,000, configured for the approach, 110 KIAS, on autopilot heading mode. You see the localiser needle alive (deflecting from one side toward center) and the glide slope still parked above (you are below the GS). The intercept is at 4,000 MSL; the FAF is published at 3,000 MSL.
 
@@ -122,7 +123,8 @@ What is your sequence as you intercept the localiser? When do you start the desc
 
 Write your answer before reading on. Then ask: what do you do if the localiser needle slews past center and pegs at full deflection on the other side?
 
-## Discover
+:::
+:::phase name="discover"
 
 The ILS decomposes into geometry (the beams), equipment (the receiver), technique (bracketing), and judgment (when to go missed). Work through.
 
@@ -224,7 +226,8 @@ If any one is not met by 1,000 AGL, go missed.
 - Bracket in wind; small crab, hold, verify needle.
 - Go missed at full-scale deflection, loss of signal, below minimums, or non-stabilised by 1,000 AGL.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -276,11 +279,11 @@ Marker beacons (older installations):
 
 ### Tolerance scaling
 
-| Position from threshold | Full-scale LOC | Full-scale GS |
-| ----------------------- | -------------- | ------------- |
-| 5 NM                    | ~2,300 ft      | ~140 ft       |
-| 1 NM                    | ~470 ft        | ~30 ft        |
-| Threshold               | ~700 ft (special)| ~25 ft (CAT I)|
+| Position from threshold | Full-scale LOC    | Full-scale GS  |
+| ----------------------- | ----------------- | -------------- |
+| 5 NM                    | ~2,300 ft         | ~140 ft        |
+| 1 NM                    | ~470 ft           | ~30 ft         |
+| Threshold               | ~700 ft (special) | ~25 ft (CAT I) |
 
 Half-scale at 5 NM: ~1,150 ft / 70 ft. Half-scale at 1 NM: ~235 ft / 15 ft.
 
@@ -299,11 +302,11 @@ If wind shifts (gusts, frontal passage), the bracket must update. Pilots note CD
 
 ### CAT categories
 
-| CAT | DA / DH         | Visibility / RVR              | Equipment                             |
-| --- | --------------- | ----------------------------- | ------------------------------------- |
-| I   | 200 ft HAT      | 1/2 SM (or 1,800 RVR)         | Standard ILS receiver, marker beacon  |
-| II  | 100 ft HAT      | 1,200 RVR                     | Augmented; lower mins; specific equip |
-| III | <100 ft HAT     | <1,200 RVR / 0 RVR (CAT IIIc) | Auto-land or fail-operational systems |
+| CAT | DA / DH     | Visibility / RVR              | Equipment                             |
+| --- | ----------- | ----------------------------- | ------------------------------------- |
+| I   | 200 ft HAT  | 1/2 SM (or 1,800 RVR)         | Standard ILS receiver, marker beacon  |
+| II  | 100 ft HAT  | 1,200 RVR                     | Augmented; lower mins; specific equip |
+| III | <100 ft HAT | <1,200 RVR / 0 RVR (CAT IIIc) | Auto-land or fail-operational systems |
 
 CAT II and III are airline / operator-specific. Most GA flies CAT I.
 
@@ -337,7 +340,8 @@ In descending order:
 - IPH Chapter 4 -- the FAA reference.
 - Foreflight or Garmin Pilot for plate retrieval; verify against the FAA chart database.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -401,6 +405,7 @@ For 20-kt crosswind: ~12.5 degrees crab. Significant; airplane visually appears 
 **Calculation 3: needle deflection meaning at threshold vs. FAF.**
 
 C172 ILS at 90 KIAS:
+
 - FAF at 1,800 AGL, 5 NM from threshold.
 - Threshold at 50 AGL (TCH).
 
@@ -412,7 +417,8 @@ Half-scale GS at threshold: ~12 ft vertical.
 
 The 70-foot deviation at FAF that you tolerated becomes a 12-foot deviation at threshold -- but the same needle position. A pilot who lets the GS sag half-scale at FAF is fine; lets it sag half-scale at threshold lands short.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -434,7 +440,8 @@ The 70-foot deviation at FAF that you tolerated becomes a 12-foot deviation at t
 - `proc-instrument-cross-check` -- the scan that supports the ILS in IMC.
 - `nav-partial-panel` -- the ILS becomes much harder partial panel.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -473,3 +480,5 @@ Evaluation criteria:
 - The CFII names the trap: many candidates conflate "stable" with "ignored." Stable means actively maintained, not left alone.
 
 The pedagogical move is to convert GS from a passive reference (pitch was set, now forgotten) into an active control axis. The candidate's hands are good; their attention is elsewhere.
+
+:::

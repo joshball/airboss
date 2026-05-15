@@ -68,7 +68,7 @@ family treatment). Same three-stage skill ladder, different alphabet:
   it converts the whole synoptic picture into a single VFR / MVFR /
   IFR / LIFR color along the route.
 
-## Context
+:::phase name="context"
 
 Two pilots brief the same flight from KSAC to KRDD. One opens the METAR
 strip and reads field-by-field; the other opens the surface analysis
@@ -77,7 +77,8 @@ isobars packed tight on the back side, and immediately knows the
 crosswind is going to be strong and gusty all afternoon. Same data,
 different layer of abstraction.
 
-## Problem
+:::
+:::phase name="problem"
 
 METARs / TAFs / PIREPs give you point observations and point forecasts.
 Surface analysis and ceiling/visibility charts give you the whole field
@@ -85,7 +86,8 @@ Surface analysis and ceiling/visibility charts give you the whole field
 where they are not, in one image. They convert dozens of station
 reports into a synoptic picture you can scan in seconds.
 
-## Discover
+:::
+:::phase name="discover"
 
 Look at any surface analysis chart and ask: where is the energy?
 
@@ -107,7 +109,8 @@ across CONUS with one-hour refresh. You can scan a route in seconds and
 see if the white (VFR) wraps your full path or if you'll cross into
 yellow (MVFR) or red (IFR) along the way.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Surface analysis update cadence: every 3 hours (00, 03, 06, 09, 12, 15,
 18, 21Z) by the Weather Prediction Center. The chart is hand-analyzed,
@@ -128,7 +131,8 @@ For VFR planning the CVA is the fastest "is the route open?" answer
 available. For instrument planning the surface analysis is the fastest
 "why is the route closed?" answer.
 
-## Practice
+:::
+:::phase name="practice"
 
 Pull up an active surface analysis on aviationweather.gov. Find a low
 pressure center. Trace the isobars outward and predict surface wind
@@ -347,7 +351,8 @@ ceiling picture are the same story told two ways.
       cite: AIM 7-1 -- National Weather Service Aviation Products
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 Surface analysis is the parent of K3e (air masses and fronts) -- it
 shows fronts as a one-image picture. CVA is the parent of S3 -- it
@@ -356,10 +361,13 @@ required products; in practice they are the bookends to a serious
 preflight (synoptic at the start, point forecasts in the middle, CVA
 at the end as the integration check).
 
-## Verify
+:::
+:::phase name="verify"
 
 Open a current surface analysis chart and a current CVA. Without
 reading any METARs, write a one-paragraph story: where the highs and
 lows are, what fronts are active, and where ceilings are low along
 your planned route. Cross-check against the underlying METARs after.
 The story should match.
+
+:::

@@ -94,7 +94,7 @@ mastery_criteria: >-
 
 # Traffic Pattern
 
-## Context
+:::phase name="context"
 
 You are inbound to a non-towered airport on a Saturday morning. CTAF is busy; you have already heard six different aircraft self-announcing in the last few minutes. One of them is doing a straight-in from the east. Another is in the run-up area calling departure. A third just called downwind for the opposite runway. You are five miles out, at pattern altitude plus 500, and you have a decision to make about how you are going to fit yourself into a pattern that already has people in it.
 
@@ -102,7 +102,8 @@ The traffic pattern is not a rule; it is a contract. Pilots have agreed to fly i
 
 The pattern itself is not complicated. The skill that wraps the pattern is. You will fly thousands of patterns in your career; the muscle memory will become invisible. What stays visible is the constant scan for the airplane that did not announce, the airplane that announced but is not where they said they were, and the airplane that is doing the right thing but at the wrong field because their nav system is one runway off.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are entering the pattern at KAPA (towered) on a left base for runway 17L. Tower clears you to land. As you turn final you spot a Cirrus high and to your right that ATC has not called. The Cirrus is descending toward the same runway from a long straight-in that tower clearly intended to space behind you. The pilot is fixated on the runway and not looking left. You are at 800 AGL, 80 KIAS, half-flaps.
 
@@ -110,7 +111,8 @@ Your radio call to tower is going to take 4-6 seconds. Before you make it, what 
 
 Write your answer before reading on. Then ask: how would the answer change if you were at a non-towered airport with no tower to call?
 
-## Discover
+:::
+:::phase name="discover"
 
 The pattern is a tool to make collision avoidance easier. Most of what we call "pattern technique" is actually answers to four underlying questions. Work through them in order.
 
@@ -184,7 +186,8 @@ Otherwise, fly the published pattern. Predictability is the whole point.
 - Radio calls feed other pilots' mental models. The standard order exists because it loads the picture in the order that lets the listener place you fastest.
 - Breaking pattern is for collision avoidance, ATC instruction, or emergency, not for convenience.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -192,13 +195,13 @@ Otherwise, fly the published pattern. Predictability is the whole point.
 
 ### The legs and their defaults
 
-| Leg          | Configuration target (typical light single)              | Wind correction emphasis                                          |
-| ------------ | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| Upwind       | Climb power, pitch for Vy                                | Maintain runway centerline track over the ground                  |
-| Crosswind    | Climbing, level off as you approach pattern altitude     | Crab into wind so you do not blow into downwind                   |
-| Downwind     | Pattern altitude, cruise or pre-landing config           | Crab away from runway side as needed; pre-landing checks abeam    |
-| Base         | Reduce power, first-stage flaps, descending              | Tailwind on base = turn final early; headwind = turn final late   |
-| Final        | Approach speed, full landing config, stabilised by 500   | Crab or wing-low slip for crosswind                               |
+| Leg       | Configuration target (typical light single)            | Wind correction emphasis                                        |
+| --------- | ------------------------------------------------------ | --------------------------------------------------------------- |
+| Upwind    | Climb power, pitch for Vy                              | Maintain runway centerline track over the ground                |
+| Crosswind | Climbing, level off as you approach pattern altitude   | Crab into wind so you do not blow into downwind                 |
+| Downwind  | Pattern altitude, cruise or pre-landing config         | Crab away from runway side as needed; pre-landing checks abeam  |
+| Base      | Reduce power, first-stage flaps, descending            | Tailwind on base = turn final early; headwind = turn final late |
+| Final     | Approach speed, full landing config, stabilised by 500 | Crab or wing-low slip for crosswind                             |
 
 POH numbers always override these. A C172S downwind is roughly 90 KIAS, base 80 KIAS with first flaps, final 65 KIAS with full flaps for a normal landing. A PA28-181 is similar. Your airplane is not generic; check Section 4.
 
@@ -235,7 +238,8 @@ In descending order:
 - Sectional chart -- pattern altitude is published if non-standard; right traffic is shown by RP notation in the Chart Supplement.
 - Foreflight (or equivalent) "airport info" page -- aggregates all of the above and shows recent NOTAMs.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -286,7 +290,8 @@ A C172 at 1,000 AGL on downwind, abeam the numbers, has roughly:
 
 Total glide need is therefore 6,000-9,000 feet (roughly), comfortably inside the 9,000-foot glide range from pattern altitude -- which is exactly why pattern altitude is set there. If you reduce altitude by 200 feet, the glide range drops to ~7,200 feet and the math gets uncomfortable.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -306,7 +311,8 @@ Total glide need is therefore 6,000-9,000 feet (roughly), comfortably inside the
 - `proc-engine-failure-after-takeoff` -- the runway you just left is the airplane you might be returning to. Brief the abort point and the turnback altitude floor before takeoff. The pattern is the recovery geometry; do not redesign it under stress.
 - `aero-load-factor-and-bank-angle` -- the steep base turn is the canonical place where a pilot cranks bank and pull, not realising the load factor is climbing the stall speed up to their indicated airspeed.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -339,3 +345,5 @@ Evaluation criteria:
 - Avoids "never bank past 30 degrees" type rules without context. The learning is to plan the turn earlier, not to limit the bank angle in the abstract.
 
 The pedagogical move is to convert the symptom (overshoot) into the cause (planning) so the student starts treating downwind-to-base wind correction as an active flying skill, not a checklist item.
+
+:::

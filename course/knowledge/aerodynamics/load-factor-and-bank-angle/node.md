@@ -94,7 +94,7 @@ mastery_criteria: >-
 
 # Load Factor and Bank Angle
 
-## Context
+:::phase name="context"
 
 A pilot in a 60-degree banked level turn is pulling 2 G. The airplane is producing twice the lift it does in level wings-level cruise. The wings are bent twice as hard. The pilot weighs twice their normal weight. The structure is doing real work.
 
@@ -106,7 +106,8 @@ This non-linearity is the silent killer in maneuvers. A pilot who pulls a tighte
 
 This node is the math that anchors `proc-stall-recovery` (why bank produces stall), `proc-overspeed-recovery` (why pulling at high airspeed is dangerous), `proc-unusual-attitude-recovery` (why level wings before pulling), and the structural intuition behind every steep turn or aggressive maneuver.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are practising steep turns at 45 degrees of bank in a Cessna 172. You hold airspeed at 100 KIAS, altitude at 3,500 MSL. The CFI asks you to tighten the turn to 60 degrees of bank without losing altitude.
 
@@ -114,7 +115,8 @@ What changes about the airplane between 45 and 60 degrees of bank? What addition
 
 Write your answer before reading on. Then ask: at what bank angle does the C172, at 100 KIAS, reach 1G of stall margin? At 90 KIAS? At 80?
 
-## Discover
+:::
+:::phase name="discover"
 
 The relationship is from physics and trigonometry. Work through.
 
@@ -152,13 +154,13 @@ Vs_n = Vs_1 * sqrt(n)
 
 So a 1G stall at Vs_1 = 48 KIAS becomes:
 
-| Bank | n     | sqrt(n) | Vs_turn |
-| ---- | ----- | ------- | ------- |
-| 0    | 1.00  | 1.00    | 48      |
-| 30   | 1.15  | 1.07    | 51      |
-| 45   | 1.41  | 1.19    | 57      |
-| 60   | 2.00  | 1.41    | 68      |
-| 75   | 3.86  | 1.97    | 95      |
+| Bank | n    | sqrt(n) | Vs_turn |
+| ---- | ---- | ------- | ------- |
+| 0    | 1.00 | 1.00    | 48      |
+| 30   | 1.15 | 1.07    | 51      |
+| 45   | 1.41 | 1.19    | 57      |
+| 60   | 2.00 | 1.41    | 68      |
+| 75   | 3.86 | 1.97    | 95      |
 
 A C172 in a 60-degree banked level turn has its stall speed doubled-from-baseline minus 19%. At 100 KIAS, you have ~30 KIAS of stall margin. At 75 degrees, your stall speed is 95; at 100 KIAS, you have 5 KIAS of margin. One small pull and you are stalled.
 
@@ -175,16 +177,16 @@ The implication: at high airspeed, you cannot pull as hard. At low airspeed, you
 
 ### Q4. What does each load factor feel like?
 
-| Load factor | Bank (level) | Body sensation                                                     |
-| ----------- | ------------ | ------------------------------------------------------------------ |
-| 1.0 G       | 0            | Normal seat pressure                                               |
-| 1.15 G      | 30           | Slight increase; barely noticeable                                 |
-| 1.41 G      | 45           | Noticeable; pilot leans into seat; "slight squish"                 |
-| 2.0 G       | 60           | Strong; pilot definitely feels heavier; cheeks may sag              |
-| 3.0 G       | 70           | Heavy; vision narrowing in some pilots                             |
-| 3.8 G       | 75           | Limit-normal; full body pressure; vision can grey out              |
-| 4.4 G       | 76+          | Limit-utility                                                       |
-| 6.0 G       | ~80          | Limit-aerobatic; pilot must tense to maintain consciousness         |
+| Load factor | Bank (level) | Body sensation                                              |
+| ----------- | ------------ | ----------------------------------------------------------- |
+| 1.0 G       | 0            | Normal seat pressure                                        |
+| 1.15 G      | 30           | Slight increase; barely noticeable                          |
+| 1.41 G      | 45           | Noticeable; pilot leans into seat; "slight squish"          |
+| 2.0 G       | 60           | Strong; pilot definitely feels heavier; cheeks may sag      |
+| 3.0 G       | 70           | Heavy; vision narrowing in some pilots                      |
+| 3.8 G       | 75           | Limit-normal; full body pressure; vision can grey out       |
+| 4.4 G       | 76+          | Limit-utility                                               |
+| 6.0 G       | ~80          | Limit-aerobatic; pilot must tense to maintain consciousness |
 
 Body sensitivity varies with G-tolerance, hydration, fitness, recent eating, and pulling technique. Aerobatic pilots train for higher G; normal pilots experience 1.5G as significant.
 
@@ -240,7 +242,8 @@ The base-to-final skidding stall is a particular killer: pilot tightens with rud
 - The pattern's base-to-final turn at low airspeed in steep bank is the canonical killer geometry.
 - Coordination matters; uncoordinated stalls roll into spins.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -259,23 +262,23 @@ Vs_turn = Vs_level * sqrt(n)
 
 Numerical values:
 
-| Bank (deg) | cos(bank) | n     | sqrt(n) | Vs multiplier |
-| ---------- | --------- | ----- | ------- | ------------- |
-| 0          | 1.000     | 1.00  | 1.00    | 1.00          |
-| 15         | 0.966     | 1.04  | 1.02    | 1.02          |
-| 30         | 0.866     | 1.15  | 1.07    | 1.07          |
-| 45         | 0.707     | 1.41  | 1.19    | 1.19          |
-| 60         | 0.500     | 2.00  | 1.41    | 1.41          |
-| 75         | 0.259     | 3.86  | 1.97    | 1.97          |
-| 80         | 0.174     | 5.76  | 2.40    | 2.40          |
+| Bank (deg) | cos(bank) | n    | sqrt(n) | Vs multiplier |
+| ---------- | --------- | ---- | ------- | ------------- |
+| 0          | 1.000     | 1.00 | 1.00    | 1.00          |
+| 15         | 0.966     | 1.04 | 1.02    | 1.02          |
+| 30         | 0.866     | 1.15 | 1.07    | 1.07          |
+| 45         | 0.707     | 1.41 | 1.19    | 1.19          |
+| 60         | 0.500     | 2.00 | 1.41    | 1.41          |
+| 75         | 0.259     | 3.86 | 1.97    | 1.97          |
+| 80         | 0.174     | 5.76 | 2.40    | 2.40          |
 
 ### Structural limits
 
-| Category   | Positive limit | Negative limit | Typical certified for                  |
-| ---------- | -------------- | -------------- | -------------------------------------- |
-| Normal     | +3.8 G         | -1.52 G        | Most light singles (PA28, C172)        |
-| Utility    | +4.4 G         | -1.76 G        | Some light singles (C172 in utility category, lighter weight) |
-| Aerobatic  | +6.0 G         | -3.0 G         | Aerobatic singles (Decathlon, Pitts)   |
+| Category  | Positive limit | Negative limit | Typical certified for                                         |
+| --------- | -------------- | -------------- | ------------------------------------------------------------- |
+| Normal    | +3.8 G         | -1.52 G        | Most light singles (PA28, C172)                               |
+| Utility   | +4.4 G         | -1.76 G        | Some light singles (C172 in utility category, lighter weight) |
+| Aerobatic | +6.0 G         | -3.0 G         | Aerobatic singles (Decathlon, Pitts)                          |
 
 Ultimate load factor is typically 1.5x limit. Exceeding ultimate produces structural damage or failure.
 
@@ -335,7 +338,8 @@ In descending order:
 - POH Section 5 -- stall speeds at various banks (if published; many do not, but some do).
 - PHAK Chapter 5 -- read the load-factor section.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -397,7 +401,8 @@ That sounds like a lot. But: at 100 KIAS in a 60-bank turn, pulling to 3.8 G mea
 
 If you're at 130 KIAS (above Va = 99) in a 60-bank turn pulling to 3.8 G: you might exceed limit-load before the wing stalls. Slow before pulling.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -419,7 +424,8 @@ If you're at 130 KIAS (above Va = 99) in a 60-bank turn pulling to 3.8 G: you mi
 - `aero-coordination-rudder" -- coordinated turns follow the cos-formula; uncoordinated turns are non-standard and more dangerous.
 - `aero-cg-and-stability` -- CG position affects stick-force-per-G during pulls, the perceptual side of load factor.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -454,3 +460,5 @@ Evaluation criteria:
 - The CFII is firm: this is not a comfort-level issue, it is a will-it-kill-me issue. The student adjusts their behavior or they do not pass the checkride.
 
 The pedagogical move is to convert "skidding to make the runway" from a tactical response into a kill-chain. The student must understand they are practicing the exact maneuver that NTSB statistics describe as the dominant pattern fatality. That changes the urgency.
+
+:::

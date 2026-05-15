@@ -52,7 +52,7 @@ mastery_criteria: >
 
 # Weather Equipment and Data Limitations
 
-## Context
+:::phase name="context"
 
 You're departing on a 200 NM IFR cross-country in widely scattered
 convection. Your EFB shows clear gaps between cells. Your onboard
@@ -62,7 +62,8 @@ unplanned airport with hail dents in the leading edges and a
 pacemaker installed because the "gap" you flew through closed
 behind a 12-minute-old NEXRAD picture and an attenuated radar return.
 
-## Problem
+:::
+:::phase name="problem"
 
 Every weather product in the cockpit and every forecast in the brief
 has a documented failure mode. Knowing the failure modes -- not just
@@ -71,7 +72,8 @@ picture is information at a 30-NM stand-off and misinformation at a
 3-NM penetration; the difference is whether the pilot understands
 the latency.
 
-## Discover
+:::
+:::phase name="discover"
 
 The limitations sort into three families per R2:
 
@@ -125,7 +127,8 @@ R2c -- inflight weather resource limitations:
 - PIREPs are voluntary; absence of PIREPs is not absence of
   hazard, especially at unusual altitudes or at non-peak hours.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 Operational rules:
 
@@ -143,7 +146,8 @@ Operational rules:
   radar showed clear" accident has the same quote in the
   toxicology report.
 
-## Practice
+:::
+:::phase name="practice"
 
 For your next flight: identify, before takeoff, the limitation that
 matters most for the day's brief. If convection is forecast, the
@@ -395,7 +399,8 @@ calibrate the rest of the brief against it.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 R2 in the ACS asks specifically about these three families of
 limitation. This node is the umbrella; the flight-deck-displays
@@ -403,7 +408,8 @@ node, the airmets-sigmets node, and the data-sources node provide
 the depth on each. The go/no-go node consumes this understanding to
 weight the briefing inputs appropriately.
 
-## Verify
+:::
+:::phase name="verify"
 
 For three different forecast scenarios, articulate the dominant
 limitation in one sentence each:
@@ -419,3 +425,5 @@ limitation in one sentence each:
 
 If you can name the limitation in a sentence, you are equipped to
 brief against it.
+
+:::

@@ -102,7 +102,7 @@ mastery_criteria: >-
 
 # Unusual Attitude Recovery
 
-## Context
+:::phase name="context"
 
 An unusual attitude is the airplane in a configuration the pilot did not intend and is not normal for the maneuver they thought they were flying. The two cases are nose-high (climbing, slowing, often banked, often near stall) and nose-low (descending, accelerating, banked, often near Vne). Both happen in IMC after a scan breakdown -- a few seconds of distraction, a clearance amendment that pulled attention head-down, an instrument failure that fed the autopilot wrong data, a spatial disorientation episode where the pilot followed body cues into a banked dive.
 
@@ -112,7 +112,8 @@ This node sits between `proc-stall-recovery` and `proc-overspeed-recovery`. Stal
 
 The discipline that prevents unusual attitudes is `proc-instrument-cross-check`. The recovery is a backup plan for when the cross-check failed.
 
-## Problem
+:::
+:::phase name="problem"
 
 You are hand-flying in IMC at 6,000, on a routine cruise leg. ATC clears you to descend to 4,000. You start the descent, retard the throttle, set the airplane up at 90 KIAS in a 500-fpm descent. Forty-five seconds in, you reach for a chart on the floor that slid off your kneeboard. You have your eyes off the panel for about 6 seconds. When you look up, the AI shows 30 degrees of right bank, nose 15 degrees below the horizon. Airspeed is 130 KIAS and rising. Altitude is showing 4,200 and falling at 2,000 fpm. The DG is rotating right at maybe 5 deg/sec.
 
@@ -120,7 +121,8 @@ What do you do, in order, in the next 5 seconds?
 
 Write your answer before reading on. Then ask: what would the recovery look like if instead, you had looked up to see 25 degrees nose-high, 30 degrees of bank, airspeed dropping through 60 KIAS?
 
-## Discover
+:::
+:::phase name="discover"
 
 The recovery decomposes into four steps that differ by direction. Work through each.
 
@@ -178,13 +180,13 @@ Get the power direction right and the rest follows. Get it wrong and you make th
 
 Three traps:
 
-| Trap                                  | Symptom                                                          | Fix                                          |
-| ------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------- |
-| Pull in a steep nose-low bank          | Load factor spikes; accelerated stall; or G-loading airframe     | Level wings BEFORE pull                      |
-| Pull at high airspeed nose-low         | Airframe overload (Vne / Va exceeded by maneuvering)             | Reduce power first; gentle pull              |
-| Drop the nose hard nose-high           | Negative G; pilot lifts out of seat; control authority confusion | Smooth forward pressure, not push           |
-| Trust body over instruments in IMC     | Pilot recovers to the wrong attitude (the felt one)              | Trust AI; ignore vestibular cues             |
-| Forget the AI is failed (vacuum out)   | Pilot recovers to a "level" indication that is itself wrong      | Verify AI agreement with TC + ASI + altimeter |
+| Trap                                 | Symptom                                                          | Fix                                           |
+| ------------------------------------ | ---------------------------------------------------------------- | --------------------------------------------- |
+| Pull in a steep nose-low bank        | Load factor spikes; accelerated stall; or G-loading airframe     | Level wings BEFORE pull                       |
+| Pull at high airspeed nose-low       | Airframe overload (Vne / Va exceeded by maneuvering)             | Reduce power first; gentle pull               |
+| Drop the nose hard nose-high         | Negative G; pilot lifts out of seat; control authority confusion | Smooth forward pressure, not push             |
+| Trust body over instruments in IMC   | Pilot recovers to the wrong attitude (the felt one)              | Trust AI; ignore vestibular cues              |
+| Forget the AI is failed (vacuum out) | Pilot recovers to a "level" indication that is itself wrong      | Verify AI agreement with TC + ASI + altimeter |
 
 ### Q6. How does scan failure produce an unusual attitude in the first place?
 
@@ -205,7 +207,8 @@ The first two are scan failures. The third is sensory failure under IMC conditio
 - Pulling in a steep bank tightens the turn; level wings first.
 - Body cues lie in IMC; trust the AI, but verify it is not the failed instrument.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The summary rule
 
@@ -213,12 +216,12 @@ The first two are scan failures. The third is sensory failure under IMC conditio
 
 ### Recovery sequences side by side
 
-| Step | Nose-high                                  | Nose-low                                    |
-| ---- | ------------------------------------------ | ------------------------------------------- |
-| 1    | Power: full                                | Power: reduce                               |
-| 2    | Pitch: forward (break AOA)                 | Wings: level (coordinated)                  |
-| 3    | Wings: level (coordinated)                 | Pitch: up smoothly                          |
-| 4    | Return to assigned altitude / heading      | Return to assigned altitude / heading       |
+| Step | Nose-high                             | Nose-low                              |
+| ---- | ------------------------------------- | ------------------------------------- |
+| 1    | Power: full                           | Power: reduce                         |
+| 2    | Pitch: forward (break AOA)            | Wings: level (coordinated)            |
+| 3    | Wings: level (coordinated)            | Pitch: up smoothly                    |
+| 4    | Return to assigned altitude / heading | Return to assigned altitude / heading |
 
 The order of steps 2 and 3 is the only structural difference. It matters because the dominant danger differs.
 
@@ -265,7 +268,8 @@ In descending order:
 - POH Section 4 -- "Maneuvering Speeds" and "Limit Load Factor" -- the limits you must respect during recovery.
 - ACS / PTS instrument rating standards -- task elements specifying recovery tolerances.
 
-## Practice
+:::
+:::phase name="practice"
 
 ### Cards (spaced memory items)
 
@@ -324,7 +328,8 @@ If at 130 KIAS, 30-degree bank, 1,500 fpm down, the recovery takes:
 
 Total ~5 seconds. Altitude lost: roughly 125 feet at 1,500 fpm. That is the budget. Slower recovery, more altitude lost, eventually below terrain or below MEA.
 
-## Connect
+:::
+:::phase name="connect"
 
 ### What changes if...
 
@@ -346,7 +351,8 @@ Total ~5 seconds. Altitude lost: roughly 125 feet at 1,500 fpm. That is the budg
 - `proc-instrument-cross-check` -- the active discipline that prevents the unusual attitude from forming.
 - `nav-partial-panel` -- if the AI is the failed instrument, recovery happens on the rate instruments.
 
-## Verify
+:::
+:::phase name="verify"
 
 ### Novel scenario (narrative)
 
@@ -382,3 +388,5 @@ Evaluation criteria:
 - The CFII names the trap: "memorised one sequence and applied it both ways" is a classic teaching failure mode; it is the reason both sequences must be drilled together with the contrast explicit.
 
 The pedagogical move is to teach both recoveries against each other, not in sequence. The contrast is the lesson.
+
+:::

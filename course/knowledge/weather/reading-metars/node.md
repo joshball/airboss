@@ -80,7 +80,7 @@ A pilot who decodes well but never advances to triage is the pilot who
 reads every METAR and still misses the one trend that should have
 stopped the flight. The decode is the alphabet; the goal is the sentence.
 
-## Context
+:::phase name="context"
 
 You're standing on the ramp at 0530 with two hours of flight ahead.
 ForeFlight is open. You've pulled the destination METAR:
@@ -96,7 +96,8 @@ groups of information. Which three would change your decision if they
 shifted by one step? That's the triage question, and answering it is
 the difference between reading the report and using it.
 
-## Problem
+:::
+:::phase name="problem"
 
 The METAR is dense by design. The format predates radio bandwidth
 limits and got compact for transmission; it stayed compact because
@@ -109,7 +110,8 @@ trend signals the METAR carries best).
 The pilot question the METAR answers is direct: what is the airport
 doing right now, and is the trend toward better or worse?
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Stage 1: Decode
 
@@ -221,7 +223,8 @@ decision if they shifted by one step. Triage is the habit of asking:
 which of these numbers, if it changed by a step, would change my
 decision? Those are the drivers. Watch them.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### Worked examples
 
@@ -497,7 +500,8 @@ underway.
 | 10  | Altimeter      | `A3002`                    | `A` + four digits = inches Hg x 100.                                          |
 | 11  | Remarks        | `RMK AO2 SLP168 T01940183` | Sea-level pressure, station type, hourly precip, free text.                   |
 
-## Practice
+:::
+:::phase name="practice"
 
 For each of the next ten METARs you read, force-rank the groups by
 impact on a hypothetical flight. Which three would change your decision
@@ -809,7 +813,8 @@ is how pilots build forecasting intuition that beats the TAF.
       cite: AIM 7-1-29 -- METAR / TAF Decode Key
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 This node is the foundation of the encoded-text family. The same
 three-stage ladder (decode -> understand -> triage) applies to:
@@ -841,7 +846,8 @@ The METAR also feeds:
 - **Airframe icing risk** -- temperature + dew-point spread + sky
   condition in winter is the first signal for in-flight icing setup.
 
-## Verify
+:::
+:::phase name="verify"
 
 Pull three METARs from three airports across one synoptic system
 (west-to-east across a frontal passage, or north-to-south across a
@@ -855,3 +861,5 @@ period spanning sunrise and sunset. Note where the diurnal cycle
 shows: temperature trace, ceiling lift-and-fall, wind shift at sunset.
 Familiarity with the home-airport rhythm is what makes the away-airport
 report parseable on the first read.
+
+:::

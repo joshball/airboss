@@ -73,7 +73,7 @@ A SIGMET-tier advisory is always operationally significant. The
 question is never "is this important?" -- it is "does this intersect
 my flight?" The polygon and the validity are what tell you.
 
-## Context
+:::phase name="context"
 
 You're 30 minutes into a flight, IFR-routed across central California
 at 11,000 ft, when ATC says: "Cessna 345, advise you of Convective
@@ -86,7 +86,8 @@ the flight. To act on it correctly you have to know what a Convective
 SIGMET is, what it isn't, and how the four hazards it can cite each
 disqualify penetration of the polygon on their own.
 
-## Problem
+:::
+:::phase name="problem"
 
 SIGMETs are the in-flight advisory tier for hazardous-to-all-aircraft
 weather. The threshold is the floor of "significance to any aircraft,
@@ -110,7 +111,8 @@ answer is almost always the same: stay clear, divert, or land. The
 severity threshold of a SIGMET has already cleared "is this a
 do-not-fly hazard?" -- the planning question is "how do I avoid it?"
 
-## Discover
+:::
+:::phase name="discover"
 
 ### Non-convective SIGMET (WS) -- four hazards
 
@@ -245,7 +247,8 @@ Decoded:
   storm areas for the next 4-hour block after the current 2-hour
   valid window. AREA 1 is the forecast polygon for that outlook.
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### Operational reads by hazard
 
@@ -425,7 +428,8 @@ hint: ash clouds evolve slowly compared to a typical 4-hour SIGMET
 hazard. Plan around an ash polygon for the whole valid window; the
 hazard is unlikely to clear before then.
 
-## Practice
+:::
+:::phase name="practice"
 
 For tomorrow's planned route, pull every active SIGMET and Convective
 SIGMET. Identify each by type (non-convective / convective), what
@@ -686,7 +690,8 @@ convection."
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 SIGMETs are forecast and observation products at the most-severe tier;
 PIREPs are the truth-up. A SIGMET for severe icing is operationally
@@ -711,7 +716,8 @@ and Convective SIGMET decoding and use; this node carries the depth,
 half, and [`wx-product-convective-outlook`](../product-convective-outlook/node.md)
 carries the strategic outlook.
 
-## Verify
+:::
+:::phase name="verify"
 
 For tomorrow's planned route, pull every active SIGMET. Identify each by
 type (non-convective / convective), what hazard it warns of, when it
@@ -727,3 +733,5 @@ where does the disagreement live -- is the outlook overestimating, are
 the SIGMETs lagging the cells, is NEXRAD ahead of the SIGMET? The
 disagreement is operational signal: it tells you which product to weight
 most heavily for *this* flight.
+
+:::

@@ -72,7 +72,7 @@ hazard text and not the polygon-and-time has decoded but not triaged.
 The polygon and validity are what tell you whether the advisory is
 *yours*.
 
-## Context
+:::phase name="context"
 
 You're planning a 1430Z launch on a January VFR cross-country from
 Cincinnati to Buffalo, KCVG to KBUF. The briefing pulls four AIRMETs:
@@ -93,7 +93,8 @@ Three of those AIRMETs are forecasts for an airplane like yours, in an
 area like the one you're flying over. Decoding each is mechanical; the
 decision is in the overlap with your route, altitude, and time.
 
-## Problem
+:::
+:::phase name="problem"
 
 AIRMETs (Airmen's Meteorological Information) are the in-flight
 advisory tier for hazardous-to-light-aircraft weather. The name gives
@@ -112,7 +113,8 @@ the geometry and timing makes two systematic mistakes:
 
 Triage is the operational read; decode is the prerequisite.
 
-## Discover
+:::
+:::phase name="discover"
 
 AIRMETs come in three families, each tagged with a phonetic letter
 that maps to a hazard class:
@@ -184,7 +186,8 @@ Decoded:
   through 0300Z (the forecaster expects this advisory to renew on the
   next cycle).
 
-## Reveal
+:::
+:::phase name="reveal"
 
 ### The three families in detail
 
@@ -423,7 +426,8 @@ valley airport with a mountain-obscuration SIERRA in effect needs to
 plan a route that stays in the valley, not one that climbs over the
 nearest ridge.
 
-## Practice
+:::
+:::phase name="practice"
 
 For tomorrow's planned route, pull every active and forecast AIRMET.
 For each one, answer: what does it warn of, where does it apply
@@ -672,7 +676,8 @@ high-confidence operational signal.
       cite: FAA-H-8083-28 Aviation Weather Handbook, Chapter 26 -- Advisories
 :::
 
-## Connect
+:::
+:::phase name="connect"
 
 AIRMETs are forecast products; PIREPs are the truth-up. The K2g element
 of the airman certification standards calls for AIRMET / SIGMET use
@@ -689,7 +694,8 @@ The AIRMET picture pairs with:
   spatially against the synoptic picture.
 - **Freezing-level chart** as the ZULU companion product.
 
-## Verify
+:::
+:::phase name="verify"
 
 For tomorrow's planned route, pull every active and forecast AIRMET.
 Identify each by family (SIERRA / TANGO / ZULU), what condition it
@@ -704,3 +710,5 @@ where the freezing level rises (warm advection) and falls (cold
 advection); the icing-risk altitude band moves with it. The
 freezing-level shape is the synoptic-frame answer to "where exactly
 is the icing setup?"
+
+:::
