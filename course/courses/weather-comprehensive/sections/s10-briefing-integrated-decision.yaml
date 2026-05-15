@@ -62,12 +62,17 @@ steps:
       [turbulence](/reference/knowledge/wx-turbulence-types), IFR
       conditions -- the things that change the decision).
       Route-and-altitude next
-      ([winds aloft](/reference/knowledge/wx-product-winds-aloft),
-      [freezing levels](/reference/knowledge/wx-freezing-level),
+      ([winds aloft](/reference/knowledge/wx-product-winds-aloft)
+      ([reference](/reference/wx/products/winds-temps-aloft)),
+      [freezing levels](/reference/knowledge/wx-freezing-level)
+      ([reference](/reference/wx/products/freezing-level)),
       ceiling and
       [visibility](/reference/knowledge/wx-fog-and-visibility-obstructions)
       along the track). Departure, destination, alternate weather last
-      ([METAR/TAF](/reference/knowledge/wx-reading-metars-tafs) for
+      ([METAR](/reference/knowledge/wx-reading-metars)
+      ([reference](/reference/wx/products/metar)) /
+      [TAF](/reference/knowledge/wx-reading-tafs)
+      ([reference](/reference/wx/products/taf)) for
       the airports that matter).
 
       The discipline is to read in that order every time. Pilots who

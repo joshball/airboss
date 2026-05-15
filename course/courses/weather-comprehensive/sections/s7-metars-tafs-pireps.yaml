@@ -12,22 +12,31 @@ body_md: |
 
   This section teaches the three text-based reports a pilot reads on
   every flight:
-  [METAR](/reference/knowledge/wx-reading-metars-tafs) (current
+  [METAR](/reference/knowledge/wx-reading-metars)
+  ([reference](/reference/wx/products/metar)) (current
   airport conditions),
-  [TAF](/reference/knowledge/wx-reading-metars-tafs) (terminal
+  [TAF](/reference/knowledge/wx-reading-tafs)
+  ([reference](/reference/wx/products/taf)) (terminal
   forecast for a 5 SM radius around the station), and
-  [PIREP](/reference/knowledge/wx-product-pireps) (pilot report from
+  [PIREP](/reference/knowledge/wx-product-pireps)
+  ([reference](/reference/wx/products/pirep)) (pilot report from
   the air).
 
   Terms you will see referenced but not fully taught here:
 
   - The graphical / regional products
     ([GFA](/reference/knowledge/wx-product-gfa),
-    [AIRMET / SIGMET](/reference/knowledge/wx-product-airmets-sigmets),
+    [AIRMET](/reference/knowledge/wx-product-airmets) /
+    [SIGMET](/reference/knowledge/wx-product-sigmets),
     [winds aloft](/reference/knowledge/wx-product-winds-aloft),
     [convective outlook](/reference/knowledge/wx-product-convective-outlook)):
-    these zoom out to the region; taught in s8.
-  - The [TAF timeline](/reference/knowledge/wx-reading-metars-tafs)
+    these zoom out to the region; taught in s8. Reference pages:
+    [GFA](/reference/wx/products/gfa),
+    [AIRMET](/reference/wx/products/airmet),
+    [SIGMET](/reference/wx/products/sigmet),
+    [winds aloft](/reference/wx/products/winds-temps-aloft),
+    [convective outlook](/reference/wx/products/convective-outlook).
+  - The [TAF timeline](/reference/knowledge/wx-reading-tafs)
     chart: a visualization of the FM / TEMPO / PROB blocks; the
     underlying TAF reading skill is taught in s7.1 below.
   - [Severe-weather day worked example](/reference/knowledge/wx-thunderstorm-hazards):
@@ -38,7 +47,8 @@ body_md: |
 
   Sections 2-6 built the synoptic story; this section is where the
   story meets the printed page.
-  [METARs, TAFs](/reference/knowledge/wx-reading-metars-tafs), and
+  [METARs](/reference/knowledge/wx-reading-metars),
+  [TAFs](/reference/knowledge/wx-reading-tafs), and
   [PIREPs](/reference/knowledge/wx-product-pireps) are the three
   workhorse products you will read on every flight, and reading them
   well is a three-stage skill: decode the symbols, understand the

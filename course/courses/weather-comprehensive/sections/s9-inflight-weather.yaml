@@ -4,7 +4,7 @@ title: In-flight weather
 body_md: |
   **Before you start.** This section assumes the pre-flight picture
   is in hand: the synoptic story (s2 through s6), the
-  [airport text products](/reference/knowledge/wx-reading-metars-tafs)
+  [airport text products](/reference/knowledge/wx-reading-metars)
   from s7, and the
   [regional products](/reference/knowledge/wx-product-gfa) from s8.
   It teaches what changes when those same products start updating
@@ -38,9 +38,16 @@ body_md: |
   Modern cockpits have made this picture richer than any prior
   generation of GA flying:
   [ADS-B FIS-B](/reference/knowledge/wx-data-sources) brings
-  [METARs, TAFs](/reference/knowledge/wx-reading-metars-tafs), NEXRAD,
-  [AIRMETs, SIGMETs](/reference/knowledge/wx-product-airmets-sigmets),
-  and [PIREPs](/reference/knowledge/wx-product-pireps) into the flight
+  [METARs](/reference/knowledge/wx-reading-metars)
+  ([reference](/reference/wx/products/metar)),
+  [TAFs](/reference/knowledge/wx-reading-tafs)
+  ([reference](/reference/wx/products/taf)), NEXRAD,
+  [AIRMETs](/reference/knowledge/wx-product-airmets)
+  ([reference](/reference/wx/products/airmet)),
+  [SIGMETs](/reference/knowledge/wx-product-sigmets)
+  ([reference](/reference/wx/products/sigmet)),
+  and [PIREPs](/reference/knowledge/wx-product-pireps)
+  ([reference](/reference/wx/products/pirep)) into the flight
   deck. XM weather adds graphical lightning and high-resolution radar.
   EFBs overlay all of it on the moving map. The risk is treating the
   cockpit display as ground truth; latency, gaps, and resolution all
