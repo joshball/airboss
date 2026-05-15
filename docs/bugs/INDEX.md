@@ -2,7 +2,7 @@
 
 # Bugs
 
-4 open bugs of 11 total.
+6 open bugs of 13 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -26,8 +26,10 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 - [bug-worker-test-flake](bug-worker-test-flake.md) -- hangar-jobs worker.test.ts flakes ~1 in 4 full-suite runs
 
-### Flightbag (open: 1)
+### Flightbag (open: 3)
 
 #### Major
 
+- [bug-flightbag-ac-appendix-chapter-404](bug-flightbag-ac-appendix-chapter-404.md) -- Flightbag AC appendix chapters 404 (hyphenated chapter code rejected)
+- [bug-flightbag-handbook-frontmatter-chapter-404](bug-flightbag-handbook-frontmatter-chapter-404.md) -- Flightbag handbook front-matter sections 404 (chapter 0 reader)
 - [bug-flightbag-ssr-stream-closed](bug-flightbag-ssr-stream-closed.md) -- Flightbag SSR crashes on parallel handbook section requests

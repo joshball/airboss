@@ -14,4 +14,12 @@ export const PORTS = {
 	HANGAR_E2E: 9623,
 	AVIONICS_E2E: 9633,
 	FLIGHTBAG_E2E: 9643,
+	// Integration ports = dev port + 7. The integration suite is a parallel,
+	// HTTP-only coverage sweep across every flightbag reader URL pointed at a
+	// dedicated database (`airboss_integration` / DEV_DB_URL_INTEGRATION).
+	// Running on its own port lets the suite coexist with both a `bun run dev`
+	// session (9640) and a `bun run test e2e` run (9643) on the same machine.
+	// Only flightbag has an integration port today; other apps land here when
+	// the suite expands.
+	FLIGHTBAG_INTEGRATION: 9647,
 } as const;
