@@ -403,6 +403,19 @@ export const ROUTES = {
 	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	/**
+	 * Truth-model authoring sandbox -- admin-only. Sliders drive a
+	 * single-station `TruthModel`; the page re-derives a METAR + TAF and
+	 * re-renders the wx-charts METAR plot live as the levers move, and can
+	 * save the result as a catalog-example candidate. Drill Phase 4. See
+	 * `docs/work/plans/2026-05-14-wx-drill-and-practice.md`.
+	 */
+	PRACTICE_WX_TEST_PAGE: '/practice/wx/test-page',
+	/** POST endpoint: slider state in, derived products + chart SVG out. */
+	PRACTICE_WX_TEST_PAGE_DERIVE: '/practice/wx/test-page/derive',
+	/** POST endpoint: writes the examples-pending candidate sidecar. */
+	PRACTICE_WX_TEST_PAGE_SAVE_CANDIDATE: '/practice/wx/test-page/save-candidate',
+
+	/**
 	 * @deprecated Phase 3 of `study-app-ia-cleanup` renamed `/calibration` to
 	 * `/insights/calibration`. Prefer `INSIGHTS_CALIBRATION`. Hooks-level
 	 * 301 redirect keeps external links working until 6 months post-Phase 3.
