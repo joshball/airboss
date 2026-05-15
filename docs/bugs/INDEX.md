@@ -2,7 +2,7 @@
 
 # Bugs
 
-6 open bugs of 11 total.
+5 open bugs of 11 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -10,15 +10,11 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 
 ## Per-product
 
-### Study (open: 3)
+### Study (open: 2)
 
 #### Major
 
 - [bug-ac-url-helper-drift](bug-ac-url-helper-drift.md) -- AC URL helper produces stray dot in path (PR #636)
-
-#### Minor
-
-- [bug-palette-fts-third-source](bug-palette-fts-third-source.md) -- Palette FTS: add course_step.body_md as third FTS source once table stabilises (PR #936)
 
 #### Nit
 

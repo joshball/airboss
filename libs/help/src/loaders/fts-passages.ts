@@ -4,19 +4,16 @@
  * intent classifier returns `phrase-fts` (long / quoted / no title-prefix
  * match queries).
  *
- * Queries three source tables in parallel via Postgres full-text search:
+ * Three sources active. Each source produces normalised `FtsRow` tuples that
+ * are merged and globally re-ranked before being returned as `SearchResult`s.
  *
  *   1. `study.reference_section.content_md` (handbook chapters, CFR sections,
  *      AIM paragraphs, AC sections joined to `study.reference.kind`).
  *   2. `study.knowledge_node.content_md` (post-pivot ADR-011 nodes).
- *   3. **Lesson bodies** -- there is no `study.lesson` table in the current
- *      schema. The closest analogue is `study.course_step.body_md` (course
- *      tree leaves + interior nodes carry markdown bodies). Wiring that
- *      source is a follow-up; passage discovery from course-step bodies is
- *      a Phase 3.5k decision because the surface is still in flight.
- *      TODO(phase-3.5-followup): add `course_step.body_md` source once the
- *      course-tree-arbitrary-depth WP closes; the row type would be
- *      `airboss.lesson` (already in the taxonomy).
+ *   3. `study.course_step.body_md` joined to `study.course` (instructor-
+ *      authored course tree -- sections, lessons, and steps all carry
+ *      markdown bodies). Rows are returned as `airboss.lesson` and link
+ *      into the in-app course-step reader via `ROUTES.COURSE_STEP`.
  *
  * Each row is ranked by `ts_rank_cd(tsvector_col, query)` and rows are then
  * merged across the three sources and globally re-ranked so cross-source
@@ -38,8 +35,15 @@
  * Server-only -- imports `@ab/db/connection`.
  */
 
-import { knowledgeNode, reference, referenceSection } from '@ab/bc-study';
-import { LIBRARY_REGULATIONS_KIND_LABELS, LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { course, courseStep, knowledgeNode, reference, referenceSection } from '@ab/bc-study';
+import {
+	COURSE_STATUSES,
+	COURSE_STEP_LEVELS,
+	LIBRARY_REGULATIONS_KIND_LABELS,
+	LIBRARY_REGULATIONS_KINDS,
+	REFERENCE_KINDS,
+	ROUTES,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { createLogger } from '@ab/utils';
 import { sql } from 'drizzle-orm';
@@ -110,7 +114,7 @@ export async function loadFtsPassages(
 	const limit = input.limit ?? DEFAULT_LIMIT;
 
 	try {
-		const [sectionRows, knodeRows] = await Promise.all([
+		const [sectionRows, knodeRows, courseStepRows] = await Promise.all([
 			queryReferenceSections(db, needle, limit).catch((err) => {
 				log.error('fts-passages: reference_section query failed', { metadata: { needle } }, asError(err));
 				return [] as readonly FtsRow[];
@@ -119,12 +123,16 @@ export async function loadFtsPassages(
 				log.error('fts-passages: knowledge_node query failed', { metadata: { needle } }, asError(err));
 				return [] as readonly FtsRow[];
 			}),
+			queryCourseSteps(db, needle, limit).catch((err) => {
+				log.error('fts-passages: course_step query failed', { metadata: { needle } }, asError(err));
+				return [] as readonly FtsRow[];
+			}),
 		]);
 
 		// Merge + global re-rank. ts_rank_cd is comparable across queries
 		// against the same tsquery shape, so the ordering across sources is
 		// meaningful. Tie-break by title for determinism.
-		const merged: FtsRow[] = [...sectionRows, ...knodeRows];
+		const merged: FtsRow[] = [...sectionRows, ...knodeRows, ...courseStepRows];
 		merged.sort((a, b) => {
 			if (a.rank !== b.rank) return b.rank - a.rank;
 			return a.title.localeCompare(b.title);
@@ -334,6 +342,96 @@ async function queryKnowledgeNodes(db: LoaderDb, needle: string, limit: number):
 			// the conservative floor for the source.
 			depth: 0,
 			clusterKey: null,
+		});
+	}
+	return out;
+}
+
+// -------- source: course_step --------
+
+interface CourseStepFtsRowRaw extends Record<string, unknown> {
+	step_id: string;
+	step_code: string;
+	step_title: string;
+	step_level: string;
+	course_id: string;
+	course_slug: string;
+	course_title: string;
+	headline: string;
+	rank: number;
+}
+
+/**
+ * Map `course_step.level` (`section` / `lesson` / `step`) to a depth value
+ * used by the I-3 ranker. Roots get 0, leaves get the deepest non-zero
+ * floor; the in-between `lesson` rows are typically interior nodes that
+ * should rank between root and leaf. This mirrors the depth-reward
+ * convention used by `reference_section` (chapter=1, section=2).
+ */
+function depthForCourseStepLevel(level: string): number {
+	switch (level) {
+		case COURSE_STEP_LEVELS.SECTION:
+			return 0;
+		case COURSE_STEP_LEVELS.LESSON:
+			return 1;
+		case COURSE_STEP_LEVELS.STEP:
+			return 2;
+		default:
+			return 0;
+	}
+}
+
+/**
+ * Query `study.course_step` joined to `study.course`. The body column is
+ * `body_md` (defaulted to `''` in schema -- the `length(...) > 0` filter
+ * drops rows that carry no authored markdown). Archived courses are
+ * excluded so a deprecated course never surfaces as a passage hit.
+ *
+ * Each match maps to `airboss.lesson` (already in the type taxonomy and
+ * placed in the Airboss Content column). The `href` lands on the in-app
+ * course-step reader (`ROUTES.COURSE_STEP(courseSlug, stepCode)`); the
+ * `clusterKey` shares the parent `course_id` so future cluster-collapse
+ * (course root + child steps) bonds correctly.
+ */
+async function queryCourseSteps(db: LoaderDb, needle: string, limit: number): Promise<readonly FtsRow[]> {
+	const result = await db.execute<CourseStepFtsRowRaw>(sql`
+		SELECT
+			cs.id AS step_id,
+			cs.code AS step_code,
+			cs.title AS step_title,
+			cs.level AS step_level,
+			c.id AS course_id,
+			c.slug AS course_slug,
+			c.title AS course_title,
+			ts_rank_cd(to_tsvector('english', cs.body_md), websearch_to_tsquery('english', ${needle})) AS rank,
+			ts_headline(
+				'english',
+				cs.body_md,
+				websearch_to_tsquery('english', ${needle}),
+				${HEADLINE_OPTIONS}
+			) AS headline
+		FROM ${courseStep} cs
+		INNER JOIN ${course} c ON c.id = cs.course_id
+		WHERE length(cs.body_md) > 0
+			AND c.status <> ${COURSE_STATUSES.ARCHIVED}
+			AND to_tsvector('english', cs.body_md) @@ websearch_to_tsquery('english', ${needle})
+		ORDER BY rank DESC
+		LIMIT ${limit}
+	`);
+
+	const rows = result as unknown as readonly CourseStepFtsRowRaw[];
+	const out: FtsRow[] = [];
+	for (const r of rows) {
+		out.push({
+			id: r.step_id,
+			type: 'airboss.lesson',
+			title: `${r.step_code} - ${r.step_title}`,
+			subtitle: `Course - ${r.course_title}`,
+			href: ROUTES.COURSE_STEP(r.course_slug, r.step_code),
+			headline: r.headline,
+			rank: Number(r.rank ?? 0),
+			depth: depthForCourseStepLevel(r.step_level),
+			clusterKey: r.course_id,
 		});
 	}
 	return out;
