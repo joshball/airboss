@@ -36,9 +36,11 @@ the canonical aviation reference list at
 `libs/aviation/src/references/faa-docs.ts:1750` which still lists
 `'14cfr14'` as a keyword.
 
-`scripts/db/cleanup-cfr-part-14-orphan.ts` exists to remove the orphan
-from old DBs but is NOT run by the seed pipeline -- it's a one-shot
-repair, not a step in `seed-all.ts`.
+A one-shot repair script (`scripts/db/cleanup-cfr-part-14-orphan.ts`)
+existed to remove the orphan from DBs seeded before the fix. It was
+deleted once PR #986 landed the root-cause fix and every dev DB was
+reseeded -- a fresh seed no longer produces the orphan, so the repair
+path is dead. Recover via `git log` if a stale DB ever resurfaces.
 
 ## Repro
 
