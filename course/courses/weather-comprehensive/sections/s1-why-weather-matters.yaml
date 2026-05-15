@@ -8,14 +8,16 @@ body_md: |
   them. The forward references in this section's prose, with where
   each one is taught:
 
-  - [METAR](/reference/knowledge/wx-reading-metars-tafs) (current
+  - [METAR](/reference/knowledge/wx-reading-metars) (current
     surface weather report): taught in s7.
-  - [TAF](/reference/knowledge/wx-reading-metars-tafs) (terminal
+    [Reference page](/reference/wx/products/metar).
+  - [TAF](/reference/knowledge/wx-reading-tafs) (terminal
     aerodrome forecast): taught in s7.
+    [Reference page](/reference/wx/products/taf).
   - [Frontal passage](/reference/knowledge/wx-airmasses-and-fronts):
     taught in s2.
   - [Area forecast / GFA](/reference/knowledge/wx-product-gfa): taught
-    in s8.
+    in s8. [Reference page](/reference/wx/products/gfa).
   - [Personal minimums](/reference/knowledge/wx-personal-minimums):
     introduced in step s1.2 below.
   - [The go/no-go decision](/reference/knowledge/wx-go-nogo-decision):
@@ -31,7 +33,7 @@ body_md: |
   A friend asks you to fly them to a wedding three states away on
   Saturday. Conditions look "fine" -- nothing in the area forecast jumps
   out, the destination is showing 4,000 broken, winds light. You know
-  how to read a [METAR](/reference/knowledge/wx-reading-metars-tafs).
+  how to read a [METAR](/reference/knowledge/wx-reading-metars).
   You know what a [frontal passage](/reference/knowledge/wx-airmasses-and-fronts)
   looks like. You trust the airplane.
 
@@ -63,7 +65,7 @@ steps:
     body_md: |
       The decision isn't "is the weather flyable?" It's "is the weather
       flyable for me, in this airplane, on this route, today?" Three
-      pilots looking at the same [TAF](/reference/knowledge/wx-reading-metars-tafs)
+      pilots looking at the same [TAF](/reference/knowledge/wx-reading-tafs)
       will arrive at three different answers and all three can be
       correct.
 

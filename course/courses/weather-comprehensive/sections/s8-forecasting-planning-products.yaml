@@ -4,7 +4,9 @@ title: Forecasting and planning products
 body_md: |
   **Before you start.** This section assumes the synoptic story from
   s2 through s6 and the airport-specific products from s7
-  ([METAR / TAF / PIREP](/reference/knowledge/wx-reading-metars-tafs)).
+  ([METAR](/reference/knowledge/wx-reading-metars) /
+  [TAF](/reference/knowledge/wx-reading-tafs) /
+  [PIREP](/reference/knowledge/wx-product-pireps)).
   It teaches the regional products: where briefing data comes from,
   the surface analysis and ceiling / visibility charts, the GFA,
   winds aloft, AIRMETs / SIGMETs, and the convective outlook. Each
@@ -17,10 +19,10 @@ body_md: |
     severe-weather data set as the s5 radar mosaic and the s7 PIREP
     plot. Cross-reference is on purpose; the product is what is new
     here, not the day.
-  - [G-AIRMET icing](/reference/knowledge/wx-product-airmets-sigmets):
+  - [G-AIRMET icing](/reference/knowledge/wx-product-airmets):
     the graphical sibling of the textual AIRMET-Zulu. Pairs with the
-    [CIP / FIP charts](/reference/knowledge/wx-product-airmets-sigmets)
-    you met in s6.
+    [CIP / FIP charts](/reference/knowledge/wx-product-airmets)
+    you met in s6. [Reference page](/reference/wx/products/airmet).
   - [Water-vapor satellite](/reference/knowledge/wx-product-gfa):
     not a primary briefing product, but useful for understanding
     why the GFA reads the way it does. Introduced via the embedded
@@ -32,11 +34,18 @@ body_md: |
   ---
 
   Section 7 was airport-specific. This section is route-and-region.
-  [GFA](/reference/knowledge/wx-product-gfa),
-  [surface analysis](/reference/knowledge/wx-product-surface-analysis-and-cva),
-  [AIRMETs, SIGMETs](/reference/knowledge/wx-product-airmets-sigmets),
-  [winds aloft](/reference/knowledge/wx-product-winds-aloft),
+  [GFA](/reference/knowledge/wx-product-gfa)
+  ([reference](/reference/wx/products/gfa)),
+  [surface analysis](/reference/knowledge/wx-product-surface-analysis-and-cva)
+  ([reference](/reference/wx/products/surface-analysis)),
+  [AIRMETs](/reference/knowledge/wx-product-airmets)
+  ([reference](/reference/wx/products/airmet)),
+  [SIGMETs](/reference/knowledge/wx-product-sigmets)
+  ([reference](/reference/wx/products/sigmet)),
+  [winds aloft](/reference/knowledge/wx-product-winds-aloft)
+  ([reference](/reference/wx/products/winds-temps-aloft)),
   [convective outlook](/reference/knowledge/wx-product-convective-outlook)
+  ([reference](/reference/wx/products/convective-outlook))
   -- each product zooms out and looks at the same atmosphere from a
   different angle. The skill is knowing which product answers which
   question, so you reach for the right one without having to read all

@@ -12,9 +12,10 @@ body_md: |
 
   Terms you will see referenced but not fully taught here:
 
-  - [G-AIRMET](/reference/knowledge/wx-product-airmets-sigmets)
+  - [G-AIRMET](/reference/knowledge/wx-product-airmets)
     turbulence and GTG charts: the graphical hazard products. Read
     them as previews; they are taught fully in s8.5.
+    [Reference page](/reference/wx/products/airmet).
   - [Mountain wave](/reference/knowledge/wx-turbulence-types) as a
     full-scenario walk: introduced here, walked end-to-end in
     [s11.4, lee-side mountain wave](/courses/weather-comprehensive/s11.4).
@@ -81,7 +82,7 @@ steps:
       severity before you enter the air.
 
       The turbulence G-AIRMET is the graphical descendant of the
-      textual [AIRMET-Tango](/reference/knowledge/wx-product-airmets-sigmets)
+      textual [AIRMET-Tango](/reference/knowledge/wx-product-airmets)
       -- six-hour forecast windows of where moderate-or-greater
       turbulence is expected:
 

@@ -16,9 +16,10 @@ body_md: |
 
   - [Freezing rain](/reference/knowledge/wx-icing-types-and-avoidance):
     introduced as the most dangerous icing setup. Taught fully in s6.
-  - [METAR](/reference/knowledge/wx-reading-metars-tafs) ceiling and
+  - [METAR](/reference/knowledge/wx-reading-metars) ceiling and
     visibility lines: how the obstructions you read about in s3.2
     show up in the airport report. Taught in s7.
+    [Reference page](/reference/wx/products/metar).
 
   Build the cloud-and-visibility picture from physics here; the
   product readouts catch up in s7 and s8.

@@ -13,11 +13,13 @@ body_md: |
 
   Terms you will see referenced but not fully taught here:
 
-  - [Convective SIGMET](/reference/knowledge/wx-product-airmets-sigmets)
+  - [Convective SIGMET](/reference/knowledge/wx-product-sigmets)
     and the
     [Day-1 convective outlook](/reference/knowledge/wx-product-convective-outlook):
     the products that flag this weather pre-flight. Taught in s8.5
-    and s8.6.
+    and s8.6. Reference pages:
+    [SIGMET](/reference/wx/products/sigmet),
+    [convective outlook](/reference/wx/products/convective-outlook).
   - [Microburst](/reference/knowledge/wx-thunderstorm-hazards):
     introduced here as a hazard family; the avoidance procedures live
     inside the node.

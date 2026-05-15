@@ -11,15 +11,21 @@ body_md: |
 
   Terms you will see referenced but not fully taught here:
 
-  - [TAF](/reference/knowledge/wx-reading-metars-tafs) and
-    [METAR](/reference/knowledge/wx-reading-metars-tafs): the airport
-    text reports. Taught in s7.
-  - [AIRMET / SIGMET](/reference/knowledge/wx-product-airmets-sigmets):
-    the hazard polygon products. Taught in s8.5.
+  - [TAF](/reference/knowledge/wx-reading-tafs) and
+    [METAR](/reference/knowledge/wx-reading-metars): the airport
+    text reports. Taught in s7. Reference pages:
+    [TAF](/reference/wx/products/taf),
+    [METAR](/reference/wx/products/metar).
+  - [AIRMET](/reference/knowledge/wx-product-airmets) /
+    [SIGMET](/reference/knowledge/wx-product-sigmets): the hazard
+    polygon products. Taught in s8.5. Reference pages:
+    [AIRMET](/reference/wx/products/airmet),
+    [SIGMET](/reference/wx/products/sigmet).
   - [Surface analysis](/reference/knowledge/wx-product-surface-analysis-and-cva)
     as a product (vs the symbol-reading skill, which has its own
     [chart-type reading node](/reference/knowledge/wx-chart-type-surface-analysis)):
     revisited in s8.2.
+    [Reference page](/reference/wx/products/surface-analysis).
   - [Frontal-XC scenario s11.1](/courses/weather-comprehensive/s11.1):
     the worked truth example whose chart we embed below. You can read
     the full scenario after finishing s2 if you want the synoptic
@@ -34,7 +40,7 @@ body_md: |
   [cold front](/reference/knowledge/wx-airmasses-and-fronts) sweeping
   east through your route, a high pressure system parked over the
   destination, isobars tightly packed across the middle leg. Without
-  reading any [TAF](/reference/knowledge/wx-reading-metars-tafs) or
+  reading any [TAF](/reference/knowledge/wx-reading-tafs) or
   METAR, what do you already know about how the day will look?
 
   This is the synoptic story -- the big-picture air-mass behavior that
