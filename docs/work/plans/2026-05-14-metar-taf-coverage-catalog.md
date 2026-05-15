@@ -274,9 +274,12 @@ catalog organizes around those:
 
 ### Phase 3 — Cross-link to wx-engine
 
-- [ ] For each catalog example that one of the 6 existing scenarios can produce, fill in `generatedBy: { scenario, station, observationTime }`
-- [ ] Reverse index: each scenario's bundle output gains a `coversCatalogExamples: string[]` field pointing back to the catalog slugs it exercises
-- [ ] Coverage report: `bun run wx-scenario coverage` prints "catalog has N examples; current scenarios cover M; gap list: [...]"
+- [x] For each catalog example that one of the 6 existing scenarios can produce, fill in `generatedBy: { scenario, station, observationTime }` (via `tools/catalog-build/match-scenarios.ts` + sidecar at `course/knowledge/weather/encoded-text-catalog/scenario-matches.json`)
+- [x] Reverse index: each scenario's bundle output gains a `coversCatalogExamples: string[]` field (written to `data/wx-scenarios/<slug>/coverage.json` by `bun run wx-scenario build`, sourced from the matcher sidecar)
+- [x] Coverage report: `bun run wx-scenario coverage` prints totals + per-scenario contribution + uncovered token families. Also accepts `--format json` for machine-readable output.
+- [x] `bun run wx-scenario check-catalog` warns (non-blocking) when scenario bundles are newer than the matcher sidecar
+
+Note: with the current six scenarios + 135 catalog examples, the matcher reports 0 matches at first run. Catalog examples use stations + dates (KORD, day 12) that don't overlap the scenario synoptics (KSTL/KORD/etc., day 19). The cross-link infrastructure is in place; growing the overlap is a content-authoring task for future catalog + scenario work.
 
 ## Authoring rules
 

@@ -17,11 +17,50 @@
  * Failure modes surface as `failed` lines and yield a non-zero exit code.
  */
 
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { WX_SCENARIO_VALUES, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
 import { generateScenario, writeScenarioBundle } from '@ab/wx-engine/server';
 import { formatHumanDurationMs, REPO_ROOT, resolveScenarioSlug } from './lib';
+
+const SCENARIO_MATCHES_PATH = resolve(REPO_ROOT, 'course/knowledge/weather/encoded-text-catalog/scenario-matches.json');
+
+interface ScenarioMatchesFile {
+	generatedAt: string;
+	coverage?: Record<string, string[]>;
+}
+
+/**
+ * Read the matcher-generated coverage map for a single scenario. Falls
+ * back to an empty list when the sidecar is absent (first run, or before
+ * `bun tools/catalog-build/match-scenarios.ts` has ever been run).
+ */
+function readCoverageForScenario(slug: WxScenario): string[] {
+	if (!existsSync(SCENARIO_MATCHES_PATH)) return [];
+	try {
+		const parsed = JSON.parse(readFileSync(SCENARIO_MATCHES_PATH, 'utf8')) as ScenarioMatchesFile;
+		const covered = parsed.coverage?.[slug];
+		return Array.isArray(covered) ? [...covered].sort() : [];
+	} catch {
+		return [];
+	}
+}
+
+/**
+ * Write `data/wx-scenarios/<slug>/coverage.json` -- the per-scenario view
+ * of "which catalog examples this scenario produces verbatim." Sourced
+ * from `course/knowledge/weather/encoded-text-catalog/scenario-matches.json`,
+ * which the matcher tool regenerates whenever scenarios or catalog change.
+ */
+function writeCoverageForScenario(slug: WxScenario): void {
+	const coversCatalogExamples = readCoverageForScenario(slug);
+	const payload = {
+		scenario: slug,
+		coversCatalogExamples,
+	};
+	const path = resolve(wxScenarioBundleDir(REPO_ROOT, slug), 'coverage.json');
+	writeFileSync(path, `${JSON.stringify(payload, null, 2)}\n`);
+}
 
 interface BuildResult {
 	slug: string;
@@ -64,6 +103,11 @@ async function buildOne(slug: WxScenario): Promise<BuildResult> {
 
 		const bundle = generateScenario({ kind: slug });
 		await writeScenarioBundle(bundle, { repoRoot: REPO_ROOT });
+
+		// Per-scenario coverage view, sourced from the catalog matcher's
+		// sidecar. Empty until `bun tools/catalog-build/match-scenarios.ts`
+		// runs after a catalog or scenario change.
+		writeCoverageForScenario(slug);
 
 		const postTruth = existsSync(truthPath) ? readFileSync(truthPath, 'utf8') : null;
 		const postCommentary = existsSync(commentaryPath) ? readFileSync(commentaryPath, 'utf8') : null;
