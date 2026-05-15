@@ -52,6 +52,12 @@ export type {
 // ----------------------------------------------------------------------
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 // ----------------------------------------------------------------------
+// v2 temporal derivation result types. Values (deriveMetarSequence,
+// deriveTafSequence, deriveAirmetTimeline, buildTimeline) live in
+// `./server.ts` because they wrap server-only derivations.
+// ----------------------------------------------------------------------
+export type { AirmetEvent, AirmetTimelineEntry, TimelineSnapshot } from './products/temporal';
+// ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
 // so the runtime barrel stays free of value re-exports per spec.md
