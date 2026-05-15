@@ -25,6 +25,7 @@ import { WX_SCENARIO_SUBCOMMANDS } from '@ab/constants';
 import { runBuild } from './wx-scenario/build';
 import { runCheckCatalog } from './wx-scenario/check-catalog';
 import { runCheckRoundTrip } from './wx-scenario/check-round-trip';
+import { runCoverage } from './wx-scenario/coverage';
 import { runDrill } from './wx-scenario/drill';
 import { runList } from './wx-scenario/list';
 import { runValidate } from './wx-scenario/validate';
@@ -60,6 +61,10 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		summary: 'Generate a pack of practice products (METAR / TAF / PIREP / FB / AIRMET) with per-token annotations',
 		example: 'bun run wx-scenario drill --count 20 --products metar,taf --output /tmp/sample-drill',
 	},
+	[WX_SCENARIO_SUBCOMMANDS.COVERAGE]: {
+		summary: 'Report catalog coverage across scenarios -- totals, per-scenario contribution, uncovered token families',
+		example: 'bun run wx-scenario coverage  |  bun run wx-scenario coverage --format json',
+	},
 };
 
 async function main(): Promise<void> {
@@ -90,6 +95,9 @@ async function main(): Promise<void> {
 			return;
 		case WX_SCENARIO_SUBCOMMANDS.DRILL:
 			await runDrill(rest);
+			return;
+		case WX_SCENARIO_SUBCOMMANDS.COVERAGE:
+			runCoverage(rest);
 			return;
 		default:
 			console.error(`wx-scenario: unknown command '${command}'.`);
