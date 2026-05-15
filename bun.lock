@@ -304,6 +304,21 @@
         "vitest": "catalog:",
       },
     },
+    "libs/bc/wx-practice": {
+      "name": "@ab/bc-wx-practice",
+      "version": "0.1.0",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/utils": "workspace:*",
+        "@ab/wx-explain": "workspace:*",
+        "drizzle-orm": "catalog:",
+      },
+      "devDependencies": {
+        "vitest": "catalog:",
+      },
+    },
     "libs/constants": {
       "name": "@ab/constants",
       "devDependencies": {
@@ -447,6 +462,19 @@
         "vitest": "catalog:",
       },
     },
+    "libs/wx-drill": {
+      "name": "@ab/wx-drill",
+      "version": "0.1.0",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+        "@ab/wx-charts": "workspace:*",
+        "@ab/wx-engine": "workspace:*",
+        "@ab/wx-explain": "workspace:*",
+      },
+      "devDependencies": {
+        "vitest": "catalog:",
+      },
+    },
     "libs/wx-engine": {
       "name": "@ab/wx-engine",
       "version": "0.1.0",
@@ -505,6 +533,8 @@
 
     "@ab/bc-study": ["@ab/bc-study@workspace:libs/bc/study"],
 
+    "@ab/bc-wx-practice": ["@ab/bc-wx-practice@workspace:libs/bc/wx-practice"],
+
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
@@ -536,6 +566,8 @@
     "@ab/utils": ["@ab/utils@workspace:libs/utils"],
 
     "@ab/wx-charts": ["@ab/wx-charts@workspace:libs/wx-charts"],
+
+    "@ab/wx-drill": ["@ab/wx-drill@workspace:libs/wx-drill"],
 
     "@ab/wx-engine": ["@ab/wx-engine@workspace:libs/wx-engine"],
 

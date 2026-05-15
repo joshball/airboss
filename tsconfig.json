@@ -70,7 +70,13 @@
 			"@ab/wx-engine/server": ["libs/wx-engine/src/server.ts"],
 			"@ab/wx-engine/*": ["libs/wx-engine/src/*"],
 			"@ab/wx-explain": ["libs/wx-explain/src/index.ts"],
-			"@ab/wx-explain/*": ["libs/wx-explain/src/*"]
+			"@ab/wx-explain/*": ["libs/wx-explain/src/*"],
+			"@ab/wx-drill": ["libs/wx-drill/src/index.ts"],
+			"@ab/wx-drill/server": ["libs/wx-drill/src/server.ts"],
+			"@ab/wx-drill/*": ["libs/wx-drill/src/*"],
+			"@ab/bc-wx-practice": ["libs/bc/wx-practice/src/index.ts"],
+			"@ab/bc-wx-practice/server": ["libs/bc/wx-practice/src/server.ts"],
+			"@ab/bc-wx-practice/*": ["libs/bc/wx-practice/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],
