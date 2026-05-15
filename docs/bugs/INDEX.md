@@ -2,7 +2,7 @@
 
 # Bugs
 
-5 open bugs of 11 total.
+4 open bugs of 11 total.
 Closed bugs (fixed / wontfix / duplicate) stay on disk for history but
 are excluded from this index.
 
@@ -31,9 +31,3 @@ Author or mutate via `bun run bug` (see `scripts/bug.ts` for the CLI).
 #### Major
 
 - [bug-flightbag-ssr-stream-closed](bug-flightbag-ssr-stream-closed.md) -- Flightbag SSR crashes on parallel handbook section requests
-
-### Platform (open: 1)
-
-#### Minor
-
-- [bug-palette-phase4-dropped-commands](bug-palette-phase4-dropped-commands.md) -- Palette Phase 4 dropped 3 commands awaiting upstream routes (PR #940)
