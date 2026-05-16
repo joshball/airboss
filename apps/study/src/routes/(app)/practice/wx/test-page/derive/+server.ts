@@ -17,7 +17,8 @@
  * surface it inline rather than failing the whole request.
  */
 
-import { dirname, resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { dirname, parse, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { requireRole } from '@ab/auth';
 import { CHART_TYPES, ROLES } from '@ab/constants';
@@ -32,10 +33,21 @@ import type { RequestHandler } from './$types';
 
 const log = createLogger('study:wx-test-page-derive');
 
-// apps/study/src/routes/(app)/practice/wx/test-page/derive -> repo root is
-// ten levels up.
-const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..', '..', '..', '..');
+/**
+ * Walk up from this module to the repo root -- the first ancestor directory
+ * holding a `bun.lock`. Robust to route-nesting changes; a hand-counted
+ * `'..' x N` would silently break the basemap paths if the route moved.
+ */
+function findRepoRoot(): string {
+	let dir = dirname(fileURLToPath(import.meta.url));
+	while (dir !== parse(dir).root) {
+		if (existsSync(resolve(dir, 'bun.lock'))) return dir;
+		dir = dirname(dir);
+	}
+	throw new Error('wx-test-page derive: could not locate repo root (no bun.lock found)');
+}
+
+const REPO_ROOT = findRepoRoot();
 const BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
 const CONTEXT_BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'north-america-context-50m.json');
 
@@ -84,12 +96,13 @@ export const POST: RequestHandler = async (event) => {
 		// spec + inline source bytes; the renderer maps source keys to
 		// bytes and pulls the basemap from disk.
 		const artifact = deriveMetarPlotChart(truth, [metar], truth.scenarioId);
-		const sourcesByKey: Record<string, string> = {};
-		for (const src of artifact.sources) {
-			// The spec's `sources.observations` is `cache://scenarios/.../metar-plot.json`;
-			// the single artifact source carries the matching bytes.
-			sourcesByKey.observations = src.bytes;
+		// The METAR-plot artifact carries exactly one source -- the observations
+		// JSON the spec references as `sources.observations`. Assert that
+		// invariant rather than letting a last-wins loop hide a future change.
+		if (artifact.sources.length !== 1) {
+			throw error(500, `Expected one METAR-plot source, got ${artifact.sources.length}`);
 		}
+		const sourcesByKey: Record<string, string> = { observations: artifact.sources[0].bytes };
 		const renderer = CHART_RENDERERS[CHART_TYPES.METAR_PLOT_GRID];
 		const spec = renderer.schema.parse(artifact.spec);
 		const rendered = await renderer.render({

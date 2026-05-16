@@ -16,8 +16,9 @@
  * examples-pending root so a crafted slug cannot escape the directory.
  */
 
+import { existsSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { dirname, resolve } from 'node:path';
+import { dirname, parse, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { requireRole } from '@ab/auth';
 import { ROLES } from '@ab/constants';
@@ -29,10 +30,21 @@ import type { RequestHandler } from './$types';
 
 const log = createLogger('study:wx-test-page-save-candidate');
 
-// apps/study/src/routes/(app)/practice/wx/test-page/save-candidate -> repo
-// root is ten levels up.
-const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..', '..', '..', '..', '..');
+/**
+ * Walk up from this module to the repo root -- the first ancestor directory
+ * holding a `bun.lock`. Robust to route-nesting changes; a hand-counted
+ * `'..' x N` would silently break the pending-dir path if the route moved.
+ */
+function findRepoRoot(): string {
+	let dir = dirname(fileURLToPath(import.meta.url));
+	while (dir !== parse(dir).root) {
+		if (existsSync(resolve(dir, 'bun.lock'))) return dir;
+		dir = dirname(dir);
+	}
+	throw new Error('wx-test-page save-candidate: could not locate repo root (no bun.lock found)');
+}
+
+const REPO_ROOT = findRepoRoot();
 const PENDING_DIR = resolve(REPO_ROOT, 'course', 'knowledge', 'weather', 'encoded-text-catalog', 'examples-pending');
 
 export const POST: RequestHandler = async (event) => {
