@@ -8,8 +8,9 @@
  * Run `bun run test help` for the full list of subcommands.
  */
 
-import { existsSync } from 'node:fs';
-import { run } from './lib/spawn';
+import { existsSync, mkdirSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { run, runTee } from './lib/spawn';
 
 const args = process.argv.slice(2);
 const first = args[0];
@@ -63,14 +64,33 @@ if (first && helpFlags.has(first)) {
 
 const rest = args.slice(1);
 
+/**
+ * Per-run log path under `.cache/test/`. Filename encodes the subcommand and a
+ * UTC timestamp so multiple runs don't collide. Print the absolute path at the
+ * end so the user (or an agent) can grep the failure list without re-running.
+ */
+function newLogPath(label: string): string {
+	const dir = resolve('.cache/test');
+	mkdirSync(dir, { recursive: true });
+	const ts = new Date().toISOString().replace(/[:.]/g, '-');
+	return resolve(dir, `${label}-${ts}.log`);
+}
+
+async function runWithLog(label: string, cmd: readonly string[]): Promise<void> {
+	const logPath = newLogPath(label);
+	const code = await runTee(cmd, logPath);
+	console.log(`\nlog: ${logPath}`);
+	if (code !== 0) process.exit(code);
+}
+
 if (first === 'watch') {
 	await ensureSvelteKitSync();
 	await run(['bunx', 'vitest', ...rest]);
 } else if (first === 'coverage') {
 	await ensureSvelteKitSync();
-	await run(['bunx', 'vitest', 'run', '--coverage', ...rest]);
+	await runWithLog('coverage', ['bunx', 'vitest', 'run', '--coverage', ...rest]);
 } else if (first === 'e2e') {
-	await run(['bunx', 'playwright', 'test', ...rest]);
+	await runWithLog('e2e', ['bunx', 'playwright', 'test', ...rest]);
 } else if (first === 'e2e:ui') {
 	await run(['bunx', 'playwright', 'test', '--ui', ...rest]);
 } else if (first === 'e2e:install') {
@@ -83,5 +103,5 @@ if (first === 'watch') {
 	await run(['bunx', 'playwright', 'test', '--project=flightbag-coverage', ...rest]);
 } else {
 	await ensureSvelteKitSync();
-	await run(['bunx', 'vitest', 'run', ...args]);
+	await runWithLog('unit', ['bunx', 'vitest', 'run', ...args]);
 }
