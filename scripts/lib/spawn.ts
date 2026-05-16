@@ -93,6 +93,50 @@ export async function runQuiet(
 	return combined;
 }
 
+/**
+ * Run a subprocess while teeing its stdout+stderr through the parent's
+ * `process.stdout` / `process.stderr` AND appending every chunk to a log file.
+ * The console output is identical to `run`; the log file gets the raw bytes
+ * so post-run inspection has the full transcript. Returns the child's exit
+ * code so the caller can decide how to surface failure (we want to print the
+ * log path even on non-zero exits).
+ */
+export async function runTee(
+	cmd: readonly string[],
+	logPath: string,
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<number> {
+	console.log(`> ${cmd.join(' ')}`);
+	const logFile = Bun.file(logPath);
+	const writer = logFile.writer();
+	writer.write(`> ${cmd.join(' ')}\n`);
+	const proc = Bun.spawn([...cmd], {
+		cwd: opts.cwd,
+		env: spawnEnv(opts.env),
+		stdio: ['inherit', 'pipe', 'pipe'],
+	});
+	const forward = async (stream: ReadableStream<Uint8Array> | null, sink: NodeJS.WriteStream): Promise<void> => {
+		if (stream === null) return;
+		const reader = stream.getReader();
+		try {
+			while (true) {
+				const { value, done } = await reader.read();
+				if (done) break;
+				if (value && value.length > 0) {
+					sink.write(Buffer.from(value));
+					writer.write(value);
+				}
+			}
+		} finally {
+			reader.releaseLock();
+		}
+	};
+	await Promise.all([forward(proc.stdout, process.stdout), forward(proc.stderr, process.stderr)]);
+	const code = await proc.exited;
+	await writer.end();
+	return code;
+}
+
 export async function runOrThrowPiped(
 	cmd: readonly string[],
 	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
