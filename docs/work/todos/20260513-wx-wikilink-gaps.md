@@ -85,3 +85,42 @@ These show up in s11 scenarios as named TruthModel features. They're scenario-lo
 - Adding new knowledge nodes is the heaviest path. Worth it for "outflow boundary," "subsidence inversion," "mixing height" which are concept-meaty.
 
 Once each gap is filled, walk the affected course sections and add the wiki-link in a follow-up commit. The authoring convention (`docs/agents/wiki-links.md`) makes this a mechanical pass.
+
+## Resolution (PR `feat/wx-gaps`, 2026-05-15)
+
+Canonical homes authored. The wiki-link wiring into course section files is NOT done here -- it is the follow-up mechanical pass described above.
+
+### Glossary entries (key in `libs/help/src/glossary/entries.ts`, content in `content/<key>.md`)
+
+| Gap term                                    | Canonical home                        |
+| ------------------------------------------- | ------------------------------------- |
+| `BKN` / `SCT` / `OVC` / `FEW` + plain forms | Glossary `metar-cloud-cover`          |
+| `VFR` / `MVFR` / `IFR` / `LIFR`             | Glossary `flight-rule-tiers`          |
+| `ceiling`                                   | Glossary `ceiling`                    |
+| `visibility` (METAR field)                  | Glossary `metar-visibility`           |
+| `TSRA` / `FZRA` / `SHRA` / `FG` / `BR`      | Glossary `metar-weather-phenomena`    |
+| `ForeFlight` (planning tool)                | Glossary `foreflight`                 |
+| `Garmin Pilot`                              | Glossary `garmin-pilot`               |
+| `SkyVector`                                 | Glossary `skyvector`                  |
+| `1800wxbrief`                               | Glossary `flight-service-1800wxbrief` |
+| `FIKI` / `non-FIKI`                         | Glossary `fiki`                       |
+
+### Sections added to existing knowledge nodes
+
+| Gap term               | Canonical home                                                            |
+| ---------------------- | ------------------------------------------------------------------------- |
+| `lapse rate`           | `wx-stability-and-instability` -- new "Lapse rate" section                |
+| `nocturnal inversion`  | `wx-fog-and-visibility-obstructions` -- new "Nocturnal inversion" section |
+| `mountain obscuration` | `wx-product-airmets` -- new "Mountain obscuration" section                |
+
+### New knowledge nodes
+
+| Gap term               | Canonical home                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------- |
+| `outflow boundary`     | New node `wx-outflow-boundary` (`course/knowledge/weather/outflow-boundary/`)         |
+| `subsidence inversion` | New node `wx-subsidence-inversion` (`course/knowledge/weather/subsidence-inversion/`) |
+| `mixing height`        | New node `wx-mixing-height` (`course/knowledge/weather/mixing-height/`)               |
+
+### Not resolved (intentionally -- scenario-local, NOT linkable)
+
+The "Scenario-named features" section terms (`cP` / `mT` / `cT` / `mP`, the `F-` / `L-` / `H-` TruthModel ids, the `HZ-` hazard polygon ids) keep no canonical home. They are scenario-local and were flagged in this todo precisely so a future author does not try to link them.

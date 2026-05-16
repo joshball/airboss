@@ -135,6 +135,46 @@ turbine blades, capable of total engine flameout (KLM 867, BA 9). FAA
 guidance is strict avoidance even for piston aircraft -- ash damages
 windscreens, pitots, and oil systems too.
 
+### Nocturnal inversion
+
+Radiation fog was introduced in Discover as "clear nights radiate heat
+to space; surface cools rapidly." Name the structure that cooling
+builds, because it explains why radiation fog forms where it forms and
+lifts when it lifts.
+
+Normally air gets colder as you climb. On a clear, calm night the
+ground radiates its heat away to space far faster than the air above
+it does. The ground chills, and it chills the thin layer of air in
+direct contact with it. By a few hours before sunrise you have a
+**nocturnal inversion** (also called a surface or radiation inversion):
+a shallow layer near the ground that is *colder* than the air just
+above it -- temperature increasing with height, the reverse of normal.
+
+Reason through what that does:
+
+- The inversion is a lid. Cold dense air at the bottom will not rise
+  through the warmer, lighter air on top of it. Vertical mixing stops.
+- With mixing shut off, the cold surface layer keeps cooling in place
+  all night. Nothing stirs warmer air down to replace it.
+- Moisture and pollutants are trapped under the lid -- which is why
+  haze thickens overnight and visibility is often worst right at
+  sunrise.
+- If that trapped, steadily-cooling surface layer reaches its dew
+  point, it saturates. That is radiation fog. The inversion is the
+  mechanism that makes radiation fog possible: it concentrates the
+  cooling into a thin layer instead of letting it mix away.
+
+The inversion also explains the lift. After sunrise the ground warms,
+heats the surface layer from below, the inversion erodes from the
+bottom up, mixing resumes -- and the fog burns off, usually one to two
+hours after sunrise. The same lid that built the fog overnight is what
+has to be destroyed for it to clear.
+
+For a pilot this is a low-level wind and visibility story too: under a
+nocturnal inversion the surface wind goes calm and decouples from a
+faster wind just above the lid, so a smooth surface can sit beneath
+unexpected shear at the inversion top.
+
 :::
 :::phase name="practice"
 

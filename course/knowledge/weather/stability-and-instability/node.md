@@ -117,6 +117,39 @@ Cooler weather comes after sunset because radiational cooling
 re-stabilizes the surface; thunderstorms that built all afternoon often
 fade after dark precisely because the stability profile shifts.
 
+### Lapse rate
+
+The word "lapse rate" appears three times in the Discover reasoning,
+and it earns a name of its own because every stability call reduces to
+comparing two of them.
+
+A **lapse rate** is simply how fast temperature changes with height --
+degrees of cooling per 1,000 ft of climb. There are three you have to
+keep straight, and the whole stability question is which is larger:
+
+- **Environmental lapse rate (ELR)** -- the *actual* temperature
+  profile of the air over the airport right now, as a sounding or a
+  Skew-T would draw it. It is a measured fact about today's
+  atmosphere, and it varies hour to hour. There is no fixed value.
+- **Dry adiabatic lapse rate** -- the *fixed* rate (~3 deg C / 1,000
+  ft) at which an unsaturated parcel cools as it rises. It is a law of
+  physics, not a measurement; it never changes.
+- **Moist (saturated) adiabatic lapse rate** -- the *fixed* slower
+  rate (~1.5 deg C / 1,000 ft) at which a saturated parcel cools,
+  because condensation releases latent heat that offsets some of the
+  cooling.
+
+The reason a pilot cares: the ELR is the variable, the two adiabatic
+rates are the fixed yardsticks. Lay the ELR against them and the
+stability class falls out -- ELR shallower than the moist rate is
+absolutely stable, ELR steeper than the dry rate is absolutely
+unstable, ELR between the two is conditionally unstable. "Reading
+stability" is, mechanically, reading the ELR's steepness. A steep ELR
+(temperature dropping fast with height) is the fingerprint of an
+unstable, convective day; a shallow ELR -- or an **inversion**, where
+temperature *rises* with height -- is the fingerprint of stable air
+that traps haze, moisture, and smooth flying underneath it.
+
 :::
 :::phase name="practice"
 

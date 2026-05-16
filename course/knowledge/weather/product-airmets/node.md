@@ -417,14 +417,41 @@ real; an absent PIREP does not refute it (pilots may not be flying
 at that altitude). Plan to the AIRMET; weight the PIREPs as confirming
 or non-confirming evidence.
 
-#### Mountain obscuration is a hidden Sierra
+### Mountain obscuration
 
-When SIERRA fires for mountain obscuration only (without low ceilings
-elsewhere in the polygon), valley airports often report VFR while
-the surrounding ridges are in cloud. A pilot launching VFR from a
-valley airport with a mountain-obscuration SIERRA in effect needs to
-plan a route that stays in the valley, not one that climbs over the
-nearest ridge.
+`Mountain obscuration` is the hazard that earns its own SIERRA wording,
+because it fails the most natural assumption a VFR pilot makes: that
+the nearest airport's METAR describes the air they are about to fly
+through.
+
+A SIERRA AIRMET covers two related things -- IFR ceilings/visibility,
+**and** mountains obscured by cloud, fog, precipitation, smoke, or
+haze. Mountain obscuration is the second of those: the *ridges and
+peaks* are in cloud even though the *valleys* are clear.
+
+Walk the trap. Ask first: where does a METAR-reporting station sit?
+Almost always at an airport, and almost always an airport sits in a
+valley or on a plain -- low terrain. So when a cloud layer settles
+between the valley floor and the ridge tops, the valley station
+honestly reports VFR: clear below, layer above, good visibility. The
+same layer has buried every peak the route has to cross. The METAR is
+not wrong; it is answering a question about the valley, and the pilot
+needed an answer about the ridge.
+
+That is why mountain obscuration gets a SIERRA of its own rather than
+folding into the IFR-ceilings advisory. The IFR advisory keys off
+reported ceilings; mountain obscuration can exist with no IFR ceiling
+reported anywhere in the polygon. The advisory exists precisely to
+warn of a hazard the station network cannot see.
+
+Operationally: a mountain-obscuration SIERRA over a route with terrain
+is a route-planning problem, not a launch/no-launch coin flip. The
+options are to stay in the valley (a route that never needs to climb
+over a ridge), to wait for the obscuration to lift, or to have the
+performance and the rules (instrument rating, equipment, clearance) to
+fly above it. Launching VFR toward a ridge on the assumption that the
+valley METAR's "clear" extends to the peaks is the classic
+controlled-flight-into-terrain setup the SIERRA is built to prevent.
 
 :::
 :::phase name="practice"
