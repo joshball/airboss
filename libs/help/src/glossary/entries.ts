@@ -184,6 +184,78 @@ export const GLOSSARY_ENTRIES: ReadonlyArray<GlossaryEntry> = [
 		longRef: 'surface-analysis-chart.md',
 		related: ['knowledge-node'],
 	},
+	{
+		key: 'metar-cloud-cover',
+		term: 'METAR cloud cover',
+		short: 'METAR sky-cover codes -- FEW, SCT (scattered), BKN (broken), OVC (overcast) -- in eighths of sky covered.',
+		longRef: 'metar-cloud-cover.md',
+		related: ['ceiling', 'flight-rule-tiers', 'metar-weather-phenomena'],
+	},
+	{
+		key: 'flight-rule-tiers',
+		term: 'Flight-rule tiers (VFR / MVFR / IFR / LIFR)',
+		short:
+			'The four flight-rule categories -- VFR, MVFR, IFR, LIFR -- computed from the more restrictive of ceiling and visibility.',
+		longRef: 'flight-rule-tiers.md',
+		related: ['ceiling', 'metar-visibility', 'metar-cloud-cover'],
+	},
+	{
+		key: 'ceiling',
+		term: 'Ceiling',
+		short:
+			'Height AGL of the lowest broken or overcast cloud layer (or vertical visibility into an obscuration). Scattered/few do not count.',
+		longRef: 'ceiling.md',
+		related: ['metar-cloud-cover', 'flight-rule-tiers', 'metar-visibility'],
+	},
+	{
+		key: 'metar-visibility',
+		term: 'Visibility (METAR field)',
+		short: 'The surface prevailing visibility reported on a METAR in statute miles -- the reported field, not the broader phenomenon.',
+		longRef: 'metar-visibility.md',
+		related: ['ceiling', 'flight-rule-tiers', 'metar-weather-phenomena'],
+	},
+	{
+		key: 'metar-weather-phenomena',
+		term: 'METAR weather phenomena codes',
+		short: 'Present-weather codes on a METAR -- TSRA, FZRA, SHRA, FG (fog), BR (mist) -- built from intensity + descriptor + phenomenon.',
+		longRef: 'metar-weather-phenomena.md',
+		related: ['metar-cloud-cover', 'metar-visibility', 'ceiling'],
+	},
+	{
+		key: 'foreflight',
+		term: 'ForeFlight',
+		short: 'The most widely used general-aviation electronic flight bag (EFB) app -- charts, planning, weather, in-flight navigation.',
+		longRef: 'foreflight.md',
+		related: ['garmin-pilot', 'skyvector', 'flight-service-1800wxbrief'],
+	},
+	{
+		key: 'garmin-pilot',
+		term: 'Garmin Pilot',
+		short: "Garmin's electronic flight bag (EFB) app for iOS and Android -- charts, planning, weather, avionics integration.",
+		longRef: 'garmin-pilot.md',
+		related: ['foreflight', 'skyvector', 'flight-service-1800wxbrief'],
+	},
+	{
+		key: 'skyvector',
+		term: 'SkyVector',
+		short: 'A free browser-based flight-planning website -- charts and weather overlay for pre-flight route planning. Not a mobile EFB.',
+		longRef: 'skyvector.md',
+		related: ['foreflight', 'garmin-pilot', 'flight-service-1800wxbrief'],
+	},
+	{
+		key: 'flight-service-1800wxbrief',
+		term: '1800wxbrief / Flight Service',
+		short: 'Leidos Flight Service portal -- the official, logged source for pilot weather briefings and flight-plan filing.',
+		longRef: 'flight-service-1800wxbrief.md',
+		related: ['foreflight', 'garmin-pilot', 'skyvector'],
+	},
+	{
+		key: 'fiki',
+		term: 'FIKI / non-FIKI',
+		short: 'FIKI = Flight Into Known Icing: an aircraft certificated for known-icing operations. Non-FIKI aircraft must avoid icing entirely.',
+		longRef: 'fiki.md',
+		related: [],
+	},
 ];
 
 /** Index keyed by `entry.key` for O(1) lookup. */
