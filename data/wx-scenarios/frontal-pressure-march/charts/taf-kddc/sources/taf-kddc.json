@@ -1,0 +1,8 @@
+{
+  "stationIcao": "KDDC",
+  "issuedAt": "2026-03-14T11:20:00.000Z",
+  "validFrom": "2026-03-14T12:00:00.000Z",
+  "validTo": "2026-03-14T20:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic TAF",
+  "raw": "TAF KDDC 141120Z 1412/1420 32020G30KT 6SM BKN030"
+}

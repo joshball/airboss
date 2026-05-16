@@ -1,0 +1,24 @@
+slug: wx-scenarios/frontal-pressure-march/winds-aloft
+type: winds-aloft-fb
+title: Winds and Temperatures Aloft (truth-derived)
+subtitle: 2026-03-14T12:00:00Z -- 6 forecast points
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent: conus
+sources:
+  bulletin: cache://scenarios/frontal-pressure-march/winds-aloft.json
+options:
+  altitudes_ft:
+    - 3000
+    - 6000
+    - 9000
+    - 12000
+    - 18000
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

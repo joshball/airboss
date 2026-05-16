@@ -248,10 +248,7 @@ const temporalCellSchema = z.object({
 		z.array(cellIntensitySampleSchema).min(1, 'inline intensity curve must have at least one sample'),
 	]),
 	radiusKmCurve: z
-		.union([
-			z.literal('linear-grow-shrink'),
-			z.object({ peak: z.number().gt(0), peakAt: z.string().min(1) }),
-		])
+		.union([z.literal('linear-grow-shrink'), z.object({ peak: z.number().gt(0), peakAt: z.string().min(1) })])
 		.optional(),
 });
 
@@ -283,9 +280,7 @@ const hazardLifecycleSchema = z.object({
 const temporalEvolutionSchema = z.object({
 	start: z.string().min(1),
 	end: z.string().min(1),
-	stepMinutes: z
-		.number()
-		.gte(EVOLUTION_MIN_STEP_MINUTES, `stepMinutes must be at least ${EVOLUTION_MIN_STEP_MINUTES}`),
+	stepMinutes: z.number().gte(EVOLUTION_MIN_STEP_MINUTES, `stepMinutes must be at least ${EVOLUTION_MIN_STEP_MINUTES}`),
 	fronts: z.array(temporalFrontSchema),
 	cells: z.array(temporalCellSchema),
 	airMassMotion: z.array(airMassMotionSchema),

@@ -47,16 +47,16 @@ export type {
 	ScenarioSeed,
 } from './engine';
 // ----------------------------------------------------------------------
-// Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
-// deriveFbGrid, derivePireps) live in `./server.ts`.
-// ----------------------------------------------------------------------
-export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
-// ----------------------------------------------------------------------
 // v2 temporal derivation result types. Values (deriveMetarSequence,
 // deriveTafSequence, deriveAirmetTimeline, buildTimeline) live in
 // `./server.ts` because they wrap server-only derivations.
 // ----------------------------------------------------------------------
 export type { AirmetEvent, AirmetTimelineEntry, TimelineSnapshot } from './products/temporal';
+// ----------------------------------------------------------------------
+// Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
+// deriveFbGrid, derivePireps) live in `./server.ts`.
+// ----------------------------------------------------------------------
+export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 // ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided
@@ -64,6 +64,12 @@ export type { AirmetEvent, AirmetTimelineEntry, TimelineSnapshot } from './produ
 // "Browser-safety contract".
 // ----------------------------------------------------------------------
 export type { TruthModelSchema } from './truth/schema';
+// ----------------------------------------------------------------------
+// v2 temporal sampler. `sampleTruthAt` is a pure function -- safe at any
+// tier, so it lives in the runtime barrel. The `deriveXSequence` helpers
+// (which wrap server-only derivations) live in `./server.ts`.
+// ----------------------------------------------------------------------
+export { sampleTruthAt } from './truth/time';
 // ----------------------------------------------------------------------
 // Truth-model interfaces. Pure shape; safe at any tier.
 // ----------------------------------------------------------------------
@@ -103,9 +109,3 @@ export type {
 	UpperLevelState,
 	WindByAltitudeRow,
 } from './truth/types';
-// ----------------------------------------------------------------------
-// v2 temporal sampler. `sampleTruthAt` is a pure function -- safe at any
-// tier, so it lives in the runtime barrel. The `deriveXSequence` helpers
-// (which wrap server-only derivations) live in `./server.ts`.
-// ----------------------------------------------------------------------
-export { sampleTruthAt } from './truth/time';

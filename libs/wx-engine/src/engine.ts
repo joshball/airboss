@@ -69,16 +69,12 @@ import type { TruthModel } from './truth/types';
 // ----------------------------------------------------------------------
 
 /**
- * Tagged union of every registered scenario. Closed at all six slugs in
- * Phase A so Phase E adds scenario literals without touching this surface.
+ * Tagged seed identifying which registered scenario to generate. `kind` is
+ * any `WxScenario` slug from `@ab/constants`, so registering a new scenario
+ * (registry + `WX_SCENARIOS`) widens this surface automatically -- no inline
+ * slug list to keep in sync.
  */
-export type ScenarioSeed =
-	| { kind: 'frontal-xc-march' }
-	| { kind: 'summer-thunderstorms-tx' }
-	| { kind: 'winter-icing-great-lakes' }
-	| { kind: 'mountain-wave-rockies' }
-	| { kind: 'marine-stratus-pacific-nw' }
-	| { kind: 'dense-fog-radiation-central-valley' };
+export type ScenarioSeed = { kind: WxScenario };
 
 /**
  * Layer-2 product collections. Phase B populates each field via the

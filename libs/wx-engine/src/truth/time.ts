@@ -55,12 +55,7 @@ import type {
  * `bearingDeg` is degrees true (clockwise from north); `speedKt` is knots;
  * `hours` is elapsed time. Returns a fresh tuple.
  */
-function translatePoint(
-	point: [number, number],
-	bearingDeg: number,
-	speedKt: number,
-	hours: number,
-): [number, number] {
+function translatePoint(point: [number, number], bearingDeg: number, speedKt: number, hours: number): [number, number] {
 	const distKm = speedKt * hours * WX_TEMPORAL_KM_PER_NM;
 	const distLat = distKm / WX_TEMPORAL_KM_PER_DEG_LAT;
 	const distLon = distKm / (WX_TEMPORAL_KM_PER_DEG_LAT * Math.cos((point[1] * Math.PI) / 180));
@@ -295,11 +290,7 @@ function projectTemporalCells(evolution: TemporalEvolution, tIso: string): Conve
  * `leadDistanceNm` ahead of the projected front's lead vertex along the
  * front's instantaneous motion bearing.
  */
-function spawnPrefrontalCells(
-	evolution: TemporalEvolution,
-	projectedFronts: Front[],
-	tIso: string,
-): ConvectiveCell[] {
+function spawnPrefrontalCells(evolution: TemporalEvolution, projectedFronts: Front[], tIso: string): ConvectiveCell[] {
 	const frontById = new Map(projectedFronts.map((f) => [f.id, f]));
 	const cells: ConvectiveCell[] = [];
 	for (const temporal of evolution.fronts) {
@@ -451,7 +442,10 @@ export function sampleTruthAt(truth: TruthModel, t: string): TruthModel {
 	const projectedFronts = projectFronts(truth, evolution, t);
 	const temporalCells = projectTemporalCells(evolution, t);
 	const prefrontalCells = spawnPrefrontalCells(evolution, projectedFronts, t);
-	const cells = temporalCells.length > 0 || prefrontalCells.length > 0 ? [...temporalCells, ...prefrontalCells] : truth.convection.cells;
+	const cells =
+		temporalCells.length > 0 || prefrontalCells.length > 0
+			? [...temporalCells, ...prefrontalCells]
+			: truth.convection.cells;
 
 	const { evolution: _stripped, ...v1 } = truth;
 	return {

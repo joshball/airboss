@@ -20,12 +20,12 @@
  */
 
 import { WX_TEMPORAL_DEFAULT_STEP_MINUTES, WX_TEMPORAL_MS_PER_HOUR } from '@ab/constants';
+import { sampleTruthAt } from '../truth/time';
+import type { TruthModel } from '../truth/types';
 import { deriveAirmets } from './airmet';
 import { deriveMetar } from './metar';
 import { deriveTaf } from './taf';
 import type { AirmetAdvisory, DerivedMetar, DerivedTaf } from './types';
-import { sampleTruthAt } from '../truth/time';
-import type { TruthModel } from '../truth/types';
 
 /** Milliseconds per minute -- step-size conversion. */
 const MS_PER_MINUTE = 60_000;
@@ -37,9 +37,7 @@ const MS_PER_MINUTE = 60_000;
  */
 function requireEvolution(truth: TruthModel): { start: string; end: string; stepMinutes: number } {
 	if (truth.evolution === undefined) {
-		throw new Error(
-			'temporal derivation requires a v2 TruthModel with an `evolution` block; received a v1 snapshot',
-		);
+		throw new Error('temporal derivation requires a v2 TruthModel with an `evolution` block; received a v1 snapshot');
 	}
 	return truth.evolution;
 }
@@ -86,9 +84,7 @@ export function deriveMetarSequence(
 ): DerivedMetar[] {
 	const evolution = requireEvolution(truth);
 	const step = options.stepMinutes ?? evolution.stepMinutes ?? WX_TEMPORAL_DEFAULT_STEP_MINUTES;
-	return enumerateTimestamps(evolution.start, evolution.end, step).map((t) =>
-		deriveMetarAt(truth, stationIcao, t),
-	);
+	return enumerateTimestamps(evolution.start, evolution.end, step).map((t) => deriveMetarAt(truth, stationIcao, t));
 }
 
 // ----------------------------------------------------------------
@@ -150,10 +146,7 @@ export interface AirmetTimelineEntry {
  * Because AIRMETs map one-to-one onto active hazard zones, an advisory's
  * issue/cancel events line up exactly with the hazard zone's lifecycle.
  */
-export function deriveAirmetTimeline(
-	truth: TruthModel,
-	options: { stepMinutes?: number } = {},
-): AirmetTimelineEntry[] {
+export function deriveAirmetTimeline(truth: TruthModel, options: { stepMinutes?: number } = {}): AirmetTimelineEntry[] {
 	const evolution = requireEvolution(truth);
 	const step = options.stepMinutes ?? evolution.stepMinutes ?? WX_TEMPORAL_DEFAULT_STEP_MINUTES;
 	const timestamps = enumerateTimestamps(evolution.start, evolution.end, step);

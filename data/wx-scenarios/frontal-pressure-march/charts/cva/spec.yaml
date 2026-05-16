@@ -1,0 +1,21 @@
+slug: wx-scenarios/frontal-pressure-march/cva
+type: cva
+title: Ceiling and Visibility Analysis (truth-derived)
+subtitle: 2026-03-14T12:00:00Z -- 3 stations, 0 area polygons
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent: conus
+sources:
+  observations: cache://scenarios/frontal-pressure-march/cva.json
+options:
+  show_legend: true
+  show_station_labels: true
+  show_polygons: true
+  dot_radius_px: 7
+  source_attribution: wx-engine -- truth-derived synthetic
