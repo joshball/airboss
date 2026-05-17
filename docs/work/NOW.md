@@ -23,6 +23,21 @@ In flight:
 
 Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course.
 
+## Carried over (rollup 2026-05-17T21:02:21Z)
+
+Consolidated from 19 wind-down sessions across 2026-05-15 and 2026-05-17. Full detail + per-session attribution in [ROLLUP-unfinished.md](./wind-down/ROLLUP-unfinished.md).
+
+High-severity carried items:
+
+- **~15 WP walkthroughs owed human sign-off** -- `human_review_status: pending` on cert-dashboard, lens-ui, goal-composer, wx-engine, course-tree-arbitrary-depth, course-reader-and-editor, xc-viewer-v1, hangar-content-census, and more. Walk each test plan, then `bun run wp set <slug> human-review signed-off`.
+- **24 e2e failures** -- Buffer hydration leak + Postgres crash on `hangar.docs_search_index`. Two root causes, one focused investigation.
+- **Real-browser hydration verification owed** -- rich-reader / reader-prefs surface + weather-comprehensive s11 flow never loaded in a real browser.
+- **ADR 028 (content-intent frontmatter) awaits approval** -- blocks content-census Layer 2 authoring at scale.
+- **Card question_tier hand-classification** -- ~786 cards lack `question_tier`; needs CFI judgement via `bun scripts/db/classify-card-tier.ts`.
+- **Manual walkthrough of weather-comprehensive end-to-end** -- not yet hand-walked in the live app.
+
+Medium / low items (16 medium, 19 low) -- see the rollup. Notable: build the personal-minimums / flightbag-citation-url-migration / xc-viewer-v1 WPs; `/ball-wp-drift`; wx-engine AIRMET text emitter; `legacy-citation-shape` warnings (200); `fix/contrast-skips-deep-ink` branch needs rebase.
+
 ## Live views
 
 - [Work package board](./BOARD.md) -- every WP grouped by status (generated)
