@@ -19,8 +19,14 @@ test.describe('/practice/wx/drill', () => {
 		await expect(page.getByRole('heading', { name: 'Weather drill' })).toBeVisible();
 
 		// Setup: METAR product is selected by default; pick 5-item count.
-		await page.getByTestId('item-count-5').click();
-		await expect(page.getByTestId('item-count-5')).toHaveClass(/on/);
+		// The chip is SSR-present and clickable before Svelte attaches its
+		// `onclick`, so a single click can land pre-hydration and no-op.
+		// Retry click + assert until the selection sticks.
+		const itemCount5 = page.getByTestId('item-count-5');
+		await expect(async () => {
+			await itemCount5.click();
+			await expect(itemCount5).toHaveClass(/on/, { timeout: 1_000 });
+		}).toPass({ timeout: 10_000 });
 
 		// Start the drill.
 		await page.getByTestId('start-drill').click();
@@ -34,6 +40,13 @@ test.describe('/practice/wx/drill', () => {
 			const answerInput = page.getByTestId('answer-input');
 			const summary = page.getByTestId('drill-summary');
 
+			// Advancing a prompt triggers a state transition: the next prompt,
+			// the next visible card, or the summary mounts. Wait for the page
+			// to settle into exactly one of those before branching -- a bare
+			// `isVisible()` snapshot races the transition and can miss the
+			// summary on the final step.
+			await expect(summary.or(answerInput).or(visibleNext).first()).toBeVisible({ timeout: 10_000 });
+
 			if (await summary.isVisible().catch(() => false)) break;
 
 			if (await visibleNext.isVisible().catch(() => false)) {
@@ -41,7 +54,6 @@ test.describe('/practice/wx/drill', () => {
 				continue;
 			}
 
-			await expect(answerInput).toBeVisible({ timeout: 5_000 });
 			await answerInput.fill('decode');
 			await page.getByTestId('submit-answer').click();
 

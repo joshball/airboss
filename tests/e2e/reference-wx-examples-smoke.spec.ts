@@ -67,7 +67,9 @@ test.describe('reference -- wx product examples (METAR)', () => {
 
 		const before = await page.locator('[data-testid^="example-card-"]').count();
 		await page.getByTestId('examples-search-input').fill('TSRA');
-		await page.getByRole('button', { name: 'Search' }).click();
+		// Scope to the search form -- the global help-search trigger in the
+		// app header also exposes an accessible "Search" name.
+		await page.getByTestId('examples-search-form').getByRole('button', { name: 'Search' }).click();
 		await page.waitForURL(new RegExp(`${QUERY_PARAMS.SEARCH}=TSRA`));
 
 		const cards = page.locator('[data-testid^="example-card-"]');

@@ -43,6 +43,17 @@ export const ENV_VARS = {
 	 */
 	HANGAR_JOBS_WORKER: 'HANGAR_JOBS_WORKER',
 	/**
+	 * Disable better-auth's database-backed rate limiter. Parsed by
+	 * `getEnvBool` (`0`/`false` -> disabled, `1`/`true` -> enabled). Used by
+	 * the playwright e2e webServers: every parallel worker signs in from the
+	 * same `127.0.0.1`, so the shared rate-limit key both throttles the suite
+	 * and races better-auth's SELECT-then-INSERT on `bauth_rate_limit` (a
+	 * unique-constraint violation under concurrency). Rate-limit behaviour
+	 * has dedicated coverage in `libs/auth/src/rate-limit.test.ts`. Default:
+	 * rate limiter enabled.
+	 */
+	AUTH_RATE_LIMIT_ENABLED: 'AUTH_RATE_LIMIT_ENABLED',
+	/**
 	 * Dev-only override for the sectional edition resolver. When set, the
 	 * binary-visual fetch pipeline loads HTML from this location (an http(s)://
 	 * URL or a local filesystem path) instead of the source's configured index

@@ -90,9 +90,12 @@ test.describe('census-mode corpus drill-down', () => {
 		// The "Layer 1 census" mode tag, not a "pending" tag.
 		await expect(page.getByText(/^Layer 1 census$/)).toBeVisible();
 
-		// Real inventory: one row per knowledge node.
+		// Real inventory: one row per knowledge node. The graph grows over
+		// time, so assert a floor (well above zero) rather than pinning an
+		// exact count that drifts with every new node.
 		const inventoryRows = page.locator('section[aria-label="Inventory"] tbody tr');
-		await expect(inventoryRows).toHaveCount(79);
+		await expect(inventoryRows.first()).toBeVisible();
+		expect(await inventoryRows.count()).toBeGreaterThan(50);
 
 		// Real metrics carry the explanatory triad.
 		await expect(page.getByRole('heading', { level: 2, name: /^Metrics$/ })).toBeVisible();
@@ -104,13 +107,9 @@ test.describe('census-mode corpus drill-down', () => {
 	});
 });
 
-test.describe('stub corpus placeholder honesty', () => {
-	test('a not-yet-built corpus shows the honest pending placeholder, not fake data', async ({ page }) => {
-		await page.goto(ROUTES.CONTENT_CENSUS_CORPUS('handbooks'));
-		await expect(page.getByRole('heading', { level: 1, name: /^Handbooks$/ })).toBeVisible();
-		await expect(page.getByRole('heading', { level: 2, name: /^Drill-down pending$/ })).toBeVisible();
-		await expect(page.getByText(/pending \(Phase 2\)/i)).toBeVisible();
-		// No inventory table is rendered for a stub corpus.
-		await expect(page.locator('section[aria-label="Inventory"]')).toHaveCount(0);
-	});
-});
+// The "stub corpus placeholder honesty" test was removed in content-census
+// Phase 2 (PR #1032): every corpus in `CORPUS_REGISTRY` now ships a real
+// Layer-1 adapter, and `/content/[corpus]` 404s any unknown slug, so the
+// `stubCensus` pending-placeholder UI is unreachable through the route. The
+// fallback adapter is retained in `@ab/content-census/server` as a defensive
+// default if a future corpus is registered before its adapter lands.

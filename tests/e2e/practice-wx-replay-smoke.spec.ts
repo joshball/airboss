@@ -55,8 +55,14 @@ test.describe('/practice/wx/replay', () => {
 		await page.goto(`${ROUTES.PRACTICE_WX_REPLAY}?scenario=frontal-pressure-march`);
 		await expect(page.getByTestId('replay-session')).toBeVisible();
 
-		// Jump to the fourth tick; the step label must follow.
-		await page.getByTestId('replay-tick-3').click();
-		await expect(page.getByTestId('replay-step-label')).toContainText('Hour 4 of');
+		// Jump to the fourth tick; the step label must follow. The tick is
+		// SSR-present and clickable before Svelte attaches its `onclick`, so
+		// a single click can land pre-hydration and no-op. Retry click +
+		// assert until the scrubber follows.
+		const tick3 = page.getByTestId('replay-tick-3');
+		await expect(async () => {
+			await tick3.click();
+			await expect(page.getByTestId('replay-step-label')).toContainText('Hour 4 of', { timeout: 1_000 });
+		}).toPass({ timeout: 10_000 });
 	});
 });
