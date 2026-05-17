@@ -9,18 +9,23 @@ authoritative_sources:
   - source: AIM
     section: '5-1-3 -- Notice to Air Missions (NOTAM) System'
     note: 'Authoritative pilot-pitch description of the NOTAM classes (D, FDC, Pointer, Military, International) and how the system is consumed. The reference most pilots actually open when a NOTAM line decodes weird.'
+    verified: false
   - source: AIM
     section: '5-1-21 -- Pre-departure briefing -- area surrounding section on weather impacts and airport status'
     note: 'Ties NOTAM-D weather entries to the preflight briefing flow and reinforces that NOTAMs are pulled separately from METAR/TAF.'
+    verified: false
   - source: FAA Order 7930.2
     section: 'Notices to Air Missions (NOTAM) -- current edition'
     note: 'Authoritative format manual. Defines the SUBJECT/CONDITION keyword tables, FICON encoding rules, RWYCC scale, and the abbreviations table used in every NOTAM-D line.'
+    verified: true
   - source: AC 150/5200-30
     section: 'Airport Winter Safety and Operations -- current change'
     note: 'Defines FICON (Field Condition) reporting that replaces SNOWTAM for US runways. Contains the RWYCC matrix, contaminant taxonomy, and the mapping between contaminant/temperature and braking-action terms.'
+    verified: true
   - source: FAA NOTAM Search
     section: 'notams.faa.gov -- public NOTAM distribution system'
     note: 'The authoritative live source. Every weather-related NOTAM you read in an EFB or briefing pack originates here.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
   - wx-fog-and-visibility-obstructions
@@ -60,16 +65,16 @@ Weather-related NOTAMs are operational reality, not advisory text. A destination
 
 A NOTAM-D entry is a structured-but-cryptic line. The fixed format starts with an exclamation-mark header and walks through facility, keyword, condition, and validity. Field-by-field:
 
-| Field             | Example                            | Meaning                                                                                                                                |
-| ----------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Header            | `!ORD 12/045`                      | `!` + Accountability ID (ORD = Chicago O'Hare FSDO area) + serial. The serial format is `MM/NNN` (month / sequence).                   |
-| Affected facility | `ORD`                              | Three-letter or four-letter facility ID for the airport / navaid the NOTAM applies to.                                                 |
-| Keyword (SUBJECT) | `RWY`, `AD`, `NAV`, `SVC`, `OBST`  | What kind of thing changed. `RWY` runway, `AD` aerodrome (whole field), `NAV` navaid, `SVC` service, `OBST` obstruction.               |
-| Identifier        | `10L/28R`                          | The specific runway, approach, navaid, or service.                                                                                     |
-| CONDITION         | `FICON 5/3/3 100PCT 1IN DRY SN`    | What is wrong (or what changed). For weather: FICON line, closure statement, navaid OTS, service downgrade.                            |
-| Validity          | `1411150900-1411151600`            | UTC start and end. Format: `YYMMDDhhmm`. `PERM` for permanent. `UFN` for "until further notice".                                       |
-| Modifier          | `EST`                              | `EST` estimated end (subject to revision). `WIE` with immediate effect.                                                                |
-| Schedule          | `DLY 0900-1600`                    | Optional recurring schedule (daily window, day-of-week pattern).                                                                       |
+| Field             | Example                           | Meaning                                                                                                                  |
+| ----------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| Header            | `!ORD 12/045`                     | `!` + Accountability ID (ORD = Chicago O'Hare FSDO area) + serial. The serial format is `MM/NNN` (month / sequence).     |
+| Affected facility | `ORD`                             | Three-letter or four-letter facility ID for the airport / navaid the NOTAM applies to.                                   |
+| Keyword (SUBJECT) | `RWY`, `AD`, `NAV`, `SVC`, `OBST` | What kind of thing changed. `RWY` runway, `AD` aerodrome (whole field), `NAV` navaid, `SVC` service, `OBST` obstruction. |
+| Identifier        | `10L/28R`                         | The specific runway, approach, navaid, or service.                                                                       |
+| CONDITION         | `FICON 5/3/3 100PCT 1IN DRY SN`   | What is wrong (or what changed). For weather: FICON line, closure statement, navaid OTS, service downgrade.              |
+| Validity          | `1411150900-1411151600`           | UTC start and end. Format: `YYMMDDhhmm`. `PERM` for permanent. `UFN` for "until further notice".                         |
+| Modifier          | `EST`                             | `EST` estimated end (subject to revision). `WIE` with immediate effect.                                                  |
+| Schedule          | `DLY 0900-1600`                   | Optional recurring schedule (daily window, day-of-week pattern).                                                         |
 
 ### FICON / runway condition lines
 
@@ -79,15 +84,15 @@ For runway contamination, the line uses the FICON format defined in AC 150/5200-
 
 The **RWYCC** (Runway Condition Code) is a single-digit 0-6 number that maps a contaminant + temperature combination to a deceleration / directional-control prediction. It is reported as three digits separated by slashes, one for each third of the runway in the direction of operation (touchdown / mid / rollout). The scale:
 
-| RWYCC | Braking action term | Surface condition (examples)                                                                  | Operational read                                                                                                      |
-| ----- | ------------------- | --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| 6     | DRY                 | Dry runway. No measurable contamination.                                                      | Normal performance numbers apply.                                                                                     |
-| 5     | GOOD                | Wet (less than 1/8 in water), frost, slush <= 1/8 in, or <= 1/8 in dry snow on dry pavement.  | Performance close to dry. Crosswind limits unchanged but apply margin.                                                |
-| 4     | GOOD TO MEDIUM      | Compacted snow at -15 C or colder.                                                            | Modest reduction. Crosswind component starts to bite.                                                                 |
+| RWYCC | Braking action term | Surface condition (examples)                                                                    | Operational read                                                                                                     |
+| ----- | ------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| 6     | DRY                 | Dry runway. No measurable contamination.                                                        | Normal performance numbers apply.                                                                                    |
+| 5     | GOOD                | Wet (less than 1/8 in water), frost, slush <= 1/8 in, or <= 1/8 in dry snow on dry pavement.    | Performance close to dry. Crosswind limits unchanged but apply margin.                                               |
+| 4     | GOOD TO MEDIUM      | Compacted snow at -15 C or colder.                                                              | Modest reduction. Crosswind component starts to bite.                                                                |
 | 3     | MEDIUM              | Wet ("slippery when wet" surface), > 1/8 in dry snow, slush, or compacted snow warmer than -15. | Noticeable stopping distance increase. Crosswind component reduced. Most operators apply contaminated-runway tables. |
-| 2     | MEDIUM TO POOR      | Greater than 1/8 in water, slush, or wet snow on the surface.                                 | Stopping distance significantly increased. Many ops manuals require operational restrictions.                         |
-| 1     | POOR                | Ice (not wet).                                                                                | Stopping distance very long. Many turbine ops manuals prohibit takeoff/landing without additional margin or de-ice.   |
-| 0     | NIL                 | Wet ice, water on top of compacted snow, dry snow or wet snow over ice.                       | No braking. Operations prohibited under most operator rules.                                                          |
+| 2     | MEDIUM TO POOR      | Greater than 1/8 in water, slush, or wet snow on the surface.                                   | Stopping distance significantly increased. Many ops manuals require operational restrictions.                        |
+| 1     | POOR                | Ice (not wet).                                                                                  | Stopping distance very long. Many turbine ops manuals prohibit takeoff/landing without additional margin or de-ice.  |
+| 0     | NIL                 | Wet ice, water on top of compacted snow, dry snow or wet snow over ice.                         | No braking. Operations prohibited under most operator rules.                                                         |
 
 The CONDITION line additionally reports **percent coverage** (in 25 percent increments: 25, 50, 75, 100) and **depth** of the contaminant for each third. A canonical FICON line reads `FICON 3/3/3 100PCT 1IN DRY SN OBSERVED AT 1430Z`: RWYCC 3 in all three thirds, 100 percent coverage, 1 inch of dry snow, observation timestamped 14:30 Zulu.
 

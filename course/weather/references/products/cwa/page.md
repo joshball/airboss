@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, In-flight Aviation Weather Advisories (Center Weather Advisory)'
     note: 'Format, trigger criteria, and valid time for the CWA product.'
+    verified: true
   - source: AIM
     section: '7-1-7'
     note: 'Center Weather Service Unit (CWSU) products: CWA and Meteorological Impact Statement (MIS).'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Chapter 26 (CWSU products)'
     note: 'Aviation Weather Handbook, Advisories chapter, CWSU/CWA subsection.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
@@ -65,17 +68,17 @@ Where it fits the briefing pack: read alongside AIRMETs and SIGMETs as the **cen
 
 A CWA is encoded text. The header identifies the issuing center and the advisory number; the body identifies the affected area (often as VOR radials), the hazard, the altitude band, the motion, and the outlook.
 
-| Field           | Example                          | Meaning                                                                                                                |
-| --------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Header          | `ZID01 CWA 211425`               | Issuing ARTCC (`ZID` = Indianapolis), advisory number (`01` = first CWA of the day for this hazard), DDHHMM issuance.  |
-| Center ID       | `ZID`                            | ICAO-style ARTCC identifier. ZID = Indianapolis, ZME = Memphis, ZDV = Denver, ZNY = New York, ZSE = Seattle, etc.      |
-| Advisory series | `CWA 01`                         | Two-digit series number, increments per hazard line within a calendar day.                                              |
-| Valid period    | `VALID UNTIL 211625`             | DDHHMM expiry, UTC. Up to 2 hours from issuance.                                                                       |
-| Hazard          | `TS DVLPG`, `MOD-SEV TURB`, `LLWS` | Free-text hazard description: developing thunderstorms, moderate-to-severe turbulence, low-level wind shear, etc.    |
-| Area            | `FROM 30W BWG TO HNN TO ...`     | Polygon as a chain of VOR radials, named fixes, or FIR boundaries. Same convention as AIRMET / SIGMET.                 |
-| Altitude band   | `BLO FL250` / `SFC-100`          | Below FL250, or surface to 10,000 ft MSL, etc. CWAs frequently cover specific bands rather than the whole column.     |
-| Motion          | `MOV E 30KT` / `LTL MOVMNT`      | Direction and speed; "little movement" for slow-moving features.                                                       |
-| Outlook         | `CONDS CONTG BYD 1625Z`          | Continuation forecast past the valid time; signals whether a follow-on CWA or SIGMET is coming.                        |
+| Field           | Example                            | Meaning                                                                                                               |
+| --------------- | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Header          | `ZID01 CWA 211425`                 | Issuing ARTCC (`ZID` = Indianapolis), advisory number (`01` = first CWA of the day for this hazard), DDHHMM issuance. |
+| Center ID       | `ZID`                              | ICAO-style ARTCC identifier. ZID = Indianapolis, ZME = Memphis, ZDV = Denver, ZNY = New York, ZSE = Seattle, etc.     |
+| Advisory series | `CWA 01`                           | Two-digit series number, increments per hazard line within a calendar day.                                            |
+| Valid period    | `VALID UNTIL 211625`               | DDHHMM expiry, UTC. Up to 2 hours from issuance.                                                                      |
+| Hazard          | `TS DVLPG`, `MOD-SEV TURB`, `LLWS` | Free-text hazard description: developing thunderstorms, moderate-to-severe turbulence, low-level wind shear, etc.     |
+| Area            | `FROM 30W BWG TO HNN TO ...`       | Polygon as a chain of VOR radials, named fixes, or FIR boundaries. Same convention as AIRMET / SIGMET.                |
+| Altitude band   | `BLO FL250` / `SFC-100`            | Below FL250, or surface to 10,000 ft MSL, etc. CWAs frequently cover specific bands rather than the whole column.     |
+| Motion          | `MOV E 30KT` / `LTL MOVMNT`        | Direction and speed; "little movement" for slow-moving features.                                                      |
+| Outlook         | `CONDS CONTG BYD 1625Z`            | Continuation forecast past the valid time; signals whether a follow-on CWA or SIGMET is coming.                       |
 
 CWAs do not use the AIRMET phonetic-letter taxonomy (SIERRA / TANGO / ZULU) and do not use the SIGMET designator taxonomy (NOVEMBER through YANKEE). The numbered series is local to the issuing center.
 

@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Ceiling and Visibility Analysis section'
     note: 'Product description, grid resolution, flight-category color scale, update cadence, ceiling/visibility-only views.'
+    verified: true
   - source: AIM
     section: '7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
     note: 'Pilot/controller glossary defines VFR / MVFR / IFR / LIFR flight-category brackets used by the CVA color scale.'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Ceiling and Visibility chapter'
     note: 'Pilot-pitch treatment of how ceiling and visibility are measured, blended, and gridded; relationship to METAR/SPECI inputs.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-surface-analysis-and-cva
   - wx-fog-and-visibility-obstructions
@@ -47,22 +50,22 @@ The default view is the combined flight-category raster. Every grid cell is pain
 
 ### Flight-category color scale
 
-| Category | Color   | Ceiling (AGL)     | Visibility (SM) |
-| -------- | ------- | ----------------- | --------------- |
-| VFR      | Green   | greater than 3000 | greater than 5  |
-| MVFR     | Blue    | 1000 to 3000      | 3 to 5          |
+| Category | Color   | Ceiling (AGL)         | Visibility (SM)  |
+| -------- | ------- | --------------------- | ---------------- |
+| VFR      | Green   | greater than 3000     | greater than 5   |
+| MVFR     | Blue    | 1000 to 3000          | 3 to 5           |
 | IFR      | Red     | 500 to less than 1000 | 1 to less than 3 |
-| LIFR     | Magenta | less than 500     | less than 1     |
+| LIFR     | Magenta | less than 500         | less than 1      |
 
 A cell falls into the worst category triggered by either field. A ceiling of 800 ft with 10 SM visibility is IFR; a ceiling of 5000 ft with 2 SM visibility is also IFR -- both paint the cell red. That is the whole symbology of the default view.
 
 ### Layer toggles
 
-| View              | What it shows                                                | When to use it                                                                 |
-| ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| Combined category | Worst of ceiling / visibility, one color per cell            | The default scan. Is the area green, blue, red, magenta?                       |
-| Ceiling only      | Cells colored by ceiling height alone, ignoring visibility   | Fog-clear-aloft days where visibility tanks but cloud bases stay high.         |
-| Visibility only   | Cells colored by visibility alone, ignoring ceiling          | Low-stratus days where the deck is the story and visibility underneath is OK.  |
+| View              | What it shows                                              | When to use it                                                                |
+| ----------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Combined category | Worst of ceiling / visibility, one color per cell          | The default scan. Is the area green, blue, red, magenta?                      |
+| Ceiling only      | Cells colored by ceiling height alone, ignoring visibility | Fog-clear-aloft days where visibility tanks but cloud bases stay high.        |
+| Visibility only   | Cells colored by visibility alone, ignoring ceiling        | Low-stratus days where the deck is the story and visibility underneath is OK. |
 
 ### Reading order
 

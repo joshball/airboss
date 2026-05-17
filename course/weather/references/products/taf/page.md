@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Chapter on Aerodrome Forecasts (TAF)'
     note: 'Definitive product spec: format, change groups, amendment criteria.'
+    verified: true
   - source: AIM
     section: '7-1-29 / 7-1-30 area (Aviation Weather Services -- TAF)'
     note: 'Operational description for pilots. Verify exact paragraph against current AIM.'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook -- Aerodrome Forecasts chapter'
     note: 'Plain-English explainer; chapter number varies by handbook revision.'
+    verified: true
 related_knowledge_nodes:
   - wx-reading-tafs
 related_products:

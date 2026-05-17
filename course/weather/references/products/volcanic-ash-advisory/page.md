@@ -9,18 +9,23 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, In-flight Aviation Weather Advisories -- Volcanic Ash Advisory'
     note: 'Format spec for VAA text bulletin and graphic, VAAC responsibilities, pairing with the VA SIGMET.'
+    verified: true
   - source: AIM
     section: '7-1-15'
     note: 'Volcanic Ash, Smoke Plumes, and the Volcanic Ash Forecast Transport and Dispersion (VAFTAD) framework.'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Volcanic Ash chapter (Hazards)'
     note: 'Engine and airframe damage mechanisms, encounter precedents, pilot procedures.'
+    verified: true
   - source: ICAO Annex 3
     section: 'Meteorological Service for International Air Navigation, Volcanic Ash Watch'
     note: 'International framework establishing the nine VAACs and the VAA product.'
+    verified: true
   - source: aviationweather.gov
     section: '/vaa'
     note: 'Service page with current advisories, graphical overlay, and bulletin archive.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
@@ -61,26 +66,26 @@ The VAA is advisory. It is not a clearance, a restriction, or a route directive.
 
 The VAA bulletin is fixed-format text. Field-by-field:
 
-| Field            | Example                          | Meaning                                                                                                                                          |
-| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Product header   | `FVXX21 KNES 141200`             | `FV` = volcanic ash advisory, `XX21` = bulletin series, `KNES` = issuing VAAC (Washington VAAC at NESDIS / AWC), DDHHMM issue time UTC.          |
-| VAAC name        | `VA ADVISORY`                    | Header line declaring the product. Followed by `DTG` (date-time group), VAAC name, advisory number.                                              |
-| DTG              | `DTG: 20260514/1200Z`            | Date-time group of the advisory, YYYYMMDD/HHMMZ.                                                                                                 |
-| VAAC             | `VAAC: WASHINGTON`               | Center that issued the advisory.                                                                                                                 |
-| Volcano name     | `VOLCANO: CLEVELAND 311240`      | Volcano common name and Smithsonian Global Volcanism Program number.                                                                             |
-| Psn (position)   | `PSN: N5249 W16957`              | Volcano latitude / longitude.                                                                                                                    |
-| Area             | `AREA: ALEUTIAN IS`              | Geographic region (used by Anchorage VAAC; Washington VAAC uses similar regional labels).                                                        |
-| Summit elev      | `SUMMIT ELEV: 5676 FT`           | Volcano summit elevation in feet MSL.                                                                                                            |
-| Advisory nr      | `ADVISORY NR: 2026/048`          | YYYY/sequence. Sequence resets each year per volcano.                                                                                            |
-| Info source      | `INFO SOURCE: GOES-18. AVO.`     | Where the analysis came from (satellites, in-situ observers, the relevant volcano observatory, ground PIREPs).                                   |
-| Eruption details | `ERUPTION DETAILS: CONTINUOUS ASH EMISSION` | Current eruption state: continuous emission, intermittent, paused, etc.                                                                |
-| Obs ash date     | `OBS VA DTG: 14/1145Z`           | Date-time of the observed ash analysis.                                                                                                          |
-| Obs ash cloud    | `OBS VA CLD: SFC/FL200 N5249 W16957 - N5300 W16800 - N5215 W16745 - N5215 W16930 - N5249 W16957 MOV E 30KT` | Observed polygon: altitude band (`SFC/FL200`), vertex list of lat/long pairs, motion vector. |
-| Fcst ash +6 hr   | `FCST VA CLD +6 HR: 14/1745Z SFC/FL250 N5300 W16700 - ...` | Forecast polygon 6 hours after analysis: validity time, altitude band, vertices.                                              |
-| Fcst ash +12 hr  | `FCST VA CLD +12 HR: 14/2345Z ...` | Forecast polygon 12 hours after analysis.                                                                                                       |
-| Fcst ash +18 hr  | `FCST VA CLD +18 HR: 15/0545Z ...` | Forecast polygon 18 hours after analysis.                                                                                                       |
-| Remarks          | `RMK: ASH PLUME EXTENDING ENE FROM SUMMIT. CONTINUOUS EMISSION OBSERVED IN GOES-18 ASH RGB.` | Free-text plain-language notes from the forecaster.                            |
-| Next advisory    | `NXT ADVISORY: 14/1800Z`         | When the next advisory is expected. VAAs typically run on a 6-hour cycle during active events, more often if conditions are changing rapidly.    |
+| Field            | Example                                                                                                     | Meaning                                                                                                                                       |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Product header   | `FVXX21 KNES 141200`                                                                                        | `FV` = volcanic ash advisory, `XX21` = bulletin series, `KNES` = issuing VAAC (Washington VAAC at NESDIS / AWC), DDHHMM issue time UTC.       |
+| VAAC name        | `VA ADVISORY`                                                                                               | Header line declaring the product. Followed by `DTG` (date-time group), VAAC name, advisory number.                                           |
+| DTG              | `DTG: 20260514/1200Z`                                                                                       | Date-time group of the advisory, YYYYMMDD/HHMMZ.                                                                                              |
+| VAAC             | `VAAC: WASHINGTON`                                                                                          | Center that issued the advisory.                                                                                                              |
+| Volcano name     | `VOLCANO: CLEVELAND 311240`                                                                                 | Volcano common name and Smithsonian Global Volcanism Program number.                                                                          |
+| Psn (position)   | `PSN: N5249 W16957`                                                                                         | Volcano latitude / longitude.                                                                                                                 |
+| Area             | `AREA: ALEUTIAN IS`                                                                                         | Geographic region (used by Anchorage VAAC; Washington VAAC uses similar regional labels).                                                     |
+| Summit elev      | `SUMMIT ELEV: 5676 FT`                                                                                      | Volcano summit elevation in feet MSL.                                                                                                         |
+| Advisory nr      | `ADVISORY NR: 2026/048`                                                                                     | YYYY/sequence. Sequence resets each year per volcano.                                                                                         |
+| Info source      | `INFO SOURCE: GOES-18. AVO.`                                                                                | Where the analysis came from (satellites, in-situ observers, the relevant volcano observatory, ground PIREPs).                                |
+| Eruption details | `ERUPTION DETAILS: CONTINUOUS ASH EMISSION`                                                                 | Current eruption state: continuous emission, intermittent, paused, etc.                                                                       |
+| Obs ash date     | `OBS VA DTG: 14/1145Z`                                                                                      | Date-time of the observed ash analysis.                                                                                                       |
+| Obs ash cloud    | `OBS VA CLD: SFC/FL200 N5249 W16957 - N5300 W16800 - N5215 W16745 - N5215 W16930 - N5249 W16957 MOV E 30KT` | Observed polygon: altitude band (`SFC/FL200`), vertex list of lat/long pairs, motion vector.                                                  |
+| Fcst ash +6 hr   | `FCST VA CLD +6 HR: 14/1745Z SFC/FL250 N5300 W16700 - ...`                                                  | Forecast polygon 6 hours after analysis: validity time, altitude band, vertices.                                                              |
+| Fcst ash +12 hr  | `FCST VA CLD +12 HR: 14/2345Z ...`                                                                          | Forecast polygon 12 hours after analysis.                                                                                                     |
+| Fcst ash +18 hr  | `FCST VA CLD +18 HR: 15/0545Z ...`                                                                          | Forecast polygon 18 hours after analysis.                                                                                                     |
+| Remarks          | `RMK: ASH PLUME EXTENDING ENE FROM SUMMIT. CONTINUOUS EMISSION OBSERVED IN GOES-18 ASH RGB.`                | Free-text plain-language notes from the forecaster.                                                                                           |
+| Next advisory    | `NXT ADVISORY: 14/1800Z`                                                                                    | When the next advisory is expected. VAAs typically run on a 6-hour cycle during active events, more often if conditions are changing rapidly. |
 
 Each forecast block has the same shape as the observed block: validity time, altitude band, polygon vertices. Altitude bands are MSL (`SFC/FL200`) or flight levels (`FL150/FL350`). Multiple polygons in the same forecast block separated by `AND` indicate a fragmented or multi-layer cloud.
 

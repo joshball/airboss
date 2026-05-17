@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: In-flight Aviation Weather Advisories
     note: Format specification for AIRMET / SIGMET / Convective SIGMET text bulletins.
+    verified: true
   - source: AIM
     section: 7-1-6
     note: Inflight Aviation Weather Advisories -- operational use, valid times, SIERRA / TANGO / ZULU taxonomy.
+    verified: true
   - source: FAA-H-8083-28
     section: Chapter 26, §26.3
     note: Aviation Weather Handbook, Advisories chapter, AIRMET subsection.
+    verified: false
 related_knowledge_nodes:
   - wx-product-airmets
 related_products:

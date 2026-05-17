@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Chapter 4 -- Pilot and Radar Weather Reports (PIREP section)'
     note: 'The canonical PIREP format: field codes (/OV /TM /FL /TP /SK /WX /TA /WV /TB /IC /RM), UA vs UUA distinction, intensity scales for turbulence and icing.'
+    verified: false
   - source: AIM
     section: '7-1-19 -- Pilot Weather Reports (PIREPs)'
     note: 'Why and how to file, the UUA trigger list, the role of PIREPs in the weather system.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, PIREPs chapter'
     note: 'Pilot-pitch treatment: how to read a PIREP, how to weigh aircraft type, how to triage a route worth of reports.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-pireps
 related_products:
@@ -48,21 +51,21 @@ PIREPs are the only product authored by another pilot in real time. Every other 
 
 A PIREP is a fixed-order encoded string. The header is `UA` (routine) or `UUA` (urgent), followed by slash-prefixed field codes. Not every field appears in every PIREP -- pilots include what's relevant -- but the order is consistent.
 
-| Code   | Example            | Meaning                                                                                                |
-| ------ | ------------------ | ------------------------------------------------------------------------------------------------------ |
-| `UA`   | `UA`               | Routine pilot report.                                                                                  |
-| `UUA`  | `UUA`              | Urgent pilot report. Triggers: severe icing, severe/extreme turbulence, hail, LLWS <2,000 AGL, volcanic ash, tornado/funnel cloud/waterspout. |
-| `/OV`  | `/OV ORD090040`    | Location, relative to a VOR or fix: VOR identifier + radial (3 digits) + distance NM (3 digits). `ORD090040` = on the 090 radial off ORD, 40 NM (40 NM east of ORD). May also be a fix name. |
-| `/TM`  | `/TM 1815`         | Time of the observation in Zulu, HHMM.                                                                 |
-| `/FL`  | `/FL080`           | Altitude in hundreds of feet MSL. `FL080` = 8,000 ft. `UNKN` if pilot did not specify; `DURGC` during climb; `DURGD` during descent. |
-| `/TP`  | `/TP C172`         | Aircraft type. Matters for interpretation: a moderate report from a C172 is a different ride than moderate from a B737. |
-| `/SK`  | `/SK BKN030-TOP050 OVC080` | Sky condition encountered. Bases and tops of layers the pilot flew through or observed. `TOP050` = layer top at 5,000. |
-| `/WX`  | `/WX RA`           | Weather encountered, using the METAR phenomenon codes (RA rain, SN snow, FG fog, BR mist, TS thunderstorm, etc.). Visibility may appear here as `FV03SM` (flight visibility 3 SM). |
-| `/TA`  | `/TA M05`          | Outside air temperature in degrees Celsius. `M` prefix for negative. `M05` = -5 C.                     |
-| `/WV`  | `/WV 27045KT`      | Wind at altitude. Direction (true) + speed in knots. `27045KT` = 270 true at 45 KT.                    |
-| `/TB`  | `/TB MOD CHOP 060-080` | Turbulence: intensity + type + altitude band. Intensity scale: `LGT` light, `MOD` moderate, `SEV` severe, `EXTRM` extreme. Type: `CHOP` (rapid bumps), `CAT` (clear air), `OCNL` occasional, `CONT` continuous. |
-| `/IC`  | `/IC MOD MXD 060-090` | Icing: intensity + type + altitude band. Intensity scale: `TRC` trace, `LGT` light, `MOD` moderate, `SEV` severe. Type: `RIME`, `CLR` clear, `MXD` mixed. |
-| `/RM`  | `/RM SMOOTH ABOVE FL120` | Remarks. Free-form. Where pilots add the texture the encoded fields cannot capture (wind-shear specifics, cloud structure, ride trend, encounter narrative). |
+| Code  | Example                    | Meaning                                                                                                                                                                                                         |
+| ----- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UA`  | `UA`                       | Routine pilot report.                                                                                                                                                                                           |
+| `UUA` | `UUA`                      | Urgent pilot report. Triggers: severe icing, severe/extreme turbulence, hail, LLWS <2,000 AGL, volcanic ash, tornado/funnel cloud/waterspout.                                                                   |
+| `/OV` | `/OV ORD090040`            | Location, relative to a VOR or fix: VOR identifier + radial (3 digits) + distance NM (3 digits). `ORD090040` = on the 090 radial off ORD, 40 NM (40 NM east of ORD). May also be a fix name.                    |
+| `/TM` | `/TM 1815`                 | Time of the observation in Zulu, HHMM.                                                                                                                                                                          |
+| `/FL` | `/FL080`                   | Altitude in hundreds of feet MSL. `FL080` = 8,000 ft. `UNKN` if pilot did not specify; `DURGC` during climb; `DURGD` during descent.                                                                            |
+| `/TP` | `/TP C172`                 | Aircraft type. Matters for interpretation: a moderate report from a C172 is a different ride than moderate from a B737.                                                                                         |
+| `/SK` | `/SK BKN030-TOP050 OVC080` | Sky condition encountered. Bases and tops of layers the pilot flew through or observed. `TOP050` = layer top at 5,000.                                                                                          |
+| `/WX` | `/WX RA`                   | Weather encountered, using the METAR phenomenon codes (RA rain, SN snow, FG fog, BR mist, TS thunderstorm, etc.). Visibility may appear here as `FV03SM` (flight visibility 3 SM).                              |
+| `/TA` | `/TA M05`                  | Outside air temperature in degrees Celsius. `M` prefix for negative. `M05` = -5 C.                                                                                                                              |
+| `/WV` | `/WV 27045KT`              | Wind at altitude. Direction (true) + speed in knots. `27045KT` = 270 true at 45 KT.                                                                                                                             |
+| `/TB` | `/TB MOD CHOP 060-080`     | Turbulence: intensity + type + altitude band. Intensity scale: `LGT` light, `MOD` moderate, `SEV` severe, `EXTRM` extreme. Type: `CHOP` (rapid bumps), `CAT` (clear air), `OCNL` occasional, `CONT` continuous. |
+| `/IC` | `/IC MOD MXD 060-090`      | Icing: intensity + type + altitude band. Intensity scale: `TRC` trace, `LGT` light, `MOD` moderate, `SEV` severe. Type: `RIME`, `CLR` clear, `MXD` mixed.                                                       |
+| `/RM` | `/RM SMOOTH ABOVE FL120`   | Remarks. Free-form. Where pilots add the texture the encoded fields cannot capture (wind-shear specifics, cloud structure, ride trend, encounter narrative).                                                    |
 
 A few format rules worth internalizing. The `/OV` group is **relative**, not absolute -- it locates the report by bearing and distance from a fix, not by latitude/longitude. The `/FL` group is the aircraft's altitude at the time of the report, not the altitude of any hazard the report mentions (hazard altitude bands live in `/TB`, `/IC`, or `/RM`). All times in `/TM` are Zulu. All temperatures in `/TA` are Celsius.
 

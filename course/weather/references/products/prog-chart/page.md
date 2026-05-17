@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: Prognostic Charts
     note: Format and symbology for the surface progs (short-range, medium-range, extended) and the legacy Low-Level Sig Wx Prog.
+    verified: true
   - source: AIM
     section: 7-1 area
     note: Aviation weather services context; surface progs as forecast counterpart to the surface analysis.
+    verified: true
   - source: FAA-H-8083-28
     section: Prognostic Charts chapter
     note: Aviation Weather Handbook, Prognostic Charts -- WPC surface forecast progs, OPC offshore progs, retired Low-Level Sig Wx Prog history.
+    verified: true
 related_knowledge_nodes:
   - wx-chart-type-surface-analysis
   - wx-airmasses-and-fronts
@@ -70,20 +73,20 @@ Each panel is a chart of CONUS (or the offshore basin, for OPC progs) with a **v
 
 The symbology is the **same alphabet as the surface analysis** (see [surface-analysis](../surface-analysis/page.md) for the shared symbols), with a few prog-specific additions for forecast precipitation and freezing precipitation areas:
 
-| Symbol            | Meaning                                                                        |
-| ----------------- | ------------------------------------------------------------------------------ |
-| H                 | Forecast high pressure center; the number near it is the forecast central MSL pressure in mb. |
-| L                 | Forecast low pressure center; the number near it is the forecast central MSL pressure in mb. |
-| Solid line w/ triangles | Cold front -- triangles point in the direction of front motion.                |
-| Solid line w/ semicircles | Warm front -- semicircles point in the direction of front motion.              |
-| Alternating triangles + semicircles, same side | Stationary front -- alternating warm / cold barbs on the same side of the line. |
-| Alternating triangles + semicircles, opposite sides | Stationary front -- (older convention; same meaning).                          |
-| Triangles + semicircles, same side, pointing the same way | Occluded front -- cold front catching the warm front.                          |
-| Solid isobar (labeled mb) | Forecast surface isobar at the panel's valid time, typically every 4 mb (e.g. 1000, 1004, 1008). |
-| Shaded / hatched area | Forecast precipitation area -- continuous, intermittent, or showery (see the chart legend for the specific hatch). |
-| Shaded area w/ freezing label | Forecast freezing precipitation zone (where shown on the surface prog).        |
-| Dashed line       | Forecast trough -- a feature without a closed circulation but enough convergence to organize weather. |
-| Arrow with speed  | Forecast movement vector for a low or front (when annotated).                  |
+| Symbol                                                    | Meaning                                                                                                            |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| H                                                         | Forecast high pressure center; the number near it is the forecast central MSL pressure in mb.                      |
+| L                                                         | Forecast low pressure center; the number near it is the forecast central MSL pressure in mb.                       |
+| Solid line w/ triangles                                   | Cold front -- triangles point in the direction of front motion.                                                    |
+| Solid line w/ semicircles                                 | Warm front -- semicircles point in the direction of front motion.                                                  |
+| Alternating triangles + semicircles, same side            | Stationary front -- alternating warm / cold barbs on the same side of the line.                                    |
+| Alternating triangles + semicircles, opposite sides       | Stationary front -- (older convention; same meaning).                                                              |
+| Triangles + semicircles, same side, pointing the same way | Occluded front -- cold front catching the warm front.                                                              |
+| Solid isobar (labeled mb)                                 | Forecast surface isobar at the panel's valid time, typically every 4 mb (e.g. 1000, 1004, 1008).                   |
+| Shaded / hatched area                                     | Forecast precipitation area -- continuous, intermittent, or showery (see the chart legend for the specific hatch). |
+| Shaded area w/ freezing label                             | Forecast freezing precipitation zone (where shown on the surface prog).                                            |
+| Dashed line                                               | Forecast trough -- a feature without a closed circulation but enough convergence to organize weather.              |
+| Arrow with speed                                          | Forecast movement vector for a low or front (when annotated).                                                      |
 
 For the shared frontal-symbol vocabulary and isobar mechanics, the surface-analysis page is the master reference; the prog adds the forecast-precipitation and forecast-freezing-precipitation hatching, plus the explicit valid-time label per panel.
 

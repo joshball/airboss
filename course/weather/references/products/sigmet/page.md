@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, In-flight Aviation Weather Advisories (SIGMET)'
     note: 'Format spec, trigger thresholds, valid times for non-convective SIGMET.'
+    verified: true
   - source: AIM
     section: '7-1-6'
     note: 'Inflight Aviation Weather Advisories -- operational use of SIGMET.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Chapter 26 (Section 26.2 -- SIGMET)'
     note: 'Modern consolidated treatment of the SIGMET product.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:

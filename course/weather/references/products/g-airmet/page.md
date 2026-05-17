@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: In-flight Aviation Weather Advisories
     note: G-AIRMET subsection within the In-flight Aviation Weather Advisories chapter; subtype taxonomy and time-slice structure.
+    verified: true
   - source: AIM
     section: 7-1-6
     note: Inflight Aviation Weather Advisories -- the G-AIRMET as the graphical counterpart to the WA text bulletin.
+    verified: true
   - source: FAA-H-8083-28
     section: Chapter 26
     note: Aviation Weather Handbook, Advisories chapter; G-AIRMET described alongside AIRMET / SIGMET / CWA.
+    verified: false
 related_knowledge_nodes:
   - wx-product-airmets
 related_products:
@@ -62,13 +65,13 @@ The G-AIRMET is a chart product viewed in a web app or EFB, not a parsed text bu
 
 ### Time slider
 
-| Slice         | Meaning                                                                                 |
-| ------------- | --------------------------------------------------------------------------------------- |
-| **00**        | Forecast valid at issuance time -- the "now" picture as the AWC drew it.                |
-| **03**        | Forecast valid 3 hours after issuance.                                                  |
-| **06**        | Forecast valid 6 hours after issuance (end of the regular AIRMET valid window).         |
-| **09**        | Forecast valid 9 hours after issuance.                                                  |
-| **12 outlook** | Outlook layer, 12 hours beyond issuance. Forecast intent, not an active advisory.       |
+| Slice          | Meaning                                                                           |
+| -------------- | --------------------------------------------------------------------------------- |
+| **00**         | Forecast valid at issuance time -- the "now" picture as the AWC drew it.          |
+| **03**         | Forecast valid 3 hours after issuance.                                            |
+| **06**         | Forecast valid 6 hours after issuance (end of the regular AIRMET valid window).   |
+| **09**         | Forecast valid 9 hours after issuance.                                            |
+| **12 outlook** | Outlook layer, 12 hours beyond issuance. Forecast intent, not an active advisory. |
 
 Polygons are time-stamped to a slice. They do **not** represent continuous validity between slices. A polygon at the 03 slice and the same-shaped polygon at the 06 slice are two separate forecast snapshots; the forecast between them is interpolated by the reader's judgment, not by the product.
 
@@ -76,15 +79,15 @@ Polygons are time-stamped to a slice. They do **not** represent continuous valid
 
 Each AIRMET letter splits into independently toggleable subtypes:
 
-| Parent     | G-AIRMET subtype     | Hazard                                                                              |
-| ---------- | -------------------- | ----------------------------------------------------------------------------------- |
+| Parent     | G-AIRMET subtype     | Hazard                                                                               |
+| ---------- | -------------------- | ------------------------------------------------------------------------------------ |
 | **Sierra** | IFR                  | Ceilings below 1,000 ft AGL and/or visibility below 3 SM over more than 50% of area. |
-| **Sierra** | Mountain obscuration | Mountains hidden by clouds, precipitation, or restrictions to visibility.           |
-| **Tango**  | Turbulence           | Moderate turbulence at the listed altitude band.                                    |
-| **Tango**  | Strong surface winds | Sustained surface winds at or above 30 KT.                                          |
-| **Tango**  | LLWS                 | Non-convective low-level wind shear.                                                |
-| **Zulu**   | Icing                | Moderate icing within the listed altitude band.                                     |
-| **Zulu**   | Freezing level       | Forecast freezing-level altitude(s) across the polygon.                             |
+| **Sierra** | Mountain obscuration | Mountains hidden by clouds, precipitation, or restrictions to visibility.            |
+| **Tango**  | Turbulence           | Moderate turbulence at the listed altitude band.                                     |
+| **Tango**  | Strong surface winds | Sustained surface winds at or above 30 KT.                                           |
+| **Tango**  | LLWS                 | Non-convective low-level wind shear.                                                 |
+| **Zulu**   | Icing                | Moderate icing within the listed altitude band.                                      |
+| **Zulu**   | Freezing level       | Forecast freezing-level altitude(s) across the polygon.                              |
 
 Each subtype has its own polygon set per time slice. Read by toggling one subtype at a time so the map doesn't drown in overlapping fills.
 

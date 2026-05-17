@@ -9,15 +9,19 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Chapter 3 -- Surface Aviation Weather Observations (METAR / SPECI)'
     note: 'Defines the SPECI type indicator, the trigger criteria a station applies to fire an off-cycle report, and the encoded-text format SPECI shares with METAR.'
+    verified: false
   - source: AIM
     section: '7-1-12 -- Reporting Weather Information'
     note: 'Pilot-pitch summary of routine and special observations, including who issues them and what triggers a SPECI.'
+    verified: false
   - source: AIM
     section: '7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
     note: 'Decode key. Because SPECI uses the same format as METAR, the same decode rules apply field for field.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Surface Observations chapter'
     note: 'Pilot-pitch treatment of METAR/SPECI with worked examples and the operational reasoning behind off-cycle reports.'
+    verified: true
 related_knowledge_nodes:
   - wx-reading-metars
 related_products:
@@ -56,19 +60,19 @@ The first group of the report is `SPECI` instead of `METAR`. That single token c
 
 A station fires a SPECI when any of the following changes occur from the most recently reported conditions. These are the criteria worth memorizing -- they tell you what to look for when a SPECI appears:
 
-| Element            | SPECI trigger                                                                                                       |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| Ceiling            | Forms, dissipates, or crosses 3,000 / 1,500 / 1,000 / 500 ft AGL                                                    |
-| Visibility         | Decreases to or crosses below 3 SM, 2 SM, 1 SM, or the lowest published instrument-approach minimum (often 1/2 SM) |
-| Wind shift         | Direction change of 45 deg or more **and** sustained speed at least 10 KT before / after the shift                  |
-| Thunderstorm       | Begins, ends, or moves to or from the station                                                                       |
-| Tornado / funnel   | Observed, disappears, or first reported in the vicinity                                                              |
-| Hail               | Begins or ends                                                                                                       |
-| Freezing precip    | Freezing rain, freezing drizzle, or ice pellets begin or end                                                         |
-| Volcanic ash       | Begins or ends                                                                                                       |
-| Squall             | Observed                                                                                                             |
-| Aircraft mishap    | Observed at the field                                                                                                |
-| Pressure           | Rapid pressure rise or fall                                                                                          |
+| Element          | SPECI trigger                                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Ceiling          | Forms, dissipates, or crosses 3,000 / 1,500 / 1,000 / 500 ft AGL                                                   |
+| Visibility       | Decreases to or crosses below 3 SM, 2 SM, 1 SM, or the lowest published instrument-approach minimum (often 1/2 SM) |
+| Wind shift       | Direction change of 45 deg or more **and** sustained speed at least 10 KT before / after the shift                 |
+| Thunderstorm     | Begins, ends, or moves to or from the station                                                                      |
+| Tornado / funnel | Observed, disappears, or first reported in the vicinity                                                            |
+| Hail             | Begins or ends                                                                                                     |
+| Freezing precip  | Freezing rain, freezing drizzle, or ice pellets begin or end                                                       |
+| Volcanic ash     | Begins or ends                                                                                                     |
+| Squall           | Observed                                                                                                           |
+| Aircraft mishap  | Observed at the field                                                                                              |
+| Pressure         | Rapid pressure rise or fall                                                                                        |
 
 (See AC 00-45H Chapter 3 for the canonical list. The thresholds above are the ones a pilot reads SPECIs against.)
 

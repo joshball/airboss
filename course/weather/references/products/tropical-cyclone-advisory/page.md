@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Tropical Cyclone Advisory'
     note: 'Format spec, TCAC issuing authorities, content of position / intensity / motion / forecast fields.'
+    verified: true
   - source: AIM
     section: '7-1'
     note: 'In-flight Aviation Weather Advisories, tropical cyclone references and pairing with the TC SIGMET.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Tropical Weather chapter (cyclone structure, intensity scales, advisory products)'
     note: 'Modern consolidated treatment of tropical cyclones and the advisory products that describe them.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
@@ -58,20 +61,20 @@ TCAs are issued at fixed synoptic times -- typically every 6 hours (00Z, 06Z, 12
 
 A TCA is fixed-format text. Field-by-field:
 
-| Field             | Example                                  | Meaning                                                                                                                |
-| ----------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| Issuing center    | `NHC` / `RSMC TOKYO` / `KNHC`            | Authority issuing the advisory (NHC, CPHC, Tokyo TCAC, La Reunion, Nadi, etc.).                                        |
-| Advisory number   | `ADVISORY NUMBER 17`                     | Running count for this storm's life. Intermediate advisories suffix with `A` (`17A`).                                  |
-| Storm identifier  | `HURRICANE FIONA`                        | Classification + name. TD = tropical depression, TS = tropical storm, HU = hurricane, TY = typhoon, MH = major hurr.   |
-| Fix / valid time  | `1500 UTC THU SEP 22 2026`               | UTC timestamp the fix is good for. The advisory itself is issued shortly after the fix time.                           |
-| Position          | `LAT 24.3N LON 70.5W`                    | Center position in degrees and tenths. Lat then lon, hemisphere letters explicit.                                      |
-| Intensity         | `MAX SUSTAINED WINDS 110 KT`             | Maximum 1-minute sustained surface winds at 33 ft (10 m) in knots. Use the basin's convention -- US is 1-min.          |
-| Central pressure  | `MINIMUM CENTRAL PRESSURE 952 MB`        | Minimum sea-level pressure at the center. Lower = stronger; rapid drop signals intensification.                        |
-| Motion            | `MOVEMENT NW OR 315 DEG AT 14 KT`        | Direction (compass + true bearing) and speed in knots. `STNR` = stationary.                                            |
-| Wind radii        | `64 KT....... 25NE 20SE 15SW 20NW`       | Extent in NM of the 34 / 50 / 64 kt wind field by quadrant (NE / SE / SW / NW).                                        |
-| Forecast position | `FORECAST VALID 23/0000Z 25.8N 72.3W`    | Forecast center position at the named valid time. Issued for +12 and +24 hours minimum; often +6 / +18 / +36 / +48.    |
-| Forecast wind     | `MAX WIND 115 KT...GUSTS 140 KT`         | Forecast max sustained wind at the forecast time. Use to track expected intensification or weakening.                  |
-| Discussion        | `KEY MESSAGES` / `DISCUSSION` block      | Prose paragraphs from the forecaster: uncertainty, ensemble spread, model disagreement, hazard call-outs.              |
+| Field             | Example                               | Meaning                                                                                                              |
+| ----------------- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Issuing center    | `NHC` / `RSMC TOKYO` / `KNHC`         | Authority issuing the advisory (NHC, CPHC, Tokyo TCAC, La Reunion, Nadi, etc.).                                      |
+| Advisory number   | `ADVISORY NUMBER 17`                  | Running count for this storm's life. Intermediate advisories suffix with `A` (`17A`).                                |
+| Storm identifier  | `HURRICANE FIONA`                     | Classification + name. TD = tropical depression, TS = tropical storm, HU = hurricane, TY = typhoon, MH = major hurr. |
+| Fix / valid time  | `1500 UTC THU SEP 22 2026`            | UTC timestamp the fix is good for. The advisory itself is issued shortly after the fix time.                         |
+| Position          | `LAT 24.3N LON 70.5W`                 | Center position in degrees and tenths. Lat then lon, hemisphere letters explicit.                                    |
+| Intensity         | `MAX SUSTAINED WINDS 110 KT`          | Maximum 1-minute sustained surface winds at 33 ft (10 m) in knots. Use the basin's convention -- US is 1-min.        |
+| Central pressure  | `MINIMUM CENTRAL PRESSURE 952 MB`     | Minimum sea-level pressure at the center. Lower = stronger; rapid drop signals intensification.                      |
+| Motion            | `MOVEMENT NW OR 315 DEG AT 14 KT`     | Direction (compass + true bearing) and speed in knots. `STNR` = stationary.                                          |
+| Wind radii        | `64 KT....... 25NE 20SE 15SW 20NW`    | Extent in NM of the 34 / 50 / 64 kt wind field by quadrant (NE / SE / SW / NW).                                      |
+| Forecast position | `FORECAST VALID 23/0000Z 25.8N 72.3W` | Forecast center position at the named valid time. Issued for +12 and +24 hours minimum; often +6 / +18 / +36 / +48.  |
+| Forecast wind     | `MAX WIND 115 KT...GUSTS 140 KT`      | Forecast max sustained wind at the forecast time. Use to track expected intensification or weakening.                |
+| Discussion        | `KEY MESSAGES` / `DISCUSSION` block   | Prose paragraphs from the forecaster: uncertainty, ensemble spread, model disagreement, hazard call-outs.            |
 
 Read the forecast positions as a list of (time, lat / lon, intensity) tuples. Plot them. That is the cone centerline. The cone itself, when published as a graphic, expands with forecast hour because uncertainty grows -- a 24-hour position is more uncertain than a 12-hour position, and a 72-hour position is much more uncertain than either.
 

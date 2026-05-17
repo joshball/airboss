@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Radar / Convective Weather chapter'
     note: 'Authoritative product catalog for WSR-88D NEXRAD mosaics: base reflectivity, composite reflectivity, echo tops, VIL, storm-relative velocity, and the dBZ color scale.'
+    verified: true
   - source: AIM
     section: '7-1-22 (Weather Radar Services) and 7-1-26 (PIREP for thunderstorms)'
     note: 'Operational role of ground-based radar in flight planning, FIS-B NEXRAD age limitations, and the PIREP feedback loop that confirms radar-implied hazards.'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Radar chapter'
     note: 'Modern pilot-pitch treatment of WSR-88D products, beam geometry, anomalous propagation, bright-band artifacts, and the difference between base and composite reflectivity.'
+    verified: true
 related_knowledge_nodes:
   - wx-thunderstorm-hazards
 related_products:
@@ -50,29 +53,29 @@ The mosaic is dense: pick which product layer you are reading first, then walk t
 
 Reflectivity is reported in decibels relative to Z (dBZ), a logarithmic scale of the radar return strength. The standard NWS / aviation color ramp groups dBZ into bands that map cleanly to operational categories.
 
-| dBZ band     | Color         | Operational meaning                                                                       |
-| ------------ | ------------- | ----------------------------------------------------------------------------------------- |
-| < 15 dBZ     | Light blue    | Drizzle, very light rain, cloud-particle return. Often dry / virga.                       |
-| 15 to 20 dBZ | Blue / cyan   | Light precipitation. Stratiform rain, light snow. No convective concern.                  |
-| 20 to 30 dBZ | Green         | Light to moderate precipitation. Steady rain, building cumulus. Bumpy but flyable IFR.    |
-| 30 to 40 dBZ | Yellow        | Moderate precipitation. Active showers and weak thunderstorms. Begin avoidance posture.   |
-| 40 to 50 dBZ | Orange        | Heavy precipitation. Strong thunderstorms. Hold the 20 NM rule.                           |
-| 50 to 60 dBZ | Red           | Very heavy rain, hail likely, strong updraft. Avoid by margin, not by line.               |
-| >= 60 dBZ    | Magenta       | Large hail, severe updraft. Tornado or significant downburst risk. Stay well clear.       |
+| dBZ band     | Color       | Operational meaning                                                                     |
+| ------------ | ----------- | --------------------------------------------------------------------------------------- |
+| < 15 dBZ     | Light blue  | Drizzle, very light rain, cloud-particle return. Often dry / virga.                     |
+| 15 to 20 dBZ | Blue / cyan | Light precipitation. Stratiform rain, light snow. No convective concern.                |
+| 20 to 30 dBZ | Green       | Light to moderate precipitation. Steady rain, building cumulus. Bumpy but flyable IFR.  |
+| 30 to 40 dBZ | Yellow      | Moderate precipitation. Active showers and weak thunderstorms. Begin avoidance posture. |
+| 40 to 50 dBZ | Orange      | Heavy precipitation. Strong thunderstorms. Hold the 20 NM rule.                         |
+| 50 to 60 dBZ | Red         | Very heavy rain, hail likely, strong updraft. Avoid by margin, not by line.             |
+| >= 60 dBZ    | Magenta     | Large hail, severe updraft. Tornado or significant downburst risk. Stay well clear.     |
 
 Two operational rules read directly off the color ramp. First, the 20 NM avoidance distance from AC 00-24C engages at orange (40 dBZ); anything yellow or stronger is a thunderstorm by radar definition. Second, magenta is not "the same as red, only more." It is a categorically different threat -- large hail and severe updraft -- and a pilot who treats it as "just bigger red" is reading the chart wrong.
 
 ### Product layers and what each one is for
 
-| Layer                    | What it shows                                                | When you read it                                                    |
-| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------- |
-| Base reflectivity        | Lowest tilt (~0.5 deg), closest to surface precipitation     | Default scan, ground-truth for "what is falling at the airport."    |
-| Composite reflectivity   | Maximum dBZ in the full column above each pixel              | Reveals upper-altitude hail cores that base tilt cannot see.        |
-| Echo tops                | Top of detected precipitation, in hundreds of feet MSL       | Vertical extent. "Tops to FL450" is a different decision than 25k.  |
-| VIL                      | Vertically integrated liquid water content                   | Hail-likelihood proxy. Used together with composite reflectivity.   |
-| Storm-relative velocity  | Doppler velocity minus average cell motion                   | Rotation signatures (mesocyclone), microburst couplets.             |
-| Storm motion vectors     | Direction-and-speed arrows on each cell                      | Project the cell forward to your route, your destination, your ETA. |
-| Range rings              | Concentric circles centered on each NEXRAD site              | Beam-geometry sanity check. See gotchas.                            |
+| Layer                   | What it shows                                            | When you read it                                                    |
+| ----------------------- | -------------------------------------------------------- | ------------------------------------------------------------------- |
+| Base reflectivity       | Lowest tilt (~0.5 deg), closest to surface precipitation | Default scan, ground-truth for "what is falling at the airport."    |
+| Composite reflectivity  | Maximum dBZ in the full column above each pixel          | Reveals upper-altitude hail cores that base tilt cannot see.        |
+| Echo tops               | Top of detected precipitation, in hundreds of feet MSL   | Vertical extent. "Tops to FL450" is a different decision than 25k.  |
+| VIL                     | Vertically integrated liquid water content               | Hail-likelihood proxy. Used together with composite reflectivity.   |
+| Storm-relative velocity | Doppler velocity minus average cell motion               | Rotation signatures (mesocyclone), microburst couplets.             |
+| Storm motion vectors    | Direction-and-speed arrows on each cell                  | Project the cell forward to your route, your destination, your ETA. |
+| Range rings             | Concentric circles centered on each NEXRAD site          | Beam-geometry sanity check. See gotchas.                            |
 
 ### Reading order
 

@@ -9,18 +9,23 @@ authoritative_sources:
   - source: 14 CFR 91.137
     section: '(a)(1), (a)(2), (a)(3)'
     note: Legal basis. (a)(1) protects persons/property on the surface from an existing/imminent hazard, (a)(2) provides a safe environment for disaster/hazard relief aircraft, (a)(3) prevents unsafe congestion of sightseeing aircraft above an incident.
+    verified: false
   - source: AIM
     section: 5-6-2
     note: Temporary Flight Restrictions. Operational description of TFR types, NOTAM dissemination, and pilot responsibilities.
+    verified: false
   - source: FAA-H-8083-28
     section: Chapter 27 (NOTAMs and TFRs)
     note: Aviation Weather Handbook discussion of weather-driven flight restrictions within the NOTAM ecosystem.
+    verified: false
   - source: tfr.faa.gov
     section: ''
     note: FAA's live TFR catalog. Convenient graphical view; the underlying NOTAM text is the legal product.
+    verified: true
   - source: NOTAM Search
     section: notams.aim.faa.gov
     note: Authoritative source for the NOTAM text that creates the TFR.
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
@@ -84,18 +89,18 @@ What it decides:
 
 Weather TFRs are disseminated as FDC NOTAMs in fixed-format text. The structure follows the standard NOTAM format with a 91.137-specific body.
 
-| Field             | Example                                                                                                                                                                                | Meaning                                                                                            |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| NOTAM ID          | `!FDC 4/8392`                                                                                                                                                                          | FDC NOTAM, sequence 4/8392. FDC = Flight Data Center, the office that publishes regulatory NOTAMs. |
-| Affected area     | `ZOA CA..AIRSPACE`                                                                                                                                                                     | ARTCC and state. ZOA = Oakland Center; CA = California. AIRSPACE flags this as an airspace item.   |
-| Authority         | `TEMPORARY FLIGHT RESTRICTIONS`                                                                                                                                                        | This NOTAM is a TFR. The body will cite the specific 91.137 subparagraph.                          |
-| Hazard            | `WILDFIRE FIREFIGHTING OPERATIONS`                                                                                                                                                     | The triggering event. Identifies the type of TFR for triage.                                       |
-| Effective times   | `EFFECTIVE 2511291800 UTC UNTIL 2512011800 UTC`                                                                                                                                        | Start and end in UTC. UFN = until further notice; open-ended cancellation by NOTAM.                |
-| Center point      | `PURSUANT TO 14 CFR SECTION 91.137(A)(1) AND (A)(2) TEMPORARY FLIGHT RESTRICTIONS WITHIN AN AREA DEFINED AS 5NM RADIUS OF 38-45-30N 122-30-15W`                                        | Citing legal authority; defining the geometry. Lat/long is degrees-minutes-seconds.                |
-| Altitude band     | `SFC-12500FT MSL`                                                                                                                                                                      | Surface to 12,500 ft MSL. Below this top, you're in the TFR; above it, you're clear.               |
-| Operational rule  | `NO PILOT MAY OPERATE AN AIRCRAFT IN THE AREAS COVERED BY THIS NOTAM (EXCEPT AS DESCRIBED) ...`                                                                                        | The 91.137 prohibition.                                                                            |
-| Exceptions        | `EXCEPT AIRCRAFT PARTICIPATING IN FIREFIGHTING OPERATIONS / RELIEF AIRCRAFT OPERATIONS UNDER THE DIRECTION OF...`                                                                      | Named exempt categories. If you're not on this list, you're prohibited.                            |
-| Coordinating fac. | `OAKLAND ARTCC TELEPHONE 510-745-3360`                                                                                                                                                 | Who to call for clearance or coordination.                                                         |
+| Field             | Example                                                                                                                                         | Meaning                                                                                            |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| NOTAM ID          | `!FDC 4/8392`                                                                                                                                   | FDC NOTAM, sequence 4/8392. FDC = Flight Data Center, the office that publishes regulatory NOTAMs. |
+| Affected area     | `ZOA CA..AIRSPACE`                                                                                                                              | ARTCC and state. ZOA = Oakland Center; CA = California. AIRSPACE flags this as an airspace item.   |
+| Authority         | `TEMPORARY FLIGHT RESTRICTIONS`                                                                                                                 | This NOTAM is a TFR. The body will cite the specific 91.137 subparagraph.                          |
+| Hazard            | `WILDFIRE FIREFIGHTING OPERATIONS`                                                                                                              | The triggering event. Identifies the type of TFR for triage.                                       |
+| Effective times   | `EFFECTIVE 2511291800 UTC UNTIL 2512011800 UTC`                                                                                                 | Start and end in UTC. UFN = until further notice; open-ended cancellation by NOTAM.                |
+| Center point      | `PURSUANT TO 14 CFR SECTION 91.137(A)(1) AND (A)(2) TEMPORARY FLIGHT RESTRICTIONS WITHIN AN AREA DEFINED AS 5NM RADIUS OF 38-45-30N 122-30-15W` | Citing legal authority; defining the geometry. Lat/long is degrees-minutes-seconds.                |
+| Altitude band     | `SFC-12500FT MSL`                                                                                                                               | Surface to 12,500 ft MSL. Below this top, you're in the TFR; above it, you're clear.               |
+| Operational rule  | `NO PILOT MAY OPERATE AN AIRCRAFT IN THE AREAS COVERED BY THIS NOTAM (EXCEPT AS DESCRIBED) ...`                                                 | The 91.137 prohibition.                                                                            |
+| Exceptions        | `EXCEPT AIRCRAFT PARTICIPATING IN FIREFIGHTING OPERATIONS / RELIEF AIRCRAFT OPERATIONS UNDER THE DIRECTION OF...`                               | Named exempt categories. If you're not on this list, you're prohibited.                            |
+| Coordinating fac. | `OAKLAND ARTCC TELEPHONE 510-745-3360`                                                                                                          | Who to call for clearance or coordination.                                                         |
 
 Geographic reference variants you will see:
 

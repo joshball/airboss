@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services -- Convective Outlook / SPC Products section'
     note: 'Categorical risk tiers, probabilistic forecast convention, Day 1 / 2 / 3 / 4-8 windows, issuance cadence.'
+    verified: true
   - source: AIM
     section: '7-1 -- National Weather Service Aviation Products'
     note: 'Operational use of SPC convective outlooks in flight planning, layered with Convective SIGMET and AIRMET.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC)); Chapter on Convective Weather'
     note: 'Outlook context within the broader forecast suite and the underlying convective-weather chapter.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-convective-outlook
   - wx-thunderstorm-hazards
@@ -69,14 +72,14 @@ The product is a categorical map plus probabilistic overlays plus a text discuss
 
 **Pass 1: categorical risk polygons (colored).** The Day 1, Day 2, and Day 3 graphics show nested polygons colored by tier. The order is fixed.
 
-| Tier  | Label        | Color         | Severe coverage                | Operational meaning for a VFR light single                                                |
-| ----- | ------------ | ------------- | ------------------------------ | ----------------------------------------------------------------------------------------- |
-| TSTM  | Thunderstorm | Light green   | Ordinary (non-severe) TS       | Convection expected but below severe criteria. Background monitoring.                     |
-| 1     | MRGL         | Dark green    | Isolated severe possible       | Background monitoring; check morning SIGMETs; no advance route change yet.                |
-| 2     | SLGT         | Yellow        | Scattered severe               | Active planning. Pre-plan diverts; expect Convective SIGMETs during the window.           |
-| 3     | ENH          | Orange        | Numerous severe                | Significant constraint. Most light singles re-plan around the corridor or delay the day.  |
-| 4     | MDT          | Red           | Widespread severe likely       | High-impact day. Most non-radar GA flights cancel or postpone in the affected corridor.   |
-| 5     | HIGH         | Magenta       | Widespread severe and intense  | Outbreak-day language. The SPC reserves HIGH for the worst severe-weather setups.         |
+| Tier | Label        | Color       | Severe coverage               | Operational meaning for a VFR light single                                               |
+| ---- | ------------ | ----------- | ----------------------------- | ---------------------------------------------------------------------------------------- |
+| TSTM | Thunderstorm | Light green | Ordinary (non-severe) TS      | Convection expected but below severe criteria. Background monitoring.                    |
+| 1    | MRGL         | Dark green  | Isolated severe possible      | Background monitoring; check morning SIGMETs; no advance route change yet.               |
+| 2    | SLGT         | Yellow      | Scattered severe              | Active planning. Pre-plan diverts; expect Convective SIGMETs during the window.          |
+| 3    | ENH          | Orange      | Numerous severe               | Significant constraint. Most light singles re-plan around the corridor or delay the day. |
+| 4    | MDT          | Red         | Widespread severe likely      | High-impact day. Most non-radar GA flights cancel or postpone in the affected corridor.  |
+| 5    | HIGH         | Magenta     | Widespread severe and intense | Outbreak-day language. The SPC reserves HIGH for the worst severe-weather setups.        |
 
 The polygons nest: a HIGH polygon sits inside an MDT polygon, which sits inside an ENH polygon, and so on out to the broad TSTM area. Reading inward gives the worst-case core; reading outward gives the area that will see severe somewhere inside it.
 

@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: Icing Forecasts / Icing Products
     note: Format and interpretation of CIP (Current Icing Product) and FIP (Forecast Icing Product) gridded raster outputs.
+    verified: true
   - source: AIM
     section: 7-1-21
     note: Icing Forecasts -- describes CIP/FIP as the gridded analysis/forecast pair for icing probability, severity, and SLD potential.
+    verified: true
   - source: FAA-H-8083-28
     section: Icing chapter
     note: Aviation Weather Handbook, icing chapter -- icing products, including the FIP/CIP grids, and their relationship to AIRMET Zulu and SIGMETs.
+    verified: true
 related_knowledge_nodes:
   - wx-icing-types-and-avoidance
 related_products:
@@ -38,11 +41,11 @@ The Current Icing Product (CIP) and Forecast Icing Product (FIP) are gridded ras
 
 Both products expose three separate display layers for any given flight level:
 
-| Layer            | What it shows                                        | Scale                                             |
-| ---------------- | ---------------------------------------------------- | ------------------------------------------------- |
-| Probability      | Likelihood that icing exists at this grid cell       | 0% to 100% (continuous color ramp)                |
-| Severity         | Expected icing intensity if it occurs                | Trace / Light / Moderate / Heavy / Severe         |
-| SLD potential    | Whether supercooled large droplets are likely        | Yes / No (binary overlay)                         |
+| Layer         | What it shows                                  | Scale                                     |
+| ------------- | ---------------------------------------------- | ----------------------------------------- |
+| Probability   | Likelihood that icing exists at this grid cell | 0% to 100% (continuous color ramp)        |
+| Severity      | Expected icing intensity if it occurs          | Trace / Light / Moderate / Heavy / Severe |
+| SLD potential | Whether supercooled large droplets are likely  | Yes / No (binary overlay)                 |
 
 The SLD layer is the freezing-rain / freezing-drizzle indicator. SLD is a category 14 CFR §91.527 and certified-aircraft handbooks call out specifically -- it can defeat boots and unprotected airframes very quickly.
 
@@ -65,11 +68,11 @@ What it decides:
 
 The product is a chart, not text. On aviationweather.gov the interface is a map with three independent controls:
 
-| Control            | Range / values                                        | Function                                                                 |
-| ------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------ |
-| Flight-level slider| 3000 to 30000 ft MSL in 1000-ft steps                 | Picks the grid layer being displayed. CIP/FIP are 3D; you read one layer at a time. |
-| Layer selector     | Probability / Severity / SLD potential                | Toggles which of the three fields is colored on the map.                 |
-| Time selector      | CIP: current (hourly). FIP: +3, +6, +9, +12, +15, +18 hr | CIP shows analysis time; FIP scrubs forward to each forecast step.       |
+| Control             | Range / values                                           | Function                                                                            |
+| ------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Flight-level slider | 3000 to 30000 ft MSL in 1000-ft steps                    | Picks the grid layer being displayed. CIP/FIP are 3D; you read one layer at a time. |
+| Layer selector      | Probability / Severity / SLD potential                   | Toggles which of the three fields is colored on the map.                            |
+| Time selector       | CIP: current (hourly). FIP: +3, +6, +9, +12, +15, +18 hr | CIP shows analysis time; FIP scrubs forward to each forecast step.                  |
 
 The three layers each have their own color scale; legends are inline on the AWC page. A few rules of thumb:
 

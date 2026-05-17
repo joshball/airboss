@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services -- Convective SIGMET (WST) section'
     note: 'Canonical format spec: trigger thresholds, region split (E/C/W), issuance cycle, valid period, encoded layout.'
+    verified: true
   - source: AIM
     section: '7-1-6 -- Inflight Aviation Weather Advisories'
     note: 'Pilot-pitch description of SIGMET, Convective SIGMET, AIRMET, and CWA, including how they relate.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 26 -- Inflight Aviation Weather Advisories, Convective SIGMET subsection'
     note: 'Operational treatment with sample WSTs and the reasoning behind each trigger.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-sigmets
   - wx-thunderstorm-hazards
