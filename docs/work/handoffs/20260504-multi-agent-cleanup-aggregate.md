@@ -97,16 +97,16 @@ PR 1 first. PRs 2-5 are independent and can run in parallel worktrees. Each PR s
 
 Status (verify before authoring, frontmatter has lied here before):
 
-| WP             | Dir          | Spec | Tasks | Test-plan | Status                                         |
-| -------------- | ------------ | ---- | ----- | --------- | ---------------------------------------------- |
-| WP-AC-V        | wp-ac/       | 129  | 58    | 40        | Shipped #480 (2026-05-02)                      |
-| WP-ACS-V       | wp-acs-v/    | 95   | 68    | 55        | Shipped #501 (2026-05-03)                      |
-| WP-CC          | wp-cc/       | 109  | -     | -         | spec only, status: draft                       |
-| WP-NTSB-ALJ    | wp-ntsb-alj/ | 97   | -     | -         | spec only, frontmatter says shipped (suspect)  |
-| WP-SAFO+INFO   | wp-safo-info/| 123  | -     | -         | spec only, frontmatter says shipped (suspect)  |
-| WP-AC-FULL     | -            | -    | -     | -         | not started; depends on WP-AC-V (unblocked)    |
-| WP-O8900-V5    | -            | -    | -     | -         | deferred per spec §4.E                         |
-| WP-SAFETY-BRIEF| -            | -    | -     | -         | deferred per spec §5                           |
+| WP              | Dir           | Spec | Tasks | Test-plan | Status                                        |
+| --------------- | ------------- | ---- | ----- | --------- | --------------------------------------------- |
+| WP-AC-V         | wp-ac/        | 129  | 58    | 40        | Shipped #480 (2026-05-02)                     |
+| WP-ACS-V        | wp-acs-v/     | 95   | 68    | 55        | Shipped #501 (2026-05-03)                     |
+| WP-CC           | wp-cc/        | 109  | -     | -         | spec only, status: draft                      |
+| WP-NTSB-ALJ     | wp-ntsb-alj/  | 97   | -     | -         | spec only, frontmatter says shipped (suspect) |
+| WP-SAFO+INFO    | wp-safo-info/ | 123  | -     | -         | spec only, frontmatter says shipped (suspect) |
+| WP-AC-FULL      | -             | -    | -     | -         | not started; depends on WP-AC-V (unblocked)   |
+| WP-O8900-V5     | -             | -    | -     | -         | deferred per spec §4.E                        |
+| WP-SAFETY-BRIEF | -             | -    | -     | -         | deferred per spec §5                          |
 
 Easy first step: reconcile WP-NTSB-ALJ + WP-SAFO-INFO frontmatter vs `status.md`. Then either fill tasks/test-plan for the three half-authored WPs or author WP-AC-FULL from scratch (probably the "natural next easy win", AC pipeline already proven).
 

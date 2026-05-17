@@ -270,7 +270,7 @@ We organize around experiences, not topics. Then map experiences -> topics.
 
 Each topic has a time counter. Scenarios contribute to multiple topics simultaneously.
 
-```
+```text
 TopicCoverage {
   LOC: 90 min    // Block 3 primary + Block 6 capstone
   TSA: 45 min    // Block 4 distributed + spaced reinforcement

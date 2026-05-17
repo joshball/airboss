@@ -48,16 +48,16 @@ Now compare against the live source ([Part 91](airboss-ref:regs/cfr-14/91?at=202
 
 The most common gaps in CFI candidates' maps:
 
-| Gap                                                                          | Why it matters                                                                  |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| [@cite](airboss-ref:regs/cfr-14/91/213?at=2026) -- the no-MEL pathway        | Triggered any time equipment is broken; gap means the candidate fakes the answer |
-| [@cite](airboss-ref:regs/cfr-14/91/171?at=2026) -- VOR check                 | Procedural; easy to forget; comes up in any IFR-using-VOR conversation         |
-| [@cite](airboss-ref:regs/cfr-14/61/189?at=2026) -- CFI instructor records    | 5-year retention; gap means the CFI's own paperwork is sloppy                  |
-| [@cite](airboss-ref:regs/cfr-14/91/117?at=2026) -- speed restriction below 10,000 | Frequently cited in airspace conversations; easy to misstate                    |
-| 49 CFR 830 -- accident vs. incident definitions                              | Wrong agency, wrong title; structural confusion                                 |
-| AC 61-65 endorsement IDs (A.1 vs A.4 vs A.31 vs A.32 etc.)                   | Working CFI's daily reference; gap means freelancing endorsement language      |
-| [@cite](airboss-ref:regs/cfr-14/91/119?at=2026) -- minimum safe altitudes    | Routinely tested; pilot tendency to confuse with [@cite](airboss-ref:regs/cfr-14/91/117?at=2026) |
-| FAA Order 8000.373 -- compliance program                                     | Affects post-incident strategy; gap means missed leverage in enforcement       |
+| Gap                                                                               | Why it matters                                                                                   |
+| --------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [@cite](airboss-ref:regs/cfr-14/91/213?at=2026) -- the no-MEL pathway             | Triggered any time equipment is broken; gap means the candidate fakes the answer                 |
+| [@cite](airboss-ref:regs/cfr-14/91/171?at=2026) -- VOR check                      | Procedural; easy to forget; comes up in any IFR-using-VOR conversation                           |
+| [@cite](airboss-ref:regs/cfr-14/61/189?at=2026) -- CFI instructor records         | 5-year retention; gap means the CFI's own paperwork is sloppy                                    |
+| [@cite](airboss-ref:regs/cfr-14/91/117?at=2026) -- speed restriction below 10,000 | Frequently cited in airspace conversations; easy to misstate                                     |
+| 49 CFR 830 -- accident vs. incident definitions                                   | Wrong agency, wrong title; structural confusion                                                  |
+| AC 61-65 endorsement IDs (A.1 vs A.4 vs A.31 vs A.32 etc.)                        | Working CFI's daily reference; gap means freelancing endorsement language                        |
+| [@cite](airboss-ref:regs/cfr-14/91/119?at=2026) -- minimum safe altitudes         | Routinely tested; pilot tendency to confuse with [@cite](airboss-ref:regs/cfr-14/91/117?at=2026) |
+| FAA Order 8000.373 -- compliance program                                          | Affects post-incident strategy; gap means missed leverage in enforcement                         |
 
 A learner with five or more of these gaps is not ready to deliver the capstone orals cleanly. The gaps are not abstract -- they manifest as silences in the partner exam.
 
@@ -67,13 +67,13 @@ Slowness is the diagnostic. A subpart you walk smoothly is a subpart you have in
 
 Try the second exercise. For each part, time yourself walking the subparts in order, with one sentence per subpart. Two minutes maximum per part:
 
-| Part      | Subparts                                                                                   | Target time |
-| --------- | ------------------------------------------------------------------------------------------ | ----------- |
-| Part 61   | A general / B aircraft ratings / C student / D recreational / E private / F commercial / G ATP / H CFI / I sport / J ground instructor / K light-sport CFI | 2 min |
-| Part 91   | A general / B flight rules / C equipment / D special ops / E maintenance / F-N specialized | 90 sec      |
-| Part 141  | A school certification / B personnel and aircraft / C training course outline / D examining authority / Appendices A-N (per cert level) | 90 sec |
-| Part 119  | (very short) general / certification / certificate authorization                             | 60 sec      |
-| Part 135  | A general / B flight ops / C aircraft / D-G operational specifications and crew                | 90 sec      |
+| Part     | Subparts                                                                                                                                                   | Target time |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Part 61  | A general / B aircraft ratings / C student / D recreational / E private / F commercial / G ATP / H CFI / I sport / J ground instructor / K light-sport CFI | 2 min       |
+| Part 91  | A general / B flight rules / C equipment / D special ops / E maintenance / F-N specialized                                                                 | 90 sec      |
+| Part 141 | A school certification / B personnel and aircraft / C training course outline / D examining authority / Appendices A-N (per cert level)                    | 90 sec      |
+| Part 119 | (very short) general / certification / certificate authorization                                                                                           | 60 sec      |
+| Part 135 | A general / B flight ops / C aircraft / D-G operational specifications and crew                                                                            | 90 sec      |
 
 A learner who blanks on a single subpart label is not slow -- they have a hole. A learner who can recite the labels but cannot describe what each subpart actually does is on the edge -- the structural skeleton is there but the content is sparse. A learner who walks every subpart smoothly with a one-sentence description is at oral-test-ready level for that part.
 
@@ -95,12 +95,12 @@ The airboss study app surfaces a "weakness lens" view that assembles the user's 
 
 After each partner exam, take the reflection note from [01-how-the-capstone-works.md](01-how-the-capstone-works.md) and translate the *axis* and *scenario* into specific topics:
 
-| Reflection note                                                                       | Translates to weakness-lens query                                  |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| "Axis 1 (section recall) was a 3 on scenario 1 -- I forgot [@cite](airboss-ref:regs/cfr-14/91/213?at=2026) again" | weakness-lens topic: 91.213 inoperative equipment              |
-| "Axis 3 (trap awareness) was a 2 on scenario 4 -- I did not catch the [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) instrument-XC definition trap" | weakness-lens topic: 61.1 cross-country definitions          |
-| "Axis 2 (structural framing) was a 3 across all four -- I forgot to route via pilot/flight/operation" | weakness-lens topic: Title 14 structural framing                 |
-| "Axis 4 (recovery) was a 2 on scenario 3 -- I went silent when the partner pulled the medical-lapse twist" | weakness-lens topic: Hicks letter / CFI-as-PIC during instruction |
+| Reflection note                                                                                                                                    | Translates to weakness-lens query                                 |
+| -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| "Axis 1 (section recall) was a 3 on scenario 1 -- I forgot [@cite](airboss-ref:regs/cfr-14/91/213?at=2026) again"                                  | weakness-lens topic: 91.213 inoperative equipment                 |
+| "Axis 3 (trap awareness) was a 2 on scenario 4 -- I did not catch the [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) instrument-XC definition trap" | weakness-lens topic: 61.1 cross-country definitions               |
+| "Axis 2 (structural framing) was a 3 across all four -- I forgot to route via pilot/flight/operation"                                              | weakness-lens topic: Title 14 structural framing                  |
+| "Axis 4 (recovery) was a 2 on scenario 3 -- I went silent when the partner pulled the medical-lapse twist"                                         | weakness-lens topic: Hicks letter / CFI-as-PIC during instruction |
 
 The weakness lens then drives the next training cycle. Cards on the weak topics surface more frequently; the candidate runs the partner exam again with the weak topics already reinforced; the rubric scores improve.
 

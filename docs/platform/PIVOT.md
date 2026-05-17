@@ -17,13 +17,13 @@ FIRC is no longer the product. It's at best one content module on a broader **pi
 
 ## Why pivot
 
-| Driver                            | What it means                                                                                   |
-| --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Chief instructor requirement      | FAA FIRC approval requires a chief instructor Joshua doesn't qualify as -- would require hiring/partnering -- kills the motivation |
-| Motivation is craft, not revenue  | "Cover costs, make it available, maybe open-source" -- removes the business pressure that made FIRC attractive in the first place |
-| The engine is the interesting part | Scenario + tick + scoring + pre-brief/debrief is the thing worth building. FIRC was the excuse to build it |
-| Real underserved niche            | Nobody owns the 20 minutes *before* a flight -- the mental rehearsal / route walk-through / head-in-cockpit loop |
-| Audience frequency                | FIRC = 1 purchase every 24 months per CFI. Performance platform = potentially daily use per pilot |
+| Driver                             | What it means                                                                                                                      |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Chief instructor requirement       | FAA FIRC approval requires a chief instructor Joshua doesn't qualify as -- would require hiring/partnering -- kills the motivation |
+| Motivation is craft, not revenue   | "Cover costs, make it available, maybe open-source" -- removes the business pressure that made FIRC attractive in the first place  |
+| The engine is the interesting part | Scenario + tick + scoring + pre-brief/debrief is the thing worth building. FIRC was the excuse to build it                         |
+| Real underserved niche             | Nobody owns the 20 minutes *before* a flight -- the mental rehearsal / route walk-through / head-in-cockpit loop                   |
+| Audience frequency                 | FIRC = 1 purchase every 24 months per CFI. Performance platform = potentially daily use per pilot                                  |
 
 ## What the new thing is
 
@@ -42,13 +42,13 @@ Over time        ->   Track calibration, proficiency trends, where the pilot is 
 
 ### Product layers
 
-| Layer                       | What it is                                                                                                      | Priority |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | -------- |
+| Layer                       | What it is                                                                                                                     | Priority |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- |
 | **Route rehearsal**         | Import a route; get a tailored pre-brief: terrain/airspace/WX gotchas, likely ATC, go/no-go pressure points, diversion options | v1 hook  |
-| **Proficiency maintenance** | Short daily scenarios; spaced + interleaved; targets the pilot's weak areas from prior performance              | v1 core  |
-| **Event prep modules**      | IPC, flight review, BFR, checkride prep, type rating prep, airline interview prep                               | v2       |
-| **Transition support**      | New type, new avionics (G1000->G3000, piston->turbine), new environment (mountain, IFR, international)          | v2       |
-| **FIRC content module**     | The 503 questions + AC 61-83K scenarios, optional, *not* FAA-approved unless a partner instructor adopts it     | v3+      |
+| **Proficiency maintenance** | Short daily scenarios; spaced + interleaved; targets the pilot's weak areas from prior performance                             | v1 core  |
+| **Event prep modules**      | IPC, flight review, BFR, checkride prep, type rating prep, airline interview prep                                              | v2       |
+| **Transition support**      | New type, new avionics (G1000->G3000, piston->turbine), new environment (mountain, IFR, international)                         | v2       |
+| **FIRC content module**     | The 503 questions + AC 61-83K scenarios, optional, *not* FAA-approved unless a partner instructor adopts it                    | v3+      |
 
 ## What stays
 
@@ -65,26 +65,26 @@ Over time        ->   Track calibration, proficiency trends, where the pilot is 
 
 ### Apps
 
-| App        | FIRC role                             | Post-pivot role                                                                | Verdict      |
-| ---------- | ------------------------------------- | ------------------------------------------------------------------------------ | ------------ |
-| **sim**    | Learner-facing course / game          | **The pilot app** -- rehearsal, proficiency, event prep. Primary surface.       | Keep, rename candidate |
-| **hangar** | Content authoring + product tracking  | Content authoring for scenarios + route packs + modules. Community contribution surface if open-sourced | Keep         |
-| **ops**    | FAA compliance, users, submissions    | Much smaller -- user admin, billing (if any), content moderation. Could fold into hangar | Downgrade / collapse |
-| **runway** | Public-facing marketing               | Public site + free content + open-source landing                               | Keep, simpler |
+| App        | FIRC role                            | Post-pivot role                                                                                         | Verdict                |
+| ---------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------- | ---------------------- |
+| **sim**    | Learner-facing course / game         | **The pilot app** -- rehearsal, proficiency, event prep. Primary surface.                               | Keep, rename candidate |
+| **hangar** | Content authoring + product tracking | Content authoring for scenarios + route packs + modules. Community contribution surface if open-sourced | Keep                   |
+| **ops**    | FAA compliance, users, submissions   | Much smaller -- user admin, billing (if any), content moderation. Could fold into hangar                | Downgrade / collapse   |
+| **runway** | Public-facing marketing              | Public site + free content + open-source landing                                                        | Keep, simpler          |
 
 Candidate simplification: **three apps (pilot / hangar / runway)** with ops-ish admin living inside hangar behind role gates. Decision deferred.
 
 ### Bounded contexts
 
-| BC             | FIRC role                          | Post-pivot role                                                                 | Verdict        |
-| -------------- | ---------------------------------- | ------------------------------------------------------------------------------- | -------------- |
-| `course`       | Curriculum, content                 | Scenario packs, route packs, module content                                     | Keep, rename?  |
-| `enrollment`   | Learner progress / completion       | Subscription / user progress / streaks                                          | Keep, rethink  |
-| `evidence`     | Scenario runs, scores               | **More important than before** -- this is the core data product for the pilot  | Elevate        |
-| `compliance`   | FAA traceability, submissions       | Only matters if someone runs a FIRC or Part 141 module on top; dormant by default | Dormant        |
-| `platform`     | Tasks, boards                       | Same                                                                            | Keep           |
-| `auth`         | Identity, sessions, permissions     | Same, simpler (fewer roles)                                                      | Keep, simpler  |
-| `audit`        | Content version history             | Same                                                                            | Keep           |
+| BC           | FIRC role                       | Post-pivot role                                                                   | Verdict       |
+| ------------ | ------------------------------- | --------------------------------------------------------------------------------- | ------------- |
+| `course`     | Curriculum, content             | Scenario packs, route packs, module content                                       | Keep, rename? |
+| `enrollment` | Learner progress / completion   | Subscription / user progress / streaks                                            | Keep, rethink |
+| `evidence`   | Scenario runs, scores           | **More important than before** -- this is the core data product for the pilot     | Elevate       |
+| `compliance` | FAA traceability, submissions   | Only matters if someone runs a FIRC or Part 141 module on top; dormant by default | Dormant       |
+| `platform`   | Tasks, boards                   | Same                                                                              | Keep          |
+| `auth`       | Identity, sessions, permissions | Same, simpler (fewer roles)                                                       | Keep, simpler |
+| `audit`      | Content version history         | Same                                                                              | Keep          |
 
 ### FAA compliance as data model
 
@@ -98,13 +98,13 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 
 **Options:**
 
-| Option                               | What                                                                                                 | Tradeoffs                                                                        |
-| ------------------------------------ | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| **Fully open**                       | Everything in public repos, MIT/Apache                                                               | Max contribution, max transparency; no moat but there wasn't one anyway          |
-| **Open core**                        | Engine + scenario format + content schemas open; hosted product closed                               | Lets others build; you run the canonical instance                                |
-| **Open content, closed engine**      | Scenario packs + route packs open (CC-BY-SA); engine/platform closed                                 | Community authors contribute; tech stays proprietary                             |
-| **Open engine, closed content**      | Engine open; curated scenario/route content is the hosted value                                      | Inverse of above; weaker since content is easier to reproduce than engine        |
-| **All closed, cover-cost hosted**    | Just run it cheap                                                                                    | Simplest; least leverage; least durable                                          |
+| Option                            | What                                                                   | Tradeoffs                                                                 |
+| --------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Fully open**                    | Everything in public repos, MIT/Apache                                 | Max contribution, max transparency; no moat but there wasn't one anyway   |
+| **Open core**                     | Engine + scenario format + content schemas open; hosted product closed | Lets others build; you run the canonical instance                         |
+| **Open content, closed engine**   | Scenario packs + route packs open (CC-BY-SA); engine/platform closed   | Community authors contribute; tech stays proprietary                      |
+| **Open engine, closed content**   | Engine open; curated scenario/route content is the hosted value        | Inverse of above; weaker since content is easier to reproduce than engine |
+| **All closed, cover-cost hosted** | Just run it cheap                                                      | Simplest; least leverage; least durable                                   |
 
 **Initial instinct:** open core -- engine, scenario format, content schemas in the open; hosted instance covers costs; scenario/route packs contributed by community *and* curated by us. But this deserves a proper ADR once we've lived with the pivot for a bit.
 
@@ -129,14 +129,14 @@ The user is leaning open-source or partially open-source. Worth deciding early b
 
 ## Risks & counter-arguments
 
-| Risk                                                                                  | Response                                                                                                                |
-| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| Scope explosion -- "every pilot, every flight" is vastly bigger than FIRC             | Pick one v1 wedge (route rehearsal) and ship it alone. Everything else is v2+.                                          |
-| No regulatory moat -- anyone can build this                                           | Regulatory moat isn't load-bearing when the goal isn't money. The contribution *is* the point.                           |
-| Existing tools already cover parts of this (ForeFlight, CloudAhoy, Sporty's, PilotEdge) | Nobody owns pre-flight rehearsal specifically. Integrate with what exists rather than compete.                          |
-| Engagement requires frequent use -- hard to build without marketing                   | Route rehearsal ties naturally to every flight. Pilots already do pre-flight prep; we make that prep dramatically better. |
-| FIRC work already done is wasted                                                       | Engine, scenario model, pre-brief/debrief, BC structure, design principles, ADRs -- 90%+ transfers. Content research is reusable as module content. |
-| "Nonprofit-ish" energy can stall -- no deadline, no pressure                          | Real. Need to set self-imposed milestones. A public v1 launch date does a lot of the work a business deadline would.     |
+| Risk                                                                                    | Response                                                                                                                                            |
+| --------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Scope explosion -- "every pilot, every flight" is vastly bigger than FIRC               | Pick one v1 wedge (route rehearsal) and ship it alone. Everything else is v2+.                                                                      |
+| No regulatory moat -- anyone can build this                                             | Regulatory moat isn't load-bearing when the goal isn't money. The contribution *is* the point.                                                      |
+| Existing tools already cover parts of this (ForeFlight, CloudAhoy, Sporty's, PilotEdge) | Nobody owns pre-flight rehearsal specifically. Integrate with what exists rather than compete.                                                      |
+| Engagement requires frequent use -- hard to build without marketing                     | Route rehearsal ties naturally to every flight. Pilots already do pre-flight prep; we make that prep dramatically better.                           |
+| FIRC work already done is wasted                                                        | Engine, scenario model, pre-brief/debrief, BC structure, design principles, ADRs -- 90%+ transfers. Content research is reusable as module content. |
+| "Nonprofit-ish" energy can stall -- no deadline, no pressure                            | Real. Need to set self-imposed milestones. A public v1 launch date does a lot of the work a business deadline would.                                |
 
 ## Open questions (not commitments)
 

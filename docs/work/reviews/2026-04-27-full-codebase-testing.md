@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 The test suite is in good shape overall. ~204 unit/spec files cover the bounded contexts, sources ingest pipeline, auth helpers, UI primitives, and a small but well-shaped Playwright e2e suite. BC integration tests use real Postgres with per-suite seed origins / per-test isolated users, which is the correct boundary for SQL aggregation logic. FSRS, engine, credentials DAG, and validators are pinned down by tight assertions. The notable gaps: several sizable BC modules (`cards.ts` 596 LOC, `snooze.ts` 401 LOC, `stats.ts` 380 LOC, `reviews.ts` 268 LOC, `validation.ts` 168 LOC) have no companion `*.test.ts`; the auth suite covers only `auth.ts` (cookies/logout/email untested); the e2e smoke test asserts a heading regex that no longer matches the rendered page; and BC tests that share the dev DB occasionally fall back to "lower bound" assertions because foreign rows leak into the aggregates.

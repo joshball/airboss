@@ -16,13 +16,13 @@ How the two lenses compose. Read [spec.md](./spec.md) first.
 
 ## Route shape
 
-| Route                                          | Purpose                                              | BC entry points                                                           |
-| ---------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| `/lens/handbook`                               | Pick a handbook                                      | `listReferences({ kind: 'handbook' })`, `getHandbookProgress`             |
-| `/lens/handbook/[doc]?edition=<slug>`          | Chapter list for one handbook (active or pinned)     | `getReferenceByDocument`, `listHandbookChapters`                          |
-| `/lens/handbook/[doc]/[chapter]`               | Sections + citing nodes for one chapter              | `getHandbookChapter`, `listChapterSections`, `getNodesCitingSection`       |
-| `/lens/weakness`                               | Domain rollup + three severity buckets               | `getWeakAreas`, `getWeakNodes` (new), `getCalibrationPageData`            |
-| `/lens/weakness/[severity]`                    | Full ranked list inside one bucket                   | `getWeakNodes` (new) with `severity` filter                               |
+| Route                                 | Purpose                                          | BC entry points                                                      |
+| ------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
+| `/lens/handbook`                      | Pick a handbook                                  | `listReferences({ kind: 'handbook' })`, `getHandbookProgress`        |
+| `/lens/handbook/[doc]?edition=<slug>` | Chapter list for one handbook (active or pinned) | `getReferenceByDocument`, `listHandbookChapters`                     |
+| `/lens/handbook/[doc]/[chapter]`      | Sections + citing nodes for one chapter          | `getHandbookChapter`, `listChapterSections`, `getNodesCitingSection` |
+| `/lens/weakness`                      | Domain rollup + three severity buckets           | `getWeakAreas`, `getWeakNodes` (new), `getCalibrationPageData`       |
+| `/lens/weakness/[severity]`           | Full ranked list inside one bucket               | `getWeakNodes` (new) with `severity` filter                          |
 
 All routes use `+page.server.ts` for data load (BC reads), `+page.svelte` for render. Form actions: only the weakness "drill" button writes (creates a session); reuses existing form action under `apps/study/src/routes/(app)/sessions/`.
 
@@ -71,21 +71,21 @@ All routes use `+page.server.ts` for data load (BC reads), `+page.svelte` for re
 
 What each lens reads, computes, and renders. The contract for "no new BC math" except `getWeakNodes`.
 
-| Lens     | Source data (reads)                                                                                       | Derived field                                                          | Render                                                                       |
-| -------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| handbook | `reference`, `handbook_section`, `handbook_figure`, `handbook_read_state`, `knowledge_node.references`    | Per-section citing-node list with mastery state                        | Section card with citing-node chips; chip color by mastery bucket            |
-| weakness | `card`, `card_review`, `confidence_calibration_point`, `knowledge_node`, `goal_node` (active goal filter) | Per-node weighted score from four signals; severity bucket assignment  | Bucket card with ranked node rows; reason chips per row                      |
+| Lens     | Source data (reads)                                                                                       | Derived field                                                         | Render                                                            |
+| -------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| handbook | `reference`, `handbook_section`, `handbook_figure`, `handbook_read_state`, `knowledge_node.references`    | Per-section citing-node list with mastery state                       | Section card with citing-node chips; chip color by mastery bucket |
+| weakness | `card`, `card_review`, `confidence_calibration_point`, `knowledge_node`, `goal_node` (active goal filter) | Per-node weighted score from four signals; severity bucket assignment | Bucket card with ranked node rows; reason chips per row           |
 
 ## Weakness scoring
 
 Each candidate node receives four signals normalized to `[0, 1]`:
 
-| Signal             | Source                                                              | Normalization                                                                                           |
-| ------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| `miscalibration`   | `confidence_calibration_point` rows tagged with this node's domain  | Largest gap between confidence and accuracy across buckets, divided by 1.0 (the worst possible gap).     |
-| `overdue`          | `card.next_due_at < now()` for cards on this node                   | `min(daysOverdue / 30, 1.0)` -- caps at 30 days overdue.                                                 |
-| `low_accuracy`     | Recent `card_review` + `rep_review` accuracy on this node           | `1.0 - rolling30dAccuracy`. Requires `>= 5` data points; otherwise this signal is `0`.                   |
-| `never_attempted`  | Node exists in graph + (active goal scope) but no card / rep ever   | Binary `0 | 1`.                                                                                          |
+| Signal            | Source                                                             | Normalization                                                                                        |     |
+| ----------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | --- |
+| `miscalibration`  | `confidence_calibration_point` rows tagged with this node's domain | Largest gap between confidence and accuracy across buckets, divided by 1.0 (the worst possible gap). |     |
+| `overdue`         | `card.next_due_at < now()` for cards on this node                  | `min(daysOverdue / 30, 1.0)` -- caps at 30 days overdue.                                             |     |
+| `low_accuracy`    | Recent `card_review` + `rep_review` accuracy on this node          | `1.0 - rolling30dAccuracy`. Requires `>= 5` data points; otherwise this signal is `0`.               |     |
+| `never_attempted` | Node exists in graph + (active goal scope) but no card / rep ever  | Binary `0                                                                                            | 1`. |
 
 Final score: weighted sum using `WEAKNESS_SIGNAL_WEIGHTS` from spec open question. Score >= severity threshold determines bucket.
 
@@ -109,14 +109,14 @@ If `wp/cert-dashboard` lands first, this WP picks up its `LensPicker` if it ship
 
 ## Risks
 
-| Risk                                                                                                            | Mitigation                                                                                                       |
-| --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Severity threshold defaults flag every overdue node as severe for a returning CFI rebuilding from zero          | Open question 1: weights skewed toward calibration. If still over-flags, `WEAKNESS_SIGNAL_WEIGHTS` is the lever. |
-| Sibling WP ships `LensPicker` first and shapes drift                                                            | Coordinate via `wp/cert-dashboard` PR review; agree on a single `LensPicker` API before either WP merges.       |
-| Handbook lens duplicates handbook reader UI                                                                     | Reuse reader components verbatim. If a component is currently inlined in the reader page, lift it to `libs/ui/`. |
-| `getNodesCitingSection` returns large lists for a popular section (Ch. 12 weight & balance, Ch. 5 aerodynamics) | Render virtual list above 50 chips; otherwise inline.                                                            |
+| Risk                                                                                                            | Mitigation                                                                                                         |
+| --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Severity threshold defaults flag every overdue node as severe for a returning CFI rebuilding from zero          | Open question 1: weights skewed toward calibration. If still over-flags, `WEAKNESS_SIGNAL_WEIGHTS` is the lever.   |
+| Sibling WP ships `LensPicker` first and shapes drift                                                            | Coordinate via `wp/cert-dashboard` PR review; agree on a single `LensPicker` API before either WP merges.          |
+| Handbook lens duplicates handbook reader UI                                                                     | Reuse reader components verbatim. If a component is currently inlined in the reader page, lift it to `libs/ui/`.   |
+| `getNodesCitingSection` returns large lists for a popular section (Ch. 12 weight & balance, Ch. 5 aerodynamics) | Render virtual list above 50 chips; otherwise inline.                                                              |
 | Edition pin via query string drifts from ADR 020 model                                                          | Resolve every read through `getReferenceByDocument`; never trust `?edition=` blindly. Banner triggers on mismatch. |
-| Weakness BC depends on `goal_node` (goal scope filter)                                                          | If no active goal, fall back to "every node the user has any card or review on" + the current studied set.      |
+| Weakness BC depends on `goal_node` (goal scope filter)                                                          | If no active goal, fall back to "every node the user has any card or review on" + the current studied set.         |
 
 ## Future work (not "someday" -- scheduled or dropped)
 

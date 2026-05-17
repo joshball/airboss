@@ -8,11 +8,11 @@ Promote the round-dial cockpit panel and its render dependencies (six-pack instr
 
 The judgement call is where to cut the dependency graph. Three plausible cuts:
 
-| Cut                       | What moves                                                                                                | Tradeoff                                                                                                                                                                      |
-| ------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **(A) Panel only**        | `CockpitPanel.svelte`. Instruments + AnnunciatorStrip stay in `apps/sim/`.                                | Tightest cut; lib reaches back into `apps/sim/$lib/...` to render. Inverts dependency direction (lib depends on app). Nonstarter.                                              |
-| **(B) Panel + deps**      | Panel + the seven instruments + the three cluster files + AnnunciatorStrip.                               | The panel renders standalone from the lib. Round-dial instruments and the lamp strip move with it -- they have no other character outside the cockpit panel surface today. **Chosen cut.** |
-| **(C) Panel + deps + tick** | (B) plus a `panel-tick.svelte.ts` rAF easing layer mirroring `pfd-tick.svelte.ts`.                       | The panel doesn't currently have a tick layer -- gauges read straight off the worker SNAPSHOT. Adding one is a behaviour change, not an extraction. Out of scope for this WP. |
+| Cut                         | What moves                                                                         | Tradeoff                                                                                                                                                                                   |
+| --------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **(A) Panel only**          | `CockpitPanel.svelte`. Instruments + AnnunciatorStrip stay in `apps/sim/`.         | Tightest cut; lib reaches back into `apps/sim/$lib/...` to render. Inverts dependency direction (lib depends on app). Nonstarter.                                                          |
+| **(B) Panel + deps**        | Panel + the seven instruments + the three cluster files + AnnunciatorStrip.        | The panel renders standalone from the lib. Round-dial instruments and the lamp strip move with it -- they have no other character outside the cockpit panel surface today. **Chosen cut.** |
+| **(C) Panel + deps + tick** | (B) plus a `panel-tick.svelte.ts` rAF easing layer mirroring `pfd-tick.svelte.ts`. | The panel doesn't currently have a tick layer -- gauges read straight off the worker SNAPSHOT. Adding one is a behaviour change, not an extraction. Out of scope for this WP.              |
 
 **Decision: (B).** The lib is self-contained; the move is mechanical; the dependency direction stays correct (`apps/sim` -> `libs/activities`, never the reverse).
 
@@ -68,11 +68,11 @@ libs/activities/
 
 ## Import strategy
 
-| Surface                         | Imports                                                                                                                                       |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inside the panel lib            | Relative paths only: `./Asi.svelte`, `./cluster/EngineCluster.svelte`. Cross-lib via alias: `@ab/bc-sim`, `@ab/constants`, `@ab/themes`.       |
-| App consumers                   | Direct subpath: `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte';` Same shape as the existing PFD imports.        |
-| Barrel                          | None. `libs/activities/src/index.ts` is prose-only. Activities are heavyweight `.svelte` components loaded on demand; consumers go direct.    |
+| Surface              | Imports                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| Inside the panel lib | Relative paths only: `./Asi.svelte`, `./cluster/EngineCluster.svelte`. Cross-lib via alias: `@ab/bc-sim`, `@ab/constants`, `@ab/themes`.   |
+| App consumers        | Direct subpath: `import CockpitPanel from '@ab/activities/cockpit-panel/CockpitPanel.svelte';` Same shape as the existing PFD imports.     |
+| Barrel               | None. `libs/activities/src/index.ts` is prose-only. Activities are heavyweight `.svelte` components loaded on demand; consumers go direct. |
 
 ## Naming convention question (resolved)
 
@@ -87,12 +87,12 @@ PR #328 used `pfd/` (no `-component` suffix). The original `crosswind-component/
 
 ## Risk + mitigation
 
-| Risk                                                                                                | Mitigation                                                                                                                              |
-| --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Theme tokens differ between the panel and its dev-gallery callsites after the move                  | Theme-lint runs as part of Phase 5; the panel and its instruments already use tokens, so the move shouldn't introduce any new hex.     |
-| `git log --follow` history breaks if a file is copied + deleted instead of `git mv`'d.              | Tasks call out `git mv` per file. Phase 5 includes a history spot-check.                                                                |
-| A consumer outside the listed five (cockpit, dual, window, debrief, `_dev/instruments`) is missed.  | Phase 1 grep of `$lib/instruments/`, `$lib/panels/AnnunciatorStrip`, and `$lib/cockpit/CockpitPanel` surfaces every reference.          |
-| Vite chunk hash changes break a stale tab pinned to an old chunk path.                              | Same risk as any extraction; build hash is unstable across rebuilds and consumers reload after a deploy. Not a code-correctness issue. |
+| Risk                                                                                               | Mitigation                                                                                                                             |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Theme tokens differ between the panel and its dev-gallery callsites after the move                 | Theme-lint runs as part of Phase 5; the panel and its instruments already use tokens, so the move shouldn't introduce any new hex.     |
+| `git log --follow` history breaks if a file is copied + deleted instead of `git mv`'d.             | Tasks call out `git mv` per file. Phase 5 includes a history spot-check.                                                               |
+| A consumer outside the listed five (cockpit, dual, window, debrief, `_dev/instruments`) is missed. | Phase 1 grep of `$lib/instruments/`, `$lib/panels/AnnunciatorStrip`, and `$lib/cockpit/CockpitPanel` surfaces every reference.         |
+| Vite chunk hash changes break a stale tab pinned to an old chunk path.                             | Same risk as any extraction; build hash is unstable across rebuilds and consumers reload after a deploy. Not a code-correctness issue. |
 
 ## References
 

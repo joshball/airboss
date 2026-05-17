@@ -12,18 +12,18 @@ Pilots don't use the FARs by reciting them. They use them by knowing where to lo
 
 Given a prompt, name the part / subpart / section. Don't answer the question -- just locate.
 
-| Prompt | Answer | Time |
-| --- | --- | --- |
-| Where are supplemental oxygen requirements? | 91.211 | 60s |
-| Where is flight review currency? | 61.56 | 60s |
-| Where is night currency for passengers? | 61.57(b) | 60s |
-| Where is the IFR alternate weather forecast standard? | 91.169(c) | 60s |
-| Where is the no-MEL pathway for inop equipment? | 91.213(d) | 60s |
-| Where is the 24-month transponder check? | 91.413 | 60s |
-| Where is the 24-month altimeter/static check? | 91.411 | 60s |
-| Where are VFR night equipment additions? | 91.205(c) | 60s |
-| Where is the rule about ELT battery replacement? | 91.207(c)/(d) | 60s |
-| Where is PIC authority to deviate from rules in an emergency? | 91.3(b) | 60s |
+| Prompt                                                        | Answer        | Time |
+| ------------------------------------------------------------- | ------------- | ---- |
+| Where are supplemental oxygen requirements?                   | 91.211        | 60s  |
+| Where is flight review currency?                              | 61.56         | 60s  |
+| Where is night currency for passengers?                       | 61.57(b)      | 60s  |
+| Where is the IFR alternate weather forecast standard?         | 91.169(c)     | 60s  |
+| Where is the no-MEL pathway for inop equipment?               | 91.213(d)     | 60s  |
+| Where is the 24-month transponder check?                      | 91.413        | 60s  |
+| Where is the 24-month altimeter/static check?                 | 91.411        | 60s  |
+| Where are VFR night equipment additions?                      | 91.205(c)     | 60s  |
+| Where is the rule about ELT battery replacement?              | 91.207(c)/(d) | 60s  |
+| Where is PIC authority to deviate from rules in an emergency? | 91.3(b)       | 60s  |
 
 These map directly to flash cards in `apps/study/`. The card type is **navigation prompt** -- the front shows the prompt, the back shows the citation. Spaced rep schedule per the existing study engine.
 
@@ -53,11 +53,11 @@ These map to scenario cards in `apps/study/`. Card type is **regulatory inventor
 
 Given a citation, parse it correctly. Example prompts:
 
-| Prompt | Answer |
-| --- | --- |
-| Read aloud: 91.169(c)(1)(i) | Title 14, Part 91, Section 169, paragraph (c), sub-paragraph (1), item (i) |
-| What's the difference between 91.103 and 91.13? | 91.103 is preflight action; 91.13 is careless or reckless. Different sections, different subjects. |
-| What's the difference between Part 91, Subpart B and Part 91, Section B? | Subparts are sub-divisions of a Part. There's no "Section B" -- sections are numbered. |
+| Prompt                                                                   | Answer                                                                                             |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
+| Read aloud: 91.169(c)(1)(i)                                              | Title 14, Part 91, Section 169, paragraph (c), sub-paragraph (1), item (i)                         |
+| What's the difference between 91.103 and 91.13?                          | 91.103 is preflight action; 91.13 is careless or reckless. Different sections, different subjects. |
+| What's the difference between Part 91, Subpart B and Part 91, Section B? | Subparts are sub-divisions of a Part. There's no "Section B" -- sections are numbered.             |
 
 Parsing drills exist because pilots read citations sloppily and miss paragraph-level distinctions that change meaning.
 
@@ -73,14 +73,14 @@ When a lesson is authored, the drills land in this directory at the same time. T
 
 ## Index (will populate as lessons are authored)
 
-| Drill set | Source lesson | Card count |
-| --- | --- | --- |
-| Title 14 architecture | week-01-architecture/ | TBD |
-| Part 61 navigation | week-02-part-61-deep/ | TBD |
-| Part 61 CFI | week-03-part-61-cfi/ | TBD |
-| Part 91 general | week-04-part-91-general-and-flight-rules/ | TBD |
-| Part 91 equipment / maintenance | week-05-part-91-equipment-and-maintenance/ | TBD |
-| Part 91 special ops | week-06-part-91-special-ops/ | TBD |
-| Parts 141 / 135 | week-07-parts-141-and-135/ | TBD |
-| Companion documents | week-08-companion-documents/ | TBD |
-| Enforcement | week-09-enforcement/ | TBD |
+| Drill set                       | Source lesson                              | Card count |
+| ------------------------------- | ------------------------------------------ | ---------- |
+| Title 14 architecture           | week-01-architecture/                      | TBD        |
+| Part 61 navigation              | week-02-part-61-deep/                      | TBD        |
+| Part 61 CFI                     | week-03-part-61-cfi/                       | TBD        |
+| Part 91 general                 | week-04-part-91-general-and-flight-rules/  | TBD        |
+| Part 91 equipment / maintenance | week-05-part-91-equipment-and-maintenance/ | TBD        |
+| Part 91 special ops             | week-06-part-91-special-ops/               | TBD        |
+| Parts 141 / 135                 | week-07-parts-141-and-135/                 | TBD        |
+| Companion documents             | week-08-companion-documents/               | TBD        |
+| Enforcement                     | week-09-enforcement/                       | TBD        |

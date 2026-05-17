@@ -34,7 +34,7 @@ Content changes constantly (typo fixes to curriculum restructures). The FAA requ
 
 FAA status is tracked per-change and per-release, independent of semver:
 
-```
+```text
 Release {
   version: "2.3.14"
   faa_status: approved | pending_review | exempt
@@ -48,7 +48,7 @@ A major version might not need FAA review (internal restructure, same content). 
 
 Every release records what changed per item:
 
-```
+```text
 release_changeset {
   release_id
   item_type       -- module | lesson | scenario | question
@@ -102,7 +102,7 @@ For each module in the student's course:
 
 Every lesson attempt records:
 
-```
+```text
 LessonAttempt {
   learner_id
   session_id
@@ -116,7 +116,7 @@ LessonAttempt {
 
 Content versions seen are tracked relationally, not as JSON:
 
-```
+```text
 LessonAttemptContent {
   attempt_id
   item_type             -- scenario | question | micro_lesson | competency

@@ -80,10 +80,10 @@ For a pilot carrying passengers at night IFR, three currency checks apply:
 
 **Plain reading:**
 
-| Currency type     | Requirement                                              | Window      |
-| ----------------- | -------------------------------------------------------- | ----------- |
-| Passenger (day)   | 3 takeoffs and 3 landings                                | 90 days     |
-| Passenger (night) | 3 takeoffs and 3 **full-stop** landings, in actual night | 90 days     |
+| Currency type     | Requirement                                              | Window            |
+| ----------------- | -------------------------------------------------------- | ----------------- |
+| Passenger (day)   | 3 takeoffs and 3 landings                                | 90 days           |
+| Passenger (night) | 3 takeoffs and 3 **full-stop** landings, in actual night | 90 days           |
 | IFR               | 6 approaches, holding, intercepting/tracking             | 6 calendar months |
 
 **What I'd say in the oral:**
@@ -124,13 +124,13 @@ Three calendar-based inspections must be current for IFR night ops with a passen
 
 **Plain reading:**
 
-| Inspection                | When required                                  | Interval         | Where           |
-| ------------------------- | ---------------------------------------------- | ---------------- | --------------- |
-| Annual                    | All civil aircraft                             | 12 calendar months | 91.409(a)       |
-| 100-hour                  | Aircraft for hire / instruction for hire       | 100 hours        | 91.409(b)       |
-| Altimeter / static system | IFR in controlled airspace                     | 24 calendar months | 91.411          |
-| Transponder               | Any use of an ATC transponder                  | 24 calendar months | 91.413          |
-| ELT                       | All required-ELT aircraft                      | 12 calendar months | 91.207(d)       |
+| Inspection                | When required                                  | Interval                              | Where           |
+| ------------------------- | ---------------------------------------------- | ------------------------------------- | --------------- |
+| Annual                    | All civil aircraft                             | 12 calendar months                    | 91.409(a)       |
+| 100-hour                  | Aircraft for hire / instruction for hire       | 100 hours                             | 91.409(b)       |
+| Altimeter / static system | IFR in controlled airspace                     | 24 calendar months                    | 91.411          |
+| Transponder               | Any use of an ATC transponder                  | 24 calendar months                    | 91.413          |
+| ELT                       | All required-ELT aircraft                      | 12 calendar months                    | 91.207(d)       |
 | ADS-B Out (if equipped)   | All ADS-B Out (Mode S extended squitter / UAT) | Ongoing per 91.227, performance-based | 91.225 / 91.227 |
 
 **What I'd say in the oral:**
@@ -282,31 +282,31 @@ That answer cites 13 distinct CFR sections in 90 seconds. Anyone who can deliver
 
 ## What goes wrong (failure modes)
 
-| Failure mode                                    | Diagnosis                                                                                                  |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| Recites 91.205 without 91.213                   | Missing the no-MEL pathway. Equipment lists alone don't tell you what to do when something is broken.      |
-| Cites night currency without "full-stop"        | Misreads 61.57(b). Touch-and-go landings don't satisfy night-passenger currency.                           |
-| Forgets 91.413 (transponder)                    | Conflates "IFR inspection" requirements. 91.411 is IFR-coded (24 cal months). 91.413 is any-transponder-use (24 cal months). |
-| Cites 1-2-3 rule for an airport with no approach | The 1-2-3 rule only applies if the destination has a published Part 97 approach. No approach -> alternate always required. |
+| Failure mode                                                        | Diagnosis                                                                                                                                                                    |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Recites 91.205 without 91.213                                       | Missing the no-MEL pathway. Equipment lists alone don't tell you what to do when something is broken.                                                                        |
+| Cites night currency without "full-stop"                            | Misreads 61.57(b). Touch-and-go landings don't satisfy night-passenger currency.                                                                                             |
+| Forgets 91.413 (transponder)                                        | Conflates "IFR inspection" requirements. 91.411 is IFR-coded (24 cal months). 91.413 is any-transponder-use (24 cal months).                                                 |
+| Cites 1-2-3 rule for an airport with no approach                    | The 1-2-3 rule only applies if the destination has a published Part 97 approach. No approach -> alternate always required.                                                   |
 | Confuses alternate filing minimums with alternate approach minimums | 600/2 and 800/2 are the *filing* numbers (forecast at ETA). The actual approach you'd fly at the alternate has its own published minimums (often 200/0.5). Different things. |
-| Stops at "I check the weather"                   | 91.103's "all available information" is broader than weather. The whole NWKRAFT list is the floor.         |
-| Forgets 61.56 (flight review)                    | Easy to miss because the question framed currency as IFR-and-passenger. 61.56 is independent of those.     |
-| Forgets the medical (Part 67) or BasicMed       | Treating Part 61 as the whole pilot-currency story. Medical lives in Part 67.                              |
-| Cites 91.211 altitudes wrong                    | 12-5 over 30, 14 always crew, 15 always everyone. Easy to scramble. Tie the numbers to the rule structure. |
+| Stops at "I check the weather"                                      | 91.103's "all available information" is broader than weather. The whole NWKRAFT list is the floor.                                                                           |
+| Forgets 61.56 (flight review)                                       | Easy to miss because the question framed currency as IFR-and-passenger. 61.56 is independent of those.                                                                       |
+| Forgets the medical (Part 67) or BasicMed                           | Treating Part 61 as the whole pilot-currency story. Medical lives in Part 67.                                                                                                |
+| Cites 91.211 altitudes wrong                                        | 12-5 over 30, 14 always crew, 15 always everyone. Easy to scramble. Tie the numbers to the rule structure.                                                                   |
 
 ## Variant prompts
 
 Same regulatory machinery, different framings. Use these to vary practice without changing the underlying skill being exercised.
 
-| Variant                                                                                                                       | What changes                                                              |
-| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| "VFR cross-country at night with two passengers in marginal weather. Walk me through the regulatory check."                   | Drops IFR layer (no 91.167, 91.169, 91.171, 91.411). Adds 91.155 for VFR weather minimums. Currency simplifies to 61.57(a) + (b). |
-| "Day IFR cross-country, no passenger. Walk me through."                                                                       | Drops 61.57(b) night currency. Drops 91.205(c) night equipment. Everything else stays. |
-| "Same flight, but the airplane is a 1972 Piper Cherokee owned by a flying club, used for rental and instruction."             | Adds 91.409(b) 100-hour. 91.213 pathway tightens because a club rental's MEL status varies. |
-| "Same flight, but you're a CFI giving an instrument lesson to a private pilot working on their IR."                           | Adds Subpart H privileges per 61.193, endorsement per 61.195(c). Logging per 61.51 (who logs PIC, who logs instruction received). |
-| "Same flight, but you discover the static system inspection is 25 calendar months old."                                       | Now 91.411 is busted. Walk through 91.213(a)(2): is the static system required? Yes for IFR. So you cannot fly IFR until repaired. Could you fly VFR? Yes, because 91.411 is IFR-only. |
-| "Same flight, but the airplane departs from a private grass strip with no published approach."                                | The 1-2-3 rule doesn't apply (no published approach at destination -- but wait, the rule is about the *destination*'s approach status; if the destination has no approach, 91.169(a)(2) requires an alternate regardless). Examiner is testing whether you know which end the rule applies to. |
-| "Same flight, but it's New Year's Eve and you had a beer at lunch. Walk me through."                                          | Adds 91.17 (8-hour rule, 0.04% BAC, no being under the influence). Adds reflection on personal minimums vs. legal minimums. |
+| Variant                                                                                                           | What changes                                                                                                                                                                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "VFR cross-country at night with two passengers in marginal weather. Walk me through the regulatory check."       | Drops IFR layer (no 91.167, 91.169, 91.171, 91.411). Adds 91.155 for VFR weather minimums. Currency simplifies to 61.57(a) + (b).                                                                                                                                                              |
+| "Day IFR cross-country, no passenger. Walk me through."                                                           | Drops 61.57(b) night currency. Drops 91.205(c) night equipment. Everything else stays.                                                                                                                                                                                                         |
+| "Same flight, but the airplane is a 1972 Piper Cherokee owned by a flying club, used for rental and instruction." | Adds 91.409(b) 100-hour. 91.213 pathway tightens because a club rental's MEL status varies.                                                                                                                                                                                                    |
+| "Same flight, but you're a CFI giving an instrument lesson to a private pilot working on their IR."               | Adds Subpart H privileges per 61.193, endorsement per 61.195(c). Logging per 61.51 (who logs PIC, who logs instruction received).                                                                                                                                                              |
+| "Same flight, but you discover the static system inspection is 25 calendar months old."                           | Now 91.411 is busted. Walk through 91.213(a)(2): is the static system required? Yes for IFR. So you cannot fly IFR until repaired. Could you fly VFR? Yes, because 91.411 is IFR-only.                                                                                                         |
+| "Same flight, but the airplane departs from a private grass strip with no published approach."                    | The 1-2-3 rule doesn't apply (no published approach at destination -- but wait, the rule is about the *destination*'s approach status; if the destination has no approach, 91.169(a)(2) requires an alternate regardless). Examiner is testing whether you know which end the rule applies to. |
+| "Same flight, but it's New Year's Eve and you had a beer at lunch. Walk me through."                              | Adds 91.17 (8-hour rule, 0.04% BAC, no being under the influence). Adds reflection on personal minimums vs. legal minimums.                                                                                                                                                                    |
 
 ## Related material
 

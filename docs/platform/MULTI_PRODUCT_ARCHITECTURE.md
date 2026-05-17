@@ -32,14 +32,14 @@ See [MULTI_PRODUCT_ARCHITECTURE_OPTIONS.md](MULTI_PRODUCT_ARCHITECTURE_OPTIONS.m
 
 FIRC and the pilot performance platform are different products:
 
-| | FIRC (airboss-firc) | Pilot Performance (airboss) |
-| --- | --- | --- |
-| What it is | A structured course | A toolkit of products |
-| Regulatory | FAA-approved (eventually) | None |
-| Audience | CFIs, every 24 months | Every pilot, daily |
-| Revenue model | Course fee | Cover-costs / open-source |
-| Apps | sim, hangar, ops, runway | study, spatial, reflect, etc. |
-| Status | 5 phases built | Scaffolded |
+|               | FIRC (airboss-firc)       | Pilot Performance (airboss)   |
+| ------------- | ------------------------- | ----------------------------- |
+| What it is    | A structured course       | A toolkit of products         |
+| Regulatory    | FAA-approved (eventually) | None                          |
+| Audience      | CFIs, every 24 months     | Every pilot, daily            |
+| Revenue model | Course fee                | Cover-costs / open-source     |
+| Apps          | sim, hangar, ops, runway  | study, spatial, reflect, etc. |
+| Status        | 5 phases built            | Scaffolded                    |
 
 Mixing them creates confusion at every level -- naming (`@firc/*` vs `@ab/*`), docs, git history, CLAUDE.md rules. Clean separation now avoids untangling later.
 
@@ -127,17 +127,17 @@ FIRC will eventually migrate into `airboss` as a surface app. Not now -- the pla
 
 Products built in the order they're needed, each creating its surface app when first required:
 
-| Order | Product | Surface app | Status |
-| ----- | ------- | ----------- | ------ |
-| 1 | Spaced Memory Items | study | first build |
-| 2 | Decision Reps | study | first build |
-| 3 | Calibration Tracker | study | first build |
-| 4 | Ten-Minute Ticker | study | after MVP |
-| 5 | Route Walkthrough | spatial (new) | creates spatial app |
-| 6 | Avionics Trainer | avionics (new) | creates avionics app |
-| 7 | Recency Recovery | study | event prep |
-| 8 | Per-Flight Journal | reflect (new) | creates reflect app |
-| -- | FIRC migration | firc (new) | after study MVP proven |
+| Order | Product             | Surface app    | Status                 |
+| ----- | ------------------- | -------------- | ---------------------- |
+| 1     | Spaced Memory Items | study          | first build            |
+| 2     | Decision Reps       | study          | first build            |
+| 3     | Calibration Tracker | study          | first build            |
+| 4     | Ten-Minute Ticker   | study          | after MVP              |
+| 5     | Route Walkthrough   | spatial (new)  | creates spatial app    |
+| 6     | Avionics Trainer    | avionics (new) | creates avionics app   |
+| 7     | Recency Recovery    | study          | event prep             |
+| 8     | Per-Flight Journal  | reflect (new)  | creates reflect app    |
+| --    | FIRC migration      | firc (new)     | after study MVP proven |
 
 ## Open questions
 

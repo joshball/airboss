@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.2
 Title:           Flight Review with a 500-Hour Owner-Pilot
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_9, FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-1', 'CJ-1', 'RM-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Sharp but Weak ADM
 Parameters:
   skillLevel:         0.8
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        In flight. You've completed steep turns, slow flight, and stalls -- all within ACS tolerances. The pilot is flying smoothly. You ask them to plan a diversion to a nearby airport. The pilot immediately programs the GPS direct-to without checking weather, NOTAMs, or fuel.
 studentSpeech:Done. Direct-to KXYZ, 22 nautical miles, 12 minutes. Easy. What's next?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot looks mildly surprised by the question. Checks weather -- KXYZ is VFR. Checks NOTAMs -- runway is shortened for construction. Fuel is adequate. Pilot shrugs it off.
 studentSpeech:Weather's fine, fuel's fine. The runway is shorter but it's plenty for our airplane. I've been flying into this airport for years. I don't usually bother checking all that for a short hop.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        You set up a scenario: simulated engine roughness. You ask the pilot what they'd do. The pilot immediately identifies the nearest airport and says they'd go there. You ask about off-airport options, passenger briefing, and the emergency checklist. The pilot dismisses these.
 studentSpeech:If the engine is rough, I'm going to the nearest airport. That's obvious. I wouldn't waste time with checklists while the engine is failing. I've got 500 hours -- I know what to do.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Post-flight debrief. Pilot is waiting for the signoff. Maneuver quality was excellent. ADM showed consistent pattern of skipping steps and relying on experience over procedure.
 studentSpeech:So, do I pass? Everything was within standards, right? I know the steep turns and stalls were good.
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

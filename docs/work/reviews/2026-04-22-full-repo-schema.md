@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The current Drizzle schema is small but mature: three namespaces (`public` for better-auth, `audit`, `study`), FKs and cascades are explicit on every relationship column except one, CHECK constraints back every string-enum, and indexes cover the actual read shapes in BC code. The structural weaknesses are propagatable: the `knowledge_node_progress.node_id` column is a pseudo-FK (no constraint, no index), the knowledge-graph content table has no versioning table despite claiming to be versioned, `updated_at` auto-bump is applied inconsistently (only two of the six mutable tables have `$onUpdate`), audit columns (`created_by`, `updated_by`) are missing from every user-authored content table, and there is no committed migration artifact (no `drizzle/` directory) -- the schema is maintained by `drizzle-kit push` plus ad-hoc SQL scripts. These patterns will replicate in every new BC (sim, hangar, firc) unless fixed at the substrate level now.

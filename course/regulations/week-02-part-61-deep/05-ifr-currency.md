@@ -188,12 +188,12 @@ The categories of approved devices:
 
 The credit structure (per §61.57(c)(2)/(3)):
 
-| Device                                    | Credit toward §61.57(c)                        |
-| ----------------------------------------- | ---------------------------------------------- |
-| Full flight simulator (FFS) -- Level B/C/D | 100% of §61.57(c)(1) requirements              |
-| Flight training device (FTD) Level 4-7    | 100% of §61.57(c)(1) requirements              |
-| Aviation training device (AATD)           | 100% of §61.57(c)(1) requirements              |
-| Aviation training device (BATD)           | 100% of §61.57(c)(1) requirements              |
+| Device                                     | Credit toward §61.57(c)           |
+| ------------------------------------------ | --------------------------------- |
+| Full flight simulator (FFS) -- Level B/C/D | 100% of §61.57(c)(1) requirements |
+| Flight training device (FTD) Level 4-7     | 100% of §61.57(c)(1) requirements |
+| Aviation training device (AATD)            | 100% of §61.57(c)(1) requirements |
+| Aviation training device (BATD)            | 100% of §61.57(c)(1) requirements |
 
 All approved categories give full credit toward currency. The *practical* difference between an ATD currency session and a real-airplane currency session is not regulatory but pedagogical -- many CFIIs note that the pilot who maintains currency only in an ATD has decreasing real-airplane proficiency, even though both pilots are equally legal.
 
@@ -248,18 +248,18 @@ AC 61-98D specifies the recommended IPC content. The IPC is conducted "to the st
 
 Recommended IPC tasks (AC 61-98 Appendix):
 
-| Task category                         | Example tasks                                                           |
-| ------------------------------------- | ----------------------------------------------------------------------- |
-| Preflight (ground)                    | Weather review, NOTAM check, weight and balance, performance, go/no-go |
-| Departure                             | IFR clearance copy and readback, departure procedure                    |
-| En route                              | Course intercepts, holding, cruise climb/descent, course changes        |
-| Approach (precision)                  | ILS or LPV to minimums                                                  |
-| Approach (non-precision)              | RNAV(GPS), VOR, LOC, or LOC-BC to minimums                              |
-| Approach (partial panel)              | At least one approach with primary instrument failure                   |
-| Missed approach                       | At least one full missed approach procedure                             |
-| Approach with circling                | Circling-to-land procedure (when conditions permit)                     |
-| Emergencies                           | Lost communication procedures, system failure response                  |
-| Landing                               | Approach to a normal full-stop landing                                  |
+| Task category            | Example tasks                                                          |
+| ------------------------ | ---------------------------------------------------------------------- |
+| Preflight (ground)       | Weather review, NOTAM check, weight and balance, performance, go/no-go |
+| Departure                | IFR clearance copy and readback, departure procedure                   |
+| En route                 | Course intercepts, holding, cruise climb/descent, course changes       |
+| Approach (precision)     | ILS or LPV to minimums                                                 |
+| Approach (non-precision) | RNAV(GPS), VOR, LOC, or LOC-BC to minimums                             |
+| Approach (partial panel) | At least one approach with primary instrument failure                  |
+| Missed approach          | At least one full missed approach procedure                            |
+| Approach with circling   | Circling-to-land procedure (when conditions permit)                    |
+| Emergencies              | Lost communication procedures, system failure response                 |
+| Landing                  | Approach to a normal full-stop landing                                 |
 
 Total recommended duration: 2-3 hours of flight plus 1+ hour of ground (preflight + post-flight).
 
@@ -289,17 +289,17 @@ Similarly, an instrument-rating add-on (e.g., AMEL with instrument privileges ad
 
 ### Locate the section
 
-| Question                                                                     | Section / source     |
-| ---------------------------------------------------------------------------- | -------------------- |
-| Where is the IFR currency requirement?                                       | §61.57(c)            |
-| Where is the IFR grace period?                                               | §61.57(d)            |
-| Where is the IPC requirement after grace expires?                            | §61.57(d)            |
-| Where is the simulator/ATD credit for IFR currency?                          | §61.57(c)(2)         |
-| Where is the safety pilot rule?                                              | §91.109(c)           |
-| Where does a safety pilot's PIC logging come from?                           | §61.51(e)(1)         |
-| Where does the IPC content come from?                                        | AC 61-98             |
-| Where does the IPC endorsement wording come from?                            | AC 61-65             |
-| Where does the instrument practical test count as currency?                  | §61.57(e)            |
+| Question                                                    | Section / source |
+| ----------------------------------------------------------- | ---------------- |
+| Where is the IFR currency requirement?                      | §61.57(c)        |
+| Where is the IFR grace period?                              | §61.57(d)        |
+| Where is the IPC requirement after grace expires?           | §61.57(d)        |
+| Where is the simulator/ATD credit for IFR currency?         | §61.57(c)(2)     |
+| Where is the safety pilot rule?                             | §91.109(c)       |
+| Where does a safety pilot's PIC logging come from?          | §61.51(e)(1)     |
+| Where does the IPC content come from?                       | AC 61-98         |
+| Where does the IPC endorsement wording come from?           | AC 61-65         |
+| Where does the instrument practical test count as currency? | §61.57(e)        |
 
 ### Apply the rules
 

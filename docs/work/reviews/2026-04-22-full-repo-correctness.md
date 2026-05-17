@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Reviewed apps/study and libs/* (~313 TS/Svelte files). Found two critical issues that will propagate as more routes and UI primitives ship: dashboard error messages are leaked raw to the browser, and Button/disabled-anchor still fires onclick. The biggest propagatable pattern is the `slotIndex`-via-`Number()` form-parsing idiom that silently maps missing input to `0`, which several current actions copy and any new session-style route will inherit. Other findings cluster around weak deep-link preservation through login, inconsistent route-param encoding, and a few registry/BC validators that silently accept broken input.

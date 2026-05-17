@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Performance Review -- spaced-memory-items
 
 Read-only perf pass over the full feature branch (phases 0-4). Focuses on the hot paths actually wired into the UI: dashboard, browse, review queue, card detail, and the `hooks.server.ts` gate that every request passes through.
@@ -58,13 +57,13 @@ Read-only perf pass over the full feature branch (phases 0-4). Focuses on the ho
 
 `getDashboardStats` runs five independent queries under `Promise.all` (the Phase 2 fix landed correctly). At 1,000 cards / ~5,000 reviews / single user:
 
-| Query            | Predicates                                                       | Index used                                        | Expected cost |
-| ---------------- | ---------------------------------------------------------------- | ------------------------------------------------- | ------------- |
-| `dueNow`         | `cardState.userId = ? AND cardState.dueAt <= now AND card.status = 'active'` | `card_state_user_due_idx (user_id, due_at)`       | 1-3 ms        |
-| `reviewedToday`  | `review.userId = ? AND reviewedAt >= todayStart`                 | `review_user_reviewed_idx (user_id, reviewed_at)` | 1-3 ms        |
-| `stateCounts`    | `cardState.userId = ? AND card.status = 'active'` group by state | `card_state` PK + `card_user_status_idx` nested-loop | 3-8 ms     |
-| `getDomainBreakdown` | `card.userId = ? AND card.status = 'active'` group by domain | `card_user_status_idx` + join `card_state` PK     | 4-10 ms       |
-| `computeStreakDays`  | `review.userId = ? AND reviewedAt >= -366d` + distinct day   | `review_user_reviewed_idx`                        | 3-10 ms       |
+| Query                | Predicates                                                                   | Index used                                           | Expected cost |
+| -------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------- | ------------- |
+| `dueNow`             | `cardState.userId = ? AND cardState.dueAt <= now AND card.status = 'active'` | `card_state_user_due_idx (user_id, due_at)`          | 1-3 ms        |
+| `reviewedToday`      | `review.userId = ? AND reviewedAt >= todayStart`                             | `review_user_reviewed_idx (user_id, reviewed_at)`    | 1-3 ms        |
+| `stateCounts`        | `cardState.userId = ? AND card.status = 'active'` group by state             | `card_state` PK + `card_user_status_idx` nested-loop | 3-8 ms        |
+| `getDomainBreakdown` | `card.userId = ? AND card.status = 'active'` group by domain                 | `card_user_status_idx` + join `card_state` PK        | 4-10 ms       |
+| `computeStreakDays`  | `review.userId = ? AND reviewedAt >= -366d` + distinct day                   | `review_user_reviewed_idx`                           | 3-10 ms       |
 
 Parallel round-trip wall time ~= max of the five ~= 10 ms. Under the 200 ms budget with comfortable headroom.
 
@@ -76,14 +75,14 @@ Parallel round-trip wall time ~= max of the five ~= 10 ms. Under the 200 ms budg
 
 Predicate shapes: `user_id = ? AND status IN (...) [+ domain = ? + card_type = ? + source_type = ? + ilike front/back]`, `ORDER BY updated_at DESC LIMIT 26 OFFSET n`.
 
-| Filter combo                             | Index used                          | Notes                                                         |
-| ---------------------------------------- | ----------------------------------- | ------------------------------------------------------------- |
-| user + status (default)                  | `card_user_status_idx`              | Good. Sort on `updated_at` is in-memory (trivial at 1k cards).|
-| user + domain                            | `card_user_domain_idx`              | Good.                                                         |
-| user + cardType                          | `card_user_status_idx` then filter  | No index on `(user_id, card_type)` -- filter on heap rows.    |
-| user + sourceType                        | `card_user_status_idx` then filter  | No index on `(user_id, source_type)` -- filter on heap rows.  |
-| user + search (`ilike '%q%'`)            | `card_user_status_idx` then filter  | Leading wildcard -- cannot use B-tree. See 1.Minor.Browse-search. |
-| user + `ORDER BY updated_at DESC LIMIT`  | None matches; sort after filter     | No `(user_id, updated_at)` index. See 1.Minor.Browse-order.   |
+| Filter combo                            | Index used                         | Notes                                                             |
+| --------------------------------------- | ---------------------------------- | ----------------------------------------------------------------- |
+| user + status (default)                 | `card_user_status_idx`             | Good. Sort on `updated_at` is in-memory (trivial at 1k cards).    |
+| user + domain                           | `card_user_domain_idx`             | Good.                                                             |
+| user + cardType                         | `card_user_status_idx` then filter | No index on `(user_id, card_type)` -- filter on heap rows.        |
+| user + sourceType                       | `card_user_status_idx` then filter | No index on `(user_id, source_type)` -- filter on heap rows.      |
+| user + search (`ilike '%q%'`)           | `card_user_status_idx` then filter | Leading wildcard -- cannot use B-tree. See 1.Minor.Browse-search. |
+| user + `ORDER BY updated_at DESC LIMIT` | None matches; sort after filter    | No `(user_id, updated_at)` index. See 1.Minor.Browse-order.       |
 
 At 1k cards these are all sub-10ms even without matching indexes. Flagged below for the 10k+ horizon.
 
@@ -157,12 +156,14 @@ Also note: the existing query filters only by `cardId`. Add `eq(review.userId, u
 **Fix options (in order of preference):**
 
 1. **better-auth cookieCache.** better-auth supports a signed-cookie cache that elides the DB round-trip while the session cookie is still valid:
+
    ```typescript
    session: {
      modelName: 'bauth_session',
      cookieCache: { enabled: true, maxAge: 5 * 60 }, // 5 min
    }
    ```
+
    Trade-off: banned-user revocations take up to `maxAge` seconds to propagate. Acceptable given `hooks.server.ts:90` already handles banned users and the revocation path is a sign-out button (which clears the cookie immediately).
 
 2. **Per-request memoization in `event.locals`.** Today the hook does one `getSession`; any downstream load that wants the session reuses `locals.user`. That is already correct -- no change needed there. The hit is the one unavoidable round-trip per request.
@@ -245,6 +246,7 @@ Keep substring search scoped by `user_id` so blast radius is bounded per user. N
 **File:** `libs/bc/study/src/reviews.ts:62-143`.
 
 **Issue:** Every rating submission:
+
 1. `SELECT card + card_state ... FOR UPDATE`
 2. `SELECT review ... WHERE reviewedAt >= windowStart ORDER BY reviewedAt DESC LIMIT 1` (dedupe check)
 3. `INSERT review`
@@ -312,25 +314,25 @@ All four statements inside one transaction. Row-level lock held on `card_state` 
 
 Current indexes (from `libs/bc/study/src/schema.ts`):
 
-| Table      | Index                             | Columns              | Primary consumer                          |
-| ---------- | --------------------------------- | -------------------- | ----------------------------------------- |
-| card       | `card_user_status_idx`            | (user_id, status)    | Dashboard stateCounts, domain breakdown   |
-| card       | `card_user_domain_idx`            | (user_id, domain)    | Browse filter-by-domain                   |
-| card       | `card_user_created_idx`           | (user_id, created_at)| (Not currently used by queries reviewed)  |
-| review     | `review_card_reviewed_idx`        | (card_id, reviewed_at)| Card detail recent reviews, submitReview dedupe |
-| review     | `review_user_reviewed_idx`        | (user_id, reviewed_at)| Dashboard reviewedToday, streak, review stats |
-| card_state | PK                                | (card_id, user_id)   | getCard join, submitReview update         |
-| card_state | `card_state_user_due_idx`         | (user_id, due_at)    | getDueCards, dashboard dueNow             |
+| Table      | Index                      | Columns                | Primary consumer                                |
+| ---------- | -------------------------- | ---------------------- | ----------------------------------------------- |
+| card       | `card_user_status_idx`     | (user_id, status)      | Dashboard stateCounts, domain breakdown         |
+| card       | `card_user_domain_idx`     | (user_id, domain)      | Browse filter-by-domain                         |
+| card       | `card_user_created_idx`    | (user_id, created_at)  | (Not currently used by queries reviewed)        |
+| review     | `review_card_reviewed_idx` | (card_id, reviewed_at) | Card detail recent reviews, submitReview dedupe |
+| review     | `review_user_reviewed_idx` | (user_id, reviewed_at) | Dashboard reviewedToday, streak, review stats   |
+| card_state | PK                         | (card_id, user_id)     | getCard join, submitReview update               |
+| card_state | `card_state_user_due_idx`  | (user_id, due_at)      | getDueCards, dashboard dueNow                   |
 
 ### Queries that still table-scan or sort without index
 
-| Query                                    | Missing index                              | Current impact |
-| ---------------------------------------- | ------------------------------------------ | -------------- |
-| Browse default ORDER BY updated_at       | `(user_id, updated_at)`                    | Sort in memory; 1k rows = fine, 10k = noticeable |
-| Browse ilike '%q%'                       | `pg_trgm` GIN on front/back                | Scan per user; 1k = fine, 10k = slow |
-| Browse filter by card_type               | `(user_id, card_type)`                     | Heap re-filter; 1k = fine          |
-| Browse filter by source_type             | `(user_id, source_type)`                   | Heap re-filter; 1k = fine          |
-| `getMasteredCount` stability > threshold | `(user_id, stability)` on card_state       | Bounded per user via PK; 1k = fine |
+| Query                                    | Missing index                        | Current impact                                   |
+| ---------------------------------------- | ------------------------------------ | ------------------------------------------------ |
+| Browse default ORDER BY updated_at       | `(user_id, updated_at)`              | Sort in memory; 1k rows = fine, 10k = noticeable |
+| Browse ilike '%q%'                       | `pg_trgm` GIN on front/back          | Scan per user; 1k = fine, 10k = slow             |
+| Browse filter by card_type               | `(user_id, card_type)`               | Heap re-filter; 1k = fine                        |
+| Browse filter by source_type             | `(user_id, source_type)`             | Heap re-filter; 1k = fine                        |
+| `getMasteredCount` stability > threshold | `(user_id, stability)` on card_state | Bounded per user via PK; 1k = fine               |
 
 **`card_user_created_idx` is currently unused** by any query in this branch. `getCards` orders by `updated_at`, not `created_at`. Worth either (a) dropping it to save write cost or (b) switching `getCards` default ordering to `created_at DESC` to use it. My read: keep the index if you expect a "show by creation date" UI soon; otherwise drop and add `(user_id, updated_at)` instead.
 

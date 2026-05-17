@@ -11,15 +11,15 @@ review_status: pending
 
 ## Automated tests
 
-| Suite | Lib | Coverage |
-| --- | --- | --- |
-| `locator.test.ts` | `libs/sources/src/handbooks/` | Every accepted locator shape (chapter / section / subsection / paragraph / intro / figure / table) under each doc; rejection messages for malformed input |
-| `citation.test.ts` | `libs/sources/src/handbooks/` | All three styles (`short`, `formal`, `title`) for chapter / section / intro |
-| `url.test.ts` | `libs/sources/src/handbooks/` | Live URL for each doc (PHAK, AFH, AvWX) |
-| `derivative-reader.test.ts` | `libs/sources/src/handbooks/` | Read fixture manifest; find section by parsed locator; null for paragraph / figure / table |
-| `resolver.test.ts` | `libs/sources/src/handbooks/` | All `CorpusResolver` methods against fixture; `getCurrentEdition` returns the right slug |
-| `ingest.test.ts` | `libs/sources/src/handbooks/` | Fixture-driven ingest produces expected SourceEntries + Edition; re-run idempotent; atomic batch failure surfaces |
-| `smoke.test.ts` | `libs/sources/src/handbooks/` | Validator accepts `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` after ingest |
+| Suite                       | Lib                           | Coverage                                                                                                                                                  |
+| --------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `locator.test.ts`           | `libs/sources/src/handbooks/` | Every accepted locator shape (chapter / section / subsection / paragraph / intro / figure / table) under each doc; rejection messages for malformed input |
+| `citation.test.ts`          | `libs/sources/src/handbooks/` | All three styles (`short`, `formal`, `title`) for chapter / section / intro                                                                               |
+| `url.test.ts`               | `libs/sources/src/handbooks/` | Live URL for each doc (PHAK, AFH, AvWX)                                                                                                                   |
+| `derivative-reader.test.ts` | `libs/sources/src/handbooks/` | Read fixture manifest; find section by parsed locator; null for paragraph / figure / table                                                                |
+| `resolver.test.ts`          | `libs/sources/src/handbooks/` | All `CorpusResolver` methods against fixture; `getCurrentEdition` returns the right slug                                                                  |
+| `ingest.test.ts`            | `libs/sources/src/handbooks/` | Fixture-driven ingest produces expected SourceEntries + Edition; re-run idempotent; atomic batch failure surfaces                                         |
+| `smoke.test.ts`             | `libs/sources/src/handbooks/` | Validator accepts `[@cite](airboss-ref:handbooks/phak/8083-25C/12/3)` after ingest                                                                        |
 
 ## Fixture
 
@@ -59,10 +59,10 @@ Expected:
 
 ## Risks + edge cases
 
-| Risk | Mitigation |
-| --- | --- |
-| Manifest schema drift in PR #242 | The reader validates required fields (`document_slug`, `edition`, `sections`); throws clear error if missing |
-| Doc slug collision (e.g. PHAK and PHAK-supplement under same `phak/` dir) | The locator parser enforces single doc slugs; the manifest's `document_slug` must match |
-| Edition slug ambiguity (`8083-25C` vs `FAA-H-8083-25C`) | The resolver maps short -> long via `DOC_EDITIONS` constant; locator always uses short form |
-| Figures / tables resolve as ERROR | Phase 6 only `parses` figures / tables; no registry entry. The validator's row-2 check (entry not in registry) is bypassed because the locator is well-formed; renderer Phase 4 descends to the on-disk file when bound to `@text` / `@quote` |
-| Re-ingest after PR #242 re-runs and re-writes derivatives with different content_hash | Phase 6 doesn't depend on hash matching; the lifecycle overlay handles idempotence |
+| Risk                                                                                  | Mitigation                                                                                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Manifest schema drift in PR #242                                                      | The reader validates required fields (`document_slug`, `edition`, `sections`); throws clear error if missing                                                                                                                                  |
+| Doc slug collision (e.g. PHAK and PHAK-supplement under same `phak/` dir)             | The locator parser enforces single doc slugs; the manifest's `document_slug` must match                                                                                                                                                       |
+| Edition slug ambiguity (`8083-25C` vs `FAA-H-8083-25C`)                               | The resolver maps short -> long via `DOC_EDITIONS` constant; locator always uses short form                                                                                                                                                   |
+| Figures / tables resolve as ERROR                                                     | Phase 6 only `parses` figures / tables; no registry entry. The validator's row-2 check (entry not in registry) is bypassed because the locator is well-formed; renderer Phase 4 descends to the on-disk file when bound to `@text` / `@quote` |
+| Re-ingest after PR #242 re-runs and re-writes derivatives with different content_hash | Phase 6 doesn't depend on hash matching; the lifecycle overlay handles idempotence                                                                                                                                                            |

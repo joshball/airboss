@@ -17,22 +17,22 @@ counts:
 
 Walked every finding against current main. 11 of 14 closed; 3 carried (operational polish).
 
-| Severity | Finding                                                | Verdict                                                                                            |
-| -------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| MAJOR    | sim/avionics hooks silently swallow session errors     | CLOSED -- both apps now `log.error('session lookup failed', ...)` (sim:66, avionics:65)            |
-| MAJOR    | clearSessionCookies hard-codes cookie list             | STILL OPEN -- tracked under correctness MAJOR; trigger = admin/magic-link plugin churn             |
-| MAJOR    | study + hangar hooks duplicate ~80 lines of hydration  | CLOSED -- `mapBetterAuthSession` extracted; remaining drift is per-app boot blocks (worker/sources) |
-| MAJOR    | requireVerifiedEmail unused on security chokepoint     | CLOSED -- helper deleted from `libs/auth/src/auth.ts`; first authenticated-email route adds inline check |
-| MINOR    | pretty-mode logger drops metadata to separate console.log | STILL OPEN -- carried below; logger DX polish                                                    |
-| MINOR    | Anonymous request access-log lacks marker              | CLOSED -- `metadata: { authenticated: event.locals.user != null }` in study/hangar hooks           |
-| MINOR    | login conflates 401 and other non-OK as bad-creds      | CLOSED -- `log.warn('login non-ok response', ...)` + 5xx upgrades to log.error (PR `chunk-3 close-out` 2026-05-04) |
-| MINOR    | handleError safe-message-for-status doesn't cover 429  | CLOSED -- 429 + 400 + 401 + 403 + 404 cases now handled (libs/utils/src/error-handler.ts:20-27)    |
-| MINOR    | auditWrite swallows actor-id provenance                | STILL OPEN -- carried below; design question on system-vs-user discriminator                       |
-| MINOR    | countAllUsers helper has no banned/deleted filter      | CLOSED -- renamed `countAllUsersIncludingBanned` (libs/auth/src/queries.ts:20)                     |
-| NIT      | requireRole JSDoc doesn't mention redirect-to-login    | CLOSED -- JSDoc updated at libs/auth/src/auth.ts:103-109                                           |
-| NIT      | forwardAuthCookies decodeCookieValue silently swallows | CLOSED -- `decodeCookieValue` warns on malformed values (cookies.ts:60-69)                         |
-| NIT      | AUDIT_TARGETS keeps retired enum value                 | CLOSED -- moved to `AUDIT_TARGETS_RETIRED` (libs/constants/src/audit.ts:89-98)                     |
-| NIT      | rate-limit test uses random IP                         | CLOSED -- accepted; comment + per-suite IP space mitigation                                        |
+| Severity | Finding                                                   | Verdict                                                                                                            |
+| -------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| MAJOR    | sim/avionics hooks silently swallow session errors        | CLOSED -- both apps now `log.error('session lookup failed', ...)` (sim:66, avionics:65)                            |
+| MAJOR    | clearSessionCookies hard-codes cookie list                | STILL OPEN -- tracked under correctness MAJOR; trigger = admin/magic-link plugin churn                             |
+| MAJOR    | study + hangar hooks duplicate ~80 lines of hydration     | CLOSED -- `mapBetterAuthSession` extracted; remaining drift is per-app boot blocks (worker/sources)                |
+| MAJOR    | requireVerifiedEmail unused on security chokepoint        | CLOSED -- helper deleted from `libs/auth/src/auth.ts`; first authenticated-email route adds inline check           |
+| MINOR    | pretty-mode logger drops metadata to separate console.log | STILL OPEN -- carried below; logger DX polish                                                                      |
+| MINOR    | Anonymous request access-log lacks marker                 | CLOSED -- `metadata: { authenticated: event.locals.user != null }` in study/hangar hooks                           |
+| MINOR    | login conflates 401 and other non-OK as bad-creds         | CLOSED -- `log.warn('login non-ok response', ...)` + 5xx upgrades to log.error (PR `chunk-3 close-out` 2026-05-04) |
+| MINOR    | handleError safe-message-for-status doesn't cover 429     | CLOSED -- 429 + 400 + 401 + 403 + 404 cases now handled (libs/utils/src/error-handler.ts:20-27)                    |
+| MINOR    | auditWrite swallows actor-id provenance                   | STILL OPEN -- carried below; design question on system-vs-user discriminator                                       |
+| MINOR    | countAllUsers helper has no banned/deleted filter         | CLOSED -- renamed `countAllUsersIncludingBanned` (libs/auth/src/queries.ts:20)                                     |
+| NIT      | requireRole JSDoc doesn't mention redirect-to-login       | CLOSED -- JSDoc updated at libs/auth/src/auth.ts:103-109                                                           |
+| NIT      | forwardAuthCookies decodeCookieValue silently swallows    | CLOSED -- `decodeCookieValue` warns on malformed values (cookies.ts:60-69)                                         |
+| NIT      | AUDIT_TARGETS keeps retired enum value                    | CLOSED -- moved to `AUDIT_TARGETS_RETIRED` (libs/constants/src/audit.ts:89-98)                                     |
+| NIT      | rate-limit test uses random IP                            | CLOSED -- accepted; comment + per-suite IP space mitigation                                                        |
 
 ### Carried-forward design items
 

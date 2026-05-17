@@ -11,15 +11,15 @@ review_status: pending
 
 ## Automated coverage
 
-| Suite                                                          | Type        | Asserts                                                                  |
-| -------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------ |
-| `libs/sources/src/diff/pair-walker.test.ts`                    | Unit        | Pair enumeration: empty, single, multi-edition, multi-corpus filter      |
-| `libs/sources/src/diff/body-hasher.test.ts`                    | Unit        | Hash equality CRLF/LF/NFC; missing-file returns null; cache hit          |
-| `libs/sources/src/diff/alias-resolver.test.ts`                 | Unit        | Five alias kinds map to expected outcome kinds; null when no alias       |
-| `libs/sources/src/diff/diff-job.test.ts`                       | Integration | End-to-end against 2026 + 2027 fixtures: ingest, walk, partition, write  |
-| `libs/sources/src/diff/lesson-rewriter.test.ts`                | Unit        | Rewrite single + multiple occurrences, mixed pins, idempotence, no-op    |
-| `libs/sources/src/diff/cli.test.ts`                            | Unit        | Argv parsing, error paths, fixture-pair short-circuit                    |
-| `libs/sources/src/diff/getEditionDistance.test.ts`             | Integration | Two-fixture ingest, distance==1, validator row-6 fires + clears post-rewrite |
+| Suite                                              | Type        | Asserts                                                                      |
+| -------------------------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `libs/sources/src/diff/pair-walker.test.ts`        | Unit        | Pair enumeration: empty, single, multi-edition, multi-corpus filter          |
+| `libs/sources/src/diff/body-hasher.test.ts`        | Unit        | Hash equality CRLF/LF/NFC; missing-file returns null; cache hit              |
+| `libs/sources/src/diff/alias-resolver.test.ts`     | Unit        | Five alias kinds map to expected outcome kinds; null when no alias           |
+| `libs/sources/src/diff/diff-job.test.ts`           | Integration | End-to-end against 2026 + 2027 fixtures: ingest, walk, partition, write      |
+| `libs/sources/src/diff/lesson-rewriter.test.ts`    | Unit        | Rewrite single + multiple occurrences, mixed pins, idempotence, no-op        |
+| `libs/sources/src/diff/cli.test.ts`                | Unit        | Argv parsing, error paths, fixture-pair short-circuit                        |
+| `libs/sources/src/diff/getEditionDistance.test.ts` | Integration | Two-fixture ingest, distance==1, validator row-6 fires + clears post-rewrite |
 
 ## Manual test plan
 

@@ -4,12 +4,12 @@ Companion to [spec.md](./spec.md). Notes the route shape, page composition, mast
 
 ## Route shape
 
-| Route                                              | Purpose                                                              | Loader inputs                  |
-| -------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------ |
-| `/credentials`                                     | Index of active credentials, default-filtered to the primary goal   | `userId`                        |
-| `/credentials/[slug]`                              | Per-credential detail (header, prereqs, mastery rollup, area list)  | `userId`, `slug`, `?edition=`   |
-| `/credentials/[slug]/areas/[areaCode]`             | Area drill (task list, expandable elements with linked nodes)       | `userId`, `slug`, `areaCode`    |
-| `/credentials/[slug]/areas/[areaCode]/tasks/[tc]`  | Task drill (deferred -- area drill expands inline first)            | n/a                             |
+| Route                                             | Purpose                                                            | Loader inputs                 |
+| ------------------------------------------------- | ------------------------------------------------------------------ | ----------------------------- |
+| `/credentials`                                    | Index of active credentials, default-filtered to the primary goal  | `userId`                      |
+| `/credentials/[slug]`                             | Per-credential detail (header, prereqs, mastery rollup, area list) | `userId`, `slug`, `?edition=` |
+| `/credentials/[slug]/areas/[areaCode]`            | Area drill (task list, expandable elements with linked nodes)      | `userId`, `slug`, `areaCode`  |
+| `/credentials/[slug]/areas/[areaCode]/tasks/[tc]` | Task drill (deferred -- area drill expands inline first)           | n/a                           |
 
 The fourth route (`CREDENTIAL_TASK`) exists in `libs/constants/src/routes.ts` but is reserved for a future expansion. Today's area drill expands tasks inline; a dedicated task page would only earn its keep when one task carries enough content to warrant its own surface.
 
@@ -59,11 +59,11 @@ Element rows expand inline. The expanded view shows: triad badge, mastery indica
 
 Three numbers, three meanings:
 
-| Metric      | Source                                                | Meaning                                    |
-| ----------- | ----------------------------------------------------- | ------------------------------------------ |
-| Coverage %  | `coveredLeaves / totalLeaves`                         | "I have touched this many of the leaves"   |
-| Mastery %   | `masteredLeaves / totalLeaves`                        | "I have demonstrated mastery on this many" |
-| Gap         | `coveredLeaves - masteredLeaves`                      | "Started but not yet mastered"             |
+| Metric     | Source                           | Meaning                                    |
+| ---------- | -------------------------------- | ------------------------------------------ |
+| Coverage % | `coveredLeaves / totalLeaves`    | "I have touched this many of the leaves"   |
+| Mastery %  | `masteredLeaves / totalLeaves`   | "I have demonstrated mastery on this many" |
+| Gap        | `coveredLeaves - masteredLeaves` | "Started but not yet mastered"             |
 
 Coverage and mastery render as separate bars. A 90%-mastered cert at 30% coverage reads "expert at the third you've studied; two-thirds untouched" -- the user must see both. An InfoTip on the index card clarifies the distinction.
 
@@ -80,23 +80,23 @@ A learner mid-prep on an older edition keeps their syllabus tree, mastery state,
 
 ## Boundary against sibling WPs
 
-| Concern                          | Owned by                | Why                                                                                                  |
-| -------------------------------- | ----------------------- | ---------------------------------------------------------------------------------------------------- |
-| `/credentials/...`               | this WP                 | Per-credential dashboard is the surface ADR 016 phase 7 names                                         |
-| `/lens/...`                      | [lens-ui](../lens-ui/spec.md)        | Cross-lens browse (handbook lens, weakness lens, etc.) is its own surface                            |
-| `/goals/...`                     | [goal-composer](../goal-composer/spec.md) | Goal CRUD belongs to a writable surface; cert dashboard reads the primary goal but never writes one |
-| `getPrimaryGoal` read            | this WP (read-only)     | Read for default-filter; no mutation                                                                 |
-| Credential authoring             | YAML + `bun run db seed credentials` | System content lives in `course/credentials/`; not authored in-app                                   |
+| Concern               | Owned by                                  | Why                                                                                                 |
+| --------------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `/credentials/...`    | this WP                                   | Per-credential dashboard is the surface ADR 016 phase 7 names                                       |
+| `/lens/...`           | [lens-ui](../lens-ui/spec.md)             | Cross-lens browse (handbook lens, weakness lens, etc.) is its own surface                           |
+| `/goals/...`          | [goal-composer](../goal-composer/spec.md) | Goal CRUD belongs to a writable surface; cert dashboard reads the primary goal but never writes one |
+| `getPrimaryGoal` read | this WP (read-only)                       | Read for default-filter; no mutation                                                                |
+| Credential authoring  | YAML + `bun run db seed credentials`      | System content lives in `course/credentials/`; not authored in-app                                  |
 
 ## Design principles applied
 
-| Principle                                  | Application                                                                                              |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Debrief Culture                            | Mastery surfaces what's untouched without shame; gaps are next-action data, not a report card            |
-| Cert as constraint set (Learning #2)       | The dashboard never recommends "next cert"; it just renders the constraint set                           |
-| DAG composition (Learning #3)              | Prereq snippet shows the DAG one hop at a time; full DAG visualisation deferred until it earns its keep  |
-| Mastery rollups (Learning #5)              | Coverage and mastery shown distinct; rollup math lives in the BC, this WP just renders                    |
-| Lenses (Learning #6)                       | Cert dashboard is the ACS lens for one credential; cross-lens browse is `/lens/...` in [lens-ui](../lens-ui/spec.md) |
+| Principle                            | Application                                                                                                          |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Debrief Culture                      | Mastery surfaces what's untouched without shame; gaps are next-action data, not a report card                        |
+| Cert as constraint set (Learning #2) | The dashboard never recommends "next cert"; it just renders the constraint set                                       |
+| DAG composition (Learning #3)        | Prereq snippet shows the DAG one hop at a time; full DAG visualisation deferred until it earns its keep              |
+| Mastery rollups (Learning #5)        | Coverage and mastery shown distinct; rollup math lives in the BC, this WP just renders                               |
+| Lenses (Learning #6)                 | Cert dashboard is the ACS lens for one credential; cross-lens browse is `/lens/...` in [lens-ui](../lens-ui/spec.md) |
 
 ## Performance
 
@@ -106,8 +106,8 @@ A learner mid-prep on an older edition keeps their syllabus tree, mastery state,
 
 ## Risks
 
-| Risk                                                                                       | Mitigation                                                                                |
-| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
-| Empty syllabi (most credentials beyond PPL ACS Area V are not yet authored)                | Empty state explicit; phase 10 transcription is iterative human content work               |
-| Edition pin diverges from authored syllabi mid-WP (FAA publishes new ACS during build)     | New edition = new syllabus row; pinned edition stays valid; diff surface is a future WP    |
-| Goal-filter ordering surprises the user when no primary goal is set                        | Banner makes it explicit; ordering falls back to credential `kind` then `slug`             |
+| Risk                                                                                   | Mitigation                                                                              |
+| -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Empty syllabi (most credentials beyond PPL ACS Area V are not yet authored)            | Empty state explicit; phase 10 transcription is iterative human content work            |
+| Edition pin diverges from authored syllabi mid-WP (FAA publishes new ACS during build) | New edition = new syllabus row; pinned edition stays valid; diff surface is a future WP |
+| Goal-filter ordering surprises the user when no primary goal is set                    | Banner makes it explicit; ordering falls back to credential `kind` then `slug`          |

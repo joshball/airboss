@@ -16,18 +16,18 @@ Stack detected: SvelteKit + Svelte 5 + Bun + TypeScript + Drizzle/PostgreSQL + V
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total |
-| ------------ | -------- | ----- | ----- | --- | ----- |
-| correctness  | 2        | 5     | 6     | 5   | 18    |
-| security     | 0        | 4     | 7     | 3   | 14    |
-| perf         | 2        | 8     | 8     | 3   | 21    |
-| architecture | 0        | 4     | 5     | 2   | 11    |
-| patterns     | 0        | 4     | 5     | 2   | 11    |
-| testing      | 1        | 6     | 6     | 3   | 16    |
-| dx           | 1        | 7     | 7     | 3   | 18    |
-| schema       | 1        | 6     | 5     | 2   | 14    |
-| backend      | 3        | 7     | 6     | 2   | 18    |
-| **TOTAL**    | **10**   | **51**| **55**| **25**| **141** |
+| Category     | Critical | Major  | Minor  | Nit    | Total   |
+| ------------ | -------- | ------ | ------ | ------ | ------- |
+| correctness  | 2        | 5      | 6      | 5      | 18      |
+| security     | 0        | 4      | 7      | 3      | 14      |
+| perf         | 2        | 8      | 8      | 3      | 21      |
+| architecture | 0        | 4      | 5      | 2      | 11      |
+| patterns     | 0        | 4      | 5      | 2      | 11      |
+| testing      | 1        | 6      | 6      | 3      | 16      |
+| dx           | 1        | 7      | 7      | 3      | 18      |
+| schema       | 1        | 6      | 5      | 2      | 14      |
+| backend      | 3        | 7      | 6      | 2      | 18      |
+| **TOTAL**    | **10**   | **51** | **55** | **25** | **141** |
 
 ## Per-category review files
 

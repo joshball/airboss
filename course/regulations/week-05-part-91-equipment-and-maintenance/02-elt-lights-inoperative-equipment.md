@@ -123,15 +123,15 @@ The structure to internalize:
 
 91.207(e) and (f) provide narrow exemptions:
 
-| Operation                                                              | Exemption |
-| ---------------------------------------------------------------------- | --------- |
+| Operation                                                              | Exemption                                               |
+| ---------------------------------------------------------------------- | ------------------------------------------------------- |
 | Aircraft engaged in scheduled flights by air carriers under Part 121   | (e)(1) -- exempt by virtue of Part 121 ELT alternatives |
-| Training flights within 50 nm of the airport at which the flight began | (e)(2) -- ELT not required |
-| Flights for the purpose of design and testing                          | (e)(3) -- exempt |
-| Ferry flight from acquisition to installation site                      | (f)(1) -- exempt |
-| Ferry flight to a repair facility for an inop ELT                      | (f)(2) -- exempt |
-| Aircraft engaged in agricultural operations                            | (e)(8) -- exempt |
-| New aircraft delivery flights                                          | (f)(1) -- exempt |
+| Training flights within 50 nm of the airport at which the flight began | (e)(2) -- ELT not required                              |
+| Flights for the purpose of design and testing                          | (e)(3) -- exempt                                        |
+| Ferry flight from acquisition to installation site                     | (f)(1) -- exempt                                        |
+| Ferry flight to a repair facility for an inop ELT                      | (f)(2) -- exempt                                        |
+| Aircraft engaged in agricultural operations                            | (e)(8) -- exempt                                        |
+| New aircraft delivery flights                                          | (f)(1) -- exempt                                        |
 
 The training flight exemption is the most operationally relevant. A flight school doing a flight review or a primary training flight that stays within 50 nm of the airport may operate an airplane with an inop ELT *without* ferrying it -- the exemption removes the ELT requirement for that operation. The 50 nm is great-circle distance from the airport at which the flight began.
 
@@ -441,20 +441,20 @@ Most GA pilots will encounter an MEL in fractional ownership programs, leaseback
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the ELT requirement?                                            | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)            |
-| Where is the ELT battery replacement rule?                               | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(c)         |
-| Where is the ELT 12-month inspection?                                    | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(d)         |
-| Where is the ELT exemption for training flights?                         | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2)      |
-| Where is the ferry-flight ELT exemption?                                 | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(f)         |
-| Where is the position-lights window?                                     | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a)         |
-| Where is the anticollision-lights "any time" rule?                       | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d)         |
-| Where is the Alaska night-lights variation?                              | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)            |
-| Where is the no-MEL deferral pathway?                                    | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)         |
-| Where is the MEL deferral pathway?                                       | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(a)(b)(c)   |
-| Where is the placard-and-record requirement?                             | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(3)      |
-| Where is the hazard determination requirement?                           | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(4)      |
+| Question                                           | Section / source                                         |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| Where is the ELT requirement?                      | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)          |
+| Where is the ELT battery replacement rule?         | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(c)       |
+| Where is the ELT 12-month inspection?              | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(d)       |
+| Where is the ELT exemption for training flights?   | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2)    |
+| Where is the ferry-flight ELT exemption?           | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(f)       |
+| Where is the position-lights window?               | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a)       |
+| Where is the anticollision-lights "any time" rule? | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d)       |
+| Where is the Alaska night-lights variation?        | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)          |
+| Where is the no-MEL deferral pathway?              | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)       |
+| Where is the MEL deferral pathway?                 | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(a)(b)(c) |
+| Where is the placard-and-record requirement?       | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(3)    |
+| Where is the hazard determination requirement?     | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(4)    |
 
 ### Apply the rules
 

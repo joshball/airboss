@@ -38,7 +38,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The app has sophisticated bones: the new `/sessions/[id]` flow is **server-derived** (current slot = first unresolved slot, so refresh naturally resumes), knowledge nodes have a 7-phase learn progression with proper a11y, the dashboard was just refactored into a deliberate TUI-style 12-col grid (monospace, 2px corners, full-bleed), and plans drive sessions cleanly. Where the app falls down is **cross-cutting**:

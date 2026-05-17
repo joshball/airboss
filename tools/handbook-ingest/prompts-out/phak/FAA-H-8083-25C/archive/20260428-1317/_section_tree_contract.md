@@ -18,6 +18,7 @@ OUTPUT (strict JSON, no markdown fencing, no prose, no explanation):
 ]
 
 RULES:
+
 - Use only headings that appear verbatim in the chapter-text.
 - Do not invent headings. If uncertain, omit.
 - Page anchors should match the printed page number format (e.g., "12-7"), not the absolute PDF page (e.g., "147").

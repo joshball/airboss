@@ -54,6 +54,7 @@ The `SHIKI_THEME` "legacy export" with no remaining consumers should be retired 
 ### MAJOR: Off-grid spacing values throughout `libs/help/src/ui/*` instead of `--space-*` tokens
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/ui/HelpCard.svelte:44`
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/ui/HelpTOC.svelte:45,50`
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/ui/HelpLayout.svelte:102,134,141`
@@ -76,6 +77,7 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 ### MAJOR: Cockpit-panel instruments hardcode `200px` sizing in primitives
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/activities/src/cockpit-panel/Tachometer.svelte:101-102`
 - `/Users/joshua/src/_me/aviation/airboss/libs/activities/src/cockpit-panel/HeadingIndicator.svelte:106-107`
 - `/Users/joshua/src/_me/aviation/airboss/libs/activities/src/cockpit-panel/Asi.svelte:122-123`
@@ -98,6 +100,7 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 ### MAJOR: Retire `SHIKI_THEME` legacy export
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/markdown/highlight.ts:33-37`
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/markdown/index.ts:16`
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/index.ts:17`
@@ -137,6 +140,7 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 ### MINOR: Sub-rem hardcoded sizes in primitives
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/InfoTip.svelte:244-245` (`width: 1.125rem; height: 1.125rem;`)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/Checkbox.svelte:88-90` (`0.875rem`, `1rem`, `1.25rem`)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/FilterCard.svelte:79` (`min-height: 1.25rem;`)
@@ -153,6 +157,7 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 ### MINOR: Off-grid sizing constraints (28rem, 32rem, 36rem, 18rem, 20rem) inlined per component
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/Dialog.svelte:132-134` (`24rem`, `36rem`, `54rem`)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/Drawer.svelte:163-165` (`20rem`, `32rem`, `48rem`)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/InfoTip.svelte:278-280` (`14rem`, `18rem`, `20rem`)
@@ -183,6 +188,7 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 ### NIT: `box-shadow: 0 0 0 3px var(--focus-ring)` repeated instead of a shared focus token
 
 **Files:**
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/SharePopover.svelte:194,224`
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/SnoozeReasonPopover.svelte:309,488`
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/BrowseListItem.svelte:69`
@@ -195,19 +201,19 @@ A few off-grid values like `0.0625rem`, `0.125rem`, `0.45rem`, `0.625rem`, `0.9r
 
 ## Status as of 2026-05-04
 
-| # | Severity | Finding | Verdict |
-|---|----------|---------|---------|
-| 1 | Critical | `HelpSearchPalette` raw `rgba()` scrim | CLOSED -- `background: var(--overlay-scrim)` (`HelpSearchPalette.svelte:274`). |
-| 2 | Critical | `PfdKeyboardLegend` magic `z-index: 100` | CLOSED -- legend now built on shared `Dialog` primitive which routes through `var(--z-modal)`. The custom popover was retired. |
-| 3 | Major | Off-grid spacing in `libs/help/src/ui/*` | CLOSED -- raw rem values migrated to `--space-*` tokens; the only remaining rem values are legitimate sizing (icon dimensions, container max-width, scroll-margin-top). |
-| 4 | Major | Cockpit-panel instruments hardcode `200px` | CLOSED -- all cockpit-panel instruments now use `width: 12.5rem; height: 12.5rem;`. |
-| 5 | Major | Retire `SHIKI_THEME` legacy export | CLOSED -- only `SHIKI_THEME_LIGHT` and `SHIKI_THEME_DARK` remain; the unsuffixed legacy alias was dropped. |
-| 6 | Minor | Hardcoded `720px` breakpoint without doc | CLOSED in this audit -- inline justification comment added. |
-| 7 | Minor | `as unknown as ShikiHighlighter` double cast | CLOSED -- explanatory comment present at `highlight.ts:63-66` documenting the narrow-surface rationale. |
-| 8 | Minor | Sub-rem icon sizes inlined per component | DEFERRED to `wp-design-token-convergence` -- requires new token contract additions. Trigger: next theme-pass session OR new overlay/instrument primitive. |
-| 9 | Minor | Off-grid overlay sizing inlined per component | DEFERRED to `wp-design-token-convergence` -- same rationale; convergent pass with #8 + nit #2. |
-| 10 | Nit | SVG `font-size="10"` etc. on instrument labels | DEFERRED to `wp-design-token-convergence` -- adds `INSTRUMENT_*_FONT_SIZE` constants in same pass. |
-| 11 | Nit | `box-shadow: 0 0 0 3px var(--focus-ring)` repeated | DEFERRED to `wp-design-token-convergence` -- same convergent token pass. |
+| #   | Severity | Finding                                            | Verdict                                                                                                                                                                 |
+| --- | -------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Critical | `HelpSearchPalette` raw `rgba()` scrim             | CLOSED -- `background: var(--overlay-scrim)` (`HelpSearchPalette.svelte:274`).                                                                                          |
+| 2   | Critical | `PfdKeyboardLegend` magic `z-index: 100`           | CLOSED -- legend now built on shared `Dialog` primitive which routes through `var(--z-modal)`. The custom popover was retired.                                          |
+| 3   | Major    | Off-grid spacing in `libs/help/src/ui/*`           | CLOSED -- raw rem values migrated to `--space-*` tokens; the only remaining rem values are legitimate sizing (icon dimensions, container max-width, scroll-margin-top). |
+| 4   | Major    | Cockpit-panel instruments hardcode `200px`         | CLOSED -- all cockpit-panel instruments now use `width: 12.5rem; height: 12.5rem;`.                                                                                     |
+| 5   | Major    | Retire `SHIKI_THEME` legacy export                 | CLOSED -- only `SHIKI_THEME_LIGHT` and `SHIKI_THEME_DARK` remain; the unsuffixed legacy alias was dropped.                                                              |
+| 6   | Minor    | Hardcoded `720px` breakpoint without doc           | CLOSED in this audit -- inline justification comment added.                                                                                                             |
+| 7   | Minor    | `as unknown as ShikiHighlighter` double cast       | CLOSED -- explanatory comment present at `highlight.ts:63-66` documenting the narrow-surface rationale.                                                                 |
+| 8   | Minor    | Sub-rem icon sizes inlined per component           | DEFERRED to `wp-design-token-convergence` -- requires new token contract additions. Trigger: next theme-pass session OR new overlay/instrument primitive.               |
+| 9   | Minor    | Off-grid overlay sizing inlined per component      | DEFERRED to `wp-design-token-convergence` -- same rationale; convergent pass with #8 + nit #2.                                                                          |
+| 10  | Nit      | SVG `font-size="10"` etc. on instrument labels     | DEFERRED to `wp-design-token-convergence` -- adds `INSTRUMENT_*_FONT_SIZE` constants in same pass.                                                                      |
+| 11  | Nit      | `box-shadow: 0 0 0 3px var(--focus-ring)` repeated | DEFERRED to `wp-design-token-convergence` -- same convergent token pass.                                                                                                |
 
 7 closed (5 fixed/already-closed, 2 documented inline). 4 deferred to
 `docs/work-packages/wp-design-token-convergence/spec.md` with explicit

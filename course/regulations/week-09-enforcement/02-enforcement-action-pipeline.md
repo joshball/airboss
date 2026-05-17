@@ -226,13 +226,13 @@ The informal conference is not a hearing. There is no judge, no rules of evidenc
 
 The FAA's typical sanctions for common violations are published in FAA Order 2150.3 sanction guidelines tables. Examples (illustrative, not authoritative):
 
-| Violation                                              | Typical sanction range          |
-| ------------------------------------------------------ | ------------------------------- |
+| Violation                                               | Typical sanction range          |
+| ------------------------------------------------------- | ------------------------------- |
 | Inadvertent airspace incursion (single, no aggravators) | Counseling to 30-day suspension |
-| Operating without required medical                     | 30-90 day suspension            |
-| Falsified logbook entry                                | Revocation                      |
-| Operating under influence (91.17)                      | Revocation, criminal referral   |
-| Repeat violations after prior Compliance Action        | Doubled or revocation           |
+| Operating without required medical                      | 30-90 day suspension            |
+| Falsified logbook entry                                 | Revocation                      |
+| Operating under influence (91.17)                       | Revocation, criminal referral   |
+| Repeat violations after prior Compliance Action         | Doubled or revocation           |
 
 Counsel uses these tables to assess the agency's leverage and negotiate. A pilot offered a 60-day suspension when the table suggests 30 has room to push back; a pilot offered a 30 when the table suggests 90 should probably take it.
 
@@ -317,15 +317,15 @@ The pilot does not need to memorize these citations. The pilot's counsel does.
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is the FAA's enforcement procedure regulation?                       | 14 CFR Part 13                |
-| Where is the NTSB rules of practice regulation?                            | 49 CFR Part 821               |
-| Where is the Pilot's Bill of Rights 2 statutory authority?                 | 49 USC 44703 note             |
-| What's the typical LOI response window?                                    | 10 calendar days              |
-| What's the NTSB appeal window from an Order of Certificate Action?         | 20 days                       |
-| What's the FAA enforcement statute of limitations?                         | 6 years (28 USC 2462)         |
-| Who bears the burden of proof at NTSB ALJ hearing?                         | The FAA, by preponderance     |
+| Question                                                           | Section / source          |
+| ------------------------------------------------------------------ | ------------------------- |
+| Where is the FAA's enforcement procedure regulation?               | 14 CFR Part 13            |
+| Where is the NTSB rules of practice regulation?                    | 49 CFR Part 821           |
+| Where is the Pilot's Bill of Rights 2 statutory authority?         | 49 USC 44703 note         |
+| What's the typical LOI response window?                            | 10 calendar days          |
+| What's the NTSB appeal window from an Order of Certificate Action? | 20 days                   |
+| What's the FAA enforcement statute of limitations?                 | 6 years (28 USC 2462)     |
+| Who bears the burden of proof at NTSB ALJ hearing?                 | The FAA, by preponderance |
 
 ### Apply
 

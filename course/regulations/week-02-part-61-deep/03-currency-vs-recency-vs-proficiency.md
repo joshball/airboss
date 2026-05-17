@@ -53,11 +53,11 @@ A pilot who answers "I'm current" without unpacking which currency they're claim
 
 ## Three different ideas
 
-| Concept           | Defined by                            | Source of truth      | Time-bound?               |
-| ----------------- | ------------------------------------- | -------------------- | ------------------------- |
-| **Currency**      | Federal regulation                    | §61.56, §61.57, §61.58 | Yes, by clock + activity  |
-| **Recency**       | Your own logbook                      | The pilot's habit    | Soft -- no specific bar    |
-| **Proficiency**   | Your own honest judgment + objective skill | The pilot's flying  | Continuous, not boolean    |
+| Concept         | Defined by                                 | Source of truth        | Time-bound?              |
+| --------------- | ------------------------------------------ | ---------------------- | ------------------------ |
+| **Currency**    | Federal regulation                         | §61.56, §61.57, §61.58 | Yes, by clock + activity |
+| **Recency**     | Your own logbook                           | The pilot's habit      | Soft -- no specific bar  |
+| **Proficiency** | Your own honest judgment + objective skill | The pilot's flying     | Continuous, not boolean  |
 
 ### Currency -- the regulatory floor
 
@@ -197,16 +197,17 @@ For most GA pilots, §61.58 doesn't apply -- they don't fly aircraft requiring m
 
 These currencies all run on independent clocks:
 
-| Currency       | Section     | Clock              | Reset event                                  |
-| -------------- | ----------- | ------------------ | -------------------------------------------- |
-| Flight review  | §61.56      | 24 calendar months | Completion of review or equivalent           |
-| Passengers     | §61.57(a)   | 90 days rolling    | Each individual T&L                          |
-| Night passengers | §61.57(b) | 90 days rolling    | Each individual full-stop landing            |
-| IFR            | §61.57(c)   | 6 calendar months  | Each approach + holding + tracking event     |
-| Class B (student) | §61.95   | Endorsement-based  | Re-endorsement (no fixed time)               |
-| PIC proficiency | §61.58     | 12 calendar months | Completion of check                          |
+| Currency          | Section   | Clock              | Reset event                              |
+| ----------------- | --------- | ------------------ | ---------------------------------------- |
+| Flight review     | §61.56    | 24 calendar months | Completion of review or equivalent       |
+| Passengers        | §61.57(a) | 90 days rolling    | Each individual T&L                      |
+| Night passengers  | §61.57(b) | 90 days rolling    | Each individual full-stop landing        |
+| IFR               | §61.57(c) | 6 calendar months  | Each approach + holding + tracking event |
+| Class B (student) | §61.95    | Endorsement-based  | Re-endorsement (no fixed time)           |
+| PIC proficiency   | §61.58    | 12 calendar months | Completion of check                      |
 
 A pilot can be:
+
 - Current for §61.56 but not §61.57(a) -- flight review valid, but no recent takeoffs.
 - Current for §61.57(a) but not §61.57(c) -- recent T&Ls but no recent approaches.
 - Current for §61.57(a) but not §61.57(b) -- recent daytime T&Ls but no night full-stop landings.
@@ -219,13 +220,13 @@ The pilot must hit each independent currency requirement that applies to the pro
 
 What proficiency requires varies with the flight:
 
-| Flight                                                     | Proficiency standard implies                                                  |
-| ---------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| VFR pattern work in an unfamiliar tower-controlled airport | Recent radio work, recent T&Ls, comfort with the airport diagram              |
-| 200-nm cross-country VFR with passengers                   | Recent cross-country work, fuel-stop planning, weather assessment, Class C/D  |
-| 400-nm cross-country IFR in IMC                            | Recent approaches in IMC, partial-panel familiarity, comfort with ATC routes  |
-| Mountainous flight in 8,000-ft density-altitude            | Mountain-flying training, density-altitude awareness, terrain awareness       |
-| Float operations on glassy water                           | Float-plane training, glassy-water landing practice, recent float currency    |
+| Flight                                                     | Proficiency standard implies                                                 |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| VFR pattern work in an unfamiliar tower-controlled airport | Recent radio work, recent T&Ls, comfort with the airport diagram             |
+| 200-nm cross-country VFR with passengers                   | Recent cross-country work, fuel-stop planning, weather assessment, Class C/D |
+| 400-nm cross-country IFR in IMC                            | Recent approaches in IMC, partial-panel familiarity, comfort with ATC routes |
+| Mountainous flight in 8,000-ft density-altitude            | Mountain-flying training, density-altitude awareness, terrain awareness      |
+| Float operations on glassy water                           | Float-plane training, glassy-water landing practice, recent float currency   |
 
 The FAA cannot regulate proficiency. The PIC must self-regulate it.
 
@@ -253,15 +254,15 @@ Personal minimums are not regulation. They are the pilot's own judgment. The les
 
 ### Locate the section
 
-| Question                                                                        | Section            |
-| ------------------------------------------------------------------------------- | ------------------ |
-| Where is the flight review requirement?                                          | §61.56             |
-| Where is daytime passenger currency?                                             | §61.57(a)          |
-| Where is night passenger currency?                                               | §61.57(b)          |
-| Where is IFR currency?                                                           | §61.57(c)          |
-| Where is the IFR currency grace period?                                          | §61.57(d)          |
-| Where is the PIC proficiency check (multi-pilot type-rated aircraft)?            | §61.58             |
-| Where is the flight review *equivalent* (practical test counts)?                | §61.56(d)          |
+| Question                                                              | Section   |
+| --------------------------------------------------------------------- | --------- |
+| Where is the flight review requirement?                               | §61.56    |
+| Where is daytime passenger currency?                                  | §61.57(a) |
+| Where is night passenger currency?                                    | §61.57(b) |
+| Where is IFR currency?                                                | §61.57(c) |
+| Where is the IFR currency grace period?                               | §61.57(d) |
+| Where is the PIC proficiency check (multi-pilot type-rated aircraft)? | §61.58    |
+| Where is the flight review *equivalent* (practical test counts)?      | §61.56(d) |
 
 ### Apply the rules
 

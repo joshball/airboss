@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     5 |      5 |    0 |
-| minor    |     9 |      2 |    7 |
-| nit      |     4 |      2 |    2 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 5     | 5      | 0    |
+| minor    | 9     | 2      | 7    |
+| nit      | 4     | 2      | 2    |
 
 ### MAJOR: Mastery integration tests carry state across describe blocks -- CLOSED
 

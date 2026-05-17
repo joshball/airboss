@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The codebase is Svelte 5 clean at the syntax level: zero `export let`, zero `$:`, zero `<slot>`, zero `$app/stores`, zero `svelte/store` imports, zero `createEventDispatcher`, every `{#each}` is keyed, every component uses `$props()` destructuring with defaults, and callback-prop patterns are used consistently instead of event dispatchers. `bind:value` only appears on inputs and on `$bindable()` primitives in `libs/ui`. `+page.ts` files load from client-safe registries (`@ab/aviation`, `@ab/help`, `@ab/bc-sim`); no DB or secrets leak into universal loads. The load-bearing issues are all in `$effect` usage: two components reset state when a prop changes (erasing user interaction on parent rerender), and a couple of effects mutate state that belongs in an event handler or `$derived`. A separate propagatable issue is the amount of visual CSS living in `+page.svelte` files instead of `libs/ui` primitives.

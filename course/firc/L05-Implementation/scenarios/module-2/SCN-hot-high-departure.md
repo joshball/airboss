@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.7
 Title:           Mountain Airport Fuel Stop on a Cross-Country
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RM-1', 'RM-2', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Eager Cross-Country Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Ramp area. Sun is high and hot. The airplane feels sluggish just taxiing. Density altitude calculation shows 9,800 feet. Student has the original flight plan on the kneeboard from this morning's preflight.
 studentSpeech:We're topped off and ready. The plan says we need 2,800 feet for takeoff, and the runway is 5,500. Plenty of room.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student recalculates (or you've prompted them to). New numbers: takeoff roll 4,200 feet, 50-foot obstacle clearance requires 5,800 feet. There's a tree line 300 feet past the departure end. Student stares at the numbers.
 studentSpeech:Hmm... that's tight. But the POH always adds a safety margin, right? And we can use the whole runway. I think we'll be fine.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student acknowledges the risk is higher than planned but is looking at the watch. Destination is 90 minutes away. Sunset is in 3 hours. The student's family is expecting them for dinner.
 studentSpeech:What if we use a short-field technique? Or reduce fuel to minimum? We need to get going or we'll be flying after dark, and I'm not night current.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student decides to attempt the takeoff despite the risk discussion. Lines up on the runway and applies full power. Acceleration is noticeably sluggish. Halfway point markers pass with 55 knots -- well below the expected 65.
 studentSpeech:Come on, come on... it's accelerating. We'll make it.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (coach/direct)

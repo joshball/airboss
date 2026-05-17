@@ -16,14 +16,14 @@ unless they are flagged as deferred below.
 
 ## Summary
 
-| Stage          | Reviews ran                                | Findings | Fixed | Deferred |
-| -------------- | ------------------------------------------ | -------- | ----- | -------- |
-| Phase 0 review | security, backend, architecture, patterns  | 54       | 37    | 17       |
-| Phase 1 review | schema, correctness, architecture          | 29       | 18    | 11       |
-| Phase 2 review | backend, correctness, perf                 | 35       | 21    | 14       |
-| Phase 3 review | svelte, ux, a11y                           | 50       | 15    | 35       |
-| Final review   | 10 categories                              | ~135     | 21    | ~114     |
-| **Total**      |                                            | **303**  | **112** | **191** |
+| Stage          | Reviews ran                               | Findings | Fixed   | Deferred |
+| -------------- | ----------------------------------------- | -------- | ------- | -------- |
+| Phase 0 review | security, backend, architecture, patterns | 54       | 37      | 17       |
+| Phase 1 review | schema, correctness, architecture         | 29       | 18      | 11       |
+| Phase 2 review | backend, correctness, perf                | 35       | 21      | 14       |
+| Phase 3 review | svelte, ux, a11y                          | 50       | 15      | 35       |
+| Final review   | 10 categories                             | ~135     | 21      | ~114     |
+| **Total**      |                                           | **303**  | **112** | **191**  |
 
 All Criticals (3) and all structural Majors (31 of 31) are fixed. Remaining
 items are UX polish, a11y refinements, perf pre-optimisations, and future-BC
@@ -35,12 +35,12 @@ architecture notes. Each deferred item is captured with a reason below.
 
 Categories: security, backend, architecture, patterns.
 
-| Severity | Count | Fixed                                                                       |
-| -------- | ----- | --------------------------------------------------------------------------- |
-| Critical | 1     | 1 -- `/api/auth` handler now try/catch + structured logging                 |
-| Major    | 13    | 13 -- FK on user_id, restrict cascade, open-redirect guard, env disclosure  |
-| Minor    | 27    | 19 -- HTML escaping in email, decode fallback, request-id sanitation        |
-| Nit      | 13    | 4 -- minor wording / comment fixes                                           |
+| Severity | Count | Fixed                                                                      |
+| -------- | ----- | -------------------------------------------------------------------------- |
+| Critical | 1     | 1 -- `/api/auth` handler now try/catch + structured logging                |
+| Major    | 13    | 13 -- FK on user_id, restrict cascade, open-redirect guard, env disclosure |
+| Minor    | 27    | 19 -- HTML escaping in email, decode fallback, request-id sanitation       |
+| Nit      | 13    | 4 -- minor wording / comment fixes                                         |
 
 Files: [phase-0-security](../../work/reviews/2026-04-19-spaced-memory-items-phase-0-security.md), [phase-0-backend](../../work/reviews/2026-04-19-spaced-memory-items-phase-0-backend.md), [phase-0-architecture](../../work/reviews/2026-04-19-spaced-memory-items-phase-0-architecture.md), [phase-0-patterns](../../work/reviews/2026-04-19-spaced-memory-items-phase-0-patterns.md).
 
@@ -48,12 +48,12 @@ Files: [phase-0-security](../../work/reviews/2026-04-19-spaced-memory-items-phas
 
 Categories: schema, correctness, architecture.
 
-| Severity | Count | Fixed                                                                    |
-| -------- | ----- | ------------------------------------------------------------------------ |
-| Critical | 0     | --                                                                        |
-| Major    | 5     | 5 -- bauth_user FKs, jsonb<string[]>, CHECK constraints, per-user FSRS    |
-| Minor    | 16    | 10 -- CHECK coverage, indexes, type narrowing                             |
-| Nit      | 8     | 3 -- doc tweaks                                                           |
+| Severity | Count | Fixed                                                                  |
+| -------- | ----- | ---------------------------------------------------------------------- |
+| Critical | 0     | --                                                                     |
+| Major    | 5     | 5 -- bauth_user FKs, jsonb<string[]>, CHECK constraints, per-user FSRS |
+| Minor    | 16    | 10 -- CHECK coverage, indexes, type narrowing                          |
+| Nit      | 8     | 3 -- doc tweaks                                                        |
 
 Files: [phase-1-schema](../../work/reviews/2026-04-19-spaced-memory-items-phase-1-schema.md), [phase-1-correctness](../../work/reviews/2026-04-19-spaced-memory-items-phase-1-correctness.md), [phase-1-architecture](../../work/reviews/2026-04-19-spaced-memory-items-phase-1-architecture.md).
 
@@ -74,8 +74,8 @@ Files: [phase-2-backend](../../work/reviews/2026-04-19-spaced-memory-items-phase
 
 Categories: svelte, ux, a11y.
 
-| Severity | Count | Fixed                                                                       |
-| -------- | ----- | --------------------------------------------------------------------------- |
+| Severity | Count | Fixed                                                                        |
+| -------- | ----- | ---------------------------------------------------------------------------- |
 | Critical | 0     | --                                                                           |
 | Major    | 11    | 5 -- destructive archive, skip link, nav aria, label maps, empty-state split |
 | Minor    | 23    | 6 -- kbd shortcut, autofocus, error aria-describedby                         |
@@ -92,19 +92,19 @@ because the review flow is the highest-surface area in the feature.
 
 Ran all 10 categories in parallel against `git diff docs/initial-migration..HEAD`.
 
-| Category     | Critical | Major | Minor | Nit | Total |
-| ------------ | -------- | ----- | ----- | --- | ----- |
-| ux           | 2        | 8     | 10    | 7   | 27    |
-| svelte       | 0        | 0     | 4     | 5   | 9     |
-| security     | 0        | 1     | 6     | 3   | 10    |
-| perf         | 0        | 2     | 7     | 4   | 13    |
-| architecture | 0        | 2     | 7     | 4   | 13    |
-| patterns     | 0        | 2     | 7     | 3   | 12    |
-| correctness  | 0        | 2     | 8     | 4   | 14    |
-| a11y         | 0        | 7     | 12    | 8   | 27    |
-| backend      | 0        | 3     | 9     | 6   | 18    |
-| schema       | 0        | 1     | 4     | 3   | 8     |
-| **Total**    | **2**    | **28**| **74**| **47**| **151** |
+| Category     | Critical | Major  | Minor  | Nit    | Total   |
+| ------------ | -------- | ------ | ------ | ------ | ------- |
+| ux           | 2        | 8      | 10     | 7      | 27      |
+| svelte       | 0        | 0      | 4      | 5      | 9       |
+| security     | 0        | 1      | 6      | 3      | 10      |
+| perf         | 0        | 2      | 7      | 4      | 13      |
+| architecture | 0        | 2      | 7      | 4      | 13      |
+| patterns     | 0        | 2      | 7      | 3      | 12      |
+| correctness  | 0        | 2      | 8      | 4      | 14      |
+| a11y         | 0        | 7      | 12     | 8      | 27      |
+| backend      | 0        | 3      | 9      | 6      | 18      |
+| schema       | 0        | 1      | 4      | 3      | 8       |
+| **Total**    | **2**    | **28** | **74** | **47** | **151** |
 
 All Critical + every structural/correctness/security Major fixed in the
 post-final commit.

@@ -26,14 +26,14 @@ Adopt a five-type taxonomy for sub-page state and route every query-param key th
 
 ### The five sub-state types
 
-| Type                | Shape                                            | Example                          | URL form                                                 |
-| ------------------- | ------------------------------------------------ | -------------------------------- | -------------------------------------------------------- |
-| Stepper             | 1..N ordered stages, fixed names                 | KG learn phases, session-item    | `?step=<slug>` (named, not index; survives reordering)   |
-| Item index          | 0-based position in a frozen queue               | Session item N of M, review card | `?item=<n>` (index; queue is frozen per-session)         |
-| Tab                 | 1-of-N full-section view                         | Plan detail sections             | `?tab=<slug>`                                            |
-| Filter              | Multiple independent narrowings                  | Browse filters                   | Keyed individually: `?domain=&cert=&status=`             |
-| Mode flag           | Boolean sub-mode                                 | Card edit mode                   | `?edit=1` (or `?mode=<slug>` for >2 states)              |
-| One-shot banner     | Post-action feedback dropped on navigation       | "Plan created"                   | `?created=1`                                             |
+| Type            | Shape                                      | Example                          | URL form                                               |
+| --------------- | ------------------------------------------ | -------------------------------- | ------------------------------------------------------ |
+| Stepper         | 1..N ordered stages, fixed names           | KG learn phases, session-item    | `?step=<slug>` (named, not index; survives reordering) |
+| Item index      | 0-based position in a frozen queue         | Session item N of M, review card | `?item=<n>` (index; queue is frozen per-session)       |
+| Tab             | 1-of-N full-section view                   | Plan detail sections             | `?tab=<slug>`                                          |
+| Filter          | Multiple independent narrowings            | Browse filters                   | Keyed individually: `?domain=&cert=&status=`           |
+| Mode flag       | Boolean sub-mode                           | Card edit mode                   | `?edit=1` (or `?mode=<slug>` for >2 states)            |
+| One-shot banner | Post-action feedback dropped on navigation | "Plan created"                   | `?created=1`                                           |
 
 The one-shot banner shape isn't a sixth taxonomic type so much as a pattern: a boolean flag a server load consumes then drops.
 

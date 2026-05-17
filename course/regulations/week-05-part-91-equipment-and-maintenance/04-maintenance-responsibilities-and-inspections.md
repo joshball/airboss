@@ -134,12 +134,12 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The 91.405 structure:
 
-| Paragraph | Owner/operator obligation                                                |
-| --------- | ------------------------------------------------------------------------ |
-| (a)       | Ensure required inspections are performed                                |
-| (a) cont. | Have discrepancies repaired (between inspections) per Part 43           |
-| (b)       | Ensure maintenance personnel make the return-to-service entry            |
-| (c)       | At the next inspection, deal with any items deferred under 91.213(d)    |
+| Paragraph | Owner/operator obligation                                                    |
+| --------- | ---------------------------------------------------------------------------- |
+| (a)       | Ensure required inspections are performed                                    |
+| (a) cont. | Have discrepancies repaired (between inspections) per Part 43                |
+| (b)       | Ensure maintenance personnel make the return-to-service entry                |
+| (c)       | At the next inspection, deal with any items deferred under 91.213(d)         |
 | (d)       | Ensure placards are installed for inoperative items deferred under 91.213(d) |
 
 The "next required inspection" in (c) is the loop-closure for the no-MEL deferral pathway from lesson 02. A pilot who defers an inop item under 91.213(d) does not have an unlimited deferral period; the next annual or 100-hour must address the deferred item (repair, replace, remove, or inspect).
@@ -401,20 +401,20 @@ We name and locate. We don't deep-lesson on CAMP.
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the owner/operator maintenance responsibility?                  | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)            |
-| Where is the AD compliance requirement?                                  | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)(a) (cross-references Part 39) |
-| Where is the maintenance-required rule?                                  | [@cite](airboss-ref:regs/cfr-14/91/405?at=2026)            |
-| Where is the post-maintenance return-to-service rule?                    | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a)         |
-| Where is the post-maintenance test-flight requirement?                   | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(b)         |
-| Where is the annual inspection requirement?                              | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(a)         |
-| Where is the 100-hour inspection requirement?                            | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)         |
-| Where is the 10-hour overrun for the 100-hour?                           | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)         |
-| Where is the progressive inspection program?                             | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(d)         |
-| Where is the continuous airworthiness maintenance program?               | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(e)         |
-| Where are the preventive maintenance items the pilot may perform?        | 14 CFR Part 43 Appendix A |
-| Where is the inspection scope for annuals and 100-hours?                 | 14 CFR Part 43 Appendix D |
+| Question                                                          | Section / source                                                              |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Where is the owner/operator maintenance responsibility?           | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)                               |
+| Where is the AD compliance requirement?                           | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)(a) (cross-references Part 39) |
+| Where is the maintenance-required rule?                           | [@cite](airboss-ref:regs/cfr-14/91/405?at=2026)                               |
+| Where is the post-maintenance return-to-service rule?             | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a)                            |
+| Where is the post-maintenance test-flight requirement?            | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(b)                            |
+| Where is the annual inspection requirement?                       | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(a)                            |
+| Where is the 100-hour inspection requirement?                     | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)                            |
+| Where is the 10-hour overrun for the 100-hour?                    | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)                            |
+| Where is the progressive inspection program?                      | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(d)                            |
+| Where is the continuous airworthiness maintenance program?        | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(e)                            |
+| Where are the preventive maintenance items the pilot may perform? | 14 CFR Part 43 Appendix A                                                     |
+| Where is the inspection scope for annuals and 100-hours?          | 14 CFR Part 43 Appendix D                                                     |
 
 ### Apply the rules
 

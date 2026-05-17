@@ -13,15 +13,15 @@ Observed evidence the migration step (per [spec.md §G](spec.md)) may have lost 
 
 ## Timeline
 
-| When | Event | Evidence |
-| ---- | ----- | -------- |
-| 2026-04-28 18:13:55 UTC | PHAK MOSAIC errata applied | inline manifest `applied_at`, with sha256 `1670b8454e...` |
-| 2026-04-28 18:13:55 UTC | AFH MOSAIC errata applied | inline manifest, sha256 recorded |
-| 2026-04-29 15:34 UTC | PR #327 (cache-flat-naming) merged | git log on main |
-| 2026-04-29 ~15:35 UTC | Operator ran `migrate-cache-flat.ts` (per WP §G) | inferred from merge timing |
-| 2026-04-29 ~21:00 UTC | First observation: PHAK errata cache file MISSING | `ls ~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/` |
-| 2026-04-29 ~21:00 UTC | Same observation: AFH errata cache file PRESENT | same `ls`, AFH directory has 24 files |
-| 2026-04-29 21:23 UTC | `--apply-errata mosaic` re-fetched PHAK errata | new file timestamp; sha matches the original 2026-04-28 record |
+| When                    | Event                                             | Evidence                                                               |
+| ----------------------- | ------------------------------------------------- | ---------------------------------------------------------------------- |
+| 2026-04-28 18:13:55 UTC | PHAK MOSAIC errata applied                        | inline manifest `applied_at`, with sha256 `1670b8454e...`              |
+| 2026-04-28 18:13:55 UTC | AFH MOSAIC errata applied                         | inline manifest, sha256 recorded                                       |
+| 2026-04-29 15:34 UTC    | PR #327 (cache-flat-naming) merged                | git log on main                                                        |
+| 2026-04-29 ~15:35 UTC   | Operator ran `migrate-cache-flat.ts` (per WP §G)  | inferred from merge timing                                             |
+| 2026-04-29 ~21:00 UTC   | First observation: PHAK errata cache file MISSING | `ls ~/Documents/airboss-handbook-cache/handbooks/phak/FAA-H-8083-25C/` |
+| 2026-04-29 ~21:00 UTC   | Same observation: AFH errata cache file PRESENT   | same `ls`, AFH directory has 24 files                                  |
+| 2026-04-29 21:23 UTC    | `--apply-errata mosaic` re-fetched PHAK errata    | new file timestamp; sha matches the original 2026-04-28 record         |
 
 ## What the manifest says about apply-time state
 
@@ -61,6 +61,7 @@ Spec is correct. If implemented as written, PHAK errata should have been renamed
 ### H1: Operator script bug -- handbook-block partial implementation
 
 The migration script was operator-written (never committed; one-shot deletion required by the WP). The operator may have implemented the AC/ACS/AIM/regs blocks, started the handbooks block, and the errata loop either:
+
 - Never ran (nested-loop bailout)
 - Ran with wrong path globs
 - Encountered an error on PHAK and bailed mid-handbook

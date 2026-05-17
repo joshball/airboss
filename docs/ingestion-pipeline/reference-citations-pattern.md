@@ -30,15 +30,15 @@ Source x target matrix (from [libs/constants/src/citations.ts](../../libs/consta
 
 Source and target tables (resolved by the BC, not the DB):
 
-| Type discriminator  | Table                           | Notes                                                                 |
-| ------------------- | ------------------------------- | --------------------------------------------------------------------- |
-| `card`              | `study.card`                    | Owner: `card.userId`                                                  |
-| `rep`               | `study.scenario`                | Same table as `scenario`, kept distinct to label reads                |
-| `scenario`          | `study.scenario`                | Owner: `scenario.userId`                                              |
-| `node`              | `study.knowledge_node`          | Author check is open in v1; per-node ACLs land later                  |
-| `reference_section` | `study.reference_section`       | Polymorphic across every corpus -- CFR / handbook / AC / ACS / AIM / NTSB / SAFO / InFO. Corpus is read from joined `study.reference.kind`. Each row carries the canonical `airboss_ref` URI used for chip deep-linking. |
-| `knowledge_node`    | `study.knowledge_node`          | Internal graph node id                                                |
-| `external_ref`      | none -- `target_id` is the data | Encodes `<url>\|<title>` via `EXTERNAL_REF_TARGET_DELIMITER`          |
+| Type discriminator  | Table                           | Notes                                                                                                                                                                                                                    |                                              |
+| ------------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| `card`              | `study.card`                    | Owner: `card.userId`                                                                                                                                                                                                     |                                              |
+| `rep`               | `study.scenario`                | Same table as `scenario`, kept distinct to label reads                                                                                                                                                                   |                                              |
+| `scenario`          | `study.scenario`                | Owner: `scenario.userId`                                                                                                                                                                                                 |                                              |
+| `node`              | `study.knowledge_node`          | Author check is open in v1; per-node ACLs land later                                                                                                                                                                     |                                              |
+| `reference_section` | `study.reference_section`       | Polymorphic across every corpus -- CFR / handbook / AC / ACS / AIM / NTSB / SAFO / InFO. Corpus is read from joined `study.reference.kind`. Each row carries the canonical `airboss_ref` URI used for chip deep-linking. |                                              |
+| `knowledge_node`    | `study.knowledge_node`          | Internal graph node id                                                                                                                                                                                                   |                                              |
+| `external_ref`      | none -- `target_id` is the data | Encodes `<url>\                                                                                                                                                                                                          | <title>` via `EXTERNAL_REF_TARGET_DELIMITER` |
 
 Soft FK rationale: a real per-type FK would require either nullable-FK fan-out (option B) or per-type tables (option C). Both lose the symmetric "cited by" query surface across types. The BC is the integrity gate -- it verifies the source row exists and is owned by the caller, and that the target row exists, before inserting. See [content-citations/spec.md](../work-packages/content-citations/spec.md) decision 1.
 
@@ -56,27 +56,27 @@ IDs use the `ccit_` prefix via [generateContentCitationId](../../libs/utils/src/
 
 Citation exports re-emitted from the `@ab/bc-study` barrel: [libs/bc/study/src/citations/index.ts](../../libs/bc/study/src/citations/index.ts).
 
-| Export                         | Purpose                                                                                |
-| ------------------------------ | -------------------------------------------------------------------------------------- |
-| `createCitation(input, db?)`   | Validate source ownership + target existence, insert. Throws typed errors below.       |
-| `deleteCitation(id, userId)`   | Owner-only delete. Returns `CitationNotFoundError` for both missing and not-owned.     |
-| `getCitationsOf(srcType, id)`  | Source-side read. Raw rows ordered by `createdAt`. Pair with `resolveCitationTargets`. |
-| `getCitedBy(tgtType, id)`      | Target-side read. Raw rows ordered by `createdAt`. Pair with `resolveCitationSources`. |
-| `resolveCitationTargets(rows)` | Batch-enrich rows with target display data (`label`, `detail`, `href`).                |
-| `resolveCitationSources(rows)` | Batch-enrich rows with source display data (`label`, `detail`, `exists`).              |
+| Export                         | Purpose                                                                                                                                                                                                                                                                                  |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `createCitation(input, db?)`   | Validate source ownership + target existence, insert. Throws typed errors below.                                                                                                                                                                                                         |
+| `deleteCitation(id, userId)`   | Owner-only delete. Returns `CitationNotFoundError` for both missing and not-owned.                                                                                                                                                                                                       |
+| `getCitationsOf(srcType, id)`  | Source-side read. Raw rows ordered by `createdAt`. Pair with `resolveCitationTargets`.                                                                                                                                                                                                   |
+| `getCitedBy(tgtType, id)`      | Target-side read. Raw rows ordered by `createdAt`. Pair with `resolveCitationSources`.                                                                                                                                                                                                   |
+| `resolveCitationTargets(rows)` | Batch-enrich rows with target display data (`label`, `detail`, `href`).                                                                                                                                                                                                                  |
+| `resolveCitationSources(rows)` | Batch-enrich rows with source display data (`label`, `detail`, `exists`).                                                                                                                                                                                                                |
 | `searchReferenceSections(q)`   | Picker search backing for the `reference_section` tab. Joins `study.reference_section` -> `study.reference`; one search box covers every corpus. Returns the `airboss_ref` URI alongside label + corpus badge so the chip-render layer can compute the deep-link without a second fetch. |
-| `searchKnowledgeNodes(q)`      | Picker search backing for `knowledge_node` tab.                                        |
-| `auditCitations(db?)`          | Walks every `content_citations` row; reports dead targets, dead sources, resolver coverage gaps, invalid external URLs. Used by `bun run sources audit-citations` + the `citation-audit` scheduled job. |
+| `searchKnowledgeNodes(q)`      | Picker search backing for `knowledge_node` tab.                                                                                                                                                                                                                                          |
+| `auditCitations(db?)`          | Walks every `content_citations` row; reports dead targets, dead sources, resolver coverage gaps, invalid external URLs. Used by `bun run sources audit-citations` + the `citation-audit` scheduled job.                                                                                  |
 
 Typed errors thrown by `createCitation` / `deleteCitation`:
 
-| Error                          | When                                                       | Route should map to                  |
-| ------------------------------ | ---------------------------------------------------------- | ------------------------------------ |
-| `CitationValidationError`      | Bad source/target type, missing ids, context > 500 chars   | `fail(400, ...)`                     |
-| `CitationSourceNotFoundError`  | Source row missing or not owned by caller                  | `error(404, ...)`                    |
-| `CitationTargetNotFoundError`  | Target row missing or invalid external URL                 | `fail(400, ...)`                     |
-| `DuplicateCitationError`       | `(srcType, srcId, tgtType, tgtId)` already exists          | `fail(409, ...)`                     |
-| `CitationNotFoundError`        | Delete: id missing or not owned by caller                  | `fail(404, ...)`                     |
+| Error                         | When                                                     | Route should map to |
+| ----------------------------- | -------------------------------------------------------- | ------------------- |
+| `CitationValidationError`     | Bad source/target type, missing ids, context > 500 chars | `fail(400, ...)`    |
+| `CitationSourceNotFoundError` | Source row missing or not owned by caller                | `error(404, ...)`   |
+| `CitationTargetNotFoundError` | Target row missing or invalid external URL               | `fail(400, ...)`    |
+| `DuplicateCitationError`      | `(srcType, srcId, tgtType, tgtId)` already exists        | `fail(409, ...)`    |
+| `CitationNotFoundError`       | Delete: id missing or not owned by caller                | `fail(404, ...)`    |
 
 Reference wiring for the error mapping: [apps/study/src/routes/(app)/memory/[id]/+page.server.ts](../../apps/study/src/routes/(app)/memory/[id]/+page.server.ts) and [apps/study/src/routes/(app)/reps/[id]/+page.server.ts](../../apps/study/src/routes/(app)/reps/[id]/+page.server.ts).
 
@@ -86,11 +86,11 @@ Batch enrichment is O(distinct-target-types), not O(citations) -- both `resolveC
 
 Layering rule: `libs/ui/` depends on `libs/constants/` only -- never on a BC. Every component takes a normalized `items` prop so the route layer projects from `CitationWith{Target,Source}` into the component shape.
 
-| Component                                                                                              | Use                                                            | Key props                                                                              |
-| ------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [CitationPicker](../../libs/ui/src/components/CitationPicker.svelte)                                   | Modal: tabs per target type, search, optional context note     | `bind:open`, `targetTypes`, `onSelect({targetType, targetId, note})`, `onCancel`       |
-| [CitationChips](../../libs/ui/src/components/CitationChips.svelte)                                     | Inline list of citations under content                         | `items`, `editable`, `removeAction` (form-action path)                                 |
-| [CitedByPanel](../../libs/ui/src/components/CitedByPanel.svelte)                                       | Reverse-lookup panel on a target detail page                   | `items`, `heading`, `emptyMessage`, `headingLevel`                                     |
+| Component                                                            | Use                                                        | Key props                                                                        |
+| -------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [CitationPicker](../../libs/ui/src/components/CitationPicker.svelte) | Modal: tabs per target type, search, optional context note | `bind:open`, `targetTypes`, `onSelect({targetType, targetId, note})`, `onCancel` |
+| [CitationChips](../../libs/ui/src/components/CitationChips.svelte)   | Inline list of citations under content                     | `items`, `editable`, `removeAction` (form-action path)                           |
+| [CitedByPanel](../../libs/ui/src/components/CitedByPanel.svelte)     | Reverse-lookup panel on a target detail page               | `items`, `heading`, `emptyMessage`, `headingLevel`                               |
 
 Picker behaviors worth knowing before you wire it:
 

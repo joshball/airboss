@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Posture has improved materially since the 2026-04-22 sweep: CSP/HSTS/XCTO/Referrer/Permissions headers are now wired through `kit.csp` + `hooks.server.ts`, the dual-gate auth contract is documented and applied, every protected route under `(app)/` runs `requireAuth` at the layout AND in each per-page load + action, file-streaming endpoints have prefix + symlink guards, the SameSite gap was tightened to `strict`, the `addSkipNode` data-integrity gap was closed at the BC, login no longer logs raw email on 5xx, and Drizzle is used exclusively (the few `sql` template usages parameterize values; `sql.raw` is fed only compile-time constants from `@ab/constants`). The remaining issues cluster around three surfaces: (1) the new hangar admin user-detail page exposes live `bauth_session.token` values to admins, (2) the upload action writes a temp file at a path joined with the client-supplied filename without sanitization, (3) a couple of HTML sinks in the small markdown renderer interpolate URLs into attributes without quote-escaping. The CSP that landed materially shrinks the exploit surface for (3).

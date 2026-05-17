@@ -122,14 +122,14 @@ Faster, requires the listener to fill in the parsing. Common, fine in informal c
 
 These look similar and have caused real confusion in oral exams and incident reports:
 
-| Citation     | What it is                                          | Length       |
-| ------------ | --------------------------------------------------- | ------------ |
-| **§91.3**    | PIC authority and emergency deviation               | 3 paragraphs |
-| **§91.13**   | Careless or reckless operation                       | 2 paragraphs |
-| **§91.103**  | Preflight action                                     | 1 page       |
-| **§91.119**  | Minimum safe altitudes                               | 1 page       |
-| **§91.123**  | Compliance with ATC clearances and instructions     | 2 paragraphs |
-| **§91.13** vs **§91.130** | Careless/reckless vs Class C ops      | very different |
+| Citation                  | What it is                                      | Length         |
+| ------------------------- | ----------------------------------------------- | -------------- |
+| **§91.3**                 | PIC authority and emergency deviation           | 3 paragraphs   |
+| **§91.13**                | Careless or reckless operation                  | 2 paragraphs   |
+| **§91.103**               | Preflight action                                | 1 page         |
+| **§91.119**               | Minimum safe altitudes                          | 1 page         |
+| **§91.123**               | Compliance with ATC clearances and instructions | 2 paragraphs   |
+| **§91.13** vs **§91.130** | Careless/reckless vs Class C ops                | very different |
 
 The trap: in fast speech, "ninety-one thirteen" and "ninety-one one thirty" can blur. Always pause briefly between digits when there's any chance of ambiguity. In writing, always use the period properly: §91.13, not §91-13 or §91/13.
 
@@ -146,16 +146,16 @@ These sections are different things. §91.3 is the PIC's authority; §91.13 is t
 
 Pilot-relevant law lives in many documents. The citation form differs:
 
-| Document                | Form                                  | Example                              |
-| ----------------------- | ------------------------------------- | ------------------------------------ |
-| 14 CFR                  | Title CFR Part.Section(paragraph)     | 14 CFR § 91.169(c)(1)(i)             |
-| 49 CFR                  | Same form, different Title            | 49 CFR § 830.5                       |
-| United States Code      | Title USC § Section                    | 49 USC § 44703                       |
-| Advisory Circular       | AC Number                             | AC 61-65 (sometimes AC 61-65J for revision letter) |
-| AIM                     | Chapter-Section-Paragraph             | AIM 5-1-7 (chapter 5, section 1, paragraph 7) |
-| Chief Counsel letter    | Recipient name + year                 | Mangiamele (2009), Hicks (2010)      |
-| FAA Order               | Order Number, Volume, Chapter         | FAA Order 8900.1, Vol 5, Ch 1        |
-| NTSB Board order        | Case name + EA-#                       | Administrator v. Lobeiko, EA-5310    |
+| Document             | Form                              | Example                                            |
+| -------------------- | --------------------------------- | -------------------------------------------------- |
+| 14 CFR               | Title CFR Part.Section(paragraph) | 14 CFR § 91.169(c)(1)(i)                           |
+| 49 CFR               | Same form, different Title        | 49 CFR § 830.5                                     |
+| United States Code   | Title USC § Section               | 49 USC § 44703                                     |
+| Advisory Circular    | AC Number                         | AC 61-65 (sometimes AC 61-65J for revision letter) |
+| AIM                  | Chapter-Section-Paragraph         | AIM 5-1-7 (chapter 5, section 1, paragraph 7)      |
+| Chief Counsel letter | Recipient name + year             | Mangiamele (2009), Hicks (2010)                    |
+| FAA Order            | Order Number, Volume, Chapter     | FAA Order 8900.1, Vol 5, Ch 1                      |
+| NTSB Board order     | Case name + EA-#                  | Administrator v. Lobeiko, EA-5310                  |
 
 When a citation has a Roman numeral or a chapter number with hyphens (like `5-1-7`), you're almost certainly looking at the AIM, not a CFR section.
 
@@ -172,38 +172,38 @@ When a citation has a Roman numeral or a chapter number with hyphens (like `5-1-
 
 ### Parse these citations aloud
 
-| Written          | Read aloud (phonetic style)                                             |
-| ---------------- | ----------------------------------------------------------------------- |
-| §91.103          | Section ninety-one one-oh-three                                          |
-| §91.103(b)(1)    | Section ninety-one one-oh-three paragraph b sub-paragraph one            |
-| §61.57(c)(1)(i)  | Section sixty-one fifty-seven paragraph c sub-paragraph one item i       |
-| §91.213(d)       | Section ninety-one two-thirteen paragraph d                              |
-| §91.13           | Section ninety-one thirteen                                              |
-| §91.130          | Section ninety-one one-thirty                                            |
+| Written         | Read aloud (phonetic style)                                        |
+| --------------- | ------------------------------------------------------------------ |
+| §91.103         | Section ninety-one one-oh-three                                    |
+| §91.103(b)(1)   | Section ninety-one one-oh-three paragraph b sub-paragraph one      |
+| §61.57(c)(1)(i) | Section sixty-one fifty-seven paragraph c sub-paragraph one item i |
+| §91.213(d)      | Section ninety-one two-thirteen paragraph d                        |
+| §91.13          | Section ninety-one thirteen                                        |
+| §91.130         | Section ninety-one one-thirty                                      |
 
 ### Parse these spoken citations into written form
 
-| Spoken                                                | Written          |
-| ----------------------------------------------------- | ---------------- |
-| "ninety-one one-sixty-seven"                          | §91.167          |
-| "ninety-one one-sixty-nine bravo"                     | §91.169(b)       |
-| "sixty-one fifty-six alpha"                           | §61.56(a)        |
-| "ninety-one two-eleven a-three"                       | §91.211(a)(3)    |
-| "fourteen CFR sixty-one fifty-seven c-one-i"          | 14 CFR § 61.57(c)(1)(i) |
-| "forty-nine CFR eight-thirty point five"              | 49 CFR § 830.5   |
+| Spoken                                       | Written                 |
+| -------------------------------------------- | ----------------------- |
+| "ninety-one one-sixty-seven"                 | §91.167                 |
+| "ninety-one one-sixty-nine bravo"            | §91.169(b)              |
+| "sixty-one fifty-six alpha"                  | §61.56(a)               |
+| "ninety-one two-eleven a-three"              | §91.211(a)(3)           |
+| "fourteen CFR sixty-one fifty-seven c-one-i" | 14 CFR § 61.57(c)(1)(i) |
+| "forty-nine CFR eight-thirty point five"     | 49 CFR § 830.5          |
 
 ### Identify the source
 
-| Citation                          | Source                                  |
-| --------------------------------- | --------------------------------------- |
-| 14 CFR § 91.103                   | Federal Aviation Regulation             |
-| 49 CFR § 830.5                    | NTSB regulation (incident reporting)    |
-| 49 USC § 44703                    | United States Code (BasicMed authority) |
-| AIM 5-1-7                         | AIM (procedure guidance, not regulation)|
-| AC 61-65                          | Advisory Circular (guidance)            |
-| FAA Order 8900.1                  | FSDO operations handbook                |
-| Mangiamele (2009)                 | Chief Counsel interpretation letter     |
-| Administrator v. Lobeiko          | NTSB Board order (enforcement precedent)|
+| Citation                 | Source                                   |
+| ------------------------ | ---------------------------------------- |
+| 14 CFR § 91.103          | Federal Aviation Regulation              |
+| 49 CFR § 830.5           | NTSB regulation (incident reporting)     |
+| 49 USC § 44703           | United States Code (BasicMed authority)  |
+| AIM 5-1-7                | AIM (procedure guidance, not regulation) |
+| AC 61-65                 | Advisory Circular (guidance)             |
+| FAA Order 8900.1         | FSDO operations handbook                 |
+| Mangiamele (2009)        | Chief Counsel interpretation letter      |
+| Administrator v. Lobeiko | NTSB Board order (enforcement precedent) |
 
 ## Where this lesson sits
 

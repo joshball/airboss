@@ -88,17 +88,17 @@ orphan baked in from before this fix, run
 2. Sign in as Abby (`abby@airboss.test` / `Pa33word!`)
 3. Walk these routes:
 
-   | Route                                                    | Expect                                            |
-   | -------------------------------------------------------- | -------------------------------------------------- |
-   | `http://localhost:5173/library`                          | All four spines populated                          |
-   | `http://localhost:5173/library/cert/private`             | PHAK, AFH, AvWx, Risk-Management all listed        |
-   | `http://localhost:5173/library/cert/instrument`          | IFH listed                                         |
-   | `http://localhost:5173/library/cert/cfi`                 | Aviation Instructor's Handbook listed              |
-   | `http://localhost:5173/library/topic/human-factors`      | FAA-P-8740-25 (Personal Minimums Checklist) listed |
-   | `http://localhost:5173/library/topic/weather`            | FAA-P-8740-25 listed                               |
-   | `http://localhost:5173/library/topic/certification`      | FAA-S-8081-14 (PPL PTS) listed                     |
-   | `http://localhost:5173/library/regulations`              | 14 CFR Parts list -- NO Part 14; Parts 23/61/91 ok |
-   | `http://localhost:5173/library/regulations/14-cfr/23`    | Part 23 sections render                            |
+| Route                                                 | Expect                                             |
+| ----------------------------------------------------- | -------------------------------------------------- |
+| `http://localhost:5173/library`                       | All four spines populated                          |
+| `http://localhost:5173/library/cert/private`          | PHAK, AFH, AvWx, Risk-Management all listed        |
+| `http://localhost:5173/library/cert/instrument`       | IFH listed                                         |
+| `http://localhost:5173/library/cert/cfi`              | Aviation Instructor's Handbook listed              |
+| `http://localhost:5173/library/topic/human-factors`   | FAA-P-8740-25 (Personal Minimums Checklist) listed |
+| `http://localhost:5173/library/topic/weather`         | FAA-P-8740-25 listed                               |
+| `http://localhost:5173/library/topic/certification`   | FAA-S-8081-14 (PPL PTS) listed                     |
+| `http://localhost:5173/library/regulations`           | 14 CFR Parts list -- NO Part 14; Parts 23/61/91 ok |
+| `http://localhost:5173/library/regulations/14-cfr/23` | Part 23 sections render                            |
 
 **What to look for**: each doc appears in its listing and clicking
 through opens its render page with no 404. Before this session, 7

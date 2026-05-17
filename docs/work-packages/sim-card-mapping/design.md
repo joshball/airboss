@@ -142,35 +142,35 @@ export interface EnginePoolFilters {
 
 The full table for the 13 graded scenarios. Knowledge node slugs follow the existing `<domain-prefix>-<topic>` convention used in seeded knowledge nodes ([course/knowledge/](../../../course/knowledge/); the FIRC-era research dossiers at [course/firc/L02-Knowledge/](../../../course/firc/L02-Knowledge/) are reference-only). Where a node does not yet exist, the seed validator will fail and the engineer either authors the node or removes the link before merge.
 
-| Scenario                       | Node id                                       | Weight | Rationale                                                                |
-| ------------------------------ | --------------------------------------------- | ------ | ------------------------------------------------------------------------ |
-| `first-flight`                 | `aero-four-forces`                            | 0.6    | Pitch / power / coordination basics.                                     |
-| `first-flight`                 | `proc-traffic-pattern`                        | 0.4    | Climb-out and pattern entry shape.                                       |
-| `departure-stall`              | `aero-angle-of-attack-and-stall`              | 1.0    | Primary concept under test.                                              |
-| `departure-stall`              | `proc-stall-recovery`                         | 0.6    | Recovery technique.                                                      |
-| `efato`                        | `proc-engine-failure-after-takeoff`           | 1.0    | Direct match.                                                            |
-| `efato`                        | `proc-emergency-authority`                    | 0.4    | Decision authority while diverting.                                      |
-| `vacuum-failure`               | `nav-partial-panel`                           | 0.8    | Vacuum-driven instruments cross-checked.                                 |
-| `vacuum-failure`               | `proc-instrument-cross-check`                 | 0.6    | Scan adjustments.                                                        |
-| `pitot-block`                  | `proc-pitot-static-failures`                  | 1.0    | Direct match.                                                            |
-| `pitot-block`                  | `proc-instrument-cross-check`                 | 0.4    | Cross-check from alternate sources.                                      |
-| `static-block`                 | `proc-pitot-static-failures`                  | 1.0    | Direct match.                                                            |
-| `static-block`                 | `proc-alternate-static-source`                | 0.6    | Specific procedure.                                                      |
-| `partial-panel`                | `nav-partial-panel`                           | 1.0    | Direct match.                                                            |
-| `partial-panel`                | `proc-instrument-cross-check`                 | 0.5    | Scan rebuild.                                                            |
-| `unusual-attitudes-nose-hi`    | `proc-unusual-attitude-recovery`              | 1.0    | Direct match.                                                            |
-| `unusual-attitudes-nose-hi`    | `aero-angle-of-attack-and-stall`              | 0.4    | Nose-high recovery is stall-margin sensitive.                            |
-| `unusual-attitudes-nose-lo`    | `proc-unusual-attitude-recovery`              | 1.0    | Direct match.                                                            |
-| `unusual-attitudes-nose-lo`    | `proc-overspeed-recovery`                     | 0.4    | Nose-low rolls into Vne territory.                                       |
-| `aft-cg-slow-flight`           | `aero-cg-and-stability`                       | 0.8    | CG-driven handling.                                                      |
-| `aft-cg-slow-flight`           | `aero-slow-flight`                            | 0.6    | Slow-flight regime.                                                      |
-| `vmc-into-imc`                 | `proc-spatial-disorientation`                 | 1.0    | Headline failure mode.                                                   |
-| `vmc-into-imc`                 | `proc-180-degree-turn`                        | 0.6    | The textbook escape.                                                     |
-| `ils-approach`                 | `nav-instrument-approach-structure`           | 0.6    | Approach segments + minimums.                                            |
-| `ils-approach`                 | `nav-localiser-and-glide-slope-tracking`      | 1.0    | Direct lateral / vertical guidance focus.                                |
-| `ils-approach`                 | `nav-marker-beacon-recognition`               | 0.4    | New beacon cue.                                                          |
-| `steep-turns`                  | `aero-load-factor-and-bank-angle`             | 1.0    | Headline concept.                                                        |
-| `steep-turns`                  | `aero-coordination-rudder`                    | 0.5    | Slip-ball discipline.                                                    |
+| Scenario                    | Node id                                  | Weight | Rationale                                     |
+| --------------------------- | ---------------------------------------- | ------ | --------------------------------------------- |
+| `first-flight`              | `aero-four-forces`                       | 0.6    | Pitch / power / coordination basics.          |
+| `first-flight`              | `proc-traffic-pattern`                   | 0.4    | Climb-out and pattern entry shape.            |
+| `departure-stall`           | `aero-angle-of-attack-and-stall`         | 1.0    | Primary concept under test.                   |
+| `departure-stall`           | `proc-stall-recovery`                    | 0.6    | Recovery technique.                           |
+| `efato`                     | `proc-engine-failure-after-takeoff`      | 1.0    | Direct match.                                 |
+| `efato`                     | `proc-emergency-authority`               | 0.4    | Decision authority while diverting.           |
+| `vacuum-failure`            | `nav-partial-panel`                      | 0.8    | Vacuum-driven instruments cross-checked.      |
+| `vacuum-failure`            | `proc-instrument-cross-check`            | 0.6    | Scan adjustments.                             |
+| `pitot-block`               | `proc-pitot-static-failures`             | 1.0    | Direct match.                                 |
+| `pitot-block`               | `proc-instrument-cross-check`            | 0.4    | Cross-check from alternate sources.           |
+| `static-block`              | `proc-pitot-static-failures`             | 1.0    | Direct match.                                 |
+| `static-block`              | `proc-alternate-static-source`           | 0.6    | Specific procedure.                           |
+| `partial-panel`             | `nav-partial-panel`                      | 1.0    | Direct match.                                 |
+| `partial-panel`             | `proc-instrument-cross-check`            | 0.5    | Scan rebuild.                                 |
+| `unusual-attitudes-nose-hi` | `proc-unusual-attitude-recovery`         | 1.0    | Direct match.                                 |
+| `unusual-attitudes-nose-hi` | `aero-angle-of-attack-and-stall`         | 0.4    | Nose-high recovery is stall-margin sensitive. |
+| `unusual-attitudes-nose-lo` | `proc-unusual-attitude-recovery`         | 1.0    | Direct match.                                 |
+| `unusual-attitudes-nose-lo` | `proc-overspeed-recovery`                | 0.4    | Nose-low rolls into Vne territory.            |
+| `aft-cg-slow-flight`        | `aero-cg-and-stability`                  | 0.8    | CG-driven handling.                           |
+| `aft-cg-slow-flight`        | `aero-slow-flight`                       | 0.6    | Slow-flight regime.                           |
+| `vmc-into-imc`              | `proc-spatial-disorientation`            | 1.0    | Headline failure mode.                        |
+| `vmc-into-imc`              | `proc-180-degree-turn`                   | 0.6    | The textbook escape.                          |
+| `ils-approach`              | `nav-instrument-approach-structure`      | 0.6    | Approach segments + minimums.                 |
+| `ils-approach`              | `nav-localiser-and-glide-slope-tracking` | 1.0    | Direct lateral / vertical guidance focus.     |
+| `ils-approach`              | `nav-marker-beacon-recognition`          | 0.4    | New beacon cue.                               |
+| `steep-turns`               | `aero-load-factor-and-bank-angle`        | 1.0    | Headline concept.                             |
+| `steep-turns`               | `aero-coordination-rudder`               | 0.5    | Slip-ball discipline.                         |
 
 Two scenarios (`playground`, `playground-pa28`) are excluded from the typed `Record` via `Exclude<SimScenarioId, ...>`; adding a new playground-style ungraded scenario means extending that exclusion, surfacing the choice in code review.
 

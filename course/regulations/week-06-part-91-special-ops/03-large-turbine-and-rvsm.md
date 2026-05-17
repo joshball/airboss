@@ -194,23 +194,23 @@ Subparts F, G, H, I, J, K, L are stacked: each *adds* to the universal A-E basel
 
 ## Drills
 
-| Question                                                      | Section / source                              |
-| ------------------------------------------------------------- | --------------------------------------------- |
-| Where is subpart F applicability?                             | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026) |
+| Question                                                      | Section / source                                       |
+| ------------------------------------------------------------- | ------------------------------------------------------ |
+| Where is subpart F applicability?                             | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026)        |
 | What aircraft does subpart F cover?                           | Large (> 12,500 lb), turbojet multi-engine, fractional |
-| Where is the subpart F passenger briefing?                    | [@cite](airboss-ref:regs/cfr-14/91/519?at=2026) |
-| Where is the SIC requirement under Part 91?                   | [@cite](airboss-ref:regs/cfr-14/91/531?at=2026) |
-| Where is the flight attendant threshold?                      | [@cite](airboss-ref:regs/cfr-14/91/533?at=2026) |
-| Where is the icing-operations rule?                           | [@cite](airboss-ref:regs/cfr-14/91/527?at=2026) |
-| Where is subpart G applicability?                             | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026) |
-| Where is the FDR / CVR rule?                                  | [@cite](airboss-ref:regs/cfr-14/91/609?at=2026) |
-| Where is the one-engine-out ferry rule?                       | [@cite](airboss-ref:regs/cfr-14/91/611?at=2026) |
-| Where is the international ops rule for U.S. aircraft abroad? | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026) |
-| Where is the RVSM rule?                                       | [@cite](airboss-ref:regs/cfr-14/91/706?at=2026) |
-| What altitude band is RVSM in U.S. airspace?                  | FL290 to FL410                                |
-| Does a TBM 940 fall under subpart F?                          | No (single-engine turboprop, under 12,500 lb) |
-| Does a King Air 350 fall under subpart F?                     | Yes (multi-engine, over 12,500 lb)            |
-| Does a Citation M2 fall under subpart F?                      | Yes (turbojet multi-engine)                   |
+| Where is the subpart F passenger briefing?                    | [@cite](airboss-ref:regs/cfr-14/91/519?at=2026)        |
+| Where is the SIC requirement under Part 91?                   | [@cite](airboss-ref:regs/cfr-14/91/531?at=2026)        |
+| Where is the flight attendant threshold?                      | [@cite](airboss-ref:regs/cfr-14/91/533?at=2026)        |
+| Where is the icing-operations rule?                           | [@cite](airboss-ref:regs/cfr-14/91/527?at=2026)        |
+| Where is subpart G applicability?                             | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026)        |
+| Where is the FDR / CVR rule?                                  | [@cite](airboss-ref:regs/cfr-14/91/609?at=2026)        |
+| Where is the one-engine-out ferry rule?                       | [@cite](airboss-ref:regs/cfr-14/91/611?at=2026)        |
+| Where is the international ops rule for U.S. aircraft abroad? | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026)        |
+| Where is the RVSM rule?                                       | [@cite](airboss-ref:regs/cfr-14/91/706?at=2026)        |
+| What altitude band is RVSM in U.S. airspace?                  | FL290 to FL410                                         |
+| Does a TBM 940 fall under subpart F?                          | No (single-engine turboprop, under 12,500 lb)          |
+| Does a King Air 350 fall under subpart F?                     | Yes (multi-engine, over 12,500 lb)                     |
+| Does a Citation M2 fall under subpart F?                      | Yes (turbojet multi-engine)                            |
 
 ### Apply the rules
 

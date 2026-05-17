@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Overall, debuggability is strong: a structured `createLogger` (libs/utils/src/logger.ts) with pretty-vs-prod modes, an env-var registry (libs/constants/src/env.ts), zero `: any` types in source, no `TODO`/`FIXME` sprinkled around, and most thrown errors include context (function name, offending value, path). The setup script is excellent -- idempotent, copy-paste remediation for missing /etc/hosts entries, friendly messages for missing thumbnail tools.

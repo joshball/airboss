@@ -17,11 +17,11 @@ The user articulated the model: **"one auth for all apps; cross-app sessions; ro
 
 Three orthogonal authorization layers, evaluated in order on every protected request:
 
-| Layer | Question | Owner | Lifecycle |
-|-------|----------|-------|-----------|
-| **Authentication** | Are you signed in? | `@ab/auth` session validation | Per-session |
-| **Roles** | What can you do across the platform? | `identity.user.role` (per ADR 009) | Slow-changing; admin-managed |
-| **Entitlements** | What have you registered or paid for? | `identity.entitlement` (new) | Dynamic; tied to billing/registration |
+| Layer              | Question                              | Owner                              | Lifecycle                             |
+| ------------------ | ------------------------------------- | ---------------------------------- | ------------------------------------- |
+| **Authentication** | Are you signed in?                    | `@ab/auth` session validation      | Per-session                           |
+| **Roles**          | What can you do across the platform?  | `identity.user.role` (per ADR 009) | Slow-changing; admin-managed          |
+| **Entitlements**   | What have you registered or paid for? | `identity.entitlement` (new)       | Dynamic; tied to billing/registration |
 
 ### Identity (authN)
 
@@ -41,12 +41,12 @@ A user who signs in to study and clicks a `airboss-ref:` chip pointing into flig
 
 Per ADR 009. No change to the role model itself. Roles are coarse, slow-changing, attached to the user, enforced by `requireRole(role)` helpers in `@ab/auth`.
 
-| Role | Surface |
-|------|---------|
-| `LEARNER` | Public consumer surfaces (study, sim, flightbag, future firc) |
-| `AUTHOR` | Authoring surfaces (hangar) |
+| Role       | Surface                                                                       |
+| ---------- | ----------------------------------------------------------------------------- |
+| `LEARNER`  | Public consumer surfaces (study, sim, flightbag, future firc)                 |
+| `AUTHOR`   | Authoring surfaces (hangar)                                                   |
 | `OPERATOR` | Ops/admin tooling (today: hangar's admin section; eventually a dedicated app) |
-| `ADMIN` | Short-circuits role and entitlement checks |
+| `ADMIN`    | Short-circuits role and entitlement checks                                    |
 
 Role changes are an admin action, not a billing action.
 
@@ -101,14 +101,14 @@ Apps compose these in `+layout.server.ts` for app-wide gates and per-route `+pag
 
 ### Per-app posture
 
-| App | authN required? | authZ requirement |
-|-----|----------------|-------------------|
-| study | yes | `study:browse` (default for all registered users) |
-| sim | yes | `sim:scenarios:basic` (default) or `sim:scenarios:premium` for premium content |
-| hangar | yes | role `AUTHOR` or `ADMIN` |
-| flightbag | yes (for now) | `flightbag:read` (default for all registered users) |
-| firc | yes | `firc:enroll` AND `firc:course:<cohort>` for the cohort the user is enrolled in |
-| runway (future public) | no | n/a — public surface |
+| App                    | authN required? | authZ requirement                                                               |
+| ---------------------- | --------------- | ------------------------------------------------------------------------------- |
+| study                  | yes             | `study:browse` (default for all registered users)                               |
+| sim                    | yes             | `sim:scenarios:basic` (default) or `sim:scenarios:premium` for premium content  |
+| hangar                 | yes             | role `AUTHOR` or `ADMIN`                                                        |
+| flightbag              | yes (for now)   | `flightbag:read` (default for all registered users)                             |
+| firc                   | yes             | `firc:enroll` AND `firc:course:<cohort>` for the cohort the user is enrolled in |
+| runway (future public) | no              | n/a — public surface                                                            |
 
 #### Flightbag specifically
 

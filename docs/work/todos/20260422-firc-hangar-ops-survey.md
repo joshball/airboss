@@ -28,18 +28,18 @@ Dashboard (`(app)/+page.svelte`) is a simple `StatCard` grid of content counts w
 
 Route index (relevant to data-management):
 
-| Route                            | Purpose                                                                                                                             |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `/references`                    | List of `course.reference_document` rows with title/type/source/version/filter form + Add Document                                  |
-| `/references/new`                | Create form: title, documentType, source, version, url, tags, notes. No file upload.                                                |
-| `/references/[id]`               | Detail: metadata + linked content items (scenarios/modules/competencies/questions).                                                 |
-| `/references/[id]/edit`          | Update, supersede (auto-creates compliance tasks for every linked content item), soft-delete.                                       |
-| `/publish`                       | "Publish current content as new release" form: version + changelog; action calls `publishRelease()` in `@firc/bc/course/publish`.   |
-| `/compliance/validation`         | "Run Validation" button -> server action calls `runValidation()` in `@firc/bc/compliance` -> renders `ValidationReport` component.  |
-| `/compliance/dashboard`          | Compliance status overview.                                                                                                         |
-| `/compliance/regulatory-checks`  | 90-day FAA policy monitoring workflow: checklist form, changes-found toggle, auto-creates tasks.                                    |
-| `/tasks/board`                   | Kanban board. Drag-drop between columns. Filtered by type + product area. Receives auto-generated tasks from supersedes and checks. |
-| `/docs/[...path]`                | Filesystem-backed browser of `docs/` from `REPO_ROOT` (via `@firc/work`). Already a pattern for exposing on-disk trees in the app.  |
+| Route                           | Purpose                                                                                                                             |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `/references`                   | List of `course.reference_document` rows with title/type/source/version/filter form + Add Document                                  |
+| `/references/new`               | Create form: title, documentType, source, version, url, tags, notes. No file upload.                                                |
+| `/references/[id]`              | Detail: metadata + linked content items (scenarios/modules/competencies/questions).                                                 |
+| `/references/[id]/edit`         | Update, supersede (auto-creates compliance tasks for every linked content item), soft-delete.                                       |
+| `/publish`                      | "Publish current content as new release" form: version + changelog; action calls `publishRelease()` in `@firc/bc/course/publish`.   |
+| `/compliance/validation`        | "Run Validation" button -> server action calls `runValidation()` in `@firc/bc/compliance` -> renders `ValidationReport` component.  |
+| `/compliance/dashboard`         | Compliance status overview.                                                                                                         |
+| `/compliance/regulatory-checks` | 90-day FAA policy monitoring workflow: checklist form, changes-found toggle, auto-creates tasks.                                    |
+| `/tasks/board`                  | Kanban board. Drag-drop between columns. Filtered by type + product area. Receives auto-generated tasks from supersedes and checks. |
+| `/docs/[...path]`               | Filesystem-backed browser of `docs/` from `REPO_ROOT` (via `@firc/work`). Already a pattern for exposing on-disk trees in the app.  |
 
 DB tables owned / touched (from `libs/bc/course/src/schema.ts`):
 
@@ -71,15 +71,15 @@ Nav (from `apps/ops/src/routes/(app)/+layout.svelte`):
 
 Route index:
 
-| Route                                | Purpose                                                                             |
-| ------------------------------------ | ----------------------------------------------------------------------------------- |
-| `/users`                             | Paginated user list, filter by role + status, Admin-gated "Invite user" button     |
-| `/users/invite`                      | Admin-only form: email, first/last, role, address. Calls better-auth admin API.    |
-| `/users/[id]`                        | User detail (role/status/ban management)                                            |
-| `/enrollments`, `/enrollments/new`, `/enrollments/[id]`, `/enrollments/[id]/progress` | Enrollment CRUD + progress view                           |
-| `/certificates`, `/certificates/issue`, `/certificates/[id]`, `/certificates/[id]/pdf` | Certificate issuance + PDF render                           |
-| `/records`, `/records/learner/[userId]`, `/records/audit`                            | FAA-retention records view + audit log viewer              |
-| `/analytics/*`                       | Learner, content, operational analytics dashboards                                  |
+| Route                                                                                  | Purpose                                                                         |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `/users`                                                                               | Paginated user list, filter by role + status, Admin-gated "Invite user" button  |
+| `/users/invite`                                                                        | Admin-only form: email, first/last, role, address. Calls better-auth admin API. |
+| `/users/[id]`                                                                          | User detail (role/status/ban management)                                        |
+| `/enrollments`, `/enrollments/new`, `/enrollments/[id]`, `/enrollments/[id]/progress`  | Enrollment CRUD + progress view                                                 |
+| `/certificates`, `/certificates/issue`, `/certificates/[id]`, `/certificates/[id]/pdf` | Certificate issuance + PDF render                                               |
+| `/records`, `/records/learner/[userId]`, `/records/audit`                              | FAA-retention records view + audit log viewer                                   |
+| `/analytics/*`                                                                         | Learner, content, operational analytics dashboards                              |
 
 Quality: shipped. The user invite flow integrates with better-auth's admin API, parses a Zod `inviteUserSchema`, writes an audit log via `@firc/audit`. Paginated DataTable pattern is reusable.
 
@@ -134,26 +134,26 @@ Hangar is the **content workshop + compliance command center**: authors and admi
 
 ## What's portable
 
-| firc path                                                                | airboss target                                                       | salvage value                  | port effort                                                         |
-| ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------- |
-| `scripts/faa-ingest/manifest.ts`                                         | `libs/aviation/src/sources/registry.ts` (airboss already has stub)   | High                           | Low: already aligned in shape; reconcile with airboss SOURCES       |
-| `scripts/faa-ingest/lib/download.ts`                                     | `libs/aviation/src/sources/download.ts` (new)                        | High                           | Low: drop-in. Streaming + hash + retry is what you want             |
-| `scripts/faa-ingest/lib/manifest-state.ts`                               | `libs/aviation/src/sources/meta.ts` (per-source `.meta.json`)        | High                           | Low: per-document meta already close; promote to sidecar-per-source |
-| `scripts/faa-ingest/commands/status.ts`                                  | hangar `/sources` index page loader                                  | High (logic), Low (CLI output) | Medium: reuse hasDownload/hasExtraction checks, render as UI        |
-| `scripts/faa-ingest/commands/fetch.ts`                                   | hangar `/sources/[id]?/fetch` form action                            | High                           | Medium: wrap `runFetch` in a form action + audit log                |
-| `scripts/faa-ingest/commands/extract.ts`                                 | hangar `/sources/[id]?/extract` form action                          | High                           | Medium: same wrap                                                   |
-| `apps/hangar/src/routes/(app)/+layout.svelte` (shell + nav + theme wire) | `apps/hangar/src/routes/(app)/+layout.svelte`                        | High                           | Low: port shape, drop FIRC-specific nav groups                      |
-| `apps/hangar/src/routes/(app)/+layout.server.ts` (role gate)             | same                                                                 | High                           | Trivial                                                             |
-| `apps/hangar/src/routes/(app)/references/*` (CRUD pattern)               | hangar `/sources/*` CRUD                                             | High (pattern), Low (schema)   | Medium: borrow DataTable/FormStack/ConfirmDialog + action shapes    |
-| `apps/hangar/src/routes/(app)/docs/*` (FS browser)                       | hangar `/data` or `/sources/[id]/files`                              | High                           | Low: same `readdir` loader pattern                                  |
-| `apps/hangar/src/routes/(app)/compliance/validation/*`                   | hangar `/validate` (or per-source)                                   | High                           | Low: swap `runValidation()` for `references validate` runner        |
-| `apps/hangar/src/routes/(app)/publish/*`                                 | "Build generated refs + commit" trigger (if we keep the verb)        | Medium                         | Medium: conceptually fits `references build`                        |
+| firc path                                                                | airboss target                                                       | salvage value                  | port effort                                                          |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------- | ------------------------------ | -------------------------------------------------------------------- |
+| `scripts/faa-ingest/manifest.ts`                                         | `libs/aviation/src/sources/registry.ts` (airboss already has stub)   | High                           | Low: already aligned in shape; reconcile with airboss SOURCES        |
+| `scripts/faa-ingest/lib/download.ts`                                     | `libs/aviation/src/sources/download.ts` (new)                        | High                           | Low: drop-in. Streaming + hash + retry is what you want              |
+| `scripts/faa-ingest/lib/manifest-state.ts`                               | `libs/aviation/src/sources/meta.ts` (per-source `.meta.json`)        | High                           | Low: per-document meta already close; promote to sidecar-per-source  |
+| `scripts/faa-ingest/commands/status.ts`                                  | hangar `/sources` index page loader                                  | High (logic), Low (CLI output) | Medium: reuse hasDownload/hasExtraction checks, render as UI         |
+| `scripts/faa-ingest/commands/fetch.ts`                                   | hangar `/sources/[id]?/fetch` form action                            | High                           | Medium: wrap `runFetch` in a form action + audit log                 |
+| `scripts/faa-ingest/commands/extract.ts`                                 | hangar `/sources/[id]?/extract` form action                          | High                           | Medium: same wrap                                                    |
+| `apps/hangar/src/routes/(app)/+layout.svelte` (shell + nav + theme wire) | `apps/hangar/src/routes/(app)/+layout.svelte`                        | High                           | Low: port shape, drop FIRC-specific nav groups                       |
+| `apps/hangar/src/routes/(app)/+layout.server.ts` (role gate)             | same                                                                 | High                           | Trivial                                                              |
+| `apps/hangar/src/routes/(app)/references/*` (CRUD pattern)               | hangar `/sources/*` CRUD                                             | High (pattern), Low (schema)   | Medium: borrow DataTable/FormStack/ConfirmDialog + action shapes     |
+| `apps/hangar/src/routes/(app)/docs/*` (FS browser)                       | hangar `/data` or `/sources/[id]/files`                              | High                           | Low: same `readdir` loader pattern                                   |
+| `apps/hangar/src/routes/(app)/compliance/validation/*`                   | hangar `/validate` (or per-source)                                   | High                           | Low: swap `runValidation()` for `references validate` runner         |
+| `apps/hangar/src/routes/(app)/publish/*`                                 | "Build generated refs + commit" trigger (if we keep the verb)        | Medium                         | Medium: conceptually fits `references build`                         |
 | `apps/hangar/src/routes/(app)/tasks/board/*`                             | hangar `/jobs` (if we want async job queue over kanban)              | Medium                         | Medium: reuse schema + drag-drop UX; retire FIRC-specific task types |
-| `apps/ops/src/routes/(app)/users/*`, `users/invite/*`                    | airboss ops `/users/*`                                               | High                           | Low: better-auth + Zod schema + audit are repo-agnostic             |
-| `apps/ops/src/routes/(app)/+layout.*` (role gate + shell)                | airboss ops shell                                                    | High                           | Trivial                                                             |
-| `libs/auth/src/auth.ts` (`requireAuth`, `requireRole`)                   | `libs/auth/src/auth.ts`                                              | High                           | Trivial                                                             |
-| `libs/constants/src/roles.ts` + `app-urls.ts`                            | `libs/constants/src/roles.ts`                                        | High                           | Trivial: 4 roles (learner, author, operator, admin) already right   |
-| `libs/audit` + audit-log pattern                                         | `libs/audit` (new)                                                   | High                           | Low: one table + `logAction`/`auditError` helpers                   |
+| `apps/ops/src/routes/(app)/users/*`, `users/invite/*`                    | airboss ops `/users/*`                                               | High                           | Low: better-auth + Zod schema + audit are repo-agnostic              |
+| `apps/ops/src/routes/(app)/+layout.*` (role gate + shell)                | airboss ops shell                                                    | High                           | Trivial                                                              |
+| `libs/auth/src/auth.ts` (`requireAuth`, `requireRole`)                   | `libs/auth/src/auth.ts`                                              | High                           | Trivial                                                              |
+| `libs/constants/src/roles.ts` + `app-urls.ts`                            | `libs/constants/src/roles.ts`                                        | High                           | Trivial: 4 roles (learner, author, operator, admin) already right    |
+| `libs/audit` + audit-log pattern                                         | `libs/audit` (new)                                                   | High                           | Low: one table + `logAction`/`auditError` helpers                    |
 | `libs/bc/course/src/schema.ts` `reference_document` + `reference_link`   | Consider mirroring as `sources.source_document` if DB-backed desired | Medium                         | N/A today: airboss registry is code, not DB. Revisit if schema flips |
 
 ## What's NOT portable

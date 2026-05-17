@@ -17,13 +17,13 @@ Every `docs/work-packages/<slug>/spec.md` carries a YAML frontmatter block whose
 
 `category` is a single closed-vocab enum. Five values, intentionally small:
 
-| Category   | Covers                                                                          |
-| ---------- | ------------------------------------------------------------------------------- |
-| `product`  | A whole product or major surface (study, hangar, sim, flightbag, avionics).     |
-| `feature`  | A feature inside a product (cert dashboard, lens picker, review queue).         |
-| `content`  | Authored content corpora. Course material is `content` with `tags: [course]`.   |
-| `docs`     | Documentation, ADRs, agent skills, tracking infrastructure.                     |
-| `platform` | Build, monorepo, dev infra, scheduled jobs, cross-cutting tooling.              |
+| Category   | Covers                                                                        |
+| ---------- | ----------------------------------------------------------------------------- |
+| `product`  | A whole product or major surface (study, hangar, sim, flightbag, avionics).   |
+| `feature`  | A feature inside a product (cert dashboard, lens picker, review queue).       |
+| `content`  | Authored content corpora. Course material is `content` with `tags: [course]`. |
+| `docs`     | Documentation, ADRs, agent skills, tracking infrastructure.                   |
+| `platform` | Build, monorepo, dev infra, scheduled jobs, cross-cutting tooling.            |
 
 Course content uses `category: content` plus `tags: [course]`. There is no `course` category; the tag carries the cross-cut. Cross-cutting slices like "all references work" are surfaced via `tags`, never via a category proliferation.
 
@@ -56,22 +56,22 @@ tags: [extraction, citations]         # optional, free-form, default []
 ---
 ```
 
-| Field                 | Required | Owner | Notes                                                          |
-| --------------------- | -------- | ----- | -------------------------------------------------------------- |
-| `id`                  | yes      | author | Must match parent dir name. Lint compares.                     |
-| `title`               | yes      | author | Human-readable.                                                |
-| `product`             | yes      | author | One of the surface apps, `platform`, `course`, or `none`.      |
-| `category`            | yes      | author | Single value from the closed vocab above.                      |
-| `status`              | yes      | author | Lifecycle. Lint enforces transitions.                          |
-| `agent_review_status` | yes      | agent  | Flips to `done` after a clean self-review pass.                |
-| `human_review_status` | yes      | user   | **Lint rejects any agent commit that changes this field.**     |
-| `created`             | yes      | author | ISO date (YYYY-MM-DD).                                         |
-| `shipped_date`        | no       | author | Required when status=shipped.                                  |
-| `shipped_prs`         | no       | agent  | PR numbers that closed the WP.                                 |
-| `depends_on`          | no       | author | Other WP ids that must ship first.                             |
-| `unblocks`            | no       | author | Other WP ids this one unblocks (informational, not enforced).  |
-| `owner`               | no       | author | Who drives the next step.                                      |
-| `tags`                | no       | author | Free-form. Use for cross-cutting slices like `references`.     |
+| Field                 | Required | Owner  | Notes                                                         |
+| --------------------- | -------- | ------ | ------------------------------------------------------------- |
+| `id`                  | yes      | author | Must match parent dir name. Lint compares.                    |
+| `title`               | yes      | author | Human-readable.                                               |
+| `product`             | yes      | author | One of the surface apps, `platform`, `course`, or `none`.     |
+| `category`            | yes      | author | Single value from the closed vocab above.                     |
+| `status`              | yes      | author | Lifecycle. Lint enforces transitions.                         |
+| `agent_review_status` | yes      | agent  | Flips to `done` after a clean self-review pass.               |
+| `human_review_status` | yes      | user   | **Lint rejects any agent commit that changes this field.**    |
+| `created`             | yes      | author | ISO date (YYYY-MM-DD).                                        |
+| `shipped_date`        | no       | author | Required when status=shipped.                                 |
+| `shipped_prs`         | no       | agent  | PR numbers that closed the WP.                                |
+| `depends_on`          | no       | author | Other WP ids that must ship first.                            |
+| `unblocks`            | no       | author | Other WP ids this one unblocks (informational, not enforced). |
+| `owner`               | no       | author | Who drives the next step.                                     |
+| `tags`                | no       | author | Free-form. Use for cross-cutting slices like `references`.    |
 
 ### Two review-status fields, two owners
 

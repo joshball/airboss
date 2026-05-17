@@ -24,14 +24,14 @@ Demonstrates every public function of `@ab/sources/pdf` against a real-world AC 
 
 ## Real-world findings
 
-| Finding | Detail |
-| --- | --- |
-| Performance | 57-page AC extracts in ~100 ms |
-| Metadata | `pdfinfo` returns title, author, creator, producer, subject, creation/mod dates |
-| Cover-page detection | Both AC slug + effective date detected from page 1 |
-| Layout mode | Preserves the 2-column header (`Subject:` left, `Date:` / `AC No:` right) |
-| Raw mode | Reading-order, single-column flow — better for body text |
-| AC date convention | AC headers use `Date: 10/30/24`, NOT `Effective:`. The `findEffectiveDate` helper handles both via the AC-context heuristic |
+| Finding              | Detail                                                                                                                      |
+| -------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Performance          | 57-page AC extracts in ~100 ms                                                                                              |
+| Metadata             | `pdfinfo` returns title, author, creator, producer, subject, creation/mod dates                                             |
+| Cover-page detection | Both AC slug + effective date detected from page 1                                                                          |
+| Layout mode          | Preserves the 2-column header (`Subject:` left, `Date:` / `AC No:` right)                                                   |
+| Raw mode             | Reading-order, single-column flow — better for body text                                                                    |
+| AC date convention   | AC headers use `Date: 10/30/24`, NOT `Effective:`. The `findEffectiveDate` helper handles both via the AC-context heuristic |
 
 ## How downstream phases consume this
 

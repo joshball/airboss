@@ -42,6 +42,7 @@ The risk is small for `seedDefault*` standalone (one statement) but real for the
 - **File**: `libs/bc/hangar/src/review.ts:572-592`
 - **Problem**: `description: input.description ?? ''` creates a non-distinguishable empty-string vs explicit-null state. The schema column is `text('description').notNull().default('')`, so the DB will accept the empty default. But the BC could just omit the field and let the DB default fire, keeping the BC and DB in lockstep without the BC repeating the default value.
 - **Fix**: Pass only fields that are present. Either drop the `?? ''` or refactor the values block into:
+
   ```ts
   const values: NewHangarBoardTaskRow = {
     id, boardId: input.boardId, title: input.title, type: input.type, productArea: input.productArea,
@@ -50,6 +51,7 @@ The risk is small for `seedDefault*` standalone (one statement) but real for the
   if (input.description !== undefined) values.description = input.description;
   // ...
   ```
+
   Slightly verbose but no double-source-of-truth on defaults.
 
 ### MINOR: `listSessions` does not paginate

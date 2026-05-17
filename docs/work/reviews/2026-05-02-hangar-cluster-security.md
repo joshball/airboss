@@ -118,19 +118,19 @@ Fix: Re-run the source-id schema check inside `readSourceId` before calling `run
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MAJOR: SSRF via `bv_index_url` and source `url` | CLOSED | PR #441 -- `validateOutboundUrl` (`@ab/utils/outbound-url`) + denylist for RFC1918 / loopback / link-local / metadata IPs, wired through `source-form.ts:168-175` |
-| MAJOR: `bv_index_url` skips http(s) regex | CLOSED | PR #441 -- `outboundUrlSchema` and BV branch share the same Zod schema (`form-schemas.ts:92-127`) |
-| MINOR: upload extension can contain `/` | CLOSED | PR #442 -- `extensionOf` whitelist + extension-format guard |
-| MINOR: Job cancel does not verify ownership | CLOSED | PR #467 wave -- gate widened to OPERATOR/ADMIN with self-cancel exception, audit row records cancelling actor |
-| MINOR: Audit-detail page ships unredacted payloads | CLOSED | PR #467 -- `redactSensitive` (`@ab/utils`) routes sensitive keys through `REDACTED_PLACEHOLDER` on render |
-| MINOR: Citation URL allows any `https?:` host | CLOSED | PR #441 -- citation URL flows through `outboundUrlSchema` |
-| MINOR: appearance / theme cookie endpoints unauthenticated | CLOSED | PR #467 -- `event.locals.user` gate added |
-| MINOR: Login form echoes typed email + better-auth message | CLOSED | PR #467 -- copy clamped to "Invalid email or password" on 400/401 |
-| NIT: `recoverOrphanedRunning` actor-id staleness | CLOSED | Documented trade-off in `enqueue.ts:200-235`; matches in-process worker design |
-| NIT: Sync job actor gate too low | CLOSED | PR #467 -- `?syncAll` and global flow actions gated to OPERATOR/ADMIN |
-| NIT: `pruneOldArchives` no length cap | CLOSED | PR #442 -- hard cap added; logs + skips when exceeded |
-| NIT: `runReferenceScript` source-id re-validation | CLOSED | PR #467 -- source-id Zod re-check on `readSourceId` |
+| Finding                                                    | Verdict | Closure                                                                                                                                                           |
+| ---------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MAJOR: SSRF via `bv_index_url` and source `url`            | CLOSED  | PR #441 -- `validateOutboundUrl` (`@ab/utils/outbound-url`) + denylist for RFC1918 / loopback / link-local / metadata IPs, wired through `source-form.ts:168-175` |
+| MAJOR: `bv_index_url` skips http(s) regex                  | CLOSED  | PR #441 -- `outboundUrlSchema` and BV branch share the same Zod schema (`form-schemas.ts:92-127`)                                                                 |
+| MINOR: upload extension can contain `/`                    | CLOSED  | PR #442 -- `extensionOf` whitelist + extension-format guard                                                                                                       |
+| MINOR: Job cancel does not verify ownership                | CLOSED  | PR #467 wave -- gate widened to OPERATOR/ADMIN with self-cancel exception, audit row records cancelling actor                                                     |
+| MINOR: Audit-detail page ships unredacted payloads         | CLOSED  | PR #467 -- `redactSensitive` (`@ab/utils`) routes sensitive keys through `REDACTED_PLACEHOLDER` on render                                                         |
+| MINOR: Citation URL allows any `https?:` host              | CLOSED  | PR #441 -- citation URL flows through `outboundUrlSchema`                                                                                                         |
+| MINOR: appearance / theme cookie endpoints unauthenticated | CLOSED  | PR #467 -- `event.locals.user` gate added                                                                                                                         |
+| MINOR: Login form echoes typed email + better-auth message | CLOSED  | PR #467 -- copy clamped to "Invalid email or password" on 400/401                                                                                                 |
+| NIT: `recoverOrphanedRunning` actor-id staleness           | CLOSED  | Documented trade-off in `enqueue.ts:200-235`; matches in-process worker design                                                                                    |
+| NIT: Sync job actor gate too low                           | CLOSED  | PR #467 -- `?syncAll` and global flow actions gated to OPERATOR/ADMIN                                                                                             |
+| NIT: `pruneOldArchives` no length cap                      | CLOSED  | PR #442 -- hard cap added; logs + skips when exceeded                                                                                                             |
+| NIT: `runReferenceScript` source-id re-validation          | CLOSED  | PR #467 -- source-id Zod re-check on `readSourceId`                                                                                                               |
 
 Total: 12 closed / 0 open. `review_status: done` (preserved -- closed at original sweep).

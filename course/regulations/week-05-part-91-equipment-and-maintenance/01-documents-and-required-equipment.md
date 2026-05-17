@@ -93,12 +93,12 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The mnemonic AROW points at the documents the pilot must have aboard:
 
-| Letter | Document                              | Where required                                  |
-| ------ | ------------------------------------- | ----------------------------------------------- |
-| A      | Airworthiness certificate              | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(1)         |
-| R      | Registration certificate               | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(2)         |
-| O      | Operating limitations (POH / AFM and placards) | [@cite](airboss-ref:regs/cfr-14/91/9?at=2026)               |
-| W      | Weight and balance data                | Type-certificate / 14 CFR 91 implicit via 91.9  |
+| Letter | Document                                       | Where required                                        |
+| ------ | ---------------------------------------------- | ----------------------------------------------------- |
+| A      | Airworthiness certificate                      | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(1) |
+| R      | Registration certificate                       | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(2) |
+| O      | Operating limitations (POH / AFM and placards) | [@cite](airboss-ref:regs/cfr-14/91/9?at=2026)         |
+| W      | Weight and balance data                        | Type-certificate / 14 CFR 91 implicit via 91.9        |
 
 Two important notes on the mnemonic:
 
@@ -198,21 +198,21 @@ Each operation adds to the previous. There is no "IFR day" list separate from "I
 
 Each letter indexes a 91.205(b) item:
 
-| Letter | Item                                       | Why required |
-| ------ | ------------------------------------------ | ------------ |
-| A      | Airspeed indicator                         | Energy management; stall awareness |
-| T      | Tachometer for each engine                 | Engine power monitoring |
-| O      | Oil pressure gauge for each engine         | Lubrication monitoring |
-| M      | Manifold pressure gauge for each constant-speed prop / supercharged engine | Power management |
-| A      | Altimeter                                  | Vertical position; airspace |
-| T      | Temperature gauge for each liquid-cooled engine | Cooling-system monitoring |
-| O      | Oil temperature gauge for each air-cooled engine | Same |
-| F      | Fuel quantity gauge for each tank          | Fuel state |
-| L      | Landing gear position indicator (retractables) | Configuration |
-| A      | Anti-collision light system (post-1971; required if installed)| Conspicuity. See 91.205(b)(11) wrinkle below |
-| M      | Magnetic direction indicator               | Heading |
-| E      | ELT (when required by 91.207)              | Search and rescue. Cross-references 91.207 |
-| S      | Seat belts (and shoulder harnesses for seats post-1978) | Crashworthiness |
+| Letter | Item                                                                       | Why required                                 |
+| ------ | -------------------------------------------------------------------------- | -------------------------------------------- |
+| A      | Airspeed indicator                                                         | Energy management; stall awareness           |
+| T      | Tachometer for each engine                                                 | Engine power monitoring                      |
+| O      | Oil pressure gauge for each engine                                         | Lubrication monitoring                       |
+| M      | Manifold pressure gauge for each constant-speed prop / supercharged engine | Power management                             |
+| A      | Altimeter                                                                  | Vertical position; airspace                  |
+| T      | Temperature gauge for each liquid-cooled engine                            | Cooling-system monitoring                    |
+| O      | Oil temperature gauge for each air-cooled engine                           | Same                                         |
+| F      | Fuel quantity gauge for each tank                                          | Fuel state                                   |
+| L      | Landing gear position indicator (retractables)                             | Configuration                                |
+| A      | Anti-collision light system (post-1971; required if installed)             | Conspicuity. See 91.205(b)(11) wrinkle below |
+| M      | Magnetic direction indicator                                               | Heading                                      |
+| E      | ELT (when required by 91.207)                                              | Search and rescue. Cross-references 91.207   |
+| S      | Seat belts (and shoulder harnesses for seats post-1978)                    | Crashworthiness                              |
 
 The wrinkle on the anti-collision light: the mnemonic puts "A" (anti-collision) in the day list, but the regulation under 91.205(b)(11) lists it for aircraft *certificated after a specific date* (the rule has been amended). The night-flight anti-collision-light rule is in 91.205(c)(3) and applies to *all* operations at night. For checkride defense: cite both -- "an anticollision light is required by 91.205(b)(11) for aircraft certificated after the effective date, and by 91.205(c)(3) for all night operations."
 
@@ -222,13 +222,13 @@ The mnemonic is a memory aid. The regulation is the authority. When the two dive
 
 Night adds to the VFR day list. The (c) additions:
 
-| Letter | Item                                       |
-| ------ | ------------------------------------------ |
-| F      | Fuses (one spare set or three spare of each kind required) |
+| Letter | Item                                                                                |
+| ------ | ----------------------------------------------------------------------------------- |
+| F      | Fuses (one spare set or three spare of each kind required)                          |
 | L      | Landing light (if for hire; otherwise recommended but not required by this section) |
-| A      | Anticollision lights (red or white)         |
-| P      | Position lights (red, green, white)         |
-| S      | Source of electrical power adequate for all installed equipment |
+| A      | Anticollision lights (red or white)                                                 |
+| P      | Position lights (red, green, white)                                                 |
+| S      | Source of electrical power adequate for all installed equipment                     |
 
 The "L" trap: the FLAPS mnemonic includes a landing light, and pilots routinely think a working landing light is *required* for VFR night under 91.205(c). It is not -- 91.205(c) does not require a landing light for non-commercial Part 91 night ops. A landing light is required by 91.205(c)(2) only "if the aircraft is operated for hire." For private Part 91 night flying, a landing light is good practice and absolutely recommended for landing, but its absence does not violate 91.205(c).
 
@@ -238,16 +238,16 @@ The (c) additions are mostly about being *seen* (position and anticollision ligh
 
 IFR adds to the cumulative VFR night list. The (d) additions:
 
-| Letter | Item                                       |
-| ------ | ------------------------------------------ |
-| G      | Generator or alternator of adequate capacity |
-| R      | Radios (two-way comm and nav appropriate for route) |
-| A      | Attitude indicator (gyroscopic pitch and bank) |
-| B      | Ball (slip-skid indicator)                  |
-| C      | Clock with hours, minutes, seconds         |
+| Letter | Item                                                                                |
+| ------ | ----------------------------------------------------------------------------------- |
+| G      | Generator or alternator of adequate capacity                                        |
+| R      | Radios (two-way comm and nav appropriate for route)                                 |
+| A      | Attitude indicator (gyroscopic pitch and bank)                                      |
+| B      | Ball (slip-skid indicator)                                                          |
+| C      | Clock with hours, minutes, seconds                                                  |
 | A      | Altimeter (sensitive, barometric-adjustable; replaces the basic altimeter from (b)) |
-| R      | Rate-of-turn indicator (turn coordinator)  |
-| D      | Directional gyro (gyroscopic heading indicator) |
+| R      | Rate-of-turn indicator (turn coordinator)                                           |
+| D      | Directional gyro (gyroscopic heading indicator)                                     |
 
 The IFR additions answer the question "what does a pilot need to fly the airplane without outside visual reference?" Attitude (A), heading (D), turn-and-bank (R), altitude reference (B), and the radios (R) to talk and navigate. The clock (C) is for timing approach segments where DME or GPS isn't authorized. The generator/alternator (G) is the redundant electrical to make all of the above survive a battery-only emergency.
 
@@ -321,18 +321,18 @@ We treat 91.207 (ELTs), 91.209 (lights), and 91.213 (inoperative equipment) in [
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the AROW documents requirement?                                 | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026) (A and R), [@cite](airboss-ref:regs/cfr-14/91/9?at=2026) (O and W) |
-| Where is the PIC airworthiness determination?                            | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026)              |
-| Where is the VFR day equipment list (ATOMATOFLAMES)?                     | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(b)         |
-| Where is the VFR night additional equipment (FLAPS)?                     | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)         |
-| Where is the IFR additional equipment (GRABCARD)?                        | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)         |
-| Where does the FAA-approved-equivalents clause live?                     | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(a)         |
-| Where is the airworthiness-certificate-display requirement?              | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(1)     |
-| Where is the night anticollision light rule?                             | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(3)     |
-| Where is the spare fuses requirement?                                    | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(5)     |
-| Where is the IFR two-way radio and nav equipment requirement?            | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)(2)     |
+| Question                                                      | Section / source                                                                                                   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Where is the AROW documents requirement?                      | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026) (A and R), [@cite](airboss-ref:regs/cfr-14/91/9?at=2026) (O and W) |
+| Where is the PIC airworthiness determination?                 | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026)                                                                      |
+| Where is the VFR day equipment list (ATOMATOFLAMES)?          | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(b)                                                                 |
+| Where is the VFR night additional equipment (FLAPS)?          | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)                                                                 |
+| Where is the IFR additional equipment (GRABCARD)?             | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)                                                                 |
+| Where does the FAA-approved-equivalents clause live?          | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(a)                                                                 |
+| Where is the airworthiness-certificate-display requirement?   | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026)(a)(1)                                                              |
+| Where is the night anticollision light rule?                  | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(3)                                                              |
+| Where is the spare fuses requirement?                         | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(5)                                                              |
+| Where is the IFR two-way radio and nav equipment requirement? | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)(2)                                                              |
 
 ### Apply the rules
 

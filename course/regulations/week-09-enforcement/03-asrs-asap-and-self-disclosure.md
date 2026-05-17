@@ -194,18 +194,18 @@ The 24-hour wall-clock rule for ASAP is procedurally critical. Pilots in 121/135
 
 ## Comparison table
 
-| Feature                 | NASA ASRS                                       | ASAP (operator-sponsored)                              |
-| ----------------------- | ----------------------------------------------- | ------------------------------------------------------ |
-| Eligibility             | All pilots                                      | Pilots flying for an operator with an active ASAP MOU  |
-| Filed with              | NASA (third party)                              | Operator's Event Review Committee                      |
-| Filing window           | 10 calendar days                                | Typically 24 hours (program-specific)                  |
-| Protection scope        | One-time waiver of certificate action per 5-year | Multiple events per year; closed without enforcement   |
-| Confidentiality         | NASA strips identity before sharing             | Within ERC; FAA member sees identity                   |
-| Accident exclusion      | Yes (49 CFR 830.2)                              | Program-specific; typically excluded                   |
-| Criminal exclusion      | Yes                                             | Yes                                                    |
-| Lack-of-qual exclusion  | Yes                                             | Yes                                                    |
-| Repeat-offender bar     | 5 years from prior finding                      | Per program rules                                      |
-| Form                    | NASA web form (asrs.arc.nasa.gov)               | Operator's internal system                             |
+| Feature                | NASA ASRS                                        | ASAP (operator-sponsored)                             |
+| ---------------------- | ------------------------------------------------ | ----------------------------------------------------- |
+| Eligibility            | All pilots                                       | Pilots flying for an operator with an active ASAP MOU |
+| Filed with             | NASA (third party)                               | Operator's Event Review Committee                     |
+| Filing window          | 10 calendar days                                 | Typically 24 hours (program-specific)                 |
+| Protection scope       | One-time waiver of certificate action per 5-year | Multiple events per year; closed without enforcement  |
+| Confidentiality        | NASA strips identity before sharing              | Within ERC; FAA member sees identity                  |
+| Accident exclusion     | Yes (49 CFR 830.2)                               | Program-specific; typically excluded                  |
+| Criminal exclusion     | Yes                                              | Yes                                                   |
+| Lack-of-qual exclusion | Yes                                              | Yes                                                   |
+| Repeat-offender bar    | 5 years from prior finding                       | Per program rules                                     |
+| Form                   | NASA web form (asrs.arc.nasa.gov)                | Operator's internal system                            |
 
 ## Self-disclosure beyond the formal programs
 
@@ -260,15 +260,15 @@ ASAP runs under AC 120-66 (current revision varies) and operator-specific Memora
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is the regulatory prohibition on using ASRS reports in enforcement? | [@cite](airboss-ref:regs/cfr-14/91/25?at=2026) |
-| Where is the ASRS waiver of certificate action policy?                    | AC 00-46F                     |
-| What's the ASRS filing window?                                            | 10 calendar days              |
-| What's the typical ASAP filing window?                                    | 24 hours (program-specific)   |
-| Where does the ASAP program framework live?                               | AC 120-66                     |
+| Question                                                                  | Section / source                                                     |
+| ------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| Where is the regulatory prohibition on using ASRS reports in enforcement? | [@cite](airboss-ref:regs/cfr-14/91/25?at=2026)                       |
+| Where is the ASRS waiver of certificate action policy?                    | AC 00-46F                                                            |
+| What's the ASRS filing window?                                            | 10 calendar days                                                     |
+| What's the typical ASAP filing window?                                    | 24 hours (program-specific)                                          |
+| Where does the ASAP program framework live?                               | AC 120-66                                                            |
 | What categorically excludes a violation from ASRS waiver?                 | Criminal offense, accident, lack of qualification, repeat in 5 years |
-| Where is the accident definition that triggers the ASRS exclusion?        | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026) |
+| Where is the accident definition that triggers the ASRS exclusion?        | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026)                       |
 
 ### Apply
 

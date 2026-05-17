@@ -93,13 +93,13 @@ This is a real, narrow piece of state. It exists so the second aircraft -- when 
 
 V-speed values for the airspeed tape's arc bands (white, green, yellow, red) come from the currently selected aircraft's FDM config in `@ab/bc-sim`. The FDM stores them in m/s; the avionics layer converts to knots at the boundary.
 
-| V-speed | Source field on `AircraftConfig` | Tape role                                                  |
-| ------- | -------------------------------- | ---------------------------------------------------------- |
-| Vs0     | `vS0` (m/s)                      | Bottom of white arc (flap-extended stall, full flaps)      |
-| Vs1     | `vS1` (m/s)                      | Bottom of green arc (clean stall)                          |
-| Vfe     | `vFe` (m/s)                      | Top of white arc (max flap-extended speed)                 |
-| Vno     | `vNo` (m/s)                      | Bottom of yellow arc (max structural cruising)             |
-| Vne     | `vNe` (m/s)                      | Red line (never-exceed)                                    |
+| V-speed | Source field on `AircraftConfig` | Tape role                                             |
+| ------- | -------------------------------- | ----------------------------------------------------- |
+| Vs0     | `vS0` (m/s)                      | Bottom of white arc (flap-extended stall, full flaps) |
+| Vs1     | `vS1` (m/s)                      | Bottom of green arc (clean stall)                     |
+| Vfe     | `vFe` (m/s)                      | Top of white arc (max flap-extended speed)            |
+| Vno     | `vNo` (m/s)                      | Bottom of yellow arc (max structural cruising)        |
+| Vne     | `vNe` (m/s)                      | Red line (never-exceed)                               |
 
 The PFD reads the config via `getAircraftConfig(selectedAircraftId)` exported from `@ab/bc-sim`. A small helper inside `apps/avionics/src/lib/pfd/airspeed-arcs.ts` derives the arc bands (in knots) from the config:
 
@@ -243,17 +243,17 @@ Per the user's note and the project's "create when needed, not before" rule, the
 
 ## Routes
 
-| Route         | Method | Auth            | Purpose                                                                                              |
-| ------------- | ------ | --------------- | ---------------------------------------------------------------------------------------------------- |
-| `/`           | GET    | Anonymous OK    | Surface index. Cards link to every demo route                                                        |
-| `/pfd`        | GET    | Anonymous OK    | The PFD demo (headline)                                                                              |
-| `/mfd`        | GET    | Anonymous OK    | Polished placeholder explaining what an MFD is and what is coming                                    |
-| `/scan`       | GET    | Anonymous OK    | Polished placeholder explaining what the instrument scan trainer is and what is coming               |
-| `/aircraft`   | GET    | Anonymous OK    | Aircraft selector (currently lists C172; PA28 disabled with "coming soon")                           |
-| `/aircraft`   | POST   | Anonymous OK    | Form action: write `selectedAircraftId` cookie                                                       |
-| `/api/auth/*` | any    | per better-auth | Cross-subdomain session bridge (mirrors sim)                                                         |
-| `/theme`      | POST   | Anonymous OK    | Theme-preference cookie endpoint (mirrors sim)                                                       |
-| `/appearance` | POST   | Anonymous OK    | Appearance-preference endpoint (mirrors sim)                                                         |
+| Route         | Method | Auth            | Purpose                                                                                |
+| ------------- | ------ | --------------- | -------------------------------------------------------------------------------------- |
+| `/`           | GET    | Anonymous OK    | Surface index. Cards link to every demo route                                          |
+| `/pfd`        | GET    | Anonymous OK    | The PFD demo (headline)                                                                |
+| `/mfd`        | GET    | Anonymous OK    | Polished placeholder explaining what an MFD is and what is coming                      |
+| `/scan`       | GET    | Anonymous OK    | Polished placeholder explaining what the instrument scan trainer is and what is coming |
+| `/aircraft`   | GET    | Anonymous OK    | Aircraft selector (currently lists C172; PA28 disabled with "coming soon")             |
+| `/aircraft`   | POST   | Anonymous OK    | Form action: write `selectedAircraftId` cookie                                         |
+| `/api/auth/*` | any    | per better-auth | Cross-subdomain session bridge (mirrors sim)                                           |
+| `/theme`      | POST   | Anonymous OK    | Theme-preference cookie endpoint (mirrors sim)                                         |
+| `/appearance` | POST   | Anonymous OK    | Appearance-preference endpoint (mirrors sim)                                           |
 
 All paths constructed via `ROUTES.AVIONICS_*`. No inline path strings in any file.
 

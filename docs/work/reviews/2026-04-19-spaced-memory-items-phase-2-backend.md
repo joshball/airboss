@@ -31,7 +31,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 2 Backend Review
 
 Scope: BC-layer functions added in commit `0bbde26` -- `libs/bc/study/src/cards.ts`, `reviews.ts`, `stats.ts`, `index.ts`, and `scripts/smoke/study-bc.ts`. Review focuses on server-side correctness and safety: transactional boundaries, idempotency, scheduling correctness, validation placement, and error surfaces.

@@ -329,15 +329,15 @@ FAA Order 2150.3  Sanction guidelines (the tables that show typical
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is the PIC emergency authority?                                      | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) |
-| Where is the ATC compliance rule?                                          | [@cite](airboss-ref:regs/cfr-14/91/123?at=2026) |
-| Where is the post-emergency notification rule?                             | §91.123(c)                    |
-| Where is the 48-hour written report after emergency priority?              | §91.123(d)                    |
-| Where is the statutory authority for remedial training in lieu?            | 49 USC 44709(d)               |
-| Where is the Compliance Program policy?                                    | FAA Order 8000.373B           |
-| Where do typical sanction guidelines live?                                 | FAA Order 2150.3              |
+| Question                                                        | Section / source                                |
+| --------------------------------------------------------------- | ----------------------------------------------- |
+| Where is the PIC emergency authority?                           | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026)   |
+| Where is the ATC compliance rule?                               | [@cite](airboss-ref:regs/cfr-14/91/123?at=2026) |
+| Where is the post-emergency notification rule?                  | §91.123(c)                                      |
+| Where is the 48-hour written report after emergency priority?   | §91.123(d)                                      |
+| Where is the statutory authority for remedial training in lieu? | 49 USC 44709(d)                                 |
+| Where is the Compliance Program policy?                         | FAA Order 8000.373B                             |
+| Where do typical sanction guidelines live?                      | FAA Order 2150.3                                |
 
 ### Apply
 

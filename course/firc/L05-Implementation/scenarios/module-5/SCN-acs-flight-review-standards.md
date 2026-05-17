@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.8
 Title:           Applying ACS Standards in a Flight Review
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_12, FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-3', 'ES-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Experienced VFR Pilot
 Parameters:
   skillLevel:         0.6
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Ground portion of flight review. Pilot has answered knowledge questions confidently. You've moved to scenario-based risk management questions. You present a scenario about deteriorating weather on a VFR cross-country.
 studentSpeech:Well, VFR minimums are 3 statute miles and clear of clouds below 10,000 feet in Class E. And 1,000 above, 500 below, 2,000 horizontal at or above. So as long as I'm legal, I'd keep going. Rules are rules, right?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot hesitates. They know the right answer is "it depends" but struggle to articulate what it depends on.
 studentSpeech:I mean... I guess I'd check the forecast and see if it was getting worse? But honestly, if it's legal, I've always just gone. I've been flying for 15 years and never had a problem. What else should I be considering?
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot is engaged but reveals they've never set personal minimums. Asks what the flight portion of the review will look like given these gaps.
 studentSpeech:I've never really thought about personal minimums. I just go by the FARs. So does this mean I'm failing the flight review? And what are you going to evaluate during the flight?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Pilot is relieved and asks about setting personal minimums before the flight.
 studentSpeech:OK, so before we fly, can you help me set some personal minimums? I realize I've been flying for 15 years without ever writing any down. What should they look like?
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

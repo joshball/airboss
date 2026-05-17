@@ -44,14 +44,14 @@ Per the project's "no `TODO(retire)`, no scheduled-cleanup cron jobs" rule, the 
 
 ## Layout rationale
 
-| Pattern resolved                          | Why it was bad                                        | Resolution                                          |
-| ----------------------------------------- | ----------------------------------------------------- | --------------------------------------------------- |
-| `<doc>/<edition>/source.pdf`              | Filename is non-self-describing; collides on `find`.  | Filename echoes the edition: `<edition>.pdf`.       |
-| `<doc>/current/`                          | `current` is a synthetic placeholder, not an edition. | When no real edition exists, drop the dir entirely. |
-| `ac/<slug>/<rev>/<filename>.pdf`          | Three levels of nesting for a flat document set.      | Flatten: `ac/<slug>.pdf`. One file per AC.          |
-| `_errata/<id>.pdf` subdir                 | Adds a level for files that already share a parent.   | Encode in filename: `<edition>-errata-<id>.pdf`.    |
-| `source.<ext>` symlink                    | Compat shim from a staged migration that's now done.  | Delete the symlink module and every caller.         |
-| Per-doc `manifest.json` for flat corpora  | Many tiny files, no whole-corpus index.               | One `<corpus>/manifest.json` per flat corpus.       |
+| Pattern resolved                         | Why it was bad                                        | Resolution                                          |
+| ---------------------------------------- | ----------------------------------------------------- | --------------------------------------------------- |
+| `<doc>/<edition>/source.pdf`             | Filename is non-self-describing; collides on `find`.  | Filename echoes the edition: `<edition>.pdf`.       |
+| `<doc>/current/`                         | `current` is a synthetic placeholder, not an edition. | When no real edition exists, drop the dir entirely. |
+| `ac/<slug>/<rev>/<filename>.pdf`         | Three levels of nesting for a flat document set.      | Flatten: `ac/<slug>.pdf`. One file per AC.          |
+| `_errata/<id>.pdf` subdir                | Adds a level for files that already share a parent.   | Encode in filename: `<edition>-errata-<id>.pdf`.    |
+| `source.<ext>` symlink                   | Compat shim from a staged migration that's now done.  | Delete the symlink module and every caller.         |
+| Per-doc `manifest.json` for flat corpora | Many tiny files, no whole-corpus index.               | One `<corpus>/manifest.json` per flat corpus.       |
 
 The `-errata-` infix is deliberate: errata files are self-identifying without filesystem context (`rg 'errata-'` finds them all), unambiguous about role (vs. an alt edition or chapter file), and sortable next to the primary in `ls`. Future errata follow the same shape (`<edition>-errata-addendum-a.pdf`, etc.).
 

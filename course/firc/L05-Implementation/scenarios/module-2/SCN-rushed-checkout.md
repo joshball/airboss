@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.4
 Title:           Complex Aircraft Checkout Appointment
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4, FAA_TOPIC.A_10]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['PS-1', 'RM-3', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Pressure-Susceptible
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO planning room. The pilot arrives in a rush, flight bag over shoulder, keys to the rental car already returned. Chief pilot's text on your phone reads: "This guy books 20 hours a month. Make it happen."
 studentSpeech:Hey, I'm in a bit of a hurry. I've got 300 hours and I fly a Bonanza back home -- this Arrow should be a piece of cake. Can we skip the ground stuff and just go fly?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot reveals he hasn't flown complex in 6 months. Bonanza was sold, hence the checkout here. Weather is MVFR with a 2,500-foot ceiling and 5-mile visibility. Sun sets in 80 minutes.
 studentSpeech:Look, I've been flying for 10 years. I know retractable gear. Can we just do a couple laps around the pattern and sign me off? I really need this for tomorrow.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot's phone rings. He glances at it -- it's the person he's flying with tomorrow. He silences it but his jaw tightens. Chief pilot walks through the FBO and gives you a thumbs-up and a pointed look.
 studentSpeech:Come on, I've done checkouts at other schools in 30 minutes. Your chief said this would be quick. What's the holdup?
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Pilot stands up, visibly frustrated. Pulls out his phone and starts texting. Weather has dropped to IFR at a nearby field. Daylight is now 60 minutes.
 studentSpeech:Fine. I'll just call another school. Or maybe I'll talk to your chief about this. This is ridiculous.
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt)
                         \         \-> terminal_safe (coach/direct)
                          \-> terminal_safe (direct)

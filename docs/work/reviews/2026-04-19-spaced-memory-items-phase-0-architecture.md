@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 0 Architecture Review
 
 Foundation port of auth, DB, logging, and error handling from airboss-firc into airboss,
@@ -65,6 +64,7 @@ that are fine to defer but worth naming now so Phase 1+ doesn't widen them.
 **Issue:** The workspace package is named `@ab/bc-study` (hyphenated), but the TS path alias, the Svelte alias, the CLAUDE.md "Import Rules" section, and the work-package design doc all use `@ab/bc/study` (slash). npm/workspace resolution goes through the hyphen name; TS/Vite resolution goes through the slash alias. Today nothing actually imports this module yet, so the mismatch is invisible -- Phase 1 will be the first to hit it.
 **Impact:** The two namespaces diverge silently. When something imports `@ab/bc/study` TS resolves it via `paths`, but `bun install` / workspace linking keys off `@ab/bc-study`, so dev-time hover tools or any code path that bypasses the alias (e.g. a CJS script) sees a different identifier. It's also a naming inconsistency that will propagate to `@ab/bc/course`, `@ab/bc/evidence` etc. when FIRC migrates.
 **Fix:** Pick one convention and apply it uniformly. Either:
+
 - Rename the package to `@ab/bc-study` everywhere (tsconfig path `@ab/bc-study`, svelte alias `@ab/bc-study`, CLAUDE.md, design doc), OR
 - Keep `@ab/bc/study` slash alias and set `"name": "@ab/bc/study"` in the package.json (valid scoped-name form `@scope/name`... note: actually npm disallows a second `/` in package names, which is why airboss-firc and many monorepos settle on `@ab/bc-course`). Given npm's naming rules, **renaming alias + tsconfig paths to `@ab/bc-study` is the correct resolution.**
 

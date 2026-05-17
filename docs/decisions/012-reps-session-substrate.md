@@ -68,14 +68,14 @@ The following files read or wrote `repAttempt` before this ADR and now read/writ
 
 Shipped 2026-04-22 in the order described below. Phases were sequenced, not parallelized, because each phase's data-flow depended on the prior phase being on main. The one order deviation from the original draft (5 before 3) reflects the real constraint: BC callers had to move off `repAttempt` before the `/reps/session` redirect could land or the redirected traffic would write to an orphan table.
 
-| Phase | Content                                                                                                                                                                                                                | Delivered in |
-|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
+| Phase | Content                                                                                                                                                                                                                                                                       | Delivered in |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | 1+2   | `libs/constants/src/presets.ts` catalogue (6 tiles: Quick reps, PPL overview, Safety, BFR prep, FIRC, Custom). Preset gallery on `/session/start`. New `?/startFromPreset` action: validate -> archive existing -> `createPlan` -> `startSession` -> 303 to `/sessions/[id]`. | PR #33       |
 | 5     | `libs/bc/study/*` refactored off `repAttempt` onto `session_item_result`. `submitAttempt` became a pure validator; `recordItemResult` writes outcomes. `sessionItemResult` schema gained `chosen_option`, `is_correct`, `confidence`, `answer_ms` plus two indexes.           | PR #38       |
-| 3     | `/reps/session` reduced to a 308 redirect to `/session/start`. `ROUTES.REPS_SESSION` constant removed. Four first-party callers (dashboard CtaPanel, ScheduledRepsPanel, `/reps` index, `/calibration`) switched to `ROUTES.SESSION_START`. | PR #39       |
-| 4     | `rep_attempt` table dropped. `session_item_result.rep_attempt_id` column dropped. `RepAttemptRow`, `NewRepAttemptRow`, `REP_DEDUPE_WINDOW_MS`, `ItemResultInput.repAttemptId` removed. Grep-clean.                                          | PR #41       |
-| 6     | `apps/study/src/routes/(app)/reps/session/*` deleted. `getRepAttemptsForSession` + `getScenariosByIds` helpers removed from `scenarios.ts` along with their tests.                                                                                 | PR #42       |
-| 7     | Verification: `bun run check` clean, 177 tests green, grep returns zero hits for all removed symbols, `/knowledge`/dashboard/calibration render correctly, one permitted comment reference in `libs/constants/src/routes.ts` documents the retirement. | on main      |
+| 3     | `/reps/session` reduced to a 308 redirect to `/session/start`. `ROUTES.REPS_SESSION` constant removed. Four first-party callers (dashboard CtaPanel, ScheduledRepsPanel, `/reps` index, `/calibration`) switched to `ROUTES.SESSION_START`.                                   | PR #39       |
+| 4     | `rep_attempt` table dropped. `session_item_result.rep_attempt_id` column dropped. `RepAttemptRow`, `NewRepAttemptRow`, `REP_DEDUPE_WINDOW_MS`, `ItemResultInput.repAttemptId` removed. Grep-clean.                                                                            | PR #41       |
+| 6     | `apps/study/src/routes/(app)/reps/session/*` deleted. `getRepAttemptsForSession` + `getScenariosByIds` helpers removed from `scenarios.ts` along with their tests.                                                                                                            | PR #42       |
+| 7     | Verification: `bun run check` clean, 177 tests green, grep returns zero hits for all removed symbols, `/knowledge`/dashboard/calibration render correctly, one permitted comment reference in `libs/constants/src/routes.ts` documents the retirement.                        | on main      |
 
 One follow-up correctness fix landed later: the preset gallery 500'd on "Quick reps" and "Safety procedures" because `createPlanSchema.certGoals` still required `min(1)`. That contradicted the presets' cert-agnostic intent. Resolved in PR #51 by relaxing the schema to allow empty arrays and handling the empty case in every cert-aware aggregator. The "empty certGoals is first-class" appendix below records the decision.
 
@@ -130,14 +130,14 @@ For card reviews specifically, `submitReview` is idempotent within `REVIEW_DEDUP
 
 Double-submit scenarios, by path:
 
-| Scenario                                               | What prevents duplicate            | Where                                           |
-| ------------------------------------------------------ | ---------------------------------- | ----------------------------------------------- |
-| Rep submit hit twice in parallel                       | UPSERT + `sir_session_slot_unique` | `recordItemResult`                              |
-| Card submit hit twice in parallel                      | Row lock + dedupe window + UPSERT  | `submitReview` tx, then `recordItemResult`      |
-| Node-complete hit twice in parallel                    | UPSERT + `sir_session_slot_unique` | `recordItemResult`                              |
-| Skip submit hit twice in parallel                      | Transactional skip + UPSERT        | `skipSessionSlot` -> `recordItemResult`         |
-| Complete session hit twice in parallel                 | Predicate `completed_at IS NULL`   | `completeSession` UPDATE with null guard        |
-| `submitAttempt` called twice (e.g., retry)             | Pure function; no persistence      | n/a (idempotent by construction)                |
+| Scenario                                   | What prevents duplicate            | Where                                      |
+| ------------------------------------------ | ---------------------------------- | ------------------------------------------ |
+| Rep submit hit twice in parallel           | UPSERT + `sir_session_slot_unique` | `recordItemResult`                         |
+| Card submit hit twice in parallel          | Row lock + dedupe window + UPSERT  | `submitReview` tx, then `recordItemResult` |
+| Node-complete hit twice in parallel        | UPSERT + `sir_session_slot_unique` | `recordItemResult`                         |
+| Skip submit hit twice in parallel          | Transactional skip + UPSERT        | `skipSessionSlot` -> `recordItemResult`    |
+| Complete session hit twice in parallel     | Predicate `completed_at IS NULL`   | `completeSession` UPDATE with null guard   |
+| `submitAttempt` called twice (e.g., retry) | Pure function; no persistence      | n/a (idempotent by construction)           |
 
 ### Gap analysis
 

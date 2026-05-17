@@ -20,7 +20,7 @@ Separate `published.*` schema. Hangar's publish action transforms and copies con
 
 ### How It Works
 
-```
+```text
 hangar (author) ---publish---> published.* (lean) <---read--- sim
                 \
                  --snapshot--> compliance.* (FAA package)

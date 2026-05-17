@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The repo is in unusually good shape for a post-pivot codebase: every +page.server.ts already fans out independent queries via `Promise.all(Settled)`, every `{#each}` block is keyed, dashboard reads use a single batched mastery map instead of per-row mastery queries, and most listing endpoints already accept `limit`/`offset`. The biggest propagatable risks live in (1) calibration reads, which pull every confidence-tagged row a user has ever written in-memory and JS-bucket them, (2) several lists that are paginated in the app layer but whose underlying BC helpers don't accept a cap (`getPlans`, `getSessions`, `listNodesForBrowse`), and (3) the glossary/help universal `+page.ts` routes that ship the whole 164K reference table + BC registry to the client. None of these bite at current scale (~30 nodes, handfuls of reviews per user), but the patterns are the ones future pages will copy.

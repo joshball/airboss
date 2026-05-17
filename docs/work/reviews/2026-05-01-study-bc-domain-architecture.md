@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     1 |      1 |    0 |
-| major    |     0 |      0 |    0 |
-| minor    |     3 |      2 |    1 |
-| nit      |     1 |      0 |    1 |
+| -------- | ----- | ------ | ---- |
+| critical | 1     | 1      | 0    |
+| major    | 0     | 0      | 0    |
+| minor    | 3     | 2      | 1    |
+| nit      | 1     | 0      | 1    |
 
 ### CRITICAL: Undeclared cross-BC dep on `@ab/bc-hangar` -- CLOSED
 

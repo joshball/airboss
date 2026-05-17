@@ -216,20 +216,20 @@ SFARs (front of 14 CFR; outside Part 91 numerically but modifying Part 91 substa
 
 ## Drills
 
-| Question                                                                  | Answer / section                                              |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Where do U.S. ops abroad rules live?                                      | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026)              |
-| Where is the U.S. waiver authority?                                       | [@cite](airboss-ref:regs/cfr-14/91/903?at=2026)              |
-| Where is fractional applicability?                                        | [@cite](airboss-ref:regs/cfr-14/91/1001?at=2026)             |
-| Where is subpart K operational control?                                   | [@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)             |
-| What does SFAR 73 modify?                                                 | Part 91 / Part 61 for R22 / R44 -- training, currency, mast-bumping awareness |
-| What does SFAR 108 modify?                                                | Part 91 / Part 61 for MU-2B -- training, currency           |
-| Where does the DC SFRA live now?                                          | 14 CFR Part 93 subpart V                                     |
-| Are SFARs binding rules?                                                  | Yes, while in effect                                          |
-| Is subpart K a Part 135 operation?                                        | No -- it's Part 91 fractional with program-management rules   |
-| Does a solo owner-flown TBM under Part 91 fall under subpart K?           | No -- not a fractional program                                |
-| Where does the noise-waiver authorization live?                           | Subpart J -- [@cite](airboss-ref:regs/cfr-14/91/903?at=2026) |
-| How do SFARs sit relative to Part 91?                                     | Outside Part 91 numerically; modifying Part 91 substantively. Read both. |
+| Question                                                        | Answer / section                                                              |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Where do U.S. ops abroad rules live?                            | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026)                               |
+| Where is the U.S. waiver authority?                             | [@cite](airboss-ref:regs/cfr-14/91/903?at=2026)                               |
+| Where is fractional applicability?                              | [@cite](airboss-ref:regs/cfr-14/91/1001?at=2026)                              |
+| Where is subpart K operational control?                         | [@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)                              |
+| What does SFAR 73 modify?                                       | Part 91 / Part 61 for R22 / R44 -- training, currency, mast-bumping awareness |
+| What does SFAR 108 modify?                                      | Part 91 / Part 61 for MU-2B -- training, currency                             |
+| Where does the DC SFRA live now?                                | 14 CFR Part 93 subpart V                                                      |
+| Are SFARs binding rules?                                        | Yes, while in effect                                                          |
+| Is subpart K a Part 135 operation?                              | No -- it's Part 91 fractional with program-management rules                   |
+| Does a solo owner-flown TBM under Part 91 fall under subpart K? | No -- not a fractional program                                                |
+| Where does the noise-waiver authorization live?                 | Subpart J -- [@cite](airboss-ref:regs/cfr-14/91/903?at=2026)                  |
+| How do SFARs sit relative to Part 91?                           | Outside Part 91 numerically; modifying Part 91 substantively. Read both.      |
 
 ### Apply the rules
 

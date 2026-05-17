@@ -21,11 +21,11 @@ Out-of-scope handbooks (IFH, IPH, helicopter, glider, balloon) ship in follow-up
 
 Three lifecycles in this repo, distinguished by who owns the content and how it changes:
 
-| Lifecycle      | Examples                                          | Mutation cadence                | Authoring tool                    |
-| -------------- | ------------------------------------------------- | ------------------------------- | --------------------------------- |
-| Authored       | `course/knowledge/`, `docs/`, app code, schemas   | Continuous, by the team         | VS Code, the codebase             |
-| Ingested       | `handbooks/<doc>/<edition>/` (this WP)            | Per FAA edition (years)         | A pipeline; commit the output     |
-| User-generated | DB rows; learner notes, plans, sessions, reviews   | Continuous, by users at runtime | The app                            |
+| Lifecycle      | Examples                                         | Mutation cadence                | Authoring tool                |
+| -------------- | ------------------------------------------------ | ------------------------------- | ----------------------------- |
+| Authored       | `course/knowledge/`, `docs/`, app code, schemas  | Continuous, by the team         | VS Code, the codebase         |
+| Ingested       | `handbooks/<doc>/<edition>/` (this WP)           | Per FAA edition (years)         | A pipeline; commit the output |
+| User-generated | DB rows; learner notes, plans, sessions, reviews | Continuous, by users at runtime | The app                       |
 
 Authored content evolves in the repo. Ingested content is a snapshot of an external source. Mixing them in `course/knowledge/` would imply that the team writes handbook chapters; the team does not. A new top-level reflects the lifecycle separation.
 
@@ -222,31 +222,31 @@ A `Page Visibility API` gate avoids charging time to a backgrounded tab. Cap on 
 
 `libs/bc/study/src/handbooks.ts`:
 
-| Function                                | Signature                                                                                            | Notes                                                                                                       |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `listReferences`                        | `(db, opts?: { kind?: ReferenceKind; includeSuperseded?: boolean }) -> ReferenceRow[]`               | Powers `/handbooks` index. Default excludes superseded.                                                     |
-| `getReferenceByDocument`                | `(db, documentSlug: string, edition?: string) -> ReferenceRow \| null`                               | Edition default = latest non-superseded.                                                                    |
-| `listHandbookChapters`                  | `(db, referenceId: string) -> HandbookSectionRow[]`                                                  | `level='chapter'`, ordered by ordinal.                                                                      |
-| `listChapterSections`                   | `(db, chapterId: string) -> HandbookSectionRow[]`                                                    | Direct children only; ordered by ordinal.                                                                   |
-| `getHandbookSection`                    | `(db, referenceId: string, code: string) -> { section: HandbookSectionRow; figures: HandbookFigureRow[]; toc: HandbookSectionRow[] } \| null` | TOC = sibling sections of the same chapter.                  |
-| `getNodesCitingSection`                 | `(db, referenceId: string, locator: { chapter: number; section?: number }) -> NodeCitationSummary[]` | NodeCitationSummary = `{ node, mastery, locator }`. Uses GIN index.                                         |
-| `getReadState`                          | `(db, userId: string, sectionId: string) -> HandbookReadStateRow \| null`                            |                                                                                                              |
-| `setReadStatus`                         | `(db, userId: string, sectionId: string, status: HandbookReadStatus) -> HandbookReadStateRow`        | User-driven. Upserts.                                                                                       |
-| `setComprehended`                       | `(db, userId: string, sectionId: string, comprehended: boolean) -> HandbookReadStateRow`             | Upserts. Disallows true while status === 'unread' (BC layer).                                                |
-| `recordHeartbeat`                       | `(db, userId: string, sectionId: string, delta: number) -> HandbookReadStateRow`                     | Adds delta to `total_seconds_visible`, updates `last_read_at`. Caps delta at `4x interval`. First write also bumps status from `unread -> reading`. |
-| `setNotes`                              | `(db, userId: string, sectionId: string, notesMd: string) -> HandbookReadStateRow`                   | Length-bounded.                                                                                              |
-| `markAsReread`                          | `(db, userId: string, sectionId: string) -> HandbookReadStateRow`                                    | Resets `status` to `unread`, clears `comprehended`. Notes survive.                                          |
-| `getHandbookProgress`                   | `(db, userId: string, referenceId: string) -> { totalSections: number; readCount: number; readingCount: number; comprehendedFalseCount: number }` | Powers handbook + chapter overview percentages. |
-| `resolveCitationUrl`                    | `(citation: Citation, references: ReferenceRow[]) -> string \| null`                                 | Pure function. Used by node detail UI to render citations as links.                                         |
+| Function                 | Signature                                                                                                                                         | Notes                                                                                                                                               |                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `listReferences`         | `(db, opts?: { kind?: ReferenceKind; includeSuperseded?: boolean }) -> ReferenceRow[]`                                                            | Powers `/handbooks` index. Default excludes superseded.                                                                                             |                                                                     |
+| `getReferenceByDocument` | `(db, documentSlug: string, edition?: string) -> ReferenceRow \                                                                                   | null`                                                                                                                                               | Edition default = latest non-superseded.                            |
+| `listHandbookChapters`   | `(db, referenceId: string) -> HandbookSectionRow[]`                                                                                               | `level='chapter'`, ordered by ordinal.                                                                                                              |                                                                     |
+| `listChapterSections`    | `(db, chapterId: string) -> HandbookSectionRow[]`                                                                                                 | Direct children only; ordered by ordinal.                                                                                                           |                                                                     |
+| `getHandbookSection`     | `(db, referenceId: string, code: string) -> { section: HandbookSectionRow; figures: HandbookFigureRow[]; toc: HandbookSectionRow[] } \            | null`                                                                                                                                               | TOC = sibling sections of the same chapter.                         |
+| `getNodesCitingSection`  | `(db, referenceId: string, locator: { chapter: number; section?: number }) -> NodeCitationSummary[]`                                              | NodeCitationSummary = `{ node, mastery, locator }`. Uses GIN index.                                                                                 |                                                                     |
+| `getReadState`           | `(db, userId: string, sectionId: string) -> HandbookReadStateRow \                                                                                | null`                                                                                                                                               |                                                                     |
+| `setReadStatus`          | `(db, userId: string, sectionId: string, status: HandbookReadStatus) -> HandbookReadStateRow`                                                     | User-driven. Upserts.                                                                                                                               |                                                                     |
+| `setComprehended`        | `(db, userId: string, sectionId: string, comprehended: boolean) -> HandbookReadStateRow`                                                          | Upserts. Disallows true while status === 'unread' (BC layer).                                                                                       |                                                                     |
+| `recordHeartbeat`        | `(db, userId: string, sectionId: string, delta: number) -> HandbookReadStateRow`                                                                  | Adds delta to `total_seconds_visible`, updates `last_read_at`. Caps delta at `4x interval`. First write also bumps status from `unread -> reading`. |                                                                     |
+| `setNotes`               | `(db, userId: string, sectionId: string, notesMd: string) -> HandbookReadStateRow`                                                                | Length-bounded.                                                                                                                                     |                                                                     |
+| `markAsReread`           | `(db, userId: string, sectionId: string) -> HandbookReadStateRow`                                                                                 | Resets `status` to `unread`, clears `comprehended`. Notes survive.                                                                                  |                                                                     |
+| `getHandbookProgress`    | `(db, userId: string, referenceId: string) -> { totalSections: number; readCount: number; readingCount: number; comprehendedFalseCount: number }` | Powers handbook + chapter overview percentages.                                                                                                     |                                                                     |
+| `resolveCitationUrl`     | `(citation: Citation, references: ReferenceRow[]) -> string \                                                                                     | null`                                                                                                                                               | Pure function. Used by node detail UI to render citations as links. |
 
 Build-script-only (not exported from BC barrel):
 
-| Function                       | Signature                                                                       |
-| ------------------------------ | ------------------------------------------------------------------------------- |
-| `upsertReference`              | `(db, ref: NewReferenceRow) -> string`                                          |
-| `upsertHandbookSection`        | `(db, section: NewHandbookSectionRow) -> string`                                |
-| `replaceFiguresForSection`     | `(db, sectionId: string, figures: NewHandbookFigureRow[]) -> void`              |
-| `attachSupersededByLatest`     | `(db, documentSlug: string, latestId: string) -> void`                          |
+| Function                   | Signature                                                          |
+| -------------------------- | ------------------------------------------------------------------ |
+| `upsertReference`          | `(db, ref: NewReferenceRow) -> string`                             |
+| `upsertHandbookSection`    | `(db, section: NewHandbookSectionRow) -> string`                   |
+| `replaceFiguresForSection` | `(db, sectionId: string, figures: NewHandbookFigureRow[]) -> void` |
+| `attachSupersededByLatest` | `(db, documentSlug: string, latestId: string) -> void`             |
 
 Errors (throwing classes, match existing BC style):
 
@@ -256,16 +256,16 @@ Errors (throwing classes, match existing BC style):
 
 ## Component structure
 
-| Component                                | Location                                                  | Props                                                                  | Purpose                                                                              |
-| ---------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| `HandbookCard.svelte`                    | `libs/ui/handbooks/`                                      | `{ reference, progress }`                                              | Index-page card for a handbook; edition badge + progress bar.                        |
-| `HandbookChapterListItem.svelte`         | `libs/ui/handbooks/`                                      | `{ section, progress, citingNodeCount }`                               | Chapter overview list row with read state + count of citing nodes.                   |
-| `HandbookSectionListItem.svelte`         | `libs/ui/handbooks/`                                      | `{ section, readStatus, hasFigures, hasTables }`                       | Section row inside a chapter overview.                                               |
-| `HandbookSectionToc.svelte`              | `libs/ui/handbooks/`                                      | `{ chapterSections, activeSectionId }`                                 | Sticky table-of-contents column.                                                     |
-| `HandbookEditionBadge.svelte`            | `libs/ui/handbooks/`                                      | `{ edition, supersededById }`                                          | Edition pill + "newer edition available" affordance when superseded.                 |
-| `HandbookReadProgressControl.svelte`     | `libs/ui/handbooks/`                                      | `{ status, comprehended, suggestion: 'idle' \| 'prompt' }`             | Segmented control + "didn't get it" toggle + suggestion prompt.                      |
-| `HandbookSectionNotes.svelte`            | `libs/ui/handbooks/`                                      | `{ notesMd, sectionId }`                                                | Markdown textarea autosaving on blur and on debounced typing.                        |
-| `HandbookCitingNodesPanel.svelte`        | `libs/ui/handbooks/`                                      | `{ nodes }`                                                             | "Knowledge nodes that cite this section" list with mastery indicators.               |
+| Component                            | Location             | Props                                            | Purpose                                                                |                                                                 |
+| ------------------------------------ | -------------------- | ------------------------------------------------ | ---------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `HandbookCard.svelte`                | `libs/ui/handbooks/` | `{ reference, progress }`                        | Index-page card for a handbook; edition badge + progress bar.          |                                                                 |
+| `HandbookChapterListItem.svelte`     | `libs/ui/handbooks/` | `{ section, progress, citingNodeCount }`         | Chapter overview list row with read state + count of citing nodes.     |                                                                 |
+| `HandbookSectionListItem.svelte`     | `libs/ui/handbooks/` | `{ section, readStatus, hasFigures, hasTables }` | Section row inside a chapter overview.                                 |                                                                 |
+| `HandbookSectionToc.svelte`          | `libs/ui/handbooks/` | `{ chapterSections, activeSectionId }`           | Sticky table-of-contents column.                                       |                                                                 |
+| `HandbookEditionBadge.svelte`        | `libs/ui/handbooks/` | `{ edition, supersededById }`                    | Edition pill + "newer edition available" affordance when superseded.   |                                                                 |
+| `HandbookReadProgressControl.svelte` | `libs/ui/handbooks/` | `{ status, comprehended, suggestion: 'idle' \    | 'prompt' }`                                                            | Segmented control + "didn't get it" toggle + suggestion prompt. |
+| `HandbookSectionNotes.svelte`        | `libs/ui/handbooks/` | `{ notesMd, sectionId }`                         | Markdown textarea autosaving on blur and on debounced typing.          |                                                                 |
+| `HandbookCitingNodesPanel.svelte`    | `libs/ui/handbooks/` | `{ nodes }`                                      | "Knowledge nodes that cite this section" list with mastery indicators. |                                                                 |
 
 All consumed by route components under `apps/study/src/routes/(app)/handbooks/...`.
 
@@ -361,17 +361,17 @@ A `manifest.json` per edition records `{ source_url, source_checksum, fetched_at
 
 ## Alternatives considered
 
-| Alternative                                                                  | Why not                                                                                                          |
-| ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Render PDFs inline (no extraction)                                            | No structured data. No reverse query. No edition-aware citation. No mobile readability. No diff in PRs.          |
-| Markdown-only, no DB                                                          | Cross-cutting queries (which nodes cite this section, what's the read progress on PHAK) require parsing every file on every page load. Not viable past v1. |
-| `handbook_read_event` table with per-event rows                               | See Decision 2 -- aggregate row is sufficient.                                                                   |
-| One `(handbook, edition, chapter, section, subsection)` composite-key table  | Postgres NULL-distinct semantics make composite keys with optional levels awkward. Single `code` column is cleaner. |
-| `course/handbooks/` storage location                                          | Mixes lifecycles inside `course/`. See "Storage rationale".                                                      |
-| Build-time PDF re-extraction                                                  | Drops Python toolchain into every build host; loses PR-reviewable edition diffs.                                 |
-| Cron-scheduled FAA URL polling                                                | Solves a problem nobody has -- FAA does not publish on a schedule we subscribe to.                              |
-| One unified `REFERENCE_KINDS` constant replacing `REFERENCE_SOURCE_TYPES`     | Two systems in flight at once; collapsing them needs either WP to wait for the other. Cert-syllabus WP can do it once both are stable. |
-| Auto-mark sections read on scroll-end                                         | Violates Learning Philosophy principle 10 ("the system is the learner's"). Suggestion only.                      |
+| Alternative                                                                 | Why not                                                                                                                                                    |
+| --------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Render PDFs inline (no extraction)                                          | No structured data. No reverse query. No edition-aware citation. No mobile readability. No diff in PRs.                                                    |
+| Markdown-only, no DB                                                        | Cross-cutting queries (which nodes cite this section, what's the read progress on PHAK) require parsing every file on every page load. Not viable past v1. |
+| `handbook_read_event` table with per-event rows                             | See Decision 2 -- aggregate row is sufficient.                                                                                                             |
+| One `(handbook, edition, chapter, section, subsection)` composite-key table | Postgres NULL-distinct semantics make composite keys with optional levels awkward. Single `code` column is cleaner.                                        |
+| `course/handbooks/` storage location                                        | Mixes lifecycles inside `course/`. See "Storage rationale".                                                                                                |
+| Build-time PDF re-extraction                                                | Drops Python toolchain into every build host; loses PR-reviewable edition diffs.                                                                           |
+| Cron-scheduled FAA URL polling                                              | Solves a problem nobody has -- FAA does not publish on a schedule we subscribe to.                                                                         |
+| One unified `REFERENCE_KINDS` constant replacing `REFERENCE_SOURCE_TYPES`   | Two systems in flight at once; collapsing them needs either WP to wait for the other. Cert-syllabus WP can do it once both are stable.                     |
+| Auto-mark sections read on scroll-end                                       | Violates Learning Philosophy principle 10 ("the system is the learner's"). Suggestion only.                                                                |
 
 ## Observability
 

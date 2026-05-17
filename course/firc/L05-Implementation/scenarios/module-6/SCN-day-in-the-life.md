@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     6.2
 Title:           Branching Day-in-the-Life CFI Simulation
 Module:          6
@@ -19,19 +19,19 @@ Pattern:         Integrated Capstone
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_6, FAA_TOPIC.A_10, FAA_TOPIC.A_4, FAA_TOPIC.A_2, FAA_TOPIC.A_3]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'RM-1', 'PS-1', 'OD-1', 'RC-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Multiple students (varies by beat)
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1 -- Solo Supervision
 
-```
+```text
 id:           tick_1
 scene:        7:30 AM. Your pre-solo student is conducting supervised solo in the pattern. You're watching from the ramp. Third circuit: the student lands long, floats past the touchdown zone, and begins a late go-around at the 2,000-foot marker on a 4,000-foot runway. The go-around is successful but the student doesn't announce it on CTAF.
 studentSpeech:(Student on radio, after landing from go-around) That was... I went around. Sorry, I didn't call it on the radio. Am I doing OK?
@@ -72,7 +72,7 @@ criticalWindow:[ask]
 
 ### Tick 2 -- Ethical Question from Colleague
 
-```
+```text
 id:           tick_2
 scene:        9:30 AM, between flights. A fellow instructor pulls you aside. They're troubled about something.
 studentSpeech:(Colleague) Hey, can I ask you something? A student's father offered me $200 cash to sign off the student for solo even though I don't think the student is ready. I said no, but the father called the chief pilot and now the chief is asking me to "reconsider." What would you do?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3 -- Instrument Pattern Work
 
-```
+```text
 id:           tick_3
 scene:        11 AM. Flying with your instrument student in the pattern at the Class C. Tower is busy. Your student is under the hood on a practice ILS. ATC: "[Callsign], traffic alert, VFR aircraft in your 2 o'clock, 500 feet below, not in contact." Your student can't see (under the hood). You look and spot a Cessna at 2 o'clock that appears to be climbing toward your altitude.
 studentSpeech:(Student, under hood) I'm maintaining the glideslope. Did they say something about traffic? I can't see anything.
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4 -- Airspace Awareness
 
-```
+```text
 id:           tick_4
 scene:        Post-approach, climbing back to pattern altitude. Your instrument student requests to do one more approach. ATC issues a TFR alert: temporary flight restriction going into effect in 30 minutes, 10 miles southwest of your position, for a VIP movement. Your student hasn't heard the NOTAM.
 studentSpeech:One more approach? I think I'm getting the hang of the glideslope. Can we stay in the pattern for another 30 minutes?
@@ -135,7 +135,7 @@ criticalWindow:[ask]
 
 ### Tick 5 -- Afternoon Walk-In
 
-```
+```text
 id:           tick_5
 scene:        2 PM. You've returned from the flight. A person is waiting at the desk -- the walk-in from the morning finally got to talk to you. They want to start training but they're on a tight timeline: they need a pilot certificate in 6 weeks for a new job that requires travel to remote sites.
 studentSpeech:I need to learn to fly in six weeks. My company will pay for everything. I fly out for a job site visit next month and having a pilot certificate would be a huge advantage. Can you get me there?
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
                          \-> terminal_safe (direct/take_controls)
 ```

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.5
 Title:           IPC Request from a Fellow CFI
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_9, FAA_TOPIC.A_10]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-1', 'PS-1', 'RM-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Sharp but Weak ADM
 Parameters:
   skillLevel:         0.8
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Briefing room. Your friend has the approach plates out, coffee ready, and is already filling in the IPC logbook entry except for your signature. The donuts are on the table.
 studentSpeech:I've already picked two approaches -- the ILS and the VOR. Both at our home airport. I've flown them a hundred times. Let's knock this out before lunch. I'll buy.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Friend laughs off the suggestion that the IPC should be more than two home-airport approaches. Points out they flew these approaches three days ago and were perfect.
 studentSpeech:Come on, we're both CFIs. You know I can fly. I'm not some rusty private pilot. Just two approaches, a hold, and sign me off. I'd do the same for you.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Friend's smile fades. The peer dynamic is shifting. They look at the donuts, then at you. The friendly request is becoming an uncomfortable professional moment.
 studentSpeech:Fine. But I'm telling you, you're overthinking this. I'll do your full IPC, and then you're buying me dinner instead of just donuts.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
               \-> terminal_safe (direct)
 ```

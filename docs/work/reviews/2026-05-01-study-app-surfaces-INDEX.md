@@ -21,31 +21,31 @@ all_criticals_closed: 2026-05-04
 
 Re-audited every per-category file against current main. **All 5 headline criticals closed via PRs #571 (testing default-annotation), #572 (backend GET-mutation), #574 (3 a11y -- MapPanel + radiogroup + read-suggestion preamble).** Remaining majors / minors / nits tracked in `docs/work-packages/review-tail-2026-05/` with concrete triggers per per-category review file.
 
-| Severity | Closed | Open  | Total |
-| -------- | -----: | ----: | ----: |
-| CRITICAL |      6 |     0 |     6 |
-| MAJOR    |     39 |    19 |    58 |
-| MINOR    |     37 |    38 |    75 |
-| NIT      |     12 |    15 |    27 |
-| **TOTAL**|  **94**|**72** |**166**|
+| Severity  | Closed | Open   | Total   |
+| --------- | ------ | ------ | ------- |
+| CRITICAL  | 6      | 0      | 6       |
+| MAJOR     | 39     | 19     | 58      |
+| MINOR     | 37     | 38     | 75      |
+| NIT       | 12     | 15     | 27      |
+| **TOTAL** | **94** | **72** | **166** |
 
 (Note: original critical tally rolled the (dev)-group security finding in -- that was scoped as MAJOR in the security review file but recorded as critical in the index frontmatter. Actual headline criticals on entry were 5: 3 a11y + 1 testing + 1 backend.)
 
 ### Per-category close-out
 
-| Category     | Closed | Open | Status   | Headline open items                                                                                                  |
-| ------------ | -----: | ---: | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| correctness  |     14 |    0 | done     | heartbeat correctness tail closed: memory-review undo numeric key + handbook-asset symlink defence (this PR); accumulator-on-success closed earlier in #468 |
-| security     |      4 |    5 | done     | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                  |
-| perf         |      6 |    5 | pending  | help-registry code-split, library aggregators, regulations-section redundant fetch, knowledge-node listReferences   |
-| architecture |      6 |   11 | done     | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                    |
-| a11y         |     17 |    4 | pending  | aria-controls on counter-trigger; login dev-accounts heading; toast live-region scope; KbdHint announcement          |
-| patterns     |     11 |    0 | done     | all clean                                                                                                            |
-| testing      |     17 |    4 | done     | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                  |
-| dx           |     11 |    7 | pending  | handbook .catch -> typed errors; login 5xx branch; sign-out body snippet; narrow/coerceEnum dedup; RenderedLesson  |
-| ux           |      5 |   13 | pending  | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency         |
-| svelte       |      5 |    3 | pending  | URL side-effect from URL-seeded state; module-scoped timers -> $effect cleanup; calibration h2 nit; IdentityMenu extraction (separate work-package) |
-| backend      |     16 |    2 | done     | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                       |
+| Category     | Closed | Open | Status  | Headline open items                                                                                                                                         |
+| ------------ | ------ | ---- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| correctness  | 14     | 0    | done    | heartbeat correctness tail closed: memory-review undo numeric key + handbook-asset symlink defence (this PR); accumulator-on-success closed earlier in #468 |
+| security     | 4      | 5    | done    | (dev) prod gate landed in this PR; remaining are seed/edition charset caps + content-type allowlist                                                         |
+| perf         | 6      | 5    | pending | help-registry code-split, library aggregators, regulations-section redundant fetch, knowledge-node listReferences                                           |
+| architecture | 6      | 11   | done    | library / knowledge / session aggregator BCs, group-by enums to constants, handbook-asset to libs                                                           |
+| a11y         | 17     | 4    | pending | aria-controls on counter-trigger; login dev-accounts heading; toast live-region scope; KbdHint announcement                                                 |
+| patterns     | 11     | 0    | done    | all clean                                                                                                                                                   |
+| testing      | 17     | 4    | done    | savedDeck seeding; cleanup-guard removal; per-test fresh user for memory/review; reps-test ordering                                                         |
+| dx           | 11     | 7    | pending | handbook .catch -> typed errors; login 5xx branch; sign-out body snippet; narrow/coerceEnum dedup; RenderedLesson                                           |
+| ux           | 5      | 13   | pending | library card-state indicator; topic 404 -> soft empty; Skip Permanently confirm copy; form-error consistency                                                |
+| svelte       | 5      | 3    | pending | URL side-effect from URL-seeded state; module-scoped timers -> $effect cleanup; calibration h2 nit; IdentityMenu extraction (separate work-package)         |
+| backend      | 16     | 2    | done    | regulations-section redundant fetch; per-action ref/chapter re-fetch (handbook chapter actions)                                                             |
 
 ### Closed-by-rewrite
 
@@ -66,20 +66,20 @@ Re-audited every per-category file against current main. **All 5 headline critic
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total | File |
-|--------------|---------:|------:|------:|----:|------:|------|
-| correctness  |        0 |     4 |     8 |   2 |    14 | [link](2026-05-01-study-app-surfaces-correctness.md) |
-| security     |        0 |     1 |     6 |   2 |     9 | [link](2026-05-01-study-app-surfaces-security.md) |
-| perf         |        0 |     5 |     5 |   1 |    11 | [link](2026-05-01-study-app-surfaces-perf.md) |
-| architecture |        0 |     6 |     8 |   3 |    17 | [link](2026-05-01-study-app-surfaces-architecture.md) |
-| a11y         |        3 |     8 |     7 |   3 |    21 | [link](2026-05-01-study-app-surfaces-a11y.md) |
-| patterns     |        0 |     4 |     5 |   2 |    11 | [link](2026-05-01-study-app-surfaces-patterns.md) |
-| testing      |        1 |     7 |     9 |   4 |    21 | [link](2026-05-01-study-app-surfaces-testing.md) |
-| dx           |        0 |     6 |     8 |   4 |    18 | [link](2026-05-01-study-app-surfaces-dx.md) |
-| ux           |        0 |     7 |     8 |   3 |    18 | [link](2026-05-01-study-app-surfaces-ux.md) |
-| svelte       |        0 |     4 |     3 |   1 |     8 | [link](2026-05-01-study-app-surfaces-svelte.md) |
-| backend      |        1 |     6 |     9 |   2 |    18 | [link](2026-05-01-study-app-surfaces-backend.md) |
-| **TOTAL**    |    **5** |**58** |**76** |**27**|**166**| |
+| Category     | Critical | Major  | Minor  | Nit    | Total   | File                                                  |
+| ------------ | -------- | ------ | ------ | ------ | ------- | ----------------------------------------------------- |
+| correctness  | 0        | 4      | 8      | 2      | 14      | [link](2026-05-01-study-app-surfaces-correctness.md)  |
+| security     | 0        | 1      | 6      | 2      | 9       | [link](2026-05-01-study-app-surfaces-security.md)     |
+| perf         | 0        | 5      | 5      | 1      | 11      | [link](2026-05-01-study-app-surfaces-perf.md)         |
+| architecture | 0        | 6      | 8      | 3      | 17      | [link](2026-05-01-study-app-surfaces-architecture.md) |
+| a11y         | 3        | 8      | 7      | 3      | 21      | [link](2026-05-01-study-app-surfaces-a11y.md)         |
+| patterns     | 0        | 4      | 5      | 2      | 11      | [link](2026-05-01-study-app-surfaces-patterns.md)     |
+| testing      | 1        | 7      | 9      | 4      | 21      | [link](2026-05-01-study-app-surfaces-testing.md)      |
+| dx           | 0        | 6      | 8      | 4      | 18      | [link](2026-05-01-study-app-surfaces-dx.md)           |
+| ux           | 0        | 7      | 8      | 3      | 18      | [link](2026-05-01-study-app-surfaces-ux.md)           |
+| svelte       | 0        | 4      | 3      | 1      | 8       | [link](2026-05-01-study-app-surfaces-svelte.md)       |
+| backend      | 1        | 6      | 9      | 2      | 18      | [link](2026-05-01-study-app-surfaces-backend.md)      |
+| **TOTAL**    | **5**    | **58** | **76** | **27** | **166** |                                                       |
 
 ## Closed findings
 
@@ -96,16 +96,19 @@ Re-audited every per-category file against current main. **All 5 headline critic
 These show up across multiple reviewers and should be fixed at the root once, not N times.
 
 ### Route-level visual CSS proliferation
+
 - **svelte (major)**: 65 of ~70 route files ship multi-screen `<style>` blocks with reusable component styling (cards, toasts, badges, score-meta, identity menu, undo-bar). Top 5 offenders carry 2300+ lines combined.
 - **architecture (major)**: `memory/[id]/+page.svelte` (1172 lines, 432 CSS) and `session/start/+page.svelte` (883 lines, 438 CSS) have grown into multi-screen feature surfaces. Should follow the dashboard `_panels/` pattern.
 - **Root cause**: route files are treated as pages instead of assembly. Visual primitives belong in `libs/ui/`.
 
 ### Business-logic drift into routes
+
 - **architecture (major)**: regulations bucket->slug rule duplicated across 5 library routes; slug-shape parsers (CFR Part, AC series, dotted section codes) live in routes; view assembly (cert/topic grouping, knowledge-edge bucketing, goal status bucketing, credentials sorting, session runner kind-dispatch) runs in `+page.server.ts` despite the `getDashboardPayload` / `getCalibrationPageData` aggregator pattern existing in the same app.
 - **patterns (major)**: `LIBRARY_REGULATIONS_KINDS` enum bypassed in 5 regulations route files; magic strings `'aim'`/`'ac'`/`'ntsb'`/`'14-cfr'`/`'49-cfr'` in switches and equality checks while the constant is used elsewhere in the same feature.
 - **Root cause**: BC layer needs aggregator helpers for these flows; routes call them and assemble shape only.
 
 ### N+1 fan-outs
+
 - **perf (5x major)** + **backend (6x major)** flag the same set:
   - `credentials/[slug]/areas/[areaCode]/+page.server.ts` -- triple-nested `tasks.map -> elements.map -> Promise.all([2])` (50-200 round trips per area drill)
   - `lens/handbook/+page.server.ts` -- one `getHandbookProgress` per handbook
@@ -114,26 +117,31 @@ These show up across multiple reviewers and should be fixed at the root once, no
 - **Root cause**: missing per-batch BC helpers (mirror existing `getNodeMasteryMap` / `getNodesByIds`).
 
 ### Generic error logging
+
 - **dx (major)**: ~25 catch blocks across memory/reps/plans/goals/sessions log `'<funcName> threw'` instead of describing the operation. User-visible fallback strings ("Could not save changes.") never appear in logs.
 - **dx (major)**: `/library/handbook/[slug]/[chapter]` and `[section]` route servers call `.catch(() => null)` on every BC fetch then 404 if null. Real DB outages render as 404s with no log trail.
 - **dx (major)**: 404 messages echo URL slugs back to user (`'Handbook not found: phak'`) -- noise UX and slug-enumeration signal.
 - **Root cause**: error logging discipline -- consistent operation/entity/state context, no `.catch(() => null)` swallowing.
 
 ### Heartbeat correctness
+
 - **correctness (major)**: queue races on slow networks (concurrent `postHeartbeat` invocations stomp shared `pendingDeltas`)
 - **correctness (major)**: never flushes on `visibilitychange` / `pagehide`, so up to 30s of read time per visit is silently dropped
 - **correctness (minor)**: heartbeat increments running ahead of server truth
 - **Root cause**: needs queue-discipline rewrite + lifecycle-event flush.
 
 ### Test-skip flow control
+
 - **testing (5x major)**: `test.skip` used as flow control when seed shape doesn't match (`calibration`, `credentials`, `reps`, `library-by-cert`). Masks real coverage gaps with green skips. One file ships a permanently-skipped test (violates "no legacy in airboss").
 - **testing (3x major)**: e2e files mutate shared seed state in parallel without pinning (`handbook-reader`, `library-by-cert`, `handbook-amendment`).
 - **Root cause**: e2e suite needs per-suite seed isolation; skip-as-flow-control is an antipattern.
 
 ### Regulations-route exhaustiveness
+
 - **correctness (major)**: 3 regulations-route switches drop exhaustiveness; adding a 6th `LibraryRegulationsKind` (per the library-completeness spec) silently returns undefined.
 
 ### `(dev)` route group leaks into prod
+
 - **security (major)**: `(dev)/references/+page.server.ts` mutates the live `__sources_internal__` source registry on first request, polluting production source resolution with fixture data for the lifetime of the process. No auth gate, no env check.
 
 ## What's clean (preserve)

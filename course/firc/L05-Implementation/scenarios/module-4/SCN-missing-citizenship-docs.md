@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.6
 Title:           Returning Student Resumes After 6 Months
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_3]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-1', 'RC-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Returning Domestic Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO office. Student's file is open on the desk. Citizenship verification box is empty. No photocopy of any citizenship document. Logbook shows 35 hours with the school over the past two years.
 studentSpeech:I showed my license when I signed up. I'm American, born here. Why is this an issue now? We've been flying together for months.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student is confused. They assumed a driver's license was sufficient. They don't have their passport with them. They do have a birth certificate at home.
 studentSpeech:My passport is at home and it's expired anyway. I have a birth certificate -- does that work? Can I bring it next time and fly today?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is annoyed but understanding. Asks a follow-up about the school's previous failure to document this properly.
 studentSpeech:This is the school's mistake, not mine. Nobody asked me for this before. Shouldn't you guys have caught this two years ago? What if something had happened?
@@ -114,7 +114,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
               \-> terminal_safe (direct)
 ```

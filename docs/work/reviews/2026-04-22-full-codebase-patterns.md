@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The repo is in solid shape on the hard critical-rules front: no `any` in production code (only test-only `as any` casts and one `Any device` English-prose false-positive), no Svelte 4 patterns, no inline route strings, no inline port numbers, no raw SQL outside Drizzle's `sql` helper, no direct `ulid()`/`nanoid()` calls outside the sanctioned wrapper, no AI attribution, and ADR 012 cleanup is complete (only the documenting comment for `REPS_SESSION` remains, as expected). The dominant issue is design-token debt: 835+ hardcoded hex values and 11 hardcoded `rgba()` shadow/focus rings across `apps/study/src/routes/(app)/**/*.svelte`, plus ~260 non-tokenized `font-size` declarations (all rem-based, but hardcoded numbers instead of `var(--font-size-*)` tokens). This bypasses `libs/themes/tokens.css` as the design-tokens source and is the single largest consistency risk in the codebase. The `libs/ui/` primitives are clean, so the debt is scoped to route-level page styles authored before the token system stabilized.

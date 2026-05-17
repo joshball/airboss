@@ -6,29 +6,29 @@ For *what* each stage means, see [pipeline.md](pipeline.md). For the per-asset c
 
 ## The five stages
 
-| Stage | What it means | Where it lives | Verifiable by |
-| ----- | ------------- | -------------- | ------------- |
-| 1. Sourced | Source PDF/HTML cached locally | `~/Documents/airboss-handbook-cache/` | `bun run sources download` produces bytes |
-| 2. Extracted | Inline derivative produced (markdown body files + `manifest.json` declaring shape) | `<corpus>/<doc>/<edition>/` | `bun run sources register <corpus>` produces files |
-| 3. Catalogued | A `study.reference` row exists; card renders on `/library` (link-only OK) | `study.reference` | YAML in `course/references/` (non-handbook) OR section-tree seed (handbook) |
-| 4. Seeded | `study.reference_section` rows exist with `content_md` populated; in-app body renders | `study.reference_section` | `getReadableReferenceIds()` returns the ID; `/library` shows "Read in-app" badge |
-| 5. Cross-linked | Citations from other content (knowledge nodes, scenario explanations) resolve to specific sections | `airboss-ref:<corpus>/<doc>/<edition>/<code>` URI scheme | Citation chips in study UI deep-link to the right section |
+| Stage           | What it means                                                                                      | Where it lives                                           | Verifiable by                                                                    |
+| --------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| 1. Sourced      | Source PDF/HTML cached locally                                                                     | `~/Documents/airboss-handbook-cache/`                    | `bun run sources download` produces bytes                                        |
+| 2. Extracted    | Inline derivative produced (markdown body files + `manifest.json` declaring shape)                 | `<corpus>/<doc>/<edition>/`                              | `bun run sources register <corpus>` produces files                               |
+| 3. Catalogued   | A `study.reference` row exists; card renders on `/library` (link-only OK)                          | `study.reference`                                        | YAML in `course/references/` (non-handbook) OR section-tree seed (handbook)      |
+| 4. Seeded       | `study.reference_section` rows exist with `content_md` populated; in-app body renders              | `study.reference_section`                                | `getReadableReferenceIds()` returns the ID; `/library` shows "Read in-app" badge |
+| 5. Cross-linked | Citations from other content (knowledge nodes, scenario explanations) resolve to specific sections | `airboss-ref:<corpus>/<doc>/<edition>/<code>` URI scheme | Citation chips in study UI deep-link to the right section                        |
 
 The line between stages 3 and 4 is what makes a reference go from "useful link" to "actually readable in app." The substrate work (WP-SUB → WP-EXTRAS-* → WP-AIM → WP-CFR) has been pushing references through that boundary.
 
 ## Per-corpus stage status
 
-| Corpus | Sourced | Extracted | Catalogued | Seeded | Cross-linked |
-| ------ | ------- | --------- | ---------- | ------ | ------------ |
-| Handbooks (PHAK / AFH / AVWX) | ✅ | ✅ | ✅ | ✅ section-tree | partial |
-| Handbooks-extras (RMH / AIH / IFH / IPH / mtn-tips) | ✅ | ✅ | ✅ | ✅ whole-doc | minimal |
-| AIM | ✅ | ✅ | ✅ | ✅ section-tree | not yet |
-| **CFR (14 + 49)** | ✅ | ✅ (3 manifests, 11 cards) | ✅ | **✅ section-tree NEW (#491)** | not yet |
-| AC | ✅ | partial (9 manifests, 17 cards) | ✅ | ❌ | not yet |
-| ACS | ✅ | partial (5 manifests, 6 cards) | ✅ | ❌ | not yet |
-| NTSB / SAFO / InFO / Chief Counsel | ❌ | ❌ | ✅ link-only umbrella | ❌ | n/a |
-| POH | per-aircraft, user-uploaded; separate workflow | | | | |
-| Other (TERPS / AOPA / plates) | manual link-only references; not pipeline candidates | | | | |
+| Corpus                                              | Sourced                                              | Extracted                       | Catalogued           | Seeded                        | Cross-linked |
+| --------------------------------------------------- | ---------------------------------------------------- | ------------------------------- | -------------------- | ----------------------------- | ------------ |
+| Handbooks (PHAK / AFH / AVWX)                       | ✅                                                    | ✅                               | ✅                    | ✅ section-tree                | partial      |
+| Handbooks-extras (RMH / AIH / IFH / IPH / mtn-tips) | ✅                                                    | ✅                               | ✅                    | ✅ whole-doc                   | minimal      |
+| AIM                                                 | ✅                                                    | ✅                               | ✅                    | ✅ section-tree                | not yet      |
+| **CFR (14 + 49)**                                   | ✅                                                    | ✅ (3 manifests, 11 cards)       | ✅                    | **✅ section-tree NEW (#491)** | not yet      |
+| AC                                                  | ✅                                                    | partial (9 manifests, 17 cards) | ✅                    | ❌                             | not yet      |
+| ACS                                                 | ✅                                                    | partial (5 manifests, 6 cards)  | ✅                    | ❌                             | not yet      |
+| NTSB / SAFO / InFO / Chief Counsel                  | ❌                                                    | ❌                               | ✅ link-only umbrella | ❌                             | n/a          |
+| POH                                                 | per-aircraft, user-uploaded; separate workflow       |                                 |                      |                               |              |
+| Other (TERPS / AOPA / plates)                       | manual link-only references; not pipeline candidates |                                 |                      |                               |              |
 
 ### What "(N manifests, M cards)" means
 
@@ -42,33 +42,33 @@ For example, AC has 9 on-disk manifests covering specific advisory circulars (61
 
 ### Section-tree readable (15)
 
-| Reference | Edition | Sections | Notes |
-| --------- | ------- | -------- | ----- |
-| PHAK | FAA-H-8083-25C | 850 | Section-tree handbook |
-| AFH | FAA-H-8083-3C | 531 | Section-tree handbook |
-| AVWX | FAA-H-8083-28B | 480 | Section-tree handbook |
-| AIM | 2026-04 | 744 | Section-tree (WP-AIM) |
-| 14 CFR Part 1 | 2026-04 | 3 | Section-tree (WP-CFR) |
-| 14 CFR Part 14 | 2026-04 | 19 | Section-tree (WP-CFR) |
-| 14 CFR Part 23 | 2026-04 | 68 | Section-tree (WP-CFR) |
-| 14 CFR Part 61 | 2026-04 | 149 | Section-tree (WP-CFR) |
-| 14 CFR Part 68 | 2026-04 | 6 | Section-tree (WP-CFR) |
-| 14 CFR Part 71 | 2026-04 | 15 | Section-tree (WP-CFR) |
-| 14 CFR Part 73 | 2026-04 | 11 | Section-tree (WP-CFR) |
-| 14 CFR Part 91 | 2026-04 | 286 | Section-tree (WP-CFR) |
-| 14 CFR Part 135 | 2026-04 | 200 | Section-tree (WP-CFR) |
-| 14 CFR Part 141 | 2026-04 | 49 | Section-tree (WP-CFR) |
-| 49 CFR Part 830 | 2026-04 | 6 | Section-tree (WP-CFR) |
-| 49 CFR Part 1552 | 2026-04 | 16 | Section-tree (WP-CFR) |
+| Reference        | Edition        | Sections | Notes                 |
+| ---------------- | -------------- | -------- | --------------------- |
+| PHAK             | FAA-H-8083-25C | 850      | Section-tree handbook |
+| AFH              | FAA-H-8083-3C  | 531      | Section-tree handbook |
+| AVWX             | FAA-H-8083-28B | 480      | Section-tree handbook |
+| AIM              | 2026-04        | 744      | Section-tree (WP-AIM) |
+| 14 CFR Part 1    | 2026-04        | 3        | Section-tree (WP-CFR) |
+| 14 CFR Part 14   | 2026-04        | 19       | Section-tree (WP-CFR) |
+| 14 CFR Part 23   | 2026-04        | 68       | Section-tree (WP-CFR) |
+| 14 CFR Part 61   | 2026-04        | 149      | Section-tree (WP-CFR) |
+| 14 CFR Part 68   | 2026-04        | 6        | Section-tree (WP-CFR) |
+| 14 CFR Part 71   | 2026-04        | 15       | Section-tree (WP-CFR) |
+| 14 CFR Part 73   | 2026-04        | 11       | Section-tree (WP-CFR) |
+| 14 CFR Part 91   | 2026-04        | 286      | Section-tree (WP-CFR) |
+| 14 CFR Part 135  | 2026-04        | 200      | Section-tree (WP-CFR) |
+| 14 CFR Part 141  | 2026-04        | 49       | Section-tree (WP-CFR) |
+| 49 CFR Part 830  | 2026-04        | 6        | Section-tree (WP-CFR) |
+| 49 CFR Part 1552 | 2026-04        | 16       | Section-tree (WP-CFR) |
 
 ### Whole-doc readable (5)
 
-| Reference | Edition | Notes |
-| --------- | ------- | ----- |
-| Risk Management | 8083-2A | Whole-doc |
-| Aviation Instructor | 8083-9 | Whole-doc |
-| IFH | 8083-15B | Whole-doc |
-| IPH | 8083-16B | Whole-doc |
+| Reference               | Edition  | Notes                                                   |
+| ----------------------- | -------- | ------------------------------------------------------- |
+| Risk Management         | 8083-2A  | Whole-doc                                               |
+| Aviation Instructor     | 8083-9   | Whole-doc                                               |
+| IFH                     | 8083-15B | Whole-doc                                               |
+| IPH                     | 8083-16B | Whole-doc                                               |
 | Tips on Mountain Flying | mtn-2003 | Whole-doc, hand-curated body via `body_override` (#489) |
 
 ## Near-term gaps
@@ -85,12 +85,12 @@ Cross-linking (stage 5) shipped end-to-end on 2026-05-04 via WP `stage5-citation
 
 Four rows that look like leftover dupes (cleanup candidates, not yet a WP):
 
-| Row | Issue |
-| --- | ----- |
-| `aim` edition `current` | Orphan placeholder; separate from the real `2026-04` row |
-| `afh` edition `FAA-H-8083-3B` | Superseded prior edition still in DB (might be intentional supersede chain) |
-| `aih` edition `FAA-H-8083-9B` | Duplicates `aviation-instructor 8083-9` (different slug, same handbook) |
-| `faa-h-8083-2` edition `FAA-H-8083-2A` | Duplicates `risk-management 8083-2A` (different slug, same handbook) |
+| Row                                    | Issue                                                                       |
+| -------------------------------------- | --------------------------------------------------------------------------- |
+| `aim` edition `current`                | Orphan placeholder; separate from the real `2026-04` row                    |
+| `afh` edition `FAA-H-8083-3B`          | Superseded prior edition still in DB (might be intentional supersede chain) |
+| `aih` edition `FAA-H-8083-9B`          | Duplicates `aviation-instructor 8083-9` (different slug, same handbook)     |
+| `faa-h-8083-2` edition `FAA-H-8083-2A` | Duplicates `risk-management 8083-2A` (different slug, same handbook)        |
 
 The two duplicate-slug bugs (`aih` / `faa-h-8083-2`) match the pattern fixed by PR #461. Worth a follow-up sweep WP. Captured in [IDEAS.md](../platform/IDEAS.md) under "Technical Approaches" if not already.
 

@@ -66,6 +66,7 @@ const SHORTCUT_MAP: Record<string, InterventionLevel> = {
 ```
 
 Listener: `$effect` that adds/removes the event listener based on phase. Ignores input when:
+
 - Phase is not `playing`
 - Ladder is disabled
 - Tutorial overlay is active
@@ -82,6 +83,7 @@ Add a `showShortcuts` prop (default `true` on desktop, `false` on mobile -- dete
 A modal-like overlay that highlights one element at a time using a spotlight effect (darken everything except the highlighted element).
 
 Props:
+
 ```typescript
 {
   step: number;
@@ -96,6 +98,7 @@ Props:
 ```
 
 The overlay renders:
+
 - Full-screen semi-transparent backdrop
 - A "window" cutout around the target element
 - A tooltip positioned near the target with title, description, and Next/action button
@@ -105,6 +108,7 @@ Steps are defined in the parent page, not in the component. The component just r
 ### ImmersionPanel.svelte (new component)
 
 Renders a single immersion tick. Separate from the scored tick display because:
+
 - It has a warmup question callout
 - It has a "Continue" button instead of the ladder
 - It has no student state badge

@@ -28,14 +28,14 @@ Not all phases need all six. The matrix at the bottom maps phases to which test 
 
 Trim + step-response validation matters more than coverage here. The port is correct or the airplane flies wrong; nothing in between.
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Unit | `tools/jsbsim-port/__tests__/` | Binding-generator output stable; FGFDMExec init/dispose lifecycle leak-free |
-| Integration | `libs/engine/src/sim/__tests__/` | Worker host exercises set-state -> advance -> get-state -> dispose without WASM panics |
-| Trim validation | `libs/sim-fdm/__tests__/trim.test.ts` | C172 1G straight-and-level at Vno + Vy. Compare airspeed (within 2%), AoA (within 1 deg), pitch (within 1 deg) to desktop JSBSim reference values shipped as a fixture |
-| Step response | `libs/sim-fdm/__tests__/step.test.ts` | Apply +5 deg pitch step, hold 5 sec; capture pitch and AoA traces; compare to fixture within tolerance |
-| Determinism | `libs/sim-fdm/__tests__/determinism.test.ts` | Same `(inputs, seed, initial)` produces identical trajectories across two runs and across page reloads |
-| Manual | Browser | Take off, climb, level cruise, gentle turns, full-stall, full-stall recovery, pattern entry, landing flare. "Feels like a 172." |
+| Type            | Where                                        | What                                                                                                                                                                   |
+| --------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Unit            | `tools/jsbsim-port/__tests__/`               | Binding-generator output stable; FGFDMExec init/dispose lifecycle leak-free                                                                                            |
+| Integration     | `libs/engine/src/sim/__tests__/`             | Worker host exercises set-state -> advance -> get-state -> dispose without WASM panics                                                                                 |
+| Trim validation | `libs/sim-fdm/__tests__/trim.test.ts`        | C172 1G straight-and-level at Vno + Vy. Compare airspeed (within 2%), AoA (within 1 deg), pitch (within 1 deg) to desktop JSBSim reference values shipped as a fixture |
+| Step response   | `libs/sim-fdm/__tests__/step.test.ts`        | Apply +5 deg pitch step, hold 5 sec; capture pitch and AoA traces; compare to fixture within tolerance                                                                 |
+| Determinism     | `libs/sim-fdm/__tests__/determinism.test.ts` | Same `(inputs, seed, initial)` produces identical trajectories across two runs and across page reloads                                                                 |
+| Manual          | Browser                                      | Take off, climb, level cruise, gentle turns, full-stall, full-stall recovery, pattern entry, landing flare. "Feels like a 172."                                        |
 
 **Ship gate:** all four automated test types green. Manual pass by the user.
 
@@ -43,13 +43,13 @@ Trim + step-response validation matters more than coverage here. The port is cor
 
 The fault model is a pure transform; tests are dense and fast.
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Unit | `libs/bc/sim/src/faults/__tests__/transform.test.ts` | One test per `(FaultKind, instrument)` pair. E.g., pitot-block at 1000 ft + climb to 2000 ft -> ASI reads 0 then descends |
-| Property | `libs/bc/sim/src/faults/__tests__/property.test.ts` | `applyFaults(truth, [])` -> truth (identity); `applyFaults` is order-independent for orthogonal faults |
-| Visual regression | `apps/sim/src/routes/_dev/instruments/+page.svelte` | Storybook gallery snapshot under Playwright with each instrument in each fault state. Diff visual baselines per PR |
-| a11y | `apps/sim/__tests__/a11y/instrument-aria.test.ts` | Each instrument exposes a parseable `aria-label`; live region narrates at 1 Hz; values match the SVG state |
-| Manual | Browser | Trigger each fault during a scenario, eyeball the gauge behavior, confirm it matches POH-failure descriptions |
+| Type              | Where                                                | What                                                                                                                      |
+| ----------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Unit              | `libs/bc/sim/src/faults/__tests__/transform.test.ts` | One test per `(FaultKind, instrument)` pair. E.g., pitot-block at 1000 ft + climb to 2000 ft -> ASI reads 0 then descends |
+| Property          | `libs/bc/sim/src/faults/__tests__/property.test.ts`  | `applyFaults(truth, [])` -> truth (identity); `applyFaults` is order-independent for orthogonal faults                    |
+| Visual regression | `apps/sim/src/routes/_dev/instruments/+page.svelte`  | Storybook gallery snapshot under Playwright with each instrument in each fault state. Diff visual baselines per PR        |
+| a11y              | `apps/sim/__tests__/a11y/instrument-aria.test.ts`    | Each instrument exposes a parseable `aria-label`; live region narrates at 1 Hz; values match the SVG state                |
+| Manual            | Browser                                              | Trigger each fault during a scenario, eyeball the gauge behavior, confirm it matches POH-failure descriptions             |
 
 **Ship gate:** unit + property tests green. Visual regression baselines accepted. Manual pass on each fault.
 
@@ -57,14 +57,14 @@ The fault model is a pure transform; tests are dense and fast.
 
 Replay determinism is the load-bearing test. If `scenarioHash + inputs + seed + initial` does not produce a byte-identical tape, the debrief lies.
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Unit | `libs/bc/sim/src/scenarios/__tests__/runner.test.ts` (extends existing) | Fault triggers fire on the right tick; step ladder + crash detection unaffected |
-| Unit | `libs/bc/sim/src/replay/__tests__/` | Ring buffer wrap-around; serialize round-trip; hash function stable across Node versions |
-| Integration | `apps/sim/__tests__/replay-determinism.test.ts` | Run scenario in worker; capture tape; replay tape; assert identical truth-state at each frame |
-| Integration | `apps/sim/__tests__/scenario-attempt.test.ts` | Run scenario to outcome; assert `RepAttempt` written to study BC with correct grade |
-| e2e | `e2e/sim/debrief.spec.ts` | Fly a scenario to outcome; debrief auto-opens; scrubber works keyboard-first; "Run Again" returns to cockpit |
-| Manual | Browser | Departure stall, EFATO, vacuum failure end-to-end; debrief tells the story |
+| Type        | Where                                                                   | What                                                                                                         |
+| ----------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Unit        | `libs/bc/sim/src/scenarios/__tests__/runner.test.ts` (extends existing) | Fault triggers fire on the right tick; step ladder + crash detection unaffected                              |
+| Unit        | `libs/bc/sim/src/replay/__tests__/`                                     | Ring buffer wrap-around; serialize round-trip; hash function stable across Node versions                     |
+| Integration | `apps/sim/__tests__/replay-determinism.test.ts`                         | Run scenario in worker; capture tape; replay tape; assert identical truth-state at each frame                |
+| Integration | `apps/sim/__tests__/scenario-attempt.test.ts`                           | Run scenario to outcome; assert `RepAttempt` written to study BC with correct grade                          |
+| e2e         | `e2e/sim/debrief.spec.ts`                                               | Fly a scenario to outcome; debrief auto-opens; scrubber works keyboard-first; "Run Again" returns to cockpit |
+| Manual      | Browser                                                                 | Departure stall, EFATO, vacuum failure end-to-end; debrief tells the story                                   |
 
 **Ship gate:** all automated tests green. Tape determinism proven on two browsers. Manual pass on three seed scenarios.
 
@@ -72,11 +72,11 @@ Replay determinism is the load-bearing test. If `scenarioHash + inputs + seed + 
 
 Most tests already exist in [libs/bc/sim/src/audio-mapping.test.ts](../../../libs/bc/sim/src/audio-mapping.test.ts). Follow-up wiring (5.3, 5.4) extends them.
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Unit | `audio-mapping.test.ts` | Each predicate (`shouldSoundGearWarning`, `flapsChanged`, `altitudeAlertCrossed`) over its threshold matrix |
-| Integration | `apps/sim/__tests__/cue-wiring.test.ts` | Cue classes activate/silence on the right snapshot transitions; mute toggle covers every cue |
-| Manual | Browser | Each cue audibly fires when expected, mutes correctly, captions render in `aria-live` region |
+| Type        | Where                                   | What                                                                                                        |
+| ----------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Unit        | `audio-mapping.test.ts`                 | Each predicate (`shouldSoundGearWarning`, `flapsChanged`, `altitudeAlertCrossed`) over its threshold matrix |
+| Integration | `apps/sim/__tests__/cue-wiring.test.ts` | Cue classes activate/silence on the right snapshot transitions; mute toggle covers every cue                |
+| Manual      | Browser                                 | Each cue audibly fires when expected, mutes correctly, captions render in `aria-live` region                |
 
 **Ship gate:** unit + integration green. Manual pass per cue.
 
@@ -84,22 +84,22 @@ Most tests already exist in [libs/bc/sim/src/audio-mapping.test.ts](../../../lib
 
 PA28 is a second instance of the Phase 2 validation; remaining scenarios are content tests.
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Trim validation | `libs/sim-fdm/__tests__/trim-pa28.test.ts` | PA28 1G straight-and-level at Vno + Vy matches desktop JSBSim reference within tolerance |
-| Unit | `libs/bc/sim/src/scenarios/__tests__/<scenario>.test.ts` | One test file per scenario; success / failure / timeout transitions exercised |
-| e2e | `e2e/sim/<scenario>.spec.ts` | Each scenario flyable to outcome via Playwright (scripted inputs); debrief opens; rep-attempt written |
-| Manual | Browser | User flies each scenario; rates "feels right" on a 1-5 |
+| Type            | Where                                                    | What                                                                                                  |
+| --------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Trim validation | `libs/sim-fdm/__tests__/trim-pa28.test.ts`               | PA28 1G straight-and-level at Vno + Vy matches desktop JSBSim reference within tolerance              |
+| Unit            | `libs/bc/sim/src/scenarios/__tests__/<scenario>.test.ts` | One test file per scenario; success / failure / timeout transitions exercised                         |
+| e2e             | `e2e/sim/<scenario>.spec.ts`                             | Each scenario flyable to outcome via Playwright (scripted inputs); debrief opens; rep-attempt written |
+| Manual          | Browser                                                  | User flies each scenario; rates "feels right" on a 1-5                                                |
 
 **Ship gate:** trim test green for PA28. Each new scenario has unit + e2e green. Manual pass on each scenario by the user.
 
 ### Phase 7 -- Horizon (optional)
 
-| Type | Where | What |
-| ---- | ----- | ---- |
-| Unit | `apps/sim/src/lib/horizon/__tests__/scene-state.test.ts` | Scene state derived from FDM truth; pitch/roll/heading round-trip |
-| Performance | `apps/sim/__tests__/horizon-perf.test.ts` | 60 fps sustained at 1280x800 with the horizon on; 30 fps with reduce-motion |
-| Manual | Browser | Visual: sky color shifts with pitch; runway tracks heading; bank produces correct horizon roll; reduce-motion drops parallax |
+| Type        | Where                                                    | What                                                                                                                         |
+| ----------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Unit        | `apps/sim/src/lib/horizon/__tests__/scene-state.test.ts` | Scene state derived from FDM truth; pitch/roll/heading round-trip                                                            |
+| Performance | `apps/sim/__tests__/horizon-perf.test.ts`                | 60 fps sustained at 1280x800 with the horizon on; 30 fps with reduce-motion                                                  |
+| Manual      | Browser                                                  | Visual: sky color shifts with pitch; runway tracks heading; bank produces correct horizon roll; reduce-motion drops parallax |
 
 **Ship gate:** perf test green. Manual pass on the VFR maneuver scenario the horizon enables.
 
@@ -192,14 +192,14 @@ These are the canonical "user-zero" walkthroughs. The user runs them before each
 
 ## Coverage matrix
 
-| Phase | Unit | Property | Integration | e2e | Visual | Validation | a11y | Perf | Manual |
-| ----- | ---- | -------- | ----------- | --- | ------ | ---------- | ---- | ---- | ------ |
-| 2 | yes | -- | yes | -- | -- | yes (trim + step + determinism) | -- | yes (perf budget) | MT-1 |
-| 3 | yes | yes | yes | -- | yes (gallery snapshots) | -- | yes | -- | each fault |
-| 4 | yes | -- | yes | yes | -- | yes (replay determinism) | yes | -- | MT-2, MT-3 |
-| 5 | yes | -- | yes | -- | -- | -- | yes (captions) | -- | each cue |
-| 6 | yes | -- | yes | yes | -- | yes (trim PA28) | yes | -- | MT-4 |
-| 7 | yes | -- | -- | yes | -- | -- | yes (reduce-motion) | yes | MT-5 |
+| Phase | Unit | Property | Integration | e2e | Visual                  | Validation                      | a11y                | Perf              | Manual     |
+| ----- | ---- | -------- | ----------- | --- | ----------------------- | ------------------------------- | ------------------- | ----------------- | ---------- |
+| 2     | yes  | --       | yes         | --  | --                      | yes (trim + step + determinism) | --                  | yes (perf budget) | MT-1       |
+| 3     | yes  | yes      | yes         | --  | yes (gallery snapshots) | --                              | yes                 | --                | each fault |
+| 4     | yes  | --       | yes         | yes | --                      | yes (replay determinism)        | yes                 | --                | MT-2, MT-3 |
+| 5     | yes  | --       | yes         | --  | --                      | --                              | yes (captions)      | --                | each cue   |
+| 6     | yes  | --       | yes         | yes | --                      | yes (trim PA28)                 | yes                 | --                | MT-4       |
+| 7     | yes  | --       | --          | yes | --                      | --                              | yes (reduce-motion) | yes               | MT-5       |
 
 ## When tests fail in CI
 

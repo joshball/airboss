@@ -341,15 +341,15 @@ gorilla:
 
 Each scenario can be tuned across these dimensions:
 
-| Lever | Easy | Medium | Hard |
-| --- | --- | --- | --- |
-| **Decay rate** | 2 kts/10s (obvious) | 1 kt/10s (gradual) | 0.5 kt/10s (glacial) |
-| **Student verbal cues** | "Is my airspeed OK?" at 98 kts | None | Student says "everything's fine" at 92 kts |
-| **Student responsiveness** | 0.9 (immediately corrects when asked) | 0.6 (needs prompting) | 0.3 (dismissive, needs directing) |
-| **Task complexity** | "Watch the scan" (one job) | "Evaluate scan + note timing" (two jobs) | "Evaluate scan + plan next lesson segment + note timing" (three jobs) |
-| **Distractors** | None | Radio calls in background | Radio calls requiring response + turbulence bumps |
-| **Duration** | 60s (less time to decay) | 90s | 120s (very slow, very subtle) |
-| **Number of gorillas** | 1 | 1 | 2 (airspeed + heading drift) |
+| Lever                      | Easy                                  | Medium                                   | Hard                                                                  |
+| -------------------------- | ------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| **Decay rate**             | 2 kts/10s (obvious)                   | 1 kt/10s (gradual)                       | 0.5 kt/10s (glacial)                                                  |
+| **Student verbal cues**    | "Is my airspeed OK?" at 98 kts        | None                                     | Student says "everything's fine" at 92 kts                            |
+| **Student responsiveness** | 0.9 (immediately corrects when asked) | 0.6 (needs prompting)                    | 0.3 (dismissive, needs directing)                                     |
+| **Task complexity**        | "Watch the scan" (one job)            | "Evaluate scan + note timing" (two jobs) | "Evaluate scan + plan next lesson segment + note timing" (three jobs) |
+| **Distractors**            | None                                  | Radio calls in background                | Radio calls requiring response + turbulence bumps                     |
+| **Duration**               | 60s (less time to decay)              | 90s                                      | 120s (very slow, very subtle)                                         |
+| **Number of gorillas**     | 1                                     | 1                                        | 2 (airspeed + heading drift)                                          |
 
 ---
 
@@ -359,13 +359,13 @@ The existing tick engine handles discrete decision points. Panel mode adds conti
 
 ### What Panel Mode Adds
 
-| Capability | Tick Engine | Panel Mode |
-| --- | --- | --- |
-| Time model | Discrete ticks | Continuous (1s tick, visual interpolation) |
-| Input timing | Per-tick choice | Any time (timestamped) |
-| Visual | Situation card + text | Animated instrument panel |
-| Student model | State machine per tick | Continuous scan + response model |
-| Scoring | Per-tick intervention score | Timeline-based detection + intervention analysis |
+| Capability    | Tick Engine                 | Panel Mode                                       |
+| ------------- | --------------------------- | ------------------------------------------------ |
+| Time model    | Discrete ticks              | Continuous (1s tick, visual interpolation)       |
+| Input timing  | Per-tick choice             | Any time (timestamped)                           |
+| Visual        | Situation card + text       | Animated instrument panel                        |
+| Student model | State machine per tick      | Continuous scan + response model                 |
+| Scoring       | Per-tick intervention score | Timeline-based detection + intervention analysis |
 
 ### Panel Mode Architecture
 
@@ -464,16 +464,16 @@ Instrument scan exercises are **not graded** in the traditional sense. They prod
 
 ### What We Capture
 
-| Data Point | Purpose |
-| --- | --- |
-| Note timestamps + targets | What they were paying attention to |
-| Intervention timestamps + types | When and how they acted |
-| Gorilla detection (yes/no) | Did they catch it |
-| Detection time | How early |
-| Detection method | Note, ask, coach, direct, or take-controls |
-| Take-controls diagnostic | What they thought was wrong |
-| Free text responses | NLP analysis for keywords |
-| Task completion | Did they correctly identify the scan skip |
+| Data Point                      | Purpose                                    |
+| ------------------------------- | ------------------------------------------ |
+| Note timestamps + targets       | What they were paying attention to         |
+| Intervention timestamps + types | When and how they acted                    |
+| Gorilla detection (yes/no)      | Did they catch it                          |
+| Detection time                  | How early                                  |
+| Detection method                | Note, ask, coach, direct, or take-controls |
+| Take-controls diagnostic        | What they thought was wrong                |
+| Free text responses             | NLP analysis for keywords                  |
+| Task completion                 | Did they correctly identify the scan skip  |
 
 ### What We Report
 

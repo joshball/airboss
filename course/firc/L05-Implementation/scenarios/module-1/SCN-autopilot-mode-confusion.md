@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.2
 Title:           IFR Descent with a Crossing Restriction
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-2', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Level at 7,000, 18 miles from JONES. Student selects VS mode and dials -500 fpm. At this rate, the aircraft will be at 4,000 well before JONES -- violating the crossing restriction. Student leans back, hands off the yoke.
 studentSpeech:OK, autopilot is descending. I set -500 feet per minute. We'll be at 4,000 in six minutes. Easy.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Descending through 6,200. JONES is now 12 miles ahead. Student either worked out the problem or not. At -500 fpm, they'll cross JONES at approximately 3,600 -- 1,400 feet below the restriction. The autopilot vertical speed indicator shows VS -500 prominently.
 studentSpeech:Hmm... wait. If JONES is 12 miles at our groundspeed, that's about 7 minutes... and we'll be at... uh, this doesn't work, does it?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student tries to fix it but selects the wrong mode. Switches from VS to FLC (flight level change) without setting the target altitude to 5,000 first. The autopilot begins descending at a variable rate, still targeting 4,000. Confusion deepens as the mode annunciations change.
 studentSpeech:Wait, I thought FLC would fix it. Why is it still going to 4,000? The numbers changed on the screen... what mode am I in now?
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        4,800 feet, 4 miles from JONES. Student has been button-mashing on the autopilot panel. Multiple mode changes have occurred. The airplane is now in a wings-level climb to 4,000 (wrong altitude) with the student unaware the altitude bug is set incorrectly. JONES crossing at 5,000 is about to be violated.
 studentSpeech:I don't know what it's doing. The airplane is doing something I didn't tell it to.
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (coach/direct)

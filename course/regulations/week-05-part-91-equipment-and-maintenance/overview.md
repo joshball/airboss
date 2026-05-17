@@ -24,15 +24,15 @@ This week is **deep**. Front-to-back reading of subparts C and E. Subpart D (spe
 
 ## Lesson structure
 
-| File | Topic |
-| --- | --- |
-| 01-documents-and-required-equipment.md | 91.203 documents (AROW) + 91.205 equipment by operation type |
-| 02-elt-lights-inoperative-equipment.md | 91.207 ELTs + 91.209 lights + 91.213 inop equipment / no-MEL pathway |
-| 03-transponder-and-ads-b.md | 91.215 transponder + 91.225 / 91.227 ADS-B Out |
-| 04-maintenance-responsibilities-and-inspections.md | 91.405 + 91.407 + 91.409 (annual / 100-hour) |
-| 05-altimeter-transponder-record-checks.md | 91.411 + 91.413 + 91.417 (records) + 91.419 (transfer on sale) |
-| drills.md | 20 scenarios: "Given this aircraft and this op, what's required?" |
-| oral.md | "Walk me through every inspection currency check on this airplane for an IFR flight tomorrow." |
+| File                                               | Topic                                                                                          |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| 01-documents-and-required-equipment.md             | 91.203 documents (AROW) + 91.205 equipment by operation type                                   |
+| 02-elt-lights-inoperative-equipment.md             | 91.207 ELTs + 91.209 lights + 91.213 inop equipment / no-MEL pathway                           |
+| 03-transponder-and-ads-b.md                        | 91.215 transponder + 91.225 / 91.227 ADS-B Out                                                 |
+| 04-maintenance-responsibilities-and-inspections.md | 91.405 + 91.407 + 91.409 (annual / 100-hour)                                                   |
+| 05-altimeter-transponder-record-checks.md          | 91.411 + 91.413 + 91.417 (records) + 91.419 (transfer on sale)                                 |
+| drills.md                                          | 20 scenarios: "Given this aircraft and this op, what's required?"                              |
+| oral.md                                            | "Walk me through every inspection currency check on this airplane for an IFR flight tomorrow." |
 
 ## How this week fits
 

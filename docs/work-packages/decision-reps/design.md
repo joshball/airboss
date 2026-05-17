@@ -84,30 +84,30 @@ export type PhaseOfFlight = (typeof PHASES_OF_FLIGHT)[keyof typeof PHASES_OF_FLI
 
 ### Server load functions
 
-| Route | Load | Returns |
-| --- | --- | --- |
-| `(app)/reps/+page.server.ts` | `getRepDashboard(userId)` | scenario count by domain, attempts today, accuracy |
+| Route                                | Load                                           | Returns                                                         |
+| ------------------------------------ | ---------------------------------------------- | --------------------------------------------------------------- |
+| `(app)/reps/+page.server.ts`         | `getRepDashboard(userId)`                      | scenario count by domain, attempts today, accuracy              |
 | `(app)/reps/session/+page.server.ts` | `getNextScenarios(userId, filters, limit: 10)` | batch of scenarios prioritized by unattempted then least-recent |
-| `(app)/reps/browse/+page.server.ts` | `getScenarios(userId, filters)` | paginated scenarios with filters |
-| `(app)/reps/new/+page.server.ts` | -- | Needs DOMAINS, DIFFICULTIES, PHASES_OF_FLIGHT |
+| `(app)/reps/browse/+page.server.ts`  | `getScenarios(userId, filters)`                | paginated scenarios with filters                                |
+| `(app)/reps/new/+page.server.ts`     | --                                             | Needs DOMAINS, DIFFICULTIES, PHASES_OF_FLIGHT                   |
 
 ### Form actions
 
-| Route | Action | What it does |
-| --- | --- | --- |
-| `(app)/reps/new/+page.server.ts` | `default` | Validate + create scenario |
-| `(app)/reps/session/+page.server.ts` | `submitAttempt` | Record rep_attempt |
+| Route                                | Action          | What it does               |
+| ------------------------------------ | --------------- | -------------------------- |
+| `(app)/reps/new/+page.server.ts`     | `default`       | Validate + create scenario |
+| `(app)/reps/session/+page.server.ts` | `submitAttempt` | Record rep_attempt         |
 
 ### BC functions
 
-| File | Function | Signature |
-| --- | --- | --- |
-| `scenarios.ts` | `createScenario` | `(db, data: NewScenario) -> Scenario` |
-| `scenarios.ts` | `getScenarios` | `(db, userId, filters?) -> Scenario[]` |
-| `scenarios.ts` | `getNextScenarios` | `(db, userId, filters?, limit?) -> Scenario[]` |
-| `scenarios.ts` | `submitAttempt` | `(db, scenarioId, userId, chosenOption, confidence?) -> RepAttempt` |
-| `scenarios.ts` | `getRepAccuracy` | `(db, userId, domain?) -> AccuracyStats` |
-| `scenarios.ts` | `getRepStats` | `(db, userId, dateRange?) -> RepStats` |
+| File           | Function           | Signature                                                           |
+| -------------- | ------------------ | ------------------------------------------------------------------- |
+| `scenarios.ts` | `createScenario`   | `(db, data: NewScenario) -> Scenario`                               |
+| `scenarios.ts` | `getScenarios`     | `(db, userId, filters?) -> Scenario[]`                              |
+| `scenarios.ts` | `getNextScenarios` | `(db, userId, filters?, limit?) -> Scenario[]`                      |
+| `scenarios.ts` | `submitAttempt`    | `(db, scenarioId, userId, chosenOption, confidence?) -> RepAttempt` |
+| `scenarios.ts` | `getRepAccuracy`   | `(db, userId, domain?) -> AccuracyStats`                            |
+| `scenarios.ts` | `getRepStats`      | `(db, userId, dateRange?) -> RepStats`                              |
 
 ## Key Decisions
 

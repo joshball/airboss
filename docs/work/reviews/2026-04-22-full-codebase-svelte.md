@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Svelte 5 rune compliance across the codebase is excellent. Zero Svelte 4 anti-patterns detected in scope: no `export let`, no `<slot>`, no `$:`, no `$app/stores`, no `createEventDispatcher`, no `writable`/`readable` store imports. All components use `$props()`, `$state`, `$derived`, `$effect`, and named snippets correctly. The main drag on quality is not runes correctness -- it's CSS hygiene: most route files carry hundreds of lines of hardcoded hex colors and px sizes instead of using the design tokens that `libs/themes/tokens.css` already ships. The UI library (`libs/ui/src/components/`) and the dashboard panels (`apps/study/src/routes/(app)/dashboard/_panels/`) are the gold standard -- everything else should migrate toward them. The `ThemeProvider` + `display: contents` pattern works, but the inline comment describing it as a "plain block-level div" is misleading (see M2).
@@ -112,14 +111,17 @@ Known item: CrosswindComponent has 4 `state_referenced_locally` compiler warning
 
 - **File**: `libs/activities/crosswind-component/CrosswindComponent.svelte:16-19`
 - **Problem**: Lines 16, 17, 18, 19 all read a `$props()` value inside a `$state(...)` initializer:
+
   ```typescript
   let windDirection: number = $state(initialWindDirection);
   let windSpeed: number = $state(initialWindSpeed);
   let showMaxDemoThreshold: boolean = $state(maxDemoCrosswind !== undefined);
   let isDraggingWind: boolean = $state(false);  // <- this one is fine, false is literal
   ```
+
   The first three trigger `state_referenced_locally` because the compiler wants `// svelte-ignore` annotations to confirm "I know this prop won't re-seed this state when the parent changes it." The actual warning count per `bun run check` should be 3, not 5 -- the skill header says "5 pre-existing warnings" but at the current tree I count 3 (or 4 if `maxDemoCrosswind` is counted twice for both the initial read and the type-widening). Either way: an open item, not a new regression.
 - **Fix**: Add explicit suppression comments matching the pattern used elsewhere in the codebase:
+
   ```typescript
   // svelte-ignore state_referenced_locally -- initial-value-only; parent cannot re-seed
   let windDirection: number = $state(initialWindDirection);
@@ -128,4 +130,5 @@ Known item: CrosswindComponent has 4 `state_referenced_locally` compiler warning
   // svelte-ignore state_referenced_locally -- initial-value-only; parent cannot re-seed
   let showMaxDemoThreshold: boolean = $state(maxDemoCrosswind !== undefined);
   ```
+
   This brings the file in line with the codebase-wide convention and silences the warnings. Also update the skill header (`/Users/joshua/.claude/skills/ball-review-svelte/SKILL.md`) to reflect the actual count if the number matters.

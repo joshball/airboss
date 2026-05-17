@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Backend layering is strong overall: a single `requireAuth` guard, BC functions that own their own transactions, typed domain errors, and Zod schemas shared between routes and BC. The patterns are clean enough to template. The chief propagatable problems are two leaks of raw Drizzle into `+page.server.ts` (browse pagination counts), a partial-failure gap in the session `skip` action where a slot commit can succeed while plan mutation fails silently, and drift between `redirect(303, ...)` and `throw redirect(303, ...)` across similar actions.

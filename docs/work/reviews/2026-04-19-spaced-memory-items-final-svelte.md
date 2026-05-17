@@ -30,7 +30,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Svelte Review
 
 Scope: every `.svelte` file introduced or modified by branch

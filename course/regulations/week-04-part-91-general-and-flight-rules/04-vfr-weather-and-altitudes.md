@@ -88,11 +88,11 @@ The structural points:
 - **"Considering wind and forecast weather."** Plan with actual headwinds and forecast deviations. A pilot who plans no-wind on a 30-knot headwind day is in §91.151 territory before departure.
 - **"Normal cruising speed."** The number is set by the AFM/POH cruise figure, not the optimistic best-economy number on the iPad.
 
-| Condition       | Reserve required (airplane) | Reserve required (rotorcraft) |
-| --------------- | --------------------------- | ----------------------------- |
-| Day VFR         | 30 minutes                  | 20 minutes                    |
-| Night VFR       | 45 minutes                  | 20 minutes                    |
-| IFR (§91.167)   | 45 minutes (different rule) | --                            |
+| Condition     | Reserve required (airplane) | Reserve required (rotorcraft) |
+| ------------- | --------------------------- | ----------------------------- |
+| Day VFR       | 30 minutes                  | 20 minutes                    |
+| Night VFR     | 45 minutes                  | 20 minutes                    |
+| IFR (§91.167) | 45 minutes (different rule) | --                            |
 
 §91.151 is an absolute floor, not a target. Plan with margin.
 
@@ -108,15 +108,15 @@ The structural points:
 
 The §91.155(a) table:
 
-| Airspace           | Altitude band              | Visibility (SM) | Cloud clearance        |
-| ------------------ | -------------------------- | --------------- | ---------------------- |
-| Class B            | All                        | 3               | Clear of clouds        |
-| Class C, D, E      | < 10,000 MSL               | 3               | 500 below / 1,000 above / 2,000 horizontal |
-| Class C, D, E      | >= 10,000 MSL              | 5               | 1,000 below / 1,000 above / 1 SM horizontal |
-| Class G day        | <= 1,200 AGL               | 1               | Clear of clouds        |
-| Class G day        | > 1,200 AGL, < 10,000 MSL  | 1               | 500 below / 1,000 above / 2,000 horizontal |
-| Class G            | > 1,200 AGL, >= 10,000 MSL | 5               | 1,000 below / 1,000 above / 1 SM horizontal |
-| Class G night      | <= 1,200 AGL               | 3               | 500 below / 1,000 above / 2,000 horizontal |
+| Airspace      | Altitude band              | Visibility (SM) | Cloud clearance                             |
+| ------------- | -------------------------- | --------------- | ------------------------------------------- |
+| Class B       | All                        | 3               | Clear of clouds                             |
+| Class C, D, E | < 10,000 MSL               | 3               | 500 below / 1,000 above / 2,000 horizontal  |
+| Class C, D, E | >= 10,000 MSL              | 5               | 1,000 below / 1,000 above / 1 SM horizontal |
+| Class G day   | <= 1,200 AGL               | 1               | Clear of clouds                             |
+| Class G day   | > 1,200 AGL, < 10,000 MSL  | 1               | 500 below / 1,000 above / 2,000 horizontal  |
+| Class G       | > 1,200 AGL, >= 10,000 MSL | 5               | 1,000 below / 1,000 above / 1 SM horizontal |
+| Class G night | <= 1,200 AGL               | 3               | 500 below / 1,000 above / 2,000 horizontal  |
 
 Two structural patterns to memorize once and apply forever:
 

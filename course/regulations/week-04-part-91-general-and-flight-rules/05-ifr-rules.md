@@ -124,10 +124,10 @@ The "1-2-3 rule" mnemonic: 1 hour before to 1 hour after, 2,000 feet ceiling, 3 
 
 The standard alternate minimums:
 
-| Approach type     | Ceiling | Visibility |
-| ----------------- | ------- | ---------- |
-| Precision         | 600 ft  | 2 SM       |
-| Non-precision     | 800 ft  | 2 SM       |
+| Approach type | Ceiling | Visibility |
+| ------------- | ------- | ---------- |
+| Precision     | 600 ft  | 2 SM       |
+| Non-precision | 800 ft  | 2 SM       |
 
 These are *forecast* minimums for the alternate at your ETA at the alternate. Once you arrive at the alternate after diversion, you fly the published approach minimums (DH/MDA), not the alternate minimums. The "alternate minima" are a planning standard, not an approach standard.
 
@@ -158,12 +158,12 @@ The 30-day VOR check is a record-keeping rule with operational teeth. The check 
 
 The four check types:
 
-| Check type        | Tolerance | Source                                                |
-| ----------------- | --------- | ----------------------------------------------------- |
-| VOT (test signal) | +/- 4 deg | Designated test signal at major airports              |
-| Ground checkpoint | +/- 4 deg | Designated point on airport, published in chart supp  |
-| Airborne checkpoint| +/- 6 deg| Designated airborne point, published in chart supp    |
-| Dual VOR check    | +/- 4 deg | Difference between two VORs in the same aircraft      |
+| Check type          | Tolerance | Source                                               |
+| ------------------- | --------- | ---------------------------------------------------- |
+| VOT (test signal)   | +/- 4 deg | Designated test signal at major airports             |
+| Ground checkpoint   | +/- 4 deg | Designated point on airport, published in chart supp |
+| Airborne checkpoint | +/- 6 deg | Designated airborne point, published in chart supp   |
+| Dual VOR check      | +/- 4 deg | Difference between two VORs in the same aircraft     |
 
 A pilot launching IFR with a VOR check older than 30 days is in §91.171 territory. The §91.13 catch-all attaches.
 

@@ -224,12 +224,12 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The §91.17(a) test has four independent prongs:
 
-| Prong   | Condition                                                                |
-| ------- | ------------------------------------------------------------------------ |
-| (a)(1)  | 8 hours from "bottle to throttle"                                        |
-| (a)(2)  | No flying "under the influence" (regardless of timing or BAC)            |
-| (a)(3)  | No flying while using any drug affecting faculties contrary to safety   |
-| (a)(4)  | BAC less than 0.04                                                       |
+| Prong  | Condition                                                             |
+| ------ | --------------------------------------------------------------------- |
+| (a)(1) | 8 hours from "bottle to throttle"                                     |
+| (a)(2) | No flying "under the influence" (regardless of timing or BAC)         |
+| (a)(3) | No flying while using any drug affecting faculties contrary to safety |
+| (a)(4) | BAC less than 0.04                                                    |
 
 A pilot must satisfy *all four* simultaneously. Failing any single prong is a §91.17 violation.
 
@@ -357,14 +357,14 @@ The most common §61.59 trap: pilots logging time they did not fly. Logbooks are
 
 Each of these career-enders falls outside the Compliance Program (8000.373B section 3) by category:
 
-| Career-ender         | Compliance Program exclusion         | ASRS waiver exclusion           |
-| -------------------- | ------------------------------------ | -------------------------------- |
-| §61.16 refusal       | Lack of qualification + criminal     | Criminal offense                 |
-| §91.17 alcohol/drugs | Reckless or intentional + criminal   | Criminal offense                 |
-| §61.15 conviction    | Criminal (for the underlying)        | Criminal offense                 |
-| §67.403 fraud        | Reckless or intentional + criminal   | Criminal offense                 |
-| §61.59 fraud         | Reckless or intentional + criminal   | Criminal offense                 |
-| §91.19 narcotics     | Criminal                             | Criminal offense                 |
+| Career-ender         | Compliance Program exclusion       | ASRS waiver exclusion |
+| -------------------- | ---------------------------------- | --------------------- |
+| §61.16 refusal       | Lack of qualification + criminal   | Criminal offense      |
+| §91.17 alcohol/drugs | Reckless or intentional + criminal | Criminal offense      |
+| §61.15 conviction    | Criminal (for the underlying)      | Criminal offense      |
+| §67.403 fraud        | Reckless or intentional + criminal | Criminal offense      |
+| §61.59 fraud         | Reckless or intentional + criminal | Criminal offense      |
+| §91.19 narcotics     | Criminal                           | Criminal offense      |
 
 Counseling and remedial training do not address the underlying issues. The FAA does not "train someone out of" intoxicated flying or medical fraud. Certificate action is the only available administrative tool.
 
@@ -421,17 +421,17 @@ The pilot side, the medical side, and the operating side are all separate. A pil
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is the alcohol/drug *operating* rule?                                | [@cite](airboss-ref:regs/cfr-14/91/17?at=2026) |
-| Where is the alcohol/drug *conviction-reporting* rule?                     | [@cite](airboss-ref:regs/cfr-14/61/15?at=2026) |
-| Where is the refusal-to-test rule?                                         | [@cite](airboss-ref:regs/cfr-14/61/16?at=2026) |
-| Where is the medical-fraud rule?                                           | [@cite](airboss-ref:regs/cfr-14/67/403?at=2026) |
-| Where is the airman-fraud rule?                                            | [@cite](airboss-ref:regs/cfr-14/61/59?at=2026) |
-| Where is the carriage-of-narcotics rule?                                   | [@cite](airboss-ref:regs/cfr-14/91/19?at=2026) |
-| What is the §61.15(c) reporting window?                                    | 60 calendar days              |
-| What is the §91.17 BAC threshold?                                          | 0.04                          |
-| What is the §91.17 minimum bottle-to-throttle window?                      | 8 hours                       |
+| Question                                               | Section / source                                |
+| ------------------------------------------------------ | ----------------------------------------------- |
+| Where is the alcohol/drug *operating* rule?            | [@cite](airboss-ref:regs/cfr-14/91/17?at=2026)  |
+| Where is the alcohol/drug *conviction-reporting* rule? | [@cite](airboss-ref:regs/cfr-14/61/15?at=2026)  |
+| Where is the refusal-to-test rule?                     | [@cite](airboss-ref:regs/cfr-14/61/16?at=2026)  |
+| Where is the medical-fraud rule?                       | [@cite](airboss-ref:regs/cfr-14/67/403?at=2026) |
+| Where is the airman-fraud rule?                        | [@cite](airboss-ref:regs/cfr-14/61/59?at=2026)  |
+| Where is the carriage-of-narcotics rule?               | [@cite](airboss-ref:regs/cfr-14/91/19?at=2026)  |
+| What is the §61.15(c) reporting window?                | 60 calendar days                                |
+| What is the §91.17 BAC threshold?                      | 0.04                                            |
+| What is the §91.17 minimum bottle-to-throttle window?  | 8 hours                                         |
 
 ### Apply
 

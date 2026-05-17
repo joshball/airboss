@@ -20,9 +20,9 @@ See [DESIGN.md](../DESIGN.md) for the authoring template.
 
 ### Capstone (Week 10)
 
-| Title | Pulls from | Difficulty |
-| --- | --- | --- |
-| [Night IFR with a passenger](night-ifr-passenger.md) | 91.103, 61.57, 91.409, 91.411, 91.413, 91.205, 91.211, 91.167, 91.169, 91.171, 91.215, 91.225, 91.203, 91.7, 91.213 | capstone |
+| Title                                                | Pulls from                                                                                                          | Difficulty |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [Night IFR with a passenger](night-ifr-passenger.md) | 91.103, 61.57, 91.409, 91.411, 91.413, 91.205, 91.211, 91.167, 91.169, 91.171, 91.215, 91.225, 91.203, 91.7, 91.213 | capstone   |
 
 ### Working (Weeks 4-9)
 
@@ -34,12 +34,12 @@ See [DESIGN.md](../DESIGN.md) for the authoring template.
 
 ## Difficulty rubric
 
-| Difficulty | Definition | Typical regulations cited |
-| --- | --- | --- |
-| foundation | Single-topic recall and location | 1-3 sections |
-| working | Two- or three-step integration | 4-7 sections |
-| challenge | Multi-step integration with a curveball | 6-10 sections |
-| capstone | Full integration across multiple parts | 10+ sections |
+| Difficulty | Definition                              | Typical regulations cited |
+| ---------- | --------------------------------------- | ------------------------- |
+| foundation | Single-topic recall and location        | 1-3 sections              |
+| working    | Two- or three-step integration          | 4-7 sections              |
+| challenge  | Multi-step integration with a curveball | 6-10 sections             |
+| capstone   | Full integration across multiple parts  | 10+ sections              |
 
 ## Authoring posture
 

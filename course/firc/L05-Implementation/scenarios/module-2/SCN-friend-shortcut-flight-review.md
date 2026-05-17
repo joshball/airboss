@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.6
 Title:           Friday Evening Phone Call from a Fellow Pilot
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_10, FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['PS-1', 'RM-3', 'ES-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Sharp but Weak ADM
 Parameters:
   skillLevel:         0.8
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Phone call. Your friend's tone is upbeat and casual. You can hear his family in the background discussing the Monday trip. He's clearly assuming this is a formality.
 studentSpeech:Come on, you know I can fly. We've been flying together for years. It's just a formality, right? I'll buy you lunch at that place by the airport.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Friend reveals his "regular flying" is actually passengers-only flights in a friend's Cirrus -- right seat, no PIC time. Last PIC time was 5 months ago. Still sounds confident.
 studentSpeech:Well, I mean, I've been in the airplane. Right seat, but I'm watching everything. It's basically the same. I could take over any time.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Friend's tone shifts. The casual request is becoming an imposition. He mentions that another instructor at the airport "would just do it" and that you're making this into a bigger deal than it needs to be.
 studentSpeech:You know what, forget it. I'll call Mike. He'll just sign me off. I thought we were friends.
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_unsafe (ask/prompt)
               \         \-> terminal_safe (coach/direct)
                \-> terminal_safe (direct)

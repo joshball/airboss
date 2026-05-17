@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.10
 Title:           Student Pilot Solo Endorsement Decision
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_13]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-3', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Student Pilot Near Solo
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Phone call from the parent. You're at your desk reviewing the student's training records. The student has 18 hours of dual and can consistently perform pattern work in calm winds.
 studentSpeech:(Parent on phone) Jake's been at this for two months and I've spent over $4,000. His friend at [other school] soloed at 12 hours. When is the solo going to happen? He says he's ready.
@@ -72,7 +72,7 @@ criticalWindow:[direct]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Next training session. Student arrives and immediately brings up the solo. He's been practicing emergency procedures on a home simulator.
 studentSpeech:My dad told me you said I'm close. Can we solo today? I've been practicing emergencies on my sim at home. I know the engine failure checklist by heart now. I'm ready.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        During the training flight. Student handles pattern work well. Winds are 8 knots with a 5-knot crosswind component. Student lands safely but the last landing has poor crosswind correction -- drifts left of centerline before correcting.
 studentSpeech:(After the flight) That last one was a little off but I caught it. I think I can handle it. Can we do the solo now? The wind is dying down.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student is disappointed but accepting. Asks about what endorsements are needed and what happens on solo day.
 studentSpeech:OK, I trust your judgment. But when we do solo, what actually happens? Do you just sign my logbook and watch from the ramp? And what about my student certificate -- does that need to be updated for solo?
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

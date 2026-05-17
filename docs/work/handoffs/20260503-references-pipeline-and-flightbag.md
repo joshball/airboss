@@ -63,8 +63,8 @@ Started the day with 22 readable references on `/library`. By end-of-session: **
 
 3 background agents at session-end:
 
-| Agent | WP | Status |
-|-------|-----|--------|
+| Agent               | WP                  | Status  |
+| ------------------- | ------------------- | ------- |
 | `a6f89de74e673b35b` | WP-RMH section-tree | Running |
 | `a230bb467fb2b983a` | WP-AIH section-tree | Running |
 | `ac25854c8c0f35e9a` | WP-IPH section-tree | Running |

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.1
 Title:           Visual Approach to Runway 27
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'AC-1', 'AC-2', 'RM-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Overconfident Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Base leg, 1000 AGL. Student begins turn to final. Wind is 190 at 15 gusting 22.
 studentSpeech:Turning final... looks a little wide but I got it.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Overshooting final. Bank angle increasing to 35 degrees. Airspeed decreasing through 75 knots.
 studentSpeech:I can make it... just need a little more bank.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Bank angle 40 degrees. Airspeed 68 knots and decreasing. Stall horn intermittent. Student is fixated on runway.
 studentSpeech:Almost there... I can see the numbers.
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Stall horn continuous. Bank angle 45 degrees. Airspeed 62 knots. Nose dropping.
 studentSpeech:...
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                                    \-> terminal_safe (direct/take_controls)
                         \-> terminal_safe (direct/take_controls)

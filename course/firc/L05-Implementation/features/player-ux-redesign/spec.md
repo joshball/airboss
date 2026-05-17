@@ -88,12 +88,12 @@ On the user's first scenario (or a dedicated tutorial scenario):
 
 ## Validation
 
-| Field | Rule |
-| --- | --- |
-| Keyboard shortcut input | Only A/P/C/D/T trigger interventions. All other keys ignored. No modifier keys (Ctrl/Cmd+key) captured. |
-| Immersion tick advancement | "Continue" button only. Keyboard Enter also works. No intervention during immersion. |
-| Tutorial step progression | Must complete each step in order. Cannot skip. Can dismiss entire tutorial (counts as seen). |
-| Structured briefing fields | All optional. Missing fields are simply not rendered. No validation on content. |
+| Field                      | Rule                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Keyboard shortcut input    | Only A/P/C/D/T trigger interventions. All other keys ignored. No modifier keys (Ctrl/Cmd+key) captured. |
+| Immersion tick advancement | "Continue" button only. Keyboard Enter also works. No intervention during immersion.                    |
+| Tutorial step progression  | Must complete each step in order. Cannot skip. Can dismiss entire tutorial (counts as seen).            |
+| Structured briefing fields | All optional. Missing fields are simply not rendered. No validation on content.                         |
 
 ## Edge Cases
 

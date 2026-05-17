@@ -23,16 +23,16 @@ Part 91 is the part you'll be reading once a week for the rest of your career. W
 
 ## Lesson structure
 
-| File                                       | Topic                                                                                        |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------- |
-| 01-pic-authority-and-careless-reckless.md  | 91.3 PIC authority + 91.13 careless or reckless (the catch-all)                              |
-| 02-airworthiness-and-preflight.md          | 91.7 airworthiness + 91.103 preflight (NWKRAFT, "all available information")                 |
-| 03-occupant-rules-and-right-of-way.md      | 91.105 / 91.107 seatbelts + 91.111 / 91.113 / 91.115 right-of-way + 91.119 minimum altitudes |
-| 04-vfr-weather-and-altitudes.md            | 91.151 fuel + 91.155 cloud clearances + 91.157 SVFR + 91.159 VFR cruising altitudes          |
-| 05-ifr-rules.md                            | 91.167 / 91.169 / 91.171 IFR fuel/alternate/equipment + 91.175-91.185 IFR ops                |
-| 06-equipment-supplemental-rules.md         | 91.211 oxygen + 91.215 transponder                                                           |
-| drills.md                                  | "Find the rule in 60 seconds" -- 25 prompts pulling from 91 subpart A and B                  |
-| oral.md                                    | "VFR cross-country, marginal weather, what regulatory checks before launching?"              |
+| File                                      | Topic                                                                                        |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------- |
+| 01-pic-authority-and-careless-reckless.md | 91.3 PIC authority + 91.13 careless or reckless (the catch-all)                              |
+| 02-airworthiness-and-preflight.md         | 91.7 airworthiness + 91.103 preflight (NWKRAFT, "all available information")                 |
+| 03-occupant-rules-and-right-of-way.md     | 91.105 / 91.107 seatbelts + 91.111 / 91.113 / 91.115 right-of-way + 91.119 minimum altitudes |
+| 04-vfr-weather-and-altitudes.md           | 91.151 fuel + 91.155 cloud clearances + 91.157 SVFR + 91.159 VFR cruising altitudes          |
+| 05-ifr-rules.md                           | 91.167 / 91.169 / 91.171 IFR fuel/alternate/equipment + 91.175-91.185 IFR ops                |
+| 06-equipment-supplemental-rules.md        | 91.211 oxygen + 91.215 transponder                                                           |
+| drills.md                                 | "Find the rule in 60 seconds" -- 25 prompts pulling from 91 subpart A and B                  |
+| oral.md                                   | "VFR cross-country, marginal weather, what regulatory checks before launching?"              |
 
 ## Authoring status
 

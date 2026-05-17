@@ -334,27 +334,27 @@ The walk gives you steps 1-3. The SFAR check is step 4 and it's habit, not refle
 
 ## Drills
 
-| Question                                                                          | Answer / source                                              |
-| --------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Which subpart owns "every flight in U.S. airspace"?                               | Subpart A (general)                                          |
-| Which subpart owns "VFR cloud clearances"?                                        | Subpart B ([@cite](airboss-ref:regs/cfr-14/91/155?at=2026)) |
-| Which subpart owns "supplemental oxygen above 12,500 cabin"?                      | Subpart C ([@cite](airboss-ref:regs/cfr-14/91/211?at=2026)) |
-| Which subpart owns "aerobatic flight rules"?                                      | Subpart D ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)) |
-| Which subpart owns "annual inspection cycle"?                                     | Subpart E ([@cite](airboss-ref:regs/cfr-14/91/409?at=2026)) |
-| Which subpart owns "fractional ownership operational control"?                    | Subpart K ([@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)) |
-| Which subpart owns "RVSM authorization"?                                          | Subpart H ([@cite](airboss-ref:regs/cfr-14/91/706?at=2026)) |
-| Which subpart owns "waiver authority"?                                            | Subpart J ([@cite](airboss-ref:regs/cfr-14/91/903?at=2026)) |
-| Which subpart owns "FDR and CVR for transport-category"?                          | Subpart G ([@cite](airboss-ref:regs/cfr-14/91/609?at=2026)) |
-| Which subpart owns "passenger briefing for large/turbine"?                        | Subpart F ([@cite](airboss-ref:regs/cfr-14/91/519?at=2026)) |
-| Where does the no-MEL pathway live?                                               | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)           |
-| Where does the lost-comm rule live?                                               | [@cite](airboss-ref:regs/cfr-14/91/185?at=2026)              |
-| Where does ELT battery replacement live?                                          | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)              |
-| Where does ADS-B Out airspace live?                                               | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)              |
-| Where does experimental aircraft default-VFR-day live?                            | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2)        |
-| Where do banner-tow operations live?                                              | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026)              |
-| What SFAR covers R22 / R44?                                                       | SFAR 73                                                      |
-| What SFAR covers MU-2B?                                                           | SFAR 108                                                     |
-| Where does the IFR alternate 1-2-3 rule live?                                     | [@cite](airboss-ref:regs/cfr-14/91/169?at=2026)              |
+| Question                                                       | Answer / source                                              |
+| -------------------------------------------------------------- | ------------------------------------------------------------ |
+| Which subpart owns "every flight in U.S. airspace"?            | Subpart A (general)                                          |
+| Which subpart owns "VFR cloud clearances"?                     | Subpart B ([@cite](airboss-ref:regs/cfr-14/91/155?at=2026))  |
+| Which subpart owns "supplemental oxygen above 12,500 cabin"?   | Subpart C ([@cite](airboss-ref:regs/cfr-14/91/211?at=2026))  |
+| Which subpart owns "aerobatic flight rules"?                   | Subpart D ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026))  |
+| Which subpart owns "annual inspection cycle"?                  | Subpart E ([@cite](airboss-ref:regs/cfr-14/91/409?at=2026))  |
+| Which subpart owns "fractional ownership operational control"? | Subpart K ([@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)) |
+| Which subpart owns "RVSM authorization"?                       | Subpart H ([@cite](airboss-ref:regs/cfr-14/91/706?at=2026))  |
+| Which subpart owns "waiver authority"?                         | Subpart J ([@cite](airboss-ref:regs/cfr-14/91/903?at=2026))  |
+| Which subpart owns "FDR and CVR for transport-category"?       | Subpart G ([@cite](airboss-ref:regs/cfr-14/91/609?at=2026))  |
+| Which subpart owns "passenger briefing for large/turbine"?     | Subpart F ([@cite](airboss-ref:regs/cfr-14/91/519?at=2026))  |
+| Where does the no-MEL pathway live?                            | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)           |
+| Where does the lost-comm rule live?                            | [@cite](airboss-ref:regs/cfr-14/91/185?at=2026)              |
+| Where does ELT battery replacement live?                       | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)              |
+| Where does ADS-B Out airspace live?                            | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)              |
+| Where does experimental aircraft default-VFR-day live?         | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2)        |
+| Where do banner-tow operations live?                           | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026)              |
+| What SFAR covers R22 / R44?                                    | SFAR 73                                                      |
+| What SFAR covers MU-2B?                                        | SFAR 108                                                     |
+| Where does the IFR alternate 1-2-3 rule live?                  | [@cite](airboss-ref:regs/cfr-14/91/169?at=2026)              |
 
 ### Apply the integration model
 

@@ -13,19 +13,19 @@ review_status: pending
 
 Vitest unit + integration suites under `libs/sources/src/regs/`. Every file has a sibling `.test.ts`; cross-file integration sits in `ingest.test.ts`, `idempotence.test.ts`, and `smoke.test.ts`.
 
-| Suite | What it covers |
-| --- | --- |
-| `locator.test.ts` | All accepted shapes from spec; rejection with clear message for malformed input; `regs` payload structure for each shape. |
-| `citation.test.ts` | All three styles (`'short'`, `'formal'`, `'title'`) for section, subpart, Part. Throws on unknown style. |
-| `url.test.ts` | Section / subpart / Part URLs for current edition (`/current/`) and past editions (`/on/<date>/`). Title 14 + Title 49. |
-| `xml-walker.test.ts` | Against the in-repo Title 14 fixture: expected Part / subpart / section counts; section text concatenation; `last_amended_date` extraction; reserved-section handling. |
-| `normalizer.test.ts` | NFC normalization (NFD input -> NFC output); blank-line collapse; canonical fields for each entry kind; `last_amended_date` fallback. |
-| `cache.test.ts` | `resolveCacheRoot` honors `AIRBOSS_HANDBOOK_CACHE`; `cacheXmlPath` shape; `loadFixtureXml` reads + hashes a known fixture. |
-| `derivative-writer.test.ts` | First write creates files; second write with identical input is a no-op; one body change rewrites exactly that file plus `sections.json`. Manifest fields populated. |
-| `resolver.test.ts` | Each `CorpusResolver` method returns expected shape with primed test entries + editions. `getCurrentEdition` returns most recent year. `getDerivativeContent` reads from temp dir. |
-| `ingest.test.ts` | End-to-end fixture ingestion populates SOURCES + EDITIONS, writes derivatives, records batch promotion to `accepted`. |
-| `idempotence.test.ts` | Two consecutive `runIngest` calls; second reports zero modifications. |
-| `smoke.test.ts` | Real `airboss-ref:regs/cfr-14/91/103?at=2026` in a temp lesson resolves with zero ERROR findings via `validateReferences`. |
+| Suite                       | What it covers                                                                                                                                                                     |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `locator.test.ts`           | All accepted shapes from spec; rejection with clear message for malformed input; `regs` payload structure for each shape.                                                          |
+| `citation.test.ts`          | All three styles (`'short'`, `'formal'`, `'title'`) for section, subpart, Part. Throws on unknown style.                                                                           |
+| `url.test.ts`               | Section / subpart / Part URLs for current edition (`/current/`) and past editions (`/on/<date>/`). Title 14 + Title 49.                                                            |
+| `xml-walker.test.ts`        | Against the in-repo Title 14 fixture: expected Part / subpart / section counts; section text concatenation; `last_amended_date` extraction; reserved-section handling.             |
+| `normalizer.test.ts`        | NFC normalization (NFD input -> NFC output); blank-line collapse; canonical fields for each entry kind; `last_amended_date` fallback.                                              |
+| `cache.test.ts`             | `resolveCacheRoot` honors `AIRBOSS_HANDBOOK_CACHE`; `cacheXmlPath` shape; `loadFixtureXml` reads + hashes a known fixture.                                                         |
+| `derivative-writer.test.ts` | First write creates files; second write with identical input is a no-op; one body change rewrites exactly that file plus `sections.json`. Manifest fields populated.               |
+| `resolver.test.ts`          | Each `CorpusResolver` method returns expected shape with primed test entries + editions. `getCurrentEdition` returns most recent year. `getDerivativeContent` reads from temp dir. |
+| `ingest.test.ts`            | End-to-end fixture ingestion populates SOURCES + EDITIONS, writes derivatives, records batch promotion to `accepted`.                                                              |
+| `idempotence.test.ts`       | Two consecutive `runIngest` calls; second reports zero modifications.                                                                                                              |
+| `smoke.test.ts`             | Real `airboss-ref:regs/cfr-14/91/103?at=2026` in a temp lesson resolves with zero ERROR findings via `validateReferences`.                                                         |
 
 All suites use `withTestEntries` / `withTestEditions` / `resetRegistry` from `libs/sources/src/registry/__test_helpers__.ts` for isolation.
 

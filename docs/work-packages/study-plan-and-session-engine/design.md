@@ -354,30 +354,30 @@ export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
 
 ### Server load functions
 
-| Route                             | Load                                                     | Returns                                                                                  |
-| --------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `(app)/plans/+page.server.ts`     | `getActivePlan(userId)` + list of archived plans         | Active plan plus archived list                                                           |
-| `(app)/plans/new/+page.server.ts` | --                                                       | `DOMAINS`, `CERTS`, `SESSION_MODES`, `DEPTH_PREFERENCES` for the wizard form             |
-| `(app)/plans/[id]/+page.server.ts`| `getPlan(planId, userId)`                                | Plan detail                                                                              |
-| `(app)/session/start/+page.server.ts` | `previewSession(userId, opts)` + plan                | `SessionPreview` (items + reasoning groups) and the plan                                 |
-| `(app)/sessions/+page.server.ts`  | `getSessionHistory(userId, limit: 50)`                   | Paginated session list                                                                   |
-| `(app)/sessions/[id]/+page.server.ts` | `getSession(sessionId, userId)` + `getSessionSummary` if complete | Session + in-progress cursor or summary                                   |
+| Route                                 | Load                                                              | Returns                                                                      |
+| ------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `(app)/plans/+page.server.ts`         | `getActivePlan(userId)` + list of archived plans                  | Active plan plus archived list                                               |
+| `(app)/plans/new/+page.server.ts`     | --                                                                | `DOMAINS`, `CERTS`, `SESSION_MODES`, `DEPTH_PREFERENCES` for the wizard form |
+| `(app)/plans/[id]/+page.server.ts`    | `getPlan(planId, userId)`                                         | Plan detail                                                                  |
+| `(app)/session/start/+page.server.ts` | `previewSession(userId, opts)` + plan                             | `SessionPreview` (items + reasoning groups) and the plan                     |
+| `(app)/sessions/+page.server.ts`      | `getSessionHistory(userId, limit: 50)`                            | Paginated session list                                                       |
+| `(app)/sessions/[id]/+page.server.ts` | `getSession(sessionId, userId)` + `getSessionSummary` if complete | Session + in-progress cursor or summary                                      |
 
 ### Form actions
 
-| Route                                  | Action         | What it does                                                    |
-| -------------------------------------- | -------------- | --------------------------------------------------------------- |
-| `(app)/plans/new/+page.server.ts`      | `default`      | Validate + create plan, activate                                |
-| `(app)/plans/[id]/+page.server.ts`     | `update`       | Validate + update plan                                          |
-| `(app)/plans/[id]/+page.server.ts`     | `archive`      | Archive plan                                                    |
-| `(app)/plans/[id]/+page.server.ts`     | `activate`     | Activate (archives other active plans in-txn)                   |
-| `(app)/session/start/+page.server.ts`  | `shuffle`      | Re-run engine with new seed                                     |
-| `(app)/session/start/+page.server.ts`  | `replaceItem`  | Re-run engine for a single slot                                 |
-| `(app)/session/start/+page.server.ts`  | `commit`       | `commitSession` -- writes session row and redirects to `/sessions/:id` |
-| `(app)/sessions/[id]/+page.server.ts`  | `recordResult` | `recordItemResult` -- updates session_item_result for a slot    |
-| `(app)/sessions/[id]/+page.server.ts`  | `skip`         | Record skip with kind; mutate plan if topic/permanent           |
-| `(app)/sessions/[id]/+page.server.ts`  | `finishEarly`  | Transition to summary with partial completion                   |
-| `(app)/sessions/[id]/+page.server.ts`  | `complete`     | `completeSession` -- finalize summary                           |
+| Route                                 | Action         | What it does                                                           |
+| ------------------------------------- | -------------- | ---------------------------------------------------------------------- |
+| `(app)/plans/new/+page.server.ts`     | `default`      | Validate + create plan, activate                                       |
+| `(app)/plans/[id]/+page.server.ts`    | `update`       | Validate + update plan                                                 |
+| `(app)/plans/[id]/+page.server.ts`    | `archive`      | Archive plan                                                           |
+| `(app)/plans/[id]/+page.server.ts`    | `activate`     | Activate (archives other active plans in-txn)                          |
+| `(app)/session/start/+page.server.ts` | `shuffle`      | Re-run engine with new seed                                            |
+| `(app)/session/start/+page.server.ts` | `replaceItem`  | Re-run engine for a single slot                                        |
+| `(app)/session/start/+page.server.ts` | `commit`       | `commitSession` -- writes session row and redirects to `/sessions/:id` |
+| `(app)/sessions/[id]/+page.server.ts` | `recordResult` | `recordItemResult` -- updates session_item_result for a slot           |
+| `(app)/sessions/[id]/+page.server.ts` | `skip`         | Record skip with kind; mutate plan if topic/permanent                  |
+| `(app)/sessions/[id]/+page.server.ts` | `finishEarly`  | Transition to summary with partial completion                          |
+| `(app)/sessions/[id]/+page.server.ts` | `complete`     | `completeSession` -- finalize summary                                  |
 
 ## Data Flow
 

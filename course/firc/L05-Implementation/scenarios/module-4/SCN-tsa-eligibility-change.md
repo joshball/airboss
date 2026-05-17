@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.7
 Title:           Foreign Student at 55 Hours Asks a Question
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_3]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-1', 'RC-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Mid-Training Foreign Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Briefing room before a scheduled lesson. Student hands you a letter from their immigration attorney regarding the visa status change. The current AFSP approval was based on their F-1 status.
 studentSpeech:My attorney says I'm transitioning from F-1 to H-1B. It won't happen for another month. Can I keep flying in the meantime? I'm so close to being ready for my checkride.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        You check the AFSP records. The approval was granted based on F-1 status. The student's F-1 is valid for 30 more days. The H-1B petition is pending. If the F-1 expires before checkride, there may be a gap.
 studentSpeech:I'm still on F-1 right now. The H-1B won't start until next month. So right now, everything is the same, right? Can we just fly as much as possible this month?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student asks what happens if they can't complete training before the visa change. They're emotionally invested -- 55 hours and close to checkride. Their family is expecting them to earn the certificate.
 studentSpeech:What if TSA says I need new approval? That could take weeks. I'll lose my F-1 before it comes through. All this training -- was it for nothing?
@@ -114,7 +114,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

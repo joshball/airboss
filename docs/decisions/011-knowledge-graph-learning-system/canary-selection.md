@@ -28,26 +28,26 @@ Each axis is a way the template could fail. A canary set needs to exercise the a
 
 ## The 10 Axes That Could Break the Template
 
-| #   | Axis                               | Where it stresses the template                           | Example contrast                                                   |
-| --- | ---------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
-| 1   | Reg-heavy vs. reg-absent           | Reveal phase -- does it gracefully have no regulation?   | 91.155 citation vs. pure judgment call                             |
-| 2   | Calculation vs. narrative          | Practice phase -- formula vs. decision tree              | Crosswind component vs. go/no-go reasoning                         |
-| 3   | Perceptual vs. symbolic            | Discover + Verify -- "look at this" vs. "state the def"  | Sight picture reading vs. definition recall                        |
-| 4   | Procedural vs. conceptual          | Verify -- demonstrate steps vs. explain mechanism        | Holding entry vs. why lift decreases at high AoA                   |
-| 5   | Technical vs. pedagogical          | The `teaches` edge -- is the CFI node load-bearing?      | Stall aerodynamics vs. common student errors teaching stalls       |
-| 6   | Time-pressured vs. analytic        | Drill infrastructure -- 3-sec EFATO vs. 20-min wx review | EFATO muscle memory vs. weather go/no-go                           |
-| 7   | Atomic vs. compound                | Node boundary -- does "plan an IFR XC" even fit as one?  | "What is Class B?" vs. "Plan an IFR XC"                            |
-| 8   | Single-cert vs. multi-cert         | `relevance[]` array -- one node across PPL and CFI       | PPL-only reg vs. airspace at PPL-remember AND CFI-evaluate         |
-| 9   | Stable vs. volatile                | Versioning -- fixed reg vs. "current ADs" moving source  | 14 CFR Part 91 vs. active NOTAMs/ADs                               |
-| 10  | Interactive vs. textual            | `libs/activities/` contract -- Svelte slot-in modality   | Reading a chart vs. interactive wind triangle component            |
+| #   | Axis                        | Where it stresses the template                           | Example contrast                                             |
+| --- | --------------------------- | -------------------------------------------------------- | ------------------------------------------------------------ |
+| 1   | Reg-heavy vs. reg-absent    | Reveal phase -- does it gracefully have no regulation?   | 91.155 citation vs. pure judgment call                       |
+| 2   | Calculation vs. narrative   | Practice phase -- formula vs. decision tree              | Crosswind component vs. go/no-go reasoning                   |
+| 3   | Perceptual vs. symbolic     | Discover + Verify -- "look at this" vs. "state the def"  | Sight picture reading vs. definition recall                  |
+| 4   | Procedural vs. conceptual   | Verify -- demonstrate steps vs. explain mechanism        | Holding entry vs. why lift decreases at high AoA             |
+| 5   | Technical vs. pedagogical   | The `teaches` edge -- is the CFI node load-bearing?      | Stall aerodynamics vs. common student errors teaching stalls |
+| 6   | Time-pressured vs. analytic | Drill infrastructure -- 3-sec EFATO vs. 20-min wx review | EFATO muscle memory vs. weather go/no-go                     |
+| 7   | Atomic vs. compound         | Node boundary -- does "plan an IFR XC" even fit as one?  | "What is Class B?" vs. "Plan an IFR XC"                      |
+| 8   | Single-cert vs. multi-cert  | `relevance[]` array -- one node across PPL and CFI       | PPL-only reg vs. airspace at PPL-remember AND CFI-evaluate   |
+| 9   | Stable vs. volatile         | Versioning -- fixed reg vs. "current ADs" moving source  | 14 CFR Part 91 vs. active NOTAMs/ADs                         |
+| 10  | Interactive vs. textual     | `libs/activities/` contract -- Svelte slot-in modality   | Reading a chart vs. interactive wind triangle component      |
 
 ## Options Considered
 
-| Option | Nodes                                                                                                                              | Axes covered | Content cost  | Risk                                                                      |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------- | ------------------------------------------------------------------------- |
-| A      | 5 (ADR original): vfr-wx-mins, crosswind-component, holding-entries, efato, cfi-student-errors-stalls                              | ~6 of 10     | ~20-40 hours  | Mid -- misses volatile, compound, multi-cert                              |
-| B      | 9 for full coverage: option A plus wx-go-nogo-decision, plan-ifr-cross-country, reg-currency-vs-proficiency, nav-gps-rnav-concepts | 10 of 10     | ~40-70 hours  | Low on template coverage; high on upfront cost before a single card ships |
-| **C**  | **3 canaries: vfr-weather-minimums, engine-failure-after-takeoff, crosswind-component**                                            | ~5 of 10     | ~12-24 hours  | Accepted -- may discover node-boundary issues at node 200, not node 7     |
+| Option | Nodes                                                                                                                              | Axes covered | Content cost | Risk                                                                      |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------- | ------------ | ------------ | ------------------------------------------------------------------------- |
+| A      | 5 (ADR original): vfr-wx-mins, crosswind-component, holding-entries, efato, cfi-student-errors-stalls                              | ~6 of 10     | ~20-40 hours | Mid -- misses volatile, compound, multi-cert                              |
+| B      | 9 for full coverage: option A plus wx-go-nogo-decision, plan-ifr-cross-country, reg-currency-vs-proficiency, nav-gps-rnav-concepts | 10 of 10     | ~40-70 hours | Low on template coverage; high on upfront cost before a single card ships |
+| **C**  | **3 canaries: vfr-weather-minimums, engine-failure-after-takeoff, crosswind-component**                                            | ~5 of 10     | ~12-24 hours | Accepted -- may discover node-boundary issues at node 200, not node 7     |
 
 ## Why 3 Won
 
@@ -58,11 +58,11 @@ Each axis is a way the template could fail. A canary set needs to exercise the a
 
 ## Build Order for the 3
 
-| Order | Node                                | Why this one, in this slot                                                                |
-| ----- | ----------------------------------- | ----------------------------------------------------------------------------------------- |
-| 1     | `airspace-vfr-weather-minimums`     | Cheapest. Proves discovery-first pedagogy against a real regulation. No new infra.        |
-| 2     | `proc-engine-failure-after-takeoff` | Proves scenarios + judgment phases. Reg-absent, time-pressured. Still no new infra.       |
-| 3     | `perf-crosswind-component`          | First `libs/activities/` component. Forces the Svelte activity contract to exist.         |
+| Order | Node                                | Why this one, in this slot                                                          |
+| ----- | ----------------------------------- | ----------------------------------------------------------------------------------- |
+| 1     | `airspace-vfr-weather-minimums`     | Cheapest. Proves discovery-first pedagogy against a real regulation. No new infra.  |
+| 2     | `proc-engine-failure-after-takeoff` | Proves scenarios + judgment phases. Reg-absent, time-pressured. Still no new infra. |
+| 3     | `perf-crosswind-component`          | First `libs/activities/` component. Forces the Svelte activity contract to exist.   |
 
 Sequence matters: infra cost rises across the three. If the template breaks on node 1 or 2, we catch it before paying for the activity contract on node 3.
 

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.8
 Title:           Preflight Briefing with a Returning Instrument Pilot
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_8]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-4', 'PS-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Experienced Pilot Returning to Training
 Parameters:
   skillLevel:         0.6
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO briefing room. Pilot presents BasicMed documentation. You're reviewing the training plan for instrument approach practice. The pilot mentions wanting to fly above FL180 for a cross-country trip next month.
 studentSpeech:I've got my BasicMed all current -- did the online course and got the CMEC from my doctor last month. I'm thinking about filing IFR direct at FL190 for the trip to Denver next month. Saves a lot of time at altitude.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot is surprised by the altitude limitation. Reveals more misunderstandings.
 studentSpeech:Wait, really? I thought BasicMed was basically the same as a third-class medical. What else can't I do? I was also planning to take five friends to Oshkosh in a Bonanza.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot absorbs the limitations. Now asks about the recurrency requirements and whether their BasicMed is actually current.
 studentSpeech:OK, so I did the online course and saw my doctor. Am I good for two years? And what if something changes with my health -- do I have to report it to anyone?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Pilot realizes they were confused about the timeline. Their online course is actually overdue. They completed it 26 months ago.
 studentSpeech:Hang on, let me check... I did the course in February two years ago. That's 26 months. Am I not legal right now? I've been flying for the last two months thinking I was fine.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

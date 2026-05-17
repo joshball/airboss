@@ -20,14 +20,14 @@ Describe the UI state, the action, the result. Link to the file
 Where each piece of the feature lives. Reader should be able to find any
 behavior from one of these entries.
 
-| Concern             | Lives at                                                 |
-| ------------------- | -------------------------------------------------------- |
-| Page routes         | `apps/{surface}/src/routes/...`                          |
-| BC / business logic | `libs/bc/{bc-name}/src/...`                              |
-| DB schema           | `libs/bc/{bc-name}/src/schema.ts`                        |
-| Constants           | `libs/constants/src/{area}.ts`                           |
-| Validation          | `libs/bc/{bc-name}/src/validation.ts`                    |
-| Tests               | `libs/bc/{bc-name}/src/*.test.ts`, `apps/{surface}/...`  |
+| Concern             | Lives at                                                |
+| ------------------- | ------------------------------------------------------- |
+| Page routes         | `apps/{surface}/src/routes/...`                         |
+| BC / business logic | `libs/bc/{bc-name}/src/...`                             |
+| DB schema           | `libs/bc/{bc-name}/src/schema.ts`                       |
+| Constants           | `libs/constants/src/{area}.ts`                          |
+| Validation          | `libs/bc/{bc-name}/src/validation.ts`                   |
+| Tests               | `libs/bc/{bc-name}/src/*.test.ts`, `apps/{surface}/...` |
 
 ## Key decisions
 

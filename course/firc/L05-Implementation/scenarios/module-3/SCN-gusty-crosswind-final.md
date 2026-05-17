@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.8
 Title:           Gusty Crosswind Final
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11, FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AC-1', 'RM-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Overconfident Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Two-mile final, 800 AGL. Airspeed fluctuating between 72 and 80 knots. Student is holding a crab angle of 15 degrees. Occasional bumps but aircraft is tracking centerline.
 studentSpeech:Winds are a little stronger than before, but I've got it. That last landing was great.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        One-mile final, 500 AGL. Wind gust hits -- airspeed spikes to 85 then drops to 65. Aircraft displaced 50 feet left of centerline. Student over-corrects right.
 studentSpeech:Whoa! OK, getting it back... there. See, I can handle this.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 2b
 
-```
+```text
 id:           tick_2b
 scene:        Student considers the coaching. Airspeed back to 75, tracking centerline but still gusting. Another bump pushes the aircraft right.
 studentSpeech:I guess we are over my limit... but we're so close. Can't we just finish this one?
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Half-mile final, 200 AGL. Strong gust from the left. Airspeed drops to 60 knots. Aircraft yaws 20 degrees and student over-controls with right rudder. Wing drops right, aircraft below glidepath.
 studentSpeech:I've got it, I've got it!
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        100 AGL. Aircraft drifts left of centerline. Right main touches first, aircraft bounces. Wind gust catches the aircraft during the bounce. Student freezes on the controls.
 studentSpeech:...
@@ -156,7 +156,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
               \         \         \-> terminal_safe (direct/take_controls)
                \         \-> terminal_safe (direct/take_controls)

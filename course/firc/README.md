@@ -14,13 +14,13 @@ See [ADR 017](../../docs/decisions/017-source-artifact-storage-policy/) for the 
 
 The FIRC course was authored against a 5-layer information architecture mirroring how the FAA expects FIRC providers to document course design. This structure is **only used here**; post-pivot content (`course/knowledge/`, `course/regulations/`, etc.) does not follow it.
 
-| Layer                     | Purpose                                                                 |
-| ------------------------- | ----------------------------------------------------------------------- |
-| [L01-FAA/](L01-FAA/)                 | Regulatory foundation -- AC 61-83K, CFR references, TCO, submission packet |
-| [L02-Knowledge/](L02-Knowledge/)     | Per-topic research dossiers (A.1-A.13)                                  |
-| [L03-Objectives/](L03-Objectives/)   | Learning objectives, competency graph, prerequisites                    |
-| [L04-Design/](L04-Design/)           | Module structure, lesson flow, course design decisions                  |
-| [L05-Implementation/](L05-Implementation/) | Scenarios, question bank, FIRC-era feature specs                        |
+| Layer                                      | Purpose                                                                    |
+| ------------------------------------------ | -------------------------------------------------------------------------- |
+| [L01-FAA/](L01-FAA/)                       | Regulatory foundation -- AC 61-83K, CFR references, TCO, submission packet |
+| [L02-Knowledge/](L02-Knowledge/)           | Per-topic research dossiers (A.1-A.13)                                     |
+| [L03-Objectives/](L03-Objectives/)         | Learning objectives, competency graph, prerequisites                       |
+| [L04-Design/](L04-Design/)                 | Module structure, lesson flow, course design decisions                     |
+| [L05-Implementation/](L05-Implementation/) | Scenarios, question bank, FIRC-era feature specs                           |
 
 ## What to do here right now
 

@@ -59,13 +59,13 @@ to archive every run.)
 
 ## Templates as of this run
 
-| Template               | SHA-256                       |
-| ---------------------- | ----------------------------- |
-| `parameters.md`        | `dbc9ce5a5da82828629df64d61404bbd7675ba84dae0d3fee28a124138298088`      |
-| `section_tree.md`      | `d8f6232a32cbe277cb295063e38727cdc586c9dec8be8915f4e519107d13d263`    |
-| `orchestrator.md`      | `21b7e9afaf62f136b6df84e71d4c61a8e94d3b2d3494d9fcced9c86291732d2f`    |
-| `chapter.md`           | `7057819c8f45abecbd961ac9571deb92cfa828f120020eee9748b043417fcf6f`         |
-| `run_readme.md`        | `a1d2f860ef2cff522af1856ec463d5222582b1f54bcb53bd513deb495ffce68d`      |
+| Template          | SHA-256                                                            |
+| ----------------- | ------------------------------------------------------------------ |
+| `parameters.md`   | `dbc9ce5a5da82828629df64d61404bbd7675ba84dae0d3fee28a124138298088` |
+| `section_tree.md` | `d8f6232a32cbe277cb295063e38727cdc586c9dec8be8915f4e519107d13d263` |
+| `orchestrator.md` | `21b7e9afaf62f136b6df84e71d4c61a8e94d3b2d3494d9fcced9c86291732d2f` |
+| `chapter.md`      | `7057819c8f45abecbd961ac9571deb92cfa828f120020eee9748b043417fcf6f` |
+| `run_readme.md`   | `a1d2f860ef2cff522af1856ec463d5222582b1f54bcb53bd513deb495ffce68d` |
 
 A reviewer can verify that this directory's `_parameters.md`,
 `_section_tree_contract.md`, etc. match these template hashes by running

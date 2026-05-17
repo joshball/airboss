@@ -4,16 +4,16 @@ How recent sim performance pressures the spaced-rep scheduler, end to end. See w
 
 ## Layers
 
-| Layer                                | What it owns                                                                                | File                                                                          |
-| ------------------------------------ | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| Sim BC persistence                   | `getRecentSimWeakness(userId)` -- per-scenario weakness signal from `sim_attempt` history   | [libs/bc/sim/src/persistence.ts](../../../libs/bc/sim/src/persistence.ts)     |
-| Constants -- authored mapping        | `SIM_SCENARIO_NODE_MAPPINGS`: scenarioId -> array of `{ nodeId, weight in (0, 1] }`         | [libs/constants/src/sim.ts](../../../libs/constants/src/sim.ts)               |
-| Study BC bridge                      | `simWeaknessByNode` (DB-aware) + `aggregateSimNodePressure` (pure helper)                   | [libs/bc/study/src/sim-bias.ts](../../../libs/bc/study/src/sim-bias.ts)       |
-| Study engine -- pool filters         | `EnginePoolFilters.simNodePressure: Readonly<Record<string, number>>`                       | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
-| Study engine -- strengthen scoring   | Adds `pressure * ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR` to the candidate score      | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
-| Study engine -- reason resolver      | Attributes `STRENGTHEN_SIM_WEAKNESS_CARD/REP` when sim pressure is the dominant contributor | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
-| Study sessions orchestrator          | `previewSession` calls `simWeaknessByNode` and stuffs the result into `EnginePoolFilters`   | [libs/bc/study/src/sessions.ts](../../../libs/bc/study/src/sessions.ts)       |
-| Seed-time validator                  | Fails the build when any `nodeId` in `SIM_SCENARIO_NODE_MAPPINGS` does not resolve          | [scripts/build-knowledge-index.ts](../../../scripts/build-knowledge-index.ts) |
+| Layer                              | What it owns                                                                                | File                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Sim BC persistence                 | `getRecentSimWeakness(userId)` -- per-scenario weakness signal from `sim_attempt` history   | [libs/bc/sim/src/persistence.ts](../../../libs/bc/sim/src/persistence.ts)     |
+| Constants -- authored mapping      | `SIM_SCENARIO_NODE_MAPPINGS`: scenarioId -> array of `{ nodeId, weight in (0, 1] }`         | [libs/constants/src/sim.ts](../../../libs/constants/src/sim.ts)               |
+| Study BC bridge                    | `simWeaknessByNode` (DB-aware) + `aggregateSimNodePressure` (pure helper)                   | [libs/bc/study/src/sim-bias.ts](../../../libs/bc/study/src/sim-bias.ts)       |
+| Study engine -- pool filters       | `EnginePoolFilters.simNodePressure: Readonly<Record<string, number>>`                       | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
+| Study engine -- strengthen scoring | Adds `pressure * ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR` to the candidate score      | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
+| Study engine -- reason resolver    | Attributes `STRENGTHEN_SIM_WEAKNESS_CARD/REP` when sim pressure is the dominant contributor | [libs/bc/study/src/engine.ts](../../../libs/bc/study/src/engine.ts)           |
+| Study sessions orchestrator        | `previewSession` calls `simWeaknessByNode` and stuffs the result into `EnginePoolFilters`   | [libs/bc/study/src/sessions.ts](../../../libs/bc/study/src/sessions.ts)       |
+| Seed-time validator                | Fails the build when any `nodeId` in `SIM_SCENARIO_NODE_MAPPINGS` does not resolve          | [scripts/build-knowledge-index.ts](../../../scripts/build-knowledge-index.ts) |
 
 ## Flow
 

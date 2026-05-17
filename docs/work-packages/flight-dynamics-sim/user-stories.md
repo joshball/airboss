@@ -15,11 +15,11 @@ The single user is **a returning private pilot rebuilding scan, judgment, and in
 
 ## Personas
 
-| Persona | Profile | Why they reach for the sim |
-| --- | --- | --- |
-| **Returning PPL (primary)** | 100-500 hr lifetime time, lapsed 1-5 years, rebuilding currency | Wants short, debriefable practice on stalls, EFATO, partial panel without booking a CFI or aircraft |
-| **Active CFI / IFR pilot (secondary)** | Current, recent, instrument-rated | Wants chair-flying for proficiency, especially partial-panel and unusual-attitude scans |
-| **Student pilot (tertiary)** | Pre-solo through checkride prep | Wants to rehearse stall recovery, slow flight, departure-stall scenarios between lessons |
+| Persona                                | Profile                                                         | Why they reach for the sim                                                                          |
+| -------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| **Returning PPL (primary)**            | 100-500 hr lifetime time, lapsed 1-5 years, rebuilding currency | Wants short, debriefable practice on stalls, EFATO, partial panel without booking a CFI or aircraft |
+| **Active CFI / IFR pilot (secondary)** | Current, recent, instrument-rated                               | Wants chair-flying for proficiency, especially partial-panel and unusual-attitude scans             |
+| **Student pilot (tertiary)**           | Pre-solo through checkride prep                                 | Wants to rehearse stall recovery, slow flight, departure-stall scenarios between lessons            |
 
 User-zero is the **returning PPL**. Every story is anchored to that persona unless otherwise marked.
 
@@ -266,26 +266,26 @@ Each phase below has the stories for it. Stories are written `As a <persona>, I 
 
 ## Coverage matrix (story -> phase)
 
-| Story | Phase landing | Notes |
-| ----- | ------------- | ----- |
-| S1 | 0.5 -> 6 | List exists; expands as scenarios land |
-| S2 | 0.5 -> 4 | Briefing exists; fault disclosure Phase 4 |
-| S3 | 4 (post-MVP if scope-tight) | Resume |
-| S4 | 0.5 / 0.6 | Help + cheatsheet shipped |
-| S5 | 0.6 -> 5 | Mute exists; captions Phase 5 |
-| S6 | 0.5 -> 2 -> 6 | Trim quality improves with JSBSim + PA28 |
-| S7 | 0.8 | Shipped |
-| S8 | 3 | Fault model |
-| S9 | 0.7 / PR #125 | Shipped |
-| S10 | 4 | Debrief |
-| S11 | 4 + 3 | Co-dependent |
-| S12 | 4 | Run again |
-| S13 | 4 | Rep substrate |
-| S14 | 4 (post-MVP) | History page |
-| S15 | 5 | Captions |
-| S16 | 3 | a11y |
-| S17 | 0.6 (motion tokens) -> 7 (horizon) | |
-| S18 | 4 (banner) | Trivial |
+| Story | Phase landing                      | Notes                                     |
+| ----- | ---------------------------------- | ----------------------------------------- |
+| S1    | 0.5 -> 6                           | List exists; expands as scenarios land    |
+| S2    | 0.5 -> 4                           | Briefing exists; fault disclosure Phase 4 |
+| S3    | 4 (post-MVP if scope-tight)        | Resume                                    |
+| S4    | 0.5 / 0.6                          | Help + cheatsheet shipped                 |
+| S5    | 0.6 -> 5                           | Mute exists; captions Phase 5             |
+| S6    | 0.5 -> 2 -> 6                      | Trim quality improves with JSBSim + PA28  |
+| S7    | 0.8                                | Shipped                                   |
+| S8    | 3                                  | Fault model                               |
+| S9    | 0.7 / PR #125                      | Shipped                                   |
+| S10   | 4                                  | Debrief                                   |
+| S11   | 4 + 3                              | Co-dependent                              |
+| S12   | 4                                  | Run again                                 |
+| S13   | 4                                  | Rep substrate                             |
+| S14   | 4 (post-MVP)                       | History page                              |
+| S15   | 5                                  | Captions                                  |
+| S16   | 3                                  | a11y                                      |
+| S17   | 0.6 (motion tokens) -> 7 (horizon) |                                           |
+| S18   | 4 (banner)                         | Trivial                                   |
 
 ## Out-of-scope user behavior
 

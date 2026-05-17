@@ -4,10 +4,10 @@ Companion to [spec.md](./spec.md). Notes the route shape, page composition, filt
 
 ## Route shape
 
-| Route                       | Purpose                                                                            | Loader inputs                                                                            |
-| --------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `/admin/audit`              | Filtered list of `audit.audit_log` rows newest-first, cursor-paginated.            | `userId`, search params: `actor`, `targetType`, `targetId`, `op`, `window`, `from`, `to`, `cursor` |
-| `/admin/audit/[id]`         | Single audit row in full: actor card, before / after / metadata panes, cross-links | `userId`, `id`                                                                            |
+| Route               | Purpose                                                                            | Loader inputs                                                                                      |
+| ------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `/admin/audit`      | Filtered list of `audit.audit_log` rows newest-first, cursor-paginated.            | `userId`, search params: `actor`, `targetType`, `targetId`, `op`, `window`, `from`, `to`, `cursor` |
+| `/admin/audit/[id]` | Single audit row in full: actor card, before / after / metadata panes, cross-links | `userId`, `id`                                                                                     |
 
 Both routes are gated `requireRole(ROLES.ADMIN)` at the page-server level. Layout-level gate (`AUTHOR | OPERATOR | ADMIN`) is too permissive for raw audit data.
 
@@ -64,14 +64,14 @@ The detail page reads exactly one row + one actor join. No additional queries.
 
 ### Time window
 
-| Preset    | Semantics                                                              |
-| --------- | ---------------------------------------------------------------------- |
-| `1h`      | `timestamp >= now() - interval '1 hour'`                                |
-| `24h`     | `timestamp >= now() - interval '24 hours'` (default)                   |
-| `7d`      | `timestamp >= now() - interval '7 days'`                                |
-| `30d`     | `timestamp >= now() - interval '30 days'`                               |
-| `all`     | No time bound                                                          |
-| `custom`  | Use `from` (inclusive) and `to` (inclusive) ISO datetimes               |
+| Preset   | Semantics                                                 |
+| -------- | --------------------------------------------------------- |
+| `1h`     | `timestamp >= now() - interval '1 hour'`                  |
+| `24h`    | `timestamp >= now() - interval '24 hours'` (default)      |
+| `7d`     | `timestamp >= now() - interval '7 days'`                  |
+| `30d`    | `timestamp >= now() - interval '30 days'`                 |
+| `all`    | No time bound                                             |
+| `custom` | Use `from` (inclusive) and `to` (inclusive) ISO datetimes |
 
 Resolution rule:
 
@@ -187,32 +187,32 @@ Hard-capped at 20 to keep the typeahead responsive. Same `escapeLikePattern` hel
 
 ## Empty + cap states
 
-| State                     | Trigger                                                              | Copy                                                               |
-| ------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Empty -- no filters       | Audit log is empty (cold dev DB)                                      | "No audit events yet. Mutations will appear here."                 |
-| Empty -- with filters     | Filter combo returns zero rows                                        | "No events match these filters. Try widening the time window."      |
-| Cap reached               | First page returned the hard cap                                      | "Showing first 200 events. Refine the filters to narrow."          |
-| Detail 404                | `/admin/audit/<id>` for a missing id                                  | Standard 404 page                                                   |
+| State                 | Trigger                              | Copy                                                           |
+| --------------------- | ------------------------------------ | -------------------------------------------------------------- |
+| Empty -- no filters   | Audit log is empty (cold dev DB)     | "No audit events yet. Mutations will appear here."             |
+| Empty -- with filters | Filter combo returns zero rows       | "No events match these filters. Try widening the time window." |
+| Cap reached           | First page returned the hard cap     | "Showing first 200 events. Refine the filters to narrow."      |
+| Detail 404            | `/admin/audit/<id>` for a missing id | Standard 404 page                                              |
 
 ## Boundary against sibling surfaces
 
-| Concern                                       | Owned by                                                    | Why                                                                                                |
-| --------------------------------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `/admin/audit*`                               | this WP                                                     | The cross-cutting audit explorer.                                                                  |
-| `/admin/audit-ping`                           | [hangar-scaffold](../hangar-scaffold/spec.md)                | Heartbeat diagnostic; stays until a separate cleanup WP retires it.                                |
-| `/users` + `/users/[id]` audit list           | [extract-hangar-bc](../extract-hangar-bc/spec.md) and PR #226 | Per-user actor-scoped audit (last 20). This WP supersedes that view's depth but not its placement. |
-| `auditWrite` calls inside BCs                 | each BC                                                     | Writers stay where they are. This WP is read-only.                                                 |
-| `/jobs` job log                               | [hangar-registry](../hangar-registry/spec.md)                | Job lifecycle is a separate stream from audit; jobs surface to `/jobs` not `/admin/audit`.         |
-| Cited-by panel mounting on audit detail       | n/a                                                         | Audit rows aren't citations -- no cited-by panel here.                                              |
+| Concern                                 | Owned by                                                      | Why                                                                                                |
+| --------------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `/admin/audit*`                         | this WP                                                       | The cross-cutting audit explorer.                                                                  |
+| `/admin/audit-ping`                     | [hangar-scaffold](../hangar-scaffold/spec.md)                 | Heartbeat diagnostic; stays until a separate cleanup WP retires it.                                |
+| `/users` + `/users/[id]` audit list     | [extract-hangar-bc](../extract-hangar-bc/spec.md) and PR #226 | Per-user actor-scoped audit (last 20). This WP supersedes that view's depth but not its placement. |
+| `auditWrite` calls inside BCs           | each BC                                                       | Writers stay where they are. This WP is read-only.                                                 |
+| `/jobs` job log                         | [hangar-registry](../hangar-registry/spec.md)                 | Job lifecycle is a separate stream from audit; jobs surface to `/jobs` not `/admin/audit`.         |
+| Cited-by panel mounting on audit detail | n/a                                                           | Audit rows aren't citations -- no cited-by panel here.                                             |
 
 ## Design principles applied
 
-| Principle                                  | Application                                                                                              |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Debrief Culture                            | Audit visibility is a debrief substrate. Every mutation is inspectable; nothing about the system is secret. |
-| Read-before-write                          | This WP is the read surface that makes future admin-write surfaces (role change, ban, revoke) trustworthy. |
-| Surface-typed apps (Option 7)              | Hangar owns admin surfaces. Audit explorer is hangar's, not study's.                                     |
-| Discovery-first vs assertion-first         | Not applicable to admin tooling; admin surfaces are functional, not pedagogical.                         |
+| Principle                          | Application                                                                                                 |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Debrief Culture                    | Audit visibility is a debrief substrate. Every mutation is inspectable; nothing about the system is secret. |
+| Read-before-write                  | This WP is the read surface that makes future admin-write surfaces (role change, ban, revoke) trustworthy.  |
+| Surface-typed apps (Option 7)      | Hangar owns admin surfaces. Audit explorer is hangar's, not study's.                                        |
+| Discovery-first vs assertion-first | Not applicable to admin tooling; admin surfaces are functional, not pedagogical.                            |
 
 ## Performance
 
@@ -224,10 +224,10 @@ Hard-capped at 20 to keep the typeahead responsive. Same `escapeLikePattern` hel
 
 ## Risks
 
-| Risk                                                                                              | Mitigation                                                                                          |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Unfiltered scans get slow as `audit_log` grows                                                     | Deferred index on `timestamp desc`; spec lists this with an explicit trigger (latency >200ms).     |
-| jsonb payloads contain sensitive data (e.g. raw user input)                                       | ADMIN-only gate is the floor; redaction at write-time is per-BC concern, out of scope for this WP. |
+| Risk                                                                                                  | Mitigation                                                                                                                         |
+| ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Unfiltered scans get slow as `audit_log` grows                                                        | Deferred index on `timestamp desc`; spec lists this with an explicit trigger (latency >200ms).                                     |
+| jsonb payloads contain sensitive data (e.g. raw user input)                                           | ADMIN-only gate is the floor; redaction at write-time is per-BC concern, out of scope for this WP.                                 |
 | Cursor URLs become stale if rows are deleted (audit is append-only by ADR 004 so this is theoretical) | Cursor decode tolerates a missing row; "Show more" still works because the keyset compare doesn't require the cursor row to exist. |
-| `before` / `after` jsonb panes are illegible for deeply nested updates                             | v1 ships side-by-side; v2 adds a real diff view if user feedback says it's needed (in spec deferred list). |
-| ADMIN-only gate drift if layout-level gate widens                                                  | Belt-and-suspenders: page-server gate AND layout gate; e2e asserts the lower-role redirect.        |
+| `before` / `after` jsonb panes are illegible for deeply nested updates                                | v1 ships side-by-side; v2 adds a real diff view if user feedback says it's needed (in spec deferred list).                         |
+| ADMIN-only gate drift if layout-level gate widens                                                     | Belt-and-suspenders: page-server gate AND layout gate; e2e asserts the lower-role redirect.                                        |

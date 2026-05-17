@@ -8,13 +8,13 @@ Read this before chasing any browser-only error in the airboss study app, especi
 
 Tests pass. Type-check passes. `bun run check` passes. The page still crashes in the user's real browser. That gap is the failure mode.
 
-| Layer                                | Sees the regression?                                  |
-| ------------------------------------ | ----------------------------------------------------- |
-| TypeScript (`tsc`, `bun run check`)  | No -- types resolve fine through type-only re-exports |
-| Biome (`noNodejsModules`)            | No -- only catches static `import 'node:*'` lines     |
-| Vitest with happy-dom                | No -- happy-dom polyfills `Buffer` and `process`      |
-| Playwright with chromium             | Sometimes -- depends on whether the chunk actually evaluates a `Buffer.allocUnsafe` at module top-level vs inside a function |
-| The user's Firefox / Safari          | **Always** -- this is the only honest signal          |
+| Layer                               | Sees the regression?                                                                                                         |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| TypeScript (`tsc`, `bun run check`) | No -- types resolve fine through type-only re-exports                                                                        |
+| Biome (`noNodejsModules`)           | No -- only catches static `import 'node:*'` lines                                                                            |
+| Vitest with happy-dom               | No -- happy-dom polyfills `Buffer` and `process`                                                                             |
+| Playwright with chromium            | Sometimes -- depends on whether the chunk actually evaluates a `Buffer.allocUnsafe` at module top-level vs inside a function |
+| The user's Firefox / Safari         | **Always** -- this is the only honest signal                                                                                 |
 
 If the symptom is a real browser console error, **the verification is a real browser load**. Not a test run.
 
@@ -109,13 +109,13 @@ If both runs pass, the fix isn't doing what you think. If the second fails and t
 
 ## The five anti-patterns that cost time on the `/memory` crash
 
-| Anti-pattern                                                     | What to do instead                                                                  |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Diagnosing from memory of the codebase                           | Read the actual files. Mental models go stale; source is ground truth.              |
-| Trusting an agent self-report ("no findings")                    | Audit. Re-grep main for the symptom; walk the relevant barrel by hand.              |
-| Shipping a candidate fix without browser verification            | Playwright smoke first. If you can't repro the failure, you can't prove the fix.    |
-| Iterating on the same hypothesis 4 times                         | After attempt 2, switch to measuring (deps metadata, browser-shipped module diff).  |
-| Treating "vitest passes" as evidence the regression is gone      | Vitest passing means nothing for browser-only regressions. happy-dom polyfills the failure mode. |
+| Anti-pattern                                                | What to do instead                                                                               |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Diagnosing from memory of the codebase                      | Read the actual files. Mental models go stale; source is ground truth.                           |
+| Trusting an agent self-report ("no findings")               | Audit. Re-grep main for the symptom; walk the relevant barrel by hand.                           |
+| Shipping a candidate fix without browser verification       | Playwright smoke first. If you can't repro the failure, you can't prove the fix.                 |
+| Iterating on the same hypothesis 4 times                    | After attempt 2, switch to measuring (deps metadata, browser-shipped module diff).               |
+| Treating "vitest passes" as evidence the regression is gone | Vitest passing means nothing for browser-only regressions. happy-dom polyfills the failure mode. |
 
 ## The static guard rail
 

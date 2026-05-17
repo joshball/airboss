@@ -53,18 +53,18 @@ The user pushed back with several observations the original framing didn't addre
 
 The decision has to satisfy multiple constraints simultaneously:
 
-| Constraint | Implication |
-| --- | --- |
-| Lessons authored in 2026 should still be useful in 2030 without rewriting every reference | Identifiers must outlive backend changes |
-| When a regulation is amended, the system must surface every lesson that needs re-verification | Identifiers must be structured enough that a diff between editions can target them |
-| Multi-reference and partial-reference must be expressible | Range, list, and exclusion syntax needed |
-| Authors should rarely have to type the canonical title -- get it from the registry | Substitution tokens (`@short`, `@formal`, etc.) in link text |
-| Platform must render a stale-version warning when a lesson references an older edition than current | Editions are part of the identifier; resolver knows current vs. referenced |
-| Adding a new corpus (e.g. POH, FAA Order, NTSB report) should not require rewriting the system | Identifier scheme must extend cleanly to new domains |
-| The scheme must work in plain Markdown | Identifiers go in standard `[text](url)` link syntax; URL is the identifier |
-| The scheme must support both "I want the latest" and "I want this specific version" | Edition pinning is optional; current is implied if omitted |
-| Static validation must catch references that don't resolve | Build-time pass against the registry |
-| Renderer must support multiple substitutions (short, formal, full title, the section text inline) | Substitution token vocabulary |
+| Constraint                                                                                          | Implication                                                                        |
+| --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Lessons authored in 2026 should still be useful in 2030 without rewriting every reference           | Identifiers must outlive backend changes                                           |
+| When a regulation is amended, the system must surface every lesson that needs re-verification       | Identifiers must be structured enough that a diff between editions can target them |
+| Multi-reference and partial-reference must be expressible                                           | Range, list, and exclusion syntax needed                                           |
+| Authors should rarely have to type the canonical title -- get it from the registry                  | Substitution tokens (`@short`, `@formal`, etc.) in link text                       |
+| Platform must render a stale-version warning when a lesson references an older edition than current | Editions are part of the identifier; resolver knows current vs. referenced         |
+| Adding a new corpus (e.g. POH, FAA Order, NTSB report) should not require rewriting the system      | Identifier scheme must extend cleanly to new domains                               |
+| The scheme must work in plain Markdown                                                              | Identifiers go in standard `[text](url)` link syntax; URL is the identifier        |
+| The scheme must support both "I want the latest" and "I want this specific version"                 | Edition pinning is optional; current is implied if omitted                         |
+| Static validation must catch references that don't resolve                                          | Build-time pass against the registry                                               |
+| Renderer must support multiple substitutions (short, formal, full title, the section text inline)   | Substitution token vocabulary                                                      |
 
 ## The four-tier storage model
 

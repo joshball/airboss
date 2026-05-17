@@ -6,9 +6,9 @@ Constraint: minimal interaction. A pilot in the cockpit has no attention to spar
 
 ## Products
 
-| ID | Name               | Priority | Status |
-| -- | ------------------ | -------- | ------ |
+| ID                         | Name               | Priority | Status |
+| -------------------------- | ------------------ | -------- | ------ |
 | prd:fly:pre-departure-card | Pre-Departure Card | 4        | idea   |
-| prd:fly:quiet-co-pilot | Quiet Co-Pilot     | 5        | idea   |
-| prd:fly:voice-debrief | Voice Debrief      | 3        | idea   |
-| prd:fly:single-tap-pirep | Single-Tap PIREP   | 5        | idea   |
+| prd:fly:quiet-co-pilot     | Quiet Co-Pilot     | 5        | idea   |
+| prd:fly:voice-debrief      | Voice Debrief      | 3        | idea   |
+| prd:fly:single-tap-pirep   | Single-Tap PIREP   | 5        | idea   |

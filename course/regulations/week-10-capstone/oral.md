@@ -16,12 +16,12 @@ The four scenarios are different *modes of integration*, not different *subsets 
 
 ## The four capstone orals
 
-| Order | Scenario                                  | Source file                                                         | Mode of integration               | Approx. duration |
-| ----- | ----------------------------------------- | ------------------------------------------------------------------- | --------------------------------- | ---------------- |
-| 1     | Night IFR with a passenger                | [orals/night-ifr-passenger.md](../orals/night-ifr-passenger.md)     | Pre-flight integration             | 25 min           |
-| 2     | Gear-up landing on a night IFR XC          | [orals/gear-up-night-ifr.md](../orals/gear-up-night-ifr.md)         | Post-incident integration          | 25 min           |
-| 3     | A friend asks for a flight review         | [orals/friend-flight-review.md](../orals/friend-flight-review.md)   | CFI-side authority and refusal     | 25 min           |
-| 4     | A 250-hour PPL applies for the IR         | [orals/ppl-applies-for-ir.md](../orals/ppl-applies-for-ir.md)       | Qualifications counting            | 25 min           |
+| Order | Scenario                          | Source file                                                       | Mode of integration            | Approx. duration |
+| ----- | --------------------------------- | ----------------------------------------------------------------- | ------------------------------ | ---------------- |
+| 1     | Night IFR with a passenger        | [orals/night-ifr-passenger.md](../orals/night-ifr-passenger.md)   | Pre-flight integration         | 25 min           |
+| 2     | Gear-up landing on a night IFR XC | [orals/gear-up-night-ifr.md](../orals/gear-up-night-ifr.md)       | Post-incident integration      | 25 min           |
+| 3     | A friend asks for a flight review | [orals/friend-flight-review.md](../orals/friend-flight-review.md) | CFI-side authority and refusal | 25 min           |
+| 4     | A 250-hour PPL applies for the IR | [orals/ppl-applies-for-ir.md](../orals/ppl-applies-for-ir.md)     | Qualifications counting        | 25 min           |
 
 Total: roughly 100 minutes of spoken oral content, plus examiner-thread-pull and partner-feedback time per scenario. A full delivery session is about 3 hours including breaks.
 

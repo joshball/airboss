@@ -35,10 +35,10 @@ the violation rather than re-adding the ignore.
 
 ## How to fix
 
-| Pattern | Replacement |
-|---|---|
-| `expect(getByTestId(x)).toBeTruthy()` | `expect(getByTestId(x)).toBeInTheDocument()` |
-| `expect(querySelector(x)).toBeTruthy()` | `expect(querySelector(x)).toBeInTheDocument()` (after import) |
-| `expect(value).toBeTruthy()` (string) | `expect(value).toMatch(/non-empty pattern/)` or `expect(value.length).toBeGreaterThan(0)` |
-| `expect(value).toBeTruthy()` (object) | `expect(value).toMatchObject({...})` or `expect(value).toEqual(...)` |
-| `expect(value).toBeTruthy()` (boolean intent) | `expect(value).toBe(true)` |
+| Pattern                                       | Replacement                                                                               |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `expect(getByTestId(x)).toBeTruthy()`         | `expect(getByTestId(x)).toBeInTheDocument()`                                              |
+| `expect(querySelector(x)).toBeTruthy()`       | `expect(querySelector(x)).toBeInTheDocument()` (after import)                             |
+| `expect(value).toBeTruthy()` (string)         | `expect(value).toMatch(/non-empty pattern/)` or `expect(value.length).toBeGreaterThan(0)` |
+| `expect(value).toBeTruthy()` (object)         | `expect(value).toMatchObject({...})` or `expect(value).toEqual(...)`                      |
+| `expect(value).toBeTruthy()` (boolean intent) | `expect(value).toBe(true)`                                                                |

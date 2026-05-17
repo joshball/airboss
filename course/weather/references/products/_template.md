@@ -37,11 +37,11 @@ A short paragraph: who issues it, how often, what it covers, what shape it takes
 
 For fixed-format encoded text products, a field-by-field table:
 
-| Field    | Example     | Meaning                                      |
-| -------- | ----------- | -------------------------------------------- |
-| Type     | METAR       | Routine surface observation                  |
-| Station  | KJFK        | ICAO identifier for the reporting station   |
-| ...      | ...         | ...                                          |
+| Field   | Example | Meaning                                   |
+| ------- | ------- | ----------------------------------------- |
+| Type    | METAR   | Routine surface observation               |
+| Station | KJFK    | ICAO identifier for the reporting station |
+| ...     | ...     | ...                                       |
 
 For chart products, a labeled walkthrough of the symbology and the questions each layer answers.
 

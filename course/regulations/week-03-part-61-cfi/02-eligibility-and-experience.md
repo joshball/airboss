@@ -293,17 +293,17 @@ The eligibility/proficiency/records grouping is the same anatomy you saw in subp
 
 ### Locate the requirement
 
-| Question                                                                | Section                |
-| ----------------------------------------------------------------------- | ---------------------- |
-| Where is the CFI age requirement?                                       | 61.183(a) (18 years)   |
-| Where is the requirement to hold a commercial pilot certificate?        | 61.183(c)(1)           |
-| Where is the FOI knowledge-test requirement?                            | 61.183(e)(1) + 61.185(a)(1) |
-| Where is the spin endorsement requirement?                              | 61.183(i)              |
-| Where is the right-seat practical test requirement?                     | 61.187 + FAA-S-ACS-25  |
-| Where is the requirement to sign the student's logbook?                 | 61.189(a)              |
-| Where is the instructor-side record obligation?                         | 61.189(b)              |
-| For how long must a CFI retain endorsement records?                     | 3 years (61.189(c))    |
-| What recommended language exists for the FOI endorsement?               | AC 61-65 paragraph A.36 |
+| Question                                                         | Section                     |
+| ---------------------------------------------------------------- | --------------------------- |
+| Where is the CFI age requirement?                                | 61.183(a) (18 years)        |
+| Where is the requirement to hold a commercial pilot certificate? | 61.183(c)(1)                |
+| Where is the FOI knowledge-test requirement?                     | 61.183(e)(1) + 61.185(a)(1) |
+| Where is the spin endorsement requirement?                       | 61.183(i)                   |
+| Where is the right-seat practical test requirement?              | 61.187 + FAA-S-ACS-25       |
+| Where is the requirement to sign the student's logbook?          | 61.189(a)                   |
+| Where is the instructor-side record obligation?                  | 61.189(b)                   |
+| For how long must a CFI retain endorsement records?              | 3 years (61.189(c))         |
+| What recommended language exists for the FOI endorsement?        | AC 61-65 paragraph A.36     |
 
 ### Apply the rules
 
@@ -325,15 +325,15 @@ Answer: No. 61.183(e)(1) requires the FOI knowledge test for any initial CFI app
 
 ### Trap detector
 
-| Statement                                                            | Trap and correction |
-| -------------------------------------------------------------------- | ------------------- |
-| "I need 200 hours of dual given before I can apply for the CFI."     | Wrong. No such requirement in 61.183. The hour bind is the underlying commercial cert (250 hr per 61.129) and whatever syllabus governs. |
-| "Signing the student's logbook covers all my CFI record obligations." | Wrong. 61.189(a) covers the student-side. 61.189(b) requires a separate instructor-side ledger of solos / knowledge tests / practical tests, retained 3 years. |
-| "The spin endorsement is required for every CFI add-on rating."      | Wrong. 61.183(i) is for initial airplane and powered-lift. Subsequent ratings (CFII, MEI) do not re-require the spin endorsement. |
-| "I have to use a paper logbook for the 61.189(b) record."            | Wrong. 61.189(b) accepts "a logbook or a separate document." Spreadsheet, database, or training-management software -- as long as the data elements are present and retainable. |
-| "If my CFI cert expires, my records obligation ends."                | Wrong. 3-year retention under 61.189(c) survives the certificate lapse. |
-| "I can take the CFI practical test from the left seat."              | Wrong. FAA-S-ACS-25 specifies the practical is conducted from the right seat. 61.187 directs you to the ACS. |
-| "61.187 has minimum hour requirements for CFI training."             | Wrong. 61.187 specifies areas of operation, not hours. The hours come from the syllabus or training plan, not from the regulation. |
+| Statement                                                             | Trap and correction                                                                                                                                                             |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "I need 200 hours of dual given before I can apply for the CFI."      | Wrong. No such requirement in 61.183. The hour bind is the underlying commercial cert (250 hr per 61.129) and whatever syllabus governs.                                        |
+| "Signing the student's logbook covers all my CFI record obligations." | Wrong. 61.189(a) covers the student-side. 61.189(b) requires a separate instructor-side ledger of solos / knowledge tests / practical tests, retained 3 years.                  |
+| "The spin endorsement is required for every CFI add-on rating."       | Wrong. 61.183(i) is for initial airplane and powered-lift. Subsequent ratings (CFII, MEI) do not re-require the spin endorsement.                                               |
+| "I have to use a paper logbook for the 61.189(b) record."             | Wrong. 61.189(b) accepts "a logbook or a separate document." Spreadsheet, database, or training-management software -- as long as the data elements are present and retainable. |
+| "If my CFI cert expires, my records obligation ends."                 | Wrong. 3-year retention under 61.189(c) survives the certificate lapse.                                                                                                         |
+| "I can take the CFI practical test from the left seat."               | Wrong. FAA-S-ACS-25 specifies the practical is conducted from the right seat. 61.187 directs you to the ACS.                                                                    |
+| "61.187 has minimum hour requirements for CFI training."              | Wrong. 61.187 specifies areas of operation, not hours. The hours come from the syllabus or training plan, not from the regulation.                                              |
 
 ## Where this lesson sits
 

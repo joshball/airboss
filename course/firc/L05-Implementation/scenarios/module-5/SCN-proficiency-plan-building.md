@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.6
 Title:           Post-Checkride Proficiency Plan Building
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_7, FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-1', 'PS-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Newly Certificated Pilot
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Post-checkride debrief at the FBO. Student has their temporary certificate in hand. Grinning but also asking genuine questions about what comes next.
 studentSpeech:I passed, but the examiner said my soft-field landings need work and my emergency procedures were "adequate." What does that mean? And how do I keep improving without an instructor watching me all the time?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student relays the examiner's feedback: soft-field landings were safe but the technique was inconsistent, and the emergency procedure response was slow -- the student eventually did the right thing but took too long to begin the checklist.
 studentSpeech:She said my landings were "certificated" but not "polished." And for the emergency, she said I froze for about 5 seconds before starting the checklist. I got through it, but she could tell I was thinking hard. How do I fix that?
@@ -93,7 +93,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is engaged and taking notes. Asks about WINGS and how to structure ongoing learning without an instructor.
 studentSpeech:Someone mentioned WINGS. Is that worth doing? And should I be flying with an instructor sometimes, or should I just practice solo? I don't want to develop bad habits.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student is writing down the plan. Asks about setting personal minimums and building toward an instrument rating.
 studentSpeech:One more thing. I want to eventually get my instrument rating. Should I start that now? And what about personal minimums -- the examiner mentioned those too.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

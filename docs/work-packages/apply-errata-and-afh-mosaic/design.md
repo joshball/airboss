@@ -366,12 +366,12 @@ dismissed_errata:
 
 Validation rules (enforced by `_load_dismissed_errata_list` in `tools/handbook-ingest/ingest/config_loader.py`):
 
-| Field    | Rule                                                                |
-| -------- | ------------------------------------------------------------------- |
-| `url`    | Optional, must be HTTPS when present                                |
-| `sha256` | Optional, must be 64 lowercase hex chars when present               |
+| Field    | Rule                                                                  |
+| -------- | --------------------------------------------------------------------- |
+| `url`    | Optional, must be HTTPS when present                                  |
+| `sha256` | Optional, must be 64 lowercase hex chars when present                 |
 | Anchor   | Each entry must specify `url`, `sha256`, or both (neither is invalid) |
-| `reason` | Optional free-form note retained for audit                          |
+| `reason` | Optional free-form note retained for audit                            |
 
 The discovery dispatcher reads these via the Python subprocess JSON interface (`python -m ingest.discovery_meta`). On every run, dismissed URLs force-set the candidate's status to `dismissed` and suppress GitHub-issue creation. SHA-256 dismissal is a forward-looking hook (not yet wired through to the scrape, since we cannot HEAD-fetch every parent-page link without amplifying network cost); the field is reserved so a future `--check-hashes` mode can compare the dismissal hash to the candidate's content.
 

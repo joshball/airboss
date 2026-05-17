@@ -47,11 +47,11 @@ Add `hangar.invitation` table to `libs/bc/hangar/src/schema.ts` with unique part
 
 Per-phase review uses 2-3 reviewers. Final pass: 10 parallel.
 
-| Phase | Reviewers                        |
-| ----- | -------------------------------- |
-| 1-2   | schema, patterns, correctness    |
-| 3-4   | backend, security, correctness   |
-| 5-7   | svelte, ux, a11y, security       |
-| 8-9   | patterns, ux                     |
+| Phase | Reviewers                      |
+| ----- | ------------------------------ |
+| 1-2   | schema, patterns, correctness  |
+| 3-4   | backend, security, correctness |
+| 5-7   | svelte, ux, a11y, security     |
+| 8-9   | patterns, ux                   |
 
 Final: full 10x pass.

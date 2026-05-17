@@ -54,15 +54,15 @@ Tasks:
 
 **Evidence from the compare report:**
 
-| Metric                                     | Value     | Reading                                                                                                          |
-| ------------------------------------------ | --------- | ---------------------------------------------------------------------------------------------------------------- |
-| Total LLM entries                          | 913       | Up from v1's 559 (PR #355 confirmed).                                                                            |
-| Total TOC nodes                            | 833       | Reasonable parse coverage.                                                                                       |
-| Total parent-mismatches across 17 chapters | **485**   | LLM nests; TOC over-flattens. Systematic.                                                                        |
-| Total level-mismatches across 17 chapters  | **317**   | Same root cause -- TOC promotes subsections to L1.                                                               |
-| Chapters with parent-diff > 10             | **15/17** | This is the rule, not the exception.                                                                             |
-| Total LLM-only entries                     | 92        | Real body headings the printed TOC omits (e.g. ch 1's "Civil Aeronautics Act of 1938").                          |
-| Worst case: ch 7 (Aircraft Systems)        | 86/88 L1  | TOC says everything is L1; LLM correctly nests subsections under Powerplant / Induction / Fuel / etc.            |
+| Metric                                     | Value     | Reading                                                                                               |
+| ------------------------------------------ | --------- | ----------------------------------------------------------------------------------------------------- |
+| Total LLM entries                          | 913       | Up from v1's 559 (PR #355 confirmed).                                                                 |
+| Total TOC nodes                            | 833       | Reasonable parse coverage.                                                                            |
+| Total parent-mismatches across 17 chapters | **485**   | LLM nests; TOC over-flattens. Systematic.                                                             |
+| Total level-mismatches across 17 chapters  | **317**   | Same root cause -- TOC promotes subsections to L1.                                                    |
+| Chapters with parent-diff > 10             | **15/17** | This is the rule, not the exception.                                                                  |
+| Total LLM-only entries                     | 92        | Real body headings the printed TOC omits (e.g. ch 1's "Civil Aeronautics Act of 1938").               |
+| Worst case: ch 7 (Aircraft Systems)        | 86/88 L1  | TOC says everything is L1; LLM correctly nests subsections under Powerplant / Induction / Fuel / etc. |
 
 **Decision criteria applied:**
 

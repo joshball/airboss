@@ -58,19 +58,19 @@ This is the daily-CFI work. Six other endorsement types operate similarly: solo 
 
 AC 61-65H (current as of 2026; check the current revision before signing) organizes endorsements by category. The major buckets:
 
-| Category                          | Source regulation        | AC 61-65 paragraphs (typical) |
-| --------------------------------- | ------------------------ | ----------------------------- |
-| Pre-solo (knowledge, maneuvers, solo) | 61.87                | A.6, A.7, A.8                 |
-| Solo cross-country                | 61.93                    | A.9 - A.13                    |
-| 61.31 operational endorsements    | 61.31                    | A.14 - A.18 (HP, complex, tailwheel, high-altitude, type) |
-| Pilot certificate / rating prep   | 61.39                    | A.19 - A.32 (private, instrument, commercial, ATP, etc.) |
-| Flight review                     | 61.56                    | A.1                           |
-| Instrument proficiency check (IPC) | 61.57(d)                | A.4                           |
-| Knowledge tests                   | 61.35                    | A.2 (private), A.3 (instrument), A.33 (commercial), etc. |
-| FOI for CFI candidates            | 61.183(d)                | A.36                          |
-| CFI practical-test prep           | 61.183(g)                | A.37                          |
-| Spin training (CFI initial)       | 61.183(i)                | A.43                          |
-| Light-sport instructor specific   | Subpart K                | (Subpart-K-specific paragraphs) |
+| Category                              | Source regulation | AC 61-65 paragraphs (typical)                             |
+| ------------------------------------- | ----------------- | --------------------------------------------------------- |
+| Pre-solo (knowledge, maneuvers, solo) | 61.87             | A.6, A.7, A.8                                             |
+| Solo cross-country                    | 61.93             | A.9 - A.13                                                |
+| 61.31 operational endorsements        | 61.31             | A.14 - A.18 (HP, complex, tailwheel, high-altitude, type) |
+| Pilot certificate / rating prep       | 61.39             | A.19 - A.32 (private, instrument, commercial, ATP, etc.)  |
+| Flight review                         | 61.56             | A.1                                                       |
+| Instrument proficiency check (IPC)    | 61.57(d)          | A.4                                                       |
+| Knowledge tests                       | 61.35             | A.2 (private), A.3 (instrument), A.33 (commercial), etc.  |
+| FOI for CFI candidates                | 61.183(d)         | A.36                                                      |
+| CFI practical-test prep               | 61.183(g)         | A.37                                                      |
+| Spin training (CFI initial)           | 61.183(i)         | A.43                                                      |
+| Light-sport instructor specific       | Subpart K         | (Subpart-K-specific paragraphs)                           |
 
 The numbering shifts between AC 61-65 revisions; always reference the current revision when actually signing. The paragraph identifiers above match AC 61-65H for orientation.
 
@@ -272,55 +272,55 @@ The CFI-S can sign sport-pilot-specific endorsements but cannot sign endorsement
 
 ### Locate the endorsement category
 
-| Question                                                                | AC 61-65 / regulation              |
-| ----------------------------------------------------------------------- | ---------------------------------- |
-| Where is the flight review endorsement?                                 | AC 61-65 paragraph A.1 / 61.56     |
-| Where is the IPC endorsement?                                           | AC 61-65 paragraph A.4 / 61.57(d)  |
-| Where is the pre-solo knowledge test endorsement?                       | AC 61-65 paragraph A.6 / 61.87(b)  |
-| Where is the pre-solo flight maneuvers endorsement?                     | AC 61-65 paragraph A.7 / 61.87(c)  |
-| Where is the solo flight endorsement (90-day clock)?                    | AC 61-65 paragraph A.8 / 61.87(n)  |
-| Where is the high-performance endorsement?                              | AC 61-65 paragraph A.15 / 61.31(f) |
-| Where is the complex airplane endorsement?                              | AC 61-65 paragraph A.16 / 61.31(e) |
-| Where is the tailwheel endorsement?                                     | AC 61-65 paragraph A.18 / 61.31(i) |
-| Where is the FOI endorsement for CFI candidates?                        | AC 61-65 paragraph A.36 / 61.183(d) |
-| Where is the CFI practical-test prep endorsement?                       | AC 61-65 paragraph A.37 / 61.183(g) |
-| Where is the spin endorsement?                                          | AC 61-65 paragraph A.43 / 61.183(i) |
-| Where is the high-altitude endorsement?                                 | AC 61-65 paragraph A.17 / 61.31(g) |
-| Where is the private pilot practical-test recommendation?               | AC 61-65 paragraph A.19 / 61.39    |
-| Where is the instrument rating practical-test recommendation?           | AC 61-65 paragraph A.20 / 61.39    |
+| Question                                                      | AC 61-65 / regulation               |
+| ------------------------------------------------------------- | ----------------------------------- |
+| Where is the flight review endorsement?                       | AC 61-65 paragraph A.1 / 61.56      |
+| Where is the IPC endorsement?                                 | AC 61-65 paragraph A.4 / 61.57(d)   |
+| Where is the pre-solo knowledge test endorsement?             | AC 61-65 paragraph A.6 / 61.87(b)   |
+| Where is the pre-solo flight maneuvers endorsement?           | AC 61-65 paragraph A.7 / 61.87(c)   |
+| Where is the solo flight endorsement (90-day clock)?          | AC 61-65 paragraph A.8 / 61.87(n)   |
+| Where is the high-performance endorsement?                    | AC 61-65 paragraph A.15 / 61.31(f)  |
+| Where is the complex airplane endorsement?                    | AC 61-65 paragraph A.16 / 61.31(e)  |
+| Where is the tailwheel endorsement?                           | AC 61-65 paragraph A.18 / 61.31(i)  |
+| Where is the FOI endorsement for CFI candidates?              | AC 61-65 paragraph A.36 / 61.183(d) |
+| Where is the CFI practical-test prep endorsement?             | AC 61-65 paragraph A.37 / 61.183(g) |
+| Where is the spin endorsement?                                | AC 61-65 paragraph A.43 / 61.183(i) |
+| Where is the high-altitude endorsement?                       | AC 61-65 paragraph A.17 / 61.31(g)  |
+| Where is the private pilot practical-test recommendation?     | AC 61-65 paragraph A.19 / 61.39     |
+| Where is the instrument rating practical-test recommendation? | AC 61-65 paragraph A.20 / 61.39     |
 
 ### Apply the rules -- given a student, what endorsement?
 
-| Student / scenario                                                                | Endorsement needed              | Source                       |
-| --------------------------------------------------------------------------------- | ------------------------------- | ---------------------------- |
-| Primary student ready for first solo                                              | Pre-solo knowledge + maneuvers + solo authorization | 61.87(b), (c), (n) |
-| Primary student ready for solo XC, generally                                      | Solo XC authorization (general) | 61.93(c)(1) / AC 61-65 A.9   |
-| Primary student about to depart on a specific solo XC tomorrow                    | Specific-flight solo XC review  | 61.93(c)(2) / AC 61-65 A.10  |
-| Private pilot wants to fly a Bonanza A36 (300 hp)                                 | High-performance                | 61.31(f) / AC 61-65 A.15     |
-| Private pilot wants to fly an Arrow (200 hp, retractable, controllable prop)      | Complex                         | 61.31(e) / AC 61-65 A.16     |
-| Private pilot wants to fly an unpressurized Cessna 195 (tailwheel)                | Tailwheel                       | 61.31(i) / AC 61-65 A.18     |
-| Pilot has a current flight review; wants to add IPC                               | IPC endorsement                 | 61.57(d) / AC 61-65 A.4      |
-| Private pilot 25 months past last flight review wants to renew                    | Flight review                   | 61.56 / AC 61-65 A.1         |
-| Instrument-rating candidate ready for the IFR practical                           | Instrument rating recommendation | 61.39 / AC 61-65 A.20       |
-| Commercial-rating candidate ready for the commercial practical                    | Commercial recommendation       | 61.39 / AC 61-65 A.27        |
-| CFI initial candidate ready for the CFI practical                                 | CFI practical-test prep         | 61.183(g) / AC 61-65 A.37    |
-| CFI initial candidate has done spin training                                      | Spin endorsement                | 61.183(i) / AC 61-65 A.43    |
-| CFI initial candidate has finished FOI study                                      | FOI endorsement                 | 61.183(d) / AC 61-65 A.36    |
-| Private pilot wants to operate above FL250 in a pressurized airplane              | High-altitude                   | 61.31(g) / AC 61-65 A.17     |
-| Student pilot wants solo into Class B airspace                                    | Class B authorization (solo XC) | 61.93(c)(3), 91.131 / AC 61-65 |
+| Student / scenario                                                           | Endorsement needed                                  | Source                         |
+| ---------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------------ |
+| Primary student ready for first solo                                         | Pre-solo knowledge + maneuvers + solo authorization | 61.87(b), (c), (n)             |
+| Primary student ready for solo XC, generally                                 | Solo XC authorization (general)                     | 61.93(c)(1) / AC 61-65 A.9     |
+| Primary student about to depart on a specific solo XC tomorrow               | Specific-flight solo XC review                      | 61.93(c)(2) / AC 61-65 A.10    |
+| Private pilot wants to fly a Bonanza A36 (300 hp)                            | High-performance                                    | 61.31(f) / AC 61-65 A.15       |
+| Private pilot wants to fly an Arrow (200 hp, retractable, controllable prop) | Complex                                             | 61.31(e) / AC 61-65 A.16       |
+| Private pilot wants to fly an unpressurized Cessna 195 (tailwheel)           | Tailwheel                                           | 61.31(i) / AC 61-65 A.18       |
+| Pilot has a current flight review; wants to add IPC                          | IPC endorsement                                     | 61.57(d) / AC 61-65 A.4        |
+| Private pilot 25 months past last flight review wants to renew               | Flight review                                       | 61.56 / AC 61-65 A.1           |
+| Instrument-rating candidate ready for the IFR practical                      | Instrument rating recommendation                    | 61.39 / AC 61-65 A.20          |
+| Commercial-rating candidate ready for the commercial practical               | Commercial recommendation                           | 61.39 / AC 61-65 A.27          |
+| CFI initial candidate ready for the CFI practical                            | CFI practical-test prep                             | 61.183(g) / AC 61-65 A.37      |
+| CFI initial candidate has done spin training                                 | Spin endorsement                                    | 61.183(i) / AC 61-65 A.43      |
+| CFI initial candidate has finished FOI study                                 | FOI endorsement                                     | 61.183(d) / AC 61-65 A.36      |
+| Private pilot wants to operate above FL250 in a pressurized airplane         | High-altitude                                       | 61.31(g) / AC 61-65 A.17       |
+| Student pilot wants solo into Class B airspace                               | Class B authorization (solo XC)                     | 61.93(c)(3), 91.131 / AC 61-65 |
 
 ### Trap detector
 
-| Statement                                                              | Trap and correction |
-| ---------------------------------------------------------------------- | ------------------- |
-| "AC 61-65 wording is regulation."                                      | Wrong. AC 61-65 is recommended language. The regulatory authority lives in 61.31, 61.39, 61.56, 61.87, 61.183, etc. |
-| "I can use AC 61-65 paragraph A.1 wording for the IPC endorsement."    | Wrong. A.1 is the flight review. IPC is A.4. Different operation, different paragraph. |
-| "Once I've signed a 61.87(n) solo endorsement, the student can solo for the next 6 months." | Wrong. 61.87(n) requires re-review every 90 days. |
-| "The complex endorsement is aircraft-specific."                        | Wrong. 61.31(e) endorsement travels with the pilot, not with a specific airplane. |
-| "I'm a CFI airplane single-engine. I can sign the instrument-rating recommendation since I have the IR on my pilot cert." | Wrong. 61.195(c) requires the CFII for instrument-rating endorsements. CFI-A alone is not enough. |
-| "The spin endorsement is required only if the candidate hasn't done spin training in their commercial." | Wrong. 61.183(i) requires the spin endorsement specifically for the CFI airplane initial, regardless of prior spin exposure. |
-| "Tailwheel and complex are the same endorsement."                      | Wrong. Different sections (61.31(e) and (i)) and different AC 61-65 paragraphs (A.16 and A.18). Same airplane could need both (a complex tailwheel like a Pitts S-2 -- actually has flaps and is tailwheel). |
-| "I can sign my friend's flight review endorsement at the end of a recreational flight where I gave them some pointers." | Wrong. 61.56 requires *training* and *endorsement* in a 1-hour-flight + 1-hour-ground format. Recreational pointers don't satisfy 61.56(a). |
+| Statement                                                                                                                 | Trap and correction                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "AC 61-65 wording is regulation."                                                                                         | Wrong. AC 61-65 is recommended language. The regulatory authority lives in 61.31, 61.39, 61.56, 61.87, 61.183, etc.                                                                                          |
+| "I can use AC 61-65 paragraph A.1 wording for the IPC endorsement."                                                       | Wrong. A.1 is the flight review. IPC is A.4. Different operation, different paragraph.                                                                                                                       |
+| "Once I've signed a 61.87(n) solo endorsement, the student can solo for the next 6 months."                               | Wrong. 61.87(n) requires re-review every 90 days.                                                                                                                                                            |
+| "The complex endorsement is aircraft-specific."                                                                           | Wrong. 61.31(e) endorsement travels with the pilot, not with a specific airplane.                                                                                                                            |
+| "I'm a CFI airplane single-engine. I can sign the instrument-rating recommendation since I have the IR on my pilot cert." | Wrong. 61.195(c) requires the CFII for instrument-rating endorsements. CFI-A alone is not enough.                                                                                                            |
+| "The spin endorsement is required only if the candidate hasn't done spin training in their commercial."                   | Wrong. 61.183(i) requires the spin endorsement specifically for the CFI airplane initial, regardless of prior spin exposure.                                                                                 |
+| "Tailwheel and complex are the same endorsement."                                                                         | Wrong. Different sections (61.31(e) and (i)) and different AC 61-65 paragraphs (A.16 and A.18). Same airplane could need both (a complex tailwheel like a Pitts S-2 -- actually has flaps and is tailwheel). |
+| "I can sign my friend's flight review endorsement at the end of a recreational flight where I gave them some pointers."   | Wrong. 61.56 requires *training* and *endorsement* in a 1-hour-flight + 1-hour-ground format. Recreational pointers don't satisfy 61.56(a).                                                                  |
 
 ## Where this lesson sits
 

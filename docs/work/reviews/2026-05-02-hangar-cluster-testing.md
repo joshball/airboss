@@ -229,6 +229,7 @@ file) so script comments don't satisfy them.
 **File:** `apps/hangar/src/lib/server/theme-tokens.test.ts:12,40-55`
 
 **Problem:** `const HANGAR_SRC = resolve(process.cwd(), 'apps/hangar/src')`
+
 - if vitest is invoked from inside the hangar app (cwd =
 `apps/hangar`), the path resolves to `apps/hangar/apps/hangar/src`
 which doesn't exist; `walk` will throw `ENOENT` (good) - but if
@@ -251,7 +252,9 @@ silently makes the test trivially pass).
 DB. The test asserts our running id is included and the queued /
 complete ids are excluded - good - but does not bound the return
 size or assert `running.every((r) => r.actorId === TEST_USER_ID
+
 || ...)`. If the worker writes an unrelated RUNNING row during
+
 the test, the test still passes. That's fine for green builds,
 but conversely the test would not catch a regression where
 `listRunningJobs` returned, say, every QUEUED row instead -
@@ -446,31 +449,31 @@ tolerance).
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| CRITICAL: audit-queries WHERE-clause filter coverage | CLOSED | PR #463 -- per-filter `expect(ours).toHaveLength(N)` (`audit-queries.test.ts:301-389`) |
-| MAJOR: hangar-jobs zero test coverage | CLOSED | PR #463 -- `worker.test.ts` + `enqueue.test.ts` (claim race, concurrency cap, target-id mutex, no-handler, cancellation, orphan recovery) |
-| MAJOR: upload form action no direct test | CLOSED | PR #463 -- `upload-action.test.ts` covers empty/oversize/missing/deleted/active-job/enqueue-throws/happy paths |
-| MAJOR: BetterAuthApiError wrap only on setUserRole | CLOSED | PR #463 -- describe block at `user-writes.test.ts:236-330` covers ban/unban/setRole/revoke/revokeAll |
-| MAJOR: ban/unban audit ordering on api-throws-after-write | CLOSED | PR #463 -- after-snapshot-fail tests added (`user-writes.test.ts:329-394`) |
-| MAJOR: cancellation handoff in source-jobs not exercised | CLOSED | PR #463 -- cancellation test added in source-jobs.test.ts |
-| MAJOR: countLiveSources doesn't verify soft-delete filter | CLOSED | This audit -- now asserts `after - before === 1` not `>= 1` |
-| MAJOR: searchActorIds cap test non-discriminating | CLOSED | This audit -- exact length + fixture-id pin + cap-5 widen check |
-| MAJOR: preview component tests grep source string | CLOSED | PR #463 -- replaced with prop-shape + template-extract checks |
-| MAJOR: theme-token test silent no-op risk | CLOSED | PR #463 -- `filesScanned > 0` guard |
-| MINOR: jobs-queries listRunningJobs leaks peer-fixture rows | CLOSED | This audit -- pinned per-fixture count |
-| MINOR: time-window filter `>=2` lax assertion | CLOSED | This audit -- exact length + id pinning |
-| MINOR: detect-conflict mixed-case test | CLOSED | PR #452 -- mixed refs+sources advanced cases |
-| MINOR: emit-aviation-ts full-set round-trip | CLOSED | PR #463 -- full-set semantic round-trip |
-| MINOR: source-fetch missing dbPatches[0].id | CLOSED | This audit -- pin id assertion |
-| MINOR: registry update test missing updatedBy | CLOSED | This audit -- assertions added on update + softDelete |
-| MINOR: revokeAllUserSessions order assertion | CLOSED | PR #463 -- explicit call-order assertion |
-| MINOR: source-jobs build/validate single-assertion | CLOSED | PR #463 -- progress + event log assertions added |
-| MINOR: parse-csv pathological inputs | CLOSED | PR #463 -- BOM + jagged-row tests |
-| MINOR: jobs.test.ts seq monotonicity | CLOSED | This audit -- `seqA < seqB` assertion added |
-| NIT: drizzleResults shim coupling | CLOSED | PR #463 -- factory-with-label pattern |
-| NIT: source-form cadence upper bound | CLOSED | PR #463 -- documented as no-cap-by-design |
-| NIT: window.test.ts unknown-vs-unparseable | CLOSED | PR #463 -- spec confirmed; no redirect-to-canonical, behavior documented |
-| NIT: audit cursor decode boundary cases | CLOSED | PR #463 -- multi-`::` and whitespace tolerance tests |
+| Finding                                                     | Verdict | Closure                                                                                                                                   |
+| ----------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| CRITICAL: audit-queries WHERE-clause filter coverage        | CLOSED  | PR #463 -- per-filter `expect(ours).toHaveLength(N)` (`audit-queries.test.ts:301-389`)                                                    |
+| MAJOR: hangar-jobs zero test coverage                       | CLOSED  | PR #463 -- `worker.test.ts` + `enqueue.test.ts` (claim race, concurrency cap, target-id mutex, no-handler, cancellation, orphan recovery) |
+| MAJOR: upload form action no direct test                    | CLOSED  | PR #463 -- `upload-action.test.ts` covers empty/oversize/missing/deleted/active-job/enqueue-throws/happy paths                            |
+| MAJOR: BetterAuthApiError wrap only on setUserRole          | CLOSED  | PR #463 -- describe block at `user-writes.test.ts:236-330` covers ban/unban/setRole/revoke/revokeAll                                      |
+| MAJOR: ban/unban audit ordering on api-throws-after-write   | CLOSED  | PR #463 -- after-snapshot-fail tests added (`user-writes.test.ts:329-394`)                                                                |
+| MAJOR: cancellation handoff in source-jobs not exercised    | CLOSED  | PR #463 -- cancellation test added in source-jobs.test.ts                                                                                 |
+| MAJOR: countLiveSources doesn't verify soft-delete filter   | CLOSED  | This audit -- now asserts `after - before === 1` not `>= 1`                                                                               |
+| MAJOR: searchActorIds cap test non-discriminating           | CLOSED  | This audit -- exact length + fixture-id pin + cap-5 widen check                                                                           |
+| MAJOR: preview component tests grep source string           | CLOSED  | PR #463 -- replaced with prop-shape + template-extract checks                                                                             |
+| MAJOR: theme-token test silent no-op risk                   | CLOSED  | PR #463 -- `filesScanned > 0` guard                                                                                                       |
+| MINOR: jobs-queries listRunningJobs leaks peer-fixture rows | CLOSED  | This audit -- pinned per-fixture count                                                                                                    |
+| MINOR: time-window filter `>=2` lax assertion               | CLOSED  | This audit -- exact length + id pinning                                                                                                   |
+| MINOR: detect-conflict mixed-case test                      | CLOSED  | PR #452 -- mixed refs+sources advanced cases                                                                                              |
+| MINOR: emit-aviation-ts full-set round-trip                 | CLOSED  | PR #463 -- full-set semantic round-trip                                                                                                   |
+| MINOR: source-fetch missing dbPatches[0].id                 | CLOSED  | This audit -- pin id assertion                                                                                                            |
+| MINOR: registry update test missing updatedBy               | CLOSED  | This audit -- assertions added on update + softDelete                                                                                     |
+| MINOR: revokeAllUserSessions order assertion                | CLOSED  | PR #463 -- explicit call-order assertion                                                                                                  |
+| MINOR: source-jobs build/validate single-assertion          | CLOSED  | PR #463 -- progress + event log assertions added                                                                                          |
+| MINOR: parse-csv pathological inputs                        | CLOSED  | PR #463 -- BOM + jagged-row tests                                                                                                         |
+| MINOR: jobs.test.ts seq monotonicity                        | CLOSED  | This audit -- `seqA < seqB` assertion added                                                                                               |
+| NIT: drizzleResults shim coupling                           | CLOSED  | PR #463 -- factory-with-label pattern                                                                                                     |
+| NIT: source-form cadence upper bound                        | CLOSED  | PR #463 -- documented as no-cap-by-design                                                                                                 |
+| NIT: window.test.ts unknown-vs-unparseable                  | CLOSED  | PR #463 -- spec confirmed; no redirect-to-canonical, behavior documented                                                                  |
+| NIT: audit cursor decode boundary cases                     | CLOSED  | PR #463 -- multi-`::` and whitespace tolerance tests                                                                                      |
 
 Total: 23 closed / 0 open. `review_status` flipped to `done`.

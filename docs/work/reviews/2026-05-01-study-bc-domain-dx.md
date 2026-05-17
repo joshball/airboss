@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     4 |      3 |    1 |
-| minor    |     5 |      3 |    2 |
-| nit      |     3 |      1 |    2 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 4     | 3      | 1    |
+| minor    | 5     | 3      | 2    |
+| nit      | 3     | 1      | 2    |
 
 ### MAJOR: `SessionNotFoundError` thrown on review-ownership failure -- CLOSED
 
@@ -114,6 +114,7 @@ Fix: log a `warn` with the syllabusId + orphan node id + dangling parentId, OR r
 ### MAJOR: Two `SourceRefRequiredError` classes collide at the barrel
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/cards.ts:53-58`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/scenarios.ts:98-103`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/index.ts:45` (only the cards version is barreled)
@@ -125,6 +126,7 @@ Fix: hoist a single `SourceRefRequiredError` to a shared location (or re-export 
 ### MINOR: Bare `throw new Error(...)` for "shouldn't happen" upsert paths
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/goals.ts:253,258,338,394`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/credentials.ts:480`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/syllabi.ts:502,534`
@@ -144,6 +146,7 @@ Fix: throw a distinct `CitationNotOwnedError` (or `CitationDeleteForbiddenError`
 ### MINOR: `FeedbackCommentRequiredError` / `SnoozeCommentRequiredError` don't list which signals require comment
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/feedback.ts:21-26`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/snooze.ts:42-47`
 
@@ -178,6 +181,7 @@ Fix: drop the `[${lensKind}]` prefix from the super call; keep `lensKind` as a p
 ### NIT: `KnowledgeGraphCycleError` / `CredentialPrereqCycleError` print cycle path with `->` (correct), but no node titles
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/knowledge.ts:59-63`
 - `/Users/joshua/src/_me/aviation/airboss/libs/bc/study/src/credentials.ts:69-77`
 

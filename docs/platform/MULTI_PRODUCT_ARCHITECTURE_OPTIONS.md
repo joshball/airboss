@@ -24,15 +24,15 @@ Bun workspaces. `@firc/*` path aliases. One PostgreSQL DB with namespaced schema
 
 ## Evaluation criteria
 
-| Criterion                     | Why it matters                                                              |
-| ----------------------------- | --------------------------------------------------------------------------- |
-| Context-switching cost         | Solo dev jumps between products daily. Friction between codebases kills flow |
-| Maintenance at 20 products    | Dependency updates, breaking changes, shared code upgrades                   |
-| Deploy independence            | Can ship product A without touching product B?                               |
-| Design system flexibility      | Products need different UIs (avionics sim vs. audio player vs. mobile cards) |
-| Shared code ergonomics         | How painful is importing/using engine, auth, content from a product?         |
-| Mobile/audio/offline story     | Not everything is a SvelteKit web app                                        |
-| Onboarding a new product       | Minutes to scaffold? Hours? Days?                                            |
+| Criterion                  | Why it matters                                                               |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| Context-switching cost     | Solo dev jumps between products daily. Friction between codebases kills flow |
+| Maintenance at 20 products | Dependency updates, breaking changes, shared code upgrades                   |
+| Deploy independence        | Can ship product A without touching product B?                               |
+| Design system flexibility  | Products need different UIs (avionics sim vs. audio player vs. mobile cards) |
+| Shared code ergonomics     | How painful is importing/using engine, auth, content from a product?         |
+| Mobile/audio/offline story | Not everything is a SvelteKit web app                                        |
+| Onboarding a new product   | Minutes to scaffold? Hours? Days?                                            |
 
 ---
 
@@ -54,17 +54,17 @@ libs/
   engine/ auth/ db/ themes/ ui/ bc/* ...
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Direct TS imports via `@firc/*`. Zero publish step. Refactor across all products in one commit |
-| Auth/users                | Single `libs/auth/`, shared session, one DB                                                  |
-| Content                   | `libs/bc/course/` serves all products. One content pipeline                                  |
-| Deploy                    | Each app builds independently. Deploy one without the others                                 |
-| Context-switching          | Lowest possible. One IDE window, one git log, one branch                                     |
-| Design flexibility         | Each app has its own `src/` with routes/layouts/styles. Themes lib provides tokens            |
-| At 20 products             | `apps/` directory gets long. CI builds everything on every push unless filtered. Bun workspace resolution slows |
-| Mobile/audio               | SvelteKit can do PWA/static. Native mobile requires separate tooling outside the monorepo    |
-| New product setup          | Copy an app skeleton, add to workspaces. Minutes                                             |
+| Aspect             | Assessment                                                                                                      |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- |
+| Shared code        | Direct TS imports via `@firc/*`. Zero publish step. Refactor across all products in one commit                  |
+| Auth/users         | Single `libs/auth/`, shared session, one DB                                                                     |
+| Content            | `libs/bc/course/` serves all products. One content pipeline                                                     |
+| Deploy             | Each app builds independently. Deploy one without the others                                                    |
+| Context-switching  | Lowest possible. One IDE window, one git log, one branch                                                        |
+| Design flexibility | Each app has its own `src/` with routes/layouts/styles. Themes lib provides tokens                              |
+| At 20 products     | `apps/` directory gets long. CI builds everything on every push unless filtered. Bun workspace resolution slows |
+| Mobile/audio       | SvelteKit can do PWA/static. Native mobile requires separate tooling outside the monorepo                       |
+| New product setup  | Copy an app skeleton, add to workspaces. Minutes                                                                |
 
 **Tradeoffs.** Simplest option. Lowest overhead. But: CI gets slow, git log becomes noisy across unrelated products, and non-web products (native mobile, audio generation) don't fit naturally. The 15th SvelteKit app will feel cluttered.
 
@@ -88,17 +88,17 @@ libs/
   engine/ auth/ db/ themes/ ui/ bc/* ...
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Same as Option 1 -- direct `@firc/*` imports                                                 |
-| Auth/users                | Even simpler -- one app, one session, one cookie. No cross-app auth needed                   |
-| Content                   | Same as Option 1                                                                             |
-| Deploy                    | Deploy the pilot app = deploy all pilot-facing products. Can't ship one without the others   |
-| Context-switching          | Lowest. Everything in one app. Shared layouts, shared nav, shared state                      |
-| Design flexibility         | Route groups can have different layouts, but they share one app shell, one CSS bundle, one nav. Hard to make the avionics trainer feel radically different from the journal |
-| At 20 products             | Route groups become a sprawling mess. The app becomes a monolith with one build, one bundle   |
-| Mobile/audio               | Same limitation as Option 1                                                                  |
-| New product setup          | Add a route group + layout. Minutes. But it's coupled to the app's build/deploy               |
+| Aspect             | Assessment                                                                                                                                                                  |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shared code        | Same as Option 1 -- direct `@firc/*` imports                                                                                                                                |
+| Auth/users         | Even simpler -- one app, one session, one cookie. No cross-app auth needed                                                                                                  |
+| Content            | Same as Option 1                                                                                                                                                            |
+| Deploy             | Deploy the pilot app = deploy all pilot-facing products. Can't ship one without the others                                                                                  |
+| Context-switching  | Lowest. Everything in one app. Shared layouts, shared nav, shared state                                                                                                     |
+| Design flexibility | Route groups can have different layouts, but they share one app shell, one CSS bundle, one nav. Hard to make the avionics trainer feel radically different from the journal |
+| At 20 products     | Route groups become a sprawling mess. The app becomes a monolith with one build, one bundle                                                                                 |
+| Mobile/audio       | Same limitation as Option 1                                                                                                                                                 |
+| New product setup  | Add a route group + layout. Minutes. But it's coupled to the app's build/deploy                                                                                             |
 
 **Tradeoffs.** Maximum code sharing, minimum overhead, but products can't diverge in look or deploy cadence. Works well if most products genuinely share a shell (dashboard + sidebar nav). Falls apart when products need distinct experiences (avionics trainer vs. audio player). The "one giant app" risk is real -- at 15 route groups the pilot app becomes hard to reason about.
 
@@ -122,17 +122,17 @@ libs/
   engine/ auth/ db/ bc/* ...
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Plugins import from platform. Platform exposes a plugin API (content, auth, progress, engine) |
-| Auth/users                | Centralized in platform shell. Plugins inherit session                                       |
-| Content                   | Platform provides content API. Plugins consume it                                            |
-| Deploy                    | Depends on implementation. If plugins are dynamic imports: one deploy. If separate builds: complex |
-| Context-switching          | Medium. Plugin boundaries are clear, but debugging crosses plugin/platform boundary           |
-| Design flexibility         | Plugins can render anything, but they live inside the platform shell. Constrained viewport    |
-| At 20 products             | Scales well conceptually. But plugin API becomes the bottleneck -- every new product need pushes the API surface |
-| Mobile/audio               | Plugins are web components. Same mobile limitation                                           |
-| New product setup          | Implement plugin interface. Moderate -- need to understand the plugin contract                |
+| Aspect             | Assessment                                                                                                       |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| Shared code        | Plugins import from platform. Platform exposes a plugin API (content, auth, progress, engine)                    |
+| Auth/users         | Centralized in platform shell. Plugins inherit session                                                           |
+| Content            | Platform provides content API. Plugins consume it                                                                |
+| Deploy             | Depends on implementation. If plugins are dynamic imports: one deploy. If separate builds: complex               |
+| Context-switching  | Medium. Plugin boundaries are clear, but debugging crosses plugin/platform boundary                              |
+| Design flexibility | Plugins can render anything, but they live inside the platform shell. Constrained viewport                       |
+| At 20 products     | Scales well conceptually. But plugin API becomes the bottleneck -- every new product need pushes the API surface |
+| Mobile/audio       | Plugins are web components. Same mobile limitation                                                               |
+| New product setup  | Implement plugin interface. Moderate -- need to understand the plugin contract                                   |
 
 **Tradeoffs.** Elegant in theory. In practice, building a plugin system is building a framework. The plugin API becomes the hardest code to maintain. SvelteKit doesn't have a natural plugin model -- you'd be inventing one. For a solo dev, the framework-building overhead likely exceeds the value until you have 10+ products that genuinely need runtime composition. If products are known at build time (they are), static imports are simpler.
 
@@ -155,17 +155,17 @@ libs/
 turbo.json / nx.json    Build graph + caching
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Same as Option 1 -- direct imports. But Turborepo/Nx adds task graph awareness               |
-| Auth/users                | Same as Option 1                                                                             |
-| Content                   | Same as Option 1                                                                             |
-| Deploy                    | Build only what changed. Deploy individual apps. CI is fast even at 20 apps                  |
-| Context-switching          | Same as Option 1 -- one repo, one IDE                                                        |
-| Design flexibility         | Same as Option 1 -- each app is independent                                                  |
-| At 20 products             | This is where it shines. Nx/Turborepo caching makes CI viable at scale. Affected-only builds |
-| Mobile/audio               | Can mix app types: SvelteKit apps, static generators, Node scripts, even React Native in the same monorepo |
-| New product setup          | Scaffold app, register in build graph. Minutes                                               |
+| Aspect             | Assessment                                                                                                 |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Shared code        | Same as Option 1 -- direct imports. But Turborepo/Nx adds task graph awareness                             |
+| Auth/users         | Same as Option 1                                                                                           |
+| Content            | Same as Option 1                                                                                           |
+| Deploy             | Build only what changed. Deploy individual apps. CI is fast even at 20 apps                                |
+| Context-switching  | Same as Option 1 -- one repo, one IDE                                                                      |
+| Design flexibility | Same as Option 1 -- each app is independent                                                                |
+| At 20 products     | This is where it shines. Nx/Turborepo caching makes CI viable at scale. Affected-only builds               |
+| Mobile/audio       | Can mix app types: SvelteKit apps, static generators, Node scripts, even React Native in the same monorepo |
+| New product setup  | Scaffold app, register in build graph. Minutes                                                             |
 
 **Tradeoffs.** Option 1 with better CI. Adds a build tool dependency (Turborepo or Nx) and configuration overhead. Turborepo is lighter; Nx is more powerful but heavier. For Bun workspaces, Turborepo has better compatibility. The question is whether you need the caching now -- at 4-5 apps, plain Bun is fine. At 10+, you'll want it. Can migrate to this from Option 1 incrementally without restructuring.
 
@@ -184,17 +184,17 @@ repo: hangar                   imports @pilot/engine, @pilot/auth, etc.
 repo: runway                   imports @pilot/engine, @pilot/auth, etc.
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Published packages. Version pinned. Upgrade is explicit per-product                          |
-| Auth/users                | Auth is a package. Each product configures it. Shared DB, shared session domain              |
-| Content                   | Content BC is a package. Products consume published content via package API                   |
-| Deploy                    | Fully independent. Each repo has its own CI/CD                                               |
-| Context-switching          | Highest cost. Different repo, different git state, different IDE window. Lose flow constantly |
-| Design flexibility         | Maximum. Each repo is fully independent                                                      |
-| At 20 products             | 20 repos. 20 CI configs. Shared package upgrades require 20 PRs. Version drift is inevitable |
-| Mobile/audio               | Each repo picks its own stack. React Native, static generator, whatever                      |
-| New product setup          | Clone template, configure packages, set up CI. Hours                                         |
+| Aspect             | Assessment                                                                                    |
+| ------------------ | --------------------------------------------------------------------------------------------- |
+| Shared code        | Published packages. Version pinned. Upgrade is explicit per-product                           |
+| Auth/users         | Auth is a package. Each product configures it. Shared DB, shared session domain               |
+| Content            | Content BC is a package. Products consume published content via package API                   |
+| Deploy             | Fully independent. Each repo has its own CI/CD                                                |
+| Context-switching  | Highest cost. Different repo, different git state, different IDE window. Lose flow constantly |
+| Design flexibility | Maximum. Each repo is fully independent                                                       |
+| At 20 products     | 20 repos. 20 CI configs. Shared package upgrades require 20 PRs. Version drift is inevitable  |
+| Mobile/audio       | Each repo picks its own stack. React Native, static generator, whatever                       |
+| New product setup  | Clone template, configure packages, set up CI. Hours                                          |
 
 **Tradeoffs.** Maximum isolation, maximum overhead. For a solo dev, the publish/version/upgrade cycle for shared packages is a tax on every change. When you fix a bug in the engine, you publish the package, then update it in every product that uses it. At 10 products, this is miserable. Multi-repo makes sense for teams with different release cadences and ownership boundaries. For one person, it's all cost and no benefit.
 
@@ -217,17 +217,17 @@ repo: pilot-audio-pipeline        (Node/Bun scripts, generates audio content)
 repo: pilot-mobile                 (React Native or Capacitor, imports @pilot/engine)
 ```
 
-| Aspect                    | Assessment                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------- |
-| Shared code               | Monorepo products: direct imports. Satellite products: published packages from core          |
-| Auth/users                | Monorepo: shared directly. Satellites: API-based auth or shared session domain               |
-| Content                   | Monorepo: direct BC access. Satellites: content API or published package                     |
-| Deploy                    | Monorepo apps deploy together or independently. Satellites are fully independent             |
-| Context-switching          | Low for web products (all in monorepo). Higher when jumping to a satellite                   |
-| Design flexibility         | Web products share what they want. Satellites are unconstrained                               |
-| At 20 products             | If 15 are web: monorepo handles them. 5 satellites is manageable                             |
-| Mobile/audio               | Satellites handle non-web naturally. This is the main advantage over pure monorepo           |
-| New product setup          | Web product: add to monorepo (minutes). Satellite: new repo + package setup (hours)          |
+| Aspect             | Assessment                                                                          |
+| ------------------ | ----------------------------------------------------------------------------------- |
+| Shared code        | Monorepo products: direct imports. Satellite products: published packages from core |
+| Auth/users         | Monorepo: shared directly. Satellites: API-based auth or shared session domain      |
+| Content            | Monorepo: direct BC access. Satellites: content API or published package            |
+| Deploy             | Monorepo apps deploy together or independently. Satellites are fully independent    |
+| Context-switching  | Low for web products (all in monorepo). Higher when jumping to a satellite          |
+| Design flexibility | Web products share what they want. Satellites are unconstrained                     |
+| At 20 products     | If 15 are web: monorepo handles them. 5 satellites is manageable                    |
+| Mobile/audio       | Satellites handle non-web naturally. This is the main advantage over pure monorepo  |
+| New product setup  | Web product: add to monorepo (minutes). Satellite: new repo + package setup (hours) |
 
 **Tradeoffs.** Pragmatic split: keep most things in the monorepo, only exile what truly can't live there. But you now maintain two integration patterns (direct imports vs. published packages). The satellite repos still suffer from the package-upgrade tax of Option 5, just for fewer repos. The decision boundary ("when does a product become a satellite?") is fuzzy and will cause friction.
 
@@ -244,15 +244,15 @@ The insight: a product's category (pre-flight, proficiency, event-prep) is a con
 Looking at all 53 products and their `surfaces` + `complexity` + `depends_on` metadata:
 
 | Surface type                   | What it needs                                                         | Products                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------------------------ | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------ | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Study / quiz / rep**         | Spaced rep engine, card UI, quiz flow, progress tracking, mobile      | prd:prof:spaced-memory-items Spaced Memory, prd:prof:decision-reps Decision Reps, prd:prof:ten-minute-ticker Ticker, prd:prof:situational-replay Replay, prd:prof:plate-reading-drills Plates, prd:prof:wx-calls WX, prd:prof:calibration-tracker Calibration, all event prep products (prd:evt:bfr-sprint through prd:evt:recency-recovery), prd:com:scenario-of-the-week Scenario of the Week |
 | **Nav / glass cockpit**        | Avionics state machine, instrument rendering, schematic panels        | prd:prof:avionics-trainer Avionics Trainer                                                                                                                                                                                                                                                                                                                                                      |
 | **Route / spatial**            | Airport data, airspace data, terrain, weather APIs, map rendering     | prd:pre:route-walkthrough Route Walkthrough, prd:pre:airport-cards Airport Cards, prd:pre:approach-rehearsal Approach Rehearsal, prd:pre:diversion-drill Diversion, prd:pre:what-could-go-wrong WCGW, prd:pre:notam-triage NOTAM, prd:fly:pre-departure-card Pre-Departure Card                                                                                                                 |
 | **Audio / narrative**          | Audio generation or playback, TTS, speech recognition, podcast format | prd:aud:daily-decision Daily Decision, prd:aud:atc-comms-drill ATC Comms, prd:aud:memory-items-audio Memory Audio, prd:aud:ntsb-story NTSB Story                                                                                                                                                                                                                                                |
-| **Journal / reflect**          | Free-text input, tagging, search, heatmaps, charts, export           | prd:ref:per-flight-journal Journal, prd:ref:skill-heatmap Heatmap, prd:ref:currency-proficiency-tracker Currency Tracker, prd:ref:decision-diary Decision Diary, prd:fly:voice-debrief Voice Debrief                                                                                                                                                                                             |
+| **Journal / reflect**          | Free-text input, tagging, search, heatmaps, charts, export            | prd:ref:per-flight-journal Journal, prd:ref:skill-heatmap Heatmap, prd:ref:currency-proficiency-tracker Currency Tracker, prd:ref:decision-diary Decision Diary, prd:fly:voice-debrief Voice Debrief                                                                                                                                                                                            |
 | **Community / social**         | User profiles, pairing, voting, leaderboards, moderation              | prd:com:route-buddy Route Buddy, prd:com:cfi-pairing CFI Pairing, prd:com:anonymous-mistakes Anon Mistakes, prd:com:local-pilot-map Pilot Map                                                                                                                                                                                                                                                   |
 | **Lightweight / mobile-first** | Minimal UI, glanceable, works offline, quick input                    | prd:pre:pre-flight-imsafe IMSAFE, prd:pre:passenger-brief Passenger Brief, prd:pre:cold-start-recall Cold-Start, prd:fly:single-tap-pirep PIREP, prd:exp:smartwatch-ritual Smartwatch                                                                                                                                                                                                           |
-| **Sim-connected**              | X-Plane/MSFS bridge, websocket, real-time state                      | prd:exp:replay-your-flight Replay Flight, prd:exp:ghost-flight Ghost Flight, prd:exp:anti-startle-trainer Anti-Startle (v2+)                                                                                                                                                                                                                                                                     |
+| **Sim-connected**              | X-Plane/MSFS bridge, websocket, real-time state                       | prd:exp:replay-your-flight Replay Flight, prd:exp:ghost-flight Ghost Flight, prd:exp:anti-startle-trainer Anti-Startle (v2+)                                                                                                                                                                                                                                                                    |
 
 Some products span surfaces (Route Walkthrough needs spatial + quiz elements), but every product has a *primary* surface.
 
@@ -371,10 +371,10 @@ If there's a standalone "study mode" product, that's a thin app over the learnin
 
 Two dashboards, two locations:
 
-| Dashboard               | What it shows                                        | Where it lives               |
-| ----------------------- | ---------------------------------------------------- | ---------------------------- |
-| Product dev progress    | What's built, what's next, task status               | `hangar` (content/product authoring app) |
-| Personal pilot progress | Skill heatmap, streaks, calibration, proficiency     | `pilot` app (or `sim`)       |
+| Dashboard               | What it shows                                    | Where it lives                           |
+| ----------------------- | ------------------------------------------------ | ---------------------------------------- |
+| Product dev progress    | What's built, what's next, task status           | `hangar` (content/product authoring app) |
+| Personal pilot progress | Skill heatmap, streaks, calibration, proficiency | `pilot` app (or `sim`)                   |
 
 ### Where does content authoring live?
 
@@ -382,12 +382,12 @@ Two dashboards, two locations:
 
 ### What happens to the existing 4 apps?
 
-| Current app | Post-pivot fate                                                                    |
-| ----------- | ---------------------------------------------------------------------------------- |
-| `sim`       | Becomes `pilot` -- the main pilot-facing app. Hosts most web products              |
-| `hangar`    | Stays. Content authoring + product tracking for all products                       |
+| Current app | Post-pivot fate                                                                      |
+| ----------- | ------------------------------------------------------------------------------------ |
+| `sim`       | Becomes `pilot` -- the main pilot-facing app. Hosts most web products                |
+| `hangar`    | Stays. Content authoring + product tracking for all products                         |
 | `ops`       | Folds into `hangar` as admin routes. Not enough standalone surface to justify an app |
-| `runway`    | Stays. Public site, marketing, free content, open-source landing                   |
+| `runway`    | Stays. Public site, marketing, free content, open-source landing                     |
 
 ---
 

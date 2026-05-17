@@ -21,15 +21,15 @@ This week is deep. Subpart H is short by section count (about 20 sections) but e
 
 ## Lesson structure
 
-| File | Topic |
-| --- | --- |
-| 01-subpart-h-walk.md | Front-to-back commentary on Part 61 subpart H |
-| 02-cfi-privileges-and-limitations.md | 61.193 / 61.195 deep dive, plus the 61.193-vs-61.113 boundary |
-| 03-renewal-pathways.md | 61.197 + FIRC mechanics + the 80%-recommendation-rate option |
-| 04-endorsements.md | AC 61-65 organized by category; 61.31 endorsements; the daily-CFI signature set |
-| 05-spin-and-special-endorsements.md | 61.183(i) spin endorsement; tailwheel; high-performance; complex; high-altitude; sport-pilot CFI |
-| drills.md | Locate / Diagnose / Distinguish / Trap-detector formats |
-| oral.md | "A friend asks you to sign them off for their flight review. Walk me through what you check, what you require, and what you sign." |
+| File                                 | Topic                                                                                                                              |
+| ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| 01-subpart-h-walk.md                 | Front-to-back commentary on Part 61 subpart H                                                                                      |
+| 02-cfi-privileges-and-limitations.md | 61.193 / 61.195 deep dive, plus the 61.193-vs-61.113 boundary                                                                      |
+| 03-renewal-pathways.md               | 61.197 + FIRC mechanics + the 80%-recommendation-rate option                                                                       |
+| 04-endorsements.md                   | AC 61-65 organized by category; 61.31 endorsements; the daily-CFI signature set                                                    |
+| 05-spin-and-special-endorsements.md  | 61.183(i) spin endorsement; tailwheel; high-performance; complex; high-altitude; sport-pilot CFI                                   |
+| drills.md                            | Locate / Diagnose / Distinguish / Trap-detector formats                                                                            |
+| oral.md                              | "A friend asks you to sign them off for their flight review. Walk me through what you check, what you require, and what you sign." |
 
 ## How this week relates to the others
 

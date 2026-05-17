@@ -16,15 +16,15 @@ review_status: done
 
 Walked every finding against current main. 4 of 8 closed; 4 carried forward.
 
-| Severity | Finding                                                 | Verdict                                                                                                  |
-| -------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| MAJOR    | `requireAuth` inlines `redirectTo` query key            | CLOSED -- `libs/auth/src/auth.ts:97` uses `QUERY_PARAMS.REDIRECT_TO`                                     |
-| MAJOR    | Session-to-AuthUser mapping duplicated 4x               | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 hooks consume it     |
-| MINOR    | `REQUEST_ID_HEADER` duplicated as local const           | STILL OPEN -- 4 hooks still declare their own; carried below                                             |
-| MINOR    | `'cookie'` / `'x-forwarded-for'` / `'content-type'`     | STILL OPEN -- header strings still inlined in 4 sites; carried below                                     |
-| MINOR    | Logger names inlined                                    | STILL OPEN -- `'study'` / `'hangar:login'` strings still inlined; carried below                          |
-| MINOR    | Security-header values repeated in `applySecurityHeaders` | STILL OPEN -- duplicated between study + hangar; carried below (also tracked by architecture/backend)  |
-| NIT      | `requireAuth` builds redirect URL inline                | CLOSED -- accepted; route function `LOGIN_WITH_REDIRECT` would over-engineer for one call site            |
+| Severity | Finding                                                     | Verdict                                                                                               |
+| -------- | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| MAJOR    | `requireAuth` inlines `redirectTo` query key                | CLOSED -- `libs/auth/src/auth.ts:97` uses `QUERY_PARAMS.REDIRECT_TO`                                  |
+| MAJOR    | Session-to-AuthUser mapping duplicated 4x                   | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 hooks consume it  |
+| MINOR    | `REQUEST_ID_HEADER` duplicated as local const               | STILL OPEN -- 4 hooks still declare their own; carried below                                          |
+| MINOR    | `'cookie'` / `'x-forwarded-for'` / `'content-type'`         | STILL OPEN -- header strings still inlined in 4 sites; carried below                                  |
+| MINOR    | Logger names inlined                                        | STILL OPEN -- `'study'` / `'hangar:login'` strings still inlined; carried below                       |
+| MINOR    | Security-header values repeated in `applySecurityHeaders`   | STILL OPEN -- duplicated between study + hangar; carried below (also tracked by architecture/backend) |
+| NIT      | `requireAuth` builds redirect URL inline                    | CLOSED -- accepted; route function `LOGIN_WITH_REDIRECT` would over-engineer for one call site        |
 | NIT      | `apps/*/src/lib/server/auth.ts` casts undefined w/o comment | CLOSED -- comment block now lives in study auth.ts:22-26 explaining build-time placeholder            |
 
 ### Carried-forward design items
@@ -54,6 +54,7 @@ Fix: Import `QUERY_PARAMS` and build the URL from it: `` `${ROUTES.LOGIN}?${QUER
 ### MAJOR: Session-to-`AuthUser` mapping is duplicated verbatim across all four `hooks.server.ts` files (with `as Record<string, unknown>` casts)
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/apps/study/src/hooks.server.ts` (lines ~98-120)
 - `/Users/joshua/src/_me/aviation/airboss/apps/hangar/src/hooks.server.ts` (lines ~122-144)
 - `/Users/joshua/src/_me/aviation/airboss/apps/sim/src/hooks.server.ts` (lines ~44-65)
@@ -78,6 +79,7 @@ Fix: Add `REQUEST_ID_HEADER` (and `REQUEST_ID_PATTERN`) to `libs/constants/`, or
 ### MINOR: `'cookie'`, `'x-forwarded-for'`, `'content-type'` header names hardcoded in login/logout actions
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/apps/study/src/routes/login/+page.server.ts` (lines 59-60)
 - `/Users/joshua/src/_me/aviation/airboss/apps/hangar/src/routes/login/+page.server.ts` (lines 46-47)
 - `/Users/joshua/src/_me/aviation/airboss/apps/study/src/routes/(app)/logout/+page.server.ts` (line 20)
@@ -102,6 +104,7 @@ Fix: Either add `LOGGERS` to `@ab/constants` (`LOGGERS.STUDY`, `LOGGERS.STUDY_LO
 ### MINOR: Security-header values are repeated as string literals in `applySecurityHeaders` (study + hangar)
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/apps/study/src/hooks.server.ts` (lines 45-53)
 - `/Users/joshua/src/_me/aviation/airboss/apps/hangar/src/hooks.server.ts` (lines 76-84)
 

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.8
 Title:           Return Leg of a Long Cross-Country
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_5, FAA_TOPIC.A_10]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RM-1', 'RM-2', 'RM-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Pressure-Susceptible
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Cruising at 4,500, 45 minutes from home. Student is flying competently but you've noticed slower responses to ATC calls and more frequent yawning. The student's posture has slumped. Haze is visible ahead.
 studentSpeech:Almost home. I can see the haze but the ATIS said 6 miles. That's fine for VFR, right?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student admits to being tired but insists they can make it. Updated ATIS: ceiling 2,000 broken, visibility 5 miles. Cloud bases are lower than when you departed this morning. Student rubs eyes.
 studentSpeech:I'm a little tired, but we're so close. I just want to get home. I don't want to deal with finding a ride from the alternate. It's only 30 more minutes.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student hesitates. Checks the time, checks the weather, looks at the fuel gauges. The alternate would add an hour to the trip including the drive. Student's family has texted asking when they'll land.
 studentSpeech:My wife is at the airport waiting. If we divert she'll have to drive an hour to get me. Can we at least try for home and divert if it gets worse?
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student continues toward home. Ceiling drops to 1,800 broken. Visibility 4 miles. Student is now hand-flying with noticeably degraded precision -- altitude excursions of 200 feet, heading wandering. Reaction to a traffic call from ATC is slow.
 studentSpeech:I can see the airport from here... I think. Is that it over there? No, that's the lake.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (coach/direct)

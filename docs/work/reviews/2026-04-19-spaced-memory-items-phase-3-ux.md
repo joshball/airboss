@@ -31,7 +31,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 3 UX Review
 
 Scope: card management UI for the spaced-memory-items feature, commit 07d1ff1 on `build/spaced-memory-items`. Routes reviewed:
@@ -48,10 +47,10 @@ Persona lens: Joshua (user zero), returning CFI who capture-cards while reading 
 
 | Severity | Count |
 | -------- | ----- |
-| Critical |     0 |
-| Major    |     6 |
-| Minor    |     9 |
-| Nit      |     6 |
+| Critical | 0     |
+| Major    | 6     |
+| Minor    | 9     |
+| Nit      | 6     |
 
 ## Findings
 

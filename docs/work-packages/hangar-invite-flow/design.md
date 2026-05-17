@@ -15,15 +15,15 @@ Tabs across the top: `Pending (n)` / `Accepted (n)` / `Revoked (n)` / `Expired (
 
 Above the tabs, an "Invite user" button (primary). Below, a table:
 
-| Column        | Source                                              |
-| ------------- | --------------------------------------------------- |
-| Email         | `invitation.email`                                  |
-| Role          | `invitation.proposed_role`                          |
-| Status        | derived (Pending / Accepted / Revoked / Expired)    |
-| Invited       | `invited_at` (relative + tooltip with absolute)     |
-| Expires       | `expires_at` (relative)                             |
-| Invited by    | joined `bauth_user.name` (fall-back email)          |
-| Actions       | "View" link to detail page                          |
+| Column     | Source                                           |
+| ---------- | ------------------------------------------------ |
+| Email      | `invitation.email`                               |
+| Role       | `invitation.proposed_role`                       |
+| Status     | derived (Pending / Accepted / Revoked / Expired) |
+| Invited    | `invited_at` (relative + tooltip with absolute)  |
+| Expires    | `expires_at` (relative)                          |
+| Invited by | joined `bauth_user.name` (fall-back email)       |
+| Actions    | "View" link to detail page                       |
 
 Empty state per status: "No pending invitations." / "No invitations have been accepted yet." etc. The empty-state component already exists in `@ab/ui/EmptyState`.
 
@@ -159,13 +159,13 @@ accept:
 
 ## Risks + mitigations
 
-| Risk                                                                                | Mitigation                                                                                       |
-| ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Email send transient failure leaves a half-state                                    | Decision (c): transactional rollback on send failure. No row, no audit, admin retries.           |
-| Recipient clicks link from one device after accepting from another                  | Server-side check on every accept; second click 404s.                                            |
-| Long-lived browser tab on accept page after expiry                                  | Server-side recheck on form submit; HIF-51.                                                      |
-| Better-auth `createUser` fails mid-accept                                           | Wrap createUser + invitation update in a transaction; HIF-52.                                    |
-| Token leaked via referrer header                                                    | Accept route is the only consumer; once redeemed the token is dead. Risk window = until accept. |
+| Risk                                                               | Mitigation                                                                                      |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| Email send transient failure leaves a half-state                   | Decision (c): transactional rollback on send failure. No row, no audit, admin retries.          |
+| Recipient clicks link from one device after accepting from another | Server-side check on every accept; second click 404s.                                           |
+| Long-lived browser tab on accept page after expiry                 | Server-side recheck on form submit; HIF-51.                                                     |
+| Better-auth `createUser` fails mid-accept                          | Wrap createUser + invitation update in a transaction; HIF-52.                                   |
+| Token leaked via referrer header                                   | Accept route is the only consumer; once redeemed the token is dead. Risk window = until accept. |
 
 ## What this design does NOT cover
 

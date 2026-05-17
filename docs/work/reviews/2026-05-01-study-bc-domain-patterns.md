@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     0 |      0 |    0 |
-| minor    |     1 |      1 |    0 |
-| nit      |     0 |      0 |    0 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 0     | 0      | 0    |
+| minor    | 1     | 1      | 0    |
+| nit      | 0     | 0      | 0    |
 
 ### MINOR: Weak-area score formula uses inline coefficient `2` -- CLOSED
 

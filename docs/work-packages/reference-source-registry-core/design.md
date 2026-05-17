@@ -355,14 +355,14 @@ Phase 2 ships the substrate; Phase 5 ships the rewrite logic.
 
 ## What this WP does NOT do
 
-| Capability | Phase |
-| --- | --- |
-| Rewrite stale pins (`?at=2024 -> ?at=2026`) | Phase 5 (annual diff job) |
-| Render tokens (`@cite -> §91.103 Preflight action`) | Phase 4 (renderer) |
-| Populate `regs` corpus with CFR text | Phase 3 (CFR ingestion) |
-| Populate `handbooks` corpus with PHAK/AFH text | Phase 6 |
-| Populate `aim` corpus | Phase 7 |
-| Populate `ac` corpus | Phase 8 |
-| Migrate pre-ADR-019 lessons | Phase 9 |
-| Hangar UI for non-engineer authoring | revisit.md R5 (deferred) |
-| Persist lifecycle state to Postgres | Future WP if/when needed |
+| Capability                                          | Phase                     |
+| --------------------------------------------------- | ------------------------- |
+| Rewrite stale pins (`?at=2024 -> ?at=2026`)         | Phase 5 (annual diff job) |
+| Render tokens (`@cite -> §91.103 Preflight action`) | Phase 4 (renderer)        |
+| Populate `regs` corpus with CFR text                | Phase 3 (CFR ingestion)   |
+| Populate `handbooks` corpus with PHAK/AFH text      | Phase 6                   |
+| Populate `aim` corpus                               | Phase 7                   |
+| Populate `ac` corpus                                | Phase 8                   |
+| Migrate pre-ADR-019 lessons                         | Phase 9                   |
+| Hangar UI for non-engineer authoring                | revisit.md R5 (deferred)  |
+| Persist lifecycle state to Postgres                 | Future WP if/when needed  |

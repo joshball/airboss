@@ -229,17 +229,17 @@ The shape: §91.1 is applicability. §91.3 is the PIC responsibility-and-authori
 
 ### Locate the section
 
-| Question                                                    | Section                                                |
-| ----------------------------------------------------------- | ------------------------------------------------------ |
-| Where does PIC final authority live?                        | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (a)      |
-| Where does the emergency-deviation clause live?             | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (b)      |
-| Where does the written-report requirement live?             | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (c)      |
-| Where does careless or reckless operation live?             | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026)         |
-| Where does the ground-careless rule live?                   | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026) (b)     |
-| Where does ASRS / NASA report immunity live?                | [@cite](airboss-ref:regs/cfr-14/91/25?at=2026)         |
-| Where does compliance with ATC clearances live?             | [@cite](airboss-ref:regs/cfr-14/91/123?at=2026)        |
-| What FAA order documents the enforcement program?           | FAA Order 2150.3C                                      |
-| Where is the canonical careless case?                       | NTSB Order EA-4877 (*Administrator v. Lobeiko*)        |
+| Question                                          | Section                                            |
+| ------------------------------------------------- | -------------------------------------------------- |
+| Where does PIC final authority live?              | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (a)  |
+| Where does the emergency-deviation clause live?   | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (b)  |
+| Where does the written-report requirement live?   | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026) (c)  |
+| Where does careless or reckless operation live?   | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026)     |
+| Where does the ground-careless rule live?         | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026) (b) |
+| Where does ASRS / NASA report immunity live?      | [@cite](airboss-ref:regs/cfr-14/91/25?at=2026)     |
+| Where does compliance with ATC clearances live?   | [@cite](airboss-ref:regs/cfr-14/91/123?at=2026)    |
+| What FAA order documents the enforcement program? | FAA Order 2150.3C                                  |
+| Where is the canonical careless case?             | NTSB Order EA-4877 (*Administrator v. Lobeiko*)    |
 
 ### Apply the rules
 

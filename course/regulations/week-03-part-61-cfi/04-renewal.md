@@ -240,16 +240,16 @@ The cost of a lapse: you can no longer teach during the lapse window, you cannot
 
 ### Locate the rule
 
-| Question                                                                | Section                |
-| ----------------------------------------------------------------------- | ---------------------- |
-| Where is the CFI renewal requirement?                                   | 61.197                 |
-| Where is the 24-calendar-month clock?                                   | 61.197(b)              |
-| Where is the FIRC pathway?                                              | 61.197(a)(4)           |
-| Where is the 80%-pass-rate pathway?                                     | 61.197(a)(2)           |
-| Where is the 3-calendar-month preceding window?                         | 61.197(a)(4) and (b)(2) |
-| Where is the expired-CFI handling?                                      | 61.199                 |
-| What records support the 80% pathway?                                   | 61.189(b)              |
-| What ACS governs the renewal practical?                                 | FAA-S-ACS-25 (CFI ASE) |
+| Question                                        | Section                 |
+| ----------------------------------------------- | ----------------------- |
+| Where is the CFI renewal requirement?           | 61.197                  |
+| Where is the 24-calendar-month clock?           | 61.197(b)               |
+| Where is the FIRC pathway?                      | 61.197(a)(4)            |
+| Where is the 80%-pass-rate pathway?             | 61.197(a)(2)            |
+| Where is the 3-calendar-month preceding window? | 61.197(a)(4) and (b)(2) |
+| Where is the expired-CFI handling?              | 61.199                  |
+| What records support the 80% pathway?           | 61.189(b)               |
+| What ACS governs the renewal practical?         | FAA-S-ACS-25 (CFI ASE)  |
 
 ### Apply the rules
 
@@ -275,15 +275,15 @@ Answer: April 30, 2028. The April 5 test is within the 3-month preceding window,
 
 ### Trap detector
 
-| Statement                                                              | Trap and correction |
-| ---------------------------------------------------------------------- | ------------------- |
-| "I have 24 months from my last renewal to do my next FIRC."            | Wrong. 61.197(a)(4) requires the FIRC be in the 3 calendar months preceding expiration. Earlier doesn't count for that cycle. |
-| "I let my cert lapse for 2 weeks; I can FIRC it back."                 | Wrong. 61.199 governs expired CFIs and excludes the FIRC pathway. Practical test or DPE check are the only options. |
-| "I recommended 4 students who all passed first time. I qualify for the 80% pathway." | Wrong. 61.197(a)(2) requires *at least 5* students recommended. 4 doesn't reach the floor regardless of pass rate. |
-| "I had 10 students recommended; 6 passed first try, 2 failed first then passed second try, 2 are still pending. My pass rate is 80%." | Wrong calculation. 6 first-attempt passes / 8 students who took the test = 75%. The 2 still pending don't count yet. The 80% bar isn't met. |
-| "FIRCs are 8 hours of online study."                                   | Wrong. FIRCs are 16-24 hours typical, and FAA-approved courses meet a 16-hour floor. The "8 hour" number sometimes confuses with 61.195(a)'s daily training cap. |
-| "If I renew via FIRC, my next renewal can be by FIRC again."           | Right, with no FAA-imposed limit on consecutive FIRCs. The same CFI can FIRC every 24 months for their entire career. The professional question is whether the FIRC keeps a CFI sharp -- some FIRCs are heavier on content than others. |
-| "An expired CFI can sign a flight review."                             | Wrong. The expired CFI is not "an authorized instructor" under 61.1(b). Any endorsement signed during the lapse is invalid. The pilot relying on it is not legally PIC for flight-review purposes (61.56(c)). |
+| Statement                                                                                                                             | Trap and correction                                                                                                                                                                                                                     |
+| ------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "I have 24 months from my last renewal to do my next FIRC."                                                                           | Wrong. 61.197(a)(4) requires the FIRC be in the 3 calendar months preceding expiration. Earlier doesn't count for that cycle.                                                                                                           |
+| "I let my cert lapse for 2 weeks; I can FIRC it back."                                                                                | Wrong. 61.199 governs expired CFIs and excludes the FIRC pathway. Practical test or DPE check are the only options.                                                                                                                     |
+| "I recommended 4 students who all passed first time. I qualify for the 80% pathway."                                                  | Wrong. 61.197(a)(2) requires *at least 5* students recommended. 4 doesn't reach the floor regardless of pass rate.                                                                                                                      |
+| "I had 10 students recommended; 6 passed first try, 2 failed first then passed second try, 2 are still pending. My pass rate is 80%." | Wrong calculation. 6 first-attempt passes / 8 students who took the test = 75%. The 2 still pending don't count yet. The 80% bar isn't met.                                                                                             |
+| "FIRCs are 8 hours of online study."                                                                                                  | Wrong. FIRCs are 16-24 hours typical, and FAA-approved courses meet a 16-hour floor. The "8 hour" number sometimes confuses with 61.195(a)'s daily training cap.                                                                        |
+| "If I renew via FIRC, my next renewal can be by FIRC again."                                                                          | Right, with no FAA-imposed limit on consecutive FIRCs. The same CFI can FIRC every 24 months for their entire career. The professional question is whether the FIRC keeps a CFI sharp -- some FIRCs are heavier on content than others. |
+| "An expired CFI can sign a flight review."                                                                                            | Wrong. The expired CFI is not "an authorized instructor" under 61.1(b). Any endorsement signed during the lapse is invalid. The pilot relying on it is not legally PIC for flight-review purposes (61.56(c)).                           |
 
 ## Where this lesson sits
 

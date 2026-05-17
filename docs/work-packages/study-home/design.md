@@ -364,15 +364,15 @@ type TodayBriefing =
 
 Worked output:
 
-| Inputs                                                                                         | Rendered prose                                                                                                                       |
-| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `kind: 'no-goal'`                                                                              | (no Today panel; banner above instead)                                                                                                |
-| `kind: 'caught_up'`                                                                            | "You're caught up. Pick a topic from the map to dig in."                                                                              |
-| `focus`, all reasons `never_attempted`, primary cite PHAK ch. 10                               | "Weight & balance -- arm and moment. You haven't started this yet. PHAK chapter 10 covers it."                                        |
-| `focus`, reason `low_accuracy`, recall 4/10, primary cite PHAK ch. 10                          | "Weight & balance -- arm and moment. You miss this 4 out of 10 times on the cards. Try reviewing PHAK chapter 10."                    |
-| `focus`, reason `overdue`, 12 due, recall 8/10                                                 | "Weight & balance. 12 cards due on this. Review them when you have a few minutes."                                                    |
-| `focus`, mixed: recall mastered, scenario zero attempts                                        | "Weight & balance -- arm and moment. You're 100% understood. No practice yet. Try a scenario."                                        |
-| `focus`, mixed: recall partial, calculation partial, scenario zero                             | "Weight & balance -- arm and moment. You're 60% understood, 25% memorized. No practice yet. The next gap is the arm-and-moment formula -- you miss it 4 out of 10 times." |
+| Inputs                                                                | Rendered prose                                                                                                                                                            |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kind: 'no-goal'`                                                     | (no Today panel; banner above instead)                                                                                                                                    |
+| `kind: 'caught_up'`                                                   | "You're caught up. Pick a topic from the map to dig in."                                                                                                                  |
+| `focus`, all reasons `never_attempted`, primary cite PHAK ch. 10      | "Weight & balance -- arm and moment. You haven't started this yet. PHAK chapter 10 covers it."                                                                            |
+| `focus`, reason `low_accuracy`, recall 4/10, primary cite PHAK ch. 10 | "Weight & balance -- arm and moment. You miss this 4 out of 10 times on the cards. Try reviewing PHAK chapter 10."                                                        |
+| `focus`, reason `overdue`, 12 due, recall 8/10                        | "Weight & balance. 12 cards due on this. Review them when you have a few minutes."                                                                                        |
+| `focus`, mixed: recall mastered, scenario zero attempts               | "Weight & balance -- arm and moment. You're 100% understood. No practice yet. Try a scenario."                                                                            |
+| `focus`, mixed: recall partial, calculation partial, scenario zero    | "Weight & balance -- arm and moment. You're 60% understood, 25% memorized. No practice yet. The next gap is the arm-and-moment formula -- you miss it 4 out of 10 times." |
 
 The "next gap" sub-clause is omitted unless one pill clearly dominates the gap (a single `WeaknessReason` of kind `low_accuracy` on a specific assessment method). Otherwise the prose ends after the percentages.
 

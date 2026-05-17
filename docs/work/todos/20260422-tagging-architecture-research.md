@@ -19,17 +19,17 @@ The `GlossaryEntry` schema has seven categorization fields:
 
 Observed tag usage across 175 entries (freeform, no enum):
 
-| Tag                          | Approx count  | Actual meaning                                    |
-| ---------------------------- | ------------: | ------------------------------------------------- |
-| `cfi-knowledge`              | ~160          | "an instructor should know this" - near-universal |
-| `faa-testing`                | ~50           | Appears on checkride/knowledge-test content       |
-| `checkride`                  | ~40           | Overlaps heavily with `faa-testing`               |
-| `instrument-flying`          | ~35           | IFR-relevant                                      |
-| `weather-decision-making`    | ~15           | Weather ADM                                       |
-| `preflight`                  | ~12           | Phase-of-flight-ish                               |
-| `vfr-operations`             | ~10           | VFR-relevant                                      |
-| `regulations`                | ~15           | Domain duplicate on non-regulation entries        |
-| `safety`, `approaches`       | 1-2 each      | One-offs                                          |
+| Tag                       | Approx count | Actual meaning                                    |
+| ------------------------- | ------------ | ------------------------------------------------- |
+| `cfi-knowledge`           | ~160         | "an instructor should know this" - near-universal |
+| `faa-testing`             | ~50          | Appears on checkride/knowledge-test content       |
+| `checkride`               | ~40          | Overlaps heavily with `faa-testing`               |
+| `instrument-flying`       | ~35          | IFR-relevant                                      |
+| `weather-decision-making` | ~15          | Weather ADM                                       |
+| `preflight`               | ~12          | Phase-of-flight-ish                               |
+| `vfr-operations`          | ~10          | VFR-relevant                                      |
+| `regulations`             | ~15          | Domain duplicate on non-regulation entries        |
+| `safety`, `approaches`    | 1-2 each     | One-offs                                          |
 
 Problems with the existing shape:
 
@@ -50,24 +50,24 @@ Faceted. Five required axes plus one optional axis plus freeform keywords. Tags 
 
 What kind of artifact the entry represents or cites. Drives "where does this come from" UI and CFR deep-links.
 
-| Value         | Rationale                                                                  |
-| ------------- | -------------------------------------------------------------------------- |
-| `cfr`         | 14 CFR or other title - regulatory text                                    |
-| `aim`         | AIM section - FAA procedural guidance                                      |
-| `pcg`         | Pilot/Controller Glossary entry                                            |
-| `ac`          | Advisory Circular                                                          |
-| `acs`         | Airman Certification Standards                                             |
-| `phak`        | Pilot's Handbook of Aeronautical Knowledge                                 |
-| `afh`         | Airplane Flying Handbook                                                   |
-| `ifh`         | Instrument Flying Handbook                                                 |
-| `poh`         | POH/AFM excerpt (tail-number or model specific)                            |
-| `ntsb`        | NTSB accident report or recommendation                                     |
-| `gajsc`       | GA Joint Steering Committee enhancement                                    |
-| `aopa`        | AOPA article                                                               |
-| `faa-safety`  | FAA Safety Team / FAASTeam publication                                     |
-| `sop`         | Operator or school SOP                                                     |
-| `authored`    | Hand-authored explainer not sourced from a single document                 |
-| `derived`     | Aggregated or derived from multiple sources (e.g. concept cards)           |
+| Value        | Rationale                                                        |
+| ------------ | ---------------------------------------------------------------- |
+| `cfr`        | 14 CFR or other title - regulatory text                          |
+| `aim`        | AIM section - FAA procedural guidance                            |
+| `pcg`        | Pilot/Controller Glossary entry                                  |
+| `ac`         | Advisory Circular                                                |
+| `acs`        | Airman Certification Standards                                   |
+| `phak`       | Pilot's Handbook of Aeronautical Knowledge                       |
+| `afh`        | Airplane Flying Handbook                                         |
+| `ifh`        | Instrument Flying Handbook                                       |
+| `poh`        | POH/AFM excerpt (tail-number or model specific)                  |
+| `ntsb`       | NTSB accident report or recommendation                           |
+| `gajsc`      | GA Joint Steering Committee enhancement                          |
+| `aopa`       | AOPA article                                                     |
+| `faa-safety` | FAA Safety Team / FAASTeam publication                           |
+| `sop`        | Operator or school SOP                                           |
+| `authored`   | Hand-authored explainer not sourced from a single document       |
+| `derived`    | Aggregated or derived from multiple sources (e.g. concept cards) |
 
 Deliberately not included: `wikipedia`, `skyvector`, `foreflight` - these are tools, not authoritative sources. If cited, use `authored` and reference them in the body.
 
@@ -75,26 +75,26 @@ Deliberately not included: `wikipedia`, `skyvector`, `foreflight` - these are to
 
 The subject matter axis. Multi-valued is mandatory - "IFR fuel reserves" is regulations + operations + systems.
 
-| Value                 | Rationale                                                                        |
-| --------------------- | -------------------------------------------------------------------------------- |
-| `regulations`         | Legal/regulatory content (14 CFR, AC, policy)                                    |
-| `weather`             | METARs, forecasts, phenomena, weather ADM                                        |
-| `navigation`          | Navaids, RNAV, charts, routing                                                   |
-| `communications`      | Radio, phraseology, ATC comms                                                    |
-| `airspace`            | Class A-G, SUA, TFR, airspace rules                                              |
-| `aerodynamics`        | Lift, drag, stalls, load factor, performance theory                              |
-| `performance`         | Takeoff/landing distances, climb, cruise numbers (distinct from aerodynamics)    |
-| `weight-balance`      | W&B computation, CG, moment arms (distinct from performance - CFIs teach apart)  |
-| `aircraft-systems`    | Engine, electrical, vacuum, pitot-static, avionics hardware                      |
-| `flight-instruments`  | Gyros, ASI, altimeter, PFD/MFD as instruments (not systems)                      |
-| `procedures`          | Checklists, IAPs, emergency procedures, flow                                     |
-| `human-factors`       | ADM, CRM, SRM, fatigue, hazardous attitudes, illusions                           |
-| `medical`             | Medicals, BasicMed, aeromedical factors, hypoxia                                 |
-| `certification`       | Airman certs, ratings, endorsements, privileges                                  |
-| `maintenance`         | Airworthiness, inspections, MEL, logbooks                                        |
-| `airports`            | Runway markings, lighting, signage, taxi ops, Chart Supplement                   |
-| `emergencies`         | Emergency procedures, engine failure, fire, forced landings                      |
-| `training-ops`        | Instructional technique, FOI, learning theory                                    |
+| Value                | Rationale                                                                       |
+| -------------------- | ------------------------------------------------------------------------------- |
+| `regulations`        | Legal/regulatory content (14 CFR, AC, policy)                                   |
+| `weather`            | METARs, forecasts, phenomena, weather ADM                                       |
+| `navigation`         | Navaids, RNAV, charts, routing                                                  |
+| `communications`     | Radio, phraseology, ATC comms                                                   |
+| `airspace`           | Class A-G, SUA, TFR, airspace rules                                             |
+| `aerodynamics`       | Lift, drag, stalls, load factor, performance theory                             |
+| `performance`        | Takeoff/landing distances, climb, cruise numbers (distinct from aerodynamics)   |
+| `weight-balance`     | W&B computation, CG, moment arms (distinct from performance - CFIs teach apart) |
+| `aircraft-systems`   | Engine, electrical, vacuum, pitot-static, avionics hardware                     |
+| `flight-instruments` | Gyros, ASI, altimeter, PFD/MFD as instruments (not systems)                     |
+| `procedures`         | Checklists, IAPs, emergency procedures, flow                                    |
+| `human-factors`      | ADM, CRM, SRM, fatigue, hazardous attitudes, illusions                          |
+| `medical`            | Medicals, BasicMed, aeromedical factors, hypoxia                                |
+| `certification`      | Airman certs, ratings, endorsements, privileges                                 |
+| `maintenance`        | Airworthiness, inspections, MEL, logbooks                                       |
+| `airports`           | Runway markings, lighting, signage, taxi ops, Chart Supplement                  |
+| `emergencies`        | Emergency procedures, engine failure, fire, forced landings                     |
+| `training-ops`       | Instructional technique, FOI, learning theory                                   |
 
 Deliberately not included: `atc` as a topic - ATC is a source of communications/airspace content, not a topic itself. `safety` as a topic - every topic has safety implications; use `knowledge-kind: safety-concept` instead.
 
@@ -102,12 +102,12 @@ Gap flagged: `weight-balance` and `performance` are separated intentionally. Con
 
 #### 3. `flight-rules` (required, single-valued)
 
-| Value    | Rationale                                                         |
-| -------- | ----------------------------------------------------------------- |
-| `vfr`    | VFR-only applicability                                            |
-| `ifr`    | IFR-only applicability                                            |
-| `both`   | Applies under both rule sets (the common case)                    |
-| `na`     | Not applicable (e.g. ground-only topic, maintenance, org entry)   |
+| Value  | Rationale                                                       |
+| ------ | --------------------------------------------------------------- |
+| `vfr`  | VFR-only applicability                                          |
+| `ifr`  | IFR-only applicability                                          |
+| `both` | Applies under both rule sets (the common case)                  |
+| `na`   | Not applicable (e.g. ground-only topic, maintenance, org entry) |
 
 Single-valued because `vfr + ifr` means `both`. Required because "IFR vs VFR minimums" is a headline user query.
 
@@ -115,49 +115,49 @@ Single-valued because `vfr + ifr` means `both`. Required because "IFR vs VFR min
 
 What kind of knowledge artifact this is. Distinct from `source-type` - a CFR section is `source-type: cfr` but `knowledge-kind: regulation`; an AIM section could be `aim` + `procedure` or `aim` + `concept`.
 
-| Value              | Rationale                                                              |
-| ------------------ | ---------------------------------------------------------------------- |
-| `definition`       | Term defined in 14 CFR 1.1 or PCG - core vocabulary                    |
-| `regulation`       | A rule with required/prohibited behavior                               |
-| `concept`          | Explanatory content (what/why)                                         |
-| `procedure`        | Step sequence (how to do something)                                    |
-| `limit`            | Numeric threshold (V-speeds, VFR mins, fuel reserves)                  |
-| `system`           | Aircraft-system description                                            |
-| `safety-concept`   | Accident categories, frameworks (PAVE, IMSAFE), hazard patterns        |
-| `reference`        | Directory-style entry (organization, facility type, chart legend)      |
+| Value            | Rationale                                                         |
+| ---------------- | ----------------------------------------------------------------- |
+| `definition`     | Term defined in 14 CFR 1.1 or PCG - core vocabulary               |
+| `regulation`     | A rule with required/prohibited behavior                          |
+| `concept`        | Explanatory content (what/why)                                    |
+| `procedure`      | Step sequence (how to do something)                               |
+| `limit`          | Numeric threshold (V-speeds, VFR mins, fuel reserves)             |
+| `system`         | Aircraft-system description                                       |
+| `safety-concept` | Accident categories, frameworks (PAVE, IMSAFE), hazard patterns   |
+| `reference`      | Directory-style entry (organization, facility type, chart legend) |
 
 Useful because "show me all the limits" and "show me all the procedures" are different learning modes.
 
 #### 5. `phase-of-flight` (optional, multi-valued, 0-3 values)
 
-| Value         | Rationale                                              |
-| ------------- | ------------------------------------------------------ |
-| `preflight`   | Planning, briefing, walk-around                        |
-| `ground-ops`  | Taxi, run-up, taxi-back                                |
-| `takeoff`     | Roll, rotation, initial climb                          |
-| `climb`       | Initial and en-route climb                             |
-| `cruise`      | En-route level flight                                  |
-| `descent`     | TOD through approach intercept                         |
-| `approach`    | Approach from IAF/pattern entry to DA/MDA              |
-| `landing`     | Short final through rollout                            |
-| `postflight`  | Shutdown, tie-down, post-flight                        |
-| `emergency`   | Not a phase per se but commonly searched with phases   |
+| Value        | Rationale                                            |
+| ------------ | ---------------------------------------------------- |
+| `preflight`  | Planning, briefing, walk-around                      |
+| `ground-ops` | Taxi, run-up, taxi-back                              |
+| `takeoff`    | Roll, rotation, initial climb                        |
+| `climb`      | Initial and en-route climb                           |
+| `cruise`     | En-route level flight                                |
+| `descent`    | TOD through approach intercept                       |
+| `approach`   | Approach from IAF/pattern entry to DA/MDA            |
+| `landing`    | Short final through rollout                          |
+| `postflight` | Shutdown, tie-down, post-flight                      |
+| `emergency`  | Not a phase per se but commonly searched with phases |
 
 Optional because most definitional/regulatory entries have no natural phase. Required on any entry with `knowledge-kind in (procedure, safety-concept)` or `source-type in (poh, authored procedure)`.
 
 #### 6. `cert-applicability` (optional, multi-valued)
 
-| Value      | Rationale                                                         |
-| ---------- | ----------------------------------------------------------------- |
-| `student`  | Sport/recreational/student pilot content                          |
-| `ppl`      | Private pilot                                                     |
-| `ir`       | Instrument rating                                                 |
-| `cpl`      | Commercial                                                        |
-| `atp`      | ATP                                                               |
-| `cfi`      | CFI certificate and instructor-specific content                   |
-| `cfii`     | CFII                                                              |
-| `mei`      | MEI                                                               |
-| `all`      | Applies to everyone                                               |
+| Value     | Rationale                                       |
+| --------- | ----------------------------------------------- |
+| `student` | Sport/recreational/student pilot content        |
+| `ppl`     | Private pilot                                   |
+| `ir`      | Instrument rating                               |
+| `cpl`     | Commercial                                      |
+| `atp`     | ATP                                             |
+| `cfi`     | CFI certificate and instructor-specific content |
+| `cfii`    | CFII                                            |
+| `mei`     | MEI                                             |
+| `all`     | Applies to everyone                             |
 
 Optional because most content applies broadly; populated when the entry is pointedly rating-specific (e.g. ATP requirements, CFII-only content).
 
@@ -191,26 +191,26 @@ Escape hatch. Closed enums are for the axes that drive UI filters; keywords are 
 
 ## Sample: 18 entries retagged under the proposal
 
-| id                            | old domain       | source-type | aviation-topic                           | flight-rules | knowledge-kind    | phase-of-flight          | cert-applicability | keywords                       |
-| ----------------------------- | ---------------- | ----------- | ---------------------------------------- | ------------ | ----------------- | ------------------------ | ------------------ | ------------------------------ |
-| `metar-wx`                    | weather          | aim         | weather                                  | both         | reference         | preflight                | -                  | observation, surface           |
-| `sigmet-wx`                   | weather          | aim         | weather                                  | both         | safety-concept    | preflight, cruise        | -                  | turbulence, icing              |
-| `imc-wx`                      | weather          | cfr         | weather, regulations                     | both         | definition        | -                        | -                  | instrument-conditions          |
-| `vmc-wx`                      | weather          | cfr         | weather, regulations, airspace           | vfr          | definition        | -                        | -                  | visual-conditions              |
-| `special-vfr-conditions-wx`   | weather          | cfr         | weather, regulations, airspace           | vfr          | regulation        | -                        | ppl                | svfr                           |
-| `ifr-ops`                     | operations       | cfr         | regulations, procedures                  | ifr          | regulation        | -                        | ir                 | instrument-flight-rules        |
-| `vfr-ops`                     | operations       | cfr         | regulations, weather, airspace           | vfr          | regulation        | -                        | ppl                | visual-flight-rules            |
-| `alternate-airport-def`       | operations       | cfr         | regulations, weather, procedures         | ifr          | regulation        | preflight                | ir                 | 1-2-3-rule, fuel-alternate     |
-| `mea-ops`                     | operations       | aim         | navigation, airspace                     | ifr          | limit             | cruise                   | ir                 | minimum-en-route-altitude      |
-| `mda-ops`                     | operations       | cfr         | procedures, navigation                   | ifr          | limit             | approach                 | ir                 | non-precision                  |
-| `va-aircraft`                 | aircraft         | phak        | aerodynamics, performance                | both         | limit             | -                        | -                  | maneuvering-speed, load-factor |
-| `vso-aircraft`                | aircraft         | phak        | performance, flight-instruments          | both         | limit             | approach, landing        | -                  | stall-speed, landing-config    |
-| `afm-aircraft`                | aircraft         | cfr         | regulations, aircraft-systems            | both         | regulation        | preflight                | -                  | poh, operating-limitations     |
-| `cfit-safety`                 | safety           | ntsb        | human-factors, navigation                | both         | safety-concept    | cruise, descent          | -                  | controlled-flight-terrain      |
-| `pave-safety`                 | safety           | phak        | human-factors                            | both         | safety-concept    | preflight                | -                  | risk-assessment                |
-| `loc-nav`                     | navigation       | aim         | navigation                               | ifr          | system            | approach                 | ir                 | localizer, ils-lateral         |
-| `cfi-training`                | training         | cfr         | certification, training-ops              | na           | definition        | -                        | cfi                | flight-instructor              |
-| `firc-reg`                    | regulations      | ac          | certification, training-ops, regulations | na           | regulation        | -                        | cfi                | cfi-renewal                    |
+| id                          | old domain  | source-type | aviation-topic                           | flight-rules | knowledge-kind | phase-of-flight   | cert-applicability | keywords                       |
+| --------------------------- | ----------- | ----------- | ---------------------------------------- | ------------ | -------------- | ----------------- | ------------------ | ------------------------------ |
+| `metar-wx`                  | weather     | aim         | weather                                  | both         | reference      | preflight         | -                  | observation, surface           |
+| `sigmet-wx`                 | weather     | aim         | weather                                  | both         | safety-concept | preflight, cruise | -                  | turbulence, icing              |
+| `imc-wx`                    | weather     | cfr         | weather, regulations                     | both         | definition     | -                 | -                  | instrument-conditions          |
+| `vmc-wx`                    | weather     | cfr         | weather, regulations, airspace           | vfr          | definition     | -                 | -                  | visual-conditions              |
+| `special-vfr-conditions-wx` | weather     | cfr         | weather, regulations, airspace           | vfr          | regulation     | -                 | ppl                | svfr                           |
+| `ifr-ops`                   | operations  | cfr         | regulations, procedures                  | ifr          | regulation     | -                 | ir                 | instrument-flight-rules        |
+| `vfr-ops`                   | operations  | cfr         | regulations, weather, airspace           | vfr          | regulation     | -                 | ppl                | visual-flight-rules            |
+| `alternate-airport-def`     | operations  | cfr         | regulations, weather, procedures         | ifr          | regulation     | preflight         | ir                 | 1-2-3-rule, fuel-alternate     |
+| `mea-ops`                   | operations  | aim         | navigation, airspace                     | ifr          | limit          | cruise            | ir                 | minimum-en-route-altitude      |
+| `mda-ops`                   | operations  | cfr         | procedures, navigation                   | ifr          | limit          | approach          | ir                 | non-precision                  |
+| `va-aircraft`               | aircraft    | phak        | aerodynamics, performance                | both         | limit          | -                 | -                  | maneuvering-speed, load-factor |
+| `vso-aircraft`              | aircraft    | phak        | performance, flight-instruments          | both         | limit          | approach, landing | -                  | stall-speed, landing-config    |
+| `afm-aircraft`              | aircraft    | cfr         | regulations, aircraft-systems            | both         | regulation     | preflight         | -                  | poh, operating-limitations     |
+| `cfit-safety`               | safety      | ntsb        | human-factors, navigation                | both         | safety-concept | cruise, descent   | -                  | controlled-flight-terrain      |
+| `pave-safety`               | safety      | phak        | human-factors                            | both         | safety-concept | preflight         | -                  | risk-assessment                |
+| `loc-nav`                   | navigation  | aim         | navigation                               | ifr          | system         | approach          | ir                 | localizer, ils-lateral         |
+| `cfi-training`              | training    | cfr         | certification, training-ops              | na           | definition     | -                 | cfi                | flight-instructor              |
+| `firc-reg`                  | regulations | ac          | certification, training-ops, regulations | na           | regulation     | -                 | cfi                | cfi-renewal                    |
 
 ## Edge cases the sample surfaced
 
@@ -235,11 +235,11 @@ Escape hatch. Closed enums are for the axes that drive UI filters; keywords are 
 
 Three options evaluated:
 
-| Approach              | Cost                            | Risk                                                         | Accuracy |
-| --------------------- | ------------------------------- | ------------------------------------------------------------ | -------- |
-| Manual per-entry      | High (~5 min x 175 = 15 hours)  | Low - human review each entry                                | Highest  |
-| Regex-first pass only | Low (~2 hours script + review)  | High - misses conceptual mappings                            | ~60%     |
-| Hybrid (recommended)  | Medium (~6 hours)               | Low - agent proposes, human approves in batches              | ~95%     |
+| Approach              | Cost                           | Risk                                            | Accuracy |
+| --------------------- | ------------------------------ | ----------------------------------------------- | -------- |
+| Manual per-entry      | High (~5 min x 175 = 15 hours) | Low - human review each entry                   | Highest  |
+| Regex-first pass only | Low (~2 hours script + review) | High - misses conceptual mappings               | ~60%     |
+| Hybrid (recommended)  | Medium (~6 hours)              | Low - agent proposes, human approves in batches | ~95%     |
 
 **Recommended: hybrid.**
 

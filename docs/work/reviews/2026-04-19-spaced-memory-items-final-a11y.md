@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final A11y Review -- spaced-memory-items
 
 Read-only review across the complete feature branch. Scope is every `.svelte` file
@@ -374,23 +373,23 @@ specific items dominate the Major list.
 
 Spot checks, white background `#ffffff` unless stated:
 
-| Token                              | Used for                    | Ratio      | Pass?          |
-| ---------------------------------- | --------------------------- | ---------- | -------------- |
-| `#0f172a` on `#ffffff`              | body text, headings         | 16.1:1     | AAA            |
-| `#334155` on `#ffffff`              | label text                  | 10.4:1     | AAA            |
-| `#475569` on `#ffffff`              | secondary text              | 7.2:1      | AAA            |
-| `#64748b` on `#ffffff`              | muted text, filter label    | 5.4:1      | AA             |
-| `#94a3b8` on `#ffffff`              | hint, dev-hint, .dm-sub     | 3.0:1      | FAIL AA        |
-| `#1d4ed8` on `#eff6ff`              | badge.domain                | 7.6:1      | AAA            |
-| `#92400e` on `#fffbeb`              | badge.status-suspended      | 7.2:1      | AAA            |
-| `#4b5563` on `#f3f4f6`              | badge.status-archived       | 7.1:1      | AAA            |
-| `#6b21a8` on `#faf5ff`              | badge.source                | 8.5:1      | AAA            |
-| `#b91c1c` on `#ffffff`              | error text .err             | 7.4:1      | AAA            |
-| `#991b1b` on `#fef2f2`              | .error banner text          | 9.1:1      | AAA            |
-| `#1e3a8a` on `#eff6ff`              | .banner (success) text      | 11.8:1     | AAA            |
-| `white` on `#2563eb`                | primary button              | 5.2:1      | AA             |
-| `white` on `#94a3b8` (disabled)     | login disabled button       | 3.0:1      | FAIL AA        |
-| `white` on `#2563eb × 0.6` opacity  | memory disabled button      | ~2.1:1 eff | FAIL AA        |
+| Token                              | Used for                 | Ratio      | Pass?   |
+| ---------------------------------- | ------------------------ | ---------- | ------- |
+| `#0f172a` on `#ffffff`             | body text, headings      | 16.1:1     | AAA     |
+| `#334155` on `#ffffff`             | label text               | 10.4:1     | AAA     |
+| `#475569` on `#ffffff`             | secondary text           | 7.2:1      | AAA     |
+| `#64748b` on `#ffffff`             | muted text, filter label | 5.4:1      | AA      |
+| `#94a3b8` on `#ffffff`             | hint, dev-hint, .dm-sub  | 3.0:1      | FAIL AA |
+| `#1d4ed8` on `#eff6ff`             | badge.domain             | 7.6:1      | AAA     |
+| `#92400e` on `#fffbeb`             | badge.status-suspended   | 7.2:1      | AAA     |
+| `#4b5563` on `#f3f4f6`             | badge.status-archived    | 7.1:1      | AAA     |
+| `#6b21a8` on `#faf5ff`             | badge.source             | 8.5:1      | AAA     |
+| `#b91c1c` on `#ffffff`             | error text .err          | 7.4:1      | AAA     |
+| `#991b1b` on `#fef2f2`             | .error banner text       | 9.1:1      | AAA     |
+| `#1e3a8a` on `#eff6ff`             | .banner (success) text   | 11.8:1     | AAA     |
+| `white` on `#2563eb`               | primary button           | 5.2:1      | AA      |
+| `white` on `#94a3b8` (disabled)    | login disabled button    | 3.0:1      | FAIL AA |
+| `white` on `#2563eb × 0.6` opacity | memory disabled button   | ~2.1:1 eff | FAIL AA |
 
 Summary: three contrast failures, all on low-emphasis / disabled states. Fix by:
 

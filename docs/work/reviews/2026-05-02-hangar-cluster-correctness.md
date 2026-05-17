@@ -224,25 +224,25 @@ Fix: Add `code === 0x2028 || code === 0x2029` to the escape branch.
 
 Re-walked every finding against current main; verdicts below reflect grep + read of the cited files.
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| CRITICAL: cancelled job overwritten by worker | CLOSED | PR #436 -- terminal updates gated on `status = RUNNING` (`worker.ts:223`, `:353`, `:374`) inside transactions |
-| CRITICAL: same-version re-upload silently overwrites | CLOSED | PR #442 -- archive-before-write keyed on `existing.checksum !== sha256` |
-| MAJOR: upload archive + rename non-atomic | CLOSED | PR #442 -- stage-inside-destDir + rollback path |
-| MAJOR: orphaned-running recovery never updates audit log | CLOSED | PR #436 -- `recoverOrphanedRunning` emits per-row audit |
-| MAJOR: claimNext race when targetId clears mid-iteration | CLOSED | PR #436 -- terminal-state writes are now transactional, drop happens after commit |
-| MAJOR: detectDrift loses fields with non-canonical TOML | CLOSED | PR #452 -- decoded-object diffing, baseline-key walking |
-| MAJOR: detectConflict skips deleted rows | CLOSED | PR #452 -- baseline-key walk added |
-| MAJOR: audit-cursor `indexOf` brittleness | CLOSED | PR #438 -- `lastIndexOf` (`audit-queries.ts:108`) |
-| MINOR: zip64 archive silently no-ops | CLOSED | PR #442 wave -- recorded in `media.archiveError` |
-| MINOR: nodeProcessRunner ignores stdin write errors | CLOSED | PR #436 wave -- defensive try/catch around stdin writes |
-| MINOR: writeAllFiles non-rollback | CLOSED | PR #452 -- `.tmp` two-phase write/rename |
-| MINOR: rotateArchives current-edition retention semantic | CLOSED | PR #442 -- `ARCHIVE_RETENTION` JSDoc clarifies "current + N-1 prior", both call paths aligned |
-| MINOR: upload version-only changes silently no-op | CLOSED | PR #442 -- version-only metadata update path |
-| MINOR: `editionsEqual` ignores resolvedAt drift | CLOSED | PR #442 -- `resolvedAt` updated on no-change short-circuit |
-| MINOR: rev-conflict refresh races a third writer | CLOSED | PR #442 -- documented as best-effort message |
-| NIT: claimNext empty-locked-targets `isNotNull` tautology | CLOSED | PR #436 -- conditional `where` composition |
-| NIT: hooks.server.ts `as Role` cast | CLOSED | PR #476 -- `mapBetterAuthSession` extracted, uses `narrowRole` |
-| NIT: emit-aviation-ts misses U+2028/U+2029 | CLOSED | `emit-aviation-ts.ts:63-68` adds the LINE/PARAGRAPH SEPARATOR escape |
+| Finding                                                   | Verdict | Closure                                                                                                       |
+| --------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| CRITICAL: cancelled job overwritten by worker             | CLOSED  | PR #436 -- terminal updates gated on `status = RUNNING` (`worker.ts:223`, `:353`, `:374`) inside transactions |
+| CRITICAL: same-version re-upload silently overwrites      | CLOSED  | PR #442 -- archive-before-write keyed on `existing.checksum !== sha256`                                       |
+| MAJOR: upload archive + rename non-atomic                 | CLOSED  | PR #442 -- stage-inside-destDir + rollback path                                                               |
+| MAJOR: orphaned-running recovery never updates audit log  | CLOSED  | PR #436 -- `recoverOrphanedRunning` emits per-row audit                                                       |
+| MAJOR: claimNext race when targetId clears mid-iteration  | CLOSED  | PR #436 -- terminal-state writes are now transactional, drop happens after commit                             |
+| MAJOR: detectDrift loses fields with non-canonical TOML   | CLOSED  | PR #452 -- decoded-object diffing, baseline-key walking                                                       |
+| MAJOR: detectConflict skips deleted rows                  | CLOSED  | PR #452 -- baseline-key walk added                                                                            |
+| MAJOR: audit-cursor `indexOf` brittleness                 | CLOSED  | PR #438 -- `lastIndexOf` (`audit-queries.ts:108`)                                                             |
+| MINOR: zip64 archive silently no-ops                      | CLOSED  | PR #442 wave -- recorded in `media.archiveError`                                                              |
+| MINOR: nodeProcessRunner ignores stdin write errors       | CLOSED  | PR #436 wave -- defensive try/catch around stdin writes                                                       |
+| MINOR: writeAllFiles non-rollback                         | CLOSED  | PR #452 -- `.tmp` two-phase write/rename                                                                      |
+| MINOR: rotateArchives current-edition retention semantic  | CLOSED  | PR #442 -- `ARCHIVE_RETENTION` JSDoc clarifies "current + N-1 prior", both call paths aligned                 |
+| MINOR: upload version-only changes silently no-op         | CLOSED  | PR #442 -- version-only metadata update path                                                                  |
+| MINOR: `editionsEqual` ignores resolvedAt drift           | CLOSED  | PR #442 -- `resolvedAt` updated on no-change short-circuit                                                    |
+| MINOR: rev-conflict refresh races a third writer          | CLOSED  | PR #442 -- documented as best-effort message                                                                  |
+| NIT: claimNext empty-locked-targets `isNotNull` tautology | CLOSED  | PR #436 -- conditional `where` composition                                                                    |
+| NIT: hooks.server.ts `as Role` cast                       | CLOSED  | PR #476 -- `mapBetterAuthSession` extracted, uses `narrowRole`                                                |
+| NIT: emit-aviation-ts misses U+2028/U+2029                | CLOSED  | `emit-aviation-ts.ts:63-68` adds the LINE/PARAGRAPH SEPARATOR escape                                          |
 
 Total: 18 closed / 0 open. All critical + major + minor + nit findings closed across PRs #436, #438, #442, #452, #476 plus follow-ups.

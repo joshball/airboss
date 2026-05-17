@@ -7,13 +7,13 @@ Product requirements for the `apps/study` surface. The detailed feature specs li
 The study app ships five top-level sections, locked by the `ia-flow.spec.ts`
 nav contract and the `page-anchor` static guard:
 
-| Section   | Path           | Owns                                                    |
-| --------- | -------------- | ------------------------------------------------------- |
-| Home      | `/study`       | Daily CTA, today's session, pressure tiles              |
-| Learn     | `/study/learn` | Cards (`/memory`), Reps (`/reps`), Read (`/library`)    |
-| Program   | `/program`     | Quals / Goal / Plan / Coverage tabs                     |
-| Insights  | `/insights`    | Stats, Calibration, Lens (handbook + weakness)          |
-| Reference | `/reference`   | Knowledge graph, Glossary, Library link                 |
+| Section   | Path           | Owns                                                 |
+| --------- | -------------- | ---------------------------------------------------- |
+| Home      | `/study`       | Daily CTA, today's session, pressure tiles           |
+| Learn     | `/study/learn` | Cards (`/memory`), Reps (`/reps`), Read (`/library`) |
+| Program   | `/program`     | Quals / Goal / Plan / Coverage tabs                  |
+| Insights  | `/insights`    | Stats, Calibration, Lens (handbook + weakness)       |
+| Reference | `/reference`   | Knowledge graph, Glossary, Library link              |
 
 Memory and Reps URLs intentionally stay where they are; the Learn section is the unifying nav surface, not a relocation. Legacy paths (`/dashboard`, `/credentials`, `/goals`, `/plans`, `/calibration`, `/lens/*`, `/knowledge/*`, `/glossary/*`) 301-redirect to their canonical homes via `apps/study/src/lib/server/legacy-redirects.ts`. See work package: [study-app-ia-cleanup](../../.archive/work-packages/study-app-ia-cleanup/).
 

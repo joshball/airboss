@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     6.1
 Title:           Mixed Campaign Scenario
 Module:          6
@@ -19,19 +19,19 @@ Pattern:         Integrated Capstone
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4, FAA_TOPIC.A_5, FAA_TOPIC.A_11, FAA_TOPIC.A_9, FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'RM-1', 'RM-2', 'AC-1', 'AV-1', 'ES-1', 'PS-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Variable (shifts between archetypes)
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1 -- Morning Briefing
 
-```
+```text
 id:           tick_1
 scene:        FBO briefing room, 8 AM. Weather is 3,500 scattered, visibility 8 miles, forecast to go 2,000 broken by noon. You check the schedule: 8:30 flight review, 10:30 training flight, and a walk-in is already sitting in the lobby. Your coffee is getting cold.
 studentSpeech:(Phone rings) Hey, this is your 8:30. I'm running late. Can we push to 9? I was out late last night and I need another cup of coffee.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2 -- Flight Review Assessment
 
-```
+```text
 id:           tick_2
 scene:        9 AM. The flight review pilot arrives. Looks tired but alert. Coffee in hand. You have 90 minutes before the weather window closes and 90 minutes before your next student. Ground review reveals solid knowledge but the pilot hasn't flown in 4 months.
 studentSpeech:I know I'm rusty. But I've been studying all week. Can we just do a quick flight and I'll come back for more practice after the review?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3 -- Training Flight Decision
 
-```
+```text
 id:           tick_3
 scene:        10:15 AM. Flight review is done (or partially done). Weather has dropped to 2,500 broken, visibility 6 miles. Your 10:30 student arrives. This student is behind schedule for their stage check and is anxious about falling further behind. The student's parents have called the school twice this week asking about progress.
 studentSpeech:Are we still flying? I really need this lesson. My stage check is next week and I'm not ready. My parents are going to be upset if I fall further behind.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4 -- Walk-In Prospective Student
 
-```
+```text
 id:           tick_4
 scene:        11:30 AM. Between sessions. The walk-in approaches you. They speak with an accent and mention they're interested in starting flight training. They have questions about the process and requirements.
 studentSpeech:Hello, I would like to learn to fly. I am here from overseas on a work visa. What do I need to begin?
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ### Tick 5 -- Day Wrap-Up
 
-```
+```text
 id:           tick_5
 scene:        1 PM. Weather has gone IFR. The walk-in is a foreign national -- you've explained the TSA process. Your flight review pilot calls back asking if they can come tomorrow. Your training student's parents have called again. The chief pilot wants a status update.
 studentSpeech:(Chief pilot) How'd the morning go? Any issues I should know about?
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
 ```
 

@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Overall architectural posture is strong. The dependency DAG is clean with no circular deps, no cross-BC imports, no libs importing from apps, no apps importing from other apps, and no direct Drizzle usage in app routes. BC boundaries are respected: `libs/bc/study` and `libs/bc/sim` both consume only primitive libs (`constants`, `db`, `utils`, `auth`) and never each other; `libs/aviation` depends only on `@ab/constants`. ADR 012 execution is complete -- `/reps/session` is gone, `SESSION_START` is the single entry point, and no dead inline references linger.

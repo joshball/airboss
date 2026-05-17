@@ -49,13 +49,13 @@ Target: ~500 nodes across all domains and cert levels. Start with 30 well-develo
 
 ### Typed edges
 
-| Edge type | Meaning | Constraint |
-| --- | --- | --- |
-| `requires` | Must understand X before Y | Forms a DAG. No cycles. Specific, not broad. |
-| `deepens` | More advanced treatment of same concept | Same domain, different depth |
-| `applies` | Uses this knowledge in practice | Cross-domain practical connection |
-| `teaches` | Pedagogical version of a technical topic | CFI nodes pointing to the topic they teach |
-| `related` | Loosely connected, useful for cross-reference | Bidirectional, not load-bearing |
+| Edge type  | Meaning                                       | Constraint                                   |
+| ---------- | --------------------------------------------- | -------------------------------------------- |
+| `requires` | Must understand X before Y                    | Forms a DAG. No cycles. Specific, not broad. |
+| `deepens`  | More advanced treatment of same concept       | Same domain, different depth                 |
+| `applies`  | Uses this knowledge in practice               | Cross-domain practical connection            |
+| `teaches`  | Pedagogical version of a technical topic      | CFI nodes pointing to the topic they teach   |
+| `related`  | Loosely connected, useful for cross-reference | Bidirectional, not load-bearing              |
 
 **Discipline rule:** `requires` edges must be specific. "Instrument approaches `requires` airspace classes" is good. "Instrument approaches `requires` VFR operations" is too broad. If an edge points to something larger than a single node, it's pointing to the wrong thing.
 
@@ -114,15 +114,15 @@ mastery_criteria: string          # what "mastered" means for this node
 
 Every node supports this learning sequence:
 
-| Phase | Purpose | Content type |
-| --- | --- | --- |
-| **Context** | Why this matters, real-world framing | Scenario setup, narrative |
-| **Problem** | Concrete situation requiring this knowledge | Question, thought experiment |
-| **Discover** | Learner reasons toward the answer | Guided questions, exercises, "what would you design?" |
-| **Reveal** | Authoritative answer with exact source | Regulation text, formula, reference location |
-| **Practice** | Exercise the knowledge | Cards, drills, reps, back-of-envelope calculations |
-| **Connect** | Relationships to other knowledge | Links to prerequisites/dependents, "what changes if..." |
-| **Verify** | Apply in a novel situation | Assessment scenario, teaching exercise |
+| Phase        | Purpose                                     | Content type                                            |
+| ------------ | ------------------------------------------- | ------------------------------------------------------- |
+| **Context**  | Why this matters, real-world framing        | Scenario setup, narrative                               |
+| **Problem**  | Concrete situation requiring this knowledge | Question, thought experiment                            |
+| **Discover** | Learner reasons toward the answer           | Guided questions, exercises, "what would you design?"   |
+| **Reveal**   | Authoritative answer with exact source      | Regulation text, formula, reference location            |
+| **Practice** | Exercise the knowledge                      | Cards, drills, reps, back-of-envelope calculations      |
+| **Connect**  | Relationships to other knowledge            | Links to prerequisites/dependents, "what changes if..." |
+| **Verify**   | Apply in a novel situation                  | Assessment scenario, teaching exercise                  |
 
 **Pedagogy rule:** Discovery first, regulation last. Lead with WHY. Let the learner derive the answer before revealing the authoritative source. The regulation confirms reasoning, not replaces it.
 
@@ -307,16 +307,16 @@ Start with 30 well-developed nodes to test the model before scaling to 500.
 
 Per [MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md), products are built in order of need. This ADR's knowledge graph work fits in as follows:
 
-| Order | Work | Why this order |
-| ----- | ---- | -------------- |
-| 1 | Spaced Memory Items MVP | Prove the three-tool mechanism layer works with personal cards before introducing graph-managed content |
-| 2 | Decision Reps MVP | Same -- prove the scenarios schema and rep flow independently |
-| 3 | Calibration Tracker MVP | Same -- needs data from 1 and 2 |
-| 4 | **Knowledge graph skeleton** | The 30-node experiment. 3-5 nodes fully built, 25 skeleton. Validates the model. |
-| 5 | Study Plan + Session Engine | Once the graph exists, build the "I want to study" recommender |
-| 6 | Learning Dashboard | Bird's-eye view of mastery across the graph |
-| 7 | Scale to ~500 nodes | Gradual content fill as Joshua studies |
-| -- | FIRC migration into airboss | After study MVP proven -- separate from knowledge graph work |
+| Order | Work                         | Why this order                                                                                          |
+| ----- | ---------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 1     | Spaced Memory Items MVP      | Prove the three-tool mechanism layer works with personal cards before introducing graph-managed content |
+| 2     | Decision Reps MVP            | Same -- prove the scenarios schema and rep flow independently                                           |
+| 3     | Calibration Tracker MVP      | Same -- needs data from 1 and 2                                                                         |
+| 4     | **Knowledge graph skeleton** | The 30-node experiment. 3-5 nodes fully built, 25 skeleton. Validates the model.                        |
+| 5     | Study Plan + Session Engine  | Once the graph exists, build the "I want to study" recommender                                          |
+| 6     | Learning Dashboard           | Bird's-eye view of mastery across the graph                                                             |
+| 7     | Scale to ~500 nodes          | Gradual content fill as Joshua studies                                                                  |
+| --    | FIRC migration into airboss  | After study MVP proven -- separate from knowledge graph work                                            |
 
 **Why the tools come first:** The tools need to work with simple personal content before we complicate them with graph-linked content. The `node_id` field on cards/scenarios gets added during step 4, not prematurely during steps 1-3.
 

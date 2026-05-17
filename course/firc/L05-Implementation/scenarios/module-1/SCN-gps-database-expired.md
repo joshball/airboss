@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.1
 Title:           IFR Cross-Country in a G1000 Cessna
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-3', 'RC-4']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Cruising IFR at 6,000. Student has the GPS approach loaded and is reviewing the plate on the iPad. You notice the "DATABASE EXPIRED" annunciation on the GPS unit. The student hasn't mentioned it.
 studentSpeech:OK, I've got the RNAV 24 loaded. Straight-in from FIXXX, pretty simple approach. Ready when ATC gives us the clearance.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student sees the DATABASE EXPIRED warning. Looks confused, then dismissive. Taps the GPS screen and the approach is still loaded and appears to work.
 studentSpeech:Oh, it's expired? But the approach is still in there and it matches the plate. It should be fine, right? It's only 10 days.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        ATC clears you for the RNAV 24 approach. Student begins configuring for the approach, following the GPS guidance without question. You notice the step-down altitude at one fix differs from the current plate by 100 feet -- the database has an old amendment.
 studentSpeech:Cleared for the approach. GPS is guiding me in. I'll just follow the magenta line.
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student descends to the GPS-indicated step-down altitude, which is 100 feet lower than the current plate. Terrain clearance is now compromised. TAWS (if equipped) gives a caution alert.
 studentSpeech:The GPS says 2,400 here but the plate says 2,500. Which one is right? Should I climb back up?
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (direct/take_controls)

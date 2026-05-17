@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.9
 Title:           Cross-Country Planning Session Before Checkride
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_8]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-4', 'ES-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Private Pilot Student (Advanced)
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Classroom with flight planning materials spread out. Student has printed a weather briefing and is reviewing NOTAMs for their planned cross-country route. Their study guide is from 2019.
 studentSpeech:I've got the NOTAMs here. There are a few FDC NOTAMs and some L NOTAMs. My study guide says to focus on FDC NOTAMs first because they're the most critical. Is that right?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student realizes their study guide is outdated. Asks about what changed and why it matters.
 studentSpeech:Oh, this guide is from before the changes. What's different now? And will the examiner care if I use the old terminology on the checkride?
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is engaged and wants to practice interpreting NOTAMs in the current format. Pulls up a live briefing.
 studentSpeech:Can we go through the actual NOTAMs for our route? I want to make sure I'm reading them correctly. There's one here about a runway closure and another about GPS testing. How do I prioritize these?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student asks about staying current with regulatory changes in general, not just NOTAMs. They're realizing their study materials may have other outdated content.
 studentSpeech:This makes me nervous. What else might be outdated in my study materials? How do I make sure I'm studying current information? I've been using this guide for months.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

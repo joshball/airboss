@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The study schema is cohesive, well-documented, and internally consistent. ULID-prefixed ids flow through `@ab/utils`, CHECK constraints mirror the `@ab/constants` value sets, and the ADR-012 phase-4/phase-5 changes (`rep_attempt` drop, `session_item_result` rep-outcome columns + two aggregator indexes) are in place and match the calibration/dashboard query shapes. The main real gap is that `session_item_result.user_id` is denormalized for aggregator speed but has no foreign key -- it can drift from `session.user_id`, which is the single correctness risk worth calling out. Secondary findings are all about schema hygiene: the `SCHEMAS.AUDIT` namespace is in the drizzle filter but no table uses it; `cardState` has no `updatedAt`; the partial UNIQUE index for "one active plan per user" lives in a hand-applied SQL file that is not wired into a repeatable migration pipeline; a handful of FKs to `bauth_user` omit `onUpdate`, which matters if better-auth ever rotates user ids. No FK is missing on a write-path column, and every hot aggregator column is index-covered.

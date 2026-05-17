@@ -17,19 +17,19 @@ counts:
 
 Walked every finding against current main login pages. All 11 closed.
 
-| Severity | Finding                                              | Verdict                                                                                       |
-| -------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| MAJOR    | Submit failure does not move focus                   | CLOSED -- `enhance` callback focuses password input on `result.type === 'failure'` (both apps) |
-| MAJOR    | H1 does not describe the page                        | CLOSED -- "Sign in to airboss study" / "Sign in to airboss hangar" H1                         |
-| MINOR    | Dev-account quick-fill buttons stay enabled on submit | CLOSED -- `disabled={loading}` on each `.dev-btn` (study:106, hangar:104)                     |
-| MINOR    | Dev-button focus ring kills native outline           | CLOSED -- `outline: 2px solid transparent; outline-offset: 2px` preserves forced-colors ring  |
-| MINOR    | Dev hint password text uses `--ink-faint`            | CLOSED -- hangar no longer renders the dev password to screen at all                          |
-| MINOR    | Loading state on submit not announced to AT          | CLOSED -- `<span class="sr-only" aria-live="polite">{loading ? 'Signing in...' : ''}</span>`  |
-| MINOR    | Email input retains stale value on failure           | CLOSED -- `invalid={!!form?.error}` on both inputs threads `aria-invalid`                     |
-| NIT      | Title uses double-hyphen instead of single-hyphen    | CLOSED -- `<title>Sign in - airboss study</title>` / `Sign in - airboss hangar`               |
-| NIT      | `<header class="hd">` adds extra landmark            | CLOSED -- replaced with `<div class="hd">` in both pages                                      |
-| NIT      | Required asterisk has no programmatic legend         | CLOSED -- low priority on a 2-field form; both fields are required, native `required` covers  |
-| NIT      | `<svelte:head>` title is the only place page named   | CLOSED -- subsumed by H1 fix above                                                            |
+| Severity | Finding                                               | Verdict                                                                                        |
+| -------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| MAJOR    | Submit failure does not move focus                    | CLOSED -- `enhance` callback focuses password input on `result.type === 'failure'` (both apps) |
+| MAJOR    | H1 does not describe the page                         | CLOSED -- "Sign in to airboss study" / "Sign in to airboss hangar" H1                          |
+| MINOR    | Dev-account quick-fill buttons stay enabled on submit | CLOSED -- `disabled={loading}` on each `.dev-btn` (study:106, hangar:104)                      |
+| MINOR    | Dev-button focus ring kills native outline            | CLOSED -- `outline: 2px solid transparent; outline-offset: 2px` preserves forced-colors ring   |
+| MINOR    | Dev hint password text uses `--ink-faint`             | CLOSED -- hangar no longer renders the dev password to screen at all                           |
+| MINOR    | Loading state on submit not announced to AT           | CLOSED -- `<span class="sr-only" aria-live="polite">{loading ? 'Signing in...' : ''}</span>`   |
+| MINOR    | Email input retains stale value on failure            | CLOSED -- `invalid={!!form?.error}` on both inputs threads `aria-invalid`                      |
+| NIT      | Title uses double-hyphen instead of single-hyphen     | CLOSED -- `<title>Sign in - airboss study</title>` / `Sign in - airboss hangar`                |
+| NIT      | `<header class="hd">` adds extra landmark             | CLOSED -- replaced with `<div class="hd">` in both pages                                       |
+| NIT      | Required asterisk has no programmatic legend          | CLOSED -- low priority on a 2-field form; both fields are required, native `required` covers   |
+| NIT      | `<svelte:head>` title is the only place page named    | CLOSED -- subsumed by H1 fix above                                                             |
 
 ## Summary
 

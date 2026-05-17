@@ -6,13 +6,13 @@ Currency is the FAA minimum. Proficiency is the actual standard. These products 
 
 ## Products
 
-| ID | Name                 | Priority | Status |
-| -- | -------------------- | -------- | ------ |
-| prd:prof:ten-minute-ticker | Ten-Minute Ticker    | 2        | idea   |
-| prd:prof:decision-reps | Decision Reps        | 1        | idea   |
-| prd:prof:situational-replay | Situational Replay   | 3        | idea   |
+| ID                            | Name                 | Priority | Status |
+| ----------------------------- | -------------------- | -------- | ------ |
+| prd:prof:ten-minute-ticker    | Ten-Minute Ticker    | 2        | idea   |
+| prd:prof:decision-reps        | Decision Reps        | 1        | idea   |
+| prd:prof:situational-replay   | Situational Replay   | 3        | idea   |
 | prd:prof:plate-reading-drills | Plate Reading Drills | 3        | idea   |
-| prd:prof:wx-calls | WX Calls             | 2        | idea   |
-| prd:prof:avionics-trainer | Avionics Trainer     | 1        | idea   |
-| prd:prof:spaced-memory-items | Spaced Memory Items  | 1        | idea   |
-| prd:prof:calibration-tracker | Calibration Tracker  | 2        | idea   |
+| prd:prof:wx-calls             | WX Calls             | 2        | idea   |
+| prd:prof:avionics-trainer     | Avionics Trainer     | 1        | idea   |
+| prd:prof:spaced-memory-items  | Spaced Memory Items  | 1        | idea   |
+| prd:prof:calibration-tracker  | Calibration Tracker  | 2        | idea   |

@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Overall UX quality across the study app is solid: confirmation patterns, undo windows, banner/toast pairings, optimistic updates with rollback, and InfoTip-driven explanations are consistently applied per DESIGN_PRINCIPLES.md #6. The main weaknesses cluster in `apps/hangar/`, where a row of bare `Rescan / Revalidate / Build / Size report` buttons fires server work with zero confirmation, no in-button progress, and no toast/banner on success; that pattern repeats on the source detail page. Several customer-facing surfaces leak developer/admin language (handbook ingest commands, "Phase 2 of wp-help-library-content", "Editing coming in a follow-up"), and a handful of pages use em-dash separators or carry interpunct/em-dash glyphs that violate the project text style. No critical (data-loss / blocked-task) issues were found.

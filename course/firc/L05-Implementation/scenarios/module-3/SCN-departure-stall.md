@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.3
 Title:           Soft-Field Takeoff Practice
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AC-1', 'AC-2', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Timid Student
 Parameters:
   skillLevel:         0.3
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Just airborne, 50 feet AGL. Nose pitching up through 12 degrees. Airspeed 62 knots and not accelerating. Student is gripping yoke tightly and staring at the end of the runway.
 studentSpeech:We're climbing, right? This feels normal?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        100 feet AGL. Pitch attitude 15 degrees. Airspeed 58 knots, decaying. Student has not adjusted pitch despite prior input. Hands are rigid on the yoke.
 studentSpeech:I don't want to push the nose down -- we'll hit the ground.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        120 feet AGL. Pitch 17 degrees. Airspeed 52 knots. Stall horn begins chirping. Student's eyes are wide and hands are frozen on the yoke.
 studentSpeech:...
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        110 feet AGL. Airspeed 47 knots. Full stall horn. Left wing drops slightly. Student is motionless.
 studentSpeech:...
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (direct/take_controls)

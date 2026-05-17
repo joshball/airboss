@@ -233,14 +233,14 @@ Where the link text is required and the URL is the identifier. The renderer rewr
 
 The link text supports tokens that the registry substitutes at render time:
 
-| Token | Substitutes with | Example |
-| --- | --- | --- |
-| `@short` | `canonical_short` field | `§91.103` |
-| `@formal` | `canonical_formal` field | `14 CFR § 91.103` |
-| `@title` | `canonical_title` field | `Preflight action` |
-| `@cite` | `canonical_short` + `canonical_title` | `§91.103 Preflight action` |
-| `@list` | normalized comma list (for multi-refs) | `§91.103, §91.104, §91.106, §91.107` |
-| `@as-of` | the pinned edition (if any) | `2026` |
+| Token     | Substitutes with                       | Example                              |
+| --------- | -------------------------------------- | ------------------------------------ |
+| `@short`  | `canonical_short` field                | `§91.103`                            |
+| `@formal` | `canonical_formal` field               | `14 CFR § 91.103`                    |
+| `@title`  | `canonical_title` field                | `Preflight action`                   |
+| `@cite`   | `canonical_short` + `canonical_title`  | `§91.103 Preflight action`           |
+| `@list`   | normalized comma list (for multi-refs) | `§91.103, §91.104, §91.106, §91.107` |
+| `@as-of`  | the pinned edition (if any)            | `2026`                               |
 
 Tokens can mix with literal text:
 
@@ -290,12 +290,12 @@ references_pinned_to: 2026          # optional; means "all unpinned references i
 
 ADR 018 has three tiers (source / derivative / generated). This ADR introduces a fourth between derivative and generated:
 
-| Tier | What it is | Where | Audience |
-| --- | --- | --- | --- |
-| **Source** | The original artifact published by an outside authority | `$AIRBOSS_HANDBOOK_CACHE/`, gitignored | Pipeline only |
-| **Derivative** | Pipeline-extracted markdown, figures, tables, manifest | In repo, committed | Engineers, auditors, re-seed source |
-| **Indexed** | DB rows mirroring derivatives, full-text index, embeddings | Postgres | Runtime, end users |
-| **Generated** | Computed platform artifacts (mastery scores, leaderboards, recommendations) | Postgres (different tables) | Runtime |
+| Tier           | What it is                                                                  | Where                                  | Audience                            |
+| -------------- | --------------------------------------------------------------------------- | -------------------------------------- | ----------------------------------- |
+| **Source**     | The original artifact published by an outside authority                     | `$AIRBOSS_HANDBOOK_CACHE/`, gitignored | Pipeline only                       |
+| **Derivative** | Pipeline-extracted markdown, figures, tables, manifest                      | In repo, committed                     | Engineers, auditors, re-seed source |
+| **Indexed**    | DB rows mirroring derivatives, full-text index, embeddings                  | Postgres                               | Runtime, end users                  |
+| **Generated**  | Computed platform artifacts (mastery scores, leaderboards, recommendations) | Postgres (different tables)            | Runtime                             |
 
 The split between *derivative* and *indexed*:
 
@@ -376,17 +376,17 @@ No new "composite identifier" registry type. The grouping is expressive at the l
 
 This ADR specifies the design. Implementation lands in subsequent work packages:
 
-| Phase | Work package | Deliverable |
-| --- | --- | --- |
-| 0 | This ADR | Decision document, design pressure analysis |
-| 1 | reference-identifier-scheme-validator | Markdown parser that recognizes identifier-shaped URLs; validator passes static-validation rules at `bun run check` time. Rejects malformed identifiers before any registry exists. |
-| 2 | reference-source-registry-phase-1 | Initial registry: Part 61, Part 91, Part 67, Part 68, NTSB Part 830, the dozen frequently-cited ACs, the handful of famous Chief Counsel letters. Hand-authored. |
-| 3 | reference-renderer-runtime | Renderer in `apps/study/` that resolves identifiers at render time, performs token substitution, links to live URLs (or derivatives if available). |
-| 4 | reference-source-versioning-tooling | The annual-rollover diff tool. Compares editions, propagates auto-verifies, surfaces human-review reports. |
-| 5 | reference-cfr-ingestion-bulk | Full eCFR ingestion populating the registry for every section in Title 14 (and 49 CFR 830, 1552). |
-| 6 | reference-handbook-ingestion | PHAK and AFH ingestion. Per the source-cache pattern in ADR 018. |
-| 7 | reference-aim-ingestion | AIM ingestion. |
-| 8 | reference-ac-ingestion | AC ingestion (catalog only; full text where licensing permits). |
+| Phase | Work package                          | Deliverable                                                                                                                                                                         |
+| ----- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0     | This ADR                              | Decision document, design pressure analysis                                                                                                                                         |
+| 1     | reference-identifier-scheme-validator | Markdown parser that recognizes identifier-shaped URLs; validator passes static-validation rules at `bun run check` time. Rejects malformed identifiers before any registry exists. |
+| 2     | reference-source-registry-phase-1     | Initial registry: Part 61, Part 91, Part 67, Part 68, NTSB Part 830, the dozen frequently-cited ACs, the handful of famous Chief Counsel letters. Hand-authored.                    |
+| 3     | reference-renderer-runtime            | Renderer in `apps/study/` that resolves identifiers at render time, performs token substitution, links to live URLs (or derivatives if available).                                  |
+| 4     | reference-source-versioning-tooling   | The annual-rollover diff tool. Compares editions, propagates auto-verifies, surfaces human-review reports.                                                                          |
+| 5     | reference-cfr-ingestion-bulk          | Full eCFR ingestion populating the registry for every section in Title 14 (and 49 CFR 830, 1552).                                                                                   |
+| 6     | reference-handbook-ingestion          | PHAK and AFH ingestion. Per the source-cache pattern in ADR 018.                                                                                                                    |
+| 7     | reference-aim-ingestion               | AIM ingestion.                                                                                                                                                                      |
+| 8     | reference-ac-ingestion                | AC ingestion (catalog only; full text where licensing permits).                                                                                                                     |
 
 Phases 1-3 are the "we can author and render lessons that reference regulations" milestone. Phase 4 is the "we survive a CFR annual update without manual chaos" milestone. Phases 5-8 are the "lessons render with full text inline" milestone.
 

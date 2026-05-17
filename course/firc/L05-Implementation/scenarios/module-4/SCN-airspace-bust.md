@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.2
 Title:           VFR Cross-Country at 4,500 Near Class B
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_2, FAA_TOPIC.A_6]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-2', 'OD-3', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Eager Cross-Country Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        4,500 feet, GPS shows on course but the aircraft is 1 mile north of the planned track -- inside the lateral buffer you had built in. The Class B shelf is 2 miles north. Student is looking at the GPS track, satisfied.
 studentSpeech:Right on track. GPS shows us dead center on the magenta line. Five minutes to the next waypoint.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Wind has pushed the aircraft further north. Now 1.5 miles from the Class B lateral boundary. At the current drift rate, you'll be at the boundary in about 3 minutes. Student is adjusting the GPS zoom.
 studentSpeech:Hmm, we're a little north. The GPS shows some airspace shading up there but I'm not sure what the altitudes are. We're at 4,500 so we should be above whatever it is, right?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student either corrected course or didn't. If not corrected, the aircraft is now 0.5 miles from the Class B boundary. ATC calls on guard frequency: "[Aircraft type] heading northbound near the Class Bravo boundary, contact approach on 124.5."
 studentSpeech:Uh oh. That's us, isn't it? Are we in the Bravo? I didn't mean to--
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_unsafe (ask/prompt)
               \         \-> terminal_safe (coach/direct/take_controls)
                \-> terminal_safe (direct)

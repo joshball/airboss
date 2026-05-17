@@ -208,15 +208,15 @@ TOC is sticky on desktop, collapses above the content on mobile. Search lives in
 
 Seven pages first, chosen because each closes a specific UX-review gap:
 
-| Page                  | UX-review issues closed                                                                                                                                 |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `getting-started`     | Login dev-accounts noise / no signup path in prod; no first-time orientation                                                                             |
-| `dashboard`           | h1 vs nav label mismatch; unexplained panels; deep-link filter chips                                                                                     |
-| `memory-review`       | Review rating undo gap; confidence-prompt randomness; Again semantics                                                                                    |
-| `reps-session`        | Undocumented keyboard shortcuts; Skip-permanently fat-finger risk; confidence-sampling predictability                                                    |
-| `calibration`         | Calibration page has no explainer once filled; overconfident vs underconfident reading; what to do about a gap                                           |
-| `knowledge-graph`     | 7-phase stepper without completion tracking narrative; dual-gate mastery; discovery-first pedagogy                                                        |
-| `keyboard-shortcuts`  | Every undocumented shortcut in the app (Cmd+Enter on new card; review rating keys; session `/` `[` `]` Escape)                                            |
+| Page                 | UX-review issues closed                                                                                        |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `getting-started`    | Login dev-accounts noise / no signup path in prod; no first-time orientation                                   |
+| `dashboard`          | h1 vs nav label mismatch; unexplained panels; deep-link filter chips                                           |
+| `memory-review`      | Review rating undo gap; confidence-prompt randomness; Again semantics                                          |
+| `reps-session`       | Undocumented keyboard shortcuts; Skip-permanently fat-finger risk; confidence-sampling predictability          |
+| `calibration`        | Calibration page has no explainer once filled; overconfident vs underconfident reading; what to do about a gap |
+| `knowledge-graph`    | 7-phase stepper without completion tracking narrative; dual-gate mastery; discovery-first pedagogy             |
+| `keyboard-shortcuts` | Every undocumented shortcut in the app (Cmd+Enter on new card; review rating keys; session `/` `[` `]` Escape) |
 
 Pages are ordered roughly by how often a new user would hit them. `getting-started` first because it is the entry point a brand-new user needs. `keyboard-shortcuts` last because it is reference material, not first-read.
 

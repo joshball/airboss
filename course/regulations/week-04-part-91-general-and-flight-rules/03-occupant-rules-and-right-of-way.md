@@ -108,14 +108,14 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The split that bites pilots:
 
-| Question                                              | §91.105                            | §91.107                             |
-| ----------------------------------------------------- | ---------------------------------- | ----------------------------------- |
-| Who is covered?                                       | Required flight crewmembers only   | Every person on board               |
-| When does it apply?                                   | Takeoff, landing, en route         | Movement on surface, takeoff, landing |
-| Seatbelt required at the station/seat?                | Yes, while at station              | Yes, during covered phases          |
-| Shoulder harness required?                            | Yes, takeoff and landing, post-1978 | Yes, takeoff and landing, if installed |
-| Brief the person?                                     | Not the section's concern           | PIC must brief                      |
-| Lap child under two?                                  | Not addressed (passenger rule)      | Held by adult OK; carrier-approved CRS preferred |
+| Question                               | §91.105                             | §91.107                                          |
+| -------------------------------------- | ----------------------------------- | ------------------------------------------------ |
+| Who is covered?                        | Required flight crewmembers only    | Every person on board                            |
+| When does it apply?                    | Takeoff, landing, en route          | Movement on surface, takeoff, landing            |
+| Seatbelt required at the station/seat? | Yes, while at station               | Yes, during covered phases                       |
+| Shoulder harness required?             | Yes, takeoff and landing, post-1978 | Yes, takeoff and landing, if installed           |
+| Brief the person?                      | Not the section's concern           | PIC must brief                                   |
+| Lap child under two?                   | Not addressed (passenger rule)      | Held by adult OK; carrier-approved CRS preferred |
 
 The §91.107(a)(3) lap-child carve-out is the second-most-common misreading after the §91.105/§91.107 confusion. The exception is for children under two, held by an adult. There is no general "small child" exception. A four-year-old needs an approved seat and a safety belt.
 

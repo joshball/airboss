@@ -67,7 +67,7 @@ Four dimensions, each answering a specific question about CFI performance. Each 
 
 Chronological list of ticks played:
 
-```
+```text
 Tick 1 -- [Scene summary]
   You: Ask ("Tell me about your airspeed?")
   Better: Prompt -- student was already degrading

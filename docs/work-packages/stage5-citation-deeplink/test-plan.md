@@ -199,12 +199,12 @@ Prefix: `S5CD`.
 
 ## Coverage matrix
 
-| Concern                           | Test IDs                              |
-| --------------------------------- | ------------------------------------- |
-| Schema integrity                  | S5CD-1, S5CD-2, S5CD-3, S5CD-30       |
-| Picker UX                         | S5CD-4..9, S5CD-23..25                |
-| Citation persistence              | S5CD-10..12, S5CD-22                  |
-| Deep-link navigation              | S5CD-13..21                           |
-| Public-page policy                | S5CD-20, S5CD-32                      |
-| Audit + scheduled job             | S5CD-26..29                           |
-| Build + tests                     | S5CD-31, S5CD-33                      |
+| Concern               | Test IDs                        |
+| --------------------- | ------------------------------- |
+| Schema integrity      | S5CD-1, S5CD-2, S5CD-3, S5CD-30 |
+| Picker UX             | S5CD-4..9, S5CD-23..25          |
+| Citation persistence  | S5CD-10..12, S5CD-22            |
+| Deep-link navigation  | S5CD-13..21                     |
+| Public-page policy    | S5CD-20, S5CD-32                |
+| Audit + scheduled job | S5CD-26..29                     |
+| Build + tests         | S5CD-31, S5CD-33                |

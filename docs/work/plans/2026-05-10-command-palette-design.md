@@ -35,13 +35,13 @@ All three share one search engine, one ranker, and one index. They differ only i
 
 Each surface has the same palette but a different "top of the list":
 
-| Surface   | Top-priority commands (Cmd+Shift+P)           | Top-priority results (Cmd+K)                 |
-| --------- | --------------------------------------------- | -------------------------------------------- |
-| study     | New plan, Go to today's reps, Memory inbox    | Memory cards, knowledge nodes, lesson pages  |
-| sim       | Start new sim, Resume last sim, Pick scenario | Scenarios, sim help, sim references          |
-| hangar    | New doc, Open audit log, Invite user          | Docs, glossary admin, source ingestion runs  |
-| flightbag | Open FAA-H-8083-28, Open 14 CFR 91, AIM 7-1   | FAA handbooks, CFR sections, AIM, ACs, ACS   |
-| avionics  | (TBD)                                         | (TBD)                                        |
+| Surface   | Top-priority commands (Cmd+Shift+P)           | Top-priority results (Cmd+K)                |
+| --------- | --------------------------------------------- | ------------------------------------------- |
+| study     | New plan, Go to today's reps, Memory inbox    | Memory cards, knowledge nodes, lesson pages |
+| sim       | Start new sim, Resume last sim, Pick scenario | Scenarios, sim help, sim references         |
+| hangar    | New doc, Open audit log, Invite user          | Docs, glossary admin, source ingestion runs |
+| flightbag | Open FAA-H-8083-28, Open 14 CFR 91, AIM 7-1   | FAA handbooks, CFR sections, AIM, ACs, ACS  |
+| avionics  | (TBD)                                         | (TBD)                                       |
 
 "Long-tail" results (results from other surfaces) appear lower. Always present, never silently filtered out. This is the "throttled per app but everything is still reachable" pattern.
 
@@ -53,22 +53,22 @@ The search palette only. Cmd+P quick-open and Cmd+Shift+P commands are noted so 
 
 Concrete queries we must handle on day one. If any of these fail, the palette is broken.
 
-| You type                  | You expect                                                              |
-| ------------------------- | ----------------------------------------------------------------------- |
-| `FAA-H-8083-28`           | The Aviation Weather Handbook, top result                               |
-| `8083-28`                 | Same                                                                    |
-| `H-8083-28`               | Same                                                                    |
-| `AvWX`                    | Same                                                                    |
-| `Aviation Weather`        | AvWX handbook + AC 00-6 + PHAK Ch.12 + our weather course + wx KB nodes |
-| `wx`                      | Same set (wx == weather)                                                |
-| `weather`                 | Same set                                                                |
-| `91.103`                  | 14 CFR 91.103 section                                                   |
-| `Part 91`                 | 14 CFR Part 91                                                          |
-| `Va`                      | Va glossary entry                                                       |
-| `density altitude`        | Glossary entry + handbook sections + knowledge nodes that cite it      |
-| `METAR`                   | Glossary + AvWX chapters that discuss it + cards that ask about it     |
-| `doc:FAA-H-8083-28 turb`  | Only turbulence sections inside AvWX                                    |
-| `kind:cfr 91.103`         | Only the CFR section, no handbook discussion of preflight              |
+| You type                 | You expect                                                              |
+| ------------------------ | ----------------------------------------------------------------------- |
+| `FAA-H-8083-28`          | The Aviation Weather Handbook, top result                               |
+| `8083-28`                | Same                                                                    |
+| `H-8083-28`              | Same                                                                    |
+| `AvWX`                   | Same                                                                    |
+| `Aviation Weather`       | AvWX handbook + AC 00-6 + PHAK Ch.12 + our weather course + wx KB nodes |
+| `wx`                     | Same set (wx == weather)                                                |
+| `weather`                | Same set                                                                |
+| `91.103`                 | 14 CFR 91.103 section                                                   |
+| `Part 91`                | 14 CFR Part 91                                                          |
+| `Va`                     | Va glossary entry                                                       |
+| `density altitude`       | Glossary entry + handbook sections + knowledge nodes that cite it       |
+| `METAR`                  | Glossary + AvWX chapters that discuss it + cards that ask about it      |
+| `doc:FAA-H-8083-28 turb` | Only turbulence sections inside AvWX                                    |
+| `kind:cfr 91.103`        | Only the CFR section, no handbook discussion of preflight               |
 
 `wx == weather` is non-negotiable. Aviation aliases are first-class.
 
@@ -76,27 +76,27 @@ Concrete queries we must handle on day one. If any of these fail, the palette is
 
 Every result has a `type`. The type drives which column / card it appears in, what affordances it has, and how it's ranked relative to others.
 
-| Type             | Source                                          | Column                | Notes                                           |
-| ---------------- | ----------------------------------------------- | --------------------- | ----------------------------------------------- |
-| `faa.handbook`   | `handbooks/*/manifest.json`                     | FAA Resources         | PHAK, AFH, AvWX, IFH, IPH, RMH, AIH, ...        |
-| `faa.cfr.part`   | `regulations/cfr-14/` + `regulations/cfr-49/`   | FAA Resources         | 14 CFR 91, etc.                                 |
-| `faa.cfr.sect`   | `study.reference_section` (kind=CFR)            | FAA Resources         | §91.103                                         |
-| `faa.handbook.chapter` | `study.reference_section` (kind=HANDBOOK) | FAA Resources         | PHAK Chapter 12: Weather Theory                 |
-| `faa.aim`        | AIM index + sections                            | FAA Resources         | AIM 7-1 etc.                                    |
-| `faa.ac`         | `ac/index.json` + sections                      | FAA Resources         | AC 00-6, AC 61-98, ...                          |
-| `faa.acs`        | ACS docs                                        | FAA Resources         | PPL ACS, IR ACS, ...                            |
-| `airboss.course` | `course/courses/*/` and `course/weather/` etc.  | Airboss Content       | "Aviation Weather Course"                       |
-| `airboss.knode`  | `study.knowledge_node`                          | Airboss Content       | Discovery-first KB nodes (ADR 011)              |
-| `airboss.glossary` | aviation registry                             | Airboss Content       | Terms / aliases / paraphrases                   |
-| `airboss.lesson` | study lesson pages                              | Airboss Content       | Per-cert syllabus sections                      |
-| `airboss.help`   | help registry                                   | App Help              | Reps, Memory, Calibration, ...                  |
-| `mine.card`      | `study.memory_card` for current user            | My Stuff              | User's flashcards                               |
-| `mine.rep`       | reps for current user                           | My Stuff              | Decision reps                                   |
-| `mine.plan`      | `study.plan` for current user                   | My Stuff              | Active / paused study plans                     |
-| `mine.note`      | reflection journal entries (future)             | My Stuff              | Future surface                                  |
-| `web.tool`       | curated external links (1800wxbrief, AWC, ...)  | External Tools        | "Go get weather"                                |
-| `cmd.action`     | declarative command registry                    | Commands              | Cmd+Shift+P-style actions                       |
-| `cmd.goto`       | route registry                                  | Commands              | "Go to dashboard", "Go to reps"                 |
+| Type                   | Source                                         | Column          | Notes                                    |
+| ---------------------- | ---------------------------------------------- | --------------- | ---------------------------------------- |
+| `faa.handbook`         | `handbooks/*/manifest.json`                    | FAA Resources   | PHAK, AFH, AvWX, IFH, IPH, RMH, AIH, ... |
+| `faa.cfr.part`         | `regulations/cfr-14/` + `regulations/cfr-49/`  | FAA Resources   | 14 CFR 91, etc.                          |
+| `faa.cfr.sect`         | `study.reference_section` (kind=CFR)           | FAA Resources   | §91.103                                  |
+| `faa.handbook.chapter` | `study.reference_section` (kind=HANDBOOK)      | FAA Resources   | PHAK Chapter 12: Weather Theory          |
+| `faa.aim`              | AIM index + sections                           | FAA Resources   | AIM 7-1 etc.                             |
+| `faa.ac`               | `ac/index.json` + sections                     | FAA Resources   | AC 00-6, AC 61-98, ...                   |
+| `faa.acs`              | ACS docs                                       | FAA Resources   | PPL ACS, IR ACS, ...                     |
+| `airboss.course`       | `course/courses/*/` and `course/weather/` etc. | Airboss Content | "Aviation Weather Course"                |
+| `airboss.knode`        | `study.knowledge_node`                         | Airboss Content | Discovery-first KB nodes (ADR 011)       |
+| `airboss.glossary`     | aviation registry                              | Airboss Content | Terms / aliases / paraphrases            |
+| `airboss.lesson`       | study lesson pages                             | Airboss Content | Per-cert syllabus sections               |
+| `airboss.help`         | help registry                                  | App Help        | Reps, Memory, Calibration, ...           |
+| `mine.card`            | `study.memory_card` for current user           | My Stuff        | User's flashcards                        |
+| `mine.rep`             | reps for current user                          | My Stuff        | Decision reps                            |
+| `mine.plan`            | `study.plan` for current user                  | My Stuff        | Active / paused study plans              |
+| `mine.note`            | reflection journal entries (future)            | My Stuff        | Future surface                           |
+| `web.tool`             | curated external links (1800wxbrief, AWC, ...) | External Tools  | "Go get weather"                         |
+| `cmd.action`           | declarative command registry                   | Commands        | Cmd+Shift+P-style actions                |
+| `cmd.goto`             | route registry                                 | Commands        | "Go to dashboard", "Go to reps"          |
 
 This taxonomy IS the contract. Adding a new content domain = define its type, register a loader, add it to a column. No other change.
 
@@ -192,13 +192,13 @@ Editor lives at `libs/aviation/src/synonyms.ts`. Bidirectional: typing "weather"
 
 Per group / column, results are sorted by tier then alpha:
 
-| Tier | Match                                                                |
-| ---- | -------------------------------------------------------------------- |
-| 1    | Exact match on doc code (`FAA-H-8083-28`), alias, or full title      |
-| 2    | Prefix match on title or alias                                       |
-| 3    | Substring match on title or alias                                    |
-| 4    | Match in keywords / tags                                             |
-| 5    | Match in body (FTS) -- snippet shown                                 |
+| Tier | Match                                                           |
+| ---- | --------------------------------------------------------------- |
+| 1    | Exact match on doc code (`FAA-H-8083-28`), alias, or full title |
+| 2    | Prefix match on title or alias                                  |
+| 3    | Substring match on title or alias                               |
+| 4    | Match in keywords / tags                                        |
+| 5    | Match in body (FTS) -- snippet shown                            |
 
 Cross-column priority is **type weight**, not relevance: a tier-3 FAA handbook beats a tier-1 help page. Each column ranks its own contents internally.
 
@@ -263,17 +263,17 @@ Phase 1 lands as a small PR on `docs/wx-chart-...` (or its own branch). Phases 2
 
 Open these and compare:
 
-| Tool          | Strength                                                  | Try this                                                        |
-| ------------- | --------------------------------------------------------- | --------------------------------------------------------------- |
-| Linear        | Multi-section list (Issues, Projects, Views, ...). Tight. | Cmd+K in any project. Search a partial issue title.             |
-| Notion        | Multi-section, mixes pages + actions, big preview pane.   | Cmd+P. Search a vague term and watch the page-vs-block split.   |
-| GitHub        | Repo-scoped + global, with `kind:` filters built in.      | `/` on github.com. Try `repos:` / `is:pr` / `org:` filters.     |
-| Raycast (Mac) | Two-column, detail pane, app-extension architecture.      | Cmd+Space. Watch how extensions add categories.                 |
-| Alfred (Mac)  | The classic. Plain rows but workflows = extensible types. | Cmd+Space. The "search the web" extensions are the type model.  |
+| Tool          | Strength                                                                                     | Try this                                                                 |
+| ------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Linear        | Multi-section list (Issues, Projects, Views, ...). Tight.                                    | Cmd+K in any project. Search a partial issue title.                      |
+| Notion        | Multi-section, mixes pages + actions, big preview pane.                                      | Cmd+P. Search a vague term and watch the page-vs-block split.            |
+| GitHub        | Repo-scoped + global, with `kind:` filters built in.                                         | `/` on github.com. Try `repos:` / `is:pr` / `org:` filters.              |
+| Raycast (Mac) | Two-column, detail pane, app-extension architecture.                                         | Cmd+Space. Watch how extensions add categories.                          |
+| Alfred (Mac)  | The classic. Plain rows but workflows = extensible types.                                    | Cmd+Space. The "search the web" extensions are the type model.           |
 | VS Code       | Three palettes, one keystroke each (Cmd+P / Cmd+Shift+P / Ctrl+Shift+O). Filters via prefix. | Cmd+P. Try `>` for commands, `@` for symbols, `#` for workspace symbols. |
-| Slack         | Channel + DM + message + file + workflow, all in one.     | Cmd+K. Watch how recents float to the top.                      |
-| Superhuman    | Keyboard-first, command-only (no general search).         | Cmd+K. Compare to Cmd+/ (cheat sheet).                          |
-| Sublime Text  | The original Cmd+P. Fuzzy-match perfected.                | Cmd+P. Type `wbrd` for "webpack_build_runner_dev.js".           |
+| Slack         | Channel + DM + message + file + workflow, all in one.                                        | Cmd+K. Watch how recents float to the top.                               |
+| Superhuman    | Keyboard-first, command-only (no general search).                                            | Cmd+K. Compare to Cmd+/ (cheat sheet).                                   |
+| Sublime Text  | The original Cmd+P. Fuzzy-match perfected.                                                   | Cmd+P. Type `wbrd` for "webpack_build_runner_dev.js".                    |
 
 **Closest to what we want for airboss:** Notion's Cmd+P (mixed content types, sections, big result cards) blended with Linear's Cmd+K (tight category headers, clear keyboard model) and VS Code's prefix grammar (`doc:`, `kind:`, `mine`).
 

@@ -102,14 +102,14 @@ No-API-key runner: [`tools/handbook-ingest/ingest/prompts/run-llm-comparison.md`
 
 We support two ways to invoke the LLM strategy. Both call the **same** committed prompt at `prompts/section_tree.md`, so the output is comparable:
 
-| Aspect | API runner (`sections_via_llm.py`) | Claude Code runner (`run-llm-comparison.md`) |
-| ------ | ---------------------------------- | -------------------------------------------- |
-| API key | Required (`ANTHROPIC_API_KEY`) | Not required; uses Claude Code's session |
-| Determinism | Pinned model + temp=0 | Claude Code's default model + sampling |
-| Cost | ~$0.30 / full PHAK run | $0 incremental (covered by Claude Code subscription) |
-| Speed | ~2-3 minutes for 17 chapters | Slower, interactive |
-| CI-runnable | Yes | No (interactive) |
-| Audit record | Raw response → `_llm_section_tree.json` | Same |
+| Aspect       | API runner (`sections_via_llm.py`)      | Claude Code runner (`run-llm-comparison.md`)         |
+| ------------ | --------------------------------------- | ---------------------------------------------------- |
+| API key      | Required (`ANTHROPIC_API_KEY`)          | Not required; uses Claude Code's session             |
+| Determinism  | Pinned model + temp=0                   | Claude Code's default model + sampling               |
+| Cost         | ~$0.30 / full PHAK run                  | $0 incremental (covered by Claude Code subscription) |
+| Speed        | ~2-3 minutes for 17 chapters            | Slower, interactive                                  |
+| CI-runnable  | Yes                                     | No (interactive)                                     |
+| Audit record | Raw response → `_llm_section_tree.json` | Same                                                 |
 
 The committed `_llm_section_tree.json` is byte-comparable across both methods because the prompt is the same and the model normalizes its output to the strict JSON schema.
 

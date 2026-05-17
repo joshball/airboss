@@ -10,13 +10,13 @@ Single orchestrating plan for every open work item: the hangar initiative (the p
 
 ## Scope map
 
-| Section                                   | What it covers                                                                                     |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [Hangar initiative](#hangar-initiative)   | Four WPs (scaffold shipped, three to go): registry, sources-v1, non-textual                        |
-| [Follow-ons](#follow-ons)                 | Per-page help, drawer overlay, dark Shiki, InfoTip validator (from session-legibility-and-help-expansion) |
-| [Content + manual gates](#content-and-manual-gates) | 6 features pending user-zero walkthroughs, seed cards, CFI review, graph scaling            |
-| [Open debts](#open-debts)                 | Scanner parser bug, TBD wiki-links, retag ambiguities, CFR XML download blocker                    |
-| [Cleanup](#cleanup)                       | 6 agent worktrees, stale branches                                                                  |
+| Section                                             | What it covers                                                                                            |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [Hangar initiative](#hangar-initiative)             | Four WPs (scaffold shipped, three to go): registry, sources-v1, non-textual                               |
+| [Follow-ons](#follow-ons)                           | Per-page help, drawer overlay, dark Shiki, InfoTip validator (from session-legibility-and-help-expansion) |
+| [Content + manual gates](#content-and-manual-gates) | 6 features pending user-zero walkthroughs, seed cards, CFI review, graph scaling                          |
+| [Open debts](#open-debts)                           | Scanner parser bug, TBD wiki-links, retag ambiguities, CFR XML download blocker                           |
+| [Cleanup](#cleanup)                                 | 6 agent worktrees, stale branches                                                                         |
 
 ## Hangar initiative
 
@@ -28,12 +28,12 @@ Companion plan (decisions already locked): [20260422-hangar-data-management-plan
 
 ## Status (2026-04-23)
 
-| #   | Work package                                                 | State   | PR        | Unblocks                   |
-| --- | ------------------------------------------------------------ | ------- | --------- | -------------------------- |
-| 1   | [wp-hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)         | shipped | [#72](https://github.com/joshball/airboss/pull/72) | the skeleton               |
-| 2   | [wp-hangar-registry](../../work-packages/hangar-registry/spec.md)         | ready   | —         | glossary + sources editing |
-| 3   | [wp-hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)     | drafted | —         | source ops (fetch/extract) |
-| 4   | [wp-hangar-non-textual](../../work-packages/hangar-non-textual/spec.md)   | drafted | —         | charts / plates / diagrams |
+| #   | Work package                                                            | State   | PR                                                 | Unblocks                   |
+| --- | ----------------------------------------------------------------------- | ------- | -------------------------------------------------- | -------------------------- |
+| 1   | [wp-hangar-scaffold](../../work-packages/hangar-scaffold/spec.md)       | shipped | [#72](https://github.com/joshball/airboss/pull/72) | the skeleton               |
+| 2   | [wp-hangar-registry](../../work-packages/hangar-registry/spec.md)       | ready   | —                                                  | glossary + sources editing |
+| 3   | [wp-hangar-sources-v1](../../work-packages/hangar-sources-v1/spec.md)   | drafted | —                                                  | source ops (fetch/extract) |
+| 4   | [wp-hangar-non-textual](../../work-packages/hangar-non-textual/spec.md) | drafted | —                                                  | charts / plates / diagrams |
 
 Serial dependency: 1 -> 2 -> 3 -> 4. Each WP has its own branch, PR, review, merge, manual walkthrough.
 
@@ -80,16 +80,16 @@ Schemas (Drizzle, namespace `hangar`):
 
 Every one of these comes from the companion plan; repeated here for the record.
 
-| Axis                   | Decision                                                                                                                        | Source           |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| Content registry       | TOML-hybrid. `libs/db/seed/glossary.toml` + `sources.toml` authoritative. DB mirrors at runtime. Sync writes TOML + commits.    | Q1 companion     |
-| Job model              | Real `hangar.job` rows day one. In-process Bun worker thread, polled by UI. No sync-with-spinner shortcut.                      | Q2 companion     |
-| Registry editing       | Writeable via UI. Edits flow DB -> TOML -> commit. No TS editing required for glossary or source adds.                         | Q3 companion     |
-| Multi-user             | Day one. Actor-logged audits, concurrent-safe job queue, optimistic lock on reference rev. Manual DB user seeding for MVP.      | Q8 companion     |
-| Sync targets           | Local-commit in dev, `gh pr create` in prod. Env-configurable. Sync-to-disk is itself a job kind.                               | Companion §Sync  |
-| Tokens + themes        | Hangar uses role tokens from `libs/themes/`. No hardcoded hex, rgb, or named colors. Lint + contrast + appearance toggle hold. | Theme invariants |
-| Routes                 | Static routes are constants in `libs/constants/src/routes.ts`. Parameterised routes are typed functions. No inline path strings. | CLAUDE.md        |
-| Cross-lib imports      | `@ab/*` aliases only. Intra-lib relative imports allowed.                                                                       | CLAUDE.md        |
+| Axis              | Decision                                                                                                                         | Source           |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| Content registry  | TOML-hybrid. `libs/db/seed/glossary.toml` + `sources.toml` authoritative. DB mirrors at runtime. Sync writes TOML + commits.     | Q1 companion     |
+| Job model         | Real `hangar.job` rows day one. In-process Bun worker thread, polled by UI. No sync-with-spinner shortcut.                       | Q2 companion     |
+| Registry editing  | Writeable via UI. Edits flow DB -> TOML -> commit. No TS editing required for glossary or source adds.                           | Q3 companion     |
+| Multi-user        | Day one. Actor-logged audits, concurrent-safe job queue, optimistic lock on reference rev. Manual DB user seeding for MVP.       | Q8 companion     |
+| Sync targets      | Local-commit in dev, `gh pr create` in prod. Env-configurable. Sync-to-disk is itself a job kind.                                | Companion §Sync  |
+| Tokens + themes   | Hangar uses role tokens from `libs/themes/`. No hardcoded hex, rgb, or named colors. Lint + contrast + appearance toggle hold.   | Theme invariants |
+| Routes            | Static routes are constants in `libs/constants/src/routes.ts`. Parameterised routes are typed functions. No inline path strings. | CLAUDE.md        |
+| Cross-lib imports | `@ab/*` aliases only. Intra-lib relative imports allowed.                                                                        | CLAUDE.md        |
 
 ## Required reading (in order, before touching any of the remaining WPs)
 
@@ -212,12 +212,12 @@ Checked off in this plan as the corresponding WPs ship.
 
 Open items from `session-legibility-and-help-expansion` (shipped PR #77). Each is small enough to land in its own mini-WP or as part of another stream.
 
-| Item                                                     | Scope                                                                                    | Notes                                                      |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Per-page help for `/dashboard`, `/reps/*`, `/knowledge/*` | Adopt `<PageHelp>` pattern route-by-route                                                | Copy the wiring from `/session/start`                      |
-| Drawer overlay for `<PageHelp>`                          | Today `<PageHelp>` navigates to `/help/<id>`; follow-up is a slide-over drawer           | Parked in WP spec "Drawer overlay" section                 |
-| Dark-theme Shiki code-block tokens                       | Shiki currently ships one theme; swap palettes based on appearance                       | Fits into the theme-system enforcement contract            |
-| `InfoTip helpId` static validator                        | Grep `.svelte` files, assert every `helpId` is registered in `helpRegistry`              | Shipped: `scripts/validate-help-ids.ts`                    |
+| Item                                                      | Scope                                                                          | Notes                                           |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------ | ----------------------------------------------- |
+| Per-page help for `/dashboard`, `/reps/*`, `/knowledge/*` | Adopt `<PageHelp>` pattern route-by-route                                      | Copy the wiring from `/session/start`           |
+| Drawer overlay for `<PageHelp>`                           | Today `<PageHelp>` navigates to `/help/<id>`; follow-up is a slide-over drawer | Parked in WP spec "Drawer overlay" section      |
+| Dark-theme Shiki code-block tokens                        | Shiki currently ships one theme; swap palettes based on appearance             | Fits into the theme-system enforcement contract |
+| `InfoTip helpId` static validator                         | Grep `.svelte` files, assert every `helpId` is registered in `helpRegistry`    | Shipped: `scripts/validate-help-ids.ts`         |
 
 Source: [session-legibility-and-help-expansion/spec.md](../../work-packages/session-legibility-and-help-expansion/spec.md).
 
@@ -225,14 +225,14 @@ Source: [session-legibility-and-help-expansion/spec.md](../../work-packages/sess
 
 CLAUDE.md is explicit: "Nothing merges without a manual test plan." Six features merged to main without a user-zero walkthrough during the parallel-build velocity push. These run before any more feature work in the affected areas.
 
-| Feature                          | Test plan                                                                         |
-| -------------------------------- | --------------------------------------------------------------------------------- |
-| Spaced Memory Items              | `docs/work-packages/spaced-memory-items/test-plan.md`                             |
-| Decision Reps                    | `docs/work-packages/decision-reps/test-plan.md`                                   |
-| Calibration Tracker              | `docs/work-packages/calibration-tracker/test-plan.md`                             |
-| Knowledge Graph                  | `docs/work-packages/knowledge-graph/test-plan.md`                                 |
-| Study Plan + Session Engine      | `docs/work-packages/study-plan-and-session-engine/test-plan.md`                   |
-| Learning Dashboard               | `docs/work-packages/learning-dashboard/test-plan.md`                              |
+| Feature                     | Test plan                                                       |
+| --------------------------- | --------------------------------------------------------------- |
+| Spaced Memory Items         | `docs/work-packages/spaced-memory-items/test-plan.md`           |
+| Decision Reps               | `docs/work-packages/decision-reps/test-plan.md`                 |
+| Calibration Tracker         | `docs/work-packages/calibration-tracker/test-plan.md`           |
+| Knowledge Graph             | `docs/work-packages/knowledge-graph/test-plan.md`               |
+| Study Plan + Session Engine | `docs/work-packages/study-plan-and-session-engine/test-plan.md` |
+| Learning Dashboard          | `docs/work-packages/learning-dashboard/test-plan.md`            |
 
 Supporting actions:
 
@@ -242,12 +242,12 @@ Supporting actions:
 
 ## Open debts
 
-| Debt                                               | Impact                                                              | Resolution                                                                                          |
-| -------------------------------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Scanner miscounts inside TS template literals      | Wiki-link reports over-count when code blocks include backticks     | Extend `scripts/references/scan.ts` to skip fenced TS template literals, same way it skips code fences |
-| 2 TBD wiki-links (`FSRS`, `discovery-first pedagogy`) | `/glossary` shows "needs link" underline on these terms          | Author reference entries in `libs/db/seed/glossary.toml` once wp-hangar-registry lands             |
-| 24 entries flagged for CFI review                  | Tag accuracy uncertain on a subset of ported references             | Work through [retag-ambiguities](./20260422-retag-ambiguities.md) during a CFI review session      |
-| 14 CFR XML not downloaded                          | Blocks Extract-2 (10 CFR extractions waiting on the binary)         | Unblocks the moment wp-hangar-sources-v1 ships: Fetch button downloads the XML end-to-end          |
+| Debt                                                  | Impact                                                          | Resolution                                                                                             |
+| ----------------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Scanner miscounts inside TS template literals         | Wiki-link reports over-count when code blocks include backticks | Extend `scripts/references/scan.ts` to skip fenced TS template literals, same way it skips code fences |
+| 2 TBD wiki-links (`FSRS`, `discovery-first pedagogy`) | `/glossary` shows "needs link" underline on these terms         | Author reference entries in `libs/db/seed/glossary.toml` once wp-hangar-registry lands                 |
+| 24 entries flagged for CFI review                     | Tag accuracy uncertain on a subset of ported references         | Work through [retag-ambiguities](./20260422-retag-ambiguities.md) during a CFI review session          |
+| 14 CFR XML not downloaded                             | Blocks Extract-2 (10 CFR extractions waiting on the binary)     | Unblocks the moment wp-hangar-sources-v1 ships: Fetch button downloads the XML end-to-end              |
 
 ## Cleanup
 

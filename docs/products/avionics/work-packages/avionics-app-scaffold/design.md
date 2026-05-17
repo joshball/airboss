@@ -33,18 +33,18 @@ The PFD must render correctly in both appearances. This is non-negotiable accept
 
 The token map the PFD reads:
 
-| Role                   | Dark appearance reads from        | Light appearance reads from                       |
-| ---------------------- | --------------------------------- | ------------------------------------------------- |
-| Instrument backplate   | `--surface-panel` (deep black)    | `--surface-panel` (light grey)                    |
-| Sky half (attitude)    | `--avionics-sky` (steel blue)     | `--avionics-sky` (lighter steel blue)             |
-| Ground half (attitude) | `--avionics-ground` (warm brown)  | `--avionics-ground` (lighter warm brown)          |
-| Pitch ladder lines     | `--ink-body`                      | `--ink-body`                                      |
-| Pointer / readout box  | `--avionics-pointer` (yellow)     | `--avionics-pointer` (deeper yellow for contrast) |
-| Tape minor ticks       | `--ink-muted`                     | `--ink-muted`                                     |
-| ASI white arc          | `--avionics-arc-white`            | `--avionics-arc-white`                            |
-| ASI green arc          | `--avionics-arc-green`            | `--avionics-arc-green`                            |
-| ASI yellow arc         | `--avionics-arc-yellow`           | `--avionics-arc-yellow`                           |
-| ASI red line           | `--avionics-arc-red`              | `--avionics-arc-red`                              |
+| Role                   | Dark appearance reads from       | Light appearance reads from                       |
+| ---------------------- | -------------------------------- | ------------------------------------------------- |
+| Instrument backplate   | `--surface-panel` (deep black)   | `--surface-panel` (light grey)                    |
+| Sky half (attitude)    | `--avionics-sky` (steel blue)    | `--avionics-sky` (lighter steel blue)             |
+| Ground half (attitude) | `--avionics-ground` (warm brown) | `--avionics-ground` (lighter warm brown)          |
+| Pitch ladder lines     | `--ink-body`                     | `--ink-body`                                      |
+| Pointer / readout box  | `--avionics-pointer` (yellow)    | `--avionics-pointer` (deeper yellow for contrast) |
+| Tape minor ticks       | `--ink-muted`                    | `--ink-muted`                                     |
+| ASI white arc          | `--avionics-arc-white`           | `--avionics-arc-white`                            |
+| ASI green arc          | `--avionics-arc-green`           | `--avionics-arc-green`                            |
+| ASI yellow arc         | `--avionics-arc-yellow`          | `--avionics-arc-yellow`                           |
+| ASI red line           | `--avionics-arc-red`             | `--avionics-arc-red`                              |
 
 The `--avionics-*` tokens are added to the global theme token set in this WP (one entry per role per appearance). They live alongside the existing `--surface-*` and `--ink-*` tokens; the light/dark branch is handled by the theme system the same way every other token already is. The PFD components reference token names only; the theme defines the values.
 

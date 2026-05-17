@@ -8,26 +8,26 @@ See [ADR 018](../docs/decisions/018-source-artifact-storage-policy/decision.md),
 
 URL inventories live at `scripts/sources/config/`. When the FAA rotates a URL, edit the YAML; no code change required.
 
-| File                          | What                                                              |
-| ----------------------------- | ----------------------------------------------------------------- |
-| `ac.yaml`                     | 12 Advisory Circulars                                             |
-| `acs.yaml`                    | 5 Airman Certification Standards                                  |
-| `aim.yaml`                    | Bundled PDF + section + appendix HTML (72 sections + 5 appendices)|
-| `regs.yaml`                   | eCFR base + per-title list (14, 49)                               |
-| `handbooks-extras.yaml`       | 8 whole-doc-only handbooks (Class C)                              |
-| `handbooks/<slug>.yaml`       | Per-handbook config (whole_doc + chapter_pdfs + ancillaries)      |
+| File                    | What                                                               |
+| ----------------------- | ------------------------------------------------------------------ |
+| `ac.yaml`               | 12 Advisory Circulars                                              |
+| `acs.yaml`              | 5 Airman Certification Standards                                   |
+| `aim.yaml`              | Bundled PDF + section + appendix HTML (72 sections + 5 appendices) |
+| `regs.yaml`             | eCFR base + per-title list (14, 49)                                |
+| `handbooks-extras.yaml` | 8 whole-doc-only handbooks (Class C)                               |
+| `handbooks/<slug>.yaml` | Per-handbook config (whole_doc + chapter_pdfs + ancillaries)       |
 
 The Python ingest tool (`tools/handbook-ingest/`) reads from the same `handbooks/<slug>.yaml` files.
 
 ## Commands
 
-| Command                       | What                                                                                  |
-| ----------------------------- | ------------------------------------------------------------------------------------- |
-| `sources download`            | Fetch source bytes (CFR XML, AIM, ACs, ACS, handbooks) into the cache                 |
-| `sources verify-urls`         | HEAD-check every configured URL (network); reports 404s with structured remediation   |
-| `sources inventory`           | Regenerate `docs/ingestion-pipeline/inventory.md` from YAML config + cache manifests             |
-| `sources register <corpus>`   | Walk a derivative tree and register entries in the `@ab/sources` registry             |
-| `sources extract <pipeline>`  | Run a source-extraction pipeline (currently: `handbooks` Python TOC + LLM strategies) |
+| Command                      | What                                                                                  |
+| ---------------------------- | ------------------------------------------------------------------------------------- |
+| `sources download`           | Fetch source bytes (CFR XML, AIM, ACs, ACS, handbooks) into the cache                 |
+| `sources verify-urls`        | HEAD-check every configured URL (network); reports 404s with structured remediation   |
+| `sources inventory`          | Regenerate `docs/ingestion-pipeline/inventory.md` from YAML config + cache manifests  |
+| `sources register <corpus>`  | Walk a derivative tree and register entries in the `@ab/sources` registry             |
+| `sources extract <pipeline>` | Run a source-extraction pipeline (currently: `handbooks` Python TOC + LLM strategies) |
 
 ```bash
 bun run sources                                    # prints index
@@ -154,14 +154,14 @@ Exits 0 when every URL returns 2xx, 1 when any URL is non-2xx or unreachable. Us
 
 The FAA periodically rotates PDF URLs. Per [ADR 022](../docs/decisions/022-chapter-source-ingestion/decision.md), the verified URL inventory lives in YAML under `scripts/sources/config/`:
 
-| Corpus            | YAML file                               |
-| ----------------- | --------------------------------------- |
-| Advisory Circulars| `scripts/sources/config/ac.yaml`        |
-| ACS               | `scripts/sources/config/acs.yaml`       |
-| AIM               | `scripts/sources/config/aim.yaml`       |
-| CFR               | `scripts/sources/config/regs.yaml`      |
-| Handbooks (whole) | `scripts/sources/config/handbooks-extras.yaml` |
-| Handbooks (chapter)| `scripts/sources/config/handbooks/<slug>.yaml` |
+| Corpus              | YAML file                                      |
+| ------------------- | ---------------------------------------------- |
+| Advisory Circulars  | `scripts/sources/config/ac.yaml`               |
+| ACS                 | `scripts/sources/config/acs.yaml`              |
+| AIM                 | `scripts/sources/config/aim.yaml`              |
+| CFR                 | `scripts/sources/config/regs.yaml`             |
+| Handbooks (whole)   | `scripts/sources/config/handbooks-extras.yaml` |
+| Handbooks (chapter) | `scripts/sources/config/handbooks/<slug>.yaml` |
 
 If `bun run sources verify-urls` (or `bun run sources download --verify`) flags a target as 404, edit the matching `entry.url` (or `whole_doc.url` / chapter-pdf URL for handbook YAMLs), re-run `bun run sources verify-urls` to confirm, and commit. No code change is needed; both the TS downloader and the Python ingest tool read the same YAMLs.
 

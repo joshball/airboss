@@ -13,72 +13,72 @@ These drills feed `apps/study/` flash cards. Format 1 -> navigation cards (locat
 
 Cover the right column. 60 seconds per row.
 
-| Prompt                                                                       | Answer                                                       |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Where is the aerobatic-flight rule?                                          | [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)             |
-| What is the aerobatic-flight altitude floor?                                 | 1,500 ft AGL ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e)) |
-| What flight visibility is required for aerobatic flight?                     | 3 SM ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(f))   |
-| Where is the parachute-pack cycle (synthetic fiber)?                         | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026) -- 180 days |
-| When must occupants wear parachutes during aerobatics?                       | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) -- when more than one person aboard |
-| Where is the bank-angle / pitch-attitude trigger for parachutes?             | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) -- > 60 deg bank or > 30 deg pitch |
-| Where is the glider-tow rule?                                                | [@cite](airboss-ref:regs/cfr-14/91/309?at=2026)             |
-| Where is banner-towing covered?                                              | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026) (LOA req)   |
-| Where is the formation-flight rule?                                          | [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)             |
-| Can a Part 135 charter fly in formation?                                     | No -- [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c)    |
-| Where is the restricted-category operating rule?                             | [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)             |
-| Where is the experimental operating rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)             |
-| What is the default flight rule for experimentals?                           | VFR day only ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2)) |
-| Where is the experimental over-densely-populated restriction?                | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(b)          |
-| What must a pilot tell every passenger in an experimental?                   | The aircraft is experimental ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1)) |
-| Where is subpart F applicability?                                            | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026)             |
-| Where is subpart G applicability?                                            | [@cite](airboss-ref:regs/cfr-14/91/601?at=2026)             |
-| Where is the FDR / CVR rule?                                                 | [@cite](airboss-ref:regs/cfr-14/91/609?at=2026)             |
-| Where do U.S. ops abroad rules live?                                         | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026)             |
-| Where is the RVSM rule?                                                      | [@cite](airboss-ref:regs/cfr-14/91/706?at=2026)             |
-| What altitude band is RVSM in U.S. airspace?                                 | FL290 to FL410                                               |
-| Where is the U.S. waiver authority?                                          | [@cite](airboss-ref:regs/cfr-14/91/903?at=2026)             |
-| Where is fractional applicability?                                           | [@cite](airboss-ref:regs/cfr-14/91/1001?at=2026)            |
-| Where is fractional operational control?                                     | [@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)            |
-| What SFAR covers R22 / R44?                                                  | SFAR 73                                                      |
+| Prompt                                                           | Answer                                                                                   |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| Where is the aerobatic-flight rule?                              | [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)                                          |
+| What is the aerobatic-flight altitude floor?                     | 1,500 ft AGL ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e))                        |
+| What flight visibility is required for aerobatic flight?         | 3 SM ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(f))                                |
+| Where is the parachute-pack cycle (synthetic fiber)?             | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026) -- 180 days                              |
+| When must occupants wear parachutes during aerobatics?           | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) -- when more than one person aboard   |
+| Where is the bank-angle / pitch-attitude trigger for parachutes? | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) -- > 60 deg bank or > 30 deg pitch |
+| Where is the glider-tow rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/309?at=2026)                                          |
+| Where is banner-towing covered?                                  | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026) (LOA req)                                |
+| Where is the formation-flight rule?                              | [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)                                          |
+| Can a Part 135 charter fly in formation?                         | No -- [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c)                                 |
+| Where is the restricted-category operating rule?                 | [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)                                          |
+| Where is the experimental operating rule?                        | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)                                          |
+| What is the default flight rule for experimentals?               | VFR day only ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2))                     |
+| Where is the experimental over-densely-populated restriction?    | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(b)                                       |
+| What must a pilot tell every passenger in an experimental?       | The aircraft is experimental ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1))     |
+| Where is subpart F applicability?                                | [@cite](airboss-ref:regs/cfr-14/91/501?at=2026)                                          |
+| Where is subpart G applicability?                                | [@cite](airboss-ref:regs/cfr-14/91/601?at=2026)                                          |
+| Where is the FDR / CVR rule?                                     | [@cite](airboss-ref:regs/cfr-14/91/609?at=2026)                                          |
+| Where do U.S. ops abroad rules live?                             | [@cite](airboss-ref:regs/cfr-14/91/703?at=2026)                                          |
+| Where is the RVSM rule?                                          | [@cite](airboss-ref:regs/cfr-14/91/706?at=2026)                                          |
+| What altitude band is RVSM in U.S. airspace?                     | FL290 to FL410                                                                           |
+| Where is the U.S. waiver authority?                              | [@cite](airboss-ref:regs/cfr-14/91/903?at=2026)                                          |
+| Where is fractional applicability?                               | [@cite](airboss-ref:regs/cfr-14/91/1001?at=2026)                                         |
+| Where is fractional operational control?                         | [@cite](airboss-ref:regs/cfr-14/91/1011?at=2026)                                         |
+| What SFAR covers R22 / R44?                                      | SFAR 73                                                                                  |
 
 ## Format 2 -- Which subparts apply?
 
 For each scenario, list the Part 91 subparts that apply.
 
-| Scenario                                                                                | Subparts that apply                                                                  |
-| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| Cessna 172 doing local primary training at a Part 61 school                             | A, B, C, E (D only if e.g. spin training counts as aerobatic; usually not)           |
-| Robinson R22 doing primary training                                                     | A, B, C, E plus SFAR 73                                                              |
-| RV-7 amateur-built doing Phase II ops                                                   | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)), E plus operating-limitations document |
-| King Air 350 in private/corporate Part 91 ops                                           | A, B, C, D as applicable, E, F                                                       |
-| Citation X NetJets fractional flight at FL410 international                             | A, B, C, D, E, F, G (transport-cat), H ([@cite](airboss-ref:regs/cfr-14/91/703?at=2026), [@cite](airboss-ref:regs/cfr-14/91/706?at=2026)), K |
-| MU-2B private corporate Part 91                                                         | A, B, C, D, E, F plus SFAR 108                                                       |
-| Stearman in restricted category for ag-purpose flight                                   | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/313?at=2026)), E                      |
-| Beechcraft Bonanza Part 91 IFR cross-country                                            | A, B, C, E                                                                           |
-| Helicopter formation flyover for a charity event                                        | A, B ([@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(b)), C, E plus subpart J waiver if low |
-| Skydiving operation in a Cessna 182                                                     | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/307?at=2026)), E plus 14 CFR Part 105 |
+| Scenario                                                    | Subparts that apply                                                                                                                          |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cessna 172 doing local primary training at a Part 61 school | A, B, C, E (D only if e.g. spin training counts as aerobatic; usually not)                                                                   |
+| Robinson R22 doing primary training                         | A, B, C, E plus SFAR 73                                                                                                                      |
+| RV-7 amateur-built doing Phase II ops                       | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)), E plus operating-limitations document                                          |
+| King Air 350 in private/corporate Part 91 ops               | A, B, C, D as applicable, E, F                                                                                                               |
+| Citation X NetJets fractional flight at FL410 international | A, B, C, D, E, F, G (transport-cat), H ([@cite](airboss-ref:regs/cfr-14/91/703?at=2026), [@cite](airboss-ref:regs/cfr-14/91/706?at=2026)), K |
+| MU-2B private corporate Part 91                             | A, B, C, D, E, F plus SFAR 108                                                                                                               |
+| Stearman in restricted category for ag-purpose flight       | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/313?at=2026)), E                                                                              |
+| Beechcraft Bonanza Part 91 IFR cross-country                | A, B, C, E                                                                                                                                   |
+| Helicopter formation flyover for a charity event            | A, B ([@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(b)), C, E plus subpart J waiver if low                                                 |
+| Skydiving operation in a Cessna 182                         | A, B, C, D ([@cite](airboss-ref:regs/cfr-14/91/307?at=2026)), E plus 14 CFR Part 105                                                         |
 
 ## Format 3 -- Trap detector
 
 For each statement, identify the misreading and correct it.
 
-| Statement                                                                          | Trap and correction |
-| ---------------------------------------------------------------------------------- | ------------------- |
-| "Aerobatics under 1,500 AGL is fine over open country."                            | Wrong. [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e) prohibits aerobatics below 1,500 AGL anywhere; "open country" is necessary but not sufficient. |
-| "My CFI tow endorsement covers banner towing."                                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/309?at=2026) covers gliders/unpowered ultralight only. Banner towing is [@cite](airboss-ref:regs/cfr-14/91/311?at=2026), separate LOA. |
-| "Two airplanes flying to lunch together are in formation."                         | Conditional. [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(b) requires *prior arrangement*. Without it, [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(a) (close-as-collision-hazard) governs. |
-| "Solo aerobatics requires a parachute."                                            | Wrong. [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) requires parachutes only when more than one person is aboard. |
-| "Restricted-category aircraft can fly any commercial mission."                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(c) prohibits carriage for hire; [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(a) limits ops to the certificated special purpose. |
-| "Experimental aircraft can fly IFR if equipped."                                   | Conditional. [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2) defaults to VFR day only. IFR requires specific authorization in the operating-limitations document. |
-| "Subpart F applies to any turbine airplane."                                       | Wrong. [@cite](airboss-ref:regs/cfr-14/91/501?at=2026) limits applicability to large airplanes (> 12,500 lb), turbojet multi-engine, or fractional. A single-engine turboprop is not subpart F. |
-| "RVSM is automatic above FL290."                                                    | Wrong. RVSM requires authorization under [@cite](airboss-ref:regs/cfr-14/91/706?at=2026) -- aircraft equipment, pilot training, operator authorization. |
-| "SFARs are old rules I don't need to worry about."                                  | Wrong. SFAR 73 (R22/R44) and SFAR 108 (MU-2B) are routine and binding for those communities. |
-| "Subpart H is just RVSM."                                                          | Wrong. Subpart H covers foreign aircraft, U.S. ops abroad, MNPS, RVSM, and special bilateral arrangements. RVSM is one section. |
-| "Fractional pilots are governed by Part 135."                                      | Wrong. Fractional operates under Part 91 subpart K. The operational-control concept ports in from 135 / 121 but the regulatory home is 91. |
-| "The 4-nm-from-airway aerobatic buffer is from the airway edge."                   | Wrong. [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(d) measures from airway centerline (effectively beyond the 4-nm half-width of the airway itself). |
-| "An experimental can carry passengers without telling them it's experimental."     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1) requires every passenger be advised of the experimental nature. |
-| "Steep turn instruction triggers the parachute requirement."                       | Conditional. [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) triggers at > 60-deg bank or > 30-deg pitch; [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(d) carves out CFI instruction required for a cert/rating. Standard 45-deg-bank steep turns don't trigger. |
-| "Carriage for hire in formation is OK if briefed."                                 | Wrong. [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c) bans formation flight when *any* aircraft carries passengers for hire. No briefing exception. |
+| Statement                                                                      | Trap and correction                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Aerobatics under 1,500 AGL is fine over open country."                        | Wrong. [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e) prohibits aerobatics below 1,500 AGL anywhere; "open country" is necessary but not sufficient.                                                                                                                  |
+| "My CFI tow endorsement covers banner towing."                                 | Wrong. [@cite](airboss-ref:regs/cfr-14/91/309?at=2026) covers gliders/unpowered ultralight only. Banner towing is [@cite](airboss-ref:regs/cfr-14/91/311?at=2026), separate LOA.                                                                                          |
+| "Two airplanes flying to lunch together are in formation."                     | Conditional. [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(b) requires *prior arrangement*. Without it, [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(a) (close-as-collision-hazard) governs.                                                                         |
+| "Solo aerobatics requires a parachute."                                        | Wrong. [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) requires parachutes only when more than one person is aboard.                                                                                                                                                   |
+| "Restricted-category aircraft can fly any commercial mission."                 | Wrong. [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(c) prohibits carriage for hire; [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(a) limits ops to the certificated special purpose.                                                                                 |
+| "Experimental aircraft can fly IFR if equipped."                               | Conditional. [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2) defaults to VFR day only. IFR requires specific authorization in the operating-limitations document.                                                                                                   |
+| "Subpart F applies to any turbine airplane."                                   | Wrong. [@cite](airboss-ref:regs/cfr-14/91/501?at=2026) limits applicability to large airplanes (> 12,500 lb), turbojet multi-engine, or fractional. A single-engine turboprop is not subpart F.                                                                           |
+| "RVSM is automatic above FL290."                                               | Wrong. RVSM requires authorization under [@cite](airboss-ref:regs/cfr-14/91/706?at=2026) -- aircraft equipment, pilot training, operator authorization.                                                                                                                   |
+| "SFARs are old rules I don't need to worry about."                             | Wrong. SFAR 73 (R22/R44) and SFAR 108 (MU-2B) are routine and binding for those communities.                                                                                                                                                                              |
+| "Subpart H is just RVSM."                                                      | Wrong. Subpart H covers foreign aircraft, U.S. ops abroad, MNPS, RVSM, and special bilateral arrangements. RVSM is one section.                                                                                                                                           |
+| "Fractional pilots are governed by Part 135."                                  | Wrong. Fractional operates under Part 91 subpart K. The operational-control concept ports in from 135 / 121 but the regulatory home is 91.                                                                                                                                |
+| "The 4-nm-from-airway aerobatic buffer is from the airway edge."               | Wrong. [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(d) measures from airway centerline (effectively beyond the 4-nm half-width of the airway itself).                                                                                                                  |
+| "An experimental can carry passengers without telling them it's experimental." | Wrong. [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1) requires every passenger be advised of the experimental nature.                                                                                                                                              |
+| "Steep turn instruction triggers the parachute requirement."                   | Conditional. [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) triggers at > 60-deg bank or > 30-deg pitch; [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(d) carves out CFI instruction required for a cert/rating. Standard 45-deg-bank steep turns don't trigger. |
+| "Carriage for hire in formation is OK if briefed."                             | Wrong. [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c) bans formation flight when *any* aircraft carries passengers for hire. No briefing exception.                                                                                                                   |
 
 ## Format 4 -- Integration scenarios (cumulative, Weeks 1-6)
 

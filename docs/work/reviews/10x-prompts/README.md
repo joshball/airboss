@@ -4,14 +4,14 @@ Six self-contained prompts. Each is meant to be pasted into a fresh Claude Code 
 
 Run them one at a time (or in parallel sessions). Each writes its review files to `docs/work/reviews/`.
 
-| # | Chunk | Prompt |
-|---|-------|--------|
-| 1 | Study app -- surfaces and routes | [01-study-app-surfaces.md](01-study-app-surfaces.md) |
-| 2 | Study BC -- domain logic | [02-study-bc-domain.md](02-study-bc-domain.md) |
-| 3 | Auth, identity, audit | [03-auth-identity-audit.md](03-auth-identity-audit.md) |
-| 4 | Sources and content pipeline | [04-sources-content-pipeline.md](04-sources-content-pipeline.md) |
-| 5 | UI library and themes | [05-ui-library-themes.md](05-ui-library-themes.md) |
-| 6 | Hangar (app + libs + BC) | [06-hangar-cluster.md](06-hangar-cluster.md) |
+| #   | Chunk                            | Prompt                                                           |
+| --- | -------------------------------- | ---------------------------------------------------------------- |
+| 1   | Study app -- surfaces and routes | [01-study-app-surfaces.md](01-study-app-surfaces.md)             |
+| 2   | Study BC -- domain logic         | [02-study-bc-domain.md](02-study-bc-domain.md)                   |
+| 3   | Auth, identity, audit            | [03-auth-identity-audit.md](03-auth-identity-audit.md)           |
+| 4   | Sources and content pipeline     | [04-sources-content-pipeline.md](04-sources-content-pipeline.md) |
+| 5   | UI library and themes            | [05-ui-library-themes.md](05-ui-library-themes.md)               |
+| 6   | Hangar (app + libs + BC)         | [06-hangar-cluster.md](06-hangar-cluster.md)                     |
 
 ## Notes
 

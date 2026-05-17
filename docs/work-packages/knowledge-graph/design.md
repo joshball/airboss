@@ -52,13 +52,13 @@ Normalizing all edges directionally (`from_node_id` -> `to_node_id`) and storing
 
 The five edge types map to distinct query patterns:
 
-| Edge type   | Primary consumer                                               | Directionality                                |
-| ----------- | -------------------------------------------------------------- | --------------------------------------------- |
-| `requires`  | Session engine "prerequisites-met" filter; node detail "prerequisites" block | Must be a DAG; load-bearing                   |
-| `deepens`   | "When you're ready to go further" on node detail; study-plan depth preference | Typically points from shallower to deeper; same domain |
-| `applies`   | Cross-domain "where is this used?"; `applied_by` list on node detail | From consumer to source (normalized reversed) |
-| `teaches`   | Pedagogical axis -- CFI-level nodes pointing to the technical nodes they teach | From pedagogy node to technical node          |
-| `related`   | Weakest edge; cross-references                                  | Bidirectional                                 |
+| Edge type  | Primary consumer                                                               | Directionality                                         |
+| ---------- | ------------------------------------------------------------------------------ | ------------------------------------------------------ |
+| `requires` | Session engine "prerequisites-met" filter; node detail "prerequisites" block   | Must be a DAG; load-bearing                            |
+| `deepens`  | "When you're ready to go further" on node detail; study-plan depth preference  | Typically points from shallower to deeper; same domain |
+| `applies`  | Cross-domain "where is this used?"; `applied_by` list on node detail           | From consumer to source (normalized reversed)          |
+| `teaches`  | Pedagogical axis -- CFI-level nodes pointing to the technical nodes they teach | From pedagogy node to technical node                   |
+| `related`  | Weakest edge; cross-references                                                 | Bidirectional                                          |
 
 Keeping `related` weak and separate lets the session engine legitimately ignore it. Mixing it into `deepens` or `applies` would corrupt the signal those edges are supposed to carry. ADR 011's "discipline rule" -- `requires` must point to a specific node, not a broad area -- isn't enforced by schema but shows up as a code review concern on authored nodes.
 
@@ -85,16 +85,16 @@ Argued against two alternatives:
 
 **What lives where:**
 
-| Data                                  | Source of truth | DB              |
-| ------------------------------------- | --------------- | --------------- |
-| Node metadata (domain, relevance, edges) | `node.md` frontmatter | `knowledge_node` + `knowledge_edge` |
-| Phase prose (Context, Problem, etc.)  | `node.md` body  | `knowledge_content_phase.body`     |
-| Phase structured payload (activity ids, card ids, rep ids, calc prompts) | YAML fences inside phase sections | `knowledge_content_phase.payload` (JSONB) |
-| References (PHAK chapter, CFR section) | `node.md` frontmatter | `knowledge_node.references` (JSONB) |
-| Assets (diagrams, images)             | `course/knowledge/{domain}/{slug}/assets/` | Paths referenced from body; not in DB |
-| Per-node card/rep attachments         | `node.md` Practice phase payload + `study.card.node_id` / `study.scenario.node_id` | DB is the primary query target (faster than scanning) |
-| Interactive activities (wind triangle, etc.) | `libs/activities/{id}/`                     | Referenced by id in `payload.activities` |
-| Mastery / progress                    | n/a (derived)   | Computed from `study.review`, `study.rep_attempt` |
+| Data                                                                     | Source of truth                                                                    | DB                                                    |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Node metadata (domain, relevance, edges)                                 | `node.md` frontmatter                                                              | `knowledge_node` + `knowledge_edge`                   |
+| Phase prose (Context, Problem, etc.)                                     | `node.md` body                                                                     | `knowledge_content_phase.body`                        |
+| Phase structured payload (activity ids, card ids, rep ids, calc prompts) | YAML fences inside phase sections                                                  | `knowledge_content_phase.payload` (JSONB)             |
+| References (PHAK chapter, CFR section)                                   | `node.md` frontmatter                                                              | `knowledge_node.references` (JSONB)                   |
+| Assets (diagrams, images)                                                | `course/knowledge/{domain}/{slug}/assets/`                                         | Paths referenced from body; not in DB                 |
+| Per-node card/rep attachments                                            | `node.md` Practice phase payload + `study.card.node_id` / `study.scenario.node_id` | DB is the primary query target (faster than scanning) |
+| Interactive activities (wind triangle, etc.)                             | `libs/activities/{id}/`                                                            | Referenced by id in `payload.activities`              |
+| Mastery / progress                                                       | n/a (derived)                                                                      | Computed from `study.review`, `study.rep_attempt`     |
 
 The `node.md` structure -- H2 headings with YAML fences for structured lists inside the Discover and Practice phases -- is a deliberate compromise: readable enough for a human author, structured enough for the build script to parse deterministically.
 
@@ -162,16 +162,16 @@ A card can be `source_type='personal'` and `node_id='kn_...'` (author-linked a p
 
 ## Alternatives considered (quick)
 
-| Alternative                                              | Why not                                                           |
-| -------------------------------------------------------- | ----------------------------------------------------------------- |
-| Build on file-save (watch mode)                          | Surprise writes; breaks when multiple nodes change. Explicit `bun run db build` is saner |
-| Neo4j or a dedicated graph DB                            | Adds a service, a query language, and ops. Postgres at 500 nodes is trivially fast |
-| Store edges as `node.edges: jsonb`                       | See "Schema rationale"                                            |
-| Store phases as seven columns on node row                | See "Schema rationale"                                            |
-| Free-text phases (no 7-phase discipline)                 | Loses the discovery-first pedagogy baked into ADR 011             |
-| No `slug` column; use the kebab-case id as the PK         | Renaming a node would orphan every card/scenario/edge referencing it |
-| Represent `relevance` as a child table                   | Five-row-max child table for a read-mostly structured value; JSONB + validation is cleaner |
-| Courses as filters in this feature                       | ADR 011 describes them but ships them with FIRC migration -- not this feature's scope |
+| Alternative                                       | Why not                                                                                    |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Build on file-save (watch mode)                   | Surprise writes; breaks when multiple nodes change. Explicit `bun run db build` is saner   |
+| Neo4j or a dedicated graph DB                     | Adds a service, a query language, and ops. Postgres at 500 nodes is trivially fast         |
+| Store edges as `node.edges: jsonb`                | See "Schema rationale"                                                                     |
+| Store phases as seven columns on node row         | See "Schema rationale"                                                                     |
+| Free-text phases (no 7-phase discipline)          | Loses the discovery-first pedagogy baked into ADR 011                                      |
+| No `slug` column; use the kebab-case id as the PK | Renaming a node would orphan every card/scenario/edge referencing it                       |
+| Represent `relevance` as a child table            | Five-row-max child table for a read-mostly structured value; JSONB + validation is cleaner |
+| Courses as filters in this feature                | ADR 011 describes them but ships them with FIRC migration -- not this feature's scope      |
 
 ## Activities library note
 

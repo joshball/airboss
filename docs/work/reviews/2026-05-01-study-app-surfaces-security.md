@@ -16,17 +16,17 @@ review_status: done
 
 Re-greped main against every finding. (dev) gate fixed in this PR; remaining items are minor input-validation hardening.
 
-| Severity | Finding | Verdict | Evidence |
-| -------- | ------- | ------- | -------- |
-| MAJOR    | (dev) route group exposed in production with no auth + module-global side effects | CLOSED | new `apps/study/src/routes/(dev)/+layout.server.ts` (this PR) gates the group behind `dev` from `$app/environment`; production hits 404 |
-| MINOR    | `notesMd` on goals/plans has no server-side length cap | CLOSED | `apps/study/src/routes/(app)/goals/new/+page.server.ts:30` and `goals/[id]/+page.server.ts:135` enforce `GOAL_NOTES_MAX_LENGTH` |
-| MINOR    | session-start `seed` query param has no length / charset cap | STILL OPEN | `apps/study/src/routes/(app)/session/start/+page.server.ts` still passes raw seed through. Next: cap length to 64, restrict to `^[A-Za-z0-9_-]+$`, fail(400) otherwise |
-| MINOR    | `/api/citations/search` accepts unbounded `q` | CLOSED | `apps/study/src/routes/api/citations/search/+server.ts:34` -- `q.trim().slice(0, CITATION_SEARCH_QUERY_MAX_LENGTH)` |
-| MINOR    | handbook-asset endpoint serves unknown extensions as octet-stream | STILL OPEN | `apps/study/src/routes/handbook-asset/[...path]/+server.ts:47` still falls back to `application/octet-stream`. Next: reject extensions not in `CONTENT_TYPES` with 404 |
-| MINOR    | login getClientAddress relies on adapter trust-proxy config | STILL OPEN | runtime self-check at boot still missing. Documented as deployment-config concern; deferred to devops/deployment doc work. Trigger: ship to a real reverse-proxy environment |
-| MINOR    | heartbeat endpoint does not validate `?edition=` charset | STILL OPEN | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/heartbeat/+server.ts` still passes raw editionParam. Next: cap `editionParam.length <= 64` before BC dispatch |
-| NIT      | CSP `style-src 'unsafe-inline'` is documented gap | STILL OPEN (accepted) | upstream SvelteKit limitation; flag preserved |
-| NIT      | appearance/theme endpoints not auth-gated by design | STILL OPEN (accepted) | intentional; cookie writes only with allowlisted values |
+| Severity | Finding                                                                           | Verdict               | Evidence                                                                                                                                                                               |
+| -------- | --------------------------------------------------------------------------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MAJOR    | (dev) route group exposed in production with no auth + module-global side effects | CLOSED                | new `apps/study/src/routes/(dev)/+layout.server.ts` (this PR) gates the group behind `dev` from `$app/environment`; production hits 404                                                |
+| MINOR    | `notesMd` on goals/plans has no server-side length cap                            | CLOSED                | `apps/study/src/routes/(app)/goals/new/+page.server.ts:30` and `goals/[id]/+page.server.ts:135` enforce `GOAL_NOTES_MAX_LENGTH`                                                        |
+| MINOR    | session-start `seed` query param has no length / charset cap                      | STILL OPEN            | `apps/study/src/routes/(app)/session/start/+page.server.ts` still passes raw seed through. Next: cap length to 64, restrict to `^[A-Za-z0-9_-]+$`, fail(400) otherwise                 |
+| MINOR    | `/api/citations/search` accepts unbounded `q`                                     | CLOSED                | `apps/study/src/routes/api/citations/search/+server.ts:34` -- `q.trim().slice(0, CITATION_SEARCH_QUERY_MAX_LENGTH)`                                                                    |
+| MINOR    | handbook-asset endpoint serves unknown extensions as octet-stream                 | STILL OPEN            | `apps/study/src/routes/handbook-asset/[...path]/+server.ts:47` still falls back to `application/octet-stream`. Next: reject extensions not in `CONTENT_TYPES` with 404                 |
+| MINOR    | login getClientAddress relies on adapter trust-proxy config                       | STILL OPEN            | runtime self-check at boot still missing. Documented as deployment-config concern; deferred to devops/deployment doc work. Trigger: ship to a real reverse-proxy environment           |
+| MINOR    | heartbeat endpoint does not validate `?edition=` charset                          | STILL OPEN            | `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/heartbeat/+server.ts` still passes raw editionParam. Next: cap `editionParam.length <= 64` before BC dispatch |
+| NIT      | CSP `style-src 'unsafe-inline'` is documented gap                                 | STILL OPEN (accepted) | upstream SvelteKit limitation; flag preserved                                                                                                                                          |
+| NIT      | appearance/theme endpoints not auth-gated by design                               | STILL OPEN (accepted) | intentional; cookie writes only with allowlisted values                                                                                                                                |
 
 ## Summary
 

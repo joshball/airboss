@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.2
 Title:           Solo Endorsement Steep Turn Practice
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'PS-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Timid Student
 Parameters:
   skillLevel:         0.3
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Climbing to practice altitude. Student has a white-knuckle grip on the yoke. Scanning instruments but eyes keep darting to you for reassurance. Altitude is holding, heading is good.
 studentSpeech:Am I doing this right? I feel like the airplane is... I don't know, heavy today?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        At practice altitude. You demonstrate a steep turn, then ask the student to try. Student enters the turn tentatively -- bank angle 20 degrees instead of 45. Altitude holding. The student is clearly afraid to bank more.
 studentSpeech:Is this enough bank? I don't want to go too steep. What if I can't recover?
@@ -93,7 +93,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student has increased bank to 35 degrees. Maintaining altitude with back pressure. Hands are shaking slightly but control inputs are actually smooth. Student keeps looking at you instead of outside.
 studentSpeech:I'm going to mess this up. I always mess this up.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student completes the first steep turn (or some portion of it). Rolls wings level. Breathing hard. Altitude within 50 feet. Performance was actually acceptable.
 studentSpeech:That was terrible, wasn't it? I know it was bad. You don't have to say it.
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 5
 
-```
+```text
 id:           tick_5
 scene:        Student absorbs the feedback. Posture relaxes slightly. Grip loosens on the yoke. Ready for the next attempt.
 studentSpeech:Really? It was OK? I... OK. Can I try again? I want to try for 45 degrees this time.
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
 ```
 

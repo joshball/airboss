@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     4 |      4 |    0 |
-| minor    |     6 |      2 |    4 |
-| nit      |     2 |      0 |    2 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 4     | 4      | 0    |
+| minor    | 6     | 2      | 4    |
+| nit      | 2     | 0      | 2    |
 
 ### MAJOR: `recordItemResult` upsert vs documented contract -- CLOSED
 

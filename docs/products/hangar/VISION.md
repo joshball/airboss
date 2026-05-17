@@ -71,11 +71,11 @@ Authoring once feeds many surfaces. A scenario authored in hangar runs in study 
 
 Per-area phasing. No fixed dates.
 
-| Area    | Now                                          | Next                                                 | Later                                           |
-| ------- | -------------------------------------------- | ---------------------------------------------------- | ----------------------------------------------- |
-| Content | Sources, Glossary                            | Scenarios authoring, Cards authoring                 | Routes, Modules, Cross-surface authoring shell  |
-| People  | `/users` directory + role / ban / revoke     | Invite flow                                          | Per-user activity heatmap, content attribution  |
-| System  | Jobs, cross-cutting audit explorer           | Hangar e2e infra, diagnostics dashboard              | Feature flags, queue ops                        |
+| Area    | Now                                      | Next                                    | Later                                          |
+| ------- | ---------------------------------------- | --------------------------------------- | ---------------------------------------------- |
+| Content | Sources, Glossary                        | Scenarios authoring, Cards authoring    | Routes, Modules, Cross-surface authoring shell |
+| People  | `/users` directory + role / ban / revoke | Invite flow                             | Per-user activity heatmap, content attribution |
+| System  | Jobs, cross-cutting audit explorer       | Hangar e2e infra, diagnostics dashboard | Feature flags, queue ops                       |
 
 The dashboard at `/` aggregates one stat per area. Each area gets its own surface as features land.
 
@@ -83,10 +83,10 @@ The dashboard at `/` aggregates one stat per area. Each area gets its own surfac
 
 The FIRC-era hangar carried a large FAA-submission surface: TCO editor, traceability matrix, FAA package generator, submission tracker, regulatory-change monitor, content lifecycle states, content-validation engine, content versioning UI. Per [PIVOT.md](../../platform/PIVOT.md), this is **dormant, not deleted**. The schema rigor stays; the UI is archived.
 
-| Where the dormant work lives                                                   | When it wakes up                                           |
-| ------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| Where the dormant work lives                                 | When it wakes up                                           |
+| ------------------------------------------------------------ | ---------------------------------------------------------- |
 | [.archive/products/hangar/](../../.archive/products/hangar/) | A FIRC content pack (or any Part 141 / WINGS module) ships |
-| [ADR 017](../../decisions/017-firc-compliance-dormant.md)                      | The decision record explaining what was dormanted and why  |
+| [ADR 017](../../decisions/017-firc-compliance-dormant.md)    | The decision record explaining what was dormanted and why  |
 
 When that day comes: restore from the archive, integrate against current platform conventions, and resume.
 

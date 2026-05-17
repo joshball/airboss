@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 2 Correctness Review
 
 Scope: HEAD (`0bbde26`) vs HEAD~1 (`e97d759`). Phase 2 adds:

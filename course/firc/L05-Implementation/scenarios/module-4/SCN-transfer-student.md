@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.5
 Title:           Transfer Student Wants to Resume Training
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_3]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-1', 'RC-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Transfer Student (Foreign National)
 Parameters:
   skillLevel:         0.3
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO office. Transfer student arrives with a partial training record and a receipt from the previous school. They hand you a folder with some logbook entries and a photocopy of a TSA approval letter.
 studentSpeech:My old school already did the TSA thing. Here's the approval letter. Can we fly today? I've already lost two weeks with the transfer.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        You examine the documents. The TSA approval letter lists the previous school as the training provider. It's a photocopy, not original. The approval is for private pilot training and was issued 8 months ago. Your school's name is not on it.
 studentSpeech:The approval is for me, not the school. It should transfer, right? The other school said it would.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is frustrated. Mentions that the previous school closed abruptly (which is why they transferred). Asks if there's any way to expedite the process.
 studentSpeech:This is not fair. I already waited weeks at the other school. Now I have to wait again? The other school closed -- it's not my fault. Can you call TSA and explain?
@@ -114,7 +114,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

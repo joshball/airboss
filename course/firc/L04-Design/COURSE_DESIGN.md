@@ -32,14 +32,14 @@ Every FAA topic makes a demand on the CFI. Some demand technical knowledge (A.1 
 
 This matters because the learning mode is different for each kind of demand:
 
-| Demand type | Learning mode | Modules |
-| --- | --- | --- |
-| Technical currency | "The world changed -- get current" | 1 |
-| Interpersonal judgment | "Read the human, not the instrument" | 2 |
-| Physical intervention | "See the threat, act in time" | 3 |
-| Administrative compliance | "Know the rules, follow the process" | 4 |
-| Evaluation skill | "Assess meaningfully, not minimally" | 5 |
-| Integration | "Put it all together under pressure" | 6 |
+| Demand type               | Learning mode                        | Modules |
+| ------------------------- | ------------------------------------ | ------- |
+| Technical currency        | "The world changed -- get current"   | 1       |
+| Interpersonal judgment    | "Read the human, not the instrument" | 2       |
+| Physical intervention     | "See the threat, act in time"        | 3       |
+| Administrative compliance | "Know the rules, follow the process" | 4       |
+| Evaluation skill          | "Assess meaningfully, not minimally" | 5       |
+| Integration               | "Put it all together under pressure" | 6       |
 
 A module that mixes technical currency with interpersonal judgment (say, A.1 + A.4) would require the learner to context-switch between completely different cognitive modes within one session. Keeping the demand type consistent lets the module build skill within a coherent frame.
 
@@ -168,12 +168,12 @@ Module 6: Integration             "Everything at once"
 
 **Cross-module reinforcement:** Some competencies appear in multiple modules at increasing difficulty:
 
-| Competency | First appears | Reinforced in | Assessed in capstone |
-| --- | --- | --- | --- |
-| CJ-2 (intervention ladder) | M1 (implicitly, via tutorial) | M2 (interpersonal), M3 (time-pressure) | M6 |
-| ES-3 (ACS framework) | M1 (explicitly) | M5 (evaluation context) | M6 |
-| RC-4 (regulatory currency) | M1 (explicitly) | M4 (compliance context), M5 (evaluation prep) | M6 |
-| RM-1 (risk identification) | M2 (explicitly) | M3 (dynamic, in-flight) | M6 |
+| Competency                 | First appears                 | Reinforced in                                 | Assessed in capstone |
+| -------------------------- | ----------------------------- | --------------------------------------------- | -------------------- |
+| CJ-2 (intervention ladder) | M1 (implicitly, via tutorial) | M2 (interpersonal), M3 (time-pressure)        | M6                   |
+| ES-3 (ACS framework)       | M1 (explicitly)               | M5 (evaluation context)                       | M6                   |
+| RC-4 (regulatory currency) | M1 (explicitly)               | M4 (compliance context), M5 (evaluation prep) | M6                   |
+| RM-1 (risk identification) | M2 (explicitly)               | M3 (dynamic, in-flight)                       | M6                   |
 
 ---
 
@@ -181,10 +181,10 @@ Module 6: Integration             "Everything at once"
 
 Not every learner plays every scenario. Within each module, scenarios are classified:
 
-| Classification | Who plays it | Purpose |
-| --- | --- | --- |
-| **Core** | Everyone | Introduces key concepts. Cannot be skipped. |
-| **Reinforcement** | System selects based on performance | Deepens practice on specific competencies where the learner is weak. |
+| Classification    | Who plays it                                     | Purpose                                                                                    |
+| ----------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| **Core**          | Everyone                                         | Introduces key concepts. Cannot be skipped.                                                |
+| **Reinforcement** | System selects based on performance              | Deepens practice on specific competencies where the learner is weak.                       |
 | **Deep Practice** | System selects for strong learners needing depth | Longer, more complex scenarios for learners who have demonstrated foundational competency. |
 
 This means:
@@ -199,22 +199,22 @@ Module 1's [lesson flow](module-1-lesson-flow.md) documents this classification 
 
 ## Topic-to-Module Assignment (Complete)
 
-| FAA Topic | Module | Role in module |
-| --- | --- | --- |
-| A.1 GPS/TAA/Automation | 1 | Primary |
-| A.2 Special Use Airspace | 4 | Primary |
-| A.3 TSA Requirements | 4 | Primary |
-| A.4 Teaching & Safety Culture | 2 | Primary |
-| A.4 (exchange of controls) | 3 | Reinforcement only |
-| A.5 GA Safety Trends | 2 | Primary |
-| A.6 Pilot Deviations | 3 | Primary |
-| A.7 FAASTeam / WINGS | 5 | Primary |
-| A.8 Regulatory Updates | 1 | Primary |
-| A.9 Flight Reviews & IPCs | 5 | Primary |
-| A.10 Ethics & Professionalism | 2 | Primary |
-| A.11 LOC Prevention | 3 | Primary |
-| A.12 ACS | 1 | Primary |
-| A.13 Student/Remote Pilot Apps | 4 | Primary |
+| FAA Topic                      | Module | Role in module     |
+| ------------------------------ | ------ | ------------------ |
+| A.1 GPS/TAA/Automation         | 1      | Primary            |
+| A.2 Special Use Airspace       | 4      | Primary            |
+| A.3 TSA Requirements           | 4      | Primary            |
+| A.4 Teaching & Safety Culture  | 2      | Primary            |
+| A.4 (exchange of controls)     | 3      | Reinforcement only |
+| A.5 GA Safety Trends           | 2      | Primary            |
+| A.6 Pilot Deviations           | 3      | Primary            |
+| A.7 FAASTeam / WINGS           | 5      | Primary            |
+| A.8 Regulatory Updates         | 1      | Primary            |
+| A.9 Flight Reviews & IPCs      | 5      | Primary            |
+| A.10 Ethics & Professionalism  | 2      | Primary            |
+| A.11 LOC Prevention            | 3      | Primary            |
+| A.12 ACS                       | 1      | Primary            |
+| A.13 Student/Remote Pilot Apps | 4      | Primary            |
 
 ---
 

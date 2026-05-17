@@ -10,28 +10,28 @@ This is the operational companion to:
 
 ## Path tokens
 
-| Token                   | Meaning                                                                      |
-| ----------------------- | ---------------------------------------------------------------------------- |
-| `$HANDBOOK_CACHE_ROOT`  | `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`) |
-| `$REPO_ROOT`            | The repo root                                                                |
-| `<doc>`                 | New document slug (e.g. `iph` for Instrument Procedures Handbook)            |
-| `<edition>`             | Edition tag (e.g. `FAA-H-8083-16B`)                                          |
-| `<NN>`                  | Two-digit chapter ordinal                                                    |
+| Token                  | Meaning                                                                       |
+| ---------------------- | ----------------------------------------------------------------------------- |
+| `$HANDBOOK_CACHE_ROOT` | `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`) |
+| `$REPO_ROOT`           | The repo root                                                                 |
+| `<doc>`                | New document slug (e.g. `iph` for Instrument Procedures Handbook)             |
+| `<edition>`            | Edition tag (e.g. `FAA-H-8083-16B`)                                           |
+| `<NN>`                 | Two-digit chapter ordinal                                                     |
 
 ## 1. Before you start
 
 Decisions to make before touching code.
 
-| Question                                           | Where to look                                                          | Decision feeds into                              |
-| -------------------------------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------ |
-| Is the document already in scope?                  | `course/` dir, `docs/platform/MULTI_PRODUCT_ARCHITECTURE.md`          | Whether to onboard at all                        |
-| Does the FAA offer chapter-level downloads?        | The FAA's index page for the doc                                       | Cache layout (whole-doc vs chapter PDFs vs HTML) |
-| What's the slug?                                   | `scripts/sources/config/handbooks/` (existing slugs)                  | YAML filename, cache directory                   |
-| Edition tag?                                       | The PDF's title page or FAA's URL                                      | YAML field, cache directory                      |
-| Page offset (PDF page 1 vs printed 1-1)?           | Open the PDF, count cover/copyright pages                              | YAML `page_offset`                               |
-| Outline strategy?                                  | Try `bookmark` first; if PDF outline is empty/wrong, use `content`    | YAML `outline_strategy`                          |
-| Section strategy default?                          | `toc` if printed TOC is reliable; `prompt` if not                     | YAML `section_strategy`                          |
-| Errata?                                            | FAA's index page (look for "addendum", "MOSAIC", "errata")            | YAML `errata:` list, ADR 020                     |
+| Question                                    | Where to look                                                      | Decision feeds into                              |
+| ------------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
+| Is the document already in scope?           | `course/` dir, `docs/platform/MULTI_PRODUCT_ARCHITECTURE.md`       | Whether to onboard at all                        |
+| Does the FAA offer chapter-level downloads? | The FAA's index page for the doc                                   | Cache layout (whole-doc vs chapter PDFs vs HTML) |
+| What's the slug?                            | `scripts/sources/config/handbooks/` (existing slugs)               | YAML filename, cache directory                   |
+| Edition tag?                                | The PDF's title page or FAA's URL                                  | YAML field, cache directory                      |
+| Page offset (PDF page 1 vs printed 1-1)?    | Open the PDF, count cover/copyright pages                          | YAML `page_offset`                               |
+| Outline strategy?                           | Try `bookmark` first; if PDF outline is empty/wrong, use `content` | YAML `outline_strategy`                          |
+| Section strategy default?                   | `toc` if printed TOC is reliable; `prompt` if not                  | YAML `section_strategy`                          |
+| Errata?                                     | FAA's index page (look for "addendum", "MOSAIC", "errata")         | YAML `errata:` list, ADR 020                     |
 
 See [ADR 020](../decisions/020-handbook-edition-and-amendment-policy.md) for errata and edition policy. See [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md) for storage policy.
 
@@ -41,11 +41,11 @@ See [ADR 020](../decisions/020-handbook-edition-and-amendment-policy.md) for err
 
 Three classes of FAA publication:
 
-| Publisher offers       | Cache contains                       | Section extraction approach                                | Examples                                                  |
-| ---------------------- | ------------------------------------ | ---------------------------------------------------------- | --------------------------------------------------------- |
-| Whole PDF only         | Whole PDF                            | TOC + LLM on page-range slices (with truncation cap)       | AVWX, IFH, AMT, seaplane                                  |
-| Chapter PDFs           | Chapter PDFs (+ optional whole-doc)  | TOC + LLM on per-chapter plaintext (no cap)                | PHAK, AFH, IPH, helicopter, glider, balloon, instructors  |
-| Chapter HTML           | Chapter HTML                         | HTML parse (deterministic) + LLM backstop                  | AIM                                                       |
+| Publisher offers | Cache contains                      | Section extraction approach                          | Examples                                                 |
+| ---------------- | ----------------------------------- | ---------------------------------------------------- | -------------------------------------------------------- |
+| Whole PDF only   | Whole PDF                           | TOC + LLM on page-range slices (with truncation cap) | AVWX, IFH, AMT, seaplane                                 |
+| Chapter PDFs     | Chapter PDFs (+ optional whole-doc) | TOC + LLM on per-chapter plaintext (no cap)          | PHAK, AFH, IPH, helicopter, glider, balloon, instructors |
+| Chapter HTML     | Chapter HTML                        | HTML parse (deterministic) + LLM backstop            | AIM                                                      |
 
 Chapter-source ingestion is implemented (per [ADR 022](../decisions/022-chapter-source-ingestion/decision.md)). When the YAML carries a `chapter_pdfs` block AND the chapter PDFs are downloaded, section extraction runs on per-chapter plaintext directly with no truncation cap. Whole-doc handbooks (Class C: AVWX, IFH, AMT, seaplane) still use the page-range slicing path with the `prompt.chapter_text_max_chars` cap (raised per-handbook in YAML).
 

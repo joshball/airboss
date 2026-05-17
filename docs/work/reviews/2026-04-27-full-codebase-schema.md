@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Schema is in strong shape overall: namespaces (`identity`/`audit`/`study`/`hangar`/`sim`) are clean, ID strategy is consistent (`prefix_ULID` via `createId()`), CHECK constraints back the constants pattern, and FK cascades have been thought through (reviews `restrict`, content `set null`, user-scoped `cascade`). Most query paths have matching composite indexes. The findings below cluster around: a persisted `lifecycle` column that is functionally dead because reads recompute it from `content_md`, a few denormalisations with no enforced consistency, several FKs with no covering index that show up in actual query plans, and a small number of normalisation/constraint gaps in newer tables (sim, hangar, scenario options, audit log, study schema cross-namespace links).

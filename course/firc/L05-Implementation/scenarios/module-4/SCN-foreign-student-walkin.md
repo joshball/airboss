@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.4
 Title:           Non-US Prospective Student Walk-In
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_3]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-1', 'RC-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Prospective Foreign Student
 Parameters:
   skillLevel:         0.0
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO front desk. A well-dressed young person with a foreign passport and university paperwork approaches you. They are polite and enthusiastic.
 studentSpeech:Hello, I am a university student here. I would like to learn to fly. I brought my passport and university documents. Can I start today?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        The prospective student confirms they are not a US citizen or permanent resident. They are a foreign national on an F-1 student visa. They pull out their passport and I-20 form.
 studentSpeech:I am from [country]. I have an F-1 visa. My university counselor said I need to get approved for flight training. Do you know what I need to do?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Prospective student nods, understanding. Asks about the process timeline. Then asks if they can at least sit in on ground school or use the simulator while waiting for TSA approval.
 studentSpeech:How long does the approval take? Can I do ground school while I wait? Or use the flight simulator? I don't want to waste time.
@@ -114,7 +114,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Prospective student asks about what documents they need to provide and what happens with their information. They're concerned about privacy and want to know if the school keeps copies of their passport.
 studentSpeech:What documents do I need to give you? Do you keep copies of my passport? My university counselor told me to be careful about who has my documents.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

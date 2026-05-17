@@ -35,7 +35,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Security Review: spaced-memory-items
 
 Scope: `git diff docs/initial-migration..HEAD` on branch `build/spaced-memory-items`. Feature is spaced repetition (cards, reviews, dashboards, auth scaffolding). Focus: auth, authorization, injection, XSS, CSRF, secret handling, data isolation, idempotency.

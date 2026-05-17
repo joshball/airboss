@@ -193,6 +193,7 @@ If the user wants to skip an item during the session:
 ```
 
 Three different skip behaviors with different effects:
+
 - "Skip today" -- don't show in this session, normal scheduling otherwise
 - "Skip permanently" -- mark the node as excluded from user's plan
 - "Skip topic" -- excludes the node AND its dependents

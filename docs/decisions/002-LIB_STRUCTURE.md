@@ -27,7 +27,7 @@ Apps are thin routing shells. All business logic, data access, components, and d
 
 ### Directory Structure
 
-```
+```text
 libs/
   auth/               Identity, sessions, permissions
   audit/              Action logging, content versioning
@@ -90,7 +90,7 @@ If `@firc/bc/course/manage` appears in the sim app, that's a red flag in review.
 
 ### Auth Lib Structure
 
-```
+```text
 libs/auth/src/
   schema.ts        Users, sessions, accounts, roles
   auth.ts          Sign in/out, sessions, guards (all apps)
@@ -101,7 +101,7 @@ Note: `accounts.ts` contains ops-only functions. While all apps can technically 
 
 ### Audit Lib Structure
 
-```
+```text
 libs/audit/src/
   schema.ts        Log entries, content versions
   log.ts           logAction() (all apps write)
@@ -114,7 +114,7 @@ Engine is a **pure computation library** -- it takes inputs (scenario state, stu
 
 BCs persist engine results: `bc/evidence/write` stores scenario run outcomes, `bc/enrollment/write` updates progress. Engine never calls BCs directly.
 
-```
+```text
 sim form action:
   1. Load published content via bc/course/read
   2. Run tick via engine (pure computation)

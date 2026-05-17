@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.5
 Title:           Complex Airport Taxi at Night
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_6]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-1', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Night-Inexperienced Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Student is taxiing on taxiway Alpha at moderate speed. Airport diagram is on the iPad but student is looking outside trying to read taxiway signs. First runway crossing (Runway 10/28L) is 500 feet ahead.
 studentSpeech:OK, Alpha to... wait, which way is Bravo? These signs all look the same at night.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Approaching hold-short line for Runway 10/28L. Student has not slowed down. The hold-short markings are visible in the taxi light. Student is looking at the iPad.
 studentSpeech:I think we go straight across here...
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Stopped at hold-short line. Student looks both ways down the runway. Ground control has not cleared a crossing. A regional jet's landing lights are visible on a 2-mile final for 28L.
 studentSpeech:Looks clear to me. Can I go?
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student begins to roll forward onto Runway 28L. The regional jet is now on short final, 1 mile out. Tower transmits: "Aircraft on 28 Left, hold your position!"
 studentSpeech:Oh! Sorry -- I didn't realize --
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (coach/direct/take_controls)

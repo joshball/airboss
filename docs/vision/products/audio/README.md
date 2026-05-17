@@ -6,9 +6,9 @@ Aviation is a storytelling culture. Hangar flying, NTSB reports, "there I was" t
 
 ## Products
 
-| ID | Name               | Priority | Status |
-| -- | ------------------ | -------- | ------ |
-| prd:aud:daily-decision | Daily Decision     | 3        | idea   |
-| prd:aud:atc-comms-drill | ATC Comms Drill    | 4        | idea   |
+| ID                         | Name               | Priority | Status |
+| -------------------------- | ------------------ | -------- | ------ |
+| prd:aud:daily-decision     | Daily Decision     | 3        | idea   |
+| prd:aud:atc-comms-drill    | ATC Comms Drill    | 4        | idea   |
 | prd:aud:memory-items-audio | Memory Items Audio | 4        | idea   |
-| prd:aud:ntsb-story | NTSB Story         | 1        | idea   |
+| prd:aud:ntsb-story         | NTSB Story         | 1        | idea   |

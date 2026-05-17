@@ -214,13 +214,13 @@ Who can sign:
 
 ### The 411 vs. 413 distinction
 
-| Feature                        | 91.411 (altimeter / static / encoder) | 91.413 (transponder) |
-| ------------------------------ | ------------------------------------- | -------------------- |
-| Applicability                  | IFR in controlled airspace             | All operations with installed transponder |
-| Interval                       | 24 calendar months                     | 24 calendar months   |
-| Components covered             | Static system, altimeter, encoder      | Transponder unit only |
-| Who can sign                   | Repair station with appropriate rating; airframe-rated mechanic for static-only | Repair station with radio rating |
-| Operational consequence if expired | Cannot fly IFR; can fly VFR        | Cannot operate the transponder; airplane may not be operated in 91.215(b) airspace |
+| Feature                            | 91.411 (altimeter / static / encoder)                                           | 91.413 (transponder)                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Applicability                      | IFR in controlled airspace                                                      | All operations with installed transponder                                          |
+| Interval                           | 24 calendar months                                                              | 24 calendar months                                                                 |
+| Components covered                 | Static system, altimeter, encoder                                               | Transponder unit only                                                              |
+| Who can sign                       | Repair station with appropriate rating; airframe-rated mechanic for static-only | Repair station with radio rating                                                   |
+| Operational consequence if expired | Cannot fly IFR; can fly VFR                                                     | Cannot operate the transponder; airplane may not be operated in 91.215(b) airspace |
 
 The two checks are normally done together at the avionics shop, but they are independent regulatory requirements. A pilot who is told "your 411 is expired" should also check the 413 -- they may both be due, or only one might.
 
@@ -442,18 +442,18 @@ A common pre-purchase practice: an A&P/IA does a "records inspection" alongside 
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the altimeter / static / encoder 24-month check?                | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)            |
-| Where is the transponder 24-month check?                                 | [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)            |
-| Where is the data correspondence post-installation re-test?              | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)(a)(3) and [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)(b) |
-| Where is the maintenance records list?                                   | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)            |
-| Where is the 1-year retention vs. perpetual retention split?             | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(b)         |
-| Where is the AD compliance records requirement?                          | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(a)(2)(v)  |
-| Where is the major alteration / Form 337 requirement?                    | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(a)(2)(vi) |
-| Where is the records-on-sale transfer rule?                              | [@cite](airboss-ref:regs/cfr-14/91/419?at=2026)            |
-| Where are the altimeter test procedures?                                 | 14 CFR Part 43 Appendix E |
-| Where are the transponder test procedures?                               | 14 CFR Part 43 Appendix F |
+| Question                                                     | Section / source                                                                                             |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| Where is the altimeter / static / encoder 24-month check?    | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)                                                              |
+| Where is the transponder 24-month check?                     | [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)                                                              |
+| Where is the data correspondence post-installation re-test?  | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)(a)(3) and [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)(b) |
+| Where is the maintenance records list?                       | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)                                                              |
+| Where is the 1-year retention vs. perpetual retention split? | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(b)                                                           |
+| Where is the AD compliance records requirement?              | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(a)(2)(v)                                                     |
+| Where is the major alteration / Form 337 requirement?        | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(a)(2)(vi)                                                    |
+| Where is the records-on-sale transfer rule?                  | [@cite](airboss-ref:regs/cfr-14/91/419?at=2026)                                                              |
+| Where are the altimeter test procedures?                     | 14 CFR Part 43 Appendix E                                                                                    |
+| Where are the transponder test procedures?                   | 14 CFR Part 43 Appendix F                                                                                    |
 
 ### Apply the rules
 

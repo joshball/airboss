@@ -27,19 +27,19 @@ The Credential DAG, Goal model, syllabus tree shape, lens framework, ACS K/R/S t
 
 ADR 016 defines a 10-phase migration. This WP is phases 1-6:
 
-| Phase | Scope                                                                                | This WP                                              |
-| ----- | ------------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| 0     | Handbook ingestion + reader                                                          | shipped (WP #1, PR #242)                             |
-| 1     | `StructuredCitation` extended with framing + airboss_ref; legacy entries migrated    | included                                             |
-| 2     | Credential DAG; CERTS / CERT_PREREQUISITES retired into derived views                | included                                             |
-| 3     | Syllabus + SyllabusNode + SyllabusNodeLink + YAML pipeline + `acs` corpus resolver   | included                                             |
-| 4     | PPL ACS pilot transcription (Area V); existing 30 nodes wired in                     | included                                             |
-| 5     | Relevance cache rebuild; authored relevance dropped                                  | included                                             |
-| 6     | Goal table; existing study plans converted                                           | included                                             |
-| 7     | Cert dashboard surface (ACS lens)                                                    | data layer only; pages in follow-on                  |
-| 8     | Lens framework + handbook lens + weakness lens                                       | type signatures + ACS + Domain lens; rest follow-on  |
-| 9     | Personal goal composer                                                               | data layer only; pages in follow-on                  |
-| 10    | Remaining syllabi: IR / CPL / CFI / CFII / MEI / endorsements; IFH + IPH ingested    | ongoing iterative content work                       |
+| Phase | Scope                                                                              | This WP                                             |
+| ----- | ---------------------------------------------------------------------------------- | --------------------------------------------------- |
+| 0     | Handbook ingestion + reader                                                        | shipped (WP #1, PR #242)                            |
+| 1     | `StructuredCitation` extended with framing + airboss_ref; legacy entries migrated  | included                                            |
+| 2     | Credential DAG; CERTS / CERT_PREREQUISITES retired into derived views              | included                                            |
+| 3     | Syllabus + SyllabusNode + SyllabusNodeLink + YAML pipeline + `acs` corpus resolver | included                                            |
+| 4     | PPL ACS pilot transcription (Area V); existing 30 nodes wired in                   | included                                            |
+| 5     | Relevance cache rebuild; authored relevance dropped                                | included                                            |
+| 6     | Goal table; existing study plans converted                                         | included                                            |
+| 7     | Cert dashboard surface (ACS lens)                                                  | data layer only; pages in follow-on                 |
+| 8     | Lens framework + handbook lens + weakness lens                                     | type signatures + ACS + Domain lens; rest follow-on |
+| 9     | Personal goal composer                                                             | data layer only; pages in follow-on                 |
+| 10    | Remaining syllabi: IR / CPL / CFI / CFII / MEI / endorsements; IFH + IPH ingested  | ongoing iterative content work                      |
 
 **Why six phases in one WP rather than six WPs?** Because they compose so tightly that splitting them produces six work packages each blocked on the previous one's data. Citations and references can't ship without credentials and syllabi (the second consumer). Credentials can't be useful without syllabi to attach. Syllabi can't validate without citations resolving. Goals can't compose without syllabi. The relevance cache rebuild can't run without all of the above. Splitting risks shipping schema additions that aren't useful in isolation and accumulating schema-only WPs.
 
@@ -456,22 +456,22 @@ The `acs` corpus resolver lands in `libs/sources/src/resolvers/acs.ts` per ADR 0
 
 ## Alternatives considered
 
-| Alternative                                                                       | Why not                                                                                                                 |
-| --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| A single `learning_object` table polymorphic over reference / citation / node     | Conflates four distinct concerns. Loses the per-table CHECK and FK clarity. Harder to write or read.                    |
-| `study.citation` as its own table (the pre-WP-#1 plan)                            | WP #1 already shipped `StructuredCitation` JSONB; a row table now would split the primitive. See Decision 1.            |
-| Re-creating the `study.reference` table in this WP                                | WP #1 already created it (PR #242). This WP seeds rows; redefining the table would conflict with the migration on main. |
-| `credential_prereq` as a self-FK column on `credential`                           | Models only one prereq per credential; CFII (CFI + IR) doesn't fit. See Schema rationale.                               |
-| `syllabus_node` flat (chapter / section / subsection codes only)                  | Loses the area / task / element semantic. Lens framework becomes guesswork.                                             |
-| `code` as the only leaf identifier (no `airboss-ref:`)                            | Cross-corpus joins lose structure. ADR 019 v3 makes `airboss-ref:` the canonical form. See Decision 8.                  |
-| Single ACS element row per task (K + R + S as columns)                            | Conflates three different mastery dimensions. See Decision 2.                                                           |
-| Generate syllabi from FAA PDF                                                     | Reliability + quality + scope. See "Why we don't auto-generate" above.                                                  |
-| Hard cutover: drop `cert_goals` and rewire the engine in this WP                  | Engine refactor scope. See Decision 6.                                                                                  |
-| Single active goal per user, like the single active study plan                    | Doesn't model parallel tracks the user actually has. See Decision 5.                                                    |
-| Derived cache of relevance computed on read (no stored column)                    | Hot path through `knowledge_node.relevance` is the dashboard; computing it on every read is wasteful. Cache it.         |
-| Dropping `CERTS` constant entirely in this WP                                     | Wide blast radius, many readers reference it. Deprecate, plan removal in follow-on. See Constants rationale.            |
-| Lens type tied to ACS shape only                                                  | Doesn't generalize. Two lenses ship to prove the type. See Lens framework rationale.                                    |
-| Materialized view for `cert_goals` derivation                                     | Postgres materialized views need explicit REFRESH; adds a maintenance burden. BC-layer derivation is cheap enough.      |
+| Alternative                                                                   | Why not                                                                                                                 |
+| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| A single `learning_object` table polymorphic over reference / citation / node | Conflates four distinct concerns. Loses the per-table CHECK and FK clarity. Harder to write or read.                    |
+| `study.citation` as its own table (the pre-WP-#1 plan)                        | WP #1 already shipped `StructuredCitation` JSONB; a row table now would split the primitive. See Decision 1.            |
+| Re-creating the `study.reference` table in this WP                            | WP #1 already created it (PR #242). This WP seeds rows; redefining the table would conflict with the migration on main. |
+| `credential_prereq` as a self-FK column on `credential`                       | Models only one prereq per credential; CFII (CFI + IR) doesn't fit. See Schema rationale.                               |
+| `syllabus_node` flat (chapter / section / subsection codes only)              | Loses the area / task / element semantic. Lens framework becomes guesswork.                                             |
+| `code` as the only leaf identifier (no `airboss-ref:`)                        | Cross-corpus joins lose structure. ADR 019 v3 makes `airboss-ref:` the canonical form. See Decision 8.                  |
+| Single ACS element row per task (K + R + S as columns)                        | Conflates three different mastery dimensions. See Decision 2.                                                           |
+| Generate syllabi from FAA PDF                                                 | Reliability + quality + scope. See "Why we don't auto-generate" above.                                                  |
+| Hard cutover: drop `cert_goals` and rewire the engine in this WP              | Engine refactor scope. See Decision 6.                                                                                  |
+| Single active goal per user, like the single active study plan                | Doesn't model parallel tracks the user actually has. See Decision 5.                                                    |
+| Derived cache of relevance computed on read (no stored column)                | Hot path through `knowledge_node.relevance` is the dashboard; computing it on every read is wasteful. Cache it.         |
+| Dropping `CERTS` constant entirely in this WP                                 | Wide blast radius, many readers reference it. Deprecate, plan removal in follow-on. See Constants rationale.            |
+| Lens type tied to ACS shape only                                              | Doesn't generalize. Two lenses ship to prove the type. See Lens framework rationale.                                    |
+| Materialized view for `cert_goals` derivation                                 | Postgres materialized views need explicit REFRESH; adds a maintenance burden. BC-layer derivation is cheap enough.      |
 
 ## Observability
 
