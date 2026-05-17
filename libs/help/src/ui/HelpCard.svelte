@@ -1,28 +1,26 @@
 <script lang="ts">
 import type { Snippet } from 'svelte';
+import type { CalloutVariant } from '../markdown/ast';
 
 /**
- * Pull-out card primitive for how-to snippets, tips, or warnings inside a
- * section body. Authors invoke it as a Svelte snippet (passed via the
- * `children` prop) for inline use, or the `HelpPage` render pipeline can
- * compose it when a section carries structured tip/warn metadata.
+ * Pull-out card primitive that renders a callout box inside a section
+ * body. The MarkdownBody renderer mounts it for every `CalloutNode` in
+ * the parsed AST (`:::tip` / `:::warn` / `:::note` / `:::example`).
  *
- * Variants map to visual intent:
- *   - 'tip'     -- neutral, informational
- *   - 'warn'    -- caution (yellow accent)
- *   - 'danger'  -- safety-critical (red accent)
- *   - 'howto'   -- a stepwise recipe
- *   - 'note'    -- neutral aside with low-emphasis border
- *   - 'example' -- worked example with subtle accent tint
+ * Variants are the callout family of the markdown directive registry
+ * (`@ab/constants` `MARKDOWN_CALLOUT_VARIANT_VALUES`). Each maps to a
+ * fixed semantic purpose and visual intent:
+ *   - 'tip'     -- a technique or pro-move (neutral accent)
+ *   - 'warn'    -- a hazard or common error (caution accent + wash)
+ *   - 'note'    -- a neutral aside or context (low-emphasis border)
+ *   - 'example' -- a worked instance of the concept (subtle accent tint)
  */
 
-type Variant = 'tip' | 'warn' | 'danger' | 'howto' | 'note' | 'example';
+type Variant = CalloutVariant;
 
 const VARIANT_LABELS: Record<Variant, string> = {
 	tip: 'Tip',
 	warn: 'Warning',
-	danger: 'Danger',
-	howto: 'How-to',
 	note: 'Note',
 	example: 'Example',
 };
@@ -68,18 +66,9 @@ const variantLabel = $derived(VARIANT_LABELS[variant]);
 		border-left-color: var(--action-default);
 	}
 
-	.card.howto {
-		border-left-color: var(--signal-success);
-	}
-
 	.card.warn {
 		border-left-color: var(--action-caution);
 		background: var(--action-caution-wash);
-	}
-
-	.card.danger {
-		border-left-color: var(--action-hazard);
-		background: var(--action-hazard-wash);
 	}
 
 	.card.note {

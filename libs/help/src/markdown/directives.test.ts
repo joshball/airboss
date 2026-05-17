@@ -219,7 +219,7 @@ describe('block parser -- directive syntax', () => {
 		expect(() => parseBlocks(':::unknown-directive slug="x"\n:::')).toThrow(/Unknown directive/);
 	});
 
-	it('still parses :::tip as a callout (directive table does not capture callouts)', () => {
+	it('parses :::tip as a callout (the callout family emits a CalloutNode, not a DirectiveNode)', () => {
 		const ast = parseBlocks(':::tip A friendly title\nbody paragraph\n:::');
 		expect(ast).toHaveLength(1);
 		expect(ast[0].kind).toBe('callout');
@@ -233,5 +233,81 @@ describe('block parser -- directive syntax', () => {
 		expect(ast[0].kind).toBe('paragraph');
 		expect(ast[1].kind).toBe('directive');
 		expect(ast[2].kind).toBe('paragraph');
+	});
+});
+
+describe('block parser -- inline-closed directive form', () => {
+	// A valid single-line YAML-flow cards payload: the inline-closed form
+	// needs a body that fits on the opener line, and YAML flow syntax
+	// (`[{...}]`) is the canonical single-line cards payload.
+	const inlineCards = ':::cards [{front: "q?", back: "a.", cardType: basic}]:::';
+	const blockCards = [':::cards', '[{front: "q?", back: "a.", cardType: basic}]', ':::'].join('\n');
+
+	it('parses an inline-closed body-bearing directive (`:::name <body>:::`)', () => {
+		const ast = parseBlocks(inlineCards);
+		expect(ast).toHaveLength(1);
+		const node = firstDirective(ast);
+		expect(node.name).toBe('cards');
+		expect(node.body).toBe('[{front: "q?", back: "a.", cardType: basic}]');
+	});
+
+	it('parses an inline-closed attribute-only directive (`:::chart slug="...":::`)', () => {
+		const ast = parseBlocks(':::chart slug="wx-scenarios/frontal-xc-march/surface-analysis":::');
+		expect(ast).toHaveLength(1);
+		const node = firstDirective(ast);
+		expect(node.name).toBe('chart');
+		expect(node.attrs.slug).toBe('wx-scenarios/frontal-xc-march/surface-analysis');
+		expect(node.body).toBeUndefined();
+	});
+
+	it('inline-closed form and block form produce an equivalent AST', () => {
+		const inline = parseBlocks(inlineCards);
+		const block = parseBlocks(blockCards);
+		expect(inline).toEqual(block);
+	});
+
+	it('throws when an inline-closed directive is followed by a stray bare `:::`', () => {
+		const src = [inlineCards, ':::'].join('\n');
+		expect(() => parseBlocks(src)).toThrow(/Unmatched directive close/);
+	});
+
+	it('throws on a stray bare `:::` with no directive open', () => {
+		expect(() => parseBlocks('A paragraph.\n\n:::')).toThrow(/Unmatched directive close/);
+	});
+
+	it('parses an inline-closed callout (the inline content is the body, no title)', () => {
+		const ast = parseBlocks(':::note A neutral aside.:::');
+		expect(ast).toHaveLength(1);
+		expect(ast[0].kind).toBe('callout');
+		if (ast[0].kind === 'callout') {
+			expect(ast[0].variant).toBe('note');
+			expect(ast[0].title).toBeUndefined();
+			expect(ast[0].children).toHaveLength(1);
+			expect(ast[0].children[0].kind).toBe('paragraph');
+		}
+	});
+
+	it('runs the per-directive validator on an inline-closed body (`:::cards none:::` fails YAML schema)', () => {
+		// `none` is not a YAML sequence -- the cards validator must reject it
+		// for the inline form exactly as it would for the block form.
+		expect(() => parseBlocks(':::cards none:::')).toThrow(/body validation failed/);
+	});
+
+	it('emits an inline-closed directive in document order alongside paragraphs', () => {
+		const ast = parseBlocks(`Before.\n\n${inlineCards}\n\nAfter.`);
+		expect(ast).toHaveLength(3);
+		expect(ast[0].kind).toBe('paragraph');
+		expect(ast[1].kind).toBe('directive');
+		expect(ast[2].kind).toBe('paragraph');
+	});
+
+	it('parses an inline-closed :::cards nested inside a callout body', () => {
+		const src = [':::tip Pro move', inlineCards, ':::'].join('\n');
+		const ast = parseBlocks(src);
+		expect(ast).toHaveLength(1);
+		expect(ast[0].kind).toBe('callout');
+		if (ast[0].kind === 'callout') {
+			expect(ast[0].children.some((c) => c.kind === 'directive')).toBe(true);
+		}
 	});
 });

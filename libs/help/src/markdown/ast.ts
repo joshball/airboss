@@ -7,11 +7,14 @@
  * lists, tables, fenced code, blockquotes, callouts, figures, hr) plus the
  * project-specific `[[display::id]]` wikilinks.
  *
- * Callout variants reuse the same set the validator accepts -- see
- * `CALLOUT_VARIANTS` in `libs/help/src/validation.ts`.
+ * Callouts are the variant-named directive family: the directive name
+ * (`tip` / `warn` / `note` / `example`) is the variant. The legal set is
+ * owned by `MARKDOWN_CALLOUT_VARIANT_VALUES` in `@ab/constants`.
  */
 
-export type CalloutVariant = 'tip' | 'warn' | 'danger' | 'howto' | 'note' | 'example';
+import type { MarkdownCalloutVariant } from '@ab/constants';
+
+export type CalloutVariant = MarkdownCalloutVariant;
 
 export type TableAlign = 'left' | 'right' | 'center' | null;
 
@@ -58,6 +61,21 @@ export interface BlockquoteNode {
 	children: MdNode[];
 }
 
+/**
+ * A callout box (the variant-named directive family). Authored as
+ * `:::tip` / `:::warn` / `:::note` / `:::example` -- the directive name
+ * is the `variant`. The body is nested markdown (same family behaviour as
+ * `:::phase`): the parser recurses into the block parser and stores the
+ * resulting `MdNode[]` in `children`. The renderer mounts a styled
+ * `<HelpCard>` keyed on the variant.
+ *
+ * Callouts share the `:::name` opener and the bare `:::` closer with
+ * every other directive and are recognised through the same registry
+ * (`MARKDOWN_DIRECTIVE_ALL_NAMES`). They keep their own node kind --
+ * rather than collapsing into `DirectiveNode` -- because the variant is
+ * a closed enum the renderer switches on directly, with no attribute
+ * bag and no host-app component mount.
+ */
 export interface CalloutNode {
 	kind: 'callout';
 	variant: CalloutVariant;

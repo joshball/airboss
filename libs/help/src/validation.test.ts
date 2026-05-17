@@ -329,12 +329,6 @@ describe('validateHelpPages - callout variants', () => {
 			':::warn',
 			'A warn.',
 			':::',
-			':::danger',
-			'A danger.',
-			':::',
-			':::howto',
-			'A howto.',
-			':::',
 			':::example',
 			'An example.',
 			':::',
@@ -344,6 +338,18 @@ describe('validateHelpPages - callout variants', () => {
 		});
 		const { errors } = validateHelpPages([page], noAviation);
 		expect(errors.some((e) => e.message.includes('unknown callout variant'))).toBe(false);
+	});
+
+	it('rejects the retired :::danger and :::howto callout variants', () => {
+		// `danger` and `howto` were retired in Phase 3 (zero authored uses).
+		for (const retired of ['danger', 'howto']) {
+			const body = [`:::${retired}`, `A ${retired}.`, ':::'].join('\n');
+			const page = makePage({
+				sections: [{ id: 'lede', title: 'Lede', body }],
+			});
+			const { errors } = validateHelpPages([page], noAviation);
+			expect(errors.some((e) => e.message.includes(`unknown callout variant ':::${retired}'`))).toBe(true);
+		}
 	});
 });
 
