@@ -258,6 +258,22 @@ export async function getCitationsForSyllabusNodes(
 }
 
 /**
+ * Look up syllabus-node rows by their `code` (`<area>.<task>.<element>`,
+ * e.g. `V.A.K1`). Returns the matched rows; codes with no row are simply
+ * absent from the result. Empty input short-circuits.
+ */
+export async function getSyllabusNodesByCodes(
+	codes: readonly string[],
+	db: Db = defaultDb,
+): Promise<SyllabusNodeRow[]> {
+	if (codes.length === 0) return [];
+	return db
+		.select()
+		.from(syllabusNode)
+		.where(inArray(syllabusNode.code, codes as string[]));
+}
+
+/**
  * Optional class scoping for the leaf-graph traversals. Class-agnostic leaves
  * (`classes IS NULL`) always pass; class-tagged leaves pass when their tags
  * intersect the filter array. Empty / undefined filter = pass.

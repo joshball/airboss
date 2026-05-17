@@ -40,7 +40,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateGoalId } from '@ab/utils';
-import { and, eq, inArray, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type AddGoalCourseInput,
@@ -214,6 +214,29 @@ export async function getGoalSyllabi(goalId: string, db: Db = defaultDb): Promis
 /** Goal-node links (ad-hoc nodes pinned outside any syllabus). */
 export async function getGoalNodes(goalId: string, db: Db = defaultDb): Promise<GoalNodeRow[]> {
 	return db.select().from(goalNode).where(eq(goalNode.goalId, goalId));
+}
+
+/**
+ * Resolve the credential a goal is primarily tracking. The goal links to
+ * syllabi via `goal_syllabus`; each syllabus links to a credential via
+ * `credential_syllabus`. Picks the credential whose `credential_syllabus`
+ * row is marked `primary`; falls back to the lowest-id credential reachable
+ * from any of the goal's syllabi when none is primary. Returns null when the
+ * goal composes no syllabi (or none of them link a credential).
+ */
+export async function getGoalPrimaryCredentialId(goalId: string, db: Db = defaultDb): Promise<string | null> {
+	const rows = await db
+		.select({ credentialId: credentialSyllabus.credentialId, primacy: credentialSyllabus.primacy })
+		.from(goalSyllabus)
+		.innerJoin(credentialSyllabus, eq(credentialSyllabus.syllabusId, goalSyllabus.syllabusId))
+		.where(eq(goalSyllabus.goalId, goalId))
+		.orderBy(
+			// Primary links sort first; ties break on credential id for a stable pick.
+			sql`(CASE WHEN ${credentialSyllabus.primacy} = ${SYLLABUS_PRIMACY.PRIMARY} THEN 0 ELSE 1 END)`,
+			asc(credentialSyllabus.credentialId),
+		)
+		.limit(1);
+	return rows[0]?.credentialId ?? null;
 }
 
 /**
