@@ -86,6 +86,7 @@
         "@ab/bc-hangar": "workspace:*",
         "@ab/bc-study": "workspace:*",
         "@ab/constants": "workspace:*",
+        "@ab/content-census": "workspace:*",
         "@ab/db": "workspace:*",
         "@ab/hangar-jobs": "workspace:*",
         "@ab/hangar-sync": "workspace:*",
@@ -330,6 +331,15 @@
         "vitest": "catalog:",
       },
     },
+    "libs/content-census": {
+      "name": "@ab/content-census",
+      "dependencies": {
+        "@ab/constants": "workspace:*",
+      },
+      "devDependencies": {
+        "vitest": "catalog:",
+      },
+    },
     "libs/db": {
       "name": "@ab/db",
       "dependencies": {
@@ -542,6 +552,8 @@
     "@ab/bc-wx-practice": ["@ab/bc-wx-practice@workspace:libs/bc/wx-practice"],
 
     "@ab/constants": ["@ab/constants@workspace:libs/constants"],
+
+    "@ab/content-census": ["@ab/content-census@workspace:libs/content-census"],
 
     "@ab/db": ["@ab/db@workspace:libs/db"],
 

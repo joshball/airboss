@@ -779,6 +779,16 @@ export const ROUTES = {
 	/** JSON dump of one WP -- raw frontmatter + validation errors, for debugging. */
 	HANGAR_ROADMAP_RAW: (wpId: string) => `/roadmap/${encodeURIComponent(wpId)}/raw` as const,
 
+	// Hangar -- /content census dashboard (hangar-content-census WP).
+	// Inventories every managed-content corpus: knowledge nodes, cards, the
+	// encoded-text catalog, wx scenarios, courses, handbooks, ACS, sources,
+	// glossary, sim content. Sibling to /roadmap: /roadmap answers "where do
+	// our work packages stand", /content answers "what learning content
+	// exists and what's missing". Role-gated AUTHOR | OPERATOR | ADMIN.
+	CONTENT_CENSUS: '/content',
+	/** Per-corpus drill-down; `id` is a corpus id from the content-census registry. */
+	CONTENT_CENSUS_CORPUS: (id: string) => `/content/${encodeURIComponent(id)}` as const,
+
 	// Hangar -- /courses authoring surface (course-reader-and-editor WP).
 	// Reads + writes YAML files under `course/courses/<slug>/` and re-runs
 	// the seed pipeline on every save. Role-gated to AUTHOR | OPERATOR |
@@ -1060,6 +1070,7 @@ export const NAV_LABELS = {
 	HANGAR_REVIEW_TASKS: 'Tasks',
 	HANGAR_REVIEW_LOADER: 'Loader',
 	HANGAR_ROADMAP: 'Roadmap',
+	CONTENT_CENSUS: 'Content',
 } as const;
 
 /**

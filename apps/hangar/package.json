@@ -15,6 +15,7 @@
 		"@ab/bc-hangar": "workspace:*",
 		"@ab/bc-study": "workspace:*",
 		"@ab/constants": "workspace:*",
+		"@ab/content-census": "workspace:*",
 		"@ab/db": "workspace:*",
 		"@ab/hangar-jobs": "workspace:*",
 		"@ab/hangar-sync": "workspace:*",

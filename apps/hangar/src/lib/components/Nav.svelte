@@ -4,8 +4,10 @@ import { page } from '$app/state';
 
 /**
  * Hangar top-level nav shell. Links to the primary admin surfaces:
- * Sources, Glossary, Courses, Docs, Review, Ingest review, Roadmap, Users
- * (admin-only), Jobs. Active-route highlighting via `aria-current` matches
+ * Sources, Glossary, Courses, Docs, Review, Ingest review, Roadmap,
+ * Content, Users (admin-only), Jobs. Roadmap tracks process (work-package
+ * state); Content tracks the learning content itself (the census).
+ * Active-route highlighting via `aria-current` matches
  * the study-app pattern. Colors + spacing resolve from role tokens
  * (04-VOCABULARY.md) so light/dark + future themes work.
  *
@@ -28,6 +30,7 @@ const docsActive = $derived(isActive(ROUTES.HANGAR_DOCS));
 const reviewActive = $derived(isActive(ROUTES.HANGAR_REVIEW));
 const ingestReviewActive = $derived(isActive(ROUTES.HANGAR_INGEST_REVIEW));
 const roadmapActive = $derived(isActive(ROUTES.HANGAR_ROADMAP));
+const contentActive = $derived(isActive(ROUTES.CONTENT_CENSUS));
 const usersActive = $derived(isActive(ROUTES.HANGAR_USERS));
 const jobsActive = $derived(isActive(ROUTES.HANGAR_JOBS));
 const isAdmin = $derived(page.data.user?.role === ROLES.ADMIN);
@@ -52,6 +55,7 @@ const reviewQueueCount = $derived<number>(
 	</a>
 	<a href={ROUTES.HANGAR_INGEST_REVIEW} aria-current={ingestReviewActive ? 'page' : undefined}>Ingest review</a>
 	<a href={ROUTES.HANGAR_ROADMAP} aria-current={roadmapActive ? 'page' : undefined}>Roadmap</a>
+	<a href={ROUTES.CONTENT_CENSUS} aria-current={contentActive ? 'page' : undefined}>Content</a>
 	{#if isAdmin}
 		<a href={ROUTES.HANGAR_USERS} aria-current={usersActive ? 'page' : undefined}>Users</a>
 	{/if}
