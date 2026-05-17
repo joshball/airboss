@@ -70,11 +70,16 @@ export function computeSiblingNav(
 
 	// Reading-order traversal: top-level rows first (parentId === null),
 	// then each row's children, recursively. The flat result is the read
-	// order used to derive prev/next.
+	// order used to derive prev/next. `visited` guards against a corrupt
+	// `parentId` graph (a self-parent or a cycle) recursing until the stack
+	// overflows and crashing the reader page-server load.
 	const readingOrder: ReferenceSectionRow[] = [];
+	const visited = new Set<string>();
 	const visit = (parentId: string | null): void => {
 		const kids = childrenByParent.get(parentId) ?? [];
 		for (const kid of kids) {
+			if (visited.has(kid.id)) continue;
+			visited.add(kid.id);
 			readingOrder.push(kid);
 			visit(kid.id);
 		}

@@ -59,6 +59,7 @@ export interface RichReaderHostProps {
 
 <script lang="ts">
 import { ROUTES, USER_PREF_KEYS } from '@ab/constants';
+import { onDestroy } from 'svelte';
 import { useComposerState, useSectionContext } from '@ab/library';
 import AnnotationFilterChip from '@ab/library/AnnotationFilterChip.svelte';
 import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
@@ -275,6 +276,12 @@ function onOrphans(list: readonly AnnotationLayerRecord[]) {
 function onNoteAnchorClicked(noteId: string) {
 	composerState?.openNoteForEdit(noteId);
 }
+
+// Clear any pending toast timer on unmount so a toast fired just before
+// navigation doesn't write `$state` on a destroyed component.
+onDestroy(() => {
+	if (toastTimer) clearTimeout(toastTimer);
+});
 </script>
 
 {#if isAuthenticated}

@@ -123,6 +123,18 @@ describe('FrameRing -- push, drain, wrap', () => {
 		expect(frames.map((f) => f.t)).toEqual([4, 5, 6]);
 	});
 
+	it('drains every frame at exactly capacity, and reports wrapped with zero dropped', () => {
+		const ring = createFrameRing(3);
+		for (let i = 0; i < 3; i += 1) pushFrame(ring, makeFrame(i));
+		// At exactly `capacity` writes the head has returned to index 0:
+		// `ringHasWrapped` must agree with the `drainFrames` read-order branch,
+		// otherwise the drain would read 0..writeIdx (empty) and lose every frame.
+		expect(ringHasWrapped(ring)).toBe(true);
+		expect(ringFramesDropped(ring)).toBe(0);
+		const frames = drainFrames(ring);
+		expect(frames.map((f) => f.t)).toEqual([0, 1, 2]);
+	});
+
 	it('returns an empty array when never written to', () => {
 		const ring = createFrameRing(10);
 		expect(drainFrames(ring)).toEqual([]);

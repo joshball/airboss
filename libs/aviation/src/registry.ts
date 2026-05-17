@@ -285,7 +285,7 @@ function scoreReference(ref: Reference, needle: string): SearchHit | null {
 		});
 	} else {
 		const wb = wordBoundaryIndex(displayLower, needle);
-		if (wb === 0 || wb > 0) {
+		if (wb !== -1) {
 			consider({
 				reference: ref,
 				matchedField: 'displayName',
