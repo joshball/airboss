@@ -325,22 +325,161 @@ async function collectTargets(): Promise<PickedTargets> {
 	}
 }
 
-const targets = await collectTargets();
+const collected = await collectTargets();
 
-// Persist the skip log + target counts onto disk for the reporter to pick up
-// at run end. Skips live with the run artefact so the report can list every
-// row that fell through to "covered-by-parent" or "no-route" along with the
-// reason -- the reporter has no DB connection of its own. The writer below
-// is intentionally append-fragile (one writer, one run) to avoid coordinating
-// across 32 workers.
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve as resolvePath } from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+// --- Sweep mode contract -------------------------------------------------
+// The dispatcher (scripts/test.ts) sets these env vars; the spec consumes
+// them at module-load so the emitted `test(...)` set matches the requested
+// scope. The reporter parses the persisted manifest, not these vars.
+
+type SweepTier = CoverageTarget['tier'];
+const ALL_TIERS: readonly SweepTier[] = ['sanity', 'structural', 'content'];
+
+/** Default URLs-per-book ceiling in sample mode. */
+const DEFAULT_SAMPLE_PER_BOOK = 12;
+
+/** sample (default) hits only sanity; full hits every tier. */
+const SAMPLE_MODE_TIERS: readonly SweepTier[] = ['sanity'];
+
+type SweepMode = 'sample' | 'full';
+
+function readSweepMode(): SweepMode {
+	return process.env.SWEEP_MODE === 'full' ? 'full' : 'sample';
+}
+
+function readSamplePerBook(): number {
+	const raw = process.env.SWEEP_SAMPLE_PER_BOOK;
+	if (raw === undefined || raw.trim() === '') return DEFAULT_SAMPLE_PER_BOOK;
+	const parsed = Number.parseInt(raw, 10);
+	return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_SAMPLE_PER_BOOK;
+}
+
+/**
+ * Parses `SWEEP_TIERS` (comma list) into a tier set, dropping unknown
+ * entries. Returns `null` when the var is absent/empty -> "no restriction".
+ */
+function readTierFilter(): ReadonlySet<SweepTier> | null {
+	const raw = process.env.SWEEP_TIERS;
+	if (raw === undefined || raw.trim() === '') return null;
+	const tiers = raw
+		.split(',')
+		.map((t) => t.trim())
+		.filter((t): t is SweepTier => (ALL_TIERS as readonly string[]).includes(t));
+	return new Set(tiers);
+}
+
+/** The book key the manifest groups by: `${kind}/${documentSlug}`. */
+function bookKey(target: CoverageTarget): string {
+	return `${target.kind}/${target.documentSlug}`;
+}
+
+/**
+ * Deterministic per-book sample. The input is already stably sorted by
+ * `collectTargets`; this picks the first URL, the last URL, and the rest
+ * evenly spaced by index, so the same registry always yields the same
+ * sample. `count >= list.length` returns the list untouched.
+ */
+function sampleBook(list: readonly CoverageTarget[], count: number): readonly CoverageTarget[] {
+	if (list.length <= count) return list;
+	if (count <= 1) return [list[0] as CoverageTarget];
+	const picked: CoverageTarget[] = [];
+	const lastIndex = list.length - 1;
+	for (let i = 0; i < count; i++) {
+		const index = Math.round((i * lastIndex) / (count - 1));
+		picked.push(list[index] as CoverageTarget);
+	}
+	// `Math.round` can collapse adjacent slots onto the same index near the
+	// ends; dedupe by index while preserving order.
+	const seen = new Set<string>();
+	return picked.filter((t) => {
+		if (seen.has(t.url)) return false;
+		seen.add(t.url);
+		return true;
+	});
+}
+
+/** Applies the per-book sample ceiling across one tier's targets. */
+function sampleTier(list: readonly CoverageTarget[], count: number): readonly CoverageTarget[] {
+	const byBook = new Map<string, CoverageTarget[]>();
+	for (const target of list) {
+		const key = bookKey(target);
+		const bucket = byBook.get(key) ?? [];
+		bucket.push(target);
+		byBook.set(key, bucket);
+	}
+	const result: CoverageTarget[] = [];
+	for (const bucket of byBook.values()) {
+		result.push(...sampleBook(bucket, count));
+	}
+	return result;
+}
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPORT_DIR = resolvePath(__dirname, '.out');
 mkdirSync(REPORT_DIR, { recursive: true });
 
+/**
+ * In resume mode, filters a target list down to URLs that failed (or never
+ * ran) on the prior recorded run. A missing `last-run.json` makes resume a
+ * no-op. A non-resume run never reads the file.
+ */
+function applyResumeFilter(list: readonly CoverageTarget[]): readonly CoverageTarget[] {
+	if (process.env.SWEEP_RESUME !== '1') return list;
+	const lastRunPath = resolvePath(REPORT_DIR, 'last-run.json');
+	if (!existsSync(lastRunPath)) return list;
+	let results: Record<string, string> = {};
+	try {
+		const parsed = JSON.parse(readFileSync(lastRunPath, 'utf8')) as { results?: Record<string, string> };
+		results = parsed.results ?? {};
+	} catch {
+		// A corrupt last-run.json degrades to "run everything" rather than
+		// silently dropping all targets.
+		return list;
+	}
+	return list.filter((t) => results[t.url] !== 'passed');
+}
+
+const sweepMode = readSweepMode();
+const samplePerBook = readSamplePerBook();
+const tierFilter = readTierFilter();
+
+// Tier set selection:
+//  - no `SWEEP_TIERS` -> the mode's baseline (full = all three tiers,
+//    sample = sanity only).
+//  - `SWEEP_TIERS` set -> exactly those tiers, intersected with what the
+//    mode is even capable of running. Full mode can run all three, so the
+//    intersection is the filter itself; sample mode is likewise allowed to
+//    run any single tier the caller names (e.g. `SWEEP_TIERS=structural` in
+//    sample mode -> structural tier, sampled). The mode still governs
+//    sampling; it does not silently veto an explicitly named tier.
+const modeBaselineTiers = sweepMode === 'full' ? ALL_TIERS : SAMPLE_MODE_TIERS;
+const requestedTiers = tierFilter === null ? modeBaselineTiers : ALL_TIERS.filter((t) => tierFilter.has(t));
+const activeTiers = new Set(requestedTiers);
+
+/** One tier's targets after mode/sample/tier-filter/resume narrowing. */
+function narrowTier(tier: SweepTier, list: readonly CoverageTarget[]): readonly CoverageTarget[] {
+	if (!activeTiers.has(tier)) return [];
+	const sampled = sweepMode === 'sample' ? sampleTier(list, samplePerBook) : list;
+	return applyResumeFilter(sampled);
+}
+
+const targets: PickedTargets = {
+	sanity: narrowTier('sanity', collected.sanity),
+	structural: narrowTier('structural', collected.structural),
+	content: narrowTier('content', collected.content),
+	skipped: collected.skipped,
+};
+
+// Persist the skip log onto disk for the reporter to pick up at run end.
+// Skips live with the run artefact so the report can list every row that
+// fell through to "covered-by-parent" or "no-route" along with the reason --
+// the reporter has no DB connection of its own. The writer below is
+// intentionally append-fragile (one writer, one run) to avoid coordinating
+// across 32 workers.
 writeFileSync(
 	resolvePath(REPORT_DIR, 'skipped.json'),
 	JSON.stringify(
@@ -359,13 +498,82 @@ writeFileSync(
 	),
 );
 
+// Persist the run manifest: what will ACTUALLY run this invocation, after
+// sampling + tier filter + resume. Written at module-load so it exists even
+// in list mode (`--grep "$^"` runs zero tests). The reporter reads this.
+interface ManifestBook {
+	readonly book: string;
+	readonly kind: ReferenceKind;
+	readonly documentSlug: string;
+	readonly sanity: number;
+	readonly structural: number;
+	readonly content: number;
+	readonly total: number;
+}
+
+const manifestBooks = new Map<string, ManifestBook>();
+function tallyBook(tier: SweepTier, list: readonly CoverageTarget[]): void {
+	for (const target of list) {
+		const key = bookKey(target);
+		const existing = manifestBooks.get(key) ?? {
+			book: key,
+			kind: target.kind,
+			documentSlug: target.documentSlug,
+			sanity: 0,
+			structural: 0,
+			content: 0,
+			total: 0,
+		};
+		manifestBooks.set(key, {
+			...existing,
+			[tier]: existing[tier] + 1,
+			total: existing.total + 1,
+		});
+	}
+}
+tallyBook('sanity', targets.sanity);
+tallyBook('structural', targets.structural);
+tallyBook('content', targets.content);
+
+const sortedManifestBooks = [...manifestBooks.values()].sort((a, b) => (a.book < b.book ? -1 : a.book > b.book ? 1 : 0));
+const totalSanity = targets.sanity.length;
+const totalStructural = targets.structural.length;
+const totalContent = targets.content.length;
+
+writeFileSync(
+	resolvePath(REPORT_DIR, 'manifest.json'),
+	JSON.stringify(
+		{
+			generatedAt: new Date().toISOString(),
+			mode: sweepMode,
+			sampledPerBook: samplePerBook,
+			totals: {
+				sanity: totalSanity,
+				structural: totalStructural,
+				content: totalContent,
+				total: totalSanity + totalStructural + totalContent,
+				books: sortedManifestBooks.length,
+			},
+			books: sortedManifestBooks,
+		},
+		null,
+		2,
+	),
+);
+
 test.describe('flightbag coverage', () => {
 	test('sample size is non-trivial -- catches a fully-empty registry', () => {
 		// Floor pinned at 50; the dev seed today produces several hundred
 		// sanity URLs (handbook sections, AIM paragraphs, CFR sections,
 		// AC chapters, ACS landings). A drop to <50 means the seed
 		// pipeline blanked the registry -- fail loudly.
-		expect(targets.sanity.length, 'sanity targets fell off a cliff').toBeGreaterThan(50);
+		//
+		// Checks the full COLLECTED set, not the post-sample/resume narrowed
+		// set: sampling and resume legitimately shrink the emitted target
+		// list (a clean resume run emits zero), so asserting on `targets`
+		// would fire false positives. The registry-health signal lives in
+		// `collected`.
+		expect(collected.sanity.length, 'sanity targets fell off a cliff').toBeGreaterThan(50);
 	});
 
 	test.describe.configure({ mode: 'parallel' });
