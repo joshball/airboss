@@ -97,7 +97,10 @@ export function linearToAngle(
  * to apply to a vertical strip of digit glyphs of cell height `cellHeight`.
  */
 export function counterTranslateY(altitudeFeet: number, cellHeight: number): number {
-	const fractional = altitudeFeet / 1000;
+	// Guard non-finite altitude the same way the sibling helpers do -- a NaN
+	// here would inject NaN straight into an SVG transform and break layout.
+	const safe = Number.isFinite(altitudeFeet) ? altitudeFeet : 0;
+	const fractional = safe / 1000;
 	return -((fractional % 10) * cellHeight);
 }
 
