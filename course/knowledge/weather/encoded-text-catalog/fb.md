@@ -140,6 +140,58 @@ MSP 3018   3022+02 3030-03 3038-08 3050-18 3070-28 307640 718950 729060
 
 Twin Cities entering the jet stream. Surface NW flow strengthens with altitude through FL300 (60 KT), then crosses into the >100-KT range at FL340 and FL390 (the "add 50" trick is engaged in the last two cells). Triage: cruise altitude selection, fuel planning, jet-stream entrance turbulence.
 
+## Scenario-derived examples
+
+The FB bulletins below are emitted verbatim by the wx-engine truth-model scenarios under `libs/wx-engine/`. Each is the winds-aloft forecast a scenario derives from its synoptic truth, so the `generatedBy` pointer in the manifest is literal: the catalog example *is* the scenario's output. The engine emits the bulletin opening at the `DATA BASED ON` line (no `FB WBC` issuance line), and they round-trip through `parseFbGrid` because the engine enforces that on every product it emits.
+
+### Winter NW flow - Great Lakes upslope regime
+
+```text
+DATA BASED ON 220900Z
+VALID 221500Z   FOR USE 1500-1900Z. TEMPS NEG ABV 24000
+
+   FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+CLE   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+ORD   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+DTW   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+GRR   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+CAK   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+```
+
+The `winter-icing-great-lakes` scenario: a cold NW flow at every level, 320 deg veering little with height, speeds climbing from 18 KT at 3,000 ft to 60+ KT aloft. Deeply negative temperatures throughout - the supercooled-liquid window that drives the scenario's icing PIREPs.
+
+### Summer southerly flow - Texas convective afternoon
+
+```text
+DATA BASED ON 151500Z
+VALID 152100Z   FOR USE 2100-0100Z. TEMPS NEG ABV 24000
+
+   FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+AUS   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+IAH   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+SAT   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+CLL   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+CRP   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+```
+
+The `summer-thunderstorms-tx` scenario: light southerly flow at low altitudes (the moist inflow feeding afternoon convection), warm temperatures aloft, veering to westerly with strengthening speed above FL180.
+
+### Mountain wave - Rockies (blank low-altitude columns)
+
+```text
+DATA BASED ON 121500Z
+VALID 122100Z   FOR USE 2100-0100Z. TEMPS NEG ABV 24000
+
+   FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+ASE                         2860-22  2770-34  2880-46  289555  289058
+DEN                 2755-15  2860-22  2770-34  2880-46  289555  289058
+COS                 2755-15  2860-22  2770-34  2880-46  289555  289058
+BJC                 2755-15  2860-22  2770-34  2880-46  289555  289058
+APA                 2755-15  2860-22  2770-34  2880-46  289555  289058
+```
+
+The `mountain-wave-rockies` scenario: high-elevation stations omit the columns below their field elevation (ASE drops 3000-9000; DEN/COS/BJC/APA drop 3000-6000). Strong westerly flow at every reported level - 28 deg at 55-80 KT - is the cross-barrier wind that drives the lee-wave turbulence the scenario's PIREPs report.
+
 ## Catalog manifest
 
 The structured metadata below drives the build script. Each FB example is a full bulletin; `parseFbGrid` consumes the whole grid and reports per-station rows.
@@ -158,14 +210,14 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 5 bulletin structure
-    examples: [fb-boi-single, fb-multi-station, fb-mountain-pre-frontal]
+    examples: [fb-boi-single, fb-multi-station, fb-mountain-pre-frontal, fb-scenario-winter-great-lakes, fb-scenario-summer-texas]
   - slug: altitude-columns
     label: Altitude columns
     decode: Standard FAA set 3000, 6000, 9000, 12000, 18000, 24000, 30000, 34000, 39000 ft MSL. Not every station reports every altitude.
     references:
       - source: AC 00-45H
         detail: Chapter 5 altitude column convention
-    examples: [fb-boi-single, fb-multi-station, fb-jet-stream]
+    examples: [fb-boi-single, fb-multi-station, fb-jet-stream, fb-scenario-mountain-wave-rockies]
   - slug: row-4-char
     label: 4-char row (temp omitted)
     decode: Below ~5,000 ft AGL the 3000 column drops temperature; cell is direction + speed only (4 chars).
@@ -200,7 +252,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 5 typical patterns
-    examples: [fb-multi-station]
+    examples: [fb-multi-station, fb-scenario-summer-texas]
 examples:
   - slug: fb-boi-single
     raw: |
@@ -248,4 +300,46 @@ examples:
     token_families: [header, altitude-columns, row-4-char, row-6-char, high-wind-trick]
     synoptic: Twin Cities entering the jet stream; FL340 and FL390 cells engage the add-50 high-wind encoding.
     triage_drivers: [jet entrance turbulence, cruise altitude, fuel]
+  - slug: fb-scenario-winter-great-lakes
+    raw: |
+      DATA BASED ON 220900Z
+      VALID 221500Z   FOR USE 1500-1900Z. TEMPS NEG ABV 24000
+
+         FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+      CLE   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+      ORD   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+      DTW   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+      GRR   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+      CAK   3118  3225-16  3230-22  3235-28  3240-38  3245-50  324558  324260
+    token_families: [header, altitude-columns, row-4-char, row-6-char]
+    synoptic: Winter NW flow across the Great Lakes in the winter-icing-great-lakes scenario; deeply negative temps feed the icing regime.
+    triage_drivers: [route winds, icing temps, cruise altitude]
+  - slug: fb-scenario-summer-texas
+    raw: |
+      DATA BASED ON 151500Z
+      VALID 152100Z   FOR USE 2100-0100Z. TEMPS NEG ABV 24000
+
+         FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+      AUS   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+      IAH   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+      SAT   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+      CLL   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+      CRP   1508  1610+22  1712+14  1815+08  2218-08  2422-22  252538  262247
+    token_families: [header, altitude-columns, row-4-char, row-6-char, tropical-pattern]
+    synoptic: Summer southerly inflow over Texas in the summer-thunderstorms-tx scenario; light low-level flow feeds afternoon convection.
+    triage_drivers: [route winds, convective inflow, cruise altitude]
+  - slug: fb-scenario-mountain-wave-rockies
+    raw: |
+      DATA BASED ON 121500Z
+      VALID 122100Z   FOR USE 2100-0100Z. TEMPS NEG ABV 24000
+
+         FT    3000    6000    9000   12000   18000   24000   30000   34000   39000
+      ASE                         2860-22  2770-34  2880-46  289555  289058
+      DEN                 2755-15  2860-22  2770-34  2880-46  289555  289058
+      COS                 2755-15  2860-22  2770-34  2880-46  289555  289058
+      BJC                 2755-15  2860-22  2770-34  2880-46  289555  289058
+      APA                 2755-15  2860-22  2770-34  2880-46  289555  289058
+    token_families: [header, altitude-columns, row-6-char, high-wind-trick]
+    synoptic: Rockies cross-barrier westerlies in the mountain-wave-rockies scenario; high-elevation stations omit columns below field elevation.
+    triage_drivers: [cross-barrier wind, lee-wave turbulence, cruise altitude]
 ```

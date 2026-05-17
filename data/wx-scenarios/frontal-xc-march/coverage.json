@@ -1,4 +1,9 @@
 {
   "scenario": "frontal-xc-march",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "metar-scenario-spi-frontal-rain",
+    "pirep-scenario-mli-light-turb",
+    "pirep-scenario-spi-mod-turb",
+    "taf-scenario-stl-frontal-fm"
+  ]
 }

@@ -678,6 +678,66 @@ EDDF 121753Z 27010KT CAVOK 18/04 Q1023
 
 Frankfurt under a surface high. `CAVOK` collapses visibility + weather + sky-condition into one token; pressure reported in hectopascals (Q1023 = 1023 hPa). Triage drivers: pressure pattern, wind direction, temperature.
 
+## Scenario-derived examples
+
+The METARs below are emitted verbatim by the wx-engine truth-model scenarios under `libs/wx-engine/`. Each is the surface observation a scenario derives from its synoptic truth, so the `generatedBy` pointer in the manifest is literal: the catalog example *is* the scenario's output. They round-trip through `parseMetar` because the engine enforces that on every product it emits.
+
+### Summer air-mass thunderstorm over the field
+
+```text
+KIAH 152153Z 13010KT 3SM BR +TSRA OVC025 BKN015 OVC060 35/24 A2992
+```
+
+Houston in the `summer-thunderstorms-tx` scenario: a heavy thunderstorm with rain over the field, mist cutting visibility to 3 SM, a ragged broken layer at 1,500 ft under deep overcast. The 11-deg spread at 35 deg C is plenty of low-level moisture for the cell.
+
+### Frontal-passage rain with gusty wind shift
+
+```text
+KSPI 191953Z 32020G33KT 3SM BR -RA OVC015 OVC070 04/M03 A2963
+```
+
+Springfield in the `frontal-xc-march` scenario, behind the cold front: wind has shifted to 320 with gusts to 33, light rain plus mist holds visibility at 3 SM, overcast at 1,500 ft, and the altimeter has fallen to 29.63 in the post-frontal trough.
+
+### Lake-effect / upslope snow regime - subfreezing both ends
+
+```text
+KCLE 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2974
+```
+
+Cleveland in the `winter-icing-great-lakes` scenario: NW flow at 320 gusting 27, both temperature and dew point well below freezing, overcast at 1,500 ft with mist. The 5-deg spread in subfreezing air is the icing-and-snow signature.
+
+### Mountain downslope - dry post-frontal
+
+```text
+KASE 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3003
+```
+
+Aspen in the `mountain-wave-rockies` scenario: strong westerly downslope flow at 25 KT, a 14-deg spread (very dry), high overcast at 14,000 ft. Density altitude and mountain-wave turbulence are the limiters, not visibility.
+
+### Denver lee-side - mountain wave
+
+```text
+KDEN 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999
+```
+
+Denver in the same `mountain-wave-rockies` scenario: identical synoptic regime to Aspen, on the lee side of the Front Range. The 25-KT westerly across the Rockies feeds the wave train the scenario's PIREPs report as severe turbulence aloft.
+
+### Tule fog at saturation
+
+```text
+KFAT 081053Z 00002KT 1/2SM FG OVC003 04/04 A3010
+```
+
+Fresno in the `dense-fog-radiation-central-valley` scenario: calm wind, zero spread (4/4), fog at 1/2 SM under a 300-ft overcast. Classic Central Valley tule fog under a strong, stagnant surface high.
+
+### Hot-and-high summer VFR
+
+```text
+KAUS 152153Z 13010KT 10SM SCT045 OVC120 35/24 A2994
+```
+
+Austin in the `summer-thunderstorms-tx` scenario, away from the cells: 35 deg C, scattered cumulus at 4,500 ft under high overcast, clear 10 SM visibility. The benign side of a convective afternoon - the triage driver is density altitude, not weather.
+
 ## Catalog manifest
 
 The structured metadata below is the source of truth the catalog build script reads. Each token family carries its examples by slug; each example carries its raw text, the families it exercises, a one-sentence synoptic story, and source references. The build script validates every example round-trips through `parseMetar` with zero warnings.
@@ -740,7 +800,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 3, wind gust reporting threshold
-    examples: [metar-mdw-gusty, metar-jan-gust, metar-den-gust]
+    examples: [metar-mdw-gusty, metar-jan-gust, metar-den-gust, metar-scenario-spi-frontal-rain]
   - slug: wind-vrb-low
     label: Variable direction (VRB) - low wind
     decode: Speed below 6 KT and direction cannot be resolved. Encoded `VRB` + two-digit speed.
@@ -768,14 +828,14 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 3, visibility group
-    examples: [metar-mem-rain, metar-ord-vis7, metar-mci-vcts]
+    examples: [metar-mem-rain, metar-ord-vis7, metar-mci-vcts, metar-scenario-iah-tsra, metar-scenario-aus-summer-vfr]
   - slug: visibility-fractional
     label: Fractional - below 3 SM
     decode: Pure fractions or mixed whole-plus-fraction with mandatory space. `1 1/2SM`, `3/4SM`, `1/4SM`.
     references:
       - source: AC 00-45H
         detail: Chapter 3, fractional visibility
-    examples: [metar-buf-snow, metar-far-fog, metar-far-fog-mless]
+    examples: [metar-buf-snow, metar-far-fog, metar-far-fog-mless, metar-scenario-fat-tule-fog]
   - slug: visibility-m-less-than
     label: Less-than (M) prefix
     decode: 'The `M` prefix means "less than." `M1/4SM` = visibility less than 1/4 SM (the lowest reportable prevailing visibility).'
@@ -803,7 +863,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 3, weather group intensity prefix
-    examples: [metar-okc-tsra, metar-ict-heavy-snow, metar-dfw-front]
+    examples: [metar-okc-tsra, metar-ict-heavy-snow, metar-dfw-front, metar-scenario-iah-tsra]
   - slug: wx-vicinity
     label: Vicinity (VC)
     decode: 'The `VC` prefix = phenomenon observed within 5-10 SM of the station but not at the station.'
@@ -845,7 +905,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 3, sky condition - ceiling definition
-    examples: [metar-mdw-gusty, metar-mci-vcts, metar-ase-mountain]
+    examples: [metar-mdw-gusty, metar-mci-vcts, metar-ase-mountain, metar-scenario-ase-mtnwave, metar-scenario-den-mtnwave]
   - slug: sky-cb
     label: Cumulonimbus (CB) suffix
     decode: 'A `CB` suffix after the layer height marks an active thunderstorm cell. Almost always paired with TS in the weather group.'
@@ -880,7 +940,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 3, temperature / dew point group
-    examples: [metar-bgr-cold, metar-buf-snow, metar-ict-heavy-snow]
+    examples: [metar-bgr-cold, metar-buf-snow, metar-ict-heavy-snow, metar-scenario-cle-icing]
   - slug: temp-cross-zero
     label: Cross-zero (one side +, one side -)
     decode: Temperature positive, dew point negative (or vice versa). Common around frontal passages.
@@ -1191,4 +1251,39 @@ examples:
     token_families: [wind-steady, sky-multi-layer, temp-positive, altimeter-q-group]
     synoptic: Paris CDG with 9999 visibility group (international form for >= 10 km) and Q-pressure.
     triage_drivers: [pressure, wind, ceiling]
+  - slug: metar-scenario-iah-tsra
+    raw: KIAH 152153Z 13010KT 3SM BR +TSRA OVC025 BKN015 OVC060 35/24 A2992
+    token_families: [type-routine, wind-steady, visibility-whole, wx-heavy, wx-descriptor-combo, wx-br-vs-fg, sky-multi-layer, temp-positive, altimeter-standard]
+    synoptic: Houston heavy air-mass thunderstorm over the field in the summer-thunderstorms-tx scenario; mist plus +TSRA at 3 SM.
+    triage_drivers: [+TSRA, ceiling, visibility]
+  - slug: metar-scenario-spi-frontal-rain
+    raw: KSPI 191953Z 32020G33KT 3SM BR -RA OVC015 OVC070 04/M03 A2963
+    token_families: [type-routine, wind-gust, visibility-whole, wx-light, wx-br-vs-fg, sky-multi-layer, temp-cross-zero, altimeter-low]
+    synoptic: Springfield behind the cold front in the frontal-xc-march scenario; NW wind shift to 320G33 with light rain and mist.
+    triage_drivers: [gust factor, visibility, altimeter trend]
+  - slug: metar-scenario-cle-icing
+    raw: KCLE 221553Z 32020G27KT 3SM BR OVC015 OVC080 M10/M15 A2974
+    token_families: [type-routine, wind-gust, visibility-whole, wx-br-vs-fg, sky-multi-layer, temp-negative, altimeter-low]
+    synoptic: Cleveland in the winter-icing-great-lakes scenario; NW flow with subfreezing temp and dew point under low overcast.
+    triage_drivers: [icing risk, ceiling, gust factor]
+  - slug: metar-scenario-ase-mtnwave
+    raw: KASE 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A3003
+    token_families: [type-routine, wind-steady, visibility-above-10, sky-multi-layer, temp-cross-zero, altimeter-standard]
+    synoptic: Aspen westerly downslope flow in the mountain-wave-rockies scenario; 14-deg spread keeps it dry.
+    triage_drivers: [density altitude, mountain wave, wind direction]
+  - slug: metar-scenario-den-mtnwave
+    raw: KDEN 122153Z 27025KT 10SM FEW060 OVC140 02/M12 A2999
+    token_families: [type-routine, wind-steady, visibility-above-10, sky-multi-layer, temp-cross-zero, altimeter-standard]
+    synoptic: Denver lee-side westerly flow in the mountain-wave-rockies scenario; the 25-KT cross-Rockies wind drives the wave train.
+    triage_drivers: [mountain wave, density altitude, wind direction]
+  - slug: metar-scenario-fat-tule-fog
+    raw: KFAT 081053Z 00002KT 1/2SM FG OVC003 04/04 A3010
+    token_families: [type-routine, wind-calm, visibility-fractional, wx-br-vs-fg, sky-single-layer, temp-positive, temp-narrow-spread, altimeter-standard]
+    synoptic: Fresno Central Valley tule fog at saturation in the dense-fog-radiation-central-valley scenario; calm wind, zero spread.
+    triage_drivers: [visibility, ceiling, spread]
+  - slug: metar-scenario-aus-summer-vfr
+    raw: KAUS 152153Z 13010KT 10SM SCT045 OVC120 35/24 A2994
+    token_families: [type-routine, wind-steady, visibility-above-10, sky-multi-layer, temp-positive, altimeter-standard]
+    synoptic: Austin away from the cells in the summer-thunderstorms-tx scenario; hot VFR afternoon where density altitude is the limiter.
+    triage_drivers: [density altitude, sky cover, wind]
 ```

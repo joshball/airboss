@@ -312,6 +312,50 @@ KSFO UA /OV SFO180015 /TM 2200 /FL050 /TP B738 /WV 27045KT /TA 02
 
 737 at 5,000 ft south of SFO: wind 270/45. Used to verify or correct the winds-aloft forecast.
 
+## Scenario-derived examples
+
+The PIREPs below are emitted verbatim by the wx-engine truth-model scenarios under `libs/wx-engine/`. Each is the pilot report a scenario derives from its synoptic truth, so the `generatedBy` pointer in the manifest is literal: the catalog example *is* the scenario's output. They round-trip through `parsePirep` because the engine enforces that on every product it emits. The engine omits the spaces around the `/XX` block separators; the parser keys on the leading two-letter code, not whitespace, so both forms decode identically.
+
+### Moderate turbulence in precipitation - frontal cross-country
+
+```text
+KSPI UUA /OV SPI270010/TM 1848/FL060/TP C172/TB MOD 050-080/SK OVC020/WX RA/RM CONT MOD CHOP IN PRECIP
+```
+
+A 172 west of Springfield in the `frontal-xc-march` scenario: moderate turbulence 5,000-8,000 ft in rain, overcast at 2,000 ft. UUA because moderate turbulence in a light single is route-changing for the aircraft behind it.
+
+### Light turbulence with a smoke-layer remark
+
+```text
+KMLI UA /OV MLI020015/TM 1855/FL050/TP B190/TB LGT 050-080/SK OVC025/WX FU/RM SMOOTH ABV 080 CONT NW WIND 30KT
+```
+
+A Beech 1900 northeast of Moline in the `frontal-xc-march` scenario: light turbulence 5,000-8,000 ft, overcast 2,500 ft, smoke aloft, with a remark noting smooth air above 8,000 and a 30-KT NW wind - useful FB verification.
+
+### Severe turbulence in a deep band - mountain wave
+
+```text
+KAPA UUA /OV APA220030/TM 2030/FL145/TP B738/TB SEV 010-280/SK BKN090/RM CONT SEV CHOP
+```
+
+A 737 northwest of Denver Centennial in the `mountain-wave-rockies` scenario: severe turbulence in a band from 1,000 ft to FL280 - the full vertical depth of a lee-wave train. UUA, stays in the briefing for hours.
+
+### Moderate turbulence near a convective cell
+
+```text
+KBJC UUA /OV BJC350036/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL
+```
+
+A 737 north of Rocky Mountain Metro in the `mountain-wave-rockies` scenario: moderate turbulence 7,000-11,000 ft near a thunderstorm with heavy precipitation. UUA - convective turbulence with TSRA in the body.
+
+### Light rime icing - lake-effect winter regime
+
+```text
+KCAK UUA /OV CAK280018/TM 1430/FL045/TP C172/TB LGT/SK OVC050/IC LGT RIME 010-080/RM ACCRETING ON LE
+```
+
+A 172 west of Akron-Canton in the `winter-icing-great-lakes` scenario: light rime ice 1,000-8,000 ft, accreting on the leading edge, in a 5,000-ft overcast. UUA because the icing band is the operational driver for a non-known-ice airframe.
+
 ## Catalog manifest
 
 ```yaml-catalog
@@ -416,21 +460,21 @@ token_families:
     references:
       - source: AIM
         detail: 7-1-23 LGT
-    examples: [pirep-ua-jfk-cruise, pirep-ua-cruise-mod, pirep-ua-light-chop]
+    examples: [pirep-ua-jfk-cruise, pirep-ua-cruise-mod, pirep-ua-light-chop, pirep-scenario-mli-light-turb]
   - slug: turb-mod
     label: Turbulence - MOD
     decode: Moderate turbulence. Loose objects rattle; 1/3 to 1 G excursions; difficulty walking.
     references:
       - source: AIM
         detail: 7-1-23 MOD
-    examples: [pirep-ua-ord-radial, pirep-ua-cruise-mod, pirep-ua-jet-mod]
+    examples: [pirep-ua-ord-radial, pirep-ua-cruise-mod, pirep-ua-jet-mod, pirep-scenario-spi-mod-turb, pirep-scenario-bjc-mod-turb]
   - slug: turb-sev
     label: Turbulence - SEV (UUA)
     decode: Severe turbulence. Aircraft thrown violently about; momentary loss of control; > 1 G excursions. UUA.
     references:
       - source: AIM
         detail: 7-1-23 SEV
-    examples: [pirep-uua-den-turb, pirep-uua-ord-sev-turb, pirep-uua-den-shear]
+    examples: [pirep-uua-den-turb, pirep-uua-ord-sev-turb, pirep-uua-den-shear, pirep-scenario-apa-sev-turb]
   - slug: turb-extm
     label: Turbulence - EXTM (UUA)
     decode: Extreme turbulence. Aircraft practically impossible to control; structural damage likely. UUA.
@@ -451,7 +495,7 @@ token_families:
     references:
       - source: AIM
         detail: 7-1-22 LGT
-    examples: [pirep-ua-grr-light, pirep-ua-ord-light-mx, pirep-ua-clt-light]
+    examples: [pirep-ua-grr-light, pirep-ua-ord-light-mx, pirep-ua-clt-light, pirep-scenario-cak-icing]
   - slug: icing-mod
     label: Icing - MOD
     decode: Moderate icing. Encounters become potentially hazardous; even short encounters need course / altitude change.
@@ -639,4 +683,29 @@ examples:
     token_families: [kind-uua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, temp-ta, icing-sev, icing-type]
     synoptic: CRJ east of CLE with severe clear ice 6,000-9,000; SLD layer over Lake Erie.
     triage_drivers: [icing severity, type (clear), immediate diversion]
+  - slug: pirep-scenario-spi-mod-turb
+    raw: 'KSPI UUA /OV SPI270010/TM 1848/FL060/TP C172/TB MOD 050-080/SK OVC020/WX RA/RM CONT MOD CHOP IN PRECIP'
+    token_families: [kind-uua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, sky-single-layer, turb-mod]
+    synoptic: 172 west of Springfield in the frontal-xc-march scenario; moderate turbulence in rain 5,000-8,000 ft.
+    triage_drivers: [turbulence, precipitation, altitude band]
+  - slug: pirep-scenario-mli-light-turb
+    raw: 'KMLI UA /OV MLI020015/TM 1855/FL050/TP B190/TB LGT 050-080/SK OVC025/WX FU/RM SMOOTH ABV 080 CONT NW WIND 30KT'
+    token_families: [kind-ua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, sky-single-layer, turb-light]
+    synoptic: Beech 1900 northeast of Moline in the frontal-xc-march scenario; light turbulence with smoke aloft and a 30-KT NW wind remark.
+    triage_drivers: [turbulence, wind verification, altitude band]
+  - slug: pirep-scenario-apa-sev-turb
+    raw: 'KAPA UUA /OV APA220030/TM 2030/FL145/TP B738/TB SEV 010-280/SK BKN090/RM CONT SEV CHOP'
+    token_families: [kind-uua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, sky-single-layer, turb-sev]
+    synoptic: 737 northwest of Denver Centennial in the mountain-wave-rockies scenario; severe turbulence through a deep lee-wave band.
+    triage_drivers: [turbulence, mountain wave, altitude band]
+  - slug: pirep-scenario-bjc-mod-turb
+    raw: 'KBJC UUA /OV BJC350036/TM 2040/FL090/TP B738/TB MOD 070-110/SK BKN040 OVC100/WX TSRA/RM HVY PRECIP NEAR CELL'
+    token_families: [kind-uua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, sky-multi-layer, turb-mod]
+    synoptic: 737 north of Rocky Mountain Metro in the mountain-wave-rockies scenario; moderate convective turbulence near a thunderstorm cell.
+    triage_drivers: [turbulence, convection, altitude band]
+  - slug: pirep-scenario-cak-icing
+    raw: 'KCAK UUA /OV CAK280018/TM 1430/FL045/TP C172/TB LGT/SK OVC050/IC LGT RIME 010-080/RM ACCRETING ON LE'
+    token_families: [kind-uua, location-radial-distance, time-hhmm, altitude-fl, aircraft-type, sky-single-layer, turb-light, icing-lgt, icing-type]
+    synoptic: 172 west of Akron-Canton in the winter-icing-great-lakes scenario; light rime ice accreting through a deep band.
+    triage_drivers: [icing intensity, altitude band, non-known-ice airframe]
 ```

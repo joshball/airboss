@@ -1,4 +1,9 @@
 {
   "scenario": "winter-icing-great-lakes",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "fb-scenario-winter-great-lakes",
+    "metar-scenario-cle-icing",
+    "pirep-scenario-cak-icing",
+    "taf-scenario-cle-icing"
+  ]
 }
