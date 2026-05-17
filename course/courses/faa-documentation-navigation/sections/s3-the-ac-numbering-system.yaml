@@ -1,0 +1,90 @@
+code: s3
+ordinal: 3
+title: The AC numbering system - a discovery exercise
+body_md: |
+  **Before you start.** This section is a discovery exercise. Do not
+  read ahead to the answer. Work the five examples first, make your
+  guesses, and only then check yourself. The whole point is that you
+  *derive* the numbering scheme rather than memorize it.
+
+  ---
+
+  Here are five real Advisory Circular numbers. Their titles are
+  hidden. Your job: guess what subject each one covers, using nothing
+  but the number.
+
+  - `AC 61-65`
+  - `AC 91-73`
+  - `AC 20-138`
+  - `AC 150-5300-13`
+  - `AC 00-6`
+
+  You almost certainly cannot do this yet, and that is the point.
+  Write down a guess for each anyway - even "no idea" is a data
+  point. Then read on for one anchor.
+
+  ---
+
+  Here is the anchor. `AC 61-65` is titled "Certification: Pilots and
+  Flight and Ground Instructors." Now recall a regulation you already
+  know: 14 CFR Part 61 is the part that governs pilot certification.
+
+  Notice the 61.
+
+  The AC is numbered 61-something, and it is guidance ABOUT 14 CFR
+  Part 61. That is not a coincidence. Before you read the next
+  paragraph, generalize: if `61-` ACs are about Part 61, what would
+  you expect a `91-` AC to be about? A `150-` AC? Make the prediction.
+
+  ---
+
+  Your prediction was almost certainly right. The AC number mirrors
+  the part structure of 14 CFR. The first number is a subject series
+  that tracks the CFR part it supports:
+
+  | AC series | Mirrors                    | Subject                                   |
+  | --------- | -------------------------- | ------------------------------------------ |
+  | 00        | General / cross-cutting    | General aviation guidance, weather, ops    |
+  | 20        | Aircraft (Parts 21-39, 43) | Aircraft, equipment, airworthiness         |
+  | 60        | Airmen (general)           | Airmen rules and standards                 |
+  | 61        | 14 CFR Part 61             | Certification of pilots and instructors    |
+  | 90        | 14 CFR Part 91 area        | Air traffic and general operating rules    |
+  | 91        | 14 CFR Part 91             | General operating and flight rules         |
+  | 150       | Airports                   | Airport design, planning, and operations   |
+
+  Now go back to the five examples and confirm:
+
+  - `AC 61-65` - certification of pilots and instructors. Part 61.
+  - `AC 91-73` - guidance on a Part 91 operating practice (single-pilot
+    procedures during taxi operations).
+  - `AC 20-138` - aircraft equipment airworthiness approval. The 20
+    series.
+  - `AC 150-5300-13` - airport design. The 150 series is airports.
+  - `AC 00-6` - the 00 series is general; this one is the Aviation
+    Weather Handbook lineage.
+
+  The numbering is not arbitrary. It is a deliberate mirror of the
+  CFR's own skeleton. Once you see that, you can look at an AC number
+  you have never met and predict its subject before you open it. The
+  authoritative source for the full scheme is AC 00-2, Appendix 2.
+
+  This section hands off to the AC-numbering knowledge node, which
+  runs the same five-number discovery as a seven-phase walk and then
+  drills the skill both directions: number to subject, and subject
+  to series prefix.
+steps:
+
+  - code: s3.1
+    ordinal: 1
+    title: Predicting an AC's subject from its number
+    body_md: |
+      The skill the knowledge node trains is prediction. Given an AC
+      number you have never seen, name its subject area. Given a
+      subject area, name the series prefix you would search.
+
+      The five-number set - `AC 61-65`, `AC 91-73`, `AC 20-138`,
+      `AC 150-5300-13`, `AC 00-6` - is the same worked set the node
+      uses, so you see one consistent example carried from this step
+      into the discovery walk and the recall cards. Do not memorize
+      the five titles; internalize the rule that produced them.
+    knowledge_node_id: reg-ac-numbering-system

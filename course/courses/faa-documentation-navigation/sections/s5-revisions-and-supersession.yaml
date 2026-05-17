@@ -1,0 +1,99 @@
+code: s5
+ordinal: 5
+title: Revisions, changes, cancellation, and supersession
+body_md: |
+  **Before you start.** Section 4 named the revision letter as one
+  part of an identifier. This section is what that letter means, and
+  why an FAA document is never quite "the document" - it is always a
+  specific edition of it.
+
+  ---
+
+  Here is the problem this section solves. You search for guidance on
+  a topic and you find a document. You read it, you trust it, you act
+  on it. Then you discover it was cancelled three years ago and a
+  newer edition says something different. The information you relied
+  on was real once and is wrong now.
+
+  FAA documents are living things. They get revised, amended,
+  cancelled, and replaced - and unless you check, you have no way to
+  know whether the copy in front of you is the current one. So before
+  the vocabulary, internalize the habit: **always confirm you have
+  the current edition before you rely on a document.**
+
+  Now the vocabulary. There are three distinct ways a document
+  changes:
+
+  - **Revision letter.** A full revision replaces the whole document
+    and bumps the letter: `AC 00-45G` becomes `AC 00-45H`. The new
+    letter means "this is the current complete edition; the previous
+    letter is superseded." No letter means the original first
+    edition.
+  - **Change (CHG).** A "Change 1" or "CHG 2" is a partial update -
+    a few pages, not the whole document. The base document keeps its
+    revision letter; the change is layered on top. You need the base
+    edition AND every change that applies to it to have the complete
+    current text.
+  - **Cancellation.** A cancelled document is withdrawn. The FAA no
+    longer stands behind it. Cancellation is not the same as
+    revision: a revision replaces with a newer edition; a
+    cancellation may or may not have a successor.
+
+  That last point is the one that bites people, so here are two
+  worked contrasts:
+
+  - **Cancelled, but a successor exists.** `AC 00-6A` ("Aviation
+    Weather") was cancelled - but the successor `AC 00-6B` was issued
+    in its place. If you find `AC 00-6A`, the fix is easy: go read
+    `AC 00-6B`. The guidance lives on; only the edition changed.
+  - **Cancelled, with no successor document at all.** `AC 00-2` was
+    the FAA's master checklist of advisory circulars - the index of
+    every AC. It was cancelled, and no replacement AC was ever
+    issued. What replaced it is not a document but a *system*:
+    drs.faa.gov, the Dynamic Regulatory System search tool. If you go
+    looking for `AC 00-2` expecting a current index, you will not
+    find one. There is no index to find. That gap is, in fact, the
+    reason this whole orientation course exists.
+
+  So a cancelled document still matters in two ways. It tells you
+  where to look next (the successor edition), and sometimes its
+  cancellation is itself the lesson - as with `AC 00-2`, where the
+  absence of a successor is the point.
+
+  This section hands off to two knowledge nodes. The document-
+  ecosystem node frames cancellation and supersession as part of how
+  the families behave over time; the citation-anatomy node connects
+  the revision letter back to the identifier you learned to parse in
+  s4. Together they build the single habit: check the edition first.
+steps:
+
+  - code: s5.1
+    ordinal: 1
+    title: How a document supersedes itself
+    body_md: |
+      The framing question for the document-ecosystem node: when you
+      hold an FAA document, what are the three things that could be
+      true of it - current edition, superseded by a newer revision,
+      or cancelled - and how would you tell which one without
+      guessing?
+
+      The node walks the revision / change / cancellation vocabulary
+      as a discovery and uses the `AC 00-6A` to `AC 00-6B` contrast
+      as the worked example: a clean supersession where the guidance
+      survives and only the edition letter moves.
+    knowledge_node_id: reg-faa-document-ecosystem
+
+  - code: s5.2
+    ordinal: 2
+    title: The revision letter as part of the identifier
+    body_md: |
+      The revision letter you learned to parse in s4 is not
+      decoration - it is the part of the identifier that tells you
+      *which edition* you are citing. `AC 00-45G` and `AC 00-45H` are
+      two different documents with the same number.
+
+      The framing question for the citation-anatomy node: when you
+      cite an AC, are you citing it precisely enough that a reader
+      knows exactly which edition you mean? A cite without a current
+      revision letter is a cite that may already be stale.
+    knowledge_node_id: reg-faa-citation-anatomy

@@ -1,0 +1,82 @@
+code: s4
+ordinal: 4
+title: Identifier anatomy - reading any FAA citation
+body_md: |
+  **Before you start.** Section 3 taught you to predict an AC's
+  subject from its number. This section goes one level deeper: how to
+  pull apart any FAA citation into its parts, and why the identifier
+  is a different thing from the title.
+
+  ---
+
+  Start with a question. When someone hands you `AC 00-45H`, what
+  exactly are they handing you? Most pilots would say "the Aviation
+  Weather Services document." That answer confuses two different
+  things, and the confusion is worth fixing now because it shows up
+  in every citation you will ever read.
+
+  `AC 00-45H` is an **identifier**. "Aviation Weather Services" is a
+  **title**. They are not the same kind of thing:
+
+  - The identifier *locates* the document. It is an address. It is
+    short, stable, and unique - there is exactly one `AC 00-45H`.
+  - The title *describes* the document. It tells you what the
+    document is about. Titles can be long, and a later revision can
+    even reword the title.
+
+  Cite by the identifier; describe with the title. Pull `AC 00-45H`
+  apart and every piece has a name:
+
+  - `AC` - the **document-type prefix**. This is an Advisory Circular.
+  - `00-45` - the **AC number**. The `00` is the subject series from
+    s3 (general); `45` is the document's slot in that series.
+  - `H` - the **revision letter**. This is the eighth edition. The
+    first edition had no letter; `A` was the second; `H` is the
+    eighth. (Revisions are the whole subject of s5.)
+
+  The same "identifier has parts, and the parts have names" idea
+  works for every family. Two more you will read constantly:
+
+  A **CFR citation**, `14 CFR 91.137(a)(2)`:
+
+  - `14` - the **title** of the Code of Federal Regulations. Title 14
+    is "Aeronautics and Space."
+  - `91` - the **part**. Part 91 is general operating and flight
+    rules.
+  - `137` - the **section** within that part.
+  - `(a)(2)` - the **paragraph** and subparagraph.
+
+  An **AIM citation**, `7-1-6`:
+
+  - `7` - the **chapter**. Chapter 7 is Safety of Flight.
+  - `1` - the **section** within the chapter.
+  - `6` - the **paragraph**.
+
+  The vocabulary matters because it lets you read any citation
+  precisely. "Look at 91.103" and "look at 91-something" are
+  completely different instructions: one is a binding regulation
+  section, the other is an advisory AC series. A pilot who knows the
+  anatomy never mixes them up.
+
+  This section hands off to the citation-anatomy knowledge node,
+  which walks the parse of an AC, a CFR cite, and an AIM cite as a
+  discovery, and trains the identifier-versus-title distinction until
+  reading a citation becomes automatic.
+steps:
+
+  - code: s4.1
+    ordinal: 1
+    title: Parsing an AC, a CFR cite, and an AIM cite
+    body_md: |
+      The framing question for the knowledge node: when you see a
+      citation anywhere - in this app, in an AC, in someone's email -
+      can you name every part of it and say which family it belongs
+      to before you look anything up?
+
+      The node trains the parse on all three citation shapes and
+      keeps the identifier-versus-title distinction central: the
+      identifier is the address, the title is the description. Get
+      that straight and `AC 00-45H` versus "Aviation Weather
+      Services" stops being a single blurry thing and becomes two
+      clear ones.
+    knowledge_node_id: reg-faa-citation-anatomy

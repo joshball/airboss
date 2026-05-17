@@ -1,0 +1,108 @@
+code: s6
+ordinal: 6
+title: Finding things and cross-referencing the families
+body_md: |
+  **Before you start.** This is the capstone section. The five
+  sections before it taught you what the families are, how they are
+  numbered, how to read a citation, and how editions change. This
+  section teaches the two skills that turn that knowledge into use:
+  finding the document you need, and triangulating a real question
+  across several families at once.
+
+  ---
+
+  ## Where things actually live
+
+  Section 5 ended on a hard fact: the FAA publishes no single
+  browsable index of its documentation. `AC 00-2`, the old master
+  checklist of advisory circulars, was cancelled with no successor
+  document. So where do you go?
+
+  - **drs.faa.gov** - the Dynamic Regulatory System. This is the
+    modern master search tool that replaced `AC 00-2`. It is a search
+    box, not a map: you find a document by knowing roughly what you
+    are looking for, not by browsing a table of contents.
+  - **eCFR** (ecfr.gov) - the regulations themselves, always the
+    current text of 14 CFR, continuously updated.
+  - **faa.gov regulations and policies areas** - landing pages for
+    handbooks, the AIM, ACs, and orders.
+
+  One structural fact makes searching less mysterious: no single FAA
+  office owns "all ACs." Advisory Circulars are issued by the office
+  that owns the subject. The Airports office owns the 150-series ACs;
+  Flight Standards owns others. That is why there is no one page that
+  lists every AC - the documents are scattered across the offices
+  that produce them, and drs.faa.gov is the search layer stitched
+  across all of them.
+
+  ## Triangulation - the real skill
+
+  Knowing where documents live is mechanical. The skill that makes a
+  pilot effective is **triangulation**: answering a real question by
+  walking it across several families, because no single family
+  answers it completely.
+
+  Each family answers a different slice of a question:
+
+  - A **14 CFR** section tells you what is *required*. It is binding,
+    and it is terse.
+  - An **AC** tells you *one acceptable way* to satisfy that
+    requirement. It is the worked example the regulation does not
+    include.
+  - The **AIM** tells you the *operational how-to* - the procedure as
+    you would actually fly it.
+  - A **handbook** gives the *training-depth* treatment - the why,
+    explained at the depth a student needs.
+  - The **ACS** tells you what a *checkride tests* on the topic.
+
+  ## A worked example: a weather go/no-go question
+
+  Suppose the question is: "Am I legal and prepared, weather-wise, to
+  launch this cross-country?" Walk it across the families:
+
+  1. **14 CFR 91.103** ("Preflight action") is the binding rule. It
+     requires you to become familiar with all available information
+     concerning the flight, weather included. It tells you that you
+     must - not how.
+  2. **AC 00-45H** ("Aviation Weather Services") shows an acceptable
+     means: it explains the weather products, how they are issued,
+     and how to read them. It is the worked example for satisfying
+     91.103's weather requirement.
+  3. **AIM Chapter 7** ("Safety of Flight") gives the operational
+     how-to: how to obtain a briefing, how the weather services fit
+     into flight planning.
+  4. The **Aviation Weather Handbook** gives the training-depth
+     treatment: the meteorology behind the products, so the products
+     mean something rather than just being decoded.
+  5. The **ACS weather task** tells you what a checkride examiner
+     expects you to demonstrate on weather - the standard your
+     preparation is measured against.
+
+  One question; five families; each one a different slice. That walk
+  is triangulation, and it is the habit this whole course was built
+  to install.
+
+  This section hands off to the cross-reference triangulation
+  knowledge node - the capstone node - which runs the 14 CFR 91.103
+  weather walk as a seven-phase discovery and trains you to build the
+  same multi-family walk for any question you bring it.
+steps:
+
+  - code: s6.1
+    ordinal: 1
+    title: Triangulating a question across the families
+    body_md: |
+      The framing question for the knowledge node: take any real
+      flying question you have - a regulation you are unsure of, a
+      procedure you want to fly correctly, a checkride area you are
+      rebuilding - and ask which families it touches. The binding
+      rule, the AC that shows compliance, the AIM how-to, the
+      handbook depth, the ACS standard: which of those does your
+      question need, and in what order?
+
+      The node walks the 14 CFR 91.103 weather go/no-go example end
+      to end, then trains you to construct the same walk yourself.
+      That is the skill that makes the entire FAA documentation
+      ecosystem usable: not memorizing it, but knowing how to
+      triangulate across it.
+    knowledge_node_id: reg-faa-cross-reference-triangulation
