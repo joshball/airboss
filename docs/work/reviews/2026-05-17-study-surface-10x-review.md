@@ -1,6 +1,6 @@
 ---
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Study surface -- 10x review (2026-05-17)
