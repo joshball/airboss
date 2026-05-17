@@ -11,8 +11,13 @@
  *   - GFM pipe tables with optional alignment row (`:---`, `---:`, `:---:`).
  *   - Fenced code blocks (```` ```lang `` ``).
  *   - Blockquotes (`> ...`).
- *   - Callout directives (`:::variant [title]` / `:::`). Variants are
- *     validated against `CALLOUT_VARIANTS`. Unclosed callouts throw.
+ *   - Directives (`:::name ...` / `:::`), four families owned by the
+ *     `@ab/constants` registry: attribute-only (`chart`, `scenario`),
+ *     data-payload-body (`cards`), nested-markdown-body (`phase`), and
+ *     the variant-named callout family (`tip` / `warn` / `note` /
+ *     `example`). Body-bearing directives may also be closed inline on
+ *     the opener line with a trailing `:::` (e.g. `:::cards none:::`).
+ *     Unknown directive names and unclosed directives throw.
  *   - Figures (`![alt](src "caption")`) -- image on its own line with an
  *     optional quoted caption.
  *   - Horizontal rules (`---`, `***`).
@@ -24,21 +29,26 @@
 import { parseCardsYaml } from '@ab/bc-study';
 import {
 	KNOWLEDGE_PHASE_VALUES,
+	MARKDOWN_CALLOUT_VARIANT_VALUES,
+	MARKDOWN_DIRECTIVE_ALL_NAMES,
 	MARKDOWN_DIRECTIVE_BODY_BEARING,
 	MARKDOWN_DIRECTIVE_NAMES,
 	MARKDOWN_DIRECTIVE_NESTED_MARKDOWN_BODY,
 	MARKDOWN_DIRECTIVE_REQUIRED_ATTRS,
-	MARKDOWN_DIRECTIVE_VALUES,
 	type MarkdownDirectiveName,
 	WX_CHART_SLUG_REGEX,
 	WX_SCENARIO_VALUES,
 } from '@ab/constants';
-import { CALLOUT_VARIANTS } from '../validation';
 import type { CalloutVariant, InlineNode, MdNode, TableAlign } from './ast';
 import { ESCAPABLE, parseInline } from './inline';
 
-const CALLOUT_VARIANT_SET = new Set<string>(CALLOUT_VARIANTS);
-const DIRECTIVE_NAME_SET = new Set<string>(MARKDOWN_DIRECTIVE_VALUES);
+// The callout family + the other three directive families all live in the
+// `@ab/constants` registry. `DIRECTIVE_NAME_SET` is every legal directive
+// name across all four families -- the `:::name` opener is recognised
+// against it, then `CALLOUT_VARIANT_SET` selects the callout parse path
+// (variant-named family) versus the `DirectiveNode`-emitting path.
+const CALLOUT_VARIANT_SET = new Set<string>(MARKDOWN_CALLOUT_VARIANT_VALUES);
+const DIRECTIVE_NAME_SET = new Set<string>(MARKDOWN_DIRECTIVE_ALL_NAMES);
 const DIRECTIVE_BODY_BEARING_SET: ReadonlySet<string> = MARKDOWN_DIRECTIVE_BODY_BEARING;
 const DIRECTIVE_NESTED_MARKDOWN_BODY_SET: ReadonlySet<string> = MARKDOWN_DIRECTIVE_NESTED_MARKDOWN_BODY;
 const WX_SCENARIO_SLUG_SET = new Set<string>(WX_SCENARIO_VALUES);
@@ -109,42 +119,133 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 			continue;
 		}
 
-		// Callout block (`:::variant [title]`) or component-mount /
-		// data-payload / nested-markdown directive (`:::chart slug="..."` /
-		// `:::scenario slug="..."` / `:::cards ... :::` /
-		// `:::phase name="..." ... :::`). All share the `:::ident` opener;
-		// the directive name distinguishes which path runs.
+		// Bare `:::` close token at the top of the loop is unmatched: every
+		// directive / callout body scan consumes its own closing `:::`, so a
+		// `:::` that reaches here closes nothing. Throw rather than emit it as
+		// a stray paragraph (this also catches an inline-closed directive
+		// followed by an orphaned `:::` line).
+		if (/^:::\s*$/.test(line)) {
+			throw new MarkdownParseError("Unmatched directive close ':::' (no directive is open)", baseLineNo + i + 1);
+		}
+
+		// Directive opener (`:::name ...`). One opener, four families owned by
+		// the `@ab/constants` registry:
+		//
+		//   - Attribute-only (chart, scenario): MUST close on the next
+		//     non-blank line. Any body content is rejected because the
+		//     renderer mounts a component parameterised by attrs alone.
+		//   - Data-payload body (cards): the lines between opener and
+		//     closer are collected verbatim into `node.body` and handed
+		//     to the per-directive validator (e.g. `parseCardsYaml`).
+		//     The body is a typed payload (YAML); it is NOT walked as
+		//     nested markdown.
+		//   - Nested-markdown body (phase): the body IS authored
+		//     markdown. We capture it into `node.body` AND recursively
+		//     parse it through the same block parser, populating
+		//     `node.children` with the resulting `MdNode[]`. Splitters
+		//     consume `body`; renderers consume `children`.
+		//   - Variant-named callout family (tip, warn, note, example):
+		//     the name IS the variant; the body is nested markdown. The
+		//     parser emits a `CalloutNode` (kind: 'callout') keyed on the
+		//     variant rather than a generic `DirectiveNode`.
+		//
+		// A body-bearing directive may also be closed INLINE on the opener
+		// line with a trailing `:::` (e.g. `:::cards none:::`); the block
+		// form and the inline-closed form parse to an equivalent node.
+		//
+		// `DIRECTIVE_NAME_SET` recognises the opener; `CALLOUT_VARIANT_SET`
+		// selects the callout path; within the directive path
+		// `DIRECTIVE_BODY_BEARING_SET` selects body vs no-body and
+		// `DIRECTIVE_NESTED_MARKDOWN_BODY_SET` selects nested-markdown vs
+		// typed-payload.
 		const calloutOpen = /^:::\s*([a-z][a-z-]*)\s*(.*)$/i.exec(line);
 		if (calloutOpen && calloutOpen[1].toLowerCase() !== 'end') {
 			const variantName = calloutOpen[1].toLowerCase();
-			const remainder = calloutOpen[2];
+			const rawRemainder = calloutOpen[2];
+			// Inline-closed form: the opener line ends with a trailing `:::`.
+			// The content between the directive name and that trailing `:::`
+			// is the inline body (empty when the line is `:::name:::`).
+			const inlineCloseMatch = /^(.*?)\s*:::\s*$/.exec(rawRemainder);
+			const isInlineClosed = inlineCloseMatch !== null;
+			const remainder = isInlineClosed ? inlineCloseMatch[1] : rawRemainder;
 
-			// Directive: `:::name [key="value" ...]` opener, `:::` closer.
-			// Three families:
-			//
-			//   - Attribute-only (chart, scenario): MUST close on the next
-			//     non-blank line. Any body content is rejected because the
-			//     renderer mounts a component parameterised by attrs alone.
-			//   - Data-payload body (cards): the lines between opener and
-			//     closer are collected verbatim into `node.body` and handed
-			//     to the per-directive validator (e.g. `parseCardsYaml`).
-			//     The body is a typed payload (YAML); it is NOT walked as
-			//     nested markdown.
-			//   - Nested-markdown body (phase): the body IS authored
-			//     markdown. We capture it into `node.body` AND recursively
-			//     parse it through the same block parser, populating
-			//     `node.children` with the resulting `MdNode[]`. Splitters
-			//     consume `body`; renderers consume `children`.
-			//
-			// All share the `:::name` opener;
-			// `DIRECTIVE_BODY_BEARING_SET` selects body vs no-body, and
-			// `DIRECTIVE_NESTED_MARKDOWN_BODY_SET` selects nested-markdown
-			// vs typed-payload within the body-bearing branch.
 			if (DIRECTIVE_NAME_SET.has(variantName)) {
-				const attrs = parseDirectiveAttrs(remainder, baseLineNo + i + 1);
+				const isCallout = CALLOUT_VARIANT_SET.has(variantName);
+				const openerLine = baseLineNo + i + 1;
+
+				if (isCallout) {
+					// Variant-named callout directive. The body is nested
+					// markdown; the parser emits a `CalloutNode`.
+					const variant = variantName as CalloutVariant;
+					if (isInlineClosed) {
+						// `:::tip body text:::` -- the inline content is the body;
+						// the inline form carries no title.
+						const children = parseBlocks(remainder);
+						out.push({ kind: 'callout', variant, title: undefined, children });
+						i += 1;
+						continue;
+					}
+					const title = remainder.trim() || undefined;
+					const bodyStart = i + 1;
+					let j = bodyStart;
+					while (j < end && !/^:::\s*$/.test(lines[j])) {
+						// Allow nested directives / callouts to open and close
+						// within; match depth so the callout's own closing `:::`
+						// is found. An inline-closed nested directive
+						// (`:::name ...:::` on one line) is self-contained -- it
+						// neither opens nor closes a multi-line block, so it does
+						// not affect depth.
+						const innerOpen = /^:::\s*([a-z][a-z-]*)/i.exec(lines[j]);
+						if (innerOpen && innerOpen[1].toLowerCase() !== 'end' && !isInlineClosedDirectiveLine(lines[j])) {
+							// Skip to its close.
+							let depth = 1;
+							j += 1;
+							while (j < end && depth > 0) {
+								if (/^:::\s*$/.test(lines[j])) depth -= 1;
+								else if (/^:::\s*[a-z]/i.test(lines[j]) && !isInlineClosedDirectiveLine(lines[j])) depth += 1;
+								if (depth === 0) break;
+								j += 1;
+							}
+							j += 1;
+							continue;
+						}
+						j += 1;
+					}
+					if (j >= end) {
+						throw new MarkdownParseError(`Unclosed callout ':::${variant}'`, openerLine);
+					}
+					const children = parseBlockRange(lines, bodyStart, j, baseLineNo);
+					out.push({ kind: 'callout', variant, title, children });
+					i = j + 1;
+					continue;
+				}
+
 				const bodyStart = i + 1;
 				const bodyBearing = DIRECTIVE_BODY_BEARING_SET.has(variantName);
 				if (bodyBearing) {
+					if (isInlineClosed) {
+						// Inline-closed body-bearing directive (`:::cards none:::`).
+						// The opener line is the whole directive. A body-bearing
+						// directive is defined by its body, so the inline content
+						// between `:::name` and the trailing `:::` IS the body; the
+						// inline form carries no attributes. Block form
+						// (`:::name\n<body>\n:::`) and inline form parse to an
+						// equivalent node. The per-directive validator still runs
+						// on the inline body (so `:::cards none:::` fails the YAML
+						// schema exactly as the block form would).
+						const attrs: Record<string, string> = {};
+						const body = remainder;
+						validateDirective(variantName as MarkdownDirectiveName, attrs, openerLine, body, baseLineNo + i + 1);
+						if (DIRECTIVE_NESTED_MARKDOWN_BODY_SET.has(variantName)) {
+							const children = parseBlocks(body);
+							out.push({ kind: 'directive', name: variantName, attrs, body, children });
+						} else {
+							out.push({ kind: 'directive', name: variantName, attrs, body });
+						}
+						i += 1;
+						continue;
+					}
+					const attrs = parseDirectiveAttrs(remainder, openerLine);
 					let j = bodyStart;
 					const bodyLines: string[] = [];
 					while (j < end && !/^:::\s*$/.test(lines[j])) {
@@ -152,16 +253,10 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 						j += 1;
 					}
 					if (j >= end) {
-						throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, baseLineNo + i + 1);
+						throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, openerLine);
 					}
 					const body = bodyLines.join('\n');
-					validateDirective(
-						variantName as MarkdownDirectiveName,
-						attrs,
-						baseLineNo + i + 1,
-						body,
-						baseLineNo + bodyStart,
-					);
+					validateDirective(variantName as MarkdownDirectiveName, attrs, openerLine, body, baseLineNo + bodyStart);
 					// Nested-markdown directives (e.g. `:::phase`) get the body
 					// walked through the same block parser so renderers can mount
 					// a real AST without re-parsing. `body` stays set in parallel
@@ -177,7 +272,19 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 					i = j + 1;
 					continue;
 				}
-				validateDirective(variantName as MarkdownDirectiveName, attrs, baseLineNo + i + 1);
+				// Attribute-only directive (`chart`, `scenario`). Defined by its
+				// attribute bag; the body is always empty. The remainder holds
+				// the `key="value"` pairs in both the block and inline-closed
+				// forms.
+				const attrs = parseDirectiveAttrs(remainder, openerLine);
+				validateDirective(variantName as MarkdownDirectiveName, attrs, openerLine);
+				if (isInlineClosed) {
+					// Attribute-only directive closed inline (`:::chart slug="x":::`).
+					// There is no body to scan; the opener line is the whole node.
+					out.push({ kind: 'directive', name: variantName, attrs });
+					i += 1;
+					continue;
+				}
 				let j = bodyStart;
 				while (j < end && !/^:::\s*$/.test(lines[j])) {
 					// Tolerate a single blank line between opener and close; reject
@@ -192,45 +299,14 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 					j += 1;
 				}
 				if (j >= end) {
-					throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, baseLineNo + i + 1);
+					throw new MarkdownParseError(`Unclosed directive ':::${variantName}'`, openerLine);
 				}
 				out.push({ kind: 'directive', name: variantName, attrs });
 				i = j + 1;
 				continue;
 			}
 
-			if (!CALLOUT_VARIANT_SET.has(variantName)) {
-				throw new MarkdownParseError(`Unknown directive ':::${variantName}'`, baseLineNo + i + 1);
-			}
-			const variant = variantName as CalloutVariant;
-			const title = remainder.trim() || undefined;
-			const bodyStart = i + 1;
-			let j = bodyStart;
-			while (j < end && !/^:::\s*$/.test(lines[j])) {
-				// Allow nested callouts to open and close within; match depth.
-				const innerOpen = /^:::\s*([a-z][a-z-]*)/i.exec(lines[j]);
-				if (innerOpen && innerOpen[1].toLowerCase() !== 'end') {
-					// Skip to its close.
-					let depth = 1;
-					j += 1;
-					while (j < end && depth > 0) {
-						if (/^:::\s*$/.test(lines[j])) depth -= 1;
-						else if (/^:::\s*[a-z]/i.test(lines[j])) depth += 1;
-						if (depth === 0) break;
-						j += 1;
-					}
-					j += 1;
-					continue;
-				}
-				j += 1;
-			}
-			if (j >= end) {
-				throw new MarkdownParseError(`Unclosed callout ':::${variant}'`, baseLineNo + i + 1);
-			}
-			const children = parseBlockRange(lines, bodyStart, j, baseLineNo);
-			out.push({ kind: 'callout', variant, title, children });
-			i = j + 1;
-			continue;
+			throw new MarkdownParseError(`Unknown directive ':::${variantName}'`, baseLineNo + i + 1);
 		}
 
 		// Blockquote.
@@ -294,6 +370,17 @@ function parseBlockRange(lines: readonly string[], start: number, end: number, b
 }
 
 // ---------- helpers ----------
+
+/**
+ * True when `line` is an inline-closed directive opener: `:::name ...:::`
+ * on a single line (the opener and its closing `:::` are on the same
+ * line). Such a line is self-contained -- it neither opens nor closes a
+ * multi-line block, so the nested-callout depth scan must treat it as
+ * neutral. A bare close (`:::`) is not an opener and returns false.
+ */
+function isInlineClosedDirectiveLine(line: string): boolean {
+	return /^:::\s*[a-z][a-z-]*(\s.*)?:::\s*$/i.test(line);
+}
 
 function slugify(text: string): string {
 	return text

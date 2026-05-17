@@ -25,6 +25,7 @@ import {
 	CONCEPT_GROUP_VALUES,
 	HELP_KIND_VALUES,
 	HELP_KINDS,
+	MARKDOWN_CALLOUT_VARIANT_VALUES,
 	MS_PER_YEAR,
 	REFERENCE_BANNED_KEYWORDS,
 	REFERENCE_KEYWORD_MAX_COUNT,
@@ -34,8 +35,13 @@ import { EXTERNAL_REF_SOURCE_VALUES, type ExternalRef } from './schema/external-
 import type { HelpPage } from './schema/help-page';
 import type { HelpSection } from './schema/help-section';
 
-/** Callout variants supported by the MarkdownBody renderer (`:::variant`). */
-export const CALLOUT_VARIANTS: readonly string[] = ['tip', 'warn', 'danger', 'howto', 'note', 'example'];
+/**
+ * Callout variants supported by the MarkdownBody renderer (`:::tip` /
+ * `:::warn` / `:::note` / `:::example`). The canonical set lives in
+ * `@ab/constants` (`MARKDOWN_CALLOUT_VARIANT_VALUES`) -- the callout
+ * family is part of the markdown directive registry.
+ */
+export const CALLOUT_VARIANTS: readonly string[] = MARKDOWN_CALLOUT_VARIANT_VALUES;
 
 /**
  * Extract `:::variant` tokens from a markdown body. Returns the set of
