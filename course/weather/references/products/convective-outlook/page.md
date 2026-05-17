@@ -15,9 +15,9 @@ authoritative_sources:
     note: 'Operational use of SPC convective outlooks in flight planning, layered with Convective SIGMET and AIRMET.'
     verified: true
   - source: FAA-H-8083-28
-    section: 'Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC)); Chapter on Convective Weather'
+    section: 'Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.17.1 (Convective Outlook (AC)); Chapter 22 -- Thunderstorms'
     note: 'Outlook context within the broader forecast suite and the underlying convective-weather chapter.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-convective-outlook
   - wx-thunderstorm-hazards

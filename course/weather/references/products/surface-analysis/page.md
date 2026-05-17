@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)'
     note: 'Modern pilot-pitch treatment of chart production at the Weather Prediction Center and the Unified Surface Analysis.'
-    verified: false
+    verified: true
   - source: AC 00-6B
     section: 'Aviation Weather, Surface Analysis section'
     note: 'Underlying meteorology -- pressure systems, frontal mechanics, wind around highs and lows.'

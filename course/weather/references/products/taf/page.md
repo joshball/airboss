@@ -11,9 +11,9 @@ authoritative_sources:
     note: 'Definitive product spec: format, change groups, amendment criteria.'
     verified: true
   - source: AIM
-    section: '7-1-29 / 7-1-30 area (Aviation Weather Services -- TAF)'
+    section: '7-1-28 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
     note: 'Operational description for pilots. Verify exact paragraph against current AIM.'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook -- Aerodrome Forecasts chapter'
     note: 'Plain-English explainer; chapter number varies by handbook revision.'

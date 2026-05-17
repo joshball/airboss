@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: Chapter 26, §26.3
     note: Aviation Weather Handbook, Advisories chapter, AIRMET subsection.
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-airmets
 related_products:

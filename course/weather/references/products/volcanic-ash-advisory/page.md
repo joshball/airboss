@@ -11,9 +11,9 @@ authoritative_sources:
     note: 'Format spec for VAA text bulletin and graphic, VAAC responsibilities, pairing with the VA SIGMET.'
     verified: true
   - source: AIM
-    section: '7-1-15'
+    section: '7-1-25 -- PIREPs Relating to Volcanic Ash Activity'
     note: 'Volcanic Ash, Smoke Plumes, and the Volcanic Ash Forecast Transport and Dispersion (VAFTAD) framework.'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Volcanic Ash chapter (Hazards)'
     note: 'Engine and airframe damage mechanisms, encounter precedents, pilot procedures.'

@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: Chapter 19 -- Turbulence
     note: Aviation Weather Handbook turbulence chapter; CAT, mountain-wave, and convective turbulence sources that the GTG component layers map to.
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-turbulence-types
 related_products:

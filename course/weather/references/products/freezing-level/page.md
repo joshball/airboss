@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: Chapters 25 (Analysis) and 27 (Forecasts), Freezing Level sections
     note: Aviation Weather Handbook -- freezing-level analysis and forecast graphics, paired with CIP / FIP icing products in the same chapters.
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-freezing-level
   - wx-icing-types-and-avoidance

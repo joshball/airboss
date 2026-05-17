@@ -11,13 +11,13 @@ authoritative_sources:
     note: 'Format spec for the GFA tool layers. Verify exact chapter/section in current revision.'
     verified: true
   - source: AIM
-    section: '7-1-5, 7-1-6'
+    section: '7-1-4 -- Graphical Forecasts for Aviation (GFA)'
     note: 'Preflight briefing (7-1-5) and in-flight weather advisories (7-1-6). The GFA is the spatial integration of the in-flight advisory products.'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
-    section: 'Chapter 28 -- Aviation Weather Tools, §28.2 (Graphical Forecasts for Aviation (GFA) Tool)'
+    section: 'Chapter 28 -- Aviation Weather Tools, §28.2 (Graphical Forecasts for Aviation (GFA) Tool); Ch 27 §27.6 (Area Forecasts) for non-CONUS regions'
     note: 'GFA is the post-Area-Forecast replacement for CONUS. Legacy textual FA still covered in Ch 27 §27.5 for non-CONUS regions.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-gfa
 related_products:

@@ -9,13 +9,13 @@ authoritative_sources:
   - source: 14 CFR 91.137
     section: '(a)(1), (a)(2), (a)(3)'
     note: Legal basis. (a)(1) protects persons/property on the surface from an existing/imminent hazard, (a)(2) provides a safe environment for disaster/hazard relief aircraft, (a)(3) prevents unsafe congestion of sightseeing aircraft above an incident.
-    verified: false
+    verified: true
   - source: AIM
-    section: 5-6-2
+    section: 3-5-3 -- Temporary Flight Restrictions
     note: Temporary Flight Restrictions. Operational description of TFR types, NOTAM dissemination, and pilot responsibilities.
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
-    section: Chapter 27 (NOTAMs and TFRs)
+    section: 'Not located in this document -- FAA-H-8083-28B has no NOTAM or TFR chapter (Chapter 27 is Forecasts); see AIM 3-5-3 and 14 CFR 91.137'
     note: Aviation Weather Handbook discussion of weather-driven flight restrictions within the NOTAM ecosystem.
     verified: false
   - source: tfr.faa.gov

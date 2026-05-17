@@ -7,11 +7,11 @@ tier: 1
 status: draft
 authoritative_sources:
   - source: AC 00-45H
-    section: 'Aviation Weather Services, Chapter 3 -- Surface Aviation Weather Observations (METAR / SPECI)'
+    section: 'Chapter 3 -- Observations, §3.1 (Aviation Routine Weather Reports (METAR) and Special Weather Reports (SPECI))'
     note: 'The canonical format spec for METAR and SPECI: group order, codes, intensity/descriptor/phenomenon table, RMK conventions.'
-    verified: false
+    verified: true
   - source: AIM
-    section: '7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
+    section: '7-1-28 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
     note: 'Decode key with worked examples. The reference most pilots actually open on the ramp.'
     verified: true
   - source: FAA-H-8083-28

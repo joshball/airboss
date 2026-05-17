@@ -11,13 +11,13 @@ authoritative_sources:
     note: 'Format, trigger criteria, and valid time for the CWA product.'
     verified: true
   - source: AIM
-    section: '7-1-7'
+    section: '7-1-6 -- Inflight Aviation Weather Advisories (Center Weather Advisory (CWA))'
     note: 'Center Weather Service Unit (CWSU) products: CWA and Meteorological Impact Statement (MIS).'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
-    section: 'Chapter 26 (CWSU products)'
+    section: 'Chapter 26 -- Advisories, §26.4 (Center Weather Advisory (CWA))'
     note: 'Aviation Weather Handbook, Advisories chapter, CWSU/CWA subsection.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
