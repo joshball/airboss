@@ -16,16 +16,23 @@
  *   Authoring-relevant, ~10KB, lives inline in `regulations/cfr-<title>/<edition>/`.
  *   Re-emitted on every ingest (idempotent via `writeIfChanged`).
  *
- * Public surface:
- *   - {@link writeCfrNavTree}        -- emit the YAML during ingest.
+ * Public surface (browser-safe reader API):
  *   - {@link getCfrNavTree}          -- lazy-load + cache the parsed YAML.
  *   - {@link findChapterForPart}     -- (titleNumber, partNumber) -> { chapter, subchapter }.
  *   - {@link buildEcfrUrl}           -- canonical URL builder for any structural level.
  *   - {@link logUnmappedParts}       -- one-shot warn surface for parts missing a chapter mapping.
+ *   - {@link bustNavTreeCache}       -- invalidate the reader cache after a write.
+ *
+ * The ingest-time writer (`writeCfrNavTree`) lives in the server-only
+ * `nav-tree-writer.ts`. It reaches `node:fs` via `write-if-changed.ts`, and
+ * keeping it out of this module is what lets the `@ab/sources` runtime barrel
+ * stay browser-safe: a production `vite build` follows dynamic-import edges
+ * too, so a deferred `await import('../io/write-if-changed.ts')` inside this
+ * module would still pull `node:fs` into the client bundle as a lazy chunk
+ * and crash the build. See `nav-tree-writer.ts` for the full rationale.
  */
 
-import { parse as parseYaml, stringify as stringifyYaml } from 'yaml';
-import type { RawNavTree } from './xml-walker.ts';
+import { parse as parseYaml } from 'yaml';
 
 // ---------------------------------------------------------------------------
 // Browser-safe lazy Node built-in loader.
@@ -101,82 +108,6 @@ export interface PartLocation {
 	readonly subchapter: CfrNavSubchapter | null;
 }
 
-// ---------------------------------------------------------------------------
-// Writer (emitted during ingest)
-// ---------------------------------------------------------------------------
-
-export interface WriteCfrNavTreeInput {
-	readonly title: CfrTitleNumber;
-	readonly editionDate: string;
-	readonly outRoot: string;
-	readonly raw: RawNavTree;
-}
-
-/**
- * Serialise a `RawNavTree` to `regulations/cfr-<title>/<edition>/nav-tree.yaml`.
- * Idempotent via {@link writeIfChanged}.
- */
-export async function writeCfrNavTree(input: WriteCfrNavTreeInput): Promise<{ wrote: boolean; path: string }> {
-	const editionDir = pathJoin(input.outRoot, `cfr-${input.title}`, input.editionDate);
-	const path = pathJoin(editionDir, NAV_TREE_FILENAME);
-	const yaml = stringifyYaml(toYamlShape(input.raw, input.editionDate), { lineWidth: 0 });
-	// Lazy import: `writeIfChanged` static-imports `node:fs`. Top-level
-	// import would pull `node:fs` into this module's load graph, which the
-	// runtime barrel re-exports via the pure URL builders -- crashes
-	// hydration. Lazy keeps the module browser-safe; ingest callers (the
-	// only legitimate consumers) pay the import cost at call time.
-	const { writeIfChanged } = await import('../io/write-if-changed.ts');
-	const result = writeIfChanged(path, yaml);
-	// Bust the in-memory cache so subsequent reads in the same process see
-	// the new contents.
-	NAV_TREE_CACHE.delete(makeCacheKey(input.title, input.editionDate));
-	NAV_TREE_LATEST_CACHE.delete(input.title);
-	return { wrote: result.wrote, path };
-}
-
-interface YamlShape {
-	readonly title: number;
-	readonly 'title-name': string;
-	readonly 'edition-date': string;
-	readonly chapters: readonly YamlChapter[];
-}
-interface YamlChapter {
-	readonly id: string;
-	readonly name: string;
-	readonly subchapters?: readonly YamlSubchapter[];
-	readonly 'direct-parts'?: readonly string[];
-}
-interface YamlSubchapter {
-	readonly id: string;
-	readonly name: string;
-	readonly parts: readonly string[];
-}
-
-function toYamlShape(raw: RawNavTree, editionDate: string): YamlShape {
-	return {
-		title: Number.parseInt(raw.title, 10),
-		'title-name': raw.titleName,
-		'edition-date': editionDate,
-		chapters: raw.chapters.map((c) => {
-			const out: YamlChapter = {
-				id: c.id,
-				name: c.name,
-				...(c.subchapters.length > 0
-					? {
-							subchapters: c.subchapters.map((s) => ({
-								id: s.id,
-								name: s.name,
-								parts: [...s.parts],
-							})),
-						}
-					: {}),
-				...(c.directParts.length > 0 ? { 'direct-parts': [...c.directParts] } : {}),
-			};
-			return out;
-		}),
-	};
-}
-
 function fromYamlShape(parsed: unknown, fallbackTitle: CfrTitleNumber): CfrNavTree | null {
 	if (parsed === null || typeof parsed !== 'object') return null;
 	const obj = parsed as Record<string, unknown>;
@@ -221,6 +152,16 @@ const NAV_TREE_LATEST_CACHE = new Map<CfrTitleNumber, CfrNavTree | null>();
 
 function makeCacheKey(title: CfrTitleNumber, editionDate: string): string {
 	return `${title}::${editionDate}`;
+}
+
+/**
+ * Invalidate the in-memory reader cache for one (title, edition) so the next
+ * `getCfrNavTree` call re-reads from disk. Called by `writeCfrNavTree` in
+ * `nav-tree-writer.ts` after emitting fresh YAML.
+ */
+export function bustNavTreeCache(title: CfrTitleNumber, editionDate: string): void {
+	NAV_TREE_CACHE.delete(makeCacheKey(title, editionDate));
+	NAV_TREE_LATEST_CACHE.delete(title);
 }
 
 /**
@@ -400,7 +341,6 @@ export function logUnmappedParts(
 // ---------------------------------------------------------------------------
 
 export const __nav_tree_internal__ = {
-	toYamlShape,
 	fromYamlShape,
 	clearCache(): void {
 		NAV_TREE_CACHE.clear();

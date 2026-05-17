@@ -19,12 +19,15 @@ registerCorpusResolver(REGS_RESOLVER);
 export { cacheXmlPath, loadEcfrXml, resolveCacheRoot } from './cache.ts';
 export { formatRegsCitation } from './citation.ts';
 export { writeDerivativeTree } from './derivative-writer.ts';
-export {
-	PHASE_3_REVIEWER_ID,
-	parseCliArgs,
-	runIngest,
-	runIngestCli,
-} from './ingest.ts';
+// The CFR ingest CLI (`runIngest`, `runIngestCli`, ...) is NOT re-exported
+// here. `ingest.ts` value-imports `xml-walker.ts`, which value-imports the
+// third-party `fast-xml-parser`. This module is the `regs` resolver-
+// registration entry point, side-effect-imported by `@ab/sources/server`
+// into EVERY server bundle -- so re-exporting the ingest CLI dragged
+// `fast-xml-parser` into the flightbag SSR bundle (which has no XML-ingest
+// path) and `vite build` failed to resolve it. Ingest callers import the
+// CLI directly from `@ab/sources/regs/ingest`: `scripts/sources/register/
+// cfr.ts` (the dispatcher) and `diff/cli.ts`.
 export { parseRegsLocator } from './locator.ts';
 export {
 	buildEcfrUrl,
@@ -38,8 +41,8 @@ export {
 	getCfrNavTree,
 	logUnmappedParts,
 	type PartLocation,
-	writeCfrNavTree,
 } from './nav-tree.ts';
+export { type WriteCfrNavTreeInput, writeCfrNavTree } from './nav-tree-writer.ts';
 export {
 	normalizeRawPart,
 	normalizeRawSection,
@@ -47,4 +50,11 @@ export {
 } from './normalizer.ts';
 export { getRegsDerivativeRoot, REGS_CORPUS, REGS_RESOLVER, setRegsDerivativeRoot } from './resolver.ts';
 export { getRegsLiveUrl } from './url.ts';
-export { walkRegsXml } from './xml-walker.ts';
+// `walkRegsXml` is NOT re-exported here. `xml-walker.ts` value-imports
+// `fast-xml-parser`, and `regs/index.ts` is the resolver-registration module
+// loaded by every server bundle via `@ab/sources/server`. Re-exporting the
+// XML walker dragged `fast-xml-parser` into the flightbag SSR bundle, which
+// has no XML-ingest path -- and `vite build` failed to resolve it. The only
+// caller (`regs/ingest.ts`, an ingest-time module) imports `walkRegsXml`
+// directly from `./xml-walker.ts`; CLI ingest is the sole legitimate
+// consumer.

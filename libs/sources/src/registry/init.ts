@@ -20,7 +20,7 @@
  * function again -- it tolerates being invoked from multiple sites.
  */
 
-import { warmEditionsCache } from './editions.ts';
+import { warmEditionsCache } from './editions-db.ts';
 import { rebuildLifecycleOverlay } from './lifecycle.ts';
 
 export async function initRegistry(): Promise<void> {

@@ -25,7 +25,7 @@ import { commitIngestBatch, getEntryLifecycle } from '../registry/lifecycle.ts';
 import type { Edition, SourceEntry, SourceId } from '../types.ts';
 import { type CacheLoadResult, loadEcfrXml } from './cache.ts';
 import { writeDerivativeTree } from './derivative-writer.ts';
-import { writeCfrNavTree } from './nav-tree.ts';
+import { writeCfrNavTree } from './nav-tree-writer.ts';
 import {
 	type NormalizedPart,
 	type NormalizedSection,

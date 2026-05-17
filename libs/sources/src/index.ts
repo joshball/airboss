@@ -77,8 +77,10 @@ export {
 	logUnmappedParts,
 	type PartLocation,
 } from './regs/nav-tree.ts';
-// `writeCfrNavTree` moved to `@ab/sources/server` -- it imports
-// `writeIfChanged` which static-imports `node:fs`. Ingest callers
+// `writeCfrNavTree` lives in the server-only `regs/nav-tree-writer.ts` and is
+// re-exported from `@ab/sources/server` -- it reaches `node:fs` via
+// `write-if-changed.ts`, which a production `vite build` would pull into the
+// client bundle if the writer stayed in `nav-tree.ts`. Ingest callers
 // (`regs/ingest.ts`, scripts) import from the server barrel.
 // `batchResolve` + `__batch_internal__` are NOT re-exported here -- they reach
 // `registry/query.ts` (which static-imports `node:fs`) and crash browser
