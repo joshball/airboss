@@ -89,51 +89,59 @@ The >99 KT convention deserves a second look because it's the field-trip trap: a
 
 ## Annotated example(s)
 
-### Example 1 -- Routine FB at KORD, valid 12Z
+### Example 1 -- Routine FB at SPI (Springfield, IL)
 
-Header context (issued 0540Z, valid 1200Z, for use 0900Z--1800Z):
+Header context:
 
 ```text
+DATA BASED ON 170000Z
+VALID 170600Z   FOR USE 0200-0900Z. TEMPS NEG ABV 24000
 FT   3000    6000    9000    12000   18000   24000   30000   34000   39000
-ORD  2715    2725+08 2740+02 2750-04 2760-15 2770-26 277540  277948  278154
+SPI  2128    2324+16 2126+09 2125+02 1917-14 2426-24 271938  292848  294861
 ```
 
 Decode altitude by altitude:
 
-- **3,000 ft**: `2715` -- 270° at 15 KT. No temperature (too close to surface).
-- **6,000 ft**: `2725+08` -- 270° at 25 KT, +8°C.
-- **9,000 ft**: `2740+02` -- 270° at 40 KT, +2°C.
-- **12,000 ft**: `2750-04` -- 270° at 50 KT, -4°C. Freezing level is just below this row; if you climb through 11,000-ish in visible moisture, brief icing.
-- **18,000 ft**: `2760-15` -- 270° at 60 KT, -15°C.
-- **24,000 ft**: `2770-26` -- 270° at 70 KT, -26°C.
-- **30,000 ft**: `277540` -- direction code is 27 (< 51, no >99 KT trigger), so 270° at 75 KT. Temperature `40` at 30,000 ft is implicitly negative -> -40°C.
-- **34,000 ft**: `277948` -- 270° at 79 KT, -48°C.
-- **39,000 ft**: `278154` -- 270° at 81 KT, -54°C. Approaching the tropopause; the jet core is up here.
+- **3,000 ft**: `2128` -- 210° at 28 KT. No temperature (too close to the surface).
+- **6,000 ft**: `2324+16` -- 230° at 24 KT, +16°C.
+- **9,000 ft**: `2126+09` -- 210° at 26 KT, +9°C.
+- **12,000 ft**: `2125+02` -- 210° at 25 KT, +2°C. Freezing level is just above this row; if you climb through the mid-teens in visible moisture, brief icing.
+- **18,000 ft**: `1917-14` -- 190° at 17 KT, -14°C.
+- **24,000 ft**: `2426-24` -- 240° at 26 KT, -24°C.
+- **30,000 ft**: `271938` -- direction code is 27 (< 51, no >99 KT trigger), so 270° at 19 KT. Temperature `38` at 30,000 ft is implicitly negative -> -38°C (the header says temps are negative above 24,000).
+- **34,000 ft**: `292848` -- 290° at 28 KT, -48°C.
+- **39,000 ft**: `294861` -- 290° at 48 KT, -61°C. Approaching the tropopause.
 
-Synthesis: a textbook westerly column, accelerating with altitude. For an eastbound flight (true course ~090°), every row is a direct tailwind -- climb as high as the airplane and the day's icing/turbulence picture allow. At FL340 the tailwind buys you 79 KT over the ground; at 9,000 ft you only get 40. For a westbound flight (true course ~270°), the inverse is true: stay low to minimize the headwind, accept the longer climb-out and the slower TAS. The FB has answered the cruise-altitude question in three seconds.
+Synthesis: a moderate southwesterly-to-westerly column, light through the middle altitudes and only modestly stronger up high. For an eastbound flight (true course ~090°) the low and middle rows give a useful tailwind component; for a westbound flight (true course ~270°) the headwind never gets severe at any level, so the cruise-altitude choice is driven more by terrain, oxygen, and the icing/turbulence picture than by wind. Note the temperature column: +2°C at 12,000 means the freezing level sits in the mid-teens, so an IFR climb that high in cloud is an icing question.
 
-### Example 2 -- Strong jet over the Midwest, >99 KT encoding
+Source: NOAA Aviation Weather Center FB bulletin FBUS31 KWNO (aviationweather.gov), valid 2026-05-17 06:00Z, station SPI.
 
-Issued 0540Z, valid 1200Z, station MKC (Kansas City):
+### Example 2 -- Strong wind aloft over the eastern Great Lakes, >99 KT encoding
+
+Header context, station ECK (Peck, MI):
 
 ```text
+DATA BASED ON 170000Z
+VALID 170600Z   FOR USE 0200-0900Z. TEMPS NEG ABV 24000
 FT   3000    6000    9000    12000   18000   24000   30000   34000   39000
-MKC  2520    2535+05 2550-02 2560-10 2580-22 730235  731745  731856  731957
+ECK  2724    2823+14 2730+06 2736+00 2941-15 2955-25 286642  289051  780560
 ```
 
-Decode the upper levels carefully -- the >99 KT trigger fires:
+Decode the column -- the >99 KT trigger fires at the top:
 
-- **3,000 ft**: `2520` -- 250° at 20 KT.
-- **6,000 ft**: `2535+05` -- 250° at 35 KT, +5°C.
-- **9,000 ft**: `2550-02` -- 250° at 50 KT, -2°C.
-- **12,000 ft**: `2560-10` -- 250° at 60 KT, -10°C.
-- **18,000 ft**: `2580-22` -- 250° at 80 KT, -22°C.
-- **24,000 ft**: `730235` -- direction code `73` is >= 51, trigger fires. Direction = 73 - 50 = 23 (230° true). Speed = 02 + 100 = 102 KT. Temperature `35` at 24,000 ft -- 24,000 is the boundary; this encoder dropped the sign and used the implicit-negative convention -> -35°C. (Some FBs render 24,000 with an explicit sign instead; if you see `2402-35` for the same forecast it decodes identically. The trigger you actually rely on is direction code >= 51.)
-- **30,000 ft**: `731745` -- 73 - 50 = 23 (230°), 17 + 100 = 117 KT, -45°C.
-- **34,000 ft**: `731856` -- 230° at 118 KT, -56°C. Jet core.
-- **39,000 ft**: `731957` -- 230° at 119 KT, -57°C.
+- **3,000 ft**: `2724` -- 270° at 24 KT.
+- **6,000 ft**: `2823+14` -- 280° at 23 KT, +14°C.
+- **9,000 ft**: `2730+06` -- 270° at 30 KT, +6°C.
+- **12,000 ft**: `2736+00` -- 270° at 36 KT, 0°C. Freezing level is right at this row.
+- **18,000 ft**: `2941-15` -- 290° at 41 KT, -15°C.
+- **24,000 ft**: `2955-25` -- 290° at 55 KT, -25°C.
+- **30,000 ft**: `286642` -- direction code 28 (< 51), so 280° at 66 KT, -42°C.
+- **34,000 ft**: `289051` -- 280° at 90 KT, -51°C.
+- **39,000 ft**: `780560` -- direction code `78` is >= 51, the trigger fires. Direction = 78 - 50 = 28 (280° true). Speed = 05 + 100 = 105 KT. Temperature -60°C. The encoded `0560` would otherwise read as a 5 KT wind; the >= 51 direction code is the flag that tells you to add 100.
 
-Synthesis: a jet streak in the upper levels, axis around FL340. For an eastbound airplane on a 090° course, the wind at FL340 is from 230° -- about 50° off the right rear quarter, so still a strong tailwind component (~75 KT). For a westbound airplane on a 270° course, FL340 is brutal -- a ~75 KT headwind component. The westbound airplane stays low (9,000 or 12,000 ft) where the wind is half the speed; the eastbound airplane climbs as high as it can. Also: -56°C at FL340 puts you well below the airframe's typical limit and well into mechanical turbulence sensitivity; cross-check AIRMET Tango and the turbulence GTG before filing FL340.
+Synthesis: a steadily strengthening westerly column with the jet core above FL340 -- the wind crosses 100 KT only at the very top. For an eastbound airplane on a 090° course, FL390 is a 105 KT direct tailwind; for a westbound airplane on a 270° course, FL390 is a 105 KT direct headwind and the airplane stays low (9,000-12,000 ft) where the wind is a third of that. The lesson the >99 KT encoding teaches: read the direction code first. If it is 51 or greater, subtract 50 from the direction and add 100 to the speed before you do anything else, or you will plan a cruise leg around a wind that is 100 KT stronger than you think.
+
+Source: NOAA Aviation Weather Center FB bulletin FBUS31 KWNO (aviationweather.gov), valid 2026-05-17 06:00Z, station ECK.
 
 ## Common gotchas
 

@@ -85,56 +85,55 @@ When you decode a SPECI, glance at this list as you read. The trigger field is u
 Raw product text:
 
 ```text
-SPECI KOKC 121822Z AUTO 33024G35KT 280V010 4SM -TSRA BR SCT025 BKN040CB OVC080 19/17 A2989 RMK AO2 WSHFT 1815 PK WND 33037/1819 LTG DSNT N TSB18 RAB19 SLP118 P0008 T01890172
+SPECI KDFW 160600Z 23009G19KT 10SM -RA FEW120 BKN150 BKN250 26/19 A2989 RMK AO2 WSHFT 0540 RAB0555 P0000 T02560194
 ```
 
 Decoded:
 
-- `SPECI` -- off-cycle report. KOKC fired this between hourly METARs.
-- `KOKC` -- Will Rogers World, Oklahoma City.
-- `121822Z` -- 12th day, 18:22 Zulu.
-- `AUTO` -- automated station, no human observer in the loop for this report.
-- `33024G35KT 280V010` -- wind 330 true at 24 KT, gusting 35 KT, varying between 280 and 010 (a 90 deg arc straddling north). This is the trigger: prior reports almost certainly had southerly flow.
-- `4SM -TSRA BR` -- 4 SM visibility in light thunderstorm rain plus mist. The vis crossed below the 5 SM mark and the TS itself is a separate SPECI trigger.
-- `SCT025 BKN040CB OVC080` -- scattered at 2,500, broken cumulonimbus at 4,000, overcast at 8,000. The `CB` flag is the loud one.
-- `19/17` -- temperature +19 C, dew point +17 C. 2 deg spread, saturated, classic convective air.
-- `A2989` -- altimeter 29.89 inHg, falling.
+- `SPECI` -- off-cycle report. KDFW fired this between hourly METARs.
+- `KDFW` -- Dallas/Fort Worth International.
+- `160600Z` -- 16th day, 06:00 Zulu.
+- `23009G19KT` -- wind 230 true at 9 KT, gusting 19 KT. The gust spread is the visible part of the trigger; the `WSHFT` remark below is the rest of the story.
+- `10SM` -- visibility 10 SM, still unrestricted.
+- `-RA` -- light rain. Rain onset is itself a SPECI trigger; the `RAB` remark below times it.
+- `FEW120 BKN150 BKN250` -- few at 12,000, broken at 15,000, broken at 25,000. Mid- and high-level cloud associated with the front; no low ceiling yet.
+- `26/19` -- temperature +26 C, dew point +19 C. 7 deg spread.
+- `A2989` -- altimeter 29.89 inHg.
 - `RMK AO2` -- automated, precip-discriminating station.
-- `WSHFT 1815` -- wind shifted at 18:15Z. Seven minutes before the SPECI was filed. **This is the trigger of record.**
-- `PK WND 33037/1819` -- peak wind 330 at 37 KT, occurred at 18:19Z. Three minutes ago.
-- `LTG DSNT N` -- lightning observed distant to the north.
-- `TSB18 RAB19` -- thunderstorm began at 18:18Z, rain began at 18:19Z. The convective onset is also a SPECI trigger; the wind shift fired first and the TS onset confirms it.
-- `SLP118` -- sea-level pressure 1011.8 mb.
-- `P0008` -- 0.08 inches of rain so far this hour.
-- `T01890172` -- precise temp +18.9, dew +17.2.
+- `WSHFT 0540` -- wind shifted at 05:40Z. **This is the trigger of record** -- a frontal wind shift fires an off-cycle observation.
+- `RAB0555` -- rain began at 05:55Z, five minutes before this report. The precip onset is the second trigger; the wind shift fired first and the rain confirmed the front.
+- `P0000` -- a trace of rain so far this hour (less than 0.01 inches).
+- `T02560194` -- precise temp +25.6, dew +19.4.
 
-What this is telling you: a cold front passed Oklahoma City seven minutes ago. The wind clocked through ~120 degrees (south to north-northwest) and the speed jumped above 10 KT both before and after the shift, tripping the wind-shift trigger by itself. A thunderstorm built on top of the front and is now on the field with a 4,000 ft cumulonimbus base, gust-front winds to 35 KT, and 4 SM in rain and mist. The SPECI exists because **the field changed character in the last ten minutes;** if you were inbound, the runway you planned to use is almost certainly no longer the right one, the crosswind picture is new, and the convective cell is the dominant decision driver.
+What this is telling you: a front passed Dallas/Fort Worth twenty minutes before this report. The wind shifted at 05:40Z, gusts picked up to 19 KT, and light rain began at 05:55Z. The SPECI exists because **the field changed character in the last half hour;** if you were inbound, the wind shift means the runway you planned to use may no longer be the right one, and the crosswind picture is new. This is a comparatively benign frontal passage -- no thunderstorm, visibility still 10 SM -- but the SPECI did its job: it put the wind shift and rain onset in front of you the moment they happened, instead of making you wait for the next hourly METAR.
+
+Source: NOAA Aviation Weather Center API (aviationweather.gov), KDFW SPECI observed 2026-05-16 06:00Z.
 
 ### Example 2 -- ceiling-drop trigger (marine-layer fog encroaching)
 
 Raw product text:
 
 ```text
-SPECI KMRY 121408Z AUTO 22004KT 1 1/2SM BR OVC004 13/13 A3008 RMK AO2 CIG 003V008 VIS 1V3 SLP186 T01280128
+SPECI KMRY 121415Z 32003KT 1SM R10R/P6000FT BR OVC002 11/11 A2996 RMK AO2 T01110106
 ```
 
 Decoded:
 
 - `SPECI` -- off-cycle report from KMRY (Monterey, CA).
-- `121408Z` -- 12th day, 14:08 Zulu (06:08 local in summer). Pre-dawn marine layer.
-- `AUTO` -- automated station.
-- `22004KT` -- wind 220 true at 4 KT. Light onshore.
-- `1 1/2SM BR` -- visibility 1.5 SM in mist. Visibility crossed below the 3 SM and 2 SM thresholds. **This and the ceiling are the triggers.**
-- `OVC004` -- overcast at 400 ft AGL. The ceiling crossed below 500 ft AGL (and below 1,000, and below 1,500, and below 3,000).
-- `13/13` -- temperature +13 C, dew point +13 C. **Zero spread.** The air is saturated.
-- `A3008` -- altimeter 30.08 inHg.
+- `121415Z` -- 12th day, 14:15 Zulu (07:15 local in summer). Early-morning marine layer.
+- `32003KT` -- wind 320 true at 3 KT. Light.
+- `1SM` -- visibility 1 SM in the body of the report. Visibility crossed below the 3 SM, 2 SM, and 1 SM thresholds. **This and the ceiling are the triggers.**
+- `R10R/P6000FT` -- runway visual range for Runway 10R is more than (`P`) 6,000 ft. The transmissometer down the runway sees farther than the prevailing-visibility sensor: the fog is patchy, denser away from the runway centerline.
+- `BR` -- mist. Visibility is at or above 5/8 SM, so it is coded mist, not fog (`FG`).
+- `OVC002` -- overcast at 200 ft AGL. The ceiling crossed below 500 ft AGL (and below 1,000, 1,500, and 3,000).
+- `11/11` -- temperature +11 C, dew point +11 C. **Zero spread.** The air is saturated.
+- `A2996` -- altimeter 29.96 inHg.
 - `RMK AO2` -- automated, precip-discriminating.
-- `CIG 003V008` -- ceiling variable between 300 and 800 ft. The 400 ft figure in the body is an average; the actual deck is heaving up and down.
-- `VIS 1V3` -- visibility variable between 1 and 3 SM. Same story.
-- `SLP186` -- sea-level pressure 1018.6 mb.
-- `T01280128` -- precise temp +12.8, dew +12.8. Same to the tenth of a degree.
+- `T01110106` -- precise temp +11.1, dew +10.6.
 
-What this is telling you: the marine layer dropped onto Monterey in the last hour. Both the ceiling and the visibility crossed multiple SPECI thresholds in one report, which is why the station fired off-cycle. The variability remarks (`CIG 003V008`, `VIS 1V3`) tell you the deck is unstable -- the field may be 400/1.5 right now and 300/1 in five minutes, or 800/3 in ten. With a 0 deg dew-point spread, there is no margin for cooling; this airport is IFR for the foreseeable near term. If you're inbound VFR, this SPECI is your divert trigger. If you're inbound IFR, the ceiling-and-vis variability means the approach you brief should be the one with the lowest minimums and an alternate that hasn't gone into the same marine layer.
+What this is telling you: the marine layer dropped onto Monterey. Both the ceiling and the visibility crossed multiple SPECI thresholds, which is why the station fired off-cycle. With a near-zero dew-point spread, there is no margin for cooling; this airport is IFR for the near term. The `R10R/P6000FT` group is worth noticing -- the RVR being much better than the 1 SM prevailing visibility tells you the fog is uneven, so what you see on the approach may differ from what the body of the report implies. If you are inbound VFR, this SPECI is your divert trigger. If you are inbound IFR, brief the approach with the lowest minimums and pick an alternate that has not gone into the same marine layer.
+
+Source: NOAA Aviation Weather Center API (aviationweather.gov), KMRY SPECI observed 2026-05-12 14:15Z.
 
 ## Common gotchas
 

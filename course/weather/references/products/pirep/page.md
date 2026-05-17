@@ -71,52 +71,52 @@ A few format rules worth internalizing. The `/OV` group is **relative**, not abs
 
 ## Annotated example(s)
 
-### Example 1 -- routine smooth ride at FL280 (UA from an airliner)
+### Example 1 -- routine smooth ride at FL330 (UA from an airliner)
 
 Raw product text:
 
 ```text
-UA /OV DSM180020 /TM 1740 /FL280 /TP B737 /SK CLR /TA M42 /WV 28065KT /TB NEG /RM SMOOTH RIDE
+BIV UA /OV PMM /TM 0020 /FL330 /TP B739 /TB NEG /RM SMOOTH
 ```
 
 Decoded:
 
+- `BIV` -- the report was filed through, or relayed near, the South Haven (BIV) VOR area. The archive prepends the nearest reporting site; the PIREP body proper begins at `UA`.
 - `UA` -- routine PIREP. Nothing in this report meets the UUA criteria.
-- `/OV DSM180020` -- 20 NM south of the Des Moines VOR (DSM), on the 180 radial.
-- `/TM 1740` -- 17:40 Zulu.
-- `/FL280` -- flight level 280, i.e. 28,000 ft MSL.
-- `/TP B737` -- Boeing 737. A large transport-category jet.
-- `/SK CLR` -- clear sky. No layers reported.
-- `/TA M42` -- outside air temperature -42 C. Consistent with FL280 on a roughly standard day.
-- `/WV 28065KT` -- wind 280 true at 65 KT. Strong upper-level westerly, typical jet-stream flank.
+- `/OV PMM` -- over the Pullman (PMM) VOR in southwest Michigan.
+- `/TM 0020` -- 00:20 Zulu.
+- `/FL330` -- flight level 330, i.e. 33,000 ft MSL.
+- `/TP B739` -- Boeing 737-900. A transport-category jet.
 - `/TB NEG` -- no turbulence reported.
-- `/RM SMOOTH RIDE` -- the remarks confirm it: nothing to report, ride is smooth.
+- `/RM SMOOTH` -- the remarks confirm it: nothing to report, ride is smooth.
 
-What this PIREP is telling other pilots: at FL280 over central Iowa, the upper air is clear, cold (standard), windy (jet-stream flow), and smooth. A jet-aircraft "smooth" at FL280 is a useful baseline but only loosely portable to a light single at 8,000 ft -- the airframes feel different scales of motion. Still, "smooth + clear" in the upper levels is a useful confirmation that any forecast turbulence is staying below cruise altitudes. Pilots planning a high-altitude crossing of this region get a green light at this level.
+What this PIREP is telling other pilots: at FL330 over southwest Michigan, the ride is smooth. The report is sparse on purpose -- when there is nothing operationally significant, the pilot fills in only what matters. A jet-aircraft "smooth" at FL330 is a useful baseline but only loosely portable to a light single at 8,000 ft; the airframes feel different scales of motion. Still, "smooth" in the upper levels is a useful confirmation that any forecast turbulence is staying below cruise altitudes. Pilots planning a high-altitude crossing of this region get a green light at this level.
 
-### Example 2 -- UUA, moderate-to-severe mixed icing in a light single during climb (the kind of PIREP that re-routes other pilots)
+Source: Iowa Environmental Mesonet PIREP archive (mesonet.agron.iastate.edu), report 202401150020.
+
+### Example 2 -- UUA, moderate rime icing in a business jet during descent (the kind of PIREP that re-routes other pilots)
 
 Raw product text:
 
 ```text
-UUA /OV BAE270015 /TM 1432 /FL080 /TP C172 /SK OVC050-TOP100 /WX FV02SM SN /TA M08 /WV 32025KT /IC MOD-SEV MXD 060-090 /RM ICE ACCRETING FAST IN CLIMB DEPARTED 080 FOR 100 LOST AIRSPEED ENCOUNTERING TOPS NOW
+RFD UUA /OV 10 NW JVL /TM 0042 /FL030 /TP CL35 /TA M06 /IC MOD RYME /RM CONTINUOUSLY FROM 070 TO 030 LANDING JVL
 ```
 
 Decoded:
 
-- `UUA` -- urgent. The trigger here is the severe icing component of the moderate-to-severe band. Severe icing is an automatic UUA.
-- `/OV BAE270015` -- 15 NM west of the Milwaukee (BAE) VOR, over the western shoreline of Lake Michigan. Classic Great Lakes lake-effect icing geography.
-- `/TM 1432` -- 14:32 Zulu.
-- `/FL080` -- aircraft at 8,000 ft MSL at the time of the report.
-- `/TP C172` -- Cessna 172. Light single, non-known-ice airframe. The aircraft type matters here: this airframe has no ice protection and minimal performance reserve.
-- `/SK OVC050-TOP100` -- overcast layer with bases at 5,000, tops at 10,000. The pilot is climbing through the layer.
-- `/WX FV02SM SN` -- flight visibility 2 SM in snow. In-cloud, in precipitation.
-- `/TA M08` -- outside air temperature -8 C. Squarely in the icing band (-10 to 0 C is the highest-risk range for super-cooled liquid water; -8 sits inside it).
-- `/WV 32025KT` -- wind 320 true at 25 KT.
-- `/IC MOD-SEV MXD 060-090` -- moderate to severe **mixed** icing between 6,000 and 9,000 ft. Mixed = both rime and clear ice characteristics. Severe = ice accretion rate exceeds the airframe's ability to shed it; immediate exit required.
-- `/RM ICE ACCRETING FAST IN CLIMB DEPARTED 080 FOR 100 LOST AIRSPEED ENCOUNTERING TOPS NOW` -- the pilot left 8,000 climbing for 10,000, lost airspeed as ice accumulated, and is now reaching the tops at 10,000. The remarks tell the story the encoded fields can only sketch: this is an active encounter, not a retrospective.
+- `RFD` -- the report was filed through the Rockford (RFD) area; the PIREP body proper begins at `UUA`.
+- `UUA` -- urgent PIREP.
+- `/OV 10 NW JVL` -- 10 NM northwest of Janesville (JVL), southern Wisconsin.
+- `/TM 0042` -- 00:42 Zulu.
+- `/FL030` -- aircraft at 3,000 ft MSL at the time of the report.
+- `/TP CL35` -- Bombardier Challenger 350. A business jet -- ice-protected, with performance reserve.
+- `/TA M06` -- outside air temperature -6 C. Squarely in the icing band (roughly -10 to 0 C is the highest-risk range for supercooled liquid water).
+- `/IC MOD RYME` -- moderate rime icing. `RYME` is the pilot's spelling of "rime" as it came across the wire; the encoded severity is what counts and it reads moderate. Rime ice is the rough, milky, fast-building accretion typical of small supercooled droplets.
+- `/RM CONTINUOUSLY FROM 070 TO 030 LANDING JVL` -- the remarks carry the part the encoded fields cannot: the icing was continuous through a 4,000 ft band, from 7,000 down to 3,000 ft, encountered on the descent into Janesville.
 
-What this PIREP is telling other pilots: at 6,000-9,000 over the western Lake Michigan shoreline, mixed icing is bad enough to take a light single out of the sky. Any pilot planning to transit this corridor at those altitudes -- in any airframe without known-ice certification -- has just had their decision made for them. Climb above 10,000 (the reported tops), descend below 5,000 (below the bases), or do not go. The UUA tag pushes this into the urgent stream where dispatchers, ATC, and other pilots see it immediately; the SIGMET forecasters use it to validate or upgrade an existing icing SIGMET.
+What this PIREP is telling other pilots: a continuous 4,000 ft band of moderate rime, from 7,000 to 3,000 ft, over southern Wisconsin. Even a Challenger -- ice-protected and powerful -- judged this urgent enough to file UUA. For a light single without known-ice certification, that band is a wall: any pilot planning to descend through 7,000-3,000 in this area has just had the decision made for them. Stay above the layer, divert, or do not go. The UUA tag pushes this into the urgent stream where dispatchers, ATC, and other pilots see it immediately; SIGMET forecasters use it to validate or upgrade an existing icing AIRMET or SIGMET.
+
+Source: Iowa Environmental Mesonet PIREP archive (mesonet.agron.iastate.edu), report 202412200042.
 
 ## Common gotchas
 

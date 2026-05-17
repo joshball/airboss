@@ -77,6 +77,8 @@ US SIGMET designator letters (NOVEMBER through YANKEE, excluding SIERRA / TANGO 
 
 ### Example 1 -- severe mountain-wave turbulence in the lee of the Rockies
 
+(Illustrative example -- constructed to show the format; not a real archived bulletin. US non-convective SIGMETs are issued only when severe turbulence or icing is actually occurring, so there is no continuously available archive of them; the format below follows the live `WSUS01 KKCI` product spec exactly.)
+
 Raw product text:
 
 ```text
@@ -107,6 +109,8 @@ Decoded:
 What this is telling you: severe CAT in the high-30s/low-40s flight levels east of the Rockies, persistent, drifting east. For a piston single this is not a "your altitude" hazard, but for any aircraft transiting at FL280-410 (turbojets and turboprops on jet airways) it's a re-plan. If you were filed through the polygon in the band, the SIGMET is the document that justifies the route or altitude change to dispatch and ATC.
 
 ### Example 2 -- severe icing in a freezing-rain event over the upper Midwest
+
+(Illustrative example -- constructed to show the format; not a real archived bulletin. As with Example 1, non-convective icing SIGMETs exist only while the hazard is active; the format below follows the live `WSUS02 KKCI` product spec exactly.)
 
 Raw product text:
 

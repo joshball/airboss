@@ -93,56 +93,60 @@ The graphical overlay on aviationweather.gov/vaa renders all four polygons (obse
 
 ## Annotated example(s)
 
-### Example 1 -- Iceland eruption drifting across the North Atlantic
+### Example 1 -- low-level ash emission at Reventador, Ecuador
 
 Raw product text:
 
 ```text
-FVXX21 EGRR 141200
+FVXX25 KNES 170310
 VA ADVISORY
-DTG: 20260514/1200Z
-VAAC: LONDON
-VOLCANO: EYJAFJALLAJOKULL 372020
-PSN: N6338 W01937
-AREA: ICELAND
-SUMMIT ELEV: 5466 FT
-ADVISORY NR: 2026/124
-INFO SOURCE: METEOSAT-11. ICELANDIC MET OFFICE.
-ERUPTION DETAILS: CONTINUOUS ASH EMISSION TO FL350
-OBS VA DTG: 14/1145Z
-OBS VA CLD: FL200/FL350 N6338 W01937 - N6300 W01700 - N6230 W01500 -
-N6200 W01700 - N6250 W01900 - N6338 W01937 MOV SE 45KT
-FCST VA CLD +6 HR: 14/1800Z FL200/FL350 N6230 W01430 - N6100 W01100 -
-N6000 W01300 - N6100 W01600 - N6230 W01430
-FCST VA CLD +12 HR: 15/0000Z FL200/FL350 N6100 W01100 - N5900 W00700 -
-N5700 W00900 - N5900 W01300 - N6100 W01100
-FCST VA CLD +18 HR: 15/0600Z FL200/FL350 N5900 W00700 - N5600 W00200 -
-N5400 W00500 - N5700 W00900 - N5900 W00700
-RMK: SUSTAINED PLUME OBSERVED IN METEOSAT-11 ASH RGB. ASH CLOUD
-TRACKING ENE-TO-SE INTO NORTH ATLANTIC TRACK SYSTEM (NATS) AIRWAYS.
-PIREPS REQUESTED.
-NXT ADVISORY: 14/1800Z
+DTG: 20260517/0310Z
+VAAC: WASHINGTON
+VOLCANO: REVENTADOR 352010
+PSN: S0004 W07739
+AREA: ECUADOR
+SUMMIT ELEV: 11686 FT
+ADVISORY NR: 2026/485
+INFO SOURCE: GOES-19. WEBCAM. NWP MODELS.
+ERUPTION DETAILS: LKLY OCNL VA EMS
+OBS VA DTG: 17/0240Z
+OBS VA CLD: SFC/FL150 S0001 W07749 - S0004 W07750 - S0005 W07739 -
+S0004 W07740 - S0001 W07749 MOV W 10KT
+FCST VA CLD +6 HR: 17/0830Z SFC/FL150 N0001 W07749 - S0002 W07750 -
+S0005 W07739 - S0004 W07739 - N0001 W07749
+FCST VA CLD +12 HR: 17/1430Z SFC/FL150 N0002 W07749 - S0002 W07751 -
+S0005 W07740 - S0004 W07739 - N0002 W07749
+FCST VA CLD +18 HR: 17/2030Z SFC/FL150 N0002 W07748 - S0002 W07750 -
+S0005 W07739 - S0005 W07739 - N0002 W07748
+RMK: VA NOT OBSD BY STLT DUE TO WX CLD CVR. HWVR VOLC ACT OBSD BY
+WEBCAM MULTIPLE TIMES. FL FM PREV ADVISORY. NWP MODELS FCST WLY-NWLY
+MOTION.
+NXT ADVISORY: 20260517/0915Z
 ```
 
 Decoded:
 
-- `FVXX21 EGRR 141200` -- volcanic ash advisory bulletin, issued by London VAAC (`EGRR`, the UK Met Office) on the 14th at 1200Z.
-- `DTG: 20260514/1200Z` -- analysis date-time. Everything in this advisory references this anchor.
-- `VAAC: LONDON` -- London VAAC, the center responsible for the Iceland / North Atlantic / European area.
-- `VOLCANO: EYJAFJALLAJOKULL 372020` -- the volcano by name and Smithsonian number. Eyjafjallajokull is the 2010 eruption that shut down European airspace for six days.
-- `PSN: N6338 W01937` -- volcano location in southern Iceland.
-- `SUMMIT ELEV: 5466 FT` -- summit elevation.
-- `ADVISORY NR: 2026/124` -- the 124th advisory for this volcano in 2026. Long-running eruptions accumulate numbers fast.
-- `INFO SOURCE: METEOSAT-11. ICELANDIC MET OFFICE.` -- analysis built from Meteosat-11 satellite ash-RGB imagery plus ground reports from the Icelandic Met Office.
-- `ERUPTION DETAILS: CONTINUOUS ASH EMISSION TO FL350` -- ongoing eruption pushing ash to flight level 350.
-- `OBS VA CLD: FL200/FL350 N6338 W01937 - N6300 W01700 - ... MOV SE 45KT` -- observed ash from FL200 to FL350, a five-vertex polygon anchored at the volcano and extending east-southeast over the ocean, moving SE at 45 KT.
-- `FCST VA CLD +6 HR / +12 HR / +18 HR` -- three forecast polygons stepping the cloud SE across the North Atlantic. By +18 hr the leading edge is near N5400 W00500, approaching Ireland / UK airspace.
-- `RMK: ... TRACKING ENE-TO-SE INTO NORTH ATLANTIC TRACK SYSTEM (NATS) AIRWAYS. PIREPS REQUESTED.` -- forecaster flags that the cloud is heading into the daily North Atlantic Track system, where the bulk of trans-Atlantic jet traffic flies; PIREPs requested means the VAAC wants pilot confirmation of what's actually there.
-- `NXT ADVISORY: 14/1800Z` -- next update in 6 hours.
+- `FVXX25 KNES 170310` -- volcanic ash advisory bulletin, issued by the Washington VAAC (`KNES`, NOAA/NESDIS) on the 17th at 0310Z.
+- `DTG: 20260517/0310Z` -- analysis date-time. Everything in this advisory references this anchor.
+- `VAAC: WASHINGTON` -- Washington VAAC, the center responsible for the Caribbean, Central America, and northern South America.
+- `VOLCANO: REVENTADOR 352010` -- the volcano by name and Smithsonian number. Reventador is a near-continuously active stratovolcano in northern Ecuador.
+- `PSN: S0004 W07739` -- volcano location, just south of the equator.
+- `SUMMIT ELEV: 11686 FT` -- summit elevation.
+- `ADVISORY NR: 2026/485` -- the 485th advisory for this volcano in 2026. A near-continuously active volcano accumulates numbers fast.
+- `INFO SOURCE: GOES-19. WEBCAM. NWP MODELS.` -- analysis built from GOES-19 satellite imagery, a ground webcam, and numerical-weather-prediction model winds.
+- `ERUPTION DETAILS: LKLY OCNL VA EMS` -- likely occasional volcanic-ash emissions. Low-level, intermittent activity, not a sustained explosive plume.
+- `OBS VA CLD: SFC/FL150 ... MOV W 10KT` -- observed ash from the surface to FL150 (15,000 ft), a small five-vertex polygon hugging the volcano, drifting west at 10 KT.
+- `FCST VA CLD +6 HR / +12 HR / +18 HR` -- three forecast polygons. They barely move: the ash stays near the volcano because the activity is weak and the winds are light.
+- `RMK: VA NOT OBSD BY STLT DUE TO WX CLD CVR. HWVR VOLC ACT OBSD BY WEBCAM ...` -- the forecaster could not see ash on satellite because weather cloud covered the volcano, but the webcam confirmed activity; the flight level is carried over from the previous advisory; the model forecasts westerly-to-northwesterly drift.
+- `NXT ADVISORY: 20260517/0915Z` -- next update in about 6 hours.
 
-What this is telling you: a sustained Iceland eruption with an ash cloud from FL200 to FL350 drifting SE at 45 KT, projected to reach the NATS jet airways within 18 hours. For trans-Atlantic operators, any westbound NAT track passing under the polygon at any of the four time stamps is a re-plan, either lateral (move the track south of the polygon) or vertical (descend below FL200 if the track economics allow, which they usually do not). For US-departing or US-bound traffic, the operational decision is made via the paired VA SIGMETs issued by Reykjavik / Shanwick / Gander oceanic centers; the VAA is the meteorology behind those SIGMETs.
+What this is telling you: a low-intensity, near-continuous eruption with ash confined to the surface-to-FL150 layer right over the volcano. This is the routine case -- most VAAs read like this, not like the airspace-closing 2010 Iceland event. For a turbojet on an airway over northern Ecuador the ash band tops out at FL150, well below cruise, so the operational impact is limited to traffic climbing or descending in the immediate area. The advisory still matters: it documents that the volcano is active and that a larger emission could follow, and the `NXT ADVISORY` time tells dispatchers when to look again. Compare this with Example 2, where an explosive eruption pushes ash to cruise altitude and the decision changes completely.
+
+Source: NOAA/NESDIS Washington VAAC (ospo.noaa.gov), advisory FVXX25 2026/485, issued 2026-05-17 03:10Z. Latitude/longitude transcribed from the advisory XML into the standard `Sddmm`/`Wdddmm` text-bulletin notation.
 
 ### Example 2 -- Alaska eruption affecting the Anchorage-Tokyo great circle
+
+(Illustrative example -- constructed to show the format of a significant explosive eruption; not a real archived bulletin. Example 1 is a real, routine VAA; a large airspace-affecting eruption is rare, so this one is built to the live `FVAK` Anchorage VAAC product spec to show what the same format carries when the stakes are high.)
 
 Raw product text:
 

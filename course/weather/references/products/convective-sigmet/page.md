@@ -86,61 +86,63 @@ The bulletin can also begin with one or more **OUTLOOK** sections that stand alo
 
 ## Annotated example(s)
 
-### Example 1 -- LINE convective SIGMET, late-spring squall line crossing Kansas and Missouri
+### Example 1 -- LINE convective SIGMET, squall line over Nebraska and the Dakotas
 
 Raw product text:
 
 ```text
-MKCE WST 122055
-CONVECTIVE SIGMET 23E
-VALID UNTIL 2255Z
-KS MO
-FROM 40WNW MCI-30W COU-50SW SGF-80WSW ICT-40WNW MCI
-LINE TS 30 NM WIDE MOV FROM 26035KT. TOPS TO FL450.
-HAIL TO 1 1/2 IN...WIND GUSTS TO 65 KT POSS.
+WSUS32 KKCI 170255
+SIGC
+CONVECTIVE SIGMET 13C
+VALID UNTIL 0455Z
+NE SD WY
+FROM 30SSW RAP-60WNW BFF
+LINE TS 40 NM WIDE MOV FROM 22030KT. TOPS TO FL390.
 ```
 
 Decoded:
 
-- `MKCE WST 122055` -- Aviation Weather Center, Eastern region bulletin, issued day 12 at 20:55Z.
-- `CONVECTIVE SIGMET 23E` -- 23rd Eastern-region WST of the day.
-- `VALID UNTIL 2255Z` -- valid 2 hours from issuance.
-- `KS MO` -- the polygon covers Kansas and Missouri.
-- `FROM 40WNW MCI-30W COU-50SW SGF-80WSW ICT-40WNW MCI` -- polygon vertices: 40 NM west-northwest of Kansas City, then to 30 NM west of Columbia, MO, then to 50 NM southwest of Springfield, MO, then to 80 NM west-southwest of Wichita, KS, back to the start. A polygon roughly 200 NM long on its long axis, oriented southwest-to-northeast.
-- `LINE TS 30 NM WIDE` -- trigger type LINE: a line of thunderstorms, 30 NM wide perpendicular to the long axis. (The line itself is the long axis of the polygon.)
-- `MOV FROM 26035KT` -- moving from 260 at 35 kt. The line will sweep east-northeast about 35 NM per hour. In 2 hours the entire polygon is roughly 70 NM east of its current position, putting the leading edge into central Missouri and Illinois.
-- `TOPS TO FL450` -- echo tops to 45,000 ft MSL. Well above any GA-attainable altitude; over-the-top is not an option in any aircraft a typical reader of this page is flying.
-- `HAIL TO 1 1/2 IN...WIND GUSTS TO 65 KT POSS.` -- worst-case hazards inside the polygon: hail to 1.5 inch (well past the 3/4 inch severe threshold), surface gusts to 65 kt (past the 50 kt severe threshold).
+- `WSUS32 KKCI 170255` -- WS (SIGMET) bulletin, US region 32 (the Central convective SIGMET desk), issued by the Aviation Weather Center at Kansas City (`KKCI`) on day 17 at 02:55Z.
+- `SIGC` -- the Central-region SIGMET identifier line.
+- `CONVECTIVE SIGMET 13C` -- 13th Central-region WST of the day.
+- `VALID UNTIL 0455Z` -- valid 2 hours from issuance.
+- `NE SD WY` -- the polygon covers Nebraska, South Dakota, and Wyoming.
+- `FROM 30SSW RAP-60WNW BFF` -- the line is defined by two endpoints: 30 NM south-southwest of Rapid City (RAP) to 60 NM west-northwest of Scottsbluff (BFF). For a LINE the `FROM` describes the line itself, and the `40 NM WIDE` below tells you how far the hazard extends to either side.
+- `LINE TS 40 NM WIDE` -- trigger type LINE: a line of thunderstorms, 40 NM wide perpendicular to its long axis.
+- `MOV FROM 22030KT` -- moving from 220 at 30 kt. The line sweeps northeast about 30 NM per hour. In 2 hours it is roughly 60 NM northeast of its current position.
+- `TOPS TO FL390` -- echo tops to 39,000 ft MSL. Well above any GA-attainable altitude; over-the-top is not an option in any aircraft a typical reader of this page is flying.
 
-What this is telling you: a fast-moving severe squall line is sweeping eastbound across Kansas and Missouri at 35 kt, with tops to FL450 and severe-criteria hail and wind. If your flight plan has you crossing Missouri this afternoon, the line is your single biggest planning constraint. You are not flying through it, around it (it is 200 NM long and growing), or over it. You are delaying, diverting south of the southern tip, or holding well west until it clears your route.
+What this is telling you: a fast-moving squall line is sweeping northeast across the western Dakotas and the Nebraska panhandle at 30 kt, with tops to FL390. If your flight plan crosses that region tonight, the line is your single biggest planning constraint. You are not flying through it, around it, or over it. You delay, divert clear of an endpoint, or hold until it clears your route.
 
-### Example 2 -- AREA convective SIGMET, embedded summer thunderstorms over Florida
+### Example 2 -- AREA convective SIGMET, severe thunderstorms with tornado potential over the central plains
 
 Raw product text:
 
 ```text
-MKCE WST 151755
-CONVECTIVE SIGMET 11E
-VALID UNTIL 1955Z
-FL
-FROM 30NW ORL-60E ORL-40SE PIE-20NW PIE-30NW ORL
-AREA EMBD TS MOV FROM 22015KT. TOPS TO FL480.
-HAIL TO 1 IN...WIND GUSTS TO 55 KT POSS.
+WSUS32 KKCI 170255
+SIGC
+CONVECTIVE SIGMET 11C
+VALID UNTIL 0455Z
+IL MO IA KS
+FROM 40S ODI-50SSW BDF-30WNW STL-40NW MCI-40NE OVR-40S ODI
+AREA SEV TS MOV FROM 27020KT. TOPS ABV FL450.
+TORNADOES...HAIL TO 2.5 IN...WIND GUSTS TO 60KT POSS.
 ```
 
 Decoded:
 
-- `MKCE WST 151755` -- AWC Eastern bulletin, day 15 at 17:55Z.
-- `CONVECTIVE SIGMET 11E` -- 11th Eastern WST of the day.
-- `VALID UNTIL 1955Z` -- 2-hour validity.
-- `FL` -- Florida.
-- `FROM 30NW ORL-60E ORL-40SE PIE-20NW PIE-30NW ORL` -- polygon over central Florida from northwest of Orlando, east to offshore, south to southeast of St. Petersburg, back northwest.
-- `AREA EMBD TS` -- trigger type AREA, with the embedded-thunderstorm sub-classification. Cells are inside broader IMC / stratiform precip, not standing alone in clear air.
-- `MOV FROM 22015KT` -- moving from 220 at 15 kt. A slow-moving system: 30 NM per hour, classic summer Florida sea-breeze convection drifting north-northeast.
-- `TOPS TO FL480` -- echo tops to 48,000 ft. The Florida warm-season troposphere is deep; FL480 tops in summer are routine, not exceptional.
-- `HAIL TO 1 IN...WIND GUSTS TO 55 KT POSS.` -- severe-criteria hail and wind.
+- `WSUS32 KKCI 170255` -- WS (SIGMET) bulletin, US region 32 (Central convective desk), AWC Kansas City, day 17 at 02:55Z.
+- `SIGC` -- Central-region SIGMET identifier line.
+- `CONVECTIVE SIGMET 11C` -- 11th Central WST of the day.
+- `VALID UNTIL 0455Z` -- 2-hour validity.
+- `IL MO IA KS` -- Illinois, Missouri, Iowa, Kansas.
+- `FROM 40S ODI-50SSW BDF-30WNW STL-40NW MCI-40NE OVR-40S ODI` -- a five-vertex polygon stretching from southern Illinois through Missouri into eastern Kansas.
+- `AREA SEV TS` -- trigger type AREA, with the `SEV` (severe) qualifier. AREA means a cluster of cells filling a region rather than a single line; `SEV` flags that the cells meet severe criteria.
+- `MOV FROM 27020KT` -- moving from 270 at 20 kt. The cluster drifts east about 20 NM per hour.
+- `TOPS ABV FL450` -- echo tops above 45,000 ft. `ABV` (not `TO`) means the tops exceed the highest figure the product reports.
+- `TORNADOES...HAIL TO 2.5 IN...WIND GUSTS TO 60KT POSS.` -- worst-case hazards inside the polygon: tornadoes, hail to 2.5 inches (more than three times the 3/4 inch severe threshold), surface gusts to 60 kt.
 
-What this is telling you: embedded thunderstorms across central Florida, slow-moving, with severe-criteria hail and wind, tops above FL480. The "embedded" word is the load-bearing one: the cells are inside a broader IFR / IMC environment, so visual avoidance is unreliable and onboard weather radar attenuation will make cells beyond the first one look weaker than they are. A VFR flight into this is not on the table. An IFR flight without onboard radar plus datalink weather plus a willingness to deviate, hold, or divert is also not on the table. The slow motion is not a kindness; it means the polygon stays over the same Florida airports for hours, and a delayed launch may not solve anything until evening dissipation.
+What this is telling you: a severe thunderstorm cluster covers a four-state area with tornadoes, 2.5 inch hail, and 60 kt gusts in the mix, tops above FL450. The `TORNADOES` line is the load-bearing one -- this is a supercell environment, not garden-variety convection. A VFR flight into this is not on the table. An IFR flight without onboard radar, datalink weather, and a real willingness to deviate, hold, or divert is also not on the table. The slow 20 kt motion is not a kindness; it means the polygon sits over the same airports for hours, so a delayed launch may not solve anything until the activity weakens overnight.
 
 ## Common gotchas
 

@@ -103,52 +103,40 @@ Day 2 is issued at 0600Z and 1730Z. Day 3 at 0830Z. Day 4-8 at 0830Z. A pre-noon
 
 ## Annotated example(s)
 
-### Example 1 -- Spring Day-1 ENH outlook over the southern Plains
+### Example 1 -- Day-1 ENH outlook over the central Plains (17 May 2026)
 
-Chart product (description in lieu of the graphic):
+Chart product (description in lieu of the graphic; the SPC convective outlook is a graphic plus a narrative discussion, not a raw text bulletin):
 
 ```text
 SPC Day 1 Convective Outlook
-Issued: 1300Z
-Valid: 1300Z today through 12Z tomorrow
+Valid: 170100Z through 171200Z
 
 Categorical risk:
-  ENH (orange) -- southern Plains corridor:
-    western/central Oklahoma into north Texas (Childress -
-    Wichita Falls - Ardmore - I-44 corridor).
-  SLGT (yellow) -- broader donut around the ENH:
-    central Texas through the OK panhandle into southern Kansas.
-  MRGL (dark green) -- outer ring through east Texas,
-    eastern Oklahoma, central Kansas, southwest Missouri.
-  TSTM (light green) -- broad area across most of the
-    south-central US.
+  ENH (orange) -- northern Kansas into southern Nebraska,
+    the area mostly north of I-70.
+  Lower-tier SLGT / MRGL / TSTM areas surround the ENH and
+    extend across the central and southern Plains.
 
-Probabilistic Day 1:
-  Tornado:     10% with significant-tornado hatch over the ENH core.
-  Hail:        30% with significant-hail hatch over the ENH core.
-  Wind:        30% with significant-wind hatch over the ENH core.
-
-Discussion (excerpt): "A strong shortwave trough over the
-southern Rockies will eject northeastward through the day.
-Surface low deepening over the TX/OK Panhandle by 21Z. Dryline
-mixing east through western OK by mid-afternoon. CAPE 2500-3500
-J/kg, 0-6 km bulk shear 50-60 kt. Supercells expected by 21Z
-along and east of the dryline, with all severe modes including
-strong tornadoes possible. Upscale growth to a forward-propagating
-MCS overnight into Arkansas and the Mississippi valley."
+Discussion (paraphrase): an upscale-growing, organizing
+cluster of storms over northern Kansas and southern Nebraska
+is the focus. Significant-caliber damaging winds are the
+leading threat -- measured 85 mph gusts were reported near
+Colby, Kansas. Large hail and a couple of tornadoes are also
+possible. The risk area was adjusted south across northern
+Kansas as the post-01Z damaging-wind potential increased.
 ```
 
 Decoded:
 
-- **ENH (orange) over central Oklahoma into north Texas** -- the worst-case core. Numerous severe storms expected; supercells with all severe modes (tornado, large hail, damaging wind). For a VFR or non-radar IFR light single, this corridor is the planning constraint for the entire day window.
-- **SLGT donut around it** -- scattered severe likely but coverage and/or intensity lower than the ENH core. Storms here will still produce 1+ inch hail and 60 kt gusts, just less densely than inside the ENH polygon.
-- **MRGL outer ring** -- isolated severe possible. Background monitoring; the rest of the convective brief carries the load.
-- **TSTM area** -- ordinary thunderstorms expected. Non-severe but still convection: cells reach 30,000-40,000 ft, with embedded turbulence, lightning, and locally heavy rain. A "no-severe-day" is not a "no-thunderstorm day."
-- **Probabilistic 10% tornado over the ENH core** -- this is a serious tornado-day pattern. A 10% tornado area with a significant-tornado hatch (the "10% hatched" combination) is the SPC's signal for a setup where strong tornadoes (EF2+) are possible.
-- **Probabilistic 30% hail and 30% wind** -- expect multiple severe hail and wind reports across the ENH corridor through the window.
-- **Discussion** -- the dryline / shortwave-trough setup, with 2500-3500 J/kg CAPE and 50-60 kt deep shear, is the classic Plains supercell environment. Initiation expected by 21Z (mid-afternoon local) along the dryline. Overnight upscale into an MCS pushing east into Arkansas.
+- **ENH (orange) over northern Kansas into southern Nebraska** -- the worst-case core. An organizing storm cluster is the threat, with damaging wind the leading mode. For a VFR or non-radar IFR light single, this corridor is the planning constraint for the entire valid window.
+- **The surrounding lower tiers (SLGT / MRGL / TSTM)** -- scattered to isolated severe possible at the edges, ordinary thunderstorms over the broad TSTM area. A "no-ENH" location is not a "no-thunderstorm" location: cells reach 30,000-40,000 ft with embedded turbulence, lightning, and heavy rain.
+- **Damaging wind as the leading threat** -- the 85 mph measured gust near Colby, Kansas is the kind of observation that confirms the outlook is verifying. An organizing cluster producing significant-caliber wind is a forward-propagating system; it moves, and it moves the hazard with it.
+- **Large hail and a couple of tornadoes possible** -- even when wind is the headline, an organizing Plains cluster carries hail and an embedded tornado risk.
+- **The southward adjustment** -- the SPC moved the ENH area south across northern Kansas as the overnight damaging-wind potential grew. Outlooks are living products; the polygon you brief in the morning is not the polygon that verifies.
 
-What this is telling you: if your flight today crosses central or western Oklahoma between roughly 19Z and 04Z tomorrow, your flight and a tornadic supercell environment are in the same corridor. The decision frame is not "deviate around cells"; it is "delay the leg by a day, route significantly north or south of the ENH polygon, or sit on the ramp through the afternoon and depart after the MCS passes east overnight." Onboard radar, datalink, or any tactical equipment does not buy enough margin to fly through a 10% hatched tornado area. The Day 1 outlook is doing the strategic planning for you; the day-of Convective SIGMETs will fire inside this polygon and you should expect them.
+What this is telling you: if your flight crosses northern Kansas or southern Nebraska during this window, your route and an organizing severe cluster are in the same corridor. The decision frame is not "deviate around cells"; it is "delay the leg, route well north or south of the ENH area, or sit on the ramp until the cluster passes." Onboard radar or datalink does not buy enough margin to fly through an organizing severe cluster. The Day 1 outlook does the strategic planning; the day-of Convective SIGMETs fire inside this area and you should expect them.
+
+Source: NOAA Storm Prediction Center Day 1 Convective Outlook (spc.noaa.gov), valid 2026-05-17 0100Z-1200Z. Categorical area and discussion content drawn from the live SPC product; the text block above paraphrases the graphic and narrative rather than quoting a raw bulletin.
 
 ### Example 2 -- Summer MRGL outlook over the Southeast with pulse air-mass thunderstorms
 

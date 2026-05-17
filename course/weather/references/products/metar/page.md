@@ -95,54 +95,61 @@ Pilots routinely skip RMK. Pilots routinely miss things hidden in RMK.
 Raw product text:
 
 ```text
-METAR KJFK 121553Z 24008KT 10SM FEW250 22/14 A3002 RMK AO2 SLP168 T02220139
+KDEN 101853Z VRB04KT 10SM FEW060 FEW120 FEW220 24/13 A3022 RMK AO2 SLP166 T02440128 $
 ```
 
 Decoded:
 
-- `METAR` -- routine hourly report.
-- `KJFK` -- John F. Kennedy International, New York.
-- `121553Z` -- observed on the 12th day of the month at 15:53 Zulu.
-- `24008KT` -- wind 240 true at 8 KT. No gusts. Light southwesterly.
+- `KDEN` -- Denver International. The Iowa Environmental Mesonet archive stores routine reports without the leading `METAR` keyword; the absence of a `SPECI` prefix and the standard :53-past-the-hour observation time confirm this is a routine hourly report.
+- `101853Z` -- observed on the 10th day of the month at 18:53 Zulu.
+- `VRB04KT` -- wind variable in direction at 4 KT. Too light and shifty to assign a steady direction.
 - `10SM` -- visibility 10 SM or greater (the maximum reported value).
-- `FEW250` -- few clouds at 25,000 ft AGL. High cirrus, operationally insignificant. No BKN or OVC layer means no ceiling at all.
-- `22/14` -- temperature +22 C, dew point +14 C. 8 deg spread (comfortable, no fog risk).
-- `A3002` -- altimeter 30.02 inHg.
+- `FEW060 FEW120 FEW220` -- few clouds at 6,000, 12,000, and 22,000 ft AGL. Three thin layers, all "few" -- fair-weather cumulus and high cloud, operationally insignificant. No BKN or OVC layer means no ceiling at all.
+- `24/13` -- temperature +24 C, dew point +13 C. 11 deg spread (dry high-plains air, no fog risk).
+- `A3022` -- altimeter 30.22 inHg.
 - `RMK AO2` -- automated station with precip discriminator.
-- `SLP168` -- sea-level pressure 1016.8 mb.
-- `T02220139` -- precise temp +22.2 / dew +13.9.
+- `SLP166` -- sea-level pressure 1016.6 mb.
+- `T02440128` -- precise temp +24.4 / dew +12.8.
+- `$` -- maintenance-check indicator. The automated sensor suite has flagged itself for service. It does not invalidate the observation; it tells you the data may warrant a second look.
 
-What this is telling you: a calm, clear, dry late morning at JFK. Light southerly wind, unlimited visibility, no ceiling, big T/Td spread. Severe-clear VFR. Nothing in this report changes any decision; it's the kind of METAR you scan in three seconds and move on.
+What this is telling you: a calm, clear, dry summer afternoon at Denver. Light variable wind, unlimited visibility, no ceiling, big T/Td spread. Severe-clear VFR. Nothing in this report changes any decision; it's the kind of METAR you scan in three seconds and move on.
 
-### Example 2 -- challenging METAR with crosswind gusts, thunderstorm in vicinity, and a meaningful RMK
+Source: Iowa Environmental Mesonet ASOS archive (mesonet.agron.iastate.edu), KDEN, observed 2024-08-10 18:53Z.
+
+### Example 2 -- challenging METAR with gusts, thunderstorm and rain on the field, and a dense RMK
 
 Raw product text:
 
 ```text
-SPECI KMEM 121847Z 21018G31KT 180V250 3SM TSRA BR BKN012CB OVC035 24/22 A2978 RMK AO2 PK WND 22035/1842 WSHFT 1825 LTG DSNT NE TS B25 RAB30 SLP074 P0023 T02390222
+KMEM 252354Z 24010G23KT 8SM TSRA FEW038 BKN065CB OVC100 29/26 A2982 RMK AO2 LTG DSNT ALQDS RAB44 TSB32 SLP093 OCNL LTGIC S-N TS S-N MOV SE P0002 60002 T02940261 10350 20294 53002 $
 ```
 
 Decoded:
 
-- `SPECI` -- special off-cycle report. Something changed enough at KMEM (Memphis) to trigger an off-hour observation.
 - `KMEM` -- Memphis International.
-- `121847Z` -- observed 12th day, 18:47 Zulu.
-- `21018G31KT 180V250` -- wind 210 true at 18 KT, gusting 31 KT, direction varying between 180 and 250 (a 70 deg arc). This is a frontal or convective wind signature, not a steady prevailing flow.
-- `3SM` -- visibility 3 SM. Below the 5 SM Class E daytime VFR ceiling/vis rule for many use cases. IFR-equivalent ceiling-and-vis territory for many ops.
-- `TSRA BR` -- thunderstorm with moderate rain, plus mist. The `TS` confirms a thunderstorm is at the station (not just in the vicinity).
-- `BKN012CB OVC035` -- broken layer at 1,200 AGL with cumulonimbus, overcast layer above at 3,500. The CB suffix is the loud one: there's a thunderstorm cell right there. Ceiling = 1,200 (lowest BKN).
-- `24/22` -- temp +24 C, dew point +22 C. 2 deg spread (saturated, unstable, classic warm-sector convective air).
-- `A2978` -- altimeter 29.78 inHg, low (frontal/low-pressure system).
+- `252354Z` -- observed 25th day, 23:54 Zulu.
+- `24010G23KT` -- wind 240 true at 10 KT, gusting 23 KT. Gusty -- a convective wind signature, not a steady prevailing flow.
+- `8SM` -- visibility 8 SM. Reduced from the 10 SM the earlier reports carried, knocked down by the rain.
+- `TSRA` -- thunderstorm with moderate rain. The `TS` confirms a thunderstorm is at the station (not just in the vicinity).
+- `FEW038 BKN065CB OVC100` -- few at 3,800, broken cumulonimbus at 6,500, overcast at 10,000. The `CB` suffix on the broken layer is the loud one: there is a thunderstorm cell right there. Ceiling = 6,500 (lowest BKN).
+- `29/26` -- temp +29 C, dew point +26 C. 3 deg spread (saturated, unstable, classic warm-sector convective air).
+- `A2982` -- altimeter 29.82 inHg.
 - `RMK AO2` -- automated, precip-discriminating.
-- `PK WND 22035/1842` -- peak wind 220 at 35 KT, occurred at 18:42Z (just 5 minutes before the report).
-- `WSHFT 1825` -- wind shifted at 18:25Z (front passage).
-- `LTG DSNT NE` -- lightning observed distant, northeast (cell moving away or another cell on that side).
-- `TS B25 RAB30` -- thunderstorm began at 25 minutes past the hour (18:25Z); rain began at 30 past (18:30Z).
-- `SLP074` -- sea-level pressure 1007.4 mb. Low.
-- `P0023` -- 0.23 inches of rain this hour.
-- `T02390222` -- precise temp +23.9, dew +22.2.
+- `LTG DSNT ALQDS` -- lightning observed distant in all quadrants. Convection surrounds the field.
+- `RAB44 TSB32` -- rain began at 44 minutes past the hour (23:44Z); thunderstorm began at 32 past (23:32Z).
+- `SLP093` -- sea-level pressure 1009.3 mb. Low.
+- `OCNL LTGIC S-N` -- occasional in-cloud lightning observed from south through north.
+- `TS S-N MOV SE` -- the thunderstorm lies south through north of the field and is moving southeast.
+- `P0002` -- 0.02 inches of rain this hour.
+- `60002` -- 0.02 inches of precipitation in the 6-hour period.
+- `T02940261` -- precise temp +29.4, dew +26.1.
+- `10350 20294` -- 6-hour maximum temperature +35.0 C, 6-hour minimum +29.4 C.
+- `53002` -- 3-hour pressure tendency: rose then fell, net +0.2 mb.
+- `$` -- maintenance-check indicator.
 
-What this is telling you: a frontal passage with active convection at Memphis. The wind shifted 22 minutes ago, peak gust was 35 KT five minutes ago, a thunderstorm built directly over the field with a 1,200 ft cumulonimbus base, and 3 SM visibility in rain and mist. This is a "do not launch, hold or divert if airborne" report -- and the SPECI tag means it triggered an off-cycle, so it's the freshest picture available. Notice how much load-bearing information lives in the RMK section here: timing of the wind shift, peak gust, lightning bearing, and precip onset all live there.
+What this is telling you: a thunderstorm has built over Memphis with rain on the field. The temperature dropped from +33 to +29 as the storm's outflow arrived, the wind is gusting to 23 KT, lightning is in every quadrant, and the cumulonimbus base is at 6,500 ft directly overhead. This is a "do not launch, hold or divert if airborne" report. Notice how much load-bearing information lives in the RMK section: lightning bearing and frequency, precip onset times, storm motion, and the 6-hour temperature swing all live there.
+
+Source: Iowa Environmental Mesonet ASOS archive (mesonet.agron.iastate.edu), KMEM, observed 2023-06-25 23:54Z.
 
 ## Common gotchas
 
