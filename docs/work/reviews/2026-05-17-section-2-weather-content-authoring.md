@@ -1,6 +1,6 @@
 ---
 status: unread
-review_status: pending
+review_status: done
 ---
 
 # Section 2 review -- Weather + Content Authoring
