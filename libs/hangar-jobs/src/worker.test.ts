@@ -92,7 +92,12 @@ async function insertQueuedJob(targetId: string | null, kind: string = JOB_KINDS
 	return id;
 }
 
-async function insertRunningJob(targetId: string | null): Promise<string> {
+/**
+ * Insert a `RUNNING` job row. `heartbeatAt` defaults to "now" (a live
+ * worker owns it); pass `null` to model a crashed worker whose ghost row
+ * `recoverOrphanedRunning` must reclaim.
+ */
+async function insertRunningJob(targetId: string | null, heartbeatAt: Date | null = new Date()): Promise<string> {
 	const id = generateHangarJobId();
 	createdJobIds.add(id);
 	const now = new Date();
@@ -106,7 +111,7 @@ async function insertRunningJob(targetId: string | null): Promise<string> {
 		payload: {},
 		actorId: null,
 		startedAt: now,
-		lastHeartbeatAt: now,
+		lastHeartbeatAt: heartbeatAt,
 	});
 	return id;
 }
@@ -480,7 +485,8 @@ describe('worker heartbeat', () => {
 
 describe('recoverOrphanedRunning', () => {
 	it('flips RUNNING -> QUEUED, emits a recovery log line and an audit row', async () => {
-		const jobId = await insertRunningJob(`${TEST_TARGET_PREFIX}-orphan`);
+		// A crashed worker leaves a ghost RUNNING row with no live heartbeat.
+		const jobId = await insertRunningJob(`${TEST_TARGET_PREFIX}-orphan`, null);
 
 		const recovered = await recoverOrphanedRunning();
 		expect(recovered).toBeGreaterThanOrEqual(1);
@@ -505,5 +511,17 @@ describe('recoverOrphanedRunning', () => {
 		expect(recoveryAudit).toBeDefined();
 		expect(recoveryAudit?.targetType).toBe(AUDIT_TARGETS.HANGAR_JOB);
 		expect((recoveryAudit?.metadata as { status?: string }).status).toBe(JOB_STATUSES.QUEUED);
+	});
+
+	it('leaves a RUNNING job with a fresh heartbeat alone (live worker owns it)', async () => {
+		// A second worker handle booting must not steal a job another live
+		// worker is actively running, or the job runs twice.
+		const jobId = await insertRunningJob(`${TEST_TARGET_PREFIX}-live`, new Date());
+
+		await recoverOrphanedRunning();
+
+		const row = await getJobRow(jobId);
+		expect(row?.status).toBe(JOB_STATUSES.RUNNING);
+		expect(row?.lastHeartbeatAt).not.toBeNull();
 	});
 });
