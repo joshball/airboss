@@ -33,7 +33,7 @@ review_time_minutes: 5
 references:
   - source: AC 00-45H
     detail: Aviation Weather Services -- used as the worked example for AC identifier anatomy
-    note: The identifier "AC 00-45H" splits into type prefix (AC), AC number (00-45), and revision letter (H). The title "Aviation Weather Services" describes the document; the identifier locates it. AC 00-45 is current at revision H.
+    note: The identifier "AC 00-45H" splits into type prefix (AC), AC number (00-45), and revision letter (H). The title "Aviation Weather Services" describes the document; the identifier locates it. AC 00-45 was revised through H; the weather-services content has since been consolidated into the Aviation Weather Handbook (FAA-H-8083-28).
   - source: 14 CFR
     detail: 91.137(a)(2) -- used as the worked example for CFR citation anatomy
     note: Splits into title (14), part (91), section (137), and paragraph (a)(2). The eCFR is the authoritative live text of any CFR citation.
@@ -118,7 +118,7 @@ document-type prefix -- this is an Advisory Circular
 
 - **Type prefix (AC):** identifies the family. Every Advisory Circular citation begins with it.
 - **AC number (00-45):** locates the document within the AC system. The leading 00 is the subject-series prefix (general); 45 is the specific document.
-- **Revision letter (H):** identifies the edition. The first issue carries no letter; the first revision is A, then B, and so on. AC 00-45 has been revised through to **H**, the current revision. A revision letter is not optional decoration: AC 00-45 and AC 00-45H can be different documents, and AC 00-45H supersedes AC 00-45G.
+- **Revision letter (H):** identifies the edition. The first issue carries no letter; the first revision is A, then B, and so on. AC 00-45 was revised through **H**. A revision letter is not optional decoration: AC 00-45 and AC 00-45H can be different documents, and AC 00-45H supersedes AC 00-45G. (The weather-services guidance that AC 00-45 carried has since been consolidated into the Aviation Weather Handbook, FAA-H-8083-28; AC 00-45H still works as a citation-grammar example because the anatomy of an identifier does not depend on whether the document is current.)
 
 The title of AC 00-45H is **"Aviation Weather Services."** The identifier and the title do two different jobs: the **identifier locates** the document precisely; the **title describes** what it contains. You cite by identifier because the identifier is unambiguous. You recognize by title because the title is meaningful. Both exist on every document on purpose.
 

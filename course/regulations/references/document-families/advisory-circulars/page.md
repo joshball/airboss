@@ -15,7 +15,7 @@ authoritative_sources:
     url: 'https://drs.faa.gov'
     note: 'The modern FAA-wide search tool that replaced the cancelled AC 00-2 master checklist. Search, do not browse.'
     verified: true
-  - source: 'AC 00-2 (cancelled), Appendix 2 -- Advisory Circular numbering scheme'
+  - source: 'AC 00-2 (cancelled), Appendix 1 -- Advisory Circular Numbering System'
     url: 'https://www.faa.gov/regulations_policies/advisory_circulars'
     note: 'The historical source for the subject-series prefix scheme. AC 00-2 itself is cancelled; the numbering convention it documented is still in use.'
     verified: true
@@ -81,14 +81,17 @@ part. The everyday series:
 | 61     | Certification: pilots, flight and ground instructors |
 | 70     | Airspace                                             |
 | 90     | Air traffic and general operating rules              |
-| 91     | General operating and flight rules                   |
 | 120    | Air carrier and commercial operations                |
 | 150    | Airports                                             |
 
-So `AC 61-65` is guidance about 14 CFR Part 61, and `AC 91-73` is guidance about Part 91.
-The skill of predicting an AC's subject from its number is worth practicing, because it
-turns a wall of acronyms into a navigable index. The identifier locates the document; the
-title ("Aviation Weather Services" for AC 00-45H) describes it.
+There is no separate `91` series. The `90` series is air traffic and general operating
+rules - the territory of 14 CFR Part 91 and the air-traffic parts (91, 93, 95, 97, 99). A
+specific AC within that series is numbered after the CFR part it most directly supports, so
+`AC 91-73` is a 90-series AC numbered `91` because it supports Part 91. So `AC 61-65` is
+guidance about 14 CFR Part 61, and `AC 91-73` is guidance about Part 91. The skill of
+predicting an AC's subject from its number is worth practicing, because it turns a wall of
+acronyms into a navigable index. The identifier locates the document; the title ("Aviation
+Weather Services" for AC 00-45H) describes it.
 
 ## Revisions and currency
 

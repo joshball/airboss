@@ -37,7 +37,7 @@ references:
     note: The binding rule that the pilot in command must, before any flight, become familiar with all available information concerning that flight, including weather reports and forecasts. Terse and binding -- the starting point of the worked triangulation.
   - source: AC 00-45H
     detail: Aviation Weather Services
-    note: The Advisory Circular that explains how to obtain and interpret the weather products a pilot needs to satisfy 91.103. One acceptable means of getting the weather information the rule requires.
+    note: The Advisory Circular that explained how to obtain and interpret the weather products a pilot needs to satisfy 91.103. One acceptable means of getting the weather information the rule requires. The weather-services content of AC 00-45 has since been consolidated into the Aviation Weather Handbook (FAA-H-8083-28), so a pilot today goes to the handbook; AC 00-45H still illustrates the AC tier of the triangulation chain.
   - source: AIM
     detail: Chapter 7 (Safety of Flight) -- weather services and hazards
     note: Operational how-to for using weather services in flight planning and en route. The procedural layer between the rule and the textbook.
@@ -70,6 +70,8 @@ This is the capstone. The earlier nodes built the pieces: the binding/advisory s
 Here is the uncomfortable truth a returning pilot discovers fast. No single FAA document answers a real question completely. The binding rule tells you what you must do, but it is terse and gives you almost no operational help. The Advisory Circular explains an acceptable way to satisfy the rule, but it is not the rule and not a tutorial. The AIM gives you operational procedure, the handbook gives you the underlying understanding, and the ACS tells you what an examiner will actually test. Each document is one face of the answer.
 
 The skill is **triangulation**: walking a question deliberately across the families, taking from each the thing only it provides, and assembling a complete answer. A pilot who can do this is not lost in the ecosystem. They use it.
+
+This is not an academic exercise. Take the weather go/no-go question this node walks. A pilot who triangulates it well - rule, acceptable means, operational how-to, training-depth understanding, tested standard - launches genuinely prepared for the weather they will meet. A pilot who reads only 14 CFR 91.103 and stops has met the letter of the rule and is still not ready to fly: the rule tells you that you must become familiar with the weather, never how, and never what the weather actually means. The skill is the difference between satisfying the regulation and being ready for the flight. That gap is the reason triangulation is worth learning, not just the documentation tidiness of it.
 
 :::
 :::phase name="problem"
@@ -120,13 +122,13 @@ A real question is answered by walking it across families. For the weather go/no
 
 ### What each link contributes
 
-| Link                      | Family             | What it gives you that the others do not                                                                                                                          |
-| ------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 14 CFR 91.103             | Binding regulation | The obligation. You MUST become familiar with all available information, including weather reports and forecasts, before the flight. Terse, mandatory, no how-to. |
-| AC 00-45H                 | Advisory Circular  | One acceptable means: how to obtain and interpret the weather products that satisfy the rule. Explains the products; does not bind you to this exact method.      |
-| AIM Chapter 7             | AIM                | Operational how-to: using weather services in planning and en route, recognizing hazards. Procedure, not theory.                                                  |
-| Aviation Weather Handbook | FAA handbook       | Training-depth understanding: the theory under the products, so you actually know what you are reading, not just where to read it.                                |
-| Private Pilot ACS         | ACS                | The standard: what an examiner may test on weather information and preflight planning. Defines "knowing this" for checkride purposes.                             |
+| Link                      | Family             | What it gives you that the others do not                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 14 CFR 91.103             | Binding regulation | The obligation. You MUST become familiar with all available information, including weather reports and forecasts, before the flight. Terse, mandatory, no how-to.                                                                                                                                                                                                                                  |
+| AC 00-45H                 | Advisory Circular  | One acceptable means: how to obtain and interpret the weather products that satisfy the rule. Explains the products; does not bind you to this exact method. The weather-services content of AC 00-45 has since been consolidated into the Aviation Weather Handbook (FAA-H-8083-28), so a pilot today reads the handbook for this material; AC 00-45H stands in here as the AC tier of the chain. |
+| AIM Chapter 7             | AIM                | Operational how-to: using weather services in planning and en route, recognizing hazards. Procedure, not theory.                                                                                                                                                                                                                                                                                   |
+| Aviation Weather Handbook | FAA handbook       | Training-depth understanding: the theory under the products, so you actually know what you are reading, not just where to read it.                                                                                                                                                                                                                                                                 |
+| Private Pilot ACS         | ACS                | The standard: what an examiner may test on weather information and preflight planning. Defines "knowing this" for checkride purposes.                                                                                                                                                                                                                                                              |
 
 ### Why no single document is enough
 
