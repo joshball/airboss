@@ -395,6 +395,22 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
 }
 
 /**
+ * Look up node titles for a set of ids, keyed by id. Lighter than
+ * `getNodesByIds` when only the title is needed (e.g. the Today briefing's
+ * focus-node label). Ids with no node are absent from the map.
+ */
+export async function getKnowledgeNodeTitles(ids: readonly string[], db: Db = defaultDb): Promise<Map<string, string>> {
+	const out = new Map<string, string>();
+	if (ids.length === 0) return out;
+	const rows = await db
+		.select({ id: knowledgeNode.id, title: knowledgeNode.title })
+		.from(knowledgeNode)
+		.where(inArray(knowledgeNode.id, ids as string[]));
+	for (const row of rows) out.set(row.id, row.title);
+	return out;
+}
+
+/**
  * Canonical phase slugs the splitter recognises inside a `:::phase` opener.
  * Kept local so this module stays free of `@ab/help` (which imports back
  * into `@ab/bc-study` via `parseCardsYaml` -- a `@ab/help` import here

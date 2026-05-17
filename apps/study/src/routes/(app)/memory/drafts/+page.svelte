@@ -1,5 +1,6 @@
 <script lang="ts">
 import { domainLabel, ROUTES } from '@ab/constants';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { enhance } from '$app/forms';
 import type { ActionData, PageData } from './$types';
@@ -113,32 +114,16 @@ function shorten(text: string, n: number): string {
 								Promote as-is
 							</button>
 						</form>
-						<form
-							method="POST"
-							action="?/discard"
-							use:enhance={() => {
-								busyId = draft.id;
-								return async ({ update }) => {
-									busyId = null;
-									await update();
-								};
-							}}
-						>
-							<input type="hidden" name="draftId" value={draft.id} />
-							<button
-								type="submit"
-								class="btn ghost danger"
-								disabled={busyId !== null}
-								data-testid="draft-discard"
-								onclick={(e) => {
-									if (!confirm('Discard this draft? The associated highlight will also be removed.')) {
-										e.preventDefault();
-									}
-								}}
-							>
-								Discard
-							</button>
-						</form>
+						<ConfirmAction
+							formAction="?/discard"
+							label="Discard"
+							confirmLabel="Discard (also removes highlight)"
+							triggerVariant="ghost"
+							confirmVariant="danger"
+							size="md"
+							disabled={busyId !== null}
+							hiddenFields={{ draftId: draft.id }}
+						/>
 					</div>
 				</li>
 			{/each}

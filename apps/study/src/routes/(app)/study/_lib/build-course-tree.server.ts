@@ -22,10 +22,11 @@
 import {
 	getKnowledgeNodesForSyllabusLeaves,
 	getNodeEvidenceStateMap,
+	getNodesByIds,
+	getSyllabusNodesByCodes,
 	type NodeEvidenceState,
 } from '@ab/bc-study/server';
 import { db as defaultDb } from '@ab/db/connection';
-import { sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type LessonRecord, listLessonsCached } from './lesson-tree';
 import type { MapNode } from './map-types';
@@ -216,18 +217,9 @@ async function resolveKnowledgeSlugsToIds(slugs: string[], db: Db): Promise<Map<
 	if (slugs.length === 0) return out;
 	// Knowledge nodes use the slug as the primary key id (per ADR 011 +
 	// the seed pipeline). Confirm via a row read so a stale cite (slug
-	// renamed under us) is silently dropped from the rollup, with an
-	// optional dev-mode warning per spec edge cases.
-	const ids = slugs.map((slug) => slug);
-	const rows = await db.execute(
-		sql`SELECT id FROM study.knowledge_node WHERE id = ANY(ARRAY[${sql.join(
-			ids.map((id) => sql`${id}`),
-			sql`, `,
-		)}]::text[])`,
-	);
-	type Row = { id: string };
-	const rowList = rows as unknown as Row[];
-	for (const row of rowList) {
+	// renamed under us) is silently dropped from the rollup.
+	const rows = await getNodesByIds(slugs, db);
+	for (const row of rows) {
 		out.set(row.id, row.id);
 	}
 	return out;
@@ -246,15 +238,8 @@ async function resolveAcsCodesToLeafIds(codes: string[], db: Db): Promise<Map<st
 		lookupCodes.push(stripped);
 		reverse.set(stripped, code);
 	}
-	const rows = await db.execute(
-		sql`SELECT id, code FROM study.syllabus_node WHERE code = ANY(ARRAY[${sql.join(
-			lookupCodes.map((c) => sql`${c}`),
-			sql`, `,
-		)}]::text[])`,
-	);
-	type Row = { id: string; code: string };
-	const rowList = rows as unknown as Row[];
-	for (const row of rowList) {
+	const rows = await getSyllabusNodesByCodes(lookupCodes, db);
+	for (const row of rows) {
 		const original = reverse.get(row.code);
 		if (original !== undefined) out.set(original, row.id);
 	}

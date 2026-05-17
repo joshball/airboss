@@ -26,6 +26,7 @@ import {
 	getCredentialById,
 	getCredentialMastery,
 	getCredentialPrimarySyllabus,
+	getGoalPrimaryCredentialId,
 	getPageExplainerDismissals,
 	getPrimaryGoal,
 	getRepBacklog,
@@ -40,6 +41,7 @@ import {
 import {
 	CITATION_ORDER_DEFAULT,
 	type CitationOrder,
+	ROUTES,
 	STUDY_MAP_TAB_DEFAULT,
 	STUDY_MAP_TAB_VALUES,
 	STUDY_MAP_TABS,
@@ -47,8 +49,8 @@ import {
 	USER_PREF_KEYS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
-import { sql } from 'drizzle-orm';
 import { buildAcsTree } from './_lib/build-acs-tree.server';
 import { buildCourseTree } from './_lib/build-course-tree.server';
 import { buildHandbookTree, type FocusHandbookCitation } from './_lib/build-handbook-tree.server';
@@ -56,6 +58,8 @@ import { buildTodayBriefing } from './_lib/build-today-briefing.server';
 import type { MapNode } from './_lib/map-types';
 import type { TodayBriefing } from './_lib/today-types';
 import type { Actions, PageServerLoad } from './$types';
+
+const log = createLogger('study:home');
 
 function isMapTab(value: unknown): value is StudyMapTab {
 	return typeof value === 'string' && (STUDY_MAP_TAB_VALUES as readonly string[]).includes(value);
@@ -107,7 +111,7 @@ export const load: PageServerLoad = async (event) => {
 	// Validate `?tab=` -- bogus values redirect (SH-23).
 	const tabParam = event.url.searchParams.get('tab');
 	if (tabParam !== null && !isMapTab(tabParam)) {
-		throw redirect(302, '/study');
+		throw redirect(302, ROUTES.STUDY);
 	}
 
 	const [prefs, primaryGoal, activePlan, pageExplainerDismissals] = await Promise.all([
@@ -153,7 +157,7 @@ export const load: PageServerLoad = async (event) => {
 	// `credential_syllabus`. We pick the credential whose primary syllabus
 	// is on the goal, falling back to the first credential reachable from
 	// any goal syllabus when none is marked primary.
-	const credentialId = await resolveGoalPrimaryCredential(primaryGoal.id);
+	const credentialId = await getGoalPrimaryCredentialId(primaryGoal.id, db);
 	if (credentialId === null) {
 		return {
 			kind: 'no-goal' as const,
@@ -210,24 +214,6 @@ export const load: PageServerLoad = async (event) => {
  * the area with the lowest mastered/total ratio. Returns null when
  * the rollup is empty.
  */
-async function resolveGoalPrimaryCredential(goalId: string): Promise<string | null> {
-	// One query: find the goal's primary-syllabus credential. The
-	// credential_syllabus join filters for `primacy = 'primary'`; if
-	// that returns nothing, fall through to any credential reachable
-	// from any of the goal's syllabi.
-	const rows = await db.execute(sql`
-		SELECT cs.credential_id, cs.primacy
-		FROM study.goal_syllabus gs
-		INNER JOIN study.credential_syllabus cs ON cs.syllabus_id = gs.syllabus_id
-		WHERE gs.goal_id = ${goalId}
-		ORDER BY (CASE WHEN cs.primacy = 'primary' THEN 0 ELSE 1 END), cs.credential_id
-		LIMIT 1
-	`);
-	type Row = { credential_id: string; primacy: string };
-	const list = rows as unknown as Row[];
-	return list[0]?.credential_id ?? null;
-}
-
 function resolveFocusAreaCode(briefing: TodayBriefing, mastery: CredentialMasteryRollup): string | null {
 	if (mastery.areas.length === 0) return null;
 	if (briefing.kind !== 'focus') {
@@ -297,7 +283,12 @@ export const actions: Actions = {
 		try {
 			await setUserPref(user.id, key, parsed.data, db);
 		} catch (err) {
-			return fail(500, { ok: false, error: (err as Error).message });
+			log.error(
+				'set user pref failed',
+				{ requestId: event.locals.requestId, userId: user.id, metadata: { key } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { ok: false, error: 'Could not save preference.' });
 		}
 		return { ok: true };
 	},
