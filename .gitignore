@@ -31,6 +31,12 @@ data/sources-snapshot.json
 # `bun scripts/airboss-ref.ts diff`. Operator-local artifacts.
 data/sources-diff/*.json
 
+# ADR 018 -- rendered SVG charts are generated artifacts and stay out of the
+# repo. The v2 timeline bundle commits per-hour chart SPECS only; the replay
+# surface renders them to SVG on demand. This blocks accidental staging of a
+# rendered chart under any wx-scenario bundle.
+data/wx-scenarios/**/*.svg
+
 # Source artifact storage policy -- see ADR 018 and docs/platform/STORAGE.md.
 # Source documents (FAA PDFs etc.) live in $AIRBOSS_HANDBOOK_CACHE
 # (default ~/Documents/airboss-handbook-cache/), not the repo.

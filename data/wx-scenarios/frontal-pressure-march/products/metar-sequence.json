@@ -1,0 +1,326 @@
+[
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KDDC",
+    "raw": "KDDC 141253Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KICT",
+    "raw": "KICT 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KFOE",
+    "raw": "KFOE 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KMHK",
+    "raw": "KMHK 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KTOP",
+    "raw": "KTOP 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T12:00:00.000Z",
+    "zulu": "1412Z",
+    "station": "KJLN",
+    "raw": "KJLN 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KDDC",
+    "raw": "KDDC 141353Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KICT",
+    "raw": "KICT 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KFOE",
+    "raw": "KFOE 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KMHK",
+    "raw": "KMHK 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KTOP",
+    "raw": "KTOP 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T13:00:00.000Z",
+    "zulu": "1413Z",
+    "station": "KJLN",
+    "raw": "KJLN 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KDDC",
+    "raw": "KDDC 141453Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KICT",
+    "raw": "KICT 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KFOE",
+    "raw": "KFOE 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KMHK",
+    "raw": "KMHK 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KTOP",
+    "raw": "KTOP 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T14:00:00.000Z",
+    "zulu": "1414Z",
+    "station": "KJLN",
+    "raw": "KJLN 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KDDC",
+    "raw": "KDDC 141553Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KICT",
+    "raw": "KICT 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KFOE",
+    "raw": "KFOE 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KMHK",
+    "raw": "KMHK 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KTOP",
+    "raw": "KTOP 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T15:00:00.000Z",
+    "zulu": "1415Z",
+    "station": "KJLN",
+    "raw": "KJLN 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KDDC",
+    "raw": "KDDC 141653Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KICT",
+    "raw": "KICT 141653Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KFOE",
+    "raw": "KFOE 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KMHK",
+    "raw": "KMHK 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KTOP",
+    "raw": "KTOP 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T16:00:00.000Z",
+    "zulu": "1416Z",
+    "station": "KJLN",
+    "raw": "KJLN 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KDDC",
+    "raw": "KDDC 141753Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KICT",
+    "raw": "KICT 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KFOE",
+    "raw": "KFOE 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KMHK",
+    "raw": "KMHK 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KTOP",
+    "raw": "KTOP 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T17:00:00.000Z",
+    "zulu": "1417Z",
+    "station": "KJLN",
+    "raw": "KJLN 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KDDC",
+    "raw": "KDDC 141853Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KICT",
+    "raw": "KICT 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KFOE",
+    "raw": "KFOE 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KMHK",
+    "raw": "KMHK 141853Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KTOP",
+    "raw": "KTOP 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T18:00:00.000Z",
+    "zulu": "1418Z",
+    "station": "KJLN",
+    "raw": "KJLN 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KDDC",
+    "raw": "KDDC 141953Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KICT",
+    "raw": "KICT 141953Z 19013G23KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KFOE",
+    "raw": "KFOE 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KMHK",
+    "raw": "KMHK 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KTOP",
+    "raw": "KTOP 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T19:00:00.000Z",
+    "zulu": "1419Z",
+    "station": "KJLN",
+    "raw": "KJLN 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KDDC",
+    "raw": "KDDC 142053Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KICT",
+    "raw": "KICT 142053Z 19013G23KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KFOE",
+    "raw": "KFOE 142053Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2967"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KMHK",
+    "raw": "KMHK 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KTOP",
+    "raw": "KTOP 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+  },
+  {
+    "at": "2026-03-14T20:00:00.000Z",
+    "zulu": "1420Z",
+    "station": "KJLN",
+    "raw": "KJLN 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+  }
+]

@@ -1,0 +1,241 @@
+{
+  "targetTimestamp": "2026-03-14T14:00:00.000Z",
+  "source": "wx-engine -- truth-derived synthetic METARs",
+  "count": 6,
+  "observations": [
+    {
+      "station": {
+        "icao": "KDDC",
+        "lat": 37.76,
+        "lon": -99.97
+      },
+      "raw": "KDDC 141453Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961",
+      "parsed": {
+        "station": "KDDC",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 29,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 3000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 8000
+          }
+        ],
+        "tempC": 5,
+        "dewpointC": -3,
+        "altimeterInHg": 29.61,
+        "cavok": false,
+        "raw": "KDDC 141453Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KICT",
+        "lat": 37.65,
+        "lon": -97.43
+      },
+      "raw": "KICT 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966",
+      "parsed": {
+        "station": "KICT",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 14000
+          }
+        ],
+        "tempC": 16,
+        "dewpointC": 12,
+        "altimeterInHg": 29.66,
+        "cavok": false,
+        "raw": "KICT 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KFOE",
+        "lat": 38.95,
+        "lon": -95.66
+      },
+      "raw": "KFOE 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2967",
+      "parsed": {
+        "station": "KFOE",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 14000
+          }
+        ],
+        "tempC": 16,
+        "dewpointC": 12,
+        "altimeterInHg": 29.67,
+        "cavok": false,
+        "raw": "KFOE 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2967",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KMHK",
+        "lat": 39.14,
+        "lon": -96.67
+      },
+      "raw": "KMHK 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2963",
+      "parsed": {
+        "station": "KMHK",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 14000
+          }
+        ],
+        "tempC": 16,
+        "dewpointC": 12,
+        "altimeterInHg": 29.63,
+        "cavok": false,
+        "raw": "KMHK 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2963",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KTOP",
+        "lat": 39.07,
+        "lon": -95.62
+      },
+      "raw": "KTOP 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966",
+      "parsed": {
+        "station": "KTOP",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 14000
+          }
+        ],
+        "tempC": 16,
+        "dewpointC": 12,
+        "altimeterInHg": 29.66,
+        "cavok": false,
+        "raw": "KTOP 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966",
+        "warnings": []
+      }
+    },
+    {
+      "station": {
+        "icao": "KJLN",
+        "lat": 37.15,
+        "lon": -94.5
+      },
+      "raw": "KJLN 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2978",
+      "parsed": {
+        "station": "KJLN",
+        "day": 14,
+        "hour": 14,
+        "minute": 53,
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 10,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          },
+          {
+            "cover": "OVC",
+            "heightFtAgl": 14000
+          }
+        ],
+        "tempC": 16,
+        "dewpointC": 12,
+        "altimeterInHg": 29.78,
+        "cavok": false,
+        "raw": "KJLN 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2978",
+        "warnings": []
+      }
+    }
+  ]
+}

@@ -15,6 +15,23 @@ export { mulberry32, pick } from './prng';
 export { renderDrillMarkdown } from './render-md';
 export { type BuildPackInput, buildPack, type CatalogFamiliesByProduct } from './sample';
 export type { ScenarioSnapshot } from './snapshot';
+// ----------------------------------------------------------------------
+// Temporal-drill exercise generators. Pure functions over a slim
+// `TemporalDrillBundle`; browser-safe. The server-only bundle BUILDER
+// (`buildTemporalDrillBundle`) lives in `./server`.
+// ----------------------------------------------------------------------
+export { type BuildTemporalPackInput, buildTemporalPack, renderTemporalDrillMarkdown } from './temporal-drill';
+export type {
+	TemporalDrillBundle,
+	TemporalDrillPack,
+	TemporalExercise,
+	TemporalExerciseKind,
+	TemporalFrontSnapshot,
+	TemporalMetar,
+	TemporalSnapshot,
+	TemporalStation,
+	TemporalTaf,
+} from './temporal-types';
 export type {
 	DrillCoverage,
 	DrillCoverageReport,

@@ -41,8 +41,10 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		example: 'bun run wx-scenario list',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.BUILD]: {
-		summary: 'Generate + write a scenario bundle (truth + products + charts + commentary)',
-		example: 'bun run wx-scenario build frontal-xc-march  |  bun run wx-scenario build --all',
+		summary:
+			'Generate + write a scenario bundle (truth + products + charts + commentary). Add --timeline for the v2 evolution bundle (v2 scenarios only).',
+		example:
+			'bun run wx-scenario build frontal-xc-march  |  bun run wx-scenario build frontal-pressure-march --timeline',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.VALIDATE]: {
 		summary: 'Run round-trip + consistency + knowledge-node resolution (no writes)',
@@ -58,8 +60,10 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		example: 'bun run wx-scenario check-catalog',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.DRILL]: {
-		summary: 'Generate a pack of practice products (METAR / TAF / PIREP / FB / AIRMET) with per-token annotations',
-		example: 'bun run wx-scenario drill --count 20 --products metar,taf --output /tmp/sample-drill',
+		summary:
+			'Generate a pack of practice products (METAR / TAF / PIREP / FB / AIRMET) with per-token annotations. Add --temporal for sequence-based exercises (v2 scenarios only).',
+		example:
+			'bun run wx-scenario drill --count 20 --products metar,taf  |  bun run wx-scenario drill --temporal --from-scenarios frontal-pressure-march',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.COVERAGE]: {
 		summary: 'Report catalog coverage across scenarios -- totals, per-scenario contribution, uncovered token families',

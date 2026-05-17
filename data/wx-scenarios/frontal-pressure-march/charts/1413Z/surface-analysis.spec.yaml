@@ -1,0 +1,22 @@
+slug: wx-scenarios/frontal-pressure-march/surface-analysis
+type: surface-analysis
+title: Surface Analysis (truth-derived)
+subtitle: "2026-03-14T13:00:00.000Z -- Accelerating cold front under pilot time
+  pressure, central Kansas. A March cold "
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent: conus
+sources:
+  fronts: cache://scenarios/frontal-pressure-march/surface-analysis.json
+options:
+  station_density: hubs
+  isobar_interval_mb: 4
+  emphasize_every_mb: 8
+  show_h_l_markers: true
+  source_attribution: wx-engine -- truth-derived synthetic

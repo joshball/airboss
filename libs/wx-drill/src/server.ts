@@ -14,3 +14,10 @@ export { buildAllScenarioSnapshots } from './build-snapshots';
 export { type CatalogLoadOptions, loadCatalogFamilies } from './catalog-loader';
 export type { CatalogFamiliesByProduct } from './sample';
 export { type ScenarioSnapshot, snapshotScenario } from './snapshot';
+// ----------------------------------------------------------------------
+// Temporal-drill bundle builder. Server-only -- runs the wx-engine to
+// derive METAR / TAF sequences + per-hour front geometry for a v2 scenario.
+// The pure exercise generators (`buildTemporalPack`) live in the runtime
+// barrel `@ab/wx-drill`.
+// ----------------------------------------------------------------------
+export { buildTemporalDrillBundle, buildTemporalDrillBundles } from './temporal-bundle';

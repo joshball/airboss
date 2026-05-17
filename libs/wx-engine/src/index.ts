@@ -53,6 +53,21 @@ export type {
 // ----------------------------------------------------------------------
 export type { AirmetEvent, AirmetTimelineEntry, TimelineSnapshot } from './products/temporal';
 // ----------------------------------------------------------------------
+// v2 timeline-bundle types. Values (buildTimelineBundle, writeTimelineBundle)
+// live in `./server.ts` because the writer touches the filesystem.
+// The `/practice/wx/replay` page components import these types only.
+// ----------------------------------------------------------------------
+export type {
+	BuildTimelineBundleOptions,
+	TimelineBundle,
+	TimelineBundleSnapshot,
+	TimelineChart,
+	TimelineChartSource,
+	TimelineMetarSample,
+	TimelinePirepEvent,
+	TimelineTafSample,
+} from './products/timeline-bundle';
+// ----------------------------------------------------------------------
 // Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
 // deriveFbGrid, derivePireps) live in `./server.ts`.
 // ----------------------------------------------------------------------
