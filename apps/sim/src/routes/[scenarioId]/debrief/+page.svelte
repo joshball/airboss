@@ -539,6 +539,10 @@ function onScrubKey(event: KeyboardEvent): void {
 	button:hover {
 		background: var(--edge-default);
 	}
+	button:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
 	.run-again {
 		font-weight: 600;
 	}

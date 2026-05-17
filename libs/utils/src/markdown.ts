@@ -53,9 +53,16 @@ function renderInline(text: string): string {
 	out = out.replace(/(^|[^*])\*([^*\n]+)\*/g, (_m, lead: string, inner: string) => `${lead}<em>${inner}</em>`);
 	// Links: [text](url) -> <a href="url">text</a>. Only http(s) and relative.
 	// Negative lookbehind on `!` so image syntax is left for a dedicated pass.
+	//
+	// `url` is captured from `out`, which `escapeHtml` already escaped at the
+	// top of this function: a raw `"` / `<` / `>` cannot reach this attribute,
+	// and a source `&` is already `&amp;`. Interpolate it verbatim -- a second
+	// `escapeAttr` pass would turn `&amp;` into `&amp;amp;` and corrupt every
+	// query-string URL. The protocol allow-list still matches because
+	// `https://`, `/`, `#`, and `mailto:` carry no escapable characters.
 	out = out.replace(/(^|[^!])\[([^\]]+)\]\(([^)\s]+)\)/g, (_m, lead: string, label: string, url: string) => {
 		const safe = /^(https?:\/\/|\/|#|mailto:)/.test(url) ? url : '#';
-		return `${lead}<a href="${escapeAttr(safe)}">${label}</a>`;
+		return `${lead}<a href="${safe}">${label}</a>`;
 	});
 	return out;
 }

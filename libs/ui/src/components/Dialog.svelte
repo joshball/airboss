@@ -136,7 +136,7 @@ $effect(() => {
 							data-testid="dialog-close"
 							onclick={close}
 						>
-							{DIALOG_CLOSE_GLYPH}
+							<span aria-hidden="true">{DIALOG_CLOSE_GLYPH}</span>
 						</button>
 					{/if}
 				</div>

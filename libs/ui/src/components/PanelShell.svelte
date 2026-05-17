@@ -38,7 +38,12 @@ let {
 	children: Snippet;
 } = $props();
 
-const slugId = $derived(`panel-${title.replace(/\s+/g, '-').toLowerCase()}`);
+// Per-instance id: `$props.id()` guarantees uniqueness even when two panels on
+// the same page share a title (e.g. two "Recent activity" panels in a
+// multi-column admin layout). A title-derived id duplicated the `<h2>` id so
+// the region's `aria-labelledby` was ambiguous. Matches Select / TextField.
+const instanceId = $props.id();
+const slugId = `panel-${instanceId}`;
 const fallbackErrorMessage = $derived(`Unable to load ${title.toLowerCase()}. Try refreshing.`);
 const resolvedError = $derived(error ? (errorMessage ?? fallbackErrorMessage) : undefined);
 </script>

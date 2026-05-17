@@ -116,6 +116,12 @@ function byGroup(group: SimKeybinding['group']): readonly SimKeybinding[] {
 		color: var(--sim-panel-fg);
 	}
 
+	.close:focus-visible,
+	.ok:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
 	.intro {
 		color: var(--sim-panel-fg-lighter);
 		font-size: var(--font-size-body);
