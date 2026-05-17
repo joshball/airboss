@@ -1,0 +1,80 @@
+code: s1
+ordinal: 1
+title: Why the FAA splits the rules from the guidance
+body_md: |
+  **Before you start.** This is the orientation course. If you have
+  ever stared at a pile of FAA acronyms - CFR, AC, AIM, ACS, PHAK,
+  SAFO, TSO, AD - and could not say which ones are law and which ones
+  are advice, this course is built for you. Take it before any
+  content course. It mentions documents and ideas you have not met
+  yet, and that is fine: the rest of the course is how you meet them.
+
+  Forward references in this section, with where each is taught:
+
+  - [The document families](/reference/knowledge/reg-faa-document-ecosystem):
+    the full taxonomy is taught in s2.
+  - [The AC numbering system](/reference/knowledge/reg-ac-numbering-system):
+    taught as a discovery exercise in s3.
+  - [Citation anatomy](/reference/knowledge/reg-faa-citation-anatomy):
+    how to read any FAA identifier, taught in s4.
+  - [Revisions and supersession](/reference/knowledge/reg-faa-document-ecosystem):
+    how documents replace each other, taught in s5.
+  - [Cross-reference triangulation](/reference/knowledge/reg-faa-cross-reference-triangulation):
+    the capstone skill, taught in s6.
+
+  ---
+
+  Picture the alternative. Imagine the FAA published exactly one kind
+  of document: a single binding rulebook that covered the regulation,
+  the recommended technique, the operational how-to, the training
+  explanation, and the checkride standard, all between the same two
+  covers. Now ask: what happens when a new piece of avionics changes
+  the best-practice technique for a maneuver?
+
+  In a one-document world, updating that technique means amending the
+  rulebook. Amending a binding rule is rulemaking: a public process
+  with notices, comment periods, and a legal review that runs for
+  months or years by design, because changing the law should be slow
+  and deliberate. So the technique either waits years for the next
+  rulemaking cycle, or the FAA stops being able to give pilots timely
+  advice at all.
+
+  That is the problem the ecosystem solves. The FAA splits its
+  documentation into two kinds:
+
+  - **Binding** documents carry the force of law. Breaking one is a
+    violation. 14 CFR (the regulations) and Airworthiness Directives
+    are binding. They change slowly, through rulemaking, on purpose.
+  - **Advisory** documents carry guidance, not law. An Advisory
+    Circular, the AIM, a handbook, the ACS - none of them is itself
+    binding. They can be updated quickly, because updating advice
+    does not require rulemaking.
+
+  The split is not bureaucratic clutter. It is the mechanism that
+  lets the FAA keep the law stable while keeping the advice current.
+  A new technique ships as an AC revision next quarter; the rule it
+  supports stays put. Once you see that, the whole acronym wall stops
+  being a wall and becomes a system with a logic you can predict.
+
+  This section hands off to the document-ecosystem knowledge node,
+  which walks the binding-versus-advisory split as a discovery: you
+  reason your way to *why* the split has to exist before the course
+  shows you the families that live on each side of it.
+steps:
+
+  - code: s1.1
+    ordinal: 1
+    title: Why two kinds of document
+    body_md: |
+      The framing question to carry into the knowledge node: if the
+      FAA had to keep its rules legally stable AND keep its advice
+      current, and it could not do both with one kind of document,
+      what is the minimum number of document kinds it needs, and what
+      is the dividing line between them?
+
+      Reason it out before the node confirms it. The answer is the
+      load-bearing idea for the entire course: binding rules change
+      slowly through rulemaking; advisory guidance changes fast
+      without rulemaking; everything else is a consequence of that
+      one design choice.
+    knowledge_node_id: reg-faa-document-ecosystem

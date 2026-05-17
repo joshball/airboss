@@ -1,0 +1,90 @@
+code: s2
+ordinal: 2
+title: The document families - a taxonomy
+body_md: |
+  **Before you start.** Section 1 established the single load-bearing
+  idea: the FAA splits documentation into binding rules and advisory
+  guidance. This section uses that split to organize the whole
+  ecosystem into twelve families. Read every family through one
+  question: is this binding or advisory?
+
+  ---
+
+  You now know *why* the split exists. The next question is *what
+  lives on each side of it*. Before you read the answer, try to sort
+  these into "binding" and "advisory" yourself:
+
+  - The regulations in 14 CFR.
+  - An Advisory Circular.
+  - The Aeronautical Information Manual.
+  - An Airworthiness Directive.
+  - A NOTAM.
+  - A NASA-style safety alert for operators.
+
+  If you reasoned from s1, you would predict: a regulation is
+  binding, an AC is advisory, the AIM is advisory. The two that trip
+  people up are the Airworthiness Directive and the NOTAM. Both feel
+  like "just notices," but both are binding - and that is exactly the
+  kind of misread this course exists to prevent.
+
+  The twelve families, sorted by the one distinction that matters:
+
+  | Family                    | Binding? | What it is                                                          |
+  | ------------------------- | -------- | ------------------------------------------------------------------- |
+  | 14 CFR                    | Binding  | The regulations. "FAR" is the colloquial name for the same thing.   |
+  | Airworthiness Directives  | Binding  | Mandatory corrective action on a specific aircraft or article.      |
+  | NOTAMs                    | Binding  | Time-critical notices of a change to the National Airspace System.  |
+  | Advisory Circulars        | Advisory | One acceptable means of complying with a regulation.                |
+  | AIM                       | Advisory | Aeronautical Information Manual: operational how-to and procedures. |
+  | Pilot/Controller Glossary | Advisory | The shared vocabulary behind the AIM and ATC phraseology.           |
+  | ACS                       | Advisory | Airman Certification Standards: what a checkride tests.             |
+  | FAA handbooks             | Advisory | PHAK, AFH, IFH, Aviation Weather Handbook, and others.              |
+  | Orders and Notices        | Advisory | Internal FAA direction (8900.1, JO 7110.65, and similar).           |
+  | TSOs                      | Advisory | Technical Standard Orders: minimum performance standards.           |
+  | SAFOs and InFOs           | Advisory | Safety Alerts for Operators; Information for Operators.             |
+  | Chart Supplements         | Advisory | Airport and facility data, formerly the Airport/Facility Directory. |
+
+  The single most important line in this table is the second column.
+  An AC shows ONE acceptable means of compliance; it is guidance, not
+  law - you may comply some other way and still be legal. A 14 CFR
+  section IS the law - there is no "some other way." A pilot who
+  confuses the two either over-constrains (treating advisory guidance
+  as if it were binding) or under-constrains (treating a binding rule
+  as if it were optional advice). Both errors are dangerous; the
+  second can be a violation.
+
+  Two families deserve a second look. An Order such as JO 7110.65
+  binds the FAA and its controllers, not pilots directly - yet it
+  shapes the phraseology and the service you receive, so it is worth
+  knowing it exists. And the "advisory" label on the AIM does not
+  mean "optional": much of the AIM restates procedures that ARE
+  binding because the underlying regulation is binding. Advisory
+  describes the *document's* authority, not the authority of every
+  sentence inside it.
+
+  The durable map of all twelve families - one citable page per
+  family with issuer, update cadence, and where it lives online -
+  is the document-family reference artifact. Use it as your answer
+  key whenever an acronym stops you cold.
+
+  This section hands off to the document-ecosystem knowledge node a
+  second time, now to fix the family map itself in memory: the
+  binding side, the advisory side, and the misreads that bite.
+steps:
+
+  - code: s2.1
+    ordinal: 1
+    title: Binding versus advisory, family by family
+    body_md: |
+      The framing question for the knowledge node: take any document
+      you encounter - an AC, a CFR part, an AIM chapter, an AD - and
+      before you read a word of its content, decide which side of the
+      binding/advisory line it sits on. That single decision changes
+      how you must treat it.
+
+      Practice the misreads deliberately. An AD looks like a notice
+      but is binding. A NOTAM looks like a notice but is binding. The
+      AIM is advisory as a document even though it restates binding
+      procedure. Get those three straight and the rest of the family
+      map follows from s1's logic.
+    knowledge_node_id: reg-faa-document-ecosystem

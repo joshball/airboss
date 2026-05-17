@@ -1,0 +1,33 @@
+slug: faa-documentation-navigation
+kind: instructor
+title: Navigating FAA Documentation
+status: active
+description: |
+  Take this course first. It is the orientation a returning pilot
+  should complete before diving into any content course: not the
+  contents of any single FAA document, but the map of how the whole
+  documentation ecosystem fits together.
+
+  Pilots are handed a wall of acronyms - CFR, FAR, AC, AIM, P/CG, ACS,
+  PHAK, AFH, IFH, SAFO, InFO, NOTAM, TSO, AD - with no orientation to
+  how the system is organized. The FAA itself publishes no single
+  browsable index: the old master list of advisory circulars, AC 00-2,
+  was cancelled, and its replacement at drs.faa.gov is a search tool,
+  not a map. That absence is this course's reason to exist. This is
+  the map the FAA does not publish.
+
+  The six sections run the arc the ecosystem demands: why the FAA
+  splits binding rules from advisory guidance (s1), the taxonomy of
+  document families and the regulatory-vs-advisory distinction (s2),
+  the AC numbering system taught as a discovery exercise (s3), how to
+  read any FAA citation (s4), how documents revise and supersede each
+  other (s5), and how to find things and triangulate a real question
+  across families (s6). Each step frames its topic in discovery prose
+  and then hands off to a knowledge node for the seven-phase discovery
+  walk (per ADR 011) - the step prose is the runway, the node body is
+  the takeoff.
+
+  The course is standalone and never a hard prerequisite. An
+  experienced pilot who already knows the ecosystem can skip straight
+  to a content course; a returning pilot who keeps hitting the
+  acronym wall should start here.
