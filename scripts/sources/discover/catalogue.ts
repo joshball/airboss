@@ -18,7 +18,15 @@
  *
  * Sources: cross-referenced against
  *   https://www.faa.gov/regulations_policies/handbooks_manuals/aviation
- * and the per-handbook parent pages indexed there. Last verified 2026-04-28.
+ * and the per-handbook parent pages indexed there. Last verified 2026-05-17.
+ *
+ * URL note: the FAA retired most per-handbook landing pages and now lists
+ * many handbooks (plus their errata/addendum PDFs) only on the shared
+ * aviation index page above. Where a handbook no longer has its own
+ * landing page, `parentPageUrl` points at that index page -- it is still
+ * an HTML page that lists the handbook's errata-shape PDFs, which is all
+ * the scraper needs. Per-handbook `filenameTokens` keep each scan scoped
+ * to its own handbook even when several share the index page.
  *
  * Future: hangar UI wraps this catalogue via dispatcher; the data is shaped
  * so a future `apps/hangar/` route can render this list as a table.
@@ -97,7 +105,9 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Aviation Maintenance Technician Handbook -- Airframe',
 		docId: 'FAA-H-8083-31',
 		currentEdition: 'FAA-H-8083-31A',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aircraft/amt_airframe_handbook',
+		// FAA retired the per-handbook landing page; the AMT-Airframe handbook
+		// and its errata are now listed only on the shared aviation index page.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['airframe', 'amt', '8083-31'],
 	},
@@ -106,7 +116,8 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Aviation Weather Handbook',
 		docId: 'FAA-H-8083-28',
 		currentEdition: 'FAA-H-8083-28B',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/aviation_weather_handbook',
+		parentPageUrl:
+			'https://www.faa.gov/regulationspolicies/handbooksmanuals/aviation/faa-h-8083-28b-aviation-weather-handbook',
 		tier: DISCOVERY_TIERS.ACTIONABLE,
 		filenameTokens: ['avwx', 'aviation_weather', '8083-28'],
 	},
@@ -142,7 +153,9 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Instrument Flying Handbook',
 		docId: 'FAA-H-8083-15',
 		currentEdition: 'FAA-H-8083-15B',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/instrument_flying_handbook',
+		// FAA retired the per-handbook landing page; the IFH download plus its
+		// errata/addendum PDFs are now listed only on the aviation index page.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['ifh', 'instrument_flying', '8083-15'],
 	},
@@ -169,7 +182,9 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Powered Parachute Flying Handbook',
 		docId: 'FAA-H-8083-29',
 		currentEdition: 'FAA-H-8083-29A',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/powered_parachute_handbook',
+		// FAA retired the per-handbook landing page; the powered-parachute
+		// handbook and its addendum are now listed only on the aviation index.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['powered_parachute', 'ppc_hb', 'ppc-hb', '8083-29'],
 	},
@@ -178,7 +193,12 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Rotorcraft Flying Handbook',
 		docId: 'FAA-H-8083-21',
 		currentEdition: 'FAA-H-8083-21A',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/rotorcraft_flying_handbook',
+		// The standalone Rotorcraft Flying Handbook is superseded -- the FAA
+		// folded it into the Helicopter Flying Handbook (FAA-H-8083-21B, the
+		// `hfh` entry below). Only the legacy `faa-h-8083-21.pdf` survives, and
+		// it is linked from the aviation index page; no dedicated landing page
+		// exists. The legacy edition will not receive further errata.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['rotorcraft', 'rfh'],
 	},
@@ -187,7 +207,12 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Light Sport Pilot Handbook',
 		docId: 'FAA-H-8083-22',
 		currentEdition: 'FAA-H-8083-22',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/sport_pilot_handbook',
+		// The FAA does not publish a handbook numbered FAA-H-8083-22; the
+		// closest current publication is the Weight-Shift-Control Flying
+		// Handbook (FAA-H-8083-5), whose addendum is listed on the aviation
+		// index page. Pointed at the index as the best available FAA page --
+		// the docId/title here are flagged for a human catalogue-data review.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['sport_pilot', '8083-22'],
 	},
@@ -196,7 +221,9 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		title: 'Weight & Balance Handbook',
 		docId: 'FAA-H-8083-1',
 		currentEdition: 'FAA-H-8083-1B',
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation/weight_balance_handbook',
+		// FAA retired the per-handbook landing page; the weight & balance
+		// handbook and its addendum are now listed only on the aviation index.
+		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
 		filenameTokens: ['weight_balance', 'weight-balance', 'wbh', '8083-1'],
 	},
