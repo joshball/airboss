@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: 'Chapter 26 (Section 26.2 -- SIGMET)'
     note: 'Modern consolidated treatment of the SIGMET product.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:

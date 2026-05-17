@@ -11,9 +11,9 @@ authoritative_sources:
     note: 'Product description, grid resolution, flight-category color scale, update cadence, ceiling/visibility-only views.'
     verified: true
   - source: AIM
-    section: '7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
+    section: '7-1-7 -- Categorical Ceiling and Visibility Conditions'
     note: 'Pilot/controller glossary defines VFR / MVFR / IFR / LIFR flight-category brackets used by the CVA color scale.'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Ceiling and Visibility chapter'
     note: 'Pilot-pitch treatment of how ceiling and visibility are measured, blended, and gridded; relationship to METAR/SPECI inputs.'

@@ -7,15 +7,15 @@ tier: 2
 status: draft
 authoritative_sources:
   - source: AC 00-45H
-    section: 'Aviation Weather Services, Chapter 3 -- Surface Aviation Weather Observations (METAR / SPECI)'
+    section: 'Chapter 3 -- Observations, §3.1 (Aviation Routine Weather Reports (METAR) and Special Weather Reports (SPECI))'
     note: 'Defines the SPECI type indicator, the trigger criteria a station applies to fire an off-cycle report, and the encoded-text format SPECI shares with METAR.'
-    verified: false
+    verified: true
   - source: AIM
-    section: '7-1-12 -- Reporting Weather Information'
+    section: '7-1-2 -- FAA Weather Services (SPECI Issuance Table)'
     note: 'Pilot-pitch summary of routine and special observations, including who issues them and what triggers a SPECI.'
-    verified: false
+    verified: true
   - source: AIM
-    section: '7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
+    section: '7-1-28 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)'
     note: 'Decode key. Because SPECI uses the same format as METAR, the same decode rules apply field for field.'
     verified: true
   - source: FAA-H-8083-28

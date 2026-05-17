@@ -15,9 +15,9 @@ authoritative_sources:
     note: Inflight Aviation Weather Advisories -- the G-AIRMET as the graphical counterpart to the WA text bulletin.
     verified: true
   - source: FAA-H-8083-28
-    section: Chapter 26
+    section: Chapter 26, §26.3 (AIRMET / G-AIRMET)
     note: Aviation Weather Handbook, Advisories chapter; G-AIRMET described alongside AIRMET / SIGMET / CWA.
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-airmets
 related_products:

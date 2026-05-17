@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 26 -- Inflight Aviation Weather Advisories, Convective SIGMET subsection'
     note: 'Operational treatment with sample WSTs and the reasoning behind each trigger.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
   - wx-thunderstorm-hazards

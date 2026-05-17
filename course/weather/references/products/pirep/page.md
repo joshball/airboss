@@ -7,11 +7,11 @@ tier: 1
 status: draft
 authoritative_sources:
   - source: AC 00-45H
-    section: 'Aviation Weather Services, Chapter 4 -- Pilot and Radar Weather Reports (PIREP section)'
+    section: 'Chapter 3 -- Observations, §3.2 (Aircraft Observations and Reports -- Pilot Weather Reports (PIREP))'
     note: 'The canonical PIREP format: field codes (/OV /TM /FL /TP /SK /WX /TA /WV /TB /IC /RM), UA vs UUA distinction, intensity scales for turbulence and icing.'
-    verified: false
+    verified: true
   - source: AIM
-    section: '7-1-19 -- Pilot Weather Reports (PIREPs)'
+    section: '7-1-18 -- Pilot Weather Reports (PIREPs)'
     note: 'Why and how to file, the UUA trigger list, the role of PIREPs in the weather system.'
     verified: true
   - source: FAA-H-8083-28

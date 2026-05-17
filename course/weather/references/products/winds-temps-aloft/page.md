@@ -17,7 +17,7 @@ authoritative_sources:
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 27 -- Forecasts, §27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)'
     note: 'Pilot-pitch treatment of FB generation, regional altitude coverage, and the operational reasoning for cruise-altitude selection.'
-    verified: false
+    verified: true
 related_knowledge_nodes:
   - wx-product-winds-aloft
 related_products:

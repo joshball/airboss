@@ -7,13 +7,13 @@ tier: 2
 status: draft
 authoritative_sources:
   - source: AIM
-    section: '5-1-3 -- Notice to Air Missions (NOTAM) System'
+    section: '5-1-3 -- Notice to Airmen (NOTAM) System'
     note: 'Authoritative pilot-pitch description of the NOTAM classes (D, FDC, Pointer, Military, International) and how the system is consumed. The reference most pilots actually open when a NOTAM line decodes weird.'
-    verified: false
+    verified: true
   - source: AIM
-    section: '5-1-21 -- Pre-departure briefing -- area surrounding section on weather impacts and airport status'
+    section: '7-1-5 -- Preflight Briefing (Notices to Airmen subsection)'
     note: 'Ties NOTAM-D weather entries to the preflight briefing flow and reinforces that NOTAMs are pulled separately from METAR/TAF.'
-    verified: false
+    verified: true
   - source: FAA Order 7930.2
     section: 'Notices to Air Missions (NOTAM) -- current edition'
     note: 'Authoritative format manual. Defines the SUBJECT/CONDITION keyword tables, FICON encoding rules, RWYCC scale, and the abbreviations table used in every NOTAM-D line.'

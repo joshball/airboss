@@ -11,9 +11,9 @@ authoritative_sources:
     note: 'Authoritative product catalog for WSR-88D NEXRAD mosaics: base reflectivity, composite reflectivity, echo tops, VIL, storm-relative velocity, and the dBZ color scale.'
     verified: true
   - source: AIM
-    section: '7-1-22 (Weather Radar Services) and 7-1-26 (PIREP for thunderstorms)'
+    section: '7-1-11 (Weather Radar Services) and 7-1-26 (Thunderstorms)'
     note: 'Operational role of ground-based radar in flight planning, FIS-B NEXRAD age limitations, and the PIREP feedback loop that confirms radar-implied hazards.'
-    verified: false
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Radar chapter'
     note: 'Modern pilot-pitch treatment of WSR-88D products, beam geometry, anomalous propagation, bright-band artifacts, and the difference between base and composite reflectivity.'
