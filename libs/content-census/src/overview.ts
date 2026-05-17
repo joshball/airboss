@@ -28,6 +28,8 @@ export function stateDistribution(census: CorpusCensus): Array<{ state: string; 
  * so the signal is never an opaque colour:
  *
  * - A stub corpus is `pending` -- it has no real adapter yet.
+ * - A `census`-mode corpus is `surveyed` -- it has a real Layer-1 census but
+ *   its gap view is Phase 3, so no structural-gap judgement can be made.
  * - A full corpus with one or more `structural` gaps is `attention`.
  * - Otherwise a full corpus is `healthy`.
  */
@@ -37,6 +39,13 @@ export function corpusHealth(census: CorpusCensus): CensusHealth {
 			level: 'pending',
 			label: 'Census pending',
 			rule: 'A real derived-state adapter for this corpus is deferred to Phase 2 of the content-census work package. No health can be computed until it lands.',
+		};
+	}
+	if (census.mode === 'census') {
+		return {
+			level: 'surveyed',
+			label: 'Layer 1 surveyed',
+			rule: 'A real Layer-1 derived-state census exists for this corpus -- inventory, derived state, and explained metrics. Its gap view and authored intent (Layer 2) are deferred to Phase 3, so no structural-gap health judgement is made yet.',
 		};
 	}
 	const structuralGaps = census.gaps.filter((gap) => gap.severity === 'structural').length;
