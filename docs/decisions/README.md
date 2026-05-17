@@ -8,6 +8,8 @@ See [docs/agents/best-practices.md](../agents/best-practices.md) for code-level 
 
 The numbered ADRs each live as a single file (`NNN-topic.md`) or a directory (`NNN-topic/decision.md`). Recent additions:
 
+- [028-content-intent-frontmatter.md](028-content-intent-frontmatter.md) -- proposed: `content_status` + `intent` frontmatter for managed-content items; Layer 2 of the content census.
+- [027-wx-charts-artifact-layout/decision.md](027-wx-charts-artifact-layout/decision.md) -- wx-chart rendered-artifact layout.
 - [026-edition-coherence/decision.md](026-edition-coherence/decision.md) -- registry-canonical edition resolution; closes the three-parallel-edition-stories incoherence flagged by the 2026-05-06 schema review.
 - [025-wp-frontmatter-contract/decision.md](025-wp-frontmatter-contract/decision.md) -- work-package frontmatter contract.
 - [024-cross-app-auth-identity-roles-entitlements.md](024-cross-app-auth-identity-roles-entitlements.md) -- shared auth identity across apps.

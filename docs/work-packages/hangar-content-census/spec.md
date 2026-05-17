@@ -198,6 +198,9 @@ per-corpus rollout order, and a lint guard. The ADR is authored in Phase 1 and
 approved before any corpus gets the block. Until the ADR lands, the dashboard runs
 Layer-1-only (derived state) -- fully useful on its own.
 
+Authored as [ADR 028 -- Content-intent frontmatter](../../decisions/028-content-intent-frontmatter.md),
+status `proposed`.
+
 ## Out of scope
 
 See [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md).

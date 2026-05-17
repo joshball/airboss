@@ -29,9 +29,7 @@ const isStub = $derived(census.mode === 'stub');
 
 /** Sort the next-list so `high`-value items lead. */
 const valueRank: Record<string, number> = { high: 0, standard: 1, low: 2 };
-const rankedNext = $derived(
-	[...census.next].sort((a, b) => (valueRank[a.value] ?? 9) - (valueRank[b.value] ?? 9)),
-);
+const rankedNext = $derived([...census.next].sort((a, b) => (valueRank[a.value] ?? 9) - (valueRank[b.value] ?? 9)));
 
 /** Items carrying a Layer-2 intent block -- the intent view renders these. */
 const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== undefined));

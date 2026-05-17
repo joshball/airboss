@@ -12,14 +12,14 @@
  * corpora route through the honest stub adapter until Phase 2.
  */
 
-import { CORPUS_REGISTRY, type CorpusDescriptor, type CorpusId } from './registry';
-import type { CorpusCensus } from './types';
 import { stubCensus } from './adapters/_stub.server';
 import { wxCatalogCensus } from './adapters/wx-catalog.server';
+import { CORPUS_REGISTRY, type CorpusDescriptor, type CorpusId } from './registry';
+import type { CorpusCensus } from './types';
 
-export { wxCatalogCensus } from './adapters/wx-catalog.server';
 export { stubCensus } from './adapters/_stub.server';
 export { repoRoot } from './adapters/repo-root.server';
+export { wxCatalogCensus } from './adapters/wx-catalog.server';
 
 /** Look up the static descriptor for a corpus id. */
 function descriptorFor(id: CorpusId): CorpusDescriptor {

@@ -15,9 +15,9 @@
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
 
-import { ROUTES } from '@ab/constants';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { ROUTES } from '@ab/constants';
 import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
 import { repoRoot } from './repo-root.server';
 
@@ -188,8 +188,7 @@ export function wxCatalogCensus(): CorpusCensus {
 			value: `${coveredFamilyCount} / ${tokenFamilyCount}`,
 			whatItMeasures:
 				'How many token families are exercised by at least one example the wx-engine can reproduce. The remaining families are reachable only through static catalog examples.',
-			whyItMatters:
-				`${uncoveredFamilyCount} families are uncovered -- the truth-aware drill cannot generate practice for them, so a learner drilling those tokens gets a thinner, repetition-limited experience.`,
+			whyItMatters: `${uncoveredFamilyCount} families are uncovered -- the truth-aware drill cannot generate practice for them, so a learner drilling those tokens gets a thinner, repetition-limited experience.`,
 			whatToDo: {
 				text: `Close the gap by adding wx-engine emitters / scenarios for the ${uncoveredFamilyCount} uncovered families (+FC, VA, SQ, WS, BECMG, and the AIRMET set).`,
 				href: ROUTES.HANGAR_ROADMAP_DETAIL('wx-engine'),
@@ -201,8 +200,7 @@ export function wxCatalogCensus(): CorpusCensus {
 			value: `${contributingScenarios.length} / ${scenarioCount}`,
 			whatItMeasures:
 				'How many authored wx-engine scenarios contribute at least one matched catalog example. A scenario that contributes zero examples does no catalog work.',
-			whyItMatters:
-				`${dormantScenarios.length} scenario contributes nothing. Authoring effort spent on it is currently invisible to the catalog -- the scenario exists but no drill or reference draws on it.`,
+			whyItMatters: `${dormantScenarios.length} scenario contributes nothing. Authoring effort spent on it is currently invisible to the catalog -- the scenario exists but no drill or reference draws on it.`,
 			whatToDo: {
 				text: `Author catalog products for the ${dormantScenarios.length} zero-contribution scenario so its authoring effort reaches a learner.`,
 				href: ROUTES.HANGAR_ROADMAP_DETAIL('wx-engine'),
@@ -213,8 +211,7 @@ export function wxCatalogCensus(): CorpusCensus {
 	const gaps: CensusGap[] = [
 		{
 			title: `${uncoveredFamilyCount} token families have no generator coverage`,
-			whatItMeasures:
-				`Of ${tokenFamilyCount} token families, ${uncoveredFamilyCount} are not exercised by any wx-engine-reproducible example. They include +FC (funnel cloud), VA (volcanic ash), SQ (squall), WS (wind shear), and BECMG (becoming) groups.`,
+			whatItMeasures: `Of ${tokenFamilyCount} token families, ${uncoveredFamilyCount} are not exercised by any wx-engine-reproducible example. They include +FC (funnel cloud), VA (volcanic ash), SQ (squall), WS (wind shear), and BECMG (becoming) groups.`,
 			whyItMatters:
 				'The truth-aware drill generates practice only for covered families. For an uncovered family the learner sees the same static catalog example every time -- no variation, no synoptic re-framing, a measurably weaker decode-skill build.',
 			whatToDo: {
@@ -225,8 +222,7 @@ export function wxCatalogCensus(): CorpusCensus {
 		},
 		{
 			title: `AIRMET / SIGMET examples cannot match the catalog (${airmetMatchedCount} of ${airmetExampleCount} matched)`,
-			whatItMeasures:
-				`All ${airmetExampleCount} AIRMET / SIGMET examples are unmatched. This is structural, not thin: the wx-engine has no AIRMET text emitter, and the catalog builder skips the round-trip parse for AIRMET / SIGMET bulletins (no parser in v1).`,
+			whatItMeasures: `All ${airmetExampleCount} AIRMET / SIGMET examples are unmatched. This is structural, not thin: the wx-engine has no AIRMET text emitter, and the catalog builder skips the round-trip parse for AIRMET / SIGMET bulletins (no parser in v1).`,
 			whyItMatters:
 				'In-flight advisories are checkride-critical and the most operationally consequential encoded products. Until an emitter exists, the entire AIRMET / SIGMET family is reference-only -- no generated drills at all.',
 			whatToDo: {
@@ -252,8 +248,7 @@ export function wxCatalogCensus(): CorpusCensus {
 	const next: CensusNextItem[] = [
 		{
 			text: 'Build the wx-engine AIRMET / SIGMET text emitter',
-			rationale:
-				`Closes the single structural gap -- all ${airmetExampleCount} in-flight-advisory examples are currently reference-only. Highest operational value of the encoded-text family.`,
+			rationale: `Closes the single structural gap -- all ${airmetExampleCount} in-flight-advisory examples are currently reference-only. Highest operational value of the encoded-text family.`,
 			href: ROUTES.HANGAR_ROADMAP_DETAIL('wx-engine'),
 			value: 'high',
 		},

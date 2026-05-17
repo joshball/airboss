@@ -133,7 +133,10 @@ export default defineConfig({
 				storageState: 'tests/e2e/.auth/learner.json',
 			},
 			dependencies: ['setup'],
-			testIgnore: /unauthed\/.*|flightbag\/.*|hangar-review-queue\/.*/,
+			// `content-census-smoke` is a hangar-app spec -- it runs in the
+			// `hangar-review-queue` project (hangar webServer + admin auth),
+			// so it is excluded from the study `chromium` project here.
+			testIgnore: /unauthed\/.*|flightbag\/.*|hangar-review-queue\/.*|content-census-smoke\.spec\.ts/,
 		},
 		{
 			// Study `unauthed/` -- specs in `tests/e2e/unauthed/`. The
@@ -183,7 +186,10 @@ export default defineConfig({
 				storageState: 'tests/e2e/.auth/hangar-admin.json',
 			},
 			dependencies: ['hangar-review-queue-setup'],
-			testMatch: /hangar-review-queue\/.*\.spec\.ts/,
+			// Matches the review-queue specs plus the top-level hangar smoke
+			// specs (`content-census-smoke.spec.ts`) -- both run against the
+			// hangar webServer + admin storage state.
+			testMatch: /(hangar-review-queue\/.*|content-census-smoke)\.spec\.ts/,
 			testIgnore: /hangar-review-queue\/unauthed\/.*/,
 		},
 		{

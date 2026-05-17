@@ -1,0 +1,75 @@
+/**
+ * The explanatory-rule guard -- the mechanical enforcement of the
+ * explanatory-surface requirement.
+ *
+ * For EVERY registered corpus adapter, this iterates every `CensusMetric`
+ * and every `CensusGap` and FAILS the build if any of them ships an empty
+ * `whatItMeasures` or `whyItMatters`. A bare number with no explanation is a
+ * spec violation; this test makes it impossible to merge one.
+ *
+ * It also asserts the overview helpers and registry stay consistent: 14
+ * corpora, ids unique, and each corpus reduces to a sane overview row.
+ */
+
+import { describe, expect, it } from 'vitest';
+import { CORPUS_REGISTRY, toOverviewRow } from '../index';
+import { censusAll } from '../server';
+
+const ALL_CENSUS = censusAll();
+
+describe('explanatory-rule guard', () => {
+	it('covers all 14 corpora with unique ids', () => {
+		expect(CORPUS_REGISTRY.length).toBe(14);
+		expect(ALL_CENSUS.length).toBe(14);
+		const ids = new Set(ALL_CENSUS.map((c) => c.id));
+		expect(ids.size).toBe(14);
+	});
+
+	it('ships exactly one full adapter (wx-catalog) in Phase 1', () => {
+		const full = ALL_CENSUS.filter((c) => c.mode === 'full');
+		expect(full.length).toBe(1);
+		expect(full[0].id).toBe('wx-catalog');
+	});
+
+	for (const census of ALL_CENSUS) {
+		describe(`corpus: ${census.id}`, () => {
+			it('has non-empty identity prose', () => {
+				expect(census.label.trim().length).toBeGreaterThan(0);
+				expect(census.whatItIs.trim().length).toBeGreaterThan(0);
+				expect(census.whyItExists.trim().length).toBeGreaterThan(0);
+				expect(census.location.trim().length).toBeGreaterThan(0);
+				expect(census.stateRule.trim().length).toBeGreaterThan(0);
+			});
+
+			it('every metric carries a non-empty what-it-measures and why-it-matters', () => {
+				for (const metric of census.metrics) {
+					expect(metric.whatItMeasures.trim().length, `${census.id}/${metric.key} whatItMeasures`).toBeGreaterThan(0);
+					expect(metric.whyItMatters.trim().length, `${census.id}/${metric.key} whyItMatters`).toBeGreaterThan(0);
+				}
+			});
+
+			it('every gap carries a non-empty what / why / do triad', () => {
+				for (const gap of census.gaps) {
+					expect(gap.whatItMeasures.trim().length, `${census.id} gap "${gap.title}" whatItMeasures`).toBeGreaterThan(0);
+					expect(gap.whyItMatters.trim().length, `${census.id} gap "${gap.title}" whyItMatters`).toBeGreaterThan(0);
+					expect(gap.whatToDo.text.trim().length, `${census.id} gap "${gap.title}" whatToDo`).toBeGreaterThan(0);
+				}
+			});
+
+			it('reduces to a coherent overview row', () => {
+				const row = toOverviewRow(census);
+				expect(row.id).toBe(census.id);
+				expect(row.health.label.trim().length).toBeGreaterThan(0);
+				expect(row.health.rule.trim().length).toBeGreaterThan(0);
+				if (census.mode === 'stub') {
+					// A stub corpus must NOT fabricate a count or a distribution.
+					expect(row.itemCount).toBeNull();
+					expect(row.stateDistribution.length).toBe(0);
+					expect(row.health.level).toBe('pending');
+				} else {
+					expect(row.itemCount).toBe(census.items.length);
+				}
+			});
+		});
+	}
+});

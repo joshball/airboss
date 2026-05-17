@@ -20,30 +20,30 @@ Read [spec.md](spec.md) + [design.md](design.md) first.
 
 ### Lib
 
-- [ ] `libs/content-census/` scaffold -- `package.json`, runtime barrel + `/server` barrel
-- [ ] `src/types.ts` -- `CorpusCensus`, `CensusItem`, `CensusMetric`, `CensusGap`, `ContentIntent` (browser-safe)
-- [ ] `src/registry.ts` -- the adapter registry; lists all 14 corpus ids
-- [ ] `src/adapters/wx-catalog.server.ts` -- the FULL reference adapter (inventory + derived state + explained metrics + gap view + next)
-- [ ] `src/adapters/_stub.server.ts` -- the honest "drill-down pending" placeholder adapter for the other 13
-- [ ] Unit tests: wx-catalog adapter counts match `catalog.json` / `scenario-matches.json`; explanatory-rule guard (every metric/gap has non-empty what/why)
+- [x] `libs/content-census/` scaffold -- `package.json`, runtime barrel + `/server` barrel
+- [x] `src/types.ts` -- `CorpusCensus`, `CensusItem`, `CensusMetric`, `CensusGap`, `ContentIntent` (browser-safe)
+- [x] `src/registry.ts` -- the adapter registry; lists all 14 corpus ids
+- [x] `src/adapters/wx-catalog.server.ts` -- the FULL reference adapter (inventory + derived state + explained metrics + gap view + next)
+- [x] `src/adapters/_stub.server.ts` -- the honest "drill-down pending" placeholder adapter for the other 13
+- [x] Unit tests: wx-catalog adapter counts match `catalog.json` / `scenario-matches.json`; explanatory-rule guard (every metric/gap has non-empty what/why)
 
 ### Routes
 
-- [ ] `ROUTES.CONTENT_CENSUS` + `ROUTES.CONTENT_CENSUS_CORPUS(id)` in `libs/constants/src/routes.ts`
-- [ ] `apps/hangar/src/routes/(app)/content/+page.server.ts` + `+page.svelte` -- the overview census
-- [ ] `apps/hangar/src/routes/(app)/content/[corpus]/+page.server.ts` + `+page.svelte` -- the generic drill-down
-- [ ] Intro prose on `/content`; overview prose on the drill-down (what/why/links)
-- [ ] Cross-link to/from `/platform` (the platform dashboard)
+- [x] `ROUTES.CONTENT_CENSUS` + `ROUTES.CONTENT_CENSUS_CORPUS(id)` in `libs/constants/src/routes.ts`
+- [x] `apps/hangar/src/routes/(app)/content/+page.server.ts` + `+page.svelte` -- the overview census
+- [x] `apps/hangar/src/routes/(app)/content/[corpus]/+page.server.ts` + `+page.svelte` -- the generic drill-down
+- [x] Intro prose on `/content`; overview prose on the drill-down (what/why/links)
+- [x] Cross-link to/from the platform dashboard -- linked to/from `/roadmap` (the shipped process-metadata dashboard; the `hangar-platform-dashboard` `/platform` route the spec names does not exist in the repo, so `/roadmap` is the correct sibling).
 
 ### ADR
 
-- [ ] Author the "Content-intent frontmatter" ADR -- `content_status` + `intent` block schema, per-corpus rollout order, lint-guard design. Status `proposed`, ready for human approval.
+- [x] Author the "Content-intent frontmatter" ADR -- `content_status` + `intent` block schema, per-corpus rollout order, lint-guard design. Status `proposed`, ready for human approval. Shipped as ADR 028.
 
 ### Verify
 
-- [ ] `bun run check` clean
-- [ ] e2e smoke: `/content` (14 rows), `/content/wx-catalog` (inventory + gap view + explanation text)
-- [ ] Manual: reader-with-no-context can explain the wx-catalog numbers
+- [x] `bun run check` clean
+- [x] e2e smoke: `/content` (14 rows), `/content/wx-catalog` (inventory + gap view + explanation text)
+- [ ] Manual: reader-with-no-context can explain the wx-catalog numbers (dispatcher / user verifies in a real browser before merge)
 
 ## Phase 2 -- Breadth pass (real Layer-1 adapter for all 13 remaining corpora)
 

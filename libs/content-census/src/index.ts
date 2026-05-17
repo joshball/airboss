@@ -11,6 +11,13 @@
  * the adapters from `@ab/content-census/server`.
  */
 
+export { corpusHealth, plannedWorkCount, stateDistribution, toOverviewRow } from './overview';
+export {
+	CORPUS_IDS,
+	CORPUS_REGISTRY,
+	type CorpusDescriptor,
+	type CorpusId,
+} from './registry';
 export type {
 	CensusGap,
 	CensusHealth,
@@ -23,12 +30,3 @@ export type {
 	CorpusCensus,
 	DocLink,
 } from './types';
-
-export { corpusHealth, plannedWorkCount, stateDistribution, toOverviewRow } from './overview';
-
-export {
-	CORPUS_IDS,
-	CORPUS_REGISTRY,
-	type CorpusDescriptor,
-	type CorpusId,
-} from './registry';
