@@ -104,13 +104,18 @@ export interface CensusNextItem {
 /**
  * The render mode of a corpus adapter.
  *
- * `full` -- a real reference adapter (wx-catalog in Phase 1): real
- *   inventory, real metrics, real gap view, real next-list.
- * `stub` -- the honest placeholder adapter (the other 13 corpora in
- *   Phase 1): the corpus name + location + a labelled "pending" state.
- *   It fabricates nothing except the explicit "pending" label.
+ * `full` -- a complete reference adapter (wx-catalog): real inventory, real
+ *   metrics, a real authored gap view, and a real value-ranked next-list.
+ * `census` -- a real Layer-1 derived-state adapter (the Phase-2 corpora):
+ *   real inventory, real derived state, real explained metrics. Its gap
+ *   view, intent view, and next-list are honest, labelled Phase-3
+ *   placeholders -- the corpus has a real census, but Layer-2 authored
+ *   intent has not been written for it yet. It fabricates no gaps.
+ * `stub` -- the honest placeholder adapter (a corpus with no real adapter
+ *   yet): the corpus name + location + a labelled "pending" state. It
+ *   fabricates nothing except the explicit "pending" label.
  */
-export type CensusMode = 'full' | 'stub';
+export type CensusMode = 'full' | 'census' | 'stub';
 
 /** A single managed-content corpus, fully described for the dashboard. */
 export interface CorpusCensus {
@@ -143,6 +148,14 @@ export interface CorpusCensus {
 	 * of real data, plus the link to the WP that tracks the real adapter.
 	 */
 	pending?: { message: string; href: string };
+	/**
+	 * Set only on a `census`-mode corpus: the honest, labelled placeholder
+	 * for Layer 2 (authored intent) and the real gap view / next-list. The
+	 * corpus has a real Layer-1 census; its gap view and intent view are
+	 * deferred to Phase 3 of the content-census work package. Rendered in
+	 * place of fabricated gaps -- the gaps array stays empty.
+	 */
+	layerTwoPending?: { message: string; href: string };
 }
 
 /** A row on the `/content` overview -- a corpus reduced to its headline facts. */
@@ -163,8 +176,14 @@ export interface CensusOverviewRow {
 
 /** A labelled health signal with the rule that produced it spelled out. */
 export interface CensusHealth {
-	/** `healthy` | `attention` | `pending` -- the level. */
-	level: 'healthy' | 'attention' | 'pending';
+	/**
+	 * `healthy` -- a full adapter found no structural gaps.
+	 * `attention` -- a full adapter found one or more structural gaps.
+	 * `surveyed` -- a `census`-mode adapter has a real Layer-1 census but its
+	 *   gap view is Phase 3; no structural-gap judgement can be made yet.
+	 * `pending` -- a stub corpus with no real adapter at all.
+	 */
+	level: 'healthy' | 'attention' | 'surveyed' | 'pending';
 	/** Short label shown next to the level, e.g. "Needs attention". */
 	label: string;
 	/** The rule, verbatim -- shown in a tooltip so the signal is never opaque. */

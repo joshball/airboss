@@ -50,20 +50,27 @@ Read [spec.md](spec.md) + [design.md](design.md) first.
 One sub-task per corpus -- each is a real derived-state adapter (inventory + states +
 explained metrics); gap/intent/next may stay honest placeholders.
 
-- [ ] Knowledge nodes adapter
-- [ ] Cards adapter
+- [x] Knowledge nodes adapter -- complete / draft / skeleton by authored `:::phase` count
+- [x] Cards adapter -- rich / thin / none by per-node `:::cards` count
 - [ ] wx-engine scenarios adapter
-- [ ] Regulations course adapter
+- [x] Regulations course adapter -- full / partial by modality + lesson-authoring
 - [ ] Handbooks adapter
 - [ ] ACS adapter
 - [ ] Source registry adapter
 - [ ] Help library + glossary adapter
-- [ ] Vision / PRD adapter
-- [ ] Work packages adapter (links to `/platform`, does not re-render)
-- [ ] ADR adapter (links to `/platform`)
+- [x] Vision / PRD adapter -- fleshed-out / outline / stub by `prd_depth` frontmatter
+- [x] Work packages adapter (links to `/roadmap`, does not re-render)
+- [x] ADR adapter (links to `/roadmap`)
 - [ ] wx charts / symbology adapter
 - [ ] Sim scenarios / models adapter
 - [ ] `bun run track content` -- the same census in the terminal
+
+Phase-2 introduced a `census` render mode (real Layer-1 census, gap view / intent
+deferred to Phase 3). A `census`-mode corpus carries a real inventory + explained
+metrics with `gaps: []` and an honest, labelled `layerTwoPending` placeholder. The
+six markdown corpora above marked `[x]` ship in the first Phase-2 PR; the remaining
+seven (wx-scenarios, handbooks, ACS, sources, glossary, wx-charts, sim-content)
+ship alongside in the parallel Phase-2 PR.
 
 ## Phase 3 -- Depth, per corpus (Layer 2 + real gap/next)
 

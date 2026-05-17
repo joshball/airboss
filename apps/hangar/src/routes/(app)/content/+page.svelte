@@ -20,6 +20,7 @@ let { data }: { data: PageData } = $props();
 
 const rows: CensusOverviewRow[] = $derived(data.rows);
 const fullCount = $derived(rows.filter((row) => row.mode === 'full').length);
+const censusCount = $derived(rows.filter((row) => row.mode === 'census').length);
 const stubCount = $derived(rows.filter((row) => row.mode === 'stub').length);
 
 /** A stable, capped colour-free distribution bar -- each state is a labelled segment. */
@@ -48,6 +49,7 @@ function distributionTitle(row: CensusOverviewRow): string {
 		<div class="counts" aria-label="Counts">
 			<span class="count"><strong>{rows.length}</strong> corpora</span>
 			<span class="count"><strong>{fullCount}</strong> full</span>
+			<span class="count"><strong>{censusCount}</strong> Layer 1</span>
 			<span class="count"><strong>{stubCount}</strong> pending</span>
 		</div>
 	</header>
@@ -72,9 +74,10 @@ function distributionTitle(row: CensusOverviewRow): string {
 			</li>
 		</ol>
 		<p class="phase-note">
-			Phase 1 ships the <strong>encoded-text catalog</strong> as the full reference drill-down. The other 13
-			corpora show an honest "census pending" placeholder -- no fabricated counts -- until their Phase 2
-			adapters land.
+			The <strong>encoded-text catalog</strong> is the full reference drill-down, with a real authored gap
+			view. Corpora marked <strong>Layer 1</strong> have a real derived-state census -- inventory, state, and
+			explained metrics -- with their gap view and authored intent deferred to Phase 3. Any remaining corpus
+			shows an honest "census pending" placeholder -- no fabricated counts -- until its adapter lands.
 		</p>
 	</section>
 
@@ -323,6 +326,11 @@ function distributionTitle(row: CensusOverviewRow): string {
 	.health[data-level='attention'] {
 		background: var(--signal-warning-wash);
 		color: var(--signal-warning-ink);
+	}
+
+	.health[data-level='surveyed'] {
+		background: var(--signal-info-wash);
+		color: var(--signal-info-ink);
 	}
 
 	.health[data-level='pending'] {

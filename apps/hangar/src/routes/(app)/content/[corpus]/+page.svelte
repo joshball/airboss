@@ -26,6 +26,8 @@ let { data }: { data: PageData } = $props();
 
 const census: CorpusCensus = $derived(data.census);
 const isStub = $derived(census.mode === 'stub');
+/** `census` mode: a real Layer-1 census whose gap view / intent are Phase 3. */
+const isLayerOneOnly = $derived(census.mode === 'census');
 
 /** Sort the next-list so `high`-value items lead. */
 const valueRank: Record<string, number> = { high: 0, standard: 1, low: 2 };
@@ -50,6 +52,8 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 		<h1>{census.label}</h1>
 		{#if isStub}
 			<span class="mode-tag mode-stub">Census pending</span>
+		{:else if isLayerOneOnly}
+			<span class="mode-tag mode-census">Layer 1 census</span>
 		{:else}
 			<span class="mode-tag mode-full">Full census</span>
 		{/if}
@@ -131,7 +135,17 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 		{/if}
 
 		<!-- Gap view: each gap fully explained, severity-tagged. -->
-		{#if census.gaps.length > 0}
+		{#if census.gaps.length === 0 && isLayerOneOnly && census.layerTwoPending}
+			<!-- Honest, labelled Phase-3 placeholder -- no fabricated gaps. -->
+			<section class="layer-two-pending" aria-label="Gap view">
+				<h2>Gap view</h2>
+				<p>{census.layerTwoPending.message}</p>
+				<p>
+					<a href={census.layerTwoPending.href}>See the content-census Phase 3 tasks</a> for the schedule of this
+					corpus's authored gap view.
+				</p>
+			</section>
+		{:else if census.gaps.length > 0}
 			<section class="gaps" aria-label="Gap view">
 				<h2>Gap view</h2>
 				<div class="gap-list">
@@ -305,6 +319,11 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 		color: var(--signal-success-ink);
 	}
 
+	.mode-census {
+		background: var(--signal-info-wash);
+		color: var(--signal-info-ink);
+	}
+
 	.mode-stub {
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
@@ -408,21 +427,24 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 		font-size: var(--type-ui-caption-size);
 	}
 
-	.pending {
+	.pending,
+	.layer-two-pending {
 		padding: var(--space-md);
 		border: 1px dashed var(--edge-default);
 		border-radius: var(--radius-md);
 		background: var(--surface-sunken);
 	}
 
-	.pending p {
+	.pending p,
+	.layer-two-pending p {
 		margin: 0;
 		color: var(--ink-body);
 		font-size: var(--type-ui-label-size);
 		max-width: 72ch;
 	}
 
-	.pending a {
+	.pending a,
+	.layer-two-pending a {
 		color: var(--link-default);
 	}
 

@@ -335,6 +335,7 @@
       "name": "@ab/content-census",
       "dependencies": {
         "@ab/constants": "workspace:*",
+        "yaml": "catalog:",
       },
       "devDependencies": {
         "vitest": "catalog:",
