@@ -7,7 +7,7 @@
  * the document's `publication_date` against the known-latest FAA edition
  * recorded in `ACS_KNOWN_LATEST_PUBLICATION`.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

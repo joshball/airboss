@@ -12,7 +12,7 @@
  *   - `thin` -- the deck has one or more cards but fewer than the threshold.
  *   - `none` -- the node carries no `:::cards` block, or an empty one.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode).
+ * Gap view / intent view are Phase-3 placeholders (`census` mode).
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */

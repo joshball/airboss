@@ -14,7 +14,7 @@
  *
  * When the Svelte plugin is wired into vitest (separate infra work), these
  * can grow into real render assertions; until then the contract above is
- * what keeps these components honest.
+ * what keeps these components accurate.
  */
 
 import { readFileSync } from 'node:fs';

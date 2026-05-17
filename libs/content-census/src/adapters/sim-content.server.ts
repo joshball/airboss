@@ -23,7 +23,7 @@
  * It also reports the FDM aircraft-model count as a metric, since the spec
  * scopes the corpus as "sim scenarios / models".
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

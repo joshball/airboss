@@ -85,7 +85,7 @@ export const load: PageServerLoad = async (event) => {
 		// Per the 2026-05-06 review §N, NULL = pending download. The earlier
 		// `'pending-download'` sentinel string was dropped along with the
 		// NOT NULL constraint; nullable + the pair CHECK on the schema is the
-		// honest representation.
+		// accurate representation.
 		const isDownloaded = row.checksum !== null;
 		const state: 'pending' | 'downloaded' | 'extracted' = !isDownloaded
 			? 'pending'

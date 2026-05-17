@@ -290,7 +290,7 @@ $effect(() => {
 
 	.errors h2 {
 		margin: 0 0 var(--space-xs);
-		font-size: var(--type-ui-section-size, 1.125rem);
+		font-size: var(--type-heading-3-size);
 		color: var(--signal-warning-ink);
 	}
 
@@ -430,7 +430,7 @@ $effect(() => {
 
 	.mutate-hint h3 {
 		margin: 0;
-		font-size: var(--type-ui-section-size, 1.125rem);
+		font-size: var(--type-heading-3-size);
 	}
 
 	.mutate-hint pre {

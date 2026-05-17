@@ -15,7 +15,7 @@
  * (how many WPs exist, at what status) and links to `/roadmap` for the
  * process drill-down rather than duplicating it.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode).
+ * Gap view / intent view are Phase-3 placeholders (`census` mode).
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */

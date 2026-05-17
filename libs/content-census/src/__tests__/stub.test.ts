@@ -1,5 +1,5 @@
 /**
- * The honest stub adapter -- placeholder honesty.
+ * The placeholder stub adapter -- design.md "Placeholder honesty".
  *
  * Verifies the stub adapter returns the corpus's real name + location and an
  * explicit, labelled "pending" state -- and that it fabricates nothing else:

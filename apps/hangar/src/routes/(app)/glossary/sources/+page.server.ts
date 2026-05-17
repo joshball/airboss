@@ -2,9 +2,11 @@ import { requireRole } from '@ab/auth';
 import { listSources } from '@ab/bc-hangar/server';
 import { JOB_KINDS, QUERY_PARAMS, type ReferenceSourceType, ROLES, ROUTES, SOURCE_TYPE_VALUES } from '@ab/constants';
 import { enqueueJob } from '@ab/hangar-jobs';
-import { narrow } from '@ab/utils';
+import { createLogger, narrow } from '@ab/utils';
 import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+
+const log = createLogger('hangar:glossary-sources');
 
 const PAGE_SIZE = 25;
 
@@ -65,7 +67,14 @@ export const actions: Actions = {
 			redirect(303, ROUTES.HANGAR_JOB_DETAIL(job.id));
 		} catch (err) {
 			if (isRedirect(err)) throw err;
-			return fail(500, { error: err instanceof Error ? err.message : 'failed to enqueue sync job' });
+			// Never leak the raw error to the client -- log it for the operator,
+			// return a fixed user string.
+			log.error(
+				'enqueue sync job failed',
+				{ requestId: event.locals.requestId, userId: user.id },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(500, { error: 'Could not start the sync job. Please try again.' });
 		}
 	},
 };

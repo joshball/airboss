@@ -10,7 +10,7 @@
  * The dispatch map below is the single place that wires a corpus id to its
  * adapter. wx-catalog shipped the FULL Phase-1 reference adapter; Phase 2
  * adds real Layer-1 derived-state adapters for the remaining 13 corpora. Any
- * corpus id absent from `CENSUS_ADAPTERS` falls through to the honest stub.
+ * corpus id absent from `CENSUS_ADAPTERS` falls through to the placeholder stub.
  */
 
 import { stubCensus } from './adapters/_stub.server';
@@ -94,7 +94,7 @@ function descriptorFor(id: CorpusId): CorpusDescriptor {
 /**
  * Produce the `CorpusCensus` for a single corpus. A corpus with a real
  * adapter wired into `CENSUS_ADAPTERS` gets it; every other corpus gets the
- * honest stub.
+ * placeholder stub.
  */
 export function censusFor(id: CorpusId): CorpusCensus {
 	const adapter = CENSUS_ADAPTERS[id];

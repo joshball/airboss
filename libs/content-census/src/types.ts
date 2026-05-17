@@ -108,12 +108,12 @@ export interface CensusNextItem {
  *   metrics, a real authored gap view, and a real value-ranked next-list.
  * `census` -- a real Layer-1 derived-state adapter (the Phase-2 corpora):
  *   real inventory, real derived state, real explained metrics. Its gap
- *   view, intent view, and next-list are honest, labelled Phase-3
- *   placeholders -- the corpus has a real census, but Layer-2 authored
- *   intent has not been written for it yet. It fabricates no gaps.
- * `stub` -- the honest placeholder adapter (a corpus with no real adapter
- *   yet): the corpus name + location + a labelled "pending" state. It
- *   fabricates nothing except the explicit "pending" label.
+ *   view, intent view, and next-list are labelled Phase-3 placeholders --
+ *   the corpus has a real census, but Layer-2 authored intent has not been
+ *   written for it yet. It fabricates no gaps.
+ * `stub` -- the placeholder adapter (a corpus with no real adapter yet):
+ *   the corpus name + location + a labelled "pending" state. It fabricates
+ *   nothing except the explicit "pending" label.
  */
 export type CensusMode = 'full' | 'census' | 'stub';
 
@@ -144,12 +144,12 @@ export interface CorpusCensus {
 	/** Synthesised, value-ranked "what to do next". Empty for a stub corpus. */
 	next: CensusNextItem[];
 	/**
-	 * Set only on a stub corpus: the honest "pending" message shown in place
+	 * Set only on a stub corpus: the labelled "pending" message shown in place
 	 * of real data, plus the link to the WP that tracks the real adapter.
 	 */
 	pending?: { message: string; href: string };
 	/**
-	 * Set only on a `census`-mode corpus: the honest, labelled placeholder
+	 * Set only on a `census`-mode corpus: the labelled placeholder
 	 * for Layer 2 (authored intent) and the real gap view / next-list. The
 	 * corpus has a real Layer-1 census; its gap view and intent view are
 	 * deferred to Phase 3 of the content-census work package. Rendered in

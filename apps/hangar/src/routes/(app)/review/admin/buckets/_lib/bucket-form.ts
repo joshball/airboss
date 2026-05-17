@@ -16,7 +16,7 @@
  *
  * Returns either a parsed `{ name, kindId, sortOrder, filterCriteria }`
  * payload (with criteria already validated through
- * {@link validateBucketFilterCriteria}, so the type signature is honest) or
+ * {@link validateBucketFilterCriteria}, so the type signature is accurate) or
  * a `FormErrors` record so the route can `fail(400, ...)` without
  * re-deriving the field map.
  */
@@ -114,7 +114,7 @@ export function parseBucketForm(values: BucketFormValues): BucketFormParsed | Bu
 				errors.advancedJson = 'Advanced JSON must be a JSON object.';
 			} else {
 				// Validate at the parser boundary so the success branch's type
-				// signature is honest -- `filterCriteria` is real
+				// signature is accurate -- `filterCriteria` is real
 				// `BucketFilterCriteria`, not an unchecked cast pushed forward
 				// to whichever caller happens to invoke
 				// `validateBucketFilterCriteria` next.

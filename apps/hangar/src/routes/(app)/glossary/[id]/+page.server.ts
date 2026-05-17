@@ -154,7 +154,7 @@ export const actions: Actions = {
 				});
 			}
 			if (err instanceof NotFoundError) {
-				return fail(404, { formError: err.message });
+				return fail(404, { formError: 'This reference no longer exists. It may have already been deleted.' });
 			}
 			log.error(
 				'softDeleteReference failed',

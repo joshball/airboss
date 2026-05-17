@@ -164,7 +164,7 @@ export const actions: Actions = {
 				});
 			}
 			if (err instanceof NotFoundError) {
-				return fail(404, { formError: err.message });
+				return fail(404, { formError: 'This source no longer exists. It may have already been deleted.' });
 			}
 			log.error(
 				'softDeleteSource failed',

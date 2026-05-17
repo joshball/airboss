@@ -31,7 +31,7 @@ export interface CorpusDescriptor {
 /**
  * All 14 corpora from spec.md's "Census scope" table. The `id` values are
  * the route segments; `wx-catalog` is the Phase-1 reference adapter and the
- * other 13 render through the honest stub adapter until Phase 2.
+ * other 13 render through the placeholder stub adapter until Phase 2.
  */
 export const CORPUS_REGISTRY = [
 	{

@@ -13,7 +13,7 @@
  *   - `partial` -- a modality is missing, the week has zero lessons, or one
  *     or more lesson files are still a skeleton (too thin to teach).
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode).
+ * Gap view / intent view are Phase-3 placeholders (`census` mode).
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
