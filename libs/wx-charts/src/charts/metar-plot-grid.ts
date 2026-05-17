@@ -368,7 +368,7 @@ function renderStationModelLegend(): string {
 			wind: { directionDeg: 270, speedKt: 25, gustKt: null, variable: false, calm: false },
 			visibilitySM: 4,
 			weather: ['-RA'],
-			clouds: [{ cover: 'OVC', heightFtAgl: 1500 }],
+			clouds: [{ cover: 'OVC', heightFtAgl: 1500, cloudType: null }],
 			tempC: 5,
 			dewpointC: 3,
 			altimeterInHg: 30.05,

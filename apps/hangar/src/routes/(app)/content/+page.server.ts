@@ -5,8 +5,8 @@
  * Calls every registered corpus adapter via `@ab/content-census/server`
  * (`censusAll()`), reduces each `CorpusCensus` to its headline overview row,
  * and returns the rows for the row-per-corpus table. wx-catalog has a full
- * Phase-1 reference adapter; the other 13 corpora render through the honest
- * stub adapter until Phase 2.
+ * Phase-1 reference adapter; the other 13 corpora render through the
+ * placeholder stub adapter until Phase 2.
  *
  * The adapters read the filesystem (`node:fs`); this file is server-only by
  * SvelteKit convention, so the `/server` import is safe and is excluded from

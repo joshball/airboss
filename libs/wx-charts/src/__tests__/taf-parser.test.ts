@@ -36,7 +36,7 @@ describe('parseTaf', () => {
 			calm: false,
 		});
 		expect(initial?.visibilitySM).toBeNull(); // P6SM is not a digit-shaped vis token; skipped.
-		expect(initial?.clouds).toEqual([{ cover: 'SCT', heightFtAgl: 8000 }]);
+		expect(initial?.clouds).toEqual([{ cover: 'SCT', heightFtAgl: 8000, cloudType: null }]);
 		const fm1 = p.periods[1];
 		expect(fm1?.kind).toBe('FM');
 		expect(fm1?.start).toMatch(/T21:00:00\.000Z$/);
@@ -72,7 +72,7 @@ describe('parseTaf', () => {
 		expect(prob1?.probability).toBe(30);
 		expect(prob1?.visibilitySM).toBe(4);
 		expect(prob1?.weather).toContain('-TSRA');
-		expect(prob1?.clouds).toEqual([{ cover: 'BKN', heightFtAgl: 4500 }]);
+		expect(prob1?.clouds).toEqual([{ cover: 'BKN', heightFtAgl: 4500, cloudType: 'CB' }]);
 		// Check change ordering: INITIAL precedes PROB30 (stays at validFrom),
 		// PROB30 carries explicit window 1019/1024.
 		const initial = p.periods[0];
@@ -119,7 +119,7 @@ describe('parseTaf', () => {
 		expect(becmg?.kind).toBe('BECMG');
 		expect(becmg?.start).toMatch(/T13:00:00\.000Z$/);
 		expect(becmg?.end).toMatch(/T15:00:00\.000Z$/);
-		expect(becmg?.clouds).toEqual([{ cover: 'SKC', heightFtAgl: null }]);
+		expect(becmg?.clouds).toEqual([{ cover: 'SKC', heightFtAgl: null, cloudType: null }]);
 	});
 
 	it('parses CAVOK in a TAF', () => {
@@ -150,7 +150,7 @@ describe('parseTaf', () => {
 		// HZ is a present-weather token and should be captured.
 		expect(initial?.weather).toEqual(['HZ']);
 		// WS group is silently skipped: it is neither a cloud layer nor a wx code.
-		expect(initial?.clouds).toEqual([{ cover: 'FEW', heightFtAgl: 2000 }]);
+		expect(initial?.clouds).toEqual([{ cover: 'FEW', heightFtAgl: 2000, cloudType: null }]);
 	});
 
 	it('parses VRB wind direction', () => {
@@ -170,7 +170,7 @@ describe('parseTaf', () => {
 		expect(p.periods).toHaveLength(3);
 		const initial = p.periods[0];
 		expect(initial?.wind?.directionDeg).toBe(230);
-		expect(initial?.clouds).toEqual([{ cover: 'BKN', heightFtAgl: 1500 }]);
+		expect(initial?.clouds).toEqual([{ cover: 'BKN', heightFtAgl: 1500, cloudType: null }]);
 	});
 
 	it('throws on missing station identifier', () => {

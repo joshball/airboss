@@ -8,10 +8,17 @@
 
 import { AUDIT_OPS } from '@ab/audit';
 import { auditWrite } from '@ab/audit/server';
-import { AUDIT_TARGETS, JOB_AUDIT_REASONS, JOB_LOG_STREAMS, JOB_STATUSES, type JobKind } from '@ab/constants';
+import {
+	AUDIT_TARGETS,
+	JOB_AUDIT_REASONS,
+	JOB_HEARTBEAT_STALE_MS,
+	JOB_LOG_STREAMS,
+	JOB_STATUSES,
+	type JobKind,
+} from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateHangarJobId, generateHangarJobLogId } from '@ab/utils';
-import { and, asc, desc, eq, gt, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, gt, isNull, lt, or, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { type HangarJobLogRow, type HangarJobRow, hangarJob, hangarJobLog } from './schema';
 
@@ -173,30 +180,41 @@ export async function appendJobLog(
 }
 
 /**
- * Mark any `running` jobs as `queued` with a `recovered` log line and an
- * audit row. Call on worker boot so a crashed process never leaves a
- * ghost running job. The audit row preserves the "every state transition
- * is audited" contract that audit-explorer relies on (chunk-6 correctness
- * major: orphaned-running recovery never updates audit log).
+ * Mark genuinely-orphaned `running` jobs as `queued` with a `recovered`
+ * log line and an audit row. Call on worker boot so a crashed process
+ * never leaves a ghost running job. The audit row preserves the "every
+ * state transition is audited" contract that audit-explorer relies on
+ * (chunk-6 correctness major: orphaned-running recovery never updates
+ * audit log).
+ *
+ * A row is "orphaned" only when its `lastHeartbeatAt` is null or older
+ * than `JOB_HEARTBEAT_STALE_MS`. A running row with a fresh heartbeat is
+ * owned by a LIVE worker -- another worker handle booting (the API
+ * supports multiple handles) must NOT steal it, or the job runs twice.
  *
  * The status flip + audit write per row run inside one transaction so a
  * crash mid-recovery never leaves an audit row orphaned of its job (or
- * vice versa).
+ * vice versa). The transaction's `WHERE` re-checks the staleness
+ * predicate so a heartbeat landing between the SELECT and the UPDATE
+ * still wins.
  */
 export async function recoverOrphanedRunning(db: Db = defaultDb): Promise<number> {
+	const staleBefore = new Date(Date.now() - JOB_HEARTBEAT_STALE_MS);
+	const orphanGate = or(isNull(hangarJob.lastHeartbeatAt), lt(hangarJob.lastHeartbeatAt, staleBefore));
 	const orphaned = await db
 		.select({ id: hangarJob.id, actorId: hangarJob.actorId, startedAt: hangarJob.startedAt })
 		.from(hangarJob)
-		.where(eq(hangarJob.status, JOB_STATUSES.RUNNING));
+		.where(and(eq(hangarJob.status, JOB_STATUSES.RUNNING), orphanGate));
 	if (orphaned.length === 0) return 0;
+	let recovered = 0;
 	for (const orphan of orphaned) {
-		await db.transaction(async (tx) => {
+		const wasRecovered = await db.transaction(async (tx) => {
 			const updated = await tx
 				.update(hangarJob)
 				.set({ status: JOB_STATUSES.QUEUED, startedAt: null, lastHeartbeatAt: null })
-				.where(and(eq(hangarJob.id, orphan.id), eq(hangarJob.status, JOB_STATUSES.RUNNING)))
+				.where(and(eq(hangarJob.id, orphan.id), eq(hangarJob.status, JOB_STATUSES.RUNNING), orphanGate))
 				.returning({ id: hangarJob.id });
-			if (updated.length === 0) return;
+			if (updated.length === 0) return false;
 			await auditWrite(
 				{
 					actorId: orphan.actorId,
@@ -211,8 +229,18 @@ export async function recoverOrphanedRunning(db: Db = defaultDb): Promise<number
 				},
 				tx,
 			);
+			return true;
 		});
-		await appendJobLog({ jobId: orphan.id, stream: JOB_LOG_STREAMS.EVENT, line: 'recovered from worker restart' }, db);
+		// Only log the recovery event for rows the transaction actually
+		// re-queued; a row whose heartbeat refreshed between the SELECT and
+		// the UPDATE is owned by a live worker and left untouched.
+		if (wasRecovered) {
+			recovered += 1;
+			await appendJobLog(
+				{ jobId: orphan.id, stream: JOB_LOG_STREAMS.EVENT, line: 'recovered from worker restart' },
+				db,
+			);
+		}
 	}
-	return orphaned.length;
+	return recovered;
 }

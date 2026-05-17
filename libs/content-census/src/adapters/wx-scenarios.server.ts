@@ -7,7 +7,7 @@
  * map: a scenario is contributing when it reproduced at least one catalog
  * example, dormant when its coverage list is empty.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

@@ -62,7 +62,7 @@ describe('explanatory-rule guard', () => {
 			// ... but does NOT fabricate gaps or a next-list ...
 			expect(census.gaps.length, `${census.id} gaps`).toBe(0);
 			expect(census.next.length, `${census.id} next`).toBe(0);
-			// ... and carries the honest, labelled Phase-3 placeholder instead.
+			// ... and carries the labelled Phase-3 placeholder instead.
 			expect(census.layerTwoPending, `${census.id} layerTwoPending`).toBeDefined();
 			expect(census.layerTwoPending?.message.trim().length).toBeGreaterThan(0);
 			expect(census.layerTwoPending?.href.trim().length).toBeGreaterThan(0);

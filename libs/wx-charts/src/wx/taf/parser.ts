@@ -38,7 +38,7 @@ const WIND_REGEX = /^(VRB|\d{3})(\d{2,3})(?:G(\d{2,3}))?(KT|MPS)$/;
 const VIS_FRACTION_REGEX = /^M?\d+(?:\/\d+)?SM$/;
 const VIS_WHOLE_REGEX = /^\d+$/;
 const VIS_FRACTION_FOLLOW_REGEX = /^\d+\/\d+SM$/;
-const CLOUD_REGEX = /^(SKC|CLR|NSC|FEW|SCT|BKN|OVC)(\d{3})?(?:CB|TCU)?$/;
+const CLOUD_REGEX = /^(SKC|CLR|NSC|FEW|SCT|BKN|OVC)(\d{3})?(CB|TCU)?$/;
 const VV_REGEX = /^VV(\d{3})$/;
 const WX_TOKEN_REGEX =
 	/^([+-]|VC|RE)?(MI|PR|BC|DR|BL|SH|TS|FZ)?(DZ|RA|SN|SG|IC|PL|GR|GS|UP|BR|FG|FU|VA|DU|SA|HZ|PY|PO|SQ|FC|SS|DS)+$/;
@@ -471,12 +471,13 @@ function decodeBody(tokens: readonly string[], rawForWarnings: string, warnings:
 		if (cm !== null) {
 			const cover = cm[1] as SkyCover;
 			const heightFtAgl = cm[2] !== undefined ? Number(cm[2]) * 100 : null;
-			clouds.push({ cover, heightFtAgl });
+			const cloudType = cm[3] === 'CB' || cm[3] === 'TCU' ? cm[3] : null;
+			clouds.push({ cover, heightFtAgl, cloudType });
 			continue;
 		}
 		const vvm = t.match(VV_REGEX);
 		if (vvm !== null) {
-			clouds.push({ cover: 'VV', heightFtAgl: Number(vvm[1]) * 100 });
+			clouds.push({ cover: 'VV', heightFtAgl: Number(vvm[1]) * 100, cloudType: null });
 			continue;
 		}
 		if (WX_TOKEN_REGEX.test(t)) {

@@ -66,7 +66,7 @@ describe('adrsCensus', () => {
 		expect(metric?.value).toBe(`${live} / ${census.items.length}`);
 	});
 
-	it('carries no fabricated gaps and an honest Layer-2 placeholder', () => {
+	it('carries no fabricated gaps and a labelled Layer-2 placeholder', () => {
 		expect(census.gaps.length).toBe(0);
 		expect(census.layerTwoPending).toBeDefined();
 	});

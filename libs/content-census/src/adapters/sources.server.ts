@@ -9,7 +9,7 @@
  * registry `manifest_path` resolves to a real file on disk, `orphan` when
  * the registry names a manifest that is missing.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

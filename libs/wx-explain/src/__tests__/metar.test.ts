@@ -4,6 +4,7 @@
  */
 
 import { parseMetar } from '@ab/wx-charts';
+import { generateScenario } from '@ab/wx-engine/server';
 import { describe, expect, it } from 'vitest';
 import { explainMetar } from '../metar';
 import { metarExamples } from './catalog-fixtures';
@@ -67,5 +68,29 @@ describe('explainMetar', () => {
 		const annotations = explainMetar(parsed);
 		const tsra = annotations.find((a) => a.token === '+TSRA');
 		expect(tsra?.decode).toMatch(/heavy.*thunderstorm/);
+	});
+
+	it('tags a CB cloud layer with the sky-cb family and a cumulonimbus decode', () => {
+		const parsed = parseMetar('KOKC 122253Z 17012G24KT 4SM +TSRA BKN025CB OVC050 24/22 A2978');
+		const annotations = explainMetar(parsed);
+		const cb = annotations.find((a) => a.family === 'sky-cb');
+		expect(cb).toMatchObject({ token: 'BKN025CB' });
+		expect(cb?.decode).toMatch(/cumulonimbus/i);
+	});
+
+	it('attaches the convective why line to a station under a cell (engine pipeline)', () => {
+		// End-to-end: a real generated scenario whose convective stations
+		// emit `+TSRA BKN...CB`. The truth-aware `why` must fire for both the
+		// TS weather token and the CB cloud layer.
+		const bundle = generateScenario({ kind: 'summer-thunderstorms-tx' });
+		const convectiveMetar = bundle.products.metars.find((m) => m.raw.includes('TS'));
+		expect(convectiveMetar).toBeDefined();
+		if (!convectiveMetar) throw new Error('no convective METAR in summer-thunderstorms-tx');
+		const parsed = parseMetar(convectiveMetar.raw);
+		const annotations = explainMetar(parsed, bundle.truth);
+		const tsWhy = annotations.find((a) => a.token.includes('TS') && a.why !== undefined);
+		expect(tsWhy?.why).toMatch(/convective cell/i);
+		const cbWhy = annotations.find((a) => a.family === 'sky-cb' && a.why !== undefined);
+		expect(cbWhy?.why).toMatch(/convective cell/i);
 	});
 });

@@ -8,7 +8,7 @@
  * sections carries real extracted body content, `partial` when one or more
  * sections were reached by the extractor but yielded no body content.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

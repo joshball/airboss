@@ -17,7 +17,7 @@
  *   - `stub`        -- no recognised `prd_depth`, or a `status` that names a
  *     research stub / spike: the idea exists but the doc is a placeholder.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode).
+ * Gap view / intent view are Phase-3 placeholders (`census` mode).
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */

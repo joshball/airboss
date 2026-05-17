@@ -16,7 +16,7 @@
  * This corpus is process metadata that also surfaces on the `/roadmap`
  * dashboard; the census links there for the actionable process view.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode).
+ * Gap view / intent view are Phase-3 placeholders (`census` mode).
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */

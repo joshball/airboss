@@ -38,7 +38,7 @@ export const load: PageServerLoad = async (event) => {
 		listRecentJobsForTarget(event.params.id, RECENT_JOBS_LIMIT),
 		// Surfaces "another job already in flight for this source" so the
 		// operator doesn't fire-and-wait. Worker serialises by targetId
-		// regardless; the BC pre-check just keeps the UI honest.
+		// regardless; the BC pre-check just keeps the UI accurate.
 		getActiveJobForTarget(event.params.id),
 		// On-disk snapshot for missing-file / size-match indicators on the
 		// page; null on stat-failure so the consumer renders the empty

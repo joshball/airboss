@@ -22,7 +22,6 @@
  * - Recent weather (RE prefix) -- ignored.
  * - Wind shear / variable wind directions (`310V040`) -- variable
  *   secondary direction discarded; primary direction kept.
- * - Cloud type tags after layer (`CB`, `TCU`) -- discarded.
  *
  * # Browser safety
  *
@@ -48,6 +47,13 @@ export interface CloudLayer {
 	cover: SkyCover;
 	/** Layer base in feet AGL; `null` for SKC/CLR/NSC and missing/unparseable heights. */
 	heightFtAgl: number | null;
+	/**
+	 * Cloud-type tag appended to the layer group: `CB` (cumulonimbus) or
+	 * `TCU` (towering cumulus). `null` when no tag was reported. Convective
+	 * cloud tags drive the truth-aware synoptic `why` annotation in
+	 * `@ab/wx-explain`; the station-model renderer can also surface them.
+	 */
+	cloudType: 'CB' | 'TCU' | null;
 }
 
 export interface ParsedMetar {

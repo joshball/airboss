@@ -500,7 +500,7 @@ const anyFilterActive = $derived(
 
 	.group h2 {
 		margin: 0;
-		font-size: var(--type-ui-section-size, 1.25rem);
+		font-size: var(--type-heading-3-size);
 		display: flex;
 		gap: var(--space-2xs);
 		align-items: baseline;

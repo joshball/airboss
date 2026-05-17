@@ -49,7 +49,7 @@ function expectValidCensusMode(census: CorpusCensus, id: string): void {
 	// A census-mode adapter fabricates no gaps and no next-list ...
 	expect(census.gaps.length).toBe(0);
 	expect(census.next.length).toBe(0);
-	// ... and carries the honest, labelled Phase-3 Layer-2 placeholder instead.
+	// ... and carries the labelled Phase-3 Layer-2 placeholder instead.
 	expect(census.layerTwoPending).toBeDefined();
 	expect(census.layerTwoPending?.message.trim().length).toBeGreaterThan(0);
 	expect(census.layerTwoPending?.href.trim().length).toBeGreaterThan(0);

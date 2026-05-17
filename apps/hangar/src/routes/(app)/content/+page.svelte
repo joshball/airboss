@@ -77,7 +77,7 @@ function distributionTitle(row: CensusOverviewRow): string {
 			The <strong>encoded-text catalog</strong> is the full reference drill-down, with a real authored gap
 			view. Corpora marked <strong>Layer 1</strong> have a real derived-state census -- inventory, state, and
 			explained metrics -- with their gap view and authored intent deferred to Phase 3. Any remaining corpus
-			shows an honest "census pending" placeholder -- no fabricated counts -- until its adapter lands.
+			shows a labelled "census pending" placeholder -- no fabricated counts -- until its adapter lands.
 		</p>
 	</section>
 
@@ -196,7 +196,7 @@ function distributionTitle(row: CensusOverviewRow): string {
 
 	.intro h2 {
 		margin: 0;
-		font-size: var(--type-ui-section-size, 1.25rem);
+		font-size: var(--type-heading-3-size);
 	}
 
 	.intro p {

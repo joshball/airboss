@@ -29,7 +29,7 @@
  * failure that a human can act on.
  */
 
-import { AIRMET_FAMILIES } from '@ab/constants';
+import { AIRMET_FAMILIES, WX_DEFAULT_TAF_VALID_HOURS, WX_TEMPORAL_MS_PER_HOUR } from '@ab/constants';
 import type { ScenarioBundle } from '../engine';
 import type { AirmetAdvisory } from '../products/types';
 import { distanceKm, pressureGradientMbPer100km, samplePressureMb } from '../truth/geometry';
@@ -261,9 +261,9 @@ function checkTafFmVsFront(bundle: ScenarioBundle, truth: TruthModel): RuleResul
 	const fronts = truth.synoptic.fronts;
 	if (fronts.length === 0) return { checked, issues };
 
-	const validHours = truth.tafValidHours ?? 12;
+	const validHours = truth.tafValidHours ?? WX_DEFAULT_TAF_VALID_HOURS;
 	const validAt = new Date(truth.validAt).getTime();
-	const validUntil = validAt + (validHours + TAF_FM_HOUR_TOLERANCE) * 3_600_000;
+	const validUntil = validAt + (validHours + TAF_FM_HOUR_TOLERANCE) * WX_TEMPORAL_MS_PER_HOUR;
 
 	// The check is one-directional: every FM group emitted by the engine must
 	// correspond to a projected front-arrival (within tolerance) at the
@@ -298,7 +298,7 @@ function checkTafFmVsFront(bundle: ScenarioBundle, truth: TruthModel): RuleResul
 			// months away from the system clock will see the parser's
 			// day-of-month drift -- the hour-of-window comparison sidesteps
 			// that.
-			const arrivalHrFromValid = (arrivalMs - validAt) / 3_600_000;
+			const arrivalHrFromValid = (arrivalMs - validAt) / WX_TEMPORAL_MS_PER_HOUR;
 			const fmParsed = new Date(fm.start);
 			const fmHr = fmParsed.getUTCDate() * 24 + fmParsed.getUTCHours();
 			const validAtHr = validAtParsed.getUTCDate() * 24 + validAtParsed.getUTCHours();
@@ -362,7 +362,7 @@ function projectedFrontArrivalMs(
 		if (dot <= 0) continue; // station is behind the moving front
 
 		const arrivalHr = closest.distanceKm / motionSpeedKmHr;
-		const arrivalMs = validAt + arrivalHr * 3_600_000;
+		const arrivalMs = validAt + arrivalHr * WX_TEMPORAL_MS_PER_HOUR;
 		if (arrivalMs > validUntil) continue; // outside window
 		if (best === null || arrivalMs < best) best = arrivalMs;
 	}

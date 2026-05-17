@@ -154,17 +154,33 @@ function describeClouds(parsed: ParsedMetar): TokenAnnotation[] {
 		} else {
 			const hundreds =
 				layer.heightFtAgl !== null ? String(Math.floor(layer.heightFtAgl / 100)).padStart(3, '0') : 'xxx';
-			token = `${cover}${hundreds}`;
-			decode = layer.heightFtAgl !== null ? `${label} layer at ${layer.heightFtAgl} ft AGL` : `${label} layer`;
+			const typeSuffix = layer.cloudType ?? '';
+			token = `${cover}${hundreds}${typeSuffix}`;
+			const typeNote =
+				layer.cloudType === 'CB'
+					? ' with cumulonimbus (CB) -- convective cloud, thunderstorm risk'
+					: layer.cloudType === 'TCU'
+						? ' with towering cumulus (TCU) -- building convective cloud'
+						: '';
+			decode =
+				layer.heightFtAgl !== null
+					? `${label} layer at ${layer.heightFtAgl} ft AGL${typeNote}`
+					: `${label} layer${typeNote}`;
 			if ((cover === 'BKN' || cover === 'OVC') && ceilingFt === null && layer.heightFtAgl !== null) {
 				ceilingFt = layer.heightFtAgl;
 			}
 		}
-		out.push({
-			token,
-			family: layer.cover === 'VV' ? 'sky-vv' : parsed.clouds.length > 1 ? 'sky-multi-layer' : 'sky-single-layer',
-			decode,
-		});
+		// A CB-tagged layer gets the `sky-cb` family so the truth-aware `why`
+		// pass can pin the convective driver to it.
+		const family =
+			layer.cover === 'VV'
+				? 'sky-vv'
+				: layer.cloudType === 'CB'
+					? 'sky-cb'
+					: parsed.clouds.length > 1
+						? 'sky-multi-layer'
+						: 'sky-single-layer';
+		out.push({ token, family, decode });
 	}
 	if (ceilingFt !== null) {
 		out.push({
@@ -222,8 +238,15 @@ function attachWhy(
 	const radiation = findRadiationCoolingDriver(truth, parsed.tempC, parsed.dewpointC);
 
 	return annotations.map((a) => {
-		if (a.family === 'wx-heavy' && a.token.includes('TS') && convective) {
-			return { ...a, why: 'Convective cell within reach - heavy thunderstorm rain in the cell core' };
+		// Any TS-bearing weather token (light, moderate, or heavy) gets the
+		// convective `why` -- the intensity prefix changes the family but not
+		// the synoptic driver. Gating on `wx-heavy` alone silently dropped the
+		// `why` for moderate `TSRA`.
+		const isThunderstormWeather =
+			a.token.includes('TS') &&
+			(a.family === 'wx-heavy' || a.family === 'wx-light' || a.family === 'wx-descriptor-combo');
+		if (isThunderstormWeather && convective) {
+			return { ...a, why: 'Convective cell within reach - thunderstorm rain in the cell core' };
 		}
 		if (a.family === 'sky-cb' && convective) {
 			return { ...a, why: 'CB layer marks the convective cell directly over the station' };

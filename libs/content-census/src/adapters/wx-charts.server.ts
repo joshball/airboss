@@ -23,7 +23,7 @@
  * with a fact computable today, no new metadata: a chart type a learner can
  * actually be shown is one with a renderer module and test coverage.
  *
- * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * Gap view / intent view are Phase-3 placeholders (`census` mode):
  * the `layerTwoPending` block carries the labelled message, `gaps` and
  * `next` stay genuinely empty.
  *

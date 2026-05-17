@@ -8,7 +8,7 @@
  * exists, governing docs), the inventory, the gap view, the intent view, and
  * the value-ranked "next" list.
  *
- * For a stub corpus (`mode === 'stub'`) the page renders the honest
+ * For a stub corpus (`mode === 'stub'`) the page renders the labelled
  * "drill-down pending" placeholder instead of inventory / gaps / next --
  * never fabricated data.
  *
@@ -89,7 +89,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 	</section>
 
 	{#if isStub && census.pending}
-		<!-- Honest placeholder: no fabricated inventory / metrics / gaps. -->
+		<!-- Labelled placeholder: no fabricated inventory / metrics / gaps. -->
 		<section class="pending" aria-label="Census pending">
 			<h2>Drill-down pending</h2>
 			<p>{census.pending.message}</p>
@@ -136,7 +136,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 
 		<!-- Gap view: each gap fully explained, severity-tagged. -->
 		{#if census.gaps.length === 0 && isLayerOneOnly && census.layerTwoPending}
-			<!-- Honest, labelled Phase-3 placeholder -- no fabricated gaps. -->
+			<!-- Labelled Phase-3 placeholder -- no fabricated gaps. -->
 			<section class="layer-two-pending" aria-label="Gap view">
 				<h2>Gap view</h2>
 				<p>{census.layerTwoPending.message}</p>
@@ -149,7 +149,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 			<section class="gaps" aria-label="Gap view">
 				<h2>Gap view</h2>
 				<div class="gap-list">
-					{#each census.gaps as gap (gap.title)}
+					{#each census.gaps as gap, gapIndex (gapIndex)}
 						<article class="gap">
 							<header>
 								<span class="gap-title">{gap.title}</span>
@@ -215,7 +215,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 			<section class="next" aria-label="What to do next">
 				<h2>Next</h2>
 				<ol class="next-list">
-					{#each rankedNext as item (item.text)}
+					{#each rankedNext as item, nextIndex (nextIndex)}
 						<li>
 							<span class="next-value" data-value={item.value}>{item.value}</span>
 							<div class="next-body">
@@ -337,7 +337,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 
 	h2 {
 		margin: 0;
-		font-size: var(--type-ui-section-size, 1.25rem);
+		font-size: var(--type-heading-3-size);
 	}
 
 	.count {
@@ -355,7 +355,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 
 	.lead {
 		margin: 0;
-		font-size: var(--type-ui-section-size, 1.1rem);
+		font-size: var(--type-reading-lead-size);
 		color: var(--ink-body);
 		max-width: 72ch;
 	}
@@ -481,7 +481,7 @@ const itemsWithIntent = $derived(census.items.filter((item) => item.intent !== u
 
 	.metric-value {
 		font-family: var(--font-family-mono);
-		font-size: var(--type-ui-section-size, 1.25rem);
+		font-size: var(--type-heading-3-size);
 		color: var(--ink-body);
 	}
 

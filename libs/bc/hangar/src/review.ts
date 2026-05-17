@@ -380,7 +380,7 @@ export async function deleteBucket(id: string, db: Db = defaultDb): Promise<void
  * to scope the lookup -- defends against a bucket id from a different board
  * being edited via URL guess once the singleton-board invariant is relaxed
  * (today there is one board, but threading the board id keeps the call site
- * honest about scope).
+ * explicit about scope).
  */
 export async function getBucket(
 	id: string,
