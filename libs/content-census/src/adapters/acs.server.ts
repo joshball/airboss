@@ -7,9 +7,9 @@
  * the document's `publication_date` against the known-latest FAA edition
  * recorded in `ACS_KNOWN_LATEST_PUBLICATION`.
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -17,7 +17,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ACS_KNOWN_LATEST_PUBLICATION, ROUTES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 /** One ACS document entry in `acs/index.json`. */
@@ -49,7 +50,6 @@ interface AcsManifest {
 
 const ACS_DIR = 'acs';
 const ACS_INDEX = 'acs/index.json';
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /** Read + parse the ACS registry index, tolerating an absent file. */
 function readAcsIndex(): AcsIndexEntry[] {
@@ -77,11 +77,6 @@ const ACS_DOCS: DocLink[] = [
 		label: 'acs/index.json -- the ACS registry',
 		href: ROUTES.HANGAR_DOCS_PATH(ACS_INDEX),
 		role: 'The machine-readable list of every ingested ACS document, its publication date, and its manifest.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -181,12 +176,6 @@ export function acsCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'acs',
 		label: 'ACS documents',
@@ -195,13 +184,14 @@ export function acsCensus(): CorpusCensus {
 		whyItExists:
 			'The ACS is the legal blueprint of every checkride. Ingesting it lets the platform anchor study, drills, and progress tracking to the exact areas, tasks, and elements a Designated Pilot Examiner will test.',
 		location: `${ACS_DIR}/**`,
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'An ACS document is "current" when its publication_date is on or after the known-latest FAA edition recorded in ACS_KNOWN_LATEST_PUBLICATION; "stale" when a newer edition has since superseded it.',
 		docs: ACS_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('ACS documents'),
 	};
 }

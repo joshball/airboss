@@ -8,9 +8,9 @@
  * sections carries real extracted body content, `partial` when one or more
  * sections were reached by the extractor but yielded no body content.
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -18,7 +18,8 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { HANDBOOK_EMPTY_EXTRACTION_STATUSES, ROUTES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 /** One section as it appears in a handbook `manifest.json`. */
@@ -42,7 +43,6 @@ interface HandbookManifest {
 }
 
 const HANDBOOKS_DIR = 'handbooks';
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /** A single handbook resolved from disk -- manifest plus its slug. */
 interface ResolvedHandbook {
@@ -91,11 +91,6 @@ const HANDBOOKS_DOCS: DocLink[] = [
 		label: 'Section-extraction prompt strategy',
 		href: ROUTES.HANGAR_DOCS_PATH('docs/ingestion-pipeline/section-extraction-prompt-strategy.md'),
 		role: 'Documents the paste-to-Claude ingestion flow that produces the per-section markdown bodies.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -185,12 +180,6 @@ export function handbooksCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'handbooks',
 		label: 'Handbooks',
@@ -199,13 +188,14 @@ export function handbooksCensus(): CorpusCensus {
 		whyItExists:
 			'Handbooks are the authoritative narrative knowledge base behind the learning graph. Ingesting them into per-section markdown makes every section individually citable, searchable, and deep-linkable from a knowledge node or the flightbag reader.',
 		location: `${HANDBOOKS_DIR}/**`,
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'A handbook is "ingested" when every section in its manifest carries real extracted body content; "partial" when one or more sections were reached by the extractor but yielded no body content (extraction_status "no-body-content").',
 		docs: HANDBOOKS_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('Handbooks'),
 	};
 }

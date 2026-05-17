@@ -12,9 +12,9 @@
  * (`libs/help/src/glossary/`) as a metric, since the spec scopes this corpus
  * as "Help library + glossary".
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -23,12 +23,12 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { decodeReferences, type Reference } from '@ab/aviation';
 import { ROUTES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 const GLOSSARY_TOML = 'libs/db/seed/glossary.toml';
 const HELP_GLOSSARY_CONTENT_DIR = 'libs/help/src/glossary/content';
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /**
  * The marker prefix a placeholder paraphrase carries. A term whose paraphrase
@@ -74,11 +74,6 @@ const GLOSSARY_DOCS: DocLink[] = [
 		label: 'Citations + cross-references pattern',
 		href: ROUTES.HANGAR_DOCS_PATH('docs/ingestion-pipeline/reference-citations-pattern.md'),
 		role: 'Documents how a glossary term is cited from a knowledge node and how the wiki-link resolves.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -150,12 +145,6 @@ export function glossaryCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'glossary',
 		label: 'Help library + glossary',
@@ -164,13 +153,14 @@ export function glossaryCensus(): CorpusCensus {
 		whyItExists:
 			'The platform’s promise is that everything explains itself. The aviation glossary lets a node cross-reference a term without re-teaching it; the page-help glossary makes every UI label and metric self-describing.',
 		location: 'libs/help/, libs/db/seed/glossary.toml',
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'An aviation term is "defined" when it carries an authored teaching paraphrase; "skeleton" when its paraphrase still begins with the "Skeleton entry" placeholder marker awaiting authoritative content.',
 		docs: GLOSSARY_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('Help library + glossary'),
 	};
 }

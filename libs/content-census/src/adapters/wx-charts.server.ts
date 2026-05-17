@@ -23,9 +23,9 @@
  * with a fact computable today, no new metadata: a chart type a learner can
  * actually be shown is one with a renderer module and test coverage.
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -33,13 +33,13 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { CHART_TYPE_LABELS, CHART_TYPE_VALUES, type ChartType, ROUTES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 const WX_CHARTS_DIR = 'libs/wx-charts';
 const CHARTS_SRC = `${WX_CHARTS_DIR}/src/charts`;
 const CHARTS_TESTS = `${WX_CHARTS_DIR}/src/__tests__`;
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /**
  * Chart-type -> renderer source filename (without `.ts`).
@@ -95,11 +95,6 @@ const WX_CHARTS_DOCS: DocLink[] = [
 		label: 'ADR 027 -- wx-charts artifact layout',
 		href: ROUTES.HANGAR_DOCS_PATH('docs/decisions/027-wx-charts-artifact-layout/decision.md'),
 		role: 'Governs the basemap layer order and the reference-fixture / wx-scenario chart-artifact slug families.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -176,12 +171,6 @@ export function wxChartsCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'wx-charts',
 		label: 'wx charts / symbology',
@@ -190,13 +179,14 @@ export function wxChartsCensus(): CorpusCensus {
 		whyItExists:
 			'A preflight weather briefing is read as a stack of standard chart products. The symbology library renders those products from truth data so the platform can show, and drill, the exact visuals a pilot meets in the wild.',
 		location: `${WX_CHARTS_DIR}/`,
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'A chart type is "rendered" when it has a renderer source module plus a dedicated test file; "rendered-shared-test" when it has a renderer but is only exercised by a shared test file; "unrendered" when it is enumerated in CHART_TYPES but has no renderer module.',
 		docs: WX_CHARTS_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('wx charts / symbology'),
 	};
 }

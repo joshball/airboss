@@ -86,3 +86,26 @@ export const ACS_KNOWN_LATEST_PUBLICATION: Record<string, string> = {
  * A handbook with any such section is `partial`, not `ingested`.
  */
 export const HANDBOOK_EMPTY_EXTRACTION_STATUSES: readonly string[] = ['no-body-content'];
+
+/**
+ * Sim-scenario difficulty banding for the census state distribution.
+ *
+ * `ScenarioDefinition.difficulty` is a 1..5 hint. The census buckets it so
+ * the overview distribution bar reads as a spread of authoring ambition,
+ * not 5 indistinguishable numbers.
+ */
+export const SIM_DIFFICULTY_BANDS = {
+	/** difficulty 1..2 -- introductory, low-workload scenarios. */
+	FOUNDATIONAL: 'foundational',
+	/** difficulty 3 -- standard proficiency scenarios. */
+	STANDARD: 'standard',
+	/** difficulty 4..5 -- demanding emergency / edge-case scenarios. */
+	DEMANDING: 'demanding',
+} as const;
+
+export type SimDifficultyBand = (typeof SIM_DIFFICULTY_BANDS)[keyof typeof SIM_DIFFICULTY_BANDS];
+
+/** Upper bound (inclusive) of the foundational difficulty band. */
+export const SIM_DIFFICULTY_FOUNDATIONAL_MAX = 2;
+/** Upper bound (inclusive) of the standard difficulty band. */
+export const SIM_DIFFICULTY_STANDARD_MAX = 3;

@@ -24,9 +24,10 @@ import {
 import type { CorpusCensus } from '../types';
 
 /** Assert the shared `CorpusCensus` invariants every Phase-2 adapter must hold. */
-function expectValidFullCensus(census: CorpusCensus, id: string): void {
+function expectValidCensusMode(census: CorpusCensus, id: string): void {
 	expect(census.id).toBe(id);
-	expect(census.mode).toBe('full');
+	// A Phase-2 adapter is a real Layer-1 census: `census` mode, not `full`.
+	expect(census.mode).toBe('census');
 	expect(census.pending).toBeUndefined();
 	expect(census.label.length).toBeGreaterThan(0);
 	expect(census.whatItIs.length).toBeGreaterThan(0);
@@ -43,17 +44,22 @@ function expectValidFullCensus(census: CorpusCensus, id: string): void {
 	for (const metric of census.metrics) {
 		expect(metric.whatItMeasures.trim().length).toBeGreaterThan(0);
 		expect(metric.whyItMatters.trim().length).toBeGreaterThan(0);
+		expect(metric.whatToDo?.text.trim().length).toBeGreaterThan(0);
 	}
-	// Phase 2 leaves gap / next as honest empty placeholders -- never fakes.
+	// A census-mode adapter fabricates no gaps and no next-list ...
 	expect(census.gaps.length).toBe(0);
 	expect(census.next.length).toBe(0);
+	// ... and carries the honest, labelled Phase-3 Layer-2 placeholder instead.
+	expect(census.layerTwoPending).toBeDefined();
+	expect(census.layerTwoPending?.message.trim().length).toBeGreaterThan(0);
+	expect(census.layerTwoPending?.href.trim().length).toBeGreaterThan(0);
 }
 
 describe('wxScenariosCensus', () => {
 	const census = wxScenariosCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'wx-scenarios');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'wx-scenarios');
 	});
 
 	it('inventories all 7 authored wx-engine scenarios', () => {
@@ -80,8 +86,8 @@ describe('wxScenariosCensus', () => {
 describe('handbooksCensus', () => {
 	const census = handbooksCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'handbooks');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'handbooks');
 	});
 
 	it('inventories all 8 ingested handbooks', () => {
@@ -108,8 +114,8 @@ describe('handbooksCensus', () => {
 describe('acsCensus', () => {
 	const census = acsCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'acs');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'acs');
 	});
 
 	it('inventories all 5 ACS documents', () => {
@@ -134,8 +140,8 @@ describe('acsCensus', () => {
 describe('sourcesCensus', () => {
 	const census = sourcesCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'sources');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'sources');
 	});
 
 	it('inventories all 19 AC / InFO / SAFO source documents', () => {
@@ -154,8 +160,8 @@ describe('sourcesCensus', () => {
 describe('glossaryCensus', () => {
 	const census = glossaryCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'glossary');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'glossary');
 	});
 
 	it('inventories the 4 aviation-term glossary entries', () => {
@@ -182,8 +188,8 @@ describe('glossaryCensus', () => {
 describe('wxChartsCensus', () => {
 	const census = wxChartsCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'wx-charts');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'wx-charts');
 	});
 
 	it('inventories all 20 chart types', () => {
@@ -216,8 +222,8 @@ describe('wxChartsCensus', () => {
 describe('simContentCensus', () => {
 	const census = simContentCensus();
 
-	it('returns a valid full-mode census', () => {
-		expectValidFullCensus(census, 'sim-content');
+	it('returns a valid census-mode census', () => {
+		expectValidCensusMode(census, 'sim-content');
 	});
 
 	it('inventories all 19 sim scenarios', () => {

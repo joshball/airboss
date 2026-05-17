@@ -23,8 +23,8 @@ describe('cardsCensus', () => {
 	});
 
 	it('inventories one item per knowledge node with a valid deck state', () => {
-		// The unit of the cards census is the node -- 79 node.md files.
-		expect(census.items.length).toBe(79);
+		// The unit of the cards census is the node -- 83 node.md files.
+		expect(census.items.length).toBe(83);
 		for (const item of census.items) {
 			expect(VALID_STATES, `${item.id} state`).toContain(item.derivedState);
 		}

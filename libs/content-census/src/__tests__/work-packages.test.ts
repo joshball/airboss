@@ -24,8 +24,8 @@ describe('workPackagesCensus', () => {
 	});
 
 	it('inventories every spec-bearing work package with a valid derived state', () => {
-		// 112 work-package directories carry a spec.md on disk.
-		expect(census.items.length).toBe(112);
+		// 113 work-package directories carry a spec.md on disk.
+		expect(census.items.length).toBe(113);
 		for (const item of census.items) {
 			expect(VALID_STATES, `${item.id} state`).toContain(item.derivedState);
 			// Every WP item links to its roadmap detail page.

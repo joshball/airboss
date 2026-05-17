@@ -23,19 +23,19 @@
  * It also reports the FDM aircraft-model count as a metric, since the spec
  * scopes the corpus as "sim scenarios / models".
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only by convention with its sibling adapters: it is wired through
  * the `/server` barrel and never imported by a `.svelte` file.
  */
 
 import { ROUTES, SIM_AIRCRAFT_IDS, SIM_SCENARIO_ID_VALUES, SIM_SCENARIO_NODE_MAPPINGS } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 
 const SIM_BC_DIR = 'libs/bc/sim';
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /** The set of scenario ids that carry a node mapping -- the graded scenarios. */
 const GRADED_SCENARIO_IDS = new Set<string>(Object.keys(SIM_SCENARIO_NODE_MAPPINGS));
@@ -59,11 +59,6 @@ const SIM_CONTENT_DOCS: DocLink[] = [
 		label: 'Engine + scenario patterns reference',
 		href: ROUTES.HANGAR_DOCS_PATH('docs/agents/reference-engine-patterns.md'),
 		role: 'Documents the sim tick loop, scenario definition shape, grading, and replay.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -148,12 +143,6 @@ export function simContentCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'sim-content',
 		label: 'Sim scenarios / models',
@@ -162,13 +151,14 @@ export function simContentCensus(): CorpusCensus {
 		whyItExists:
 			'The sim is the platform’s motor-skill and decision-rehearsal surface. Scenarios are its rehearsable situations; FDM models are the airframes those situations fly. Together they are what a learner practises in the cockpit.',
 		location: 'libs/bc/sim/, apps/sim/',
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'A sim scenario is "graded" when it appears in SIM_SCENARIO_NODE_MAPPINGS -- it has scoring criteria and is linked to the knowledge nodes it exercises, so it feeds the spaced-rep scheduler; "playground" when it is free flight with no grading and no node linkage.',
 		docs: SIM_CONTENT_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('Sim scenarios / models'),
 	};
 }

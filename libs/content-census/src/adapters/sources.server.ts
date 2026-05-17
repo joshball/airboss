@@ -9,9 +9,9 @@
  * registry `manifest_path` resolves to a real file on disk, `orphan` when
  * the registry names a manifest that is missing.
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3 and returned empty (no fabricated gaps); the Phase-3 task pointer
- * is carried in `docs`.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -19,7 +19,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROUTES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 /** A common source-document entry -- AC, InFO, and SAFO entries reduce to this. */
@@ -54,8 +55,6 @@ interface RegistryIndex {
 	schema_version: number;
 	entries: unknown[];
 }
-
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /** Read + parse a registry index, tolerating an absent file. */
 function readRegistry(relativePath: string): unknown[] {
@@ -111,11 +110,6 @@ const SOURCES_DOCS: DocLink[] = [
 		label: 'Citations + cross-references pattern',
 		href: ROUTES.HANGAR_DOCS_PATH('docs/ingestion-pipeline/reference-citations-pattern.md'),
 		role: 'Documents how a knowledge node or drill cites a source document and how the link resolves.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -189,12 +183,6 @@ export function sourcesCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'sources',
 		label: 'Source registry',
@@ -203,13 +191,14 @@ export function sourcesCensus(): CorpusCensus {
 		whyItExists:
 			'Every authoritative claim in the learning graph traces back to a primary source. The registry is the citable universe: it is what the citation picker draws from and what a node, drill, or scenario links to for authority.',
 		location: 'ac/, info/, safo/ + libs/sources/',
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'A source document is "linked" when its registry manifest_path resolves to a real file on disk; "orphan" when the registry names a manifest that is missing -- a citation to it would resolve to nothing.',
 		docs: SOURCES_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('Source registry'),
 	};
 }

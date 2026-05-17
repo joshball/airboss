@@ -7,9 +7,9 @@
  * map: a scenario is contributing when it reproduced at least one catalog
  * example, dormant when its coverage list is empty.
  *
- * Layer 1 only -- the gap view, intent view, and next-list are deferred to
- * Phase 3. They are returned empty (no fabricated gaps); the Phase-3 task
- * pointer is carried in `docs` so the placeholder is honest and labelled.
+ * Gap view / intent view are honest Phase-3 placeholders (`census` mode):
+ * the `layerTwoPending` block carries the labelled message, `gaps` and
+ * `next` stay genuinely empty.
  *
  * Server-only: reads `node:fs`. Called from `+page.server.ts` and tests.
  */
@@ -17,7 +17,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { ROUTES, WX_SCENARIO_LABELS, WX_SCENARIO_VALUES } from '@ab/constants';
-import type { CensusGap, CensusItem, CensusMetric, CensusNextItem, CorpusCensus, DocLink } from '../types';
+import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
+import { layerTwoPending } from './layer-two.server';
 import { repoRoot } from './repo-root.server';
 
 /** The on-disk `scenario-matches.json` shape (the slice this adapter reads). */
@@ -29,7 +30,6 @@ interface ScenarioMatches {
 
 const SCENARIO_DIR = 'libs/wx-engine/src/truth/scenarios';
 const MATCH_MANIFEST = 'course/knowledge/weather/encoded-text-catalog/scenario-matches.json';
-const CENSUS_WP_TASKS = 'docs/work-packages/hangar-content-census/tasks.md';
 
 /** Read + parse the scenario-match manifest, tolerating an absent file. */
 function readCoverage(): Record<string, string[]> {
@@ -55,11 +55,6 @@ const WX_SCENARIOS_DOCS: DocLink[] = [
 		label: 'scenario-matches.json -- the coverage manifest',
 		href: ROUTES.HANGAR_DOCS_PATH(MATCH_MANIFEST),
 		role: 'Maps each scenario to the catalog examples it reproduced -- the source of the contributing / dormant state.',
-	},
-	{
-		label: 'Content census -- Phase 3 tasks (gap view + intent)',
-		href: ROUTES.HANGAR_DOCS_PATH(CENSUS_WP_TASKS),
-		role: 'Tracks the Layer-2 intent block and the gap / next-list views still to be authored for this corpus.',
 	},
 ];
 
@@ -133,12 +128,6 @@ export function wxScenariosCensus(): CorpusCensus {
 		},
 	];
 
-	// Layer 1 only. The gap view, intent view, and next-list are deferred to
-	// Phase 3 -- returned empty (no fabricated gaps); the Phase-3 task pointer
-	// is carried in `docs` so the placeholder is honest and labelled.
-	const gaps: CensusGap[] = [];
-	const next: CensusNextItem[] = [];
-
 	return {
 		id: 'wx-scenarios',
 		label: 'wx-engine scenarios',
@@ -147,13 +136,14 @@ export function wxScenariosCensus(): CorpusCensus {
 		whyItExists:
 			'The truth-aware generator authors weather products (METARs, TAFs, PIREPs, charts) and their Socratic commentary from a known truth state. A scenario IS that truth state; without scenarios the generator has nothing to render.',
 		location: `${SCENARIO_DIR}/`,
-		mode: 'full',
+		mode: 'census',
 		stateRule:
 			'A scenario is "contributing" when scenario-matches.json records at least one catalog example it reproduced; otherwise "dormant" -- the truth model is authored and validates, but no catalog reference or generated drill is built against it.',
 		docs: WX_SCENARIOS_DOCS,
 		items,
 		metrics,
-		gaps,
-		next,
+		gaps: [],
+		next: [],
+		layerTwoPending: layerTwoPending('wx-engine scenarios'),
 	};
 }
