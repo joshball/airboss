@@ -88,7 +88,13 @@ export function authoredPhases(body: string): string[] {
 /** List immediate subdirectory names of a repo-relative directory, sorted. */
 export function listDirs(relativeDir: string): string[] {
 	const abs = join(repoRoot(), relativeDir);
-	return readdirSync(abs)
+	let entries: string[];
+	try {
+		entries = readdirSync(abs);
+	} catch {
+		return [];
+	}
+	return entries
 		.filter((name) => {
 			if (name.startsWith('.')) return false;
 			try {
@@ -98,6 +104,11 @@ export function listDirs(relativeDir: string): string[] {
 			}
 		})
 		.sort();
+}
+
+/** List immediate subdirectories of a repo-relative dir whose name starts with `prefix`. */
+export function dirsWithPrefix(relativeDir: string, prefix: string): string[] {
+	return listDirs(relativeDir).filter((name) => name.startsWith(prefix));
 }
 
 /** List markdown file names directly inside a repo-relative directory. */

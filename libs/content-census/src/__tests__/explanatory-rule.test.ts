@@ -25,10 +25,31 @@ describe('explanatory-rule guard', () => {
 		expect(ids.size).toBe(14);
 	});
 
-	it('ships exactly one full adapter (wx-catalog) in Phase 1', () => {
+	it('ships exactly one full adapter -- wx-catalog, the reference drill-down', () => {
 		const full = ALL_CENSUS.filter((c) => c.mode === 'full');
 		expect(full.length).toBe(1);
 		expect(full[0].id).toBe('wx-catalog');
+	});
+
+	it('ships the six Phase-2 markdown corpora as real Layer-1 censuses', () => {
+		const censusMode = ALL_CENSUS.filter((c) => c.mode === 'census');
+		const ids = censusMode.map((c) => c.id).sort();
+		expect(ids).toEqual(['adrs', 'cards', 'knowledge-nodes', 'regulations', 'vision', 'work-packages']);
+	});
+
+	it('gives every census-mode corpus a real inventory and a Layer-2 placeholder', () => {
+		for (const census of ALL_CENSUS.filter((c) => c.mode === 'census')) {
+			// A census-mode adapter has real items and metrics ...
+			expect(census.items.length, `${census.id} items`).toBeGreaterThan(0);
+			expect(census.metrics.length, `${census.id} metrics`).toBeGreaterThan(0);
+			// ... but does NOT fabricate gaps or a next-list ...
+			expect(census.gaps.length, `${census.id} gaps`).toBe(0);
+			expect(census.next.length, `${census.id} next`).toBe(0);
+			// ... and carries the honest, labelled Phase-3 placeholder instead.
+			expect(census.layerTwoPending, `${census.id} layerTwoPending`).toBeDefined();
+			expect(census.layerTwoPending?.message.trim().length).toBeGreaterThan(0);
+			expect(census.layerTwoPending?.href.trim().length).toBeGreaterThan(0);
+		}
 	});
 
 	for (const census of ALL_CENSUS) {
