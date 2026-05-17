@@ -113,43 +113,41 @@ Plot the polygon on a chart (sectional or low-altitude IFR) or pull it up on an 
 
 ## Annotated example(s)
 
-### Example 1 -- Wildfire TFR over Northern California (91.137(a)(1) + (a)(2))
+### Example 1 -- Wildfire TFR over the Gila National Forest, New Mexico (91.137(a)(2))
 
 Raw product text:
 
 ```text
-!FDC 4/8392 ZOA CA..AIRSPACE..TEMPORARY FLIGHT RESTRICTIONS
-PURSUANT TO 14 CFR SECTION 91.137(A)(1) AND (A)(2)
-TEMPORARY FLIGHT RESTRICTIONS WITHIN AN AREA DEFINED AS
-5NM RADIUS OF 38-45-30N 122-30-15W (SAC 015024.6) SFC-12500FT MSL
-TO PROVIDE A SAFE ENVIRONMENT FOR FIRE FIGHTING AIRCRAFT
-OPERATIONS. PACIFIC PEAK FIRE.
-EFFECTIVE 2511291800 UTC (1100 PST) UNTIL FURTHER NOTICE.
-THE FOLLOWING OPERATIONS ARE AUTHORIZED IN THE AREA:
-AIRCRAFT PARTICIPATING IN FIREFIGHTING OPERATIONS AT THE
-DIRECTION OF INCIDENT COMMANDER OPS BRANCH DIRECTOR (805-555-0142);
-AIRCRAFT CARRYING LAW ENFORCEMENT OFFICIALS ON OFFICIAL BUSINESS;
-AIRCRAFT CARRYING PROPERLY ACCREDITED NEWS REPRESENTATIVES WHO
-HAVE FILED A FLIGHT PLAN WITH AT LEAST ONE HOUR ADVANCE NOTICE
-WITH OAKLAND ARTCC.
-OAKLAND ARTCC TELEPHONE 510-745-3360 IS THE COORDINATION FACILITY.
+!FDC 6/9663 ZAB NM..AIRSPACE 38NM NW SILVER CITY, NM..TEMPORARY
+FLIGHT RESTRICTIONS. PURSUANT TO 14 CFR SECTION 91.137(A)(2)
+TEMPORARY FLIGHT RESTRICTIONS ARE IN EFFECT TO PROVIDE A SAFE
+ENVIRONMENT FOR FIRE FIGHTING ACFT OPS. WI AN AREA DEFINED AS
+3NM RADIUS OF 332130N1083500W (SVC321048.2) SFC-10500FT
+GILA NATIONAL FOREST, SILVER CITY DISPATCH TEL 575-538-5371 OR
+FREQ 118.1250 OR EMAIL NMSDC@FIRENET.GOV HUMMINGBIRD FIRE IS IN
+CHARGE OF THE OPERATION. ALBUQUERQUE/ZAB/ARTCC TEL 505-856-4591
+IS THE FAA CDN FAC. DLY 1300-0300 2605121300-2605260300EST
 ```
 
 Decoded:
 
-- **NOTAM ID** -- `!FDC 4/8392`. FDC NOTAM, sequence 4/8392. The exclamation mark prefix is the FAA NOTAM marker; FDC denotes Flight Data Center / regulatory NOTAM.
-- **Affected ARTCC + state** -- `ZOA CA..AIRSPACE`. Oakland Center, California, an airspace restriction.
-- **Authority** -- `PURSUANT TO 14 CFR SECTION 91.137(A)(1) AND (A)(2)`. Hazard on the surface plus relief-aircraft environment. Standard pairing for fire TFRs.
-- **Geometry** -- `5NM RADIUS OF 38-45-30N 122-30-15W`. Center at 38 deg 45 min 30 sec N, 122 deg 30 min 15 sec W; the parenthetical `(SAC 015024.6)` gives the same point as a radial and distance from the Sacramento VORTAC (SAC), 015 radial at 24.6 NM. Either reference frame should plot to the same point; cross-check both on the chart.
-- **Altitude band** -- `SFC-12500FT MSL`. Surface to 12,500 ft MSL. A non-deiced piston single can legally overfly at 13,000 ft (subject to oxygen rules above 12,500 for more than 30 min and 14,000 continuous).
-- **Effective window** -- `EFFECTIVE 2511291800 UTC (1100 PST) UNTIL FURTHER NOTICE`. From 29 November 2025 at 1800Z. UFN means the TFR remains in force until the FAA cancels it by NOTAM; check at every preflight while it's active.
-- **Hazard identifier** -- `PACIFIC PEAK FIRE`. The incident name. Useful for cross-referencing news reports and InciWeb.
-- **Exception list** -- firefighting aircraft at incident commander's direction, law enforcement on official business, accredited news with prior flight plan + 1 hr notice via Oakland ARTCC. If you are not in one of these categories, you may not enter.
-- **Coordinating facility** -- Oakland ARTCC at 510-745-3360. The number to call if you have a legitimate need to enter or transit.
+- **NOTAM ID** -- `!FDC 6/9663`. FDC NOTAM, sequence 6/9663. The exclamation mark prefix is the FAA NOTAM marker; FDC denotes Flight Data Center / regulatory NOTAM.
+- **Affected ARTCC + state** -- `ZAB NM..AIRSPACE`. Albuquerque Center, New Mexico, an airspace restriction. The plain-language locator `38NM NW SILVER CITY, NM` follows.
+- **Authority** -- `PURSUANT TO 14 CFR SECTION 91.137(A)(2)`. Subparagraph (a)(2) reserves the airspace so relief aircraft -- here, firefighting aircraft -- can operate without conflicting traffic.
+- **Purpose** -- `TO PROVIDE A SAFE ENVIRONMENT FOR FIRE FIGHTING ACFT OPS`. Air tankers and helicopters work this airspace at low level and high workload; an uninvolved aircraft wandering through is a midair hazard.
+- **Geometry** -- `3NM RADIUS OF 332130N1083500W`. Center at 33 deg 21 min 30 sec N, 108 deg 35 min 00 sec W; the parenthetical `(SVC321048.2)` gives the same point as a radial and distance from the Silver City VORTAC (SVC), 321 radial at 48.2 NM. Either reference frame should plot to the same point; cross-check both on the chart.
+- **Altitude band** -- `SFC-10500FT`. Surface to 10,500 ft MSL.
+- **Hazard identifier** -- `GILA NATIONAL FOREST ... HUMMINGBIRD FIRE`. The location and incident name. Useful for cross-referencing news reports and InciWeb.
+- **Coordinating facility** -- `SILVER CITY DISPATCH` (with phone, a frequency, and an email) handles fire-side coordination; `ALBUQUERQUE/ZAB/ARTCC` is the FAA coordination facility. The number to call if you have a legitimate need to enter or transit.
+- **Effective window** -- `DLY 1300-0300 2605121300-2605260300EST`. Active daily from 1300Z to 0300Z, across the period 12 May 2026 through 26 May 2026, end time estimated (`EST`). A daily-window TFR -- the airspace reverts to normal use overnight when the air tankers are not flying.
 
-What this is telling you: there is a 10 NM diameter cylinder of airspace from the surface to 12,500 ft over the Pacific Peak fire in Northern California, reserved for firefighting aircraft. A VFR cross-country planning to route through this lat/long is replanning. Either around the 5 NM circle (a small lateral deviation) or above the 12,500 ft cap with oxygen and the performance to get there. Calling the Oakland ARTCC number to "ask permission" is not how this works; the exception list is the exception list.
+What this is telling you: there is a 6 NM diameter cylinder of airspace from the surface to 10,500 ft over the Hummingbird Fire in the Gila National Forest, reserved for firefighting aircraft during daylight-plus hours. A VFR cross-country planning to route through this lat/long is replanning -- either around the 3 NM circle (a small lateral deviation) or above the 10,500 ft cap. Calling the ARTCC number to "ask permission" is not how this works; subparagraph (a)(2) does not have a transit exception for ordinary traffic.
+
+Source: FAA TFR list (tfr.faa.gov), FDC 6/9663, retrieved 2026-05-17.
 
 ### Example 2 -- Hurricane relief TFR over Gulf coast (91.137(a)(1), (a)(2), and (a)(3))
+
+(Illustrative example -- constructed to show a large disaster-relief TFR invoking all three subparagraphs of 91.137; not a real archived bulletin. Example 1 is a real, currently-active fire TFR; disaster-relief TFRs exist only while a major disaster is being worked, so none was available to quote. This one follows the live FDC NOTAM syntax.)
 
 Raw product text:
 

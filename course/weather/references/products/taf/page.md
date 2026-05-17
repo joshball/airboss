@@ -78,49 +78,61 @@ After a `FM` group, the new line is the prevailing forecast. A subsequent `TEMPO
 
 ## Annotated example(s)
 
-### Example 1 -- clean TAF, one `FM`, no probability groups
+### Example 1 -- clean TAF, only `FM` groups, no `TEMPO` or probability groups
 
 Raw product text:
 
 ```text
-TAF KMDW 121720Z 1218/1318 27008KT P6SM SCT040
-     FM130000 24005KT P6SM SKC
-     FM131400 20010KT P6SM BKN050
+TAF KPHX 170304Z 1703/1806 24011KT P6SM SKC
+     FM170900 10005KT P6SM SKC
+     FM171500 17010KT P6SM FEW250
+     FM172100 23012G21KT P6SM FEW250
+     FM180100 24015G26KT P6SM FEW250
 ```
 
 Decoded:
 
-- **Header** -- routine TAF for Chicago Midway (`KMDW`), issued day 12 at 17:20Z, valid day 12 18:00Z through day 13 18:00Z (24 hours).
-- **Base forecast** (1218 onward) -- wind 270 at 8 knots, visibility better than 6 SM, scattered clouds at 4,000 ft AGL.
-- **`FM130000`** -- at 00:00Z on day 13, conditions change to wind 240 at 5 knots, visibility better than 6 SM, sky clear. This is the new prevailing forecast until the next `FM`.
-- **`FM131400`** -- at 14:00Z on day 13, wind shifts to 200 at 10 knots, visibility better than 6 SM, broken at 5,000 ft AGL. New prevailing forecast through the end of the valid period at 1318Z (day 13 18Z).
+- **Header** -- routine TAF for Phoenix Sky Harbor (`KPHX`), issued day 17 at 03:04Z, valid day 17 03Z through day 18 06Z (a 27-hour TAF -- Phoenix is a major hub).
+- **Base forecast** (1703 onward) -- wind 240 at 11 knots, visibility better than 6 SM, sky clear.
+- **`FM170900`** -- at 09:00Z, conditions change to wind 100 at 5 knots, visibility better than 6 SM, sky clear. New prevailing forecast until the next `FM`.
+- **`FM171500`** -- at 15:00Z, wind 170 at 10 knots, visibility better than 6 SM, a thin few-cloud layer at 25,000 ft AGL (high cloud, no ceiling).
+- **`FM172100`** -- at 21:00Z, wind 230 at 12 gusting 21, visibility better than 6 SM, few at 25,000 ft. The afternoon wind picks up -- a normal desert diurnal pattern.
+- **`FM180100`** -- at 01:00Z on day 18, wind 240 at 15 gusting 26, few at 25,000 ft. The breeze peaks in the evening, still VFR.
 
-What this is telling you: a quiet 24 hours at Midway. VFR throughout. Winds back through south overnight, a broken layer rolls in by mid-morning day 13 but well above pattern altitude. Nothing in here changes a go decision.
+What this is telling you: a quiet, severe-clear 27 hours at Phoenix. VFR throughout. The only thing that moves is the wind -- light overnight, building through the afternoon and evening to gusts in the mid-20s. Nothing here changes a go decision; the gust forecast is the one number worth carrying forward for a late-day arrival or departure.
 
-### Example 2 -- complex TAF, frontal passage at KORD with `FM`, `TEMPO`, and `PROB30`
+Source: NOAA Aviation Weather Center API (aviationweather.gov), KPHX TAF issued 2026-05-17 03:04Z.
+
+### Example 2 -- complex TAF at KDEN with `FM` and `TEMPO`, including a convective `TEMPO`
 
 Raw product text:
 
 ```text
-TAF KORD 121720Z 1218/1324 22012G22KT P6SM BKN040
-     TEMPO 1219/1222 4SM -SHRA BR BKN025
-     FM130000 25015G25KT 5SM -TSRA BR BKN030CB
-     PROB30 1302/1306 2SM +TSRA BR OVC020CB
-     FM130700 28012KT P6SM SCT025 BKN060
-     FM131500 30008KT P6SM SKC
+TAF KDEN 170259Z 1703/1806 09011KT P6SM FEW100 BKN140
+     FM170700 VRB06KT P6SM FEW020 BKN100
+     FM170900 34011KT P6SM FEW020 BKN050
+     FM171300 05008KT P6SM SCT020 BKN050
+     TEMPO 1713/1716 BKN020
+     FM171800 03012G18KT P6SM -SHRA BKN050
+     TEMPO 1719/1723 5SM -TSRA BKN020CB
+     FM172300 06012G18KT P6SM -SHRA BKN040
 ```
 
 Decoded:
 
-- **Header** -- routine TAF for Chicago O'Hare (`KORD`), issued day 12 at 17:20Z, valid day 12 18Z through day 13 24Z (30-hour TAF -- O'Hare is a major hub).
-- **Base forecast** (1218 onward) -- wind 220 at 12 gusting 22, visibility better than 6 SM, broken at 4,000 ft AGL. VFR but breezy, ceiling marginal for the unfamiliar.
-- **`TEMPO 1219/1222`** -- between 19Z and 22Z on day 12, temporarily expect visibility 4 SM in light rain showers and mist, broken at 2,500 ft. Each occurrence under 1 hour, 50% probability. Overlay on the base forecast: the rest of the time during that window the base still applies.
-- **`FM130000`** -- at 00:00Z on day 13, frontal passage. Wind veers to 250 at 15 gusting 25, visibility 5 SM in light thunderstorms and rain plus mist, broken at 3,000 ft AGL with cumulonimbus. This is now the prevailing forecast -- thunderstorms are the expected condition, not the exception.
-- **`PROB30 1302/1306`** -- between 02Z and 06Z on day 13, 30% probability the conditions get worse: visibility 2 SM in heavy thunderstorms and rain plus mist, overcast at 2,000 ft AGL with cumulonimbus. Overlay on the post-`FM130000` prevailing forecast.
-- **`FM130700`** -- at 07:00Z, front clears. Wind 280 at 12, visibility better than 6 SM, scattered at 2,500 ft AGL with a broken layer at 6,000. Improving but still post-frontal.
-- **`FM131500`** -- at 15:00Z, wind 300 at 8, visibility better than 6 SM, sky clear. Clean VFR through the end of the valid period.
+- **Header** -- routine TAF for Denver International (`KDEN`), issued day 17 at 02:59Z, valid day 17 03Z through day 18 06Z (27-hour TAF).
+- **Base forecast** (1703 onward) -- wind 090 at 11 knots, visibility better than 6 SM, few at 10,000 ft, broken at 14,000 ft. VFR.
+- **`FM170700`** -- at 07:00Z, wind variable at 6 knots, few at 2,000 ft, broken at 10,000 ft. The ceiling lowers overnight but stays VFR.
+- **`FM170900`** -- at 09:00Z, wind 340 at 11, broken at 5,000 ft.
+- **`FM171300`** -- at 13:00Z, wind 050 at 8, scattered at 2,000 ft, broken at 5,000 ft.
+- **`TEMPO 1713/1716`** -- between 13Z and 16Z, temporarily expect a broken ceiling at 2,000 ft. Each occurrence under 1 hour. This is an overlay on the post-`FM171300` prevailing forecast: most of that window the broken layer stays at 5,000, but it may drop to 2,000 briefly.
+- **`FM171800`** -- at 18:00Z, wind 030 at 12 gusting 18, visibility better than 6 SM in light rain showers, broken at 5,000 ft. New prevailing forecast.
+- **`TEMPO 1719/1723`** -- between 19Z and 23Z, temporarily expect visibility 5 SM in light thunderstorms and rain, broken at 2,000 ft AGL with cumulonimbus. The `CB` and `TSRA` are the loud part: convection is possible on and off through that window. Overlay on the post-`FM171800` prevailing forecast.
+- **`FM172300`** -- at 23:00Z, wind 060 at 12 gusting 18, light rain showers, broken at 4,000 ft.
 
-What this is telling you: a cold front moves through ORD around midnight Zulu. Late afternoon and evening day 12 are VFR with passing showers; the actual frontal passage drops conditions to MVFR with embedded thunderstorms; there's a 30% chance the small hours of day 13 go IFR with heavy storms. By dawn the front is gone and the day clears out. If your ETA is 02-06Z, this TAF says "plan for thunderstorms, file an alternate, and watch the radar."
+What this is telling you: a benign VFR start at Denver, then an afternoon that turns showery and convective. The first `TEMPO` is a minor ceiling wobble; the second `TEMPO` is the one that matters -- a 19Z-23Z window where thunderstorms with a 2,000 ft cumulonimbus base can flare up. A `TEMPO` group means the condition is expected to occur for less than half the period; a `PROB30` or `PROB40` group, when a TAF carries one, works the same way as an overlay but attaches an explicit probability instead. If your ETA at Denver is 19-23Z, this TAF says "plan for thunderstorms in the area, file an alternate, and watch the radar."
+
+Source: NOAA Aviation Weather Center API (aviationweather.gov), KDEN TAF issued 2026-05-17 02:59Z.
 
 ## Common gotchas
 

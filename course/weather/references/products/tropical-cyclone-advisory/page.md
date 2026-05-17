@@ -82,60 +82,65 @@ Wind radii tell you how big the dangerous wind field is. A compact hurricane wit
 
 ## Annotated example(s)
 
-### Example 1 -- Atlantic hurricane tracking toward south Florida
+### Example 1 -- Hurricane Milton approaching the Florida Gulf coast
 
 Raw advisory text:
 
 ```text
-HURRICANE FIONA ADVISORY NUMBER  17
-NWS NATIONAL HURRICANE CENTER MIAMI FL    AL062026
-1500 UTC THU SEP 22 2026
+HURRICANE MILTON FORECAST/ADVISORY NUMBER  17
+NWS NATIONAL HURRICANE CENTER MIAMI FL       AL142024
+0900 UTC WED OCT 09 2024
 
-SUMMARY OF 1500 UTC...1100 AM EDT...INFORMATION
-LOCATION...24.3N 70.5W
-ABOUT 470 MI...755 KM E OF MIAMI FLORIDA
-MAXIMUM SUSTAINED WINDS...110 KT
-PRESENT MOVEMENT...NW OR 315 DEGREES AT 14 KT
-MINIMUM CENTRAL PRESSURE...952 MB...28.11 INCHES
+HURRICANE CENTER LOCATED NEAR 24.5N  85.4W AT 09/0900Z
+POSITION ACCURATE WITHIN  10 NM
 
-FORECAST POSITIONS AND MAX WINDS
-INIT  22/1500Z  24.3N  70.5W  110 KT  CATEGORY 3 HURRICANE
- 12H  23/0000Z  25.8N  72.3W  115 KT  CATEGORY 4 HURRICANE
- 24H  23/1200Z  27.2N  74.6W  110 KT  CATEGORY 3 HURRICANE
- 36H  24/0000Z  28.0N  77.1W  100 KT  CATEGORY 3 HURRICANE
- 48H  24/1200Z  28.4N  79.5W   90 KT  CATEGORY 2 HURRICANE
+PRESENT MOVEMENT TOWARD THE NORTHEAST OR  45 DEGREES AT  12 KT
 
-WIND RADII (NM)
- 34 KT.....120NE  90SE  60SW 100NW
- 50 KT......60NE  50SE  30SW  50NW
- 64 KT......25NE  20SE  15SW  20NW
+ESTIMATED MINIMUM CENTRAL PRESSURE  907 MB
+EYE DIAMETER  10 NM
+MAX SUSTAINED WINDS 140 KT WITH GUSTS TO 170 KT.
+64 KT....... 25NE  25SE  25SW  25NW.
+50 KT....... 45NE  50SE  50SW  50NW.
+34 KT.......100NE 100SE 100SW 110NW.
+12 FT SEAS..150NE 150SE 360SW 360NW.
 
-KEY MESSAGES
-1. FIONA IS FORECAST TO REMAIN A MAJOR HURRICANE THROUGH FRIDAY
-   WITH A PEAK NEAR CATEGORY 4. SLOW WEAKENING IS EXPECTED THEREAFTER.
-2. HURRICANE-FORCE WINDS POSSIBLE ALONG THE EAST COAST OF FLORIDA
-   FROM LATE FRIDAY THROUGH SATURDAY. RESIDENTS IN SOUTH FLORIDA
-   SHOULD MONITOR THE PROGRESS OF FIONA AND FOLLOW LOCAL OFFICIALS.
-3. UNCERTAINTY REMAINS IN THE 48-72 H TRACK. A WESTWARD SHIFT
-   WOULD BRING THE CORE OVER MIAMI; AN EASTWARD SHIFT WOULD KEEP
-   THE STRONGEST WINDS OFFSHORE.
+FORECAST VALID 09/1800Z 25.9N  84.3W
+MAX WIND 130 KT...GUSTS 160 KT.
+
+FORECAST VALID 10/0600Z 27.4N  82.6W...INLAND
+MAX WIND 115 KT...GUSTS 140 KT.
+
+FORECAST VALID 10/1800Z 28.2N  80.5W...OVER WATER
+MAX WIND  70 KT...GUSTS  85 KT.
+
+FORECAST VALID 11/0600Z 28.8N  76.8W
+MAX WIND  60 KT...GUSTS  75 KT.
+
+NEXT ADVISORY AT 09/1500Z
+$$
+FORECASTER CANGIALOSI
 ```
 
 Decoded:
 
-- `HURRICANE FIONA ADVISORY NUMBER 17` -- 17th regular advisory for this storm. Atlantic basin identifier `AL062026` (sixth Atlantic storm of 2026).
-- `1500 UTC THU SEP 22 2026` -- fix is good for 1500Z on 22 Sep; advisory issued shortly after.
-- `LOCATION 24.3N 70.5W` -- center is about 470 statute miles east of Miami, sitting over warm Atlantic water with no land friction to weaken it.
-- `MAX SUSTAINED WINDS 110 KT` -- 110-knot 1-minute sustained winds at the surface. That is mid-Category-3 on the Saffir-Simpson scale (96-112 kt = Cat 3; the storm is at the upper edge).
-- `MOVEMENT NW OR 315 DEG AT 14 KT` -- moving northwest at 14 knots. At 14 kt the storm covers roughly 335 NM per day; the 470 NM gap to Miami closes in about 34 hours absent any track shift.
-- `MINIMUM CENTRAL PRESSURE 952 MB` -- deep central pressure consistent with a strong Cat 3. Watch for further drops in successive advisories; rapid pressure falls signal rapid intensification.
-- Forecast positions: 24/0000Z 75 NM closer and intensifying to Cat 4; 24-h forecast puts the center 27.2N 74.6W (about 250 NM east of West Palm Beach). 48-h forecast puts it 28.4N 79.5W, just offshore south Florida, weakening to Cat 2 -- but still a hurricane making a close approach.
-- Wind radii: 64 kt winds extend only 25 NM NE / 20 SE / 15 SW / 20 NW from the center (a relatively compact core). 34 kt tropical-storm-force winds extend 120 NM NE / 90 SE / 60 SW / 100 NW. The footprint is asymmetric -- the NE quadrant is the dangerous half.
-- Key Messages: explicit forecaster call-out that a westward track shift puts the core over Miami; eastward keeps the worst winds offshore. The cone is wide at 48-72 h.
+- `HURRICANE MILTON FORECAST/ADVISORY NUMBER 17` -- 17th forecast/advisory for this storm. The forecast/advisory is the technical product (the one with the aviation- and marine-relevant numbers); the parallel public advisory carries the plain-language version. Atlantic basin identifier `AL142024` (14th Atlantic storm of 2024).
+- `0900 UTC WED OCT 09 2024` -- the fix is good for 0900Z on 9 Oct.
+- `HURRICANE CENTER LOCATED NEAR 24.5N 85.4W` -- center in the eastern Gulf of Mexico, southwest of Tampa, over warm water with no land friction to weaken it.
+- `PRESENT MOVEMENT TOWARD THE NORTHEAST OR 45 DEGREES AT 12 KT` -- moving northeast at 12 knots, straight at the Florida Gulf coast.
+- `ESTIMATED MINIMUM CENTRAL PRESSURE 907 MB` -- an extremely deep central pressure. Watch this number across advisories; a 907 mb hurricane is among the strongest the Atlantic basin produces.
+- `EYE DIAMETER 10 NM` -- a small, tight eye, typical of an intense, well-organized hurricane.
+- `MAX SUSTAINED WINDS 140 KT WITH GUSTS TO 170 KT` -- 140-knot 1-minute sustained winds. That is Category 5 on the Saffir-Simpson scale (137 kt and above).
+- Wind radii on the observed line: 64 kt hurricane-force winds extend 25 NM in every quadrant (a compact, symmetric core); 34 kt tropical-storm-force winds extend 100-110 NM. The `12 FT SEAS` line shows the sea-state footprint, far larger to the southwest.
+- `FORECAST VALID` lines: each gives the forecast center position and max wind at a future time. 09/1800Z puts the center near 25.9N 84.3W at 130 kt; 10/0600Z has the center inland near 27.4N 82.6W still at 115 kt (a major hurricane at landfall); by 10/1800Z it is back over water off the Atlantic coast and down to 70 kt.
+- `NEXT ADVISORY AT 09/1500Z` -- next forecast/advisory in 6 hours.
 
-What this is telling you: a Category 3 hurricane is 470 NM offshore moving toward south Florida at 14 kt, with the forecast track threading just east of the coastline at 48 hours. Even with the storm tracking offshore, KMIA falls inside the 34 kt wind radius for some portion of the +24 to +48 hour window, and inside the 50 kt radius if the track shifts west by even one cone width. Operationally: any GA flight into or through KMIA, KFLL, KFXE, KPBI between Friday afternoon and Saturday night is canceled or rescheduled; the paired tropical cyclone SIGMET will define the closed polygon for IFR routing. Aircraft based at affected fields should be flown out (or hangared / tied down) before tropical-storm-force winds arrive -- typically 24-36 hours before forecast landfall, when the airfield is still flyable but the surface wind hasn't started to climb.
+What this is telling you: a Category 5 hurricane is in the eastern Gulf moving northeast at 12 kt, forecast to cross the Florida Gulf coast as a major hurricane within about 21 hours of this fix. Every airport in the forecast path -- Tampa, Sarasota, Orlando, and the fields between -- is unflyable for the duration. Operationally: any GA flight into or through that corridor on 9-10 October is canceled, and the paired tropical-cyclone SIGMET defines the closed polygon for IFR routing. Aircraft based at the threatened fields are flown out, or hangared and tied down, before tropical-storm-force winds arrive -- typically 24-36 hours before forecast landfall, while the field is still flyable and the surface wind has not yet started to climb. The wind radii tell you how wide a berth to give: 34 kt winds reach 100 NM-plus from the center, so "clear of the eye" is nowhere near "clear of the storm."
+
+Source: NOAA National Hurricane Center advisory archive (nhc.noaa.gov), Hurricane Milton Forecast/Advisory Number 17, AL142024, issued 2024-10-09 09:00Z. Wind-radii and extended-outlook lines beyond +48 HR trimmed for length; the header, observed conditions, and the first four forecast positions are quoted verbatim.
 
 ### Example 2 -- western Pacific typhoon (Tokyo TCAC)
+
+(Illustrative example -- constructed to show the ICAO `TC ADVISORY` format issued by a Tropical Cyclone Advisory Center; not a real archived bulletin. Example 1 is a real NHC product; this one shows the parallel TCAC format used outside the NHC area, built to the live RSMC Tokyo product spec.)
 
 Raw advisory text:
 

@@ -83,6 +83,8 @@ The polygon is described as a chain of points relative to VOR/DME stations or na
 
 ### Example 1 -- AIRMET SIERRA, Pacific Northwest IFR + mountain obscuration
 
+(Illustrative example -- constructed to show the format; not a real archived bulletin. The textual AIRMET was retired for the contiguous US on 27 January 2025 in favor of the graphical G-AIRMET, so no current CONUS textual AIRMET exists to quote; the format below remains live for Alaska, where the AAWU still issues textual `WAAK` AIRMET bulletins.)
+
 Raw product text:
 
 ```text
@@ -112,6 +114,8 @@ Decoded:
 What this is telling you: the entire I-5 corridor and the Cascades are in IFR with mountains hidden in the clag. A VFR pilot eastbound from KSEA to KGEG cannot legally cross the Cascades VFR; the only options are IFR with an aircraft and pilot capable, wait it out, or coastal/Columbia Gorge low-altitude routing under careful eyeball -- and even that has the mountain obscuration AIRMET sitting on top of it. The outlook says it doesn't clear today.
 
 ### Example 2 -- AIRMET ZULU, Great Lakes icing
+
+(Illustrative example -- constructed to show the format; not a real archived bulletin. As with Example 1, this is the retired CONUS textual format, kept here because it remains in use for Alaska and the underlying SIERRA/TANGO/ZULU taxonomy still drives the G-AIRMET.)
 
 Raw product text:
 

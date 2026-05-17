@@ -88,6 +88,8 @@ The polygon convention is the same as AIRMET / SIGMET: a chain of points express
 
 ### Example 1 -- developing thunderstorm line, ZME (Memphis)
 
+(Illustrative example -- constructed to show the format; not a real archived bulletin. A CWA is a 2-hour product issued by a Center Weather Service Unit only while a hazard is active, so there is no continuously available archive of past CWA text; the format below follows the live product spec exactly.)
+
 Raw product text:
 
 ```text
@@ -111,6 +113,8 @@ Decoded:
 What this is telling you: a developing, intensifying line of thunderstorms with tops above FL400 is moving east across the ZME boundary. For any GA flight in or near the polygon at any altitude, this is a divert / hold / wait. The CWA is the early warning; expect a Convective SIGMET on the next H+55 issuance to cover the same line as an AWC product. Cross-check radar mosaic and PIREPs; PIREPs from aircraft skirting the line will confirm severity faster than the next forecast cycle.
 
 ### Example 2 -- moderate-to-severe lee-wave turbulence, ZDV (Denver)
+
+(Illustrative example -- constructed to show the format; not a real archived bulletin. As with Example 1, CWAs are short-lived and not archived as a continuous text feed; the format below follows the live product spec exactly.)
 
 Raw product text:
 

@@ -106,6 +106,8 @@ Whole-field weather closures use the AD keyword: `AD AP CLSD WX`. Service / nava
 
 ### Example 1 -- FICON on a contaminated runway
 
+(Illustrative example -- constructed to show the FICON NOTAM format; not a real archived bulletin. NOTAMs are short-lived and the FAA NOTAM system does not publish a continuous raw-text archive of expired NOTAMs, so this is built to the live domestic NOTAM and FICON/RWYCC syntax.)
+
 Raw NOTAM:
 
 ```text
@@ -128,6 +130,8 @@ Decoded:
 What this is telling you: O'Hare's 10L/28R has uniform 1-inch dry-snow coverage on a MEDIUM (RWYCC 3) braking-action surface, freshly assessed at the top of the half hour. For a turboprop on a 6,000-ft runway, RWYCC 3 typically increases unfactored landing distance by 30 to 50 percent vs dry; pilots should run the contaminated-runway table in the AFM/POH and confirm landing distance available exceeds the corrected requirement with the crosswind component the surface still supports. The `EST` modifier on the end time means the FICON may be revised earlier or extended if the surface changes.
 
 ### Example 2 -- weather-driven airport closure
+
+(Illustrative example -- constructed to show the airport-closure NOTAM format; not a real archived bulletin. As with Example 1, expired NOTAMs are not published as a raw-text archive; this follows the live domestic NOTAM syntax.)
 
 Raw NOTAM:
 
