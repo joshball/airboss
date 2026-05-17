@@ -160,6 +160,16 @@ S2 historical calibration (gated: real METAR archive ingest + "too synthetic" fe
 - §5 Manual smoke tests owed (WP 1 study, header/brand smoke, /credentials + /lens/handbook visual check, MVP step 8 six features) — user-only by design.
 - §6 Header WP deferred-with-trigger items (cross-origin sign-in redirect, /preferences route, per-app HelpSearch ranking bias, real help content) — gated on triggers, not actioned.
 
+### wx-products-reference (3 items)
+
+The aviation weather products reference (`course/weather/references/products/`, 25 pages; route `/reference/wx/products`) shipped via PRs #956, #960, #964, #998, #1000, #1003. Three follow-ups are deliberately deferred, each with a concrete revisit trigger.
+
+| Item                                           | Why deferred                                                                                                                                                                                                         | Revisit trigger                                                                                                                                  |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Migrate reference pages into `apps/flightbag/` | `apps/flightbag/` is still a scaffold (no usable reader). `/reference/wx/products` is the correct interim home; migration is a lift-and-shift later, not a rebuild.                                                  | `apps/flightbag/` reaches a usable reference-reader state.                                                                                       |
+| Generate real chart images for chart products  | Chart-product pages (surface analysis, prog chart, radar, satellite, GFA, etc.) describe images in prose as deliberate anchors. Real images need the `wx-charts` library to render live data, or hand-drawn figures. | The `wx-charts` library lands real renderers — then the reference pages embed the same `:::chart slug="..."` directives the course already uses. |
+| `/reference/wx` parent index page              | There is exactly one surface under `wx/` today (`products`). A parent index listing one child is empty ceremony.                                                                                                     | A second `wx/` sub-surface appears (e.g. `wx/canonical-events`).                                                                                 |
+
 ---
 
 ## Hygiene / process
