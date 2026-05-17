@@ -2205,6 +2205,14 @@ export const REFERENCE_SECTION_LEVELS = {
 	 * audience badge) without confusing a SAFO/InFO with a whole-doc handbook.
 	 */
 	BULLETIN: 'bulletin',
+	/**
+	 * Handbook front-matter page (WP-HANDBOOK-RE-EXTRACTION-V2 Sub-phase 1C).
+	 * Depth-0 peer of the real chapters; code is `0.N` (`0.1` Cover, `0.2`
+	 * Preface, ...). Each row is a leaf carrying real `content_md` (preface,
+	 * acknowledgments, how-to-use). Distinct from `'chapter'` so the reader
+	 * can route front-matter to its own leaf URL rather than the chapter list.
+	 */
+	FRONT_MATTER: 'front-matter',
 } as const;
 
 export type ReferenceSectionLevel = (typeof REFERENCE_SECTION_LEVELS)[keyof typeof REFERENCE_SECTION_LEVELS];
@@ -2229,6 +2237,7 @@ export const REFERENCE_SECTION_LEVEL_LABELS: Record<ReferenceSectionLevel, strin
 	[REFERENCE_SECTION_LEVELS.TASK]: 'Task',
 	[REFERENCE_SECTION_LEVELS.ELEMENT]: 'Element',
 	[REFERENCE_SECTION_LEVELS.BULLETIN]: 'Bulletin',
+	[REFERENCE_SECTION_LEVELS.FRONT_MATTER]: 'Front matter',
 };
 
 /**

@@ -10,16 +10,26 @@ let { data }: { data: PageData } = $props();
 const hasPreamble = $derived(hasChapterPreamble({ contentMd: data.chapter.contentMd, figures: data.figures }));
 const hasSections = $derived(data.sections.length > 0);
 const isEndOfDoc = $derived(data.nav.next === null);
+
+// AC appendix rows are `level='chapter'` with code `appendix-<letter>`; they
+// read as "Appendix A", not "Chapter appendix-a". Numbered chapters keep the
+// "Chapter N" prefix.
+const APPENDIX_CODE = /^appendix-([a-z0-9]+)$/i;
+const chapterLabel = $derived.by(() => {
+	const match = APPENDIX_CODE.exec(data.chapter.code);
+	return match ? `Appendix ${match[1].toUpperCase()}` : `Chapter ${data.chapter.code}`;
+});
+const chapterHeading = $derived(`${chapterLabel}: ${data.chapter.title}`);
 </script>
 
 <svelte:head>
-	<title>{data.reference.title} -- Chapter {data.chapter.code}</title>
+	<title>{data.reference.title} -- {chapterLabel}</title>
 </svelte:head>
 
 {#if hasSections}
 	{#if hasPreamble}
 		<RenderedSection
-			title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
+			title={chapterHeading}
 			id={data.uri}
 			body={data.chapter.contentMd}
 			figures={data.figures}
@@ -29,7 +39,7 @@ const isEndOfDoc = $derived(data.nav.next === null);
 		/>
 	{:else}
 		<header class="page-header-inline">
-			<h1>Chapter {data.chapter.code}: {data.chapter.title}</h1>
+			<h1>{chapterHeading}</h1>
 			<p class="meta-row">
 				{#if data.chapter.sourceLocator}
 					<span class="locator">{data.chapter.sourceLocator}</span>
@@ -59,7 +69,7 @@ const isEndOfDoc = $derived(data.nav.next === null);
 	<ReaderNav nav={data.nav} variant={isEndOfDoc ? 'end-of-doc' : 'footer'} />
 {:else}
 	<RenderedSection
-		title={`Chapter ${data.chapter.code}: ${data.chapter.title}`}
+		title={chapterHeading}
 		id={data.uri}
 		body={data.chapter.contentMd}
 		figures={data.figures}

@@ -429,6 +429,7 @@ export {
 	computeReadingOrder,
 	getFlatSection,
 	getHandbookChapter,
+	getHandbookFrontMatter,
 	getHandbookProgress,
 	getHandbookProgressMap,
 	getHandbookSection,

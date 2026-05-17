@@ -19,6 +19,7 @@ import {
 } from '@ab/bc-study/server';
 import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { error } from '@sveltejs/kit';
+import { handbookHrefFor } from '../../../../../lib/handbook-href';
 import { loadReadSetForReference } from '../../../../../lib/read-state';
 import { computeSiblingNav } from '../../../../../lib/section-nav';
 import { buildSourceLinks } from '../../../../../lib/source-links';
@@ -58,16 +59,8 @@ export const load: PageServerLoad = async (event) => {
 	});
 
 	const allSections = await listAllSectionsForReference(ref.id);
-	const hrefForRow = (row: { parentId: string | null; code: string }): string | null => {
-		if (row.parentId === null) {
-			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, row.code);
-		}
-		const parts = row.code.split('.');
-		if (parts.length !== 2) return null;
-		const [ch, sec] = parts;
-		if (!ch || !sec) return null;
-		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
-	};
+	const hrefForRow = (row: { parentId: string | null; code: string; level: string }): string | null =>
+		handbookHrefFor(ref.documentSlug, shortEdition, row);
 	const nav = computeSiblingNav(allSections, chapter.id, hrefForRow);
 
 	const readingOrder = computeReadingOrder(allSections);

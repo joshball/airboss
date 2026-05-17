@@ -27,16 +27,36 @@ describe('sectionUrlFor -- handbook', () => {
 		expect(result).toEqual({ kind: 'url', url: ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '4', '2') });
 	});
 
-	it('emits a URL (not skip) for chapter "0" front-matter so the suite surfaces that bug', () => {
+	it('maps a front-matter row to the dedicated FLIGHTBAG_HANDBOOK_FRONT_MATTER leaf URL', () => {
 		const result = sectionUrlFor({
 			kind: REFERENCE_KINDS.HANDBOOK,
 			documentSlug: 'avwx',
 			edition: 'FAA-H-8083-28A',
 			code: '0.2',
-			parentId: 'rs_X',
-			level: REFERENCE_SECTION_LEVELS.SECTION,
+			parentId: null,
+			level: REFERENCE_SECTION_LEVELS.FRONT_MATTER,
 		});
-		expect(result).toEqual({ kind: 'url', url: ROUTES.FLIGHTBAG_HANDBOOK_SECTION('avwx', '8083-28A', '0', '2') });
+		expect(result).toEqual({
+			kind: 'url',
+			url: ROUTES.FLIGHTBAG_HANDBOOK_FRONT_MATTER('avwx', '8083-28A', '0.2'),
+		});
+	});
+
+	it('routes every front-matter code (0.1..0.6) to its own front-matter leaf', () => {
+		for (const code of ['0.1', '0.3', '0.6']) {
+			const result = sectionUrlFor({
+				kind: REFERENCE_KINDS.HANDBOOK,
+				documentSlug: 'phak',
+				edition: 'FAA-H-8083-25C',
+				code,
+				parentId: null,
+				level: REFERENCE_SECTION_LEVELS.FRONT_MATTER,
+			});
+			expect(result).toEqual({
+				kind: 'url',
+				url: ROUTES.FLIGHTBAG_HANDBOOK_FRONT_MATTER('phak', '8083-25C', code),
+			});
+		}
 	});
 
 	it('routes deeper subsections back to their chapter URL (covered-by-parent)', () => {
