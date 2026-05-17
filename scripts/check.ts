@@ -153,7 +153,7 @@ interface CommandHelp {
 const COMMAND_HELP: Record<string, CommandHelp> = {
 	dirty: {
 		summary: 'Default. Only checks relevant to changed files (typically <10s).',
-		what: `Runs every check whose domain overlaps your dirty files. Per-file linters (biome, theme-lint, test-lint, md-format) run only on the changed files. Graph validators (references, airboss-ref, knowledge, help-ids, browser-globals, frontmatter) skip entirely if nothing in their domain changed. svelte-check:study runs only if .ts/.svelte/lib files changed; the other 4 svelte-checks skip on dirty.
+		what: `Runs every check whose domain overlaps your dirty files. Per-file linters (biome, theme-lint, test-lint, md-format) run only on the changed files. Graph validators (references, airboss-ref, knowledge, help-ids, browser-globals, frontmatter) skip entirely if nothing in their domain changed. svelte-check runs per app: each app's whole-program type-check runs when that app's own files change, or when a shared lib it imports (browser-bundled libs, libs/db, libs/auth) changes -- so a hangar-only edit type-checks hangar, not study.
 
   bun run check                # default
   bun run check dirty
@@ -1491,36 +1491,33 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: () => shellRun('bun', ['scripts/wx-scenario.ts', 'check-round-trip', '--all']),
 	});
 
-	// svelte-check predicates: a file change is "relevant" to app X if it's in apps/X
-	// or in any browser-bundled lib (transitively imported by all apps). On `dirty`
-	// we run *only* svelte-check:study by default (it's the canonical app and the
-	// other 4 are scaffolds / smaller surfaces that rarely catch unique issues).
+	// svelte-check predicates: in `dirty` / `branch` scope an app's type-check
+	// runs when that app's own files change, or when a shared lib it imports
+	// changes. `svelte-check --tsconfig` always type-checks the whole app
+	// program (TypeScript needs the full graph), so the scoping decision is
+	// "which apps does this change touch", not "which files" -- each touched
+	// app gets a full whole-program check.
+	//
+	// Shared libs (browser-bundled libs, libs/db, libs/auth) feed every app;
+	// libs/hangar-jobs and libs/hangar-sync are hangar-only. Edits confined to
+	// scripts/, tools/, course/, docs/, drizzle/ trigger no svelte-check.
 	for (const app of SVELTE_APPS) {
 		const name = `svelte-check:${app.slice('apps/'.length)}`;
-		const isStudy = app === 'apps/study';
+		const isHangar = app === 'apps/hangar';
 		defs.push({
 			name,
 			tier: 'heavy',
 			lane: 'svelte-check',
-			relevantWhen: (d) => {
-				if (!isStudy) return false; // dirty / branch never run the non-study svelte-checks
-				// A change is type-relevant for apps/study only when it's:
-				//  - inside apps/study itself, or
-				//  - inside a browser-bundled lib (transitively imported), or
-				//  - inside libs/bc/study (study's BC), or
-				//  - in libs/db/ or libs/auth/ (server types app pages import)
-				// Edits to scripts/, tools/, course/, docs/, drizzle/, etc. don't trigger it.
-				return anyMatch(
+			relevantWhen: (d) =>
+				anyMatch(
 					d,
 					(f) =>
 						f.startsWith(`${app}/`) ||
 						startsWithAny(f, BROWSER_BUNDLED_LIBS) ||
 						f.startsWith('libs/db/') ||
 						f.startsWith('libs/auth/') ||
-						f.startsWith('libs/hangar-jobs/') ||
-						f.startsWith('libs/hangar-sync/'),
-				);
-			},
+						(isHangar && (f.startsWith('libs/hangar-jobs/') || f.startsWith('libs/hangar-sync/'))),
+				),
 			fn: () => shellRun('bunx', ['svelte-check', '--tsconfig', './tsconfig.json'], resolve(REPO_ROOT, app)),
 		});
 	}
@@ -1580,8 +1577,9 @@ function selectByProfile(defs: readonly StepDef[], profile: Profile, dirty: read
 	if (profile === 'types') return defs.filter((d) => d.tier === 'heavy');
 	if (profile === 'quick') return defs.filter((d) => d.tier !== 'heavy');
 	// dirty / branch: every step that has a `relevantWhen` predicate that returns true.
-	// Heavy svelte-checks are kept too (predicate filters to study only) so a TS edit
-	// still gets type-checked.
+	// Heavy svelte-checks are kept too -- each app's predicate fires when that app's
+	// files (or a shared lib it imports) change, so every touched app gets a
+	// whole-program type-check.
 	return defs.filter((d) => {
 		if (d.relevantWhen) return d.relevantWhen(dirty);
 		return d.tier !== 'heavy'; // unguarded fast/medium always run; unguarded heavy doesn't

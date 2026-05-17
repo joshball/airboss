@@ -21,7 +21,36 @@ import { formatMarkdown } from './format';
 
 const REPO_ROOT = resolve(import.meta.dir, '..', '..');
 
-const SKIP_PREFIXES = ['node_modules/', '.svelte-kit/', 'dist/', 'build/', '.claude/skills/', 'docs/.archive/', 'spikes/'];
+/**
+ * Path prefixes md-format never touches.
+ *
+ * Two groups:
+ *   - Build / vendor / archive dirs (`node_modules/`, `.svelte-kit/`, `dist/`,
+ *     `build/`, `.claude/`, `docs/.archive/`, `spikes/`) -- not source.
+ *     `.claude/` is skipped wholesale: `.claude/worktrees/` holds full repo
+ *     checkouts of other agents' branches; the formatter must never recurse
+ *     into another worktree's tree.
+ *   - Ingested FAA source corpora (`handbooks/`, `ac/`, `aim/`, `safo/`,
+ *     `info/`) -- markdown extracted verbatim from FAA PDFs by the ingest
+ *     pipeline. These are machine-generated, not hand-authored: pipe-table
+ *     alignment is meaningless on them, and rewriting a section body desyncs
+ *     it from the `content_hash` recorded in its `manifest.json`. The ingest
+ *     pipeline owns these files; the formatter leaves them alone.
+ */
+const SKIP_PREFIXES = [
+	'node_modules/',
+	'.svelte-kit/',
+	'dist/',
+	'build/',
+	'.claude/',
+	'docs/.archive/',
+	'spikes/',
+	'handbooks/',
+	'ac/',
+	'aim/',
+	'safo/',
+	'info/',
+];
 
 interface Args {
 	check: boolean;

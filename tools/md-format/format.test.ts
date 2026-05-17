@@ -68,4 +68,36 @@ describe('formatMarkdown', () => {
 		// Round-trip should be stable.
 		expect(formatMarkdown(out)).toBe(out);
 	});
+
+	it('leaves a pipe block with no separator row verbatim (not a real table)', () => {
+		// Ingested FAA PDFs often have stray bare `|` lines -- a table that
+		// failed to extract cleanly. With no GFM separator row the block is
+		// not a table; aligning it would oscillate between passes.
+		const input = ['intro', '', '|', '|', '|', '', 'outro', ''].join('\n');
+		const out = formatMarkdown(input);
+		expect(out).toContain('\n|\n|\n|\n');
+	});
+
+	it('leaves a degenerate all-empty pipe block verbatim', () => {
+		const input = ['text', '', '|  |', '|  |', '|  |', '', 'more', ''].join('\n');
+		const out = formatMarkdown(input);
+		expect(out).toContain('\n|  |\n|  |\n|  |\n');
+	});
+
+	it('is idempotent on a non-table pipe block (the regression that motivated the fix)', () => {
+		const input = ['# H', '', '|', '|', '|', '', 'body', ''].join('\n');
+		const pass1 = formatMarkdown(input);
+		const pass2 = formatMarkdown(pass1);
+		expect(pass2).toBe(pass1);
+	});
+
+	it('still aligns a real table that follows a stray pipe block', () => {
+		const input = ['intro', '', '|', '|', '', '| a | b |', '| --- | --- |', '| longer | x |', ''].join('\n');
+		const out = formatMarkdown(input);
+		// The stray `|` lines pass through; the real table below is aligned.
+		expect(out).toContain('\n|\n|\n');
+		const tableLines = out.split('\n').filter((l) => l.startsWith('| '));
+		expect(tableLines[0]).toBe('| a      | b   |');
+		expect(formatMarkdown(out)).toBe(out);
+	});
 });
