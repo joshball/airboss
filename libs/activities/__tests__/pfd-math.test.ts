@@ -178,6 +178,11 @@ describe('counterTranslateY', () => {
 		// 11_000 ft mod 10 = 1.0 -> same offset as 1_000 ft
 		expect(counterTranslateY(11_000, 26)).toBeCloseTo(counterTranslateY(1_000, 26), 5);
 	});
+
+	it('treats non-finite altitude as zero rather than injecting NaN', () => {
+		expect(counterTranslateY(Number.NaN, 26)).toBeCloseTo(0, 10);
+		expect(counterTranslateY(Number.POSITIVE_INFINITY, 26)).toBeCloseTo(0, 10);
+	});
 });
 
 describe('altitudeLowDigits', () => {

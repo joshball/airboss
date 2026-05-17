@@ -32,7 +32,7 @@ import {
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateCardSnoozeId } from '@ab/utils';
-import { and, desc, eq, gt, isNull, lte, or, sql } from 'drizzle-orm';
+import { and, desc, eq, gt, isNotNull, isNull, lte, or } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import { CardNotFoundError } from './cards';
 import { type CardSnoozeRow, card, cardSnooze, cardState } from './schema';
@@ -342,7 +342,7 @@ export async function getUnresolvedReEntrySnooze(
 				eq(cardSnooze.userId, userId),
 				eq(cardSnooze.reason, SNOOZE_REASONS.BAD_QUESTION),
 				isNull(cardSnooze.resolvedAt),
-				sql`"card_edited_at" IS NOT NULL`,
+				isNotNull(cardSnooze.cardEditedAt),
 			),
 		)
 		.orderBy(desc(cardSnooze.createdAt))

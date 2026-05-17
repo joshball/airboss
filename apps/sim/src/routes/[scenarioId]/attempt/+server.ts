@@ -24,6 +24,13 @@ import type { RequestHandler } from './$types';
 const REASON_MAX_LENGTH = 200;
 const GRADE_COMPONENT_MAX = 32;
 const GRADE_SUMMARY_MAX = 200;
+/**
+ * Hard ceiling on the serialized tape, in bytes. The BC schema comment
+ * bounds a real ~3-minute run at ~1-5 MB; 16 MB leaves generous headroom
+ * for the longest authored scenario while stopping an authenticated client
+ * from POSTing an unbounded JSON blob into the `tape` JSONB column.
+ */
+const TAPE_MAX_SERIALIZED_BYTES = 16 * 1024 * 1024;
 
 const attemptResultSchema = z.object({
 	scenarioId: z.string().min(1),
@@ -86,6 +93,15 @@ export const POST: RequestHandler = async ({ params, request, locals }) => {
 		payload.tape && typeof payload.tape === 'object'
 			? (payload.tape as Parameters<typeof recordSimAttempt>[0]['tape'])
 			: null;
+	// Bound the tape before it reaches the JSONB column. `tape` is
+	// `z.unknown()` -- a structurally-valid run is small, but an
+	// authenticated client could otherwise POST an arbitrarily large blob.
+	if (tape !== null) {
+		const serializedBytes = new TextEncoder().encode(JSON.stringify(tape)).length;
+		if (serializedBytes > TAPE_MAX_SERIALIZED_BYTES) {
+			throw error(413, 'Replay tape exceeds the maximum size.');
+		}
+	}
 	// Cast at the boundary: Zod confirmed the structural shape; component
 	// `kind` strings are narrowed to GradingComponentKind by the BC. The
 	// worker is browser code and is therefore not trusted -- the schema

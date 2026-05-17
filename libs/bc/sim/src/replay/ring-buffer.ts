@@ -88,12 +88,22 @@ export function drainFrames(ring: FrameRing): ReplayFrame[] {
 	return out;
 }
 
-/** True when the ring has wrapped at least once (frames have been dropped). */
+/**
+ * True once the write head has returned to the start of the ring, i.e. the
+ * ring is full and `drainFrames` must read from `writeIdx` rather than from
+ * index 0. The boundary is `>= capacity` so this agrees with the `wrapped`
+ * condition inside `drainFrames`: at exactly `capacity` writes the head sits
+ * at index 0 and the oldest live slot is `writeIdx`, not 0.
+ *
+ * Note this answers "has the write head wrapped", not "have frames been
+ * dropped" -- at exactly `capacity` writes no frame has been overwritten yet.
+ * Use `ringFramesDropped` for the dropped-frame count.
+ */
 export function ringHasWrapped(ring: FrameRing): boolean {
-	return ring.totalWrites > ring.capacity;
+	return ring.totalWrites >= ring.capacity;
 }
 
-/** Number of frames lost to overwrite. Zero unless the ring wrapped. */
+/** Number of frames lost to overwrite. Zero until `totalWrites` exceeds `capacity`. */
 export function ringFramesDropped(ring: FrameRing): number {
 	return Math.max(0, ring.totalWrites - ring.capacity);
 }

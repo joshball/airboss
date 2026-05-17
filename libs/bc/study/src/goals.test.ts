@@ -41,6 +41,7 @@ import {
 	getGoalById,
 	getGoalNodes,
 	getGoalNodeUnion,
+	getGoalPrimaryCredentialId,
 	getGoalSyllabi,
 	getOwnedGoal,
 	getPrimaryGoal,
@@ -474,6 +475,32 @@ describe('addGoalSyllabus / removeGoalSyllabus / getGoalSyllabi', () => {
 		await removeGoalSyllabus(g.id, TEST_USER_ID, PPL_SYL_ID);
 		rows = await getGoalSyllabi(g.id);
 		expect(rows.length).toBe(0);
+	});
+});
+
+describe('getGoalPrimaryCredentialId', () => {
+	it('resolves the credential whose credential_syllabus link is primary', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'primary-cred test', notesMd: '', isPrimary: false });
+		await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: PPL_SYL_ID, weight: 1.0 });
+		const credId = await getGoalPrimaryCredentialId(g.id);
+		expect(credId).toBe(PPL_CRED_ID);
+	});
+
+	it('returns null for a goal that composes no syllabi', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'no-syllabus test', notesMd: '', isPrimary: false });
+		const credId = await getGoalPrimaryCredentialId(g.id);
+		expect(credId).toBeNull();
+	});
+
+	it('prefers the primary link when a goal reaches two credentials', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'two-cred test', notesMd: '', isPrimary: false });
+		await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: PPL_SYL_ID, weight: 1.0 });
+		await addGoalSyllabus(g.id, TEST_USER_ID, { syllabusId: IFR_SYL_ID, weight: 1.0 });
+		// Both credential_syllabus links are primary; the tiebreak is the
+		// lowest credential id, so the result is deterministic across runs.
+		const credId = await getGoalPrimaryCredentialId(g.id);
+		const expected = PPL_CRED_ID < IFR_CRED_ID ? PPL_CRED_ID : IFR_CRED_ID;
+		expect(credId).toBe(expected);
 	});
 });
 

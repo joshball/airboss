@@ -11,18 +11,9 @@
  */
 
 import { loadSimAttempt } from '@ab/bc-sim/persistence';
-import { HOSTS, ROUTES } from '@ab/constants';
 import { error, redirect } from '@sveltejs/kit';
+import { studyLoginUrl } from '$lib/server/study-login';
 import type { PageServerLoad } from './$types';
-
-function studyLoginUrl(currentUrl: URL): string {
-	const fallback = `${currentUrl.protocol}//${HOSTS.STUDY}${ROUTES.LOGIN}`;
-	const host = currentUrl.host;
-	const dotIdx = host.indexOf('.');
-	if (dotIdx <= 0) return fallback;
-	const parent = host.slice(dotIdx + 1);
-	return `${currentUrl.protocol}//study.${parent}${ROUTES.LOGIN}`;
-}
 
 export const load: PageServerLoad = async ({ locals, params, url }) => {
 	if (!locals.user) {

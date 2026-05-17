@@ -30,6 +30,7 @@ import {
 	computeCardGate,
 	computeDisplayScore,
 	computeRepGate,
+	getKnowledgeNodeTitles,
 	getNodeMastery,
 	getNodeView,
 	isMastered,
@@ -358,5 +359,24 @@ describe('getNodeView -- edge target existence (LEFT JOIN)', () => {
 		const view = await getNodeView(NODE_BOTH, TEST_USER_ID);
 		const ghost = view?.edges.find((e) => e.toNodeId === ghostId);
 		expect(ghost).toMatchObject({ toNodeId: ghostId, targetExists: false });
+	});
+});
+
+describe('getKnowledgeNodeTitles', () => {
+	it('returns an id -> title map for the requested nodes', async () => {
+		const titles = await getKnowledgeNodeTitles([NODE_BOTH, NODE_EMPTY]);
+		expect(titles.get(NODE_BOTH)).toBe(`Test Node ${NODE_BOTH}`);
+		expect(titles.get(NODE_EMPTY)).toBe(`Test Node ${NODE_EMPTY}`);
+	});
+
+	it('omits ids with no matching node', async () => {
+		const titles = await getKnowledgeNodeTitles([NODE_BOTH, 'test-kg-does-not-exist']);
+		expect(titles.has(NODE_BOTH)).toBe(true);
+		expect(titles.has('test-kg-does-not-exist')).toBe(false);
+	});
+
+	it('short-circuits on empty input', async () => {
+		const titles = await getKnowledgeNodeTitles([]);
+		expect(titles.size).toBe(0);
 	});
 });

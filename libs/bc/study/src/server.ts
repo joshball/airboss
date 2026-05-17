@@ -142,11 +142,6 @@ export {
 	type TargetTypeTally,
 } from './citations';
 export type { ListCoursesForReaderOpts, UpsertCourseInput, UpsertCourseStepInput } from './courses';
-// Course seed pipeline -- DB-touching, server-only. The pure validator
-// (`validateCourseTree`, `CourseSeedError`) is re-exported here via
-// `export * from './index'` below; named here too for discoverability.
-export type { SeedCoursesOptions, SeedCoursesSummary } from './seed-courses.server';
-export { DEFAULT_COURSES_DIR, seedCourses } from './seed-courses.server';
 export {
 	countGoalsReferencingCourse,
 	countSectionsByCourse,
@@ -237,6 +232,7 @@ export {
 	getGoalFocusDomains,
 	getGoalNodes,
 	getGoalNodeUnion,
+	getGoalPrimaryCredentialId,
 	getGoalSkipDomains,
 	getGoalSkipNodes,
 	getGoalSyllabi,
@@ -285,6 +281,7 @@ export {
 	getCertProgress,
 	getCitationsForKnowledgeNode,
 	getDomainCertMatrix,
+	getKnowledgeNodeTitles,
 	getNodeMastery,
 	getNodeMasteryMap,
 	getNodeProgress,
@@ -573,6 +570,11 @@ export {
 	setScenarioStatus,
 	submitAttempt,
 } from './scenarios';
+// Course seed pipeline -- DB-touching, server-only. The pure validator
+// (`validateCourseTree`, `CourseSeedError`) is re-exported here via
+// `export * from './index'` below; named here too for discoverability.
+export type { SeedCoursesOptions, SeedCoursesSummary } from './seed-courses.server';
+export { DEFAULT_COURSES_DIR, seedCourses } from './seed-courses.server';
 export type {
 	ItemResultInput,
 	PreviewOptions,
@@ -656,6 +658,7 @@ export {
 	getSyllabusBySlug,
 	getSyllabusLeaves,
 	getSyllabusLeavesForKnowledgeNode,
+	getSyllabusNodesByCodes,
 	getSyllabusTree,
 	levelIsLeafEligible,
 	listSyllabi,
