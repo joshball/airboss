@@ -294,10 +294,10 @@ $effect(() => {
 		font-size: var(--type-ui-label-size);
 	}
 	.counter.overflow {
-		color: var(--signal-danger, #dc2626);
+		color: var(--signal-danger);
 	}
 	.error {
-		color: var(--signal-danger, #dc2626);
+		color: var(--signal-danger);
 		font-size: var(--type-ui-label-size);
 	}
 	.actions {

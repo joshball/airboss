@@ -74,20 +74,20 @@ const TONE_BY_KIND: Record<NoteContextKind, string> = {
 		border: 1px solid currentColor;
 	}
 	.tone-reference {
-		background: color-mix(in srgb, var(--signal-warning, #d97706) 12%, transparent);
-		color: var(--signal-warning, #b45309);
+		background: var(--signal-warning-wash);
+		color: var(--signal-warning-ink);
 	}
 	.tone-goal {
-		background: color-mix(in srgb, var(--signal-info, #2563eb) 12%, transparent);
-		color: var(--signal-info, #1d4ed8);
+		background: var(--signal-info-wash);
+		color: var(--signal-info-ink);
 	}
 	.tone-course {
-		background: color-mix(in srgb, var(--signal-success, #16a34a) 12%, transparent);
-		color: var(--signal-success, #15803d);
+		background: var(--signal-success-wash);
+		color: var(--signal-success-ink);
 	}
 	.tone-knowledge {
-		background: color-mix(in srgb, var(--signal-info) 18%, transparent);
-		color: var(--signal-info);
+		background: var(--signal-info-wash);
+		color: var(--signal-info-ink);
 	}
 	.tone-syllabus {
 		background: var(--surface-sunken);

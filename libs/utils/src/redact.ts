@@ -1,8 +1,11 @@
 /**
  * Recursive redactor for audit-rendered payloads. Walks any JSON-shaped value
  * and replaces values whose key matches a "sensitive" pattern (`token`,
- * `secret`, `password`, `cookie`, `key`, `authorization`) with the constant
- * `REDACTED_PLACEHOLDER`. Defense-in-depth for surfaces that render arbitrary
+ * `secret`, `password`, `cookie`, `authorization`, `bearer`, `api_key`,
+ * `private_key`) with the constant `REDACTED_PLACEHOLDER`. A bare `key` is
+ * intentionally NOT matched -- it would redact innocuous keys like
+ * `keyboardShortcut`; only the `api`/`private` prefixed forms are credentials.
+ * Defense-in-depth for surfaces that render arbitrary
  * `metadata` blobs from `audit_log` rows -- the BC has no schema constraint
  * on what gets written into `metadata`, and a future caller could plant a
  * session token or temp-file path that an admin reader would otherwise see

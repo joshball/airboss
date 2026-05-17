@@ -119,7 +119,7 @@ const isArchived = $derived(note.archivedAt !== null);
 	}
 	.title {
 		margin: 0;
-		font-size: var(--font-size-lg, 1.125rem);
+		font-size: var(--font-size-lg);
 		font-weight: 600;
 		color: var(--ink-strong);
 	}
@@ -135,7 +135,7 @@ const isArchived = $derived(note.archivedAt !== null);
 		background: var(--surface-sunken);
 		color: var(--ink-muted);
 		border: 1px solid var(--edge-default);
-		border-radius: var(--radius-pill, 999px);
+		border-radius: var(--radius-pill);
 	}
 	.preview {
 		margin: 0;

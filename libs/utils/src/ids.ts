@@ -5,6 +5,10 @@ import {
 	GOAL_ID_PREFIX,
 	NOTE_ID_PREFIX,
 	PLAN_ITEM_ID_PREFIX,
+	REFERENCE_FIGURE_ID_PREFIX,
+	REFERENCE_ID_PREFIX,
+	REFERENCE_SECTION_ERRATA_ID_PREFIX,
+	REFERENCE_SECTION_ID_PREFIX,
 	SYLLABUS_ID_PREFIX,
 	SYLLABUS_NODE_ID_PREFIX,
 	SYLLABUS_NODE_LINK_ID_PREFIX,
@@ -74,10 +78,10 @@ export const generateContentCitationId = (): string => createId('ccit');
 // hierarchy; `referenceFigure` = per-figure asset record. Errata + read-state
 // rows live in their own tables (errata gets its own id; read-state has a
 // composite PK).
-export const generateReferenceId = (): string => createId('ref');
-export const generateReferenceSectionId = (): string => createId('refsec');
-export const generateReferenceFigureId = (): string => createId('reffig');
-export const generateReferenceSectionErrataId = (): string => createId('refera');
+export const generateReferenceId = (): string => createId(REFERENCE_ID_PREFIX);
+export const generateReferenceSectionId = (): string => createId(REFERENCE_SECTION_ID_PREFIX);
+export const generateReferenceFigureId = (): string => createId(REFERENCE_FIGURE_ID_PREFIX);
+export const generateReferenceSectionErrataId = (): string => createId(REFERENCE_SECTION_ERRATA_ID_PREFIX);
 
 // Hangar BC -- job queue + streamed log + sync ledger.
 export const generateHangarJobId = (): string => createId('job');
