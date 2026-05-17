@@ -1,0 +1,21 @@
+# Scheduled job: markdown-format-drift
+#
+# Monthly housekeeping. Runs the markdown formatter across every authored
+# doc and opens a PR if any file has drifted from the canonical md-format
+# style. Daily work uses `bun run check` (dirty-scoped) and never pays for
+# a full-repo pass; this job is the quarterly-cadence safety net that keeps
+# the backlog from silently accumulating.
+
+name = "markdown-format-drift"
+description = "Monthly: re-format all authored markdown; open a PR if any file drifted from md-format style"
+enabled = true
+
+# Monthly, 09:00 local time on the 1st.
+schedule = "0 9 1 * *"
+
+[behaviour]
+on_diff = "open-pr"             # drift is a pure-formatting diff -- safe to auto-PR
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job", "drift", "docs"]
+working_dir = "."
+base_branch = "main"
