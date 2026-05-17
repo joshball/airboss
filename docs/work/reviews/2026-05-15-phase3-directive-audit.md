@@ -118,3 +118,13 @@ But Option B conflicts with the brief's explicit instruction that `:::callout` j
 - Sub-item (c): no code. Audit confirms `:::chart` / `:::scenario` clean, `:::xc-viewer` non-existent.
 - Sub-item (b): no migration. `:::cards` stays data-payload-body. Confirmed correct by design.
 - Sub-item (a): BLOCKER. Option A (migrate 69 sites to `:::callout variant="tip"`, delete callout branch) vs Option B (formalise callouts as the fourth family, keep `:::tip` syntax). Recommended: Option B. Dispatcher decides.
+
+## Resolution (2026-05-16)
+
+The dispatcher resolved sub-item (a) as **Option B** -- formalise callouts as the fourth directive family (variant-named directives), keep `:::tip` / `:::warn` / `:::note` / `:::example` as the authored syntax, no content migration. Shipped in the PR titled `feat(course): :::callout directive family + inline-closed directive form (Phase 3)`:
+
+- Callout family added to the `@ab/constants` registry (`MARKDOWN_CALLOUT_VARIANT_NAMES`); the registry doc comment now documents all four families and each callout variant's semantic purpose.
+- `danger` and `howto` retired (zero authored uses, dead code).
+- The parser recognises callouts through the unified registry opener set; the ad-hoc `CALLOUT_VARIANT_SET` is now sourced from the registry. The callout path still emits `CalloutNode`, so the `<HelpCard>` renderer is unchanged.
+- A general inline-closed directive form was added (`:::name ...:::`), separate from the callout decision.
+- `:::cards` stays data-payload-body, as this audit concluded.
