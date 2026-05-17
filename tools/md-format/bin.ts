@@ -121,6 +121,31 @@ async function dirtyMdFiles(): Promise<string[]> {
 	return out;
 }
 
+/**
+ * Drop git-ignored paths from a filesystem-walked list. `walkMd` reads the
+ * disk directly, so without this it picks up generated derived artifacts
+ * (`tests/integration/.out/`, `course/knowledge/graph-index.md`, ...) that
+ * the `dirty` scan already excludes via `git ls-files --exclude-standard`.
+ * One batched `git check-ignore --stdin` call keeps `--all` / `--dir` in
+ * agreement with what `bun run check` actually scans.
+ */
+async function filterGitIgnored(absPaths: readonly string[]): Promise<string[]> {
+	if (absPaths.length === 0) return [];
+	const rels = absPaths.map((p) => relative(REPO_ROOT, p));
+	// `check-ignore --stdin` prints one line per ignored path; exit 1 means
+	// "nothing ignored", which is not an error here.
+	const proc = Bun.spawn(['git', 'check-ignore', '--stdin'], {
+		cwd: REPO_ROOT,
+		stdin: new TextEncoder().encode(`${rels.join('\n')}\n`),
+		stdout: 'pipe',
+		stderr: 'ignore',
+	});
+	const ignoredText = await new Response(proc.stdout).text();
+	await proc.exited;
+	const ignored = new Set(ignoredText.split('\n').map((l) => l.trim()).filter(Boolean));
+	return absPaths.filter((_, idx) => !ignored.has(rels[idx] ?? ''));
+}
+
 async function collectFiles(args: Args): Promise<string[]> {
 	if (args.files.length > 0) {
 		return args.files
@@ -133,13 +158,13 @@ async function collectFiles(args: Args): Promise<string[]> {
 	if (args.all) {
 		const out: string[] = [];
 		for await (const file of walkMd(REPO_ROOT)) out.push(file);
-		return out;
+		return await filterGitIgnored(out);
 	}
 	if (args.dir !== null) {
 		const out: string[] = [];
 		const abs = resolve(process.cwd(), args.dir);
 		for await (const file of walkMd(abs)) out.push(file);
-		return out;
+		return await filterGitIgnored(out);
 	}
 	return await dirtyMdFiles();
 }
