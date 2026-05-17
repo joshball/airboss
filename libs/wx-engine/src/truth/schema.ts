@@ -22,6 +22,7 @@
  * authoring.
  */
 
+import { WX_TEMPORAL_MIN_STEP_MINUTES } from '@ab/constants';
 import { z } from 'zod';
 
 // ----------------------------------------------------------------
@@ -176,9 +177,6 @@ const terrainStateSchema = z.object({
 // derive a v1-shape snapshot for any timestamp inside [start, end].
 // ----------------------------------------------------------------
 
-/** Minimum native step size for temporal derivation (minutes). */
-const EVOLUTION_MIN_STEP_MINUTES = 5;
-
 const motionVectorSchema = z.object({
 	bearingDeg: z.number().gte(0).lte(360),
 	speedKt: z.number().gte(0),
@@ -280,7 +278,9 @@ const hazardLifecycleSchema = z.object({
 const temporalEvolutionSchema = z.object({
 	start: z.string().min(1),
 	end: z.string().min(1),
-	stepMinutes: z.number().gte(EVOLUTION_MIN_STEP_MINUTES, `stepMinutes must be at least ${EVOLUTION_MIN_STEP_MINUTES}`),
+	stepMinutes: z
+		.number()
+		.gte(WX_TEMPORAL_MIN_STEP_MINUTES, `stepMinutes must be at least ${WX_TEMPORAL_MIN_STEP_MINUTES}`),
 	fronts: z.array(temporalFrontSchema),
 	cells: z.array(temporalCellSchema),
 	airMassMotion: z.array(airMassMotionSchema),

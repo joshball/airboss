@@ -136,7 +136,7 @@ export interface ScenarioRunOptions {
  * commentary via `deriveCommentary`.
  */
 export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
-	const slug = seed.kind as WxScenario;
+	const slug = seed.kind;
 	const truth = loadScenario(slug);
 
 	// === Phase B: products ===

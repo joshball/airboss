@@ -75,9 +75,15 @@ export type WxTemporalCellIntensityCurve = keyof typeof WX_TEMPORAL_CELL_INTENSI
 /**
  * `linear-grow-shrink` radius curve endpoints. The cell radius ramps from
  * `startMul * templateRadius` at genesis to `peakMul * templateRadius` at
- * mid-life and back down to `endMul * templateRadius` at dissipation.
+ * life fraction `peakFrac` and back down to `endMul * templateRadius` at
+ * dissipation.
  */
-export const WX_TEMPORAL_RADIUS_GROW_SHRINK = { startMul: 0.4, peakMul: 1, endMul: 0.4 } as const;
+export const WX_TEMPORAL_RADIUS_GROW_SHRINK = {
+	startMul: 0.4,
+	peakMul: 1,
+	endMul: 0.4,
+	peakFrac: 0.5,
+} as const;
 
 /**
  * Reference cell radius (km) -- the genesis / template scale a named

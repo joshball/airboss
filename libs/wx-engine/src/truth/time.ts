@@ -230,11 +230,11 @@ function cellRadiusAt(cell: TemporalCell, tIso: string, lifeFrac: number, templa
 	const curve = cell.radiusKmCurve;
 	if (curve === undefined) return templateRadiusKm;
 	if (curve === 'linear-grow-shrink') {
-		const { startMul, peakMul, endMul } = WX_TEMPORAL_RADIUS_GROW_SHRINK;
+		const { startMul, peakMul, endMul, peakFrac } = WX_TEMPORAL_RADIUS_GROW_SHRINK;
 		const mul =
-			lifeFrac <= 0.5
-				? startMul + (peakMul - startMul) * (lifeFrac / 0.5)
-				: peakMul + (endMul - peakMul) * ((lifeFrac - 0.5) / 0.5);
+			lifeFrac <= peakFrac
+				? startMul + (peakMul - startMul) * (lifeFrac / peakFrac)
+				: peakMul + (endMul - peakMul) * ((lifeFrac - peakFrac) / (1 - peakFrac));
 		return templateRadiusKm * mul;
 	}
 	const genesisMs = new Date(cell.genesisAt).getTime();
