@@ -14,7 +14,7 @@ import Button from '@ab/ui/components/Button.svelte';
 import Toast, { type ToastTone } from '@ab/ui/components/Toast.svelte';
 import WalkerStepRow from '@ab/ui/components/WalkerStepRow.svelte';
 import type { ActionResult } from '@sveltejs/kit';
-import { onDestroy, onMount } from 'svelte';
+import { onDestroy, onMount, untrack } from 'svelte';
 import { applyAction, deserialize } from '$app/forms';
 import { goto, invalidateAll } from '$app/navigation';
 import type { PageData } from './$types';
@@ -63,8 +63,14 @@ const recordedByRef = $derived<ReadonlyMap<string, RecordedEntry>>(
 // flight (its local state is fresher than the server's). Skip any ref the
 // user is mid-edit on (note draft; tracked via WalkerStepRow's focus check).
 let optimistic = $state<Map<string, RecordedEntry>>(new Map());
+// The merge effect reacts to fresh SERVER data (`recordedByRef`) and the
+// in-flight set (`savingByStep`). It reads the prior `optimistic` value to
+// preserve pending / orphan-note entries, but that read is wrapped in
+// `untrack` -- the effect WRITES `optimistic`, so subscribing to it would
+// make every write re-trigger the effect, an infinite loop that crashes
+// hydration with `effect_update_depth_exceeded`.
 $effect(() => {
-	const next = new Map(optimistic);
+	const next = untrack(() => new Map(optimistic));
 	for (const [ref, rec] of recordedByRef) {
 		if (savingByStep.get(ref) === true) continue;
 		next.set(ref, { ...rec });
