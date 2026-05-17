@@ -1,0 +1,107 @@
+[
+  {
+    "station": "KDDC",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-14T11:20:00.000Z",
+    "validFrom": "2026-05-14T12:00:00.000Z",
+    "validTo": "2026-05-14T20:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-14T12:00:00.000Z",
+        "end": "2026-05-14T20:00:00.000Z",
+        "probability": null,
+        "raw": "32020G30KT 6SM BKN030",
+        "wind": {
+          "directionDeg": 320,
+          "speedKt": 20,
+          "gustKt": 30,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "BKN",
+            "heightFtAgl": 3000
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KDDC 141120Z 1412/1420 32020G30KT 6SM BKN030",
+    "warnings": []
+  },
+  {
+    "station": "KICT",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-14T11:20:00.000Z",
+    "validFrom": "2026-05-14T12:00:00.000Z",
+    "validTo": "2026-05-14T20:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-14T12:00:00.000Z",
+        "end": "2026-05-14T20:00:00.000Z",
+        "probability": null,
+        "raw": "19013KT 6SM SCT050",
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KICT 141120Z 1412/1420 19013KT 6SM SCT050",
+    "warnings": []
+  },
+  {
+    "station": "KFOE",
+    "amended": false,
+    "corrected": false,
+    "issuedAt": "2026-05-14T11:20:00.000Z",
+    "validFrom": "2026-05-14T12:00:00.000Z",
+    "validTo": "2026-05-14T20:00:00.000Z",
+    "periods": [
+      {
+        "kind": "INITIAL",
+        "start": "2026-05-14T12:00:00.000Z",
+        "end": "2026-05-14T20:00:00.000Z",
+        "probability": null,
+        "raw": "19013KT 6SM SCT050",
+        "wind": {
+          "directionDeg": 190,
+          "speedKt": 13,
+          "gustKt": null,
+          "variable": false,
+          "calm": false
+        },
+        "visibilitySM": 6,
+        "weather": [],
+        "clouds": [
+          {
+            "cover": "SCT",
+            "heightFtAgl": 5000
+          }
+        ],
+        "cavok": false
+      }
+    ],
+    "raw": "TAF KFOE 141120Z 1412/1420 19013KT 6SM SCT050",
+    "warnings": []
+  }
+]

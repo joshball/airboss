@@ -47,6 +47,12 @@ export type {
 	ScenarioSeed,
 } from './engine';
 // ----------------------------------------------------------------------
+// v2 temporal derivation result types. Values (deriveMetarSequence,
+// deriveTafSequence, deriveAirmetTimeline, buildTimeline) live in
+// `./server.ts` because they wrap server-only derivations.
+// ----------------------------------------------------------------------
+export type { AirmetEvent, AirmetTimelineEntry, TimelineSnapshot } from './products/temporal';
+// ----------------------------------------------------------------------
 // Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
 // deriveFbGrid, derivePireps) live in `./server.ts`.
 // ----------------------------------------------------------------------
@@ -59,13 +65,23 @@ export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, Derived
 // ----------------------------------------------------------------------
 export type { TruthModelSchema } from './truth/schema';
 // ----------------------------------------------------------------------
+// v2 temporal sampler. `sampleTruthAt` is a pure function -- safe at any
+// tier, so it lives in the runtime barrel. The `deriveXSequence` helpers
+// (which wrap server-only derivations) live in `./server.ts`.
+// ----------------------------------------------------------------------
+export { sampleTruthAt } from './truth/time';
+// ----------------------------------------------------------------------
 // Truth-model interfaces. Pure shape; safe at any tier.
 // ----------------------------------------------------------------------
 export type {
 	AirMass,
 	AirMassClassification,
+	AirMassMotion,
 	AirMassStability,
 	CardinalSide,
+	CellIntensitySample,
+	CellTemplate,
+	ConstantMotion,
 	ConvectionState,
 	ConvectiveCell,
 	DiurnalCycle,
@@ -73,14 +89,21 @@ export type {
 	FrontalPrecipBand,
 	FrontIntensity,
 	FrontKind,
+	FrontMotion,
 	HazardKind,
+	HazardLifecycle,
 	HazardSeverity,
 	HazardZone,
+	InlineIntensityCurve,
+	PiecewiseMotion,
 	PressureSystem,
 	SkyCoverHint,
 	StationRecord,
 	StationRegistry,
 	SynopticState,
+	TemporalCell,
+	TemporalEvolution,
+	TemporalFront,
 	TerrainState,
 	TruthModel,
 	UpperLevelState,

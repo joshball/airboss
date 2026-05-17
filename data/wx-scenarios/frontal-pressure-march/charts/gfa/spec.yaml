@@ -1,0 +1,19 @@
+slug: wx-scenarios/frontal-pressure-march/gfa
+type: gfa
+title: Graphical Forecasts for Aviation (truth-derived)
+subtitle: Issued 2026-03-14T12:00:00Z -- SFC-180 band
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent: conus
+sources:
+  polygons: cache://scenarios/frontal-pressure-march/gfa.json
+options:
+  show_legend: true
+  show_labels: true
+  source_attribution: wx-engine -- truth-derived synthetic GFA

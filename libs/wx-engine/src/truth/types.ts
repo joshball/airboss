@@ -56,6 +56,13 @@ export interface TruthModel {
 	 * passage.
 	 */
 	tafValidHours?: number;
+	/**
+	 * v2 temporal evolution block (optional). When present, `sampleTruthAt`
+	 * (`./time.ts`) derives a v1-shape snapshot for any timestamp inside
+	 * `[evolution.start, evolution.end]`. v1 callers ignore this field --
+	 * the temporal extension is purely additive.
+	 */
+	evolution?: TemporalEvolution;
 }
 
 export interface StationRecord {
@@ -199,4 +206,145 @@ export interface HazardZone {
 
 export interface TerrainState {
 	ridges: Array<{ id: string; polyline: [number, number][]; peakElevationFt: number }>;
+}
+
+// ----------------------------------------------------------------
+// v2 temporal evolution (additive, optional)
+// ----------------------------------------------------------------
+//
+// The `evolution` block describes how the v1 snapshot changes over a scenario
+// window. v1 callers ignore it entirely; the `sampleTruthAt` helper in
+// `./time.ts` consults it to produce a v1-shape snapshot for any timestamp
+// inside [start, end]. Nothing in the v1 derivation path reads `evolution` --
+// the temporal extension is purely upstream of derivation.
+//
+// See `docs/work/plans/2026-05-14-truth-model-v2-temporal.md` "Shape A".
+
+/**
+ * Per-cell intensity sample. An inline curve overrides the named-curve
+ * presets ('building' | 'mature' | 'decaying') for finer authored control.
+ */
+export interface CellIntensitySample {
+	/** UTC ISO timestamp; the sample applies from this instant forward. */
+	at: string;
+	/** Radar reflectivity (dBZ) at this instant. */
+	peakDbz: number;
+}
+
+/**
+ * Inline cell intensity curve -- a sorted list of (time, dBZ) samples.
+ * `sampleTruthAt` linearly interpolates between adjacent samples.
+ */
+export type InlineIntensityCurve = CellIntensitySample[];
+
+/**
+ * Shape of a cell spawned ahead of a temporal front by its
+ * `prefrontalConvection` block.
+ */
+export interface CellTemplate {
+	/** Reach (radius) of each spawned cell, km. */
+	radiusKm: number;
+	/** Peak reflectivity (dBZ) of each spawned cell. */
+	peakDbz: number;
+	/** When true the spawned cell tracks with the front's motion vector. */
+	motionMatchesFront: boolean;
+}
+
+/** Constant translation vector -- a true heading plus a speed in knots. */
+export interface ConstantMotion {
+	kind: 'constant';
+	bearingDeg: number;
+	speedKt: number;
+}
+
+/** Piecewise translation -- each segment applies up to its `until` instant. */
+export interface PiecewiseMotion {
+	kind: 'piecewise';
+	segments: { until: string; bearingDeg: number; speedKt: number }[];
+}
+
+export type FrontMotion = ConstantMotion | PiecewiseMotion;
+
+/** A v1 front plus the rules for how it translates + evolves over time. */
+export interface TemporalFront {
+	id: string;
+	/** Initial polyline at `TemporalEvolution.start`. */
+	pointsAtStart: [number, number][];
+	/** Translation vector; may vary over time when `kind` is 'piecewise'. */
+	motion: FrontMotion;
+	/** Intensity overrides; each entry applies from its `at` instant forward. */
+	intensitySchedule?: { at: string; intensity: FrontIntensity }[];
+	/** Convection that appears ahead of the boundary (gust-front signature). */
+	prefrontalConvection?: {
+		/** Distance ahead of the boundary the cells spawn, nm. */
+		leadDistanceNm: number;
+		/** When pre-frontal convection becomes active. */
+		onsetAt: string;
+		/** Shape of every cell spawned ahead of the front. */
+		cellTemplate: CellTemplate;
+	};
+}
+
+/** A convective cell with a genesis/dissipation lifecycle + motion. */
+export interface TemporalCell {
+	id: string;
+	/** Genesis longitude (deg). */
+	initialLon: number;
+	/** Genesis latitude (deg). */
+	initialLat: number;
+	/** When the cell first appears. */
+	genesisAt: string;
+	/** When the cell dissipates. */
+	dissipatesAt: string;
+	/** Translation vector applied across the cell lifetime. */
+	motion: { bearingDeg: number; speedKt: number };
+	/** Intensity curve -- a named preset or an inline sample list. */
+	intensityCurve: 'building' | 'mature' | 'decaying' | InlineIntensityCurve;
+	/** Reach (radius) curve over the cell lifetime. Defaults to constant. */
+	radiusKmCurve?: 'linear-grow-shrink' | { peak: number; peakAt: string };
+}
+
+/** Translation + drift rules for one air-mass polygon. */
+export interface AirMassMotion {
+	/** `AirMass.id` this motion applies to. */
+	airMassId: string;
+	/** Polygon translation vector. */
+	motion: { bearingDeg: number; speedKt: number };
+	/** Optional surface-wind drift, applied per hour of elapsed time. */
+	surfaceWindShift?: { perHour: { dirDeg: number; speedKt: number } };
+	/** Optional surface-temperature drift, degrees C per hour. */
+	temperatureDriftCPerHour?: number;
+}
+
+/** Onset/dissipation + severity schedule for one hazard zone. */
+export interface HazardLifecycle {
+	/** `HazardZone.id` this lifecycle applies to. */
+	hazardZoneId: string;
+	/** When the hazard first appears. */
+	onsetAt: string;
+	/** When the hazard dissipates. */
+	endAt: string;
+	/** Severity overrides; each entry applies from its `at` instant forward. */
+	severitySchedule?: { at: string; severity: HazardSeverity }[];
+}
+
+/**
+ * Temporal evolution block. The static v1 snapshot fields describe the world
+ * at `start`; this block describes how it changes through `end`.
+ */
+export interface TemporalEvolution {
+	/** Start of the scenario window (UTC ISO). Equals the v1 `validAt`. */
+	start: string;
+	/** End of the scenario window (UTC ISO). */
+	end: string;
+	/** Native derivation step size, minutes. >= 5; default 60. */
+	stepMinutes: number;
+	/** Temporal fronts; each `id` should match a v1 `synoptic.fronts` entry. */
+	fronts: TemporalFront[];
+	/** Temporal cells spawned/evolved over the window. */
+	cells: TemporalCell[];
+	/** Per-air-mass translation + drift rules. */
+	airMassMotion: AirMassMotion[];
+	/** Per-hazard-zone lifecycle rules. */
+	hazardLifecycle: HazardLifecycle[];
 }

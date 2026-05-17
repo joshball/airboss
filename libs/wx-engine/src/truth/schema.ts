@@ -22,6 +22,7 @@
  * authoring.
  */
 
+import { WX_TEMPORAL_MIN_STEP_MINUTES } from '@ab/constants';
 import { z } from 'zod';
 
 // ----------------------------------------------------------------
@@ -170,6 +171,122 @@ const terrainStateSchema = z.object({
 	),
 });
 
+// ----------------------------------------------------------------
+// v2 temporal evolution (optional). The block is purely additive: a v1
+// scenario omits it entirely. When present, `sampleTruthAt` consults it to
+// derive a v1-shape snapshot for any timestamp inside [start, end].
+// ----------------------------------------------------------------
+
+const motionVectorSchema = z.object({
+	bearingDeg: z.number().gte(0).lte(360),
+	speedKt: z.number().gte(0),
+});
+
+const frontMotionSchema = z.discriminatedUnion('kind', [
+	z.object({
+		kind: z.literal('constant'),
+		bearingDeg: z.number().gte(0).lte(360),
+		speedKt: z.number().gte(0),
+	}),
+	z.object({
+		kind: z.literal('piecewise'),
+		segments: z
+			.array(
+				z.object({
+					until: z.string().min(1),
+					bearingDeg: z.number().gte(0).lte(360),
+					speedKt: z.number().gte(0),
+				}),
+			)
+			.min(1, 'piecewise motion must have at least one segment'),
+	}),
+]);
+
+const cellTemplateSchema = z.object({
+	radiusKm: z.number().gt(0),
+	peakDbz: z.number(),
+	motionMatchesFront: z.boolean(),
+});
+
+const temporalFrontSchema = z.object({
+	id: z.string().min(1),
+	pointsAtStart: z.array(lonLatTuple).min(2, 'temporal front polyline must have at least 2 vertices'),
+	motion: frontMotionSchema,
+	intensitySchedule: z
+		.array(
+			z.object({
+				at: z.string().min(1),
+				intensity: z.enum(['weak', 'moderate', 'strong']),
+			}),
+		)
+		.optional(),
+	prefrontalConvection: z
+		.object({
+			leadDistanceNm: z.number().gt(0),
+			onsetAt: z.string().min(1),
+			cellTemplate: cellTemplateSchema,
+		})
+		.optional(),
+});
+
+const cellIntensitySampleSchema = z.object({
+	at: z.string().min(1),
+	peakDbz: z.number(),
+});
+
+const temporalCellSchema = z.object({
+	id: z.string().min(1),
+	initialLon: z.number(),
+	initialLat: z.number(),
+	genesisAt: z.string().min(1),
+	dissipatesAt: z.string().min(1),
+	motion: motionVectorSchema,
+	intensityCurve: z.union([
+		z.enum(['building', 'mature', 'decaying']),
+		z.array(cellIntensitySampleSchema).min(1, 'inline intensity curve must have at least one sample'),
+	]),
+	radiusKmCurve: z
+		.union([z.literal('linear-grow-shrink'), z.object({ peak: z.number().gt(0), peakAt: z.string().min(1) })])
+		.optional(),
+});
+
+const airMassMotionSchema = z.object({
+	airMassId: z.string().min(1),
+	motion: motionVectorSchema,
+	surfaceWindShift: z
+		.object({
+			perHour: z.object({ dirDeg: z.number(), speedKt: z.number() }),
+		})
+		.optional(),
+	temperatureDriftCPerHour: z.number().optional(),
+});
+
+const hazardLifecycleSchema = z.object({
+	hazardZoneId: z.string().min(1),
+	onsetAt: z.string().min(1),
+	endAt: z.string().min(1),
+	severitySchedule: z
+		.array(
+			z.object({
+				at: z.string().min(1),
+				severity: z.enum(['light', 'moderate', 'severe']),
+			}),
+		)
+		.optional(),
+});
+
+const temporalEvolutionSchema = z.object({
+	start: z.string().min(1),
+	end: z.string().min(1),
+	stepMinutes: z
+		.number()
+		.gte(WX_TEMPORAL_MIN_STEP_MINUTES, `stepMinutes must be at least ${WX_TEMPORAL_MIN_STEP_MINUTES}`),
+	fronts: z.array(temporalFrontSchema),
+	cells: z.array(temporalCellSchema),
+	airMassMotion: z.array(airMassMotionSchema),
+	hazardLifecycle: z.array(hazardLifecycleSchema),
+});
+
 /**
  * Full `TruthModel` schema. Validates every scenario literal on load via
  * `loadScenario`. The inferred type matches the `TruthModel` interface in
@@ -192,6 +309,7 @@ export const truthModelSchema = z
 		routeStations: z.array(z.string().min(1)).min(1, 'routeStations must list at least one station'),
 		fbStations: z.array(z.string().min(1)).min(1, 'fbStations must list at least one station'),
 		tafValidHours: z.number().int().positive().optional(),
+		evolution: temporalEvolutionSchema.optional(),
 	})
 	.superRefine((model, ctx) => {
 		const known = Object.keys(model.stations);

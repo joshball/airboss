@@ -19,6 +19,8 @@ export const WX_SCENARIOS = {
 	MOUNTAIN_WAVE_ROCKIES: 'mountain-wave-rockies',
 	MARINE_STRATUS_PACIFIC_NW: 'marine-stratus-pacific-nw',
 	DENSE_FOG_RADIATION_CENTRAL_VALLEY: 'dense-fog-radiation-central-valley',
+	/** v2 temporal pilot scenario -- cold front under pilot time pressure. */
+	FRONTAL_PRESSURE_MARCH: 'frontal-pressure-march',
 } as const;
 
 export const WX_SCENARIO_VALUES = Object.values(WX_SCENARIOS);
@@ -32,7 +34,70 @@ export const WX_SCENARIO_LABELS: Record<WxScenario, string> = {
 	'mountain-wave-rockies': 'Lee-side Mountain Wave - Rockies',
 	'marine-stratus-pacific-nw': 'Marine Stratus - Pacific Northwest',
 	'dense-fog-radiation-central-valley': 'Radiation Fog - Central Valley',
+	'frontal-pressure-march': 'Accelerating Cold Front - Pilot Time Pressure (March)',
 };
+
+// ----------------------------------------------------------------
+// v2 temporal-engine tuning. `sampleTruthAt` (libs/wx-engine/src/truth/time.ts)
+// reads these to translate fronts, cells, and air-mass polygons over time and
+// to derive the deterministic noise seed. Centralized here so the temporal
+// engine carries no inline numeric literals.
+// ----------------------------------------------------------------
+
+/** Kilometers per degree of latitude (great-circle approximation). */
+export const WX_TEMPORAL_KM_PER_DEG_LAT = 111;
+/** Kilometers per nautical mile. */
+export const WX_TEMPORAL_KM_PER_NM = 1.852;
+/** Milliseconds per hour -- elapsed-time -> distance conversion. */
+export const WX_TEMPORAL_MS_PER_HOUR = 3_600_000;
+/** Default native step size for temporal derivation (minutes). */
+export const WX_TEMPORAL_DEFAULT_STEP_MINUTES = 60;
+/** Minimum legal native step size for temporal derivation (minutes). */
+export const WX_TEMPORAL_MIN_STEP_MINUTES = 5;
+
+/**
+ * Named-curve presets for `TemporalCell.intensityCurve`. Each maps the
+ * normalized cell-life fraction (0 = genesis, 1 = dissipation) to a
+ * reflectivity multiplier applied to the cell's template `peakDbz`.
+ *
+ * - `building`: ramps from a low value to peak across the life.
+ * - `mature`: holds near peak through the middle, tapering at the ends.
+ * - `decaying`: starts at peak and falls off.
+ */
+export const WX_TEMPORAL_CELL_INTENSITY_CURVES = {
+	building: { startMul: 0.35, peakMul: 1, endMul: 1, peakFrac: 1 },
+	mature: { startMul: 0.6, peakMul: 1, endMul: 0.6, peakFrac: 0.5 },
+	decaying: { startMul: 1, peakMul: 1, endMul: 0.25, peakFrac: 0 },
+} as const;
+
+export type WxTemporalCellIntensityCurve = keyof typeof WX_TEMPORAL_CELL_INTENSITY_CURVES;
+
+/**
+ * `linear-grow-shrink` radius curve endpoints. The cell radius ramps from
+ * `startMul * templateRadius` at genesis to `peakMul * templateRadius` at
+ * life fraction `peakFrac` and back down to `endMul * templateRadius` at
+ * dissipation.
+ */
+export const WX_TEMPORAL_RADIUS_GROW_SHRINK = {
+	startMul: 0.4,
+	peakMul: 1,
+	endMul: 0.4,
+	peakFrac: 0.5,
+} as const;
+
+/**
+ * Reference cell radius (km) -- the genesis / template scale a named
+ * intensity-curve `TemporalCell` is sized against. Matches the gust-front
+ * cell scale the v2 pilot scenario uses.
+ */
+export const WX_TEMPORAL_REFERENCE_CELL_RADIUS_KM = 12;
+
+/**
+ * Reference cell peak reflectivity (dBZ) -- the value a named intensity-curve
+ * multiplier is applied against. Inline (time, dBZ) curves override this with
+ * authored absolute values.
+ */
+export const WX_TEMPORAL_REFERENCE_CELL_PEAK_DBZ = 45;
 
 /** AIRMET family discriminator. Drives layer-2 AIRMET derivation labeling. */
 export const AIRMET_FAMILIES = {

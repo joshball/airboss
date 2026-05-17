@@ -1,0 +1,25 @@
+slug: wx-scenarios/frontal-pressure-march/pirep-plot
+type: pirep-plot-grid
+title: PIREP Plot (truth-derived)
+subtitle: 2026-03-14T12:00:00Z -- 0 truth-derived reports
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent:
+  lon_min: -100
+  lat_min: 32
+  lon_max: -80
+  lat_max: 47
+sources:
+  reports: cache://scenarios/frontal-pressure-march/pirep-plot.json
+options:
+  collision_min_distance_px: 28
+  collision_max_iterations: 40
+  show_altitude_label: true
+  show_legend: true
+  source_attribution: wx-engine -- truth-derived synthetic

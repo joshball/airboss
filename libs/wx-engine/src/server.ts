@@ -67,6 +67,22 @@ export { deriveAirmets } from './products/airmet';
 export { deriveMetar } from './products/metar';
 export { derivePireps } from './products/pirep';
 export { deriveTaf } from './products/taf';
+// ----------------------------------------------------------------------
+// v2 temporal derivation surface. Thin wrappers that sample a v2 TruthModel
+// then run the unchanged deriveX functions. Server-only because they wrap
+// server-only product derivations.
+// ----------------------------------------------------------------------
+export {
+	type AirmetEvent,
+	type AirmetTimelineEntry,
+	buildTimeline,
+	deriveAirmetTimeline,
+	deriveMetarAt,
+	deriveMetarSequence,
+	deriveTafAt,
+	deriveTafSequence,
+	type TimelineSnapshot,
+} from './products/temporal';
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 export { deriveFbGrid } from './products/winds-aloft';
 // ----------------------------------------------------------------------

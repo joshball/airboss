@@ -1,0 +1,95 @@
+[
+  {
+    "station": "KDDC",
+    "day": 14,
+    "hour": 12,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 320,
+      "speedKt": 20,
+      "gustKt": 29,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "BKN",
+        "heightFtAgl": 3000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 8000
+      }
+    ],
+    "tempC": 5,
+    "dewpointC": -3,
+    "altimeterInHg": 29.61,
+    "cavok": false,
+    "raw": "KDDC 141253Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961",
+    "warnings": []
+  },
+  {
+    "station": "KICT",
+    "day": 14,
+    "hour": 12,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 190,
+      "speedKt": 13,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "SCT",
+        "heightFtAgl": 5000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 16,
+    "dewpointC": 12,
+    "altimeterInHg": 29.66,
+    "cavok": false,
+    "raw": "KICT 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966",
+    "warnings": []
+  },
+  {
+    "station": "KFOE",
+    "day": 14,
+    "hour": 12,
+    "minute": 53,
+    "wind": {
+      "directionDeg": 190,
+      "speedKt": 13,
+      "gustKt": null,
+      "variable": false,
+      "calm": false
+    },
+    "visibilitySM": 10,
+    "weather": [],
+    "clouds": [
+      {
+        "cover": "SCT",
+        "heightFtAgl": 5000
+      },
+      {
+        "cover": "OVC",
+        "heightFtAgl": 14000
+      }
+    ],
+    "tempC": 16,
+    "dewpointC": 12,
+    "altimeterInHg": 29.67,
+    "cavok": false,
+    "raw": "KFOE 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2967",
+    "warnings": []
+  }
+]

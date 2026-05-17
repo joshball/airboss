@@ -1,0 +1,33 @@
+{
+  "targetTimestamp": "2026-03-14T12:00:00Z",
+  "source": "wx-engine -- truth-derived synthetic CVA",
+  "count": 3,
+  "_source_note": "Stations from per-station METARs; polygons lowered from truth.hazardZones.",
+  "observations": [
+    {
+      "station": {
+        "icao": "KDDC",
+        "lat": 37.76,
+        "lon": -99.97
+      },
+      "raw": "KDDC 141253Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+    },
+    {
+      "station": {
+        "icao": "KICT",
+        "lat": 37.65,
+        "lon": -97.43
+      },
+      "raw": "KICT 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+    },
+    {
+      "station": {
+        "icao": "KFOE",
+        "lat": 38.95,
+        "lon": -95.66
+      },
+      "raw": "KFOE 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+    }
+  ],
+  "polygons": []
+}
