@@ -654,6 +654,14 @@ const trimBias = $derived(inputs.trim);
 		cursor: not-allowed;
 	}
 
+	.icon-button:focus-visible,
+	.retry:focus-visible,
+	.reset-button:focus-visible,
+	.debrief-link:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
 	.icon-button.muted-state {
 		color: var(--sim-status-danger-strong);
 		border-color: var(--sim-status-danger-strong);

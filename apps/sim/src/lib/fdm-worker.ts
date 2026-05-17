@@ -65,6 +65,15 @@ interface WorkerState {
 	tapePosted: boolean;
 	/** Cached scenario marker-beacon zones (empty when scenario declares none). */
 	markerBeacons: readonly MarkerBeaconZone[];
+	/**
+	 * Fault kinds that fired on FDM ticks since the last ring write. The
+	 * snapshot cadence is coarser than the FDM tick, so a fault can trigger
+	 * on a tick that produces no ring frame. Accumulating the edges here --
+	 * and draining them into the next `pushFrame` -- keeps every fault edge
+	 * on the tape so the debrief scrubber can mark "fault fired here" at the
+	 * right t. Drained (reset to empty) every time a ring frame is written.
+	 */
+	pendingFiredThisTick: ReplayFrame['firedThisTick'][number][];
 }
 
 let state: WorkerState | null = null;
@@ -96,6 +105,7 @@ function buildState(scenarioId: SimScenarioId): WorkerState {
 		lastFrame: null,
 		tapePosted: false,
 		markerBeacons: def.markerBeacons ?? [],
+		pendingFiredThisTick: [],
 	};
 }
 
@@ -205,21 +215,22 @@ function loop(): void {
 		state.accumulator -= SIM_FDM_DT_SECONDS;
 		state.snapshotClock += SIM_FDM_DT_SECONDS;
 
-		// Capture a tape frame on the same cadence as snapshot posting.
-		// firedThisTick is captured per-FDM-step (not per-snapshot) so the
-		// debrief can mark the exact tick a fault triggered.
-		if (evalResult.firedThisTick.length > 0 && state.lastFrame !== null) {
-			// Carry the edge into the next ring frame so the tape's
-			// "fault fired here" mark sits at the right t.
-			state.lastFrame = { ...state.lastFrame, firedThisTick: evalResult.firedThisTick };
+		// firedThisTick is captured per-FDM-step (not per-snapshot). The
+		// snapshot cadence is coarser than the FDM tick, so accumulate every
+		// edge here and drain the set into the next ring frame -- otherwise a
+		// fault firing on a non-snapshot tick never reaches the tape.
+		if (evalResult.firedThisTick.length > 0) {
+			state.pendingFiredThisTick.push(...evalResult.firedThisTick);
 		}
 
 		if (evalResult.outcome !== SIM_SCENARIO_OUTCOMES.RUNNING) {
 			state.terminated = true;
 			state.running = false;
 			// Final frame (the one that locked the outcome) lands in the ring
-			// alongside the snapshot post.
-			const finalFrame = captureFrame(state, evalResult.firedThisTick);
+			// alongside the snapshot post. Carries every fault edge since the
+			// last ring write so none are lost on the terminal tick.
+			const finalFrame = captureFrame(state, state.pendingFiredThisTick.slice());
+			state.pendingFiredThisTick = [];
 			state.lastFrame = finalFrame;
 			pushFrame(state.frameRing, finalFrame);
 			postSnapshot(state);
@@ -232,7 +243,10 @@ function loop(): void {
 
 	if (state.snapshotClock >= SIM_SNAPSHOT_INTERVAL_SECONDS) {
 		state.snapshotClock = 0;
-		const frame = captureFrame(state, []);
+		// Drain the fault edges accumulated since the last ring write so the
+		// tape frame carries every "fault fired here" mark at the right t.
+		const frame = captureFrame(state, state.pendingFiredThisTick.slice());
+		state.pendingFiredThisTick = [];
 		state.lastFrame = frame;
 		pushFrame(state.frameRing, frame);
 		post({
