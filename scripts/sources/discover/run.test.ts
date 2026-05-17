@@ -12,7 +12,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { DISCOVERY_CACHE, DISCOVERY_STATUSES } from '@ab/constants';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { ALL_HANDBOOK_SLUGS, getCatalogueEntry } from './catalogue';
+import { ALL_HANDBOOK_SLUGS, getCatalogueEntry, HANDBOOK_CATALOGUE } from './catalogue';
 import { runDiscoverErrata } from './run';
 import { loadState } from './state';
 
@@ -248,8 +248,10 @@ describe('runDiscoverErrata', () => {
 	});
 
 	it('scans every catalogued slug when --doc is omitted', async () => {
-		// Stub returns the same simple page for every catalogue parent; we
-		// just count how many distinct URLs got scraped.
+		// Stub returns the same simple page for every catalogue parent. Several
+		// handbooks share one `parentPageUrl` (the FAA aviation index page),
+		// so we record every fetched URL and assert each catalogued parent
+		// page was scraped -- not that the URLs were distinct.
 		const visited = new Set<string>();
 		const fetchImpl = (async (input: string | URL | Request) => {
 			const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
@@ -281,7 +283,11 @@ describe('runDiscoverErrata', () => {
 		// Empty page -> no candidates.
 		const lastRun = JSON.parse(readFileSync(join(cacheRoot, DISCOVERY_CACHE.LAST_RUN_FILE), 'utf8'));
 		expect(lastRun.handbooks_scanned).toBe(ALL_HANDBOOK_SLUGS.length);
-		expect(visited.size).toBeGreaterThanOrEqual(ALL_HANDBOOK_SLUGS.length);
+		// Every catalogued parent page was fetched. Distinct-URL count is no
+		// longer a valid proxy: several handbooks share the FAA aviation index.
+		for (const entry of HANDBOOK_CATALOGUE) {
+			expect(visited.has(entry.parentPageUrl)).toBe(true);
+		}
 	});
 
 	it('does not attempt the GitHub API when GH_TOKEN is unset', async () => {
