@@ -182,7 +182,7 @@ async function saveCandidate() {
 
 <div class="page">
 	<header class="hd">
-		<h1>Weather truth-model sandbox</h1>
+		<h1 data-testid="page-anchor">Weather truth-model sandbox</h1>
 		<p class="lead">
 			Admin authoring surface. Drag a lever to re-derive a METAR + TAF and re-render the
 			METAR-plot chart for {data.station.name} ({data.station.icao}). Save a result as a

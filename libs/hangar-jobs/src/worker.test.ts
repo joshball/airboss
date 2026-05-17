@@ -266,11 +266,20 @@ describe('worker terminal-state atomicity', () => {
 			);
 			expect(failAudits).toHaveLength(1);
 
-			const logs = await db
-				.select({ stream: hangarJobLog.stream, line: hangarJobLog.line })
-				.from(hangarJobLog)
-				.where(eq(hangarJobLog.jobId, jobId));
-			expect(logs.some((l) => l.stream === JOB_LOG_STREAMS.STDERR && l.line.includes('handler boom'))).toBe(true);
+			// The worker writes the FAILED status + audit row atomically FIRST,
+			// then the stderr log line as a best-effort follow-up (see the
+			// "Order matters" comment in worker.ts). Polling for status===FAILED
+			// can therefore observe the job terminal before the stderr row
+			// lands, so wait for the log row itself rather than reading once.
+			const stderrLog = async (): Promise<boolean> => {
+				const logs = await db
+					.select({ stream: hangarJobLog.stream, line: hangarJobLog.line })
+					.from(hangarJobLog)
+					.where(eq(hangarJobLog.jobId, jobId));
+				return logs.some((l) => l.stream === JOB_LOG_STREAMS.STDERR && l.line.includes('handler boom'));
+			};
+			await waitFor(stderrLog);
+			expect(await stderrLog()).toBe(true);
 		} finally {
 			await worker.stop();
 		}

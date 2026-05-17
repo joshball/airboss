@@ -863,6 +863,10 @@ export async function recordStep(input: RecordStepInput, db: Db = defaultDb): Pr
 				outcome: input.outcome,
 				note: input.note,
 				stepIndex: input.stepIndex,
+				// Drizzle's `$onUpdate` hook on `updatedAt` fires for `db.update()`
+				// but NOT for the conflict-update path of an `insert().onConflictDoUpdate()`.
+				// Set it explicitly so re-recording a step bumps `updatedAt`.
+				updatedAt: new Date(),
 			},
 		})
 		.returning();
