@@ -25,22 +25,25 @@ describe('explanatory-rule guard', () => {
 		expect(ids.size).toBe(14);
 	});
 
-	it('ships exactly one full adapter -- wx-catalog, the reference drill-down', () => {
+	it('ships the full adapters -- wx-catalog and knowledge-nodes', () => {
+		// wx-catalog is the Phase-1 reference drill-down; knowledge-nodes is
+		// the first Phase-3 corpus to gain a real gap view + next-list.
 		const full = ALL_CENSUS.filter((c) => c.mode === 'full');
-		expect(full.length).toBe(1);
-		expect(full[0].id).toBe('wx-catalog');
+		const ids = full.map((c) => c.id).sort();
+		expect(ids).toEqual(['knowledge-nodes', 'wx-catalog']);
 	});
 
-	it('ships every Phase-2 corpus as a real Layer-1 census', () => {
+	it('ships every still-Layer-1 corpus as a real census-mode adapter', () => {
 		const censusMode = ALL_CENSUS.filter((c) => c.mode === 'census');
 		const ids = censusMode.map((c) => c.id).sort();
+		// knowledge-nodes has graduated to `full` mode (Phase-3 gap view); the
+		// remaining twelve Phase-2 corpora are still Layer-1-only.
 		expect(ids).toEqual([
 			'acs',
 			'adrs',
 			'cards',
 			'glossary',
 			'handbooks',
-			'knowledge-nodes',
 			'regulations',
 			'sim-content',
 			'sources',
