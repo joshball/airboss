@@ -184,14 +184,12 @@ function defaultShouldThrow(): boolean {
 	// tests) don't have it but they're not bundled to the browser, so the
 	// `process` fallback below is gated to keep the browser scanner happy.
 	try {
-		// biome-ignore lint/suspicious/noExplicitAny: defensive runtime probe -- import.meta shape varies
-		const meta = import.meta as any;
-		if (typeof meta?.env?.DEV === 'boolean') return meta.env.DEV === true;
+		const meta = import.meta as ImportMeta & { env?: { DEV?: unknown } };
+		if (typeof meta.env?.DEV === 'boolean') return meta.env.DEV === true;
 	} catch {
 		/* import.meta unavailable */
 	}
-	// biome-ignore lint/suspicious/noExplicitAny: probe global via globalThis to avoid bare `process` reference
-	const proc = (typeof process !== 'undefined' ? process : undefined) as any;
+	const proc = typeof process !== 'undefined' ? (process as { env?: Record<string, string | undefined> }) : undefined;
 	const nodeEnv = proc?.env?.NODE_ENV;
 	if (typeof nodeEnv === 'string') return nodeEnv !== 'production';
 	return true;
