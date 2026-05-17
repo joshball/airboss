@@ -22,8 +22,17 @@
 
 import { writeFileSync } from 'node:fs';
 import { WX_PRODUCT_VALUES, WX_SCENARIO_VALUES, type WxProduct, type WxScenario } from '@ab/constants';
-import { buildPack, renderDrillMarkdown, validateDrillPack } from '@ab/wx-drill';
-import { buildAllScenarioSnapshots, loadCatalogFamilies } from '@ab/wx-drill/server';
+import {
+	buildPack,
+	buildTemporalPack,
+	renderDrillMarkdown,
+	renderTemporalDrillMarkdown,
+	validateDrillPack,
+} from '@ab/wx-drill';
+import { buildAllScenarioSnapshots, buildTemporalDrillBundles, loadCatalogFamilies } from '@ab/wx-drill/server';
+
+/** Flag that switches `drill` into sequence-based temporal-exercise mode. */
+const TEMPORAL_FLAG = '--temporal';
 
 type DrillLayout = 'interleaved' | 'two-section';
 type DrillCoverage = 'balanced' | 'random' | 'gap-filling';
@@ -135,6 +144,14 @@ function parseArgs(argv: readonly string[]): DrillArgs {
 }
 
 export async function runDrill(args: readonly string[]): Promise<void> {
+	// `--temporal` switches to sequence-based exercises (step 6 of the
+	// TruthModel v2 plan). Strip the flag before `parseArgs`, which rejects
+	// unknown arguments.
+	if (args.includes(TEMPORAL_FLAG)) {
+		await runTemporalDrill(args.filter((a) => a !== TEMPORAL_FLAG));
+		return;
+	}
+
 	const parsed = parseArgs(args);
 	const scenarioSlugs: WxScenario[] = parsed.fromScenarios === 'all' ? [...WX_SCENARIO_VALUES] : parsed.fromScenarios;
 	const snapshots = buildAllScenarioSnapshots(scenarioSlugs);
@@ -171,5 +188,54 @@ export async function runDrill(args: readonly string[]): Promise<void> {
 	console.log(`drill: wrote ${mdPath}`);
 	console.log(
 		`drill: ${pack.items.length} items, ${pack.coverageReport.coveredFamilies}/${pack.coverageReport.totalFamilies} catalog families covered, ${validation.checked} round-trip checks ok`,
+	);
+}
+
+/**
+ * `bun run wx-scenario drill --temporal` -- sequence-based exercise mode.
+ *
+ * Builds a temporal-drill bundle for each v2 scenario in `--from-scenarios`,
+ * runs the three exercise generators (sequence-change, taf-vs-actuals,
+ * front-position), and writes a `.json` + `.md` pack. Reuses `--count`,
+ * `--seed`, `--from-scenarios`, `--output`; the `--products` / `--layout` /
+ * `--coverage` knobs are token-fluency concerns and do not apply here.
+ *
+ * Only v2 scenarios (those with an `evolution` block) support `--temporal`;
+ * a v1 slug surfaces a clear error.
+ */
+async function runTemporalDrill(args: readonly string[]): Promise<void> {
+	const parsed = parseArgs(args);
+	// `all` is rejected for temporal: most registered scenarios are v1-only.
+	// The caller must name the v2 scenarios explicitly.
+	if (parsed.fromScenarios === 'all') {
+		console.error(
+			`drill --temporal: pass --from-scenarios with explicit v2 scenario slugs (e.g. --from-scenarios frontal-pressure-march). 'all' is not supported because most scenarios are v1-only.`,
+		);
+		process.exit(2);
+	}
+
+	let bundles: ReturnType<typeof buildTemporalDrillBundles>;
+	try {
+		bundles = buildTemporalDrillBundles(parsed.fromScenarios);
+	} catch (err) {
+		console.error(`drill --temporal: ${err instanceof Error ? err.message : String(err)}`);
+		process.exit(1);
+	}
+
+	const pack = buildTemporalPack({ bundles, seed: parsed.seed, count: parsed.count });
+
+	if (pack.exercises.length === 0) {
+		console.error('drill --temporal: no exercises generated -- the scenario(s) produced no usable sequences.');
+		process.exit(1);
+	}
+
+	const jsonPath = `${parsed.output}.json`;
+	const mdPath = `${parsed.output}.md`;
+	writeFileSync(jsonPath, `${JSON.stringify(pack, null, '\t')}\n`);
+	writeFileSync(mdPath, renderTemporalDrillMarkdown(pack));
+	console.log(`drill: wrote ${jsonPath}`);
+	console.log(`drill: wrote ${mdPath}`);
+	console.log(
+		`drill --temporal: ${pack.exercises.length} sequence-based exercises across ${bundles.length} scenario(s)`,
 	);
 }
