@@ -41,6 +41,23 @@ const editHref = $derived(ROUTES.PROGRAM_GOAL_EDIT(goal.id));
 // `+ Note` pre-fills the goal context so the standalone composer opens
 // with this goal already selected.
 const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=${encodeURIComponent(goal.id)}`);
+
+// Per-action success message. The actions return a discriminating `intent`;
+// the banner names what happened rather than leaving the success silent.
+const SUCCESS_MESSAGES: Record<string, string> = {
+	addCourse: 'Course added to goal.',
+	removeCourse: 'Course removed from goal.',
+	setCourseWeight: 'Weight updated.',
+	addSyllabus: 'Syllabus added to goal.',
+	removeSyllabus: 'Syllabus removed from goal.',
+	setSyllabusWeight: 'Weight updated.',
+	addNode: 'Knowledge node added to goal.',
+	removeNode: 'Knowledge node removed from goal.',
+	setNodeWeight: 'Weight updated.',
+	setStatus: 'Goal status updated.',
+	makePrimary: 'Goal set as primary.',
+};
+const successMessage = $derived(form?.success === true ? (SUCCESS_MESSAGES[form.intent ?? ''] ?? 'Saved.') : null);
 </script>
 
 <svelte:head>
@@ -48,10 +65,11 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 </svelte:head>
 
 <section class="page">
-	<nav class="crumb" aria-label="Breadcrumb">
-		<a href={ROUTES.PROGRAM_GOALS}>{NAV_LABELS.PROGRAM_GOAL}</a>
-		<span aria-hidden="true">/</span>
-		<span>{goal.title}</span>
+	<nav aria-label="Breadcrumb">
+		<ol class="crumb">
+			<li><a href={ROUTES.PROGRAM_GOALS}>{NAV_LABELS.PROGRAM_GOAL}</a></li>
+			<li aria-current="page">{goal.title}</li>
+		</ol>
 	</nav>
 
 	<PageHeader
@@ -83,9 +101,16 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 		</PageExplainer>
 	{/if}
 
-	{#if form?.error}
-		<p class="banner-error" role="alert">{form.error}</p>
-	{/if}
+	<div class="banner-live" aria-live="assertive">
+		{#if form?.error}
+			<p class="banner-error" role="alert">{form.error}</p>
+		{/if}
+	</div>
+	<div class="banner-live" aria-live="polite">
+		{#if successMessage !== null}
+			<p class="banner-ok" role="status">{successMessage}</p>
+		{/if}
+	</div>
 
 	{#if editing}
 		<form method="POST" action="?/update" class="form">
@@ -260,7 +285,7 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 				{#each courses as gc (gc.course.id)}
 					<li class="row">
 						<a class="row-title" href={ROUTES.COURSE(gc.course.slug)}>{gc.course.title}</a>
-						<form method="POST" action="?/setCourseWeight" class="weight-form">
+						<form method="POST" action={ROUTES.STUDY_GOAL_SET_COURSE_WEIGHT_ACTION} class="weight-form">
 							<input type="hidden" name="courseId" value={gc.course.id} />
 							<label class="weight-label">
 								Weight
@@ -275,7 +300,7 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 							</label>
 							<Button type="submit" variant="ghost">Save</Button>
 						</form>
-						<form method="POST" action="?/removeCourse">
+						<form method="POST" action={ROUTES.STUDY_GOAL_REMOVE_COURSE_ACTION}>
 							<input type="hidden" name="courseId" value={gc.course.id} />
 							<Button type="submit" variant="ghost">Remove</Button>
 						</form>
@@ -285,7 +310,7 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 		{/if}
 
 		{#if availableCourses.length > 0}
-			<form method="POST" action="?/addCourse" class="add-form">
+			<form method="POST" action={ROUTES.STUDY_GOAL_ADD_COURSE_ACTION} class="add-form">
 				<label class="field-inline">
 					<span class="label">Add course</span>
 					<select name="courseId">
@@ -326,13 +351,26 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 
 	.crumb {
 		display: flex;
-		gap: var(--space-xs);
+		gap: var(--space-sm);
+		list-style: none;
+		padding: 0;
+		margin: 0;
 		color: var(--ink-subtle);
 		font-size: var(--font-size-xs);
 	}
 
+	.crumb li + li::before {
+		content: '/';
+		margin-right: var(--space-sm);
+		color: var(--ink-faint);
+	}
+
 	.crumb a {
 		color: var(--ink-subtle);
+	}
+
+	.banner-live:empty {
+		display: none;
 	}
 
 	.banner-error {
@@ -341,6 +379,15 @@ const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_GOAL_ID}=$
 		background: var(--signal-danger-wash);
 		color: var(--signal-danger-ink);
 		border: 1px solid var(--signal-danger-edge);
+		border-radius: var(--radius-md);
+	}
+
+	.banner-ok {
+		margin: 0;
+		padding: var(--space-md);
+		background: var(--signal-success-wash);
+		color: var(--ink-body);
+		border: 1px solid var(--signal-success-edge);
 		border-radius: var(--radius-md);
 	}
 

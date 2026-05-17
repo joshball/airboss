@@ -96,4 +96,11 @@ let { courseSlug, prev, next }: Props = $props();
 		visibility: hidden;
 		max-width: 45%;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.prev,
+		.next {
+			transition: none;
+		}
+	}
 </style>

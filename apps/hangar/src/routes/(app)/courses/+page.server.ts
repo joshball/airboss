@@ -6,21 +6,22 @@
  * recently edited course lands at the top. Status filter via `?status=`
  * query param.
  *
- * Each row carries the section count (a cheap aggregation via
- * getCourseStepsByCourse + level filter; total steps = sections + leaves
- * but the count we display is "sections" since steps are always inside
- * sections).
+ * Each row carries the section count via one grouped `countSectionsByCourse`
+ * query rather than an N+1 of `getCourseStepsByCourse` per course.
  */
 
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { requireRole } from '@ab/auth';
-import { type CourseRow, getCourseStepsByCourse, listAllCourses } from '@ab/bc-study/server';
+import { type CourseRow, countSectionsByCourse, listAllCourses } from '@ab/bc-study/server';
 import {
 	COURSE_KINDS,
+	COURSE_SLUG_REGEX,
+	COURSE_SLUG_REGEX_SOURCE,
 	COURSE_STATUS_VALUES,
 	COURSE_STATUSES,
+	COURSE_TITLE_MAX_LENGTH,
 	type CourseStatus,
 	QUERY_PARAMS,
 	ROLES,
@@ -46,25 +47,19 @@ export const load: PageServerLoad = async (event) => {
 	const allCourses = await listAllCourses(db);
 	const filtered = statusFilter !== undefined ? allCourses.filter((c) => c.status === statusFilter) : allCourses;
 
-	// Per-row section count. One read per course (the BC's
-	// `getCourseStepsByCourse` returns sections + steps in one query).
-	// At single-digit course count the cost is trivial; at scale we'd
-	// batch via a count-by-course query.
-	const rows: CourseAdminRow[] = await Promise.all(
-		filtered.map(async (course) => {
-			const steps = await getCourseStepsByCourse(course.id);
-			const sectionCount = steps.filter((s) => s.parentId === null).length;
-			return { course, sectionCount };
-		}),
-	);
+	// Per-row section count via ONE grouped query (count-by-course), not an
+	// N+1 of `getCourseStepsByCourse` per course.
+	const sectionCounts = await countSectionsByCourse(filtered.map((c) => c.id));
+	const rows: CourseAdminRow[] = filtered.map((course) => ({
+		course,
+		sectionCount: sectionCounts.get(course.id) ?? 0,
+	}));
 
 	return {
 		rows,
 		statusFilter: statusFilter ?? null,
 	};
 };
-
-const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
 
 export const actions: Actions = {
 	createCourse: async (event) => {
@@ -78,11 +73,17 @@ export const actions: Actions = {
 		if (slug === '' || !COURSE_SLUG_REGEX.test(slug)) {
 			return fail(400, {
 				intent: 'createCourse',
-				error: 'Slug must match ^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$.',
+				error: `Slug must match ${COURSE_SLUG_REGEX_SOURCE}.`,
 			});
 		}
 		if (title === '') {
 			return fail(400, { intent: 'createCourse', error: 'Title is required.' });
+		}
+		if (title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, {
+				intent: 'createCourse',
+				error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.`,
+			});
 		}
 		const status = (COURSE_STATUS_VALUES as readonly string[]).includes(statusRaw)
 			? (statusRaw as CourseStatus)
@@ -108,10 +109,19 @@ export const actions: Actions = {
 		try {
 			await runCourseSeed(slug);
 		} catch (err) {
+			// On seed failure remove the freshly created directory so a retry
+			// with the same slug is not wedged by the `existsSync` guard above.
+			// The guard proved the directory was absent before this action ran,
+			// so an unconditional remove of `dir` is safe.
+			rmSync(dir, { recursive: true, force: true });
 			if (err instanceof CourseSeedError) {
 				return fail(400, { intent: 'createCourse', error: `seed failed: ${err.message}` });
 			}
-			throw err;
+			console.error('[hangar/courses] createCourse unexpected failure:', err);
+			return fail(400, {
+				intent: 'createCourse',
+				error: 'Course creation failed unexpectedly. Check server logs.',
+			});
 		}
 
 		throw redirect(303, ROUTES.HANGAR_COURSE(slug));

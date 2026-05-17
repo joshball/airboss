@@ -51,13 +51,27 @@ export {
 	courseStepSchema,
 	courseTreeNodeSchema,
 } from './course-yaml-schemas';
+// Pure course-tree seed validator. Browser-safe (synchronous shape checks,
+// no `node:*`, no DB) -- exported from the runtime barrel so the validator
+// unit tests and any non-server consumer can reach it. The DB-touching seed
+// pipeline (`seedCourses`) is server-only -- see `@ab/bc-study/server`.
+export {
+	CourseSeedError,
+	hasLeafDescendant,
+	isLessonNode,
+	isStepNode,
+	type ParsedSection,
+	validateCourseTree,
+} from './seed-courses-validator';
 // Goal-CRUD Zod schemas + their inferred input types. The BC `goals.ts`
 // write helpers parse against these inside their function bodies as a
 // defense-in-depth layer on top of the route-level coercion.
 export {
+	type AddGoalCourseInput,
 	type AddGoalNodeInput,
 	type AddGoalSyllabusInput,
 	type ApplyCertGoalsInput,
+	addGoalCourseInputSchema,
 	addGoalNodeInputSchema,
 	addGoalSyllabusInputSchema,
 	applyCertGoalsInputSchema,
@@ -86,12 +100,25 @@ export { runEngine } from './engine';
 export { SourceRefRequiredError, UpsertReturnedNoRowError } from './errors';
 // Display formatters (`.svelte` pages render review intervals via these).
 export { formatNextInterval, formatNextIntervalAbsolute } from './formatters';
-export type { PrevNextLeaf, PrevNextResult, PrevNextRow } from './lens-tree-walk';
 // `flattenLeavesDepthFirst` + `computePrevNextLeaves` are pure tree-walk
 // helpers (browser-safe). They live in `./lens-tree-walk` precisely so the
 // runtime barrel can value-export them without pulling the lens's
 // DB-touching imports.
-export { aggregateCertCoverage, computePrevNextLeaves, flattenLeavesDepthFirst } from './lens-tree-walk';
+export {
+	aggregateCertCoverage,
+	buildAncestorChain,
+	computePrevNextLeaves,
+	flattenLeafRowsDepthFirst,
+	flattenLeavesDepthFirst,
+} from './lens-tree-walk';
+export type {
+	AncestorChainRow,
+	AncestorCrumb,
+	LeafOrderRow,
+	PrevNextLeaf,
+	PrevNextResult,
+	PrevNextRow,
+} from './lens-tree-walk';
 // Lens projection types only -- the value implementations
 // (`acsLens`, `domainLens`, `computeMasteryRollup`, `LensError`) live in
 // `./lenses`, which transitively imports `./mastery` -> `@ab/db/connection`

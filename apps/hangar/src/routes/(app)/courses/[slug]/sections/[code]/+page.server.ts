@@ -23,10 +23,11 @@ import {
 	getCourseBySlug,
 	listNodesForBrowse,
 } from '@ab/bc-study/server';
-import { COURSE_STEP_LEVELS, ROLES } from '@ab/constants';
+import { COURSE_STEP_LEVELS, COURSE_TITLE_MAX_LENGTH, ROLES } from '@ab/constants';
 import { error, fail } from '@sveltejs/kit';
 import { parse } from 'yaml';
 import type { PickerNode } from '$lib/components/knowledge-node-picker-types';
+import { assertResolvedUnder, assertSafeSlug } from '$lib/server/course-path-safety';
 import { COURSES_DIR, CourseSeedError, runCourseSeed } from '$lib/server/course-seed';
 import { emitSection, sectionToEmitInput } from '$lib/server/course-yaml-emit';
 import type { Actions, PageServerLoad } from './$types';
@@ -65,6 +66,7 @@ function findSectionFile(slug: string, code: string): { filename: string; sectio
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const slug = event.params.slug;
+	assertSafeSlug(slug);
 	const code = event.params.code;
 	const course = await getCourseBySlug(slug);
 	if (course === null) throw error(404, 'Course not found.');
@@ -102,7 +104,12 @@ interface SaveSectionPayload {
  * the previous file content from an in-memory backup.
  */
 async function saveSection({ intent, slug, filename, section }: SaveSectionPayload) {
-	const path = resolve(sectionsDir(slug), filename);
+	const dir = sectionsDir(slug);
+	const path = resolve(dir, filename);
+	// `filename` is read from a section file already on disk (not raw form
+	// input), but assert the resolved path stays under the sections dir as
+	// defence in depth.
+	assertResolvedUnder(dir, path);
 	const backup = existsSync(path) ? readFileSync(path, 'utf8') : null;
 	try {
 		// `sectionToEmitInput` walks the recursive CourseTreeNode shape and
@@ -117,9 +124,25 @@ async function saveSection({ intent, slug, filename, section }: SaveSectionPaylo
 		await runCourseSeed(slug);
 		return { intent, success: true } as const;
 	} catch (err) {
-		if (backup !== null) await writeFile(path, backup, 'utf8').catch(() => {});
-		const message = err instanceof CourseSeedError ? err.message : err instanceof Error ? err.message : String(err);
-		return fail(400, { intent, error: `seed failed: ${message}` });
+		let revertFailed = false;
+		if (backup !== null) {
+			try {
+				await writeFile(path, backup, 'utf8');
+			} catch (revertErr) {
+				console.error(`[hangar/sections] revert failed for ${path}:`, revertErr);
+				revertFailed = true;
+			}
+		}
+		const isSeedError = err instanceof CourseSeedError;
+		if (!isSeedError) {
+			console.error(`[hangar/sections] ${intent} unexpected failure:`, err);
+		}
+		const detail = isSeedError ? err.message : 'unexpected error (see server logs)';
+		let message = `seed failed: ${detail}`;
+		if (revertFailed) {
+			message += `; WARNING: ${filename} could not be reverted -- run 'git checkout course/courses/${slug}' to restore`;
+		}
+		return fail(400, { intent, error: message });
 	}
 }
 
@@ -145,12 +168,16 @@ export const actions: Actions = {
 	updateSection: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const code = event.params.code;
 		const form = await event.request.formData();
 		const title = String(form.get('title') ?? '').trim();
 		const body_md = String(form.get('body_md') ?? '');
 		const ordinal = Number.parseInt(String(form.get('ordinal') ?? ''), 10);
 		if (title === '') return fail(400, { intent: 'updateSection', error: 'Title is required.' });
+		if (title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, { intent: 'updateSection', error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.` });
+		}
 		if (!Number.isFinite(ordinal) || ordinal < 0) {
 			return fail(400, { intent: 'updateSection', error: 'Ordinal must be a non-negative integer.' });
 		}
@@ -164,6 +191,7 @@ export const actions: Actions = {
 	addStep: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const code = event.params.code;
 		const form = await event.request.formData();
 		const stepInput = parseStepFromForm(form);
@@ -173,13 +201,18 @@ export const actions: Actions = {
 				error: 'All step fields are required (code, title, knowledge_node_id, ordinal).',
 			});
 		}
+		if (stepInput.title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, { intent: 'addStep', error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.` });
+		}
 
 		const found = findSectionFile(slug, code);
 		if (found === null) return fail(404, { intent: 'addStep', error: 'Section not found.' });
 
-		// Reject duplicate code within the section. Course-wide duplicate-code
-		// check fires inside the seed pipeline when we re-run it; this is the
-		// inner-section duplicate, friendlier message.
+		// Reject duplicate code within the section. A cross-section duplicate
+		// (the same code under a different section) is caught course-wide by
+		// the seed pipeline on re-run and surfaces as a `seed failed: ...`
+		// message after a write-then-revert -- documented here so the test
+		// plan's CRE expectations are not surprised.
 		if (found.section.steps.some((s) => s.code === stepInput.code)) {
 			return fail(400, { intent: 'addStep', error: `Step code ${stepInput.code} already exists in this section.` });
 		}
@@ -198,12 +231,16 @@ export const actions: Actions = {
 	updateStep: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const code = event.params.code;
 		const form = await event.request.formData();
 		const originalCode = String(form.get('originalCode') ?? '').trim();
 		const stepInput = parseStepFromForm(form);
 		if (stepInput === null || originalCode === '') {
 			return fail(400, { intent: 'updateStep', error: 'All step fields required.' });
+		}
+		if (stepInput.title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, { intent: 'updateStep', error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.` });
 		}
 
 		const found = findSectionFile(slug, code);
@@ -229,6 +266,7 @@ export const actions: Actions = {
 	deleteStep: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const code = event.params.code;
 		const form = await event.request.formData();
 		const stepCode = String(form.get('stepCode') ?? '').trim();

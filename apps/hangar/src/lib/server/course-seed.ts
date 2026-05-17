@@ -4,14 +4,12 @@
  * (course-reader-and-editor WP, Phase 6).
  *
  * Per design.md "Hangar editor: per-save seed pipeline integration via
- * direct function import": the editor invokes the seed pipeline by
- * importing `seedCourses()` from `scripts/db/seed-courses.ts` and calling
- * it programmatically. This wrapper:
+ * direct function import": the editor invokes the seed pipeline by calling
+ * `seedCourses()`. The pipeline lives in the BC (`@ab/bc-study/server`) --
+ * apps depend on libs, not on `scripts/`. This wrapper:
  *
- *   - Resolves the canonical `course/courses/` directory at the repo root
- *     so the editor's save action doesn't have to know about path math.
- *   - Catches `CourseSeedError` and re-throws it with a friendlier shape
- *     the form-action handler can surface as a validation error.
+ *   - Surfaces the canonical `course/courses/` directory so the editor's
+ *     save actions don't have to know about path math.
  *   - Surfaces the summary (rows scanned / upserted / skipped) for the
  *     post-save banner.
  *
@@ -20,17 +18,11 @@
  * OUT-OF-SCOPE "Multi-author concurrency on the same course."
  */
 
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { CourseSeedError, type SeedCoursesSummary, seedCourses } from '@ab/seed-courses';
+import { CourseSeedError, DEFAULT_COURSES_DIR, type SeedCoursesSummary, seedCourses } from '@ab/bc-study/server';
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-// Resolve from `apps/hangar/src/lib/server/` -> repo root -> `course/courses/`.
-// Six `..` segments: `server/` -> `lib/` -> `src/` -> `hangar/` -> `apps/` -> repo root.
-const REPO_ROOT = resolve(HERE, '..', '..', '..', '..', '..', '..');
-const COURSES_DIR = resolve(REPO_ROOT, 'course/courses');
+const COURSES_DIR = DEFAULT_COURSES_DIR;
 
-export { CourseSeedError } from '@ab/seed-courses';
+export { CourseSeedError };
 
 export interface RunCourseSeedResult {
 	summary: SeedCoursesSummary;

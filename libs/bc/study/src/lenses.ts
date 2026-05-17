@@ -294,6 +294,23 @@ type RollupMasteryInput = {
 };
 
 /**
+ * A fresh zero-valued {@link MasteryRollup}. Returns a NEW object on every
+ * call -- callers that assign a rollup default per row (e.g. the course index
+ * loader's out-of-goal rows) must not share one mutable reference across
+ * rows. Pure; browser-safe.
+ */
+export function emptyMasteryRollup(): MasteryRollup {
+	return {
+		totalLeaves: 0,
+		coveredLeaves: 0,
+		masteredLeaves: 0,
+		masteryFraction: 0,
+		coverageFraction: 0,
+		byEvidenceKind: {},
+	};
+}
+
+/**
  * Compute the weighted rollup over a set of leaves. Pure given the leaf
  * mastery + weight inputs. Aggregates per-evidence-kind counts when the
  * inputs carry the richer `LensLeafMastery` shape so consumers can render

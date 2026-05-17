@@ -1,7 +1,8 @@
 <script lang="ts">
 import type { CourseStep } from '@ab/bc-study';
-import { COURSE_STEP_LEVELS, ROUTES } from '@ab/constants';
+import { COURSE_STEP_LEVELS, COURSE_TITLE_MAX_LENGTH, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import KnowledgeNodePicker from '$lib/components/KnowledgeNodePicker.svelte';
@@ -29,8 +30,27 @@ const hasLessons = $derived(section.steps.length !== leafSteps.length);
 let editingStepCode = $state<string | null>(null);
 let showAddStep = $state(false);
 let pickerValue = $state('');
+let addStepCodeInput = $state<HTMLInputElement | null>(null);
+
+// Per-action success message: name what happened rather than a generic
+// "Saved." The action returns a discriminating `intent`.
+const SUCCESS_MESSAGES: Record<string, string> = {
+	updateSection: 'Section updated.',
+	addStep: 'Step added.',
+	updateStep: 'Step updated.',
+	deleteStep: 'Step deleted.',
+};
+const successMessage = $derived(form?.success === true ? (SUCCESS_MESSAGES[form.intent ?? ''] ?? 'Saved.') : null);
+
+// Move focus into the add-step form when it is revealed.
+$effect(() => {
+	if (showAddStep) addStepCodeInput?.focus();
+});
 
 function startEdit(code: string): void {
+	// Editing and adding are mutually exclusive -- close the add-step form
+	// so only one KnowledgeNodePicker (one `pickerValue`) is mounted.
+	showAddStep = false;
 	editingStepCode = code;
 	const step = leafSteps.find((s) => s.code === code);
 	pickerValue = step?.knowledge_node_id ?? '';
@@ -38,6 +58,13 @@ function startEdit(code: string): void {
 
 function cancelEdit(): void {
 	editingStepCode = null;
+	pickerValue = '';
+}
+
+function toggleAddStep(): void {
+	// Closing any in-progress row edit keeps a single picker mounted.
+	editingStepCode = null;
+	showAddStep = !showAddStep;
 	pickerValue = '';
 }
 </script>
@@ -57,27 +84,33 @@ function cancelEdit(): void {
 
 	<PageHeader title={section.title} subtitle={`Section ${section.code} (ordinal ${section.ordinal})`} />
 
-	{#if form?.error}
-		<p class="banner banner-error" role="alert">{form.error}</p>
-	{:else if form?.success === true}
-		<p class="banner banner-ok" role="status">Saved.</p>
-	{/if}
+	<div class="banner-live" aria-live="assertive">
+		{#if form?.error}
+			<p class="banner banner-error" role="alert">{form.error}</p>
+		{/if}
+	</div>
+	<div class="banner-live" aria-live="polite">
+		{#if successMessage !== null}
+			<p class="banner banner-ok" role="status">{successMessage}</p>
+		{/if}
+	</div>
 
 	<section class="block" aria-labelledby="section-h">
 		<h2 id="section-h">Section</h2>
-		<form method="POST" action="?/updateSection" class="form">
+		<form method="POST" action={ROUTES.HANGAR_COURSE_UPDATE_SECTION_ACTION} class="form">
 			<div class="row-fields">
 				<label class="field">
 					<span class="label">Code</span>
-					<input type="text" disabled value={section.code} />
+					<input type="text" disabled value={section.code} aria-describedby="section-code-help" />
+					<span id="section-code-help" class="field-help">Code is fixed once a section is created.</span>
 				</label>
 				<label class="field">
-					<span class="label">Ordinal</span>
-					<input type="number" name="ordinal" min="0" required value={section.ordinal} />
+					<span class="label">Ordinal <span class="req">required</span></span>
+					<input type="number" name="ordinal" min="0" required aria-required="true" value={section.ordinal} />
 				</label>
 				<label class="field grow">
-					<span class="label">Title</span>
-					<input type="text" name="title" maxlength="200" required value={section.title} />
+					<span class="label">Title <span class="req">required</span></span>
+					<input type="text" name="title" maxlength={COURSE_TITLE_MAX_LENGTH} required aria-required="true" value={section.title} />
 				</label>
 			</div>
 			<label class="field">
@@ -93,31 +126,32 @@ function cancelEdit(): void {
 	<section class="block" aria-labelledby="steps-h">
 		<header class="block-head">
 			<h2 id="steps-h">Steps ({section.steps.length})</h2>
-			<Button
-				onclick={() => {
-					showAddStep = !showAddStep;
-					pickerValue = '';
-				}}
-				variant="secondary"
-			>
+			<Button onclick={toggleAddStep} variant="secondary">
 				{showAddStep ? 'Cancel' : 'Add step'}
 			</Button>
 		</header>
 
 		{#if showAddStep}
-			<form method="POST" action="?/addStep" class="form add-step-form">
+			<form method="POST" action={ROUTES.HANGAR_COURSE_ADD_STEP_ACTION} class="form add-step-form">
 				<div class="row-fields">
 					<label class="field">
-						<span class="label">Code</span>
-						<input type="text" name="code" required placeholder={`${section.code}.${section.steps.length + 1}`} />
+						<span class="label">Code <span class="req">required</span></span>
+						<input
+							type="text"
+							name="code"
+							required
+							aria-required="true"
+							placeholder={`${section.code}.${section.steps.length + 1}`}
+							bind:this={addStepCodeInput}
+						/>
 					</label>
 					<label class="field">
-						<span class="label">Ordinal</span>
-						<input type="number" name="ordinal" min="0" required value={section.steps.length + 1} />
+						<span class="label">Ordinal <span class="req">required</span></span>
+						<input type="number" name="ordinal" min="0" required aria-required="true" value={section.steps.length + 1} />
 					</label>
 					<label class="field grow">
-						<span class="label">Title</span>
-						<input type="text" name="title" maxlength="200" required placeholder="Step title" />
+						<span class="label">Title <span class="req">required</span></span>
+						<input type="text" name="title" maxlength={COURSE_TITLE_MAX_LENGTH} required aria-required="true" placeholder="Step title" />
 					</label>
 				</div>
 				<label class="field">
@@ -149,25 +183,29 @@ function cancelEdit(): void {
 				{#each leafSteps as step (step.code)}
 					<li class="step-row">
 						{#if editingStepCode === step.code}
-							<form method="POST" action="?/updateStep" class="form edit-step-form">
+							<form method="POST" action={ROUTES.HANGAR_COURSE_UPDATE_STEP_ACTION} class="form edit-step-form">
 								<input type="hidden" name="originalCode" value={step.code} />
 								<div class="row-fields">
 									<label class="field">
-										<span class="label">Code</span>
-										<input type="text" name="code" required value={step.code} />
+										<span class="label">Code <span class="req">required</span></span>
+										<input type="text" name="code" required aria-required="true" value={step.code} />
 									</label>
 									<label class="field">
-										<span class="label">Ordinal</span>
-										<input type="number" name="ordinal" min="0" required value={step.ordinal} />
+										<span class="label">Ordinal <span class="req">required</span></span>
+										<input type="number" name="ordinal" min="0" required aria-required="true" value={step.ordinal} />
 									</label>
 									<label class="field grow">
-										<span class="label">Title</span>
-										<input type="text" name="title" maxlength="200" required value={step.title} />
+										<span class="label">Title <span class="req">required</span></span>
+										<input type="text" name="title" maxlength={COURSE_TITLE_MAX_LENGTH} required aria-required="true" value={step.title} />
 									</label>
 								</div>
 								<label class="field">
 									<span class="label">Knowledge node</span>
-									<KnowledgeNodePicker nodes={pickerNodes} bind:value={pickerValue} />
+									<!-- Key the picker on the edited code so it remounts with
+									     fresh internal filter state when the row switches. -->
+									{#key editingStepCode}
+										<KnowledgeNodePicker nodes={pickerNodes} bind:value={pickerValue} />
+									{/key}
 								</label>
 								<label class="field">
 									<span class="label">Body (markdown)</span>
@@ -191,24 +229,18 @@ function cancelEdit(): void {
 								</div>
 								{#if step.body_md !== undefined && step.body_md !== ''}
 									<details class="step-body">
-										<summary>Body ({step.body_md.length} chars)</summary>
+										<summary>Body for {step.code} ({step.body_md.length} chars)</summary>
 										<pre>{step.body_md}</pre>
 									</details>
 								{/if}
 								<div class="step-actions">
 									<Button onclick={() => startEdit(step.code)} variant="ghost">Edit</Button>
-									<form method="POST" action="?/deleteStep" class="inline">
-										<input type="hidden" name="stepCode" value={step.code} />
-										<Button
-											type="submit"
-											variant="ghost"
-											onclick={(e) => {
-												if (!confirm(`Delete step "${step.title}"?`)) e.preventDefault();
-											}}
-										>
-											Delete
-										</Button>
-									</form>
+									<ConfirmAction
+										label="Delete"
+										confirmLabel="Delete step"
+										formAction={ROUTES.HANGAR_COURSE_DELETE_STEP_ACTION}
+										hiddenFields={{ stepCode: step.code }}
+									/>
 								</div>
 							</div>
 						{/if}
@@ -249,6 +281,10 @@ function cancelEdit(): void {
 	.crumb a {
 		color: var(--action-default-hover);
 		text-decoration: none;
+	}
+
+	.banner-live:empty {
+		display: none;
 	}
 
 	.banner {
@@ -317,6 +353,19 @@ function cancelEdit(): void {
 		font-size: var(--type-ui-label-size);
 		font-weight: 600;
 		color: var(--ink-muted);
+	}
+
+	.req {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 400;
+		color: var(--ink-faint);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
+	.field-help {
+		font-size: var(--type-ui-caption-size);
+		color: var(--ink-faint);
 	}
 
 	.row-fields {
@@ -413,9 +462,5 @@ function cancelEdit(): void {
 		display: flex;
 		gap: var(--space-sm);
 		justify-content: flex-end;
-	}
-
-	.inline {
-		display: inline-block;
 	}
 </style>

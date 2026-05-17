@@ -87,11 +87,6 @@ const config = {
 			// `+page.server.ts` import path stays grep-able and survives a
 			// future loader move into a `libs/tracking/` server entry point.
 			'@ab/wp-loader': '../../scripts/lib/wp-loader.ts',
-			// course-reader-and-editor WP, Phase 6: hangar editor save actions
-			// invoke the seed pipeline directly. Aliased so the import path
-			// stays grep-able + a future move of the seed entry into
-			// `libs/bc/study/src/seed-courses.ts` only touches one place.
-			'@ab/seed-courses': '../../scripts/db/seed-courses.ts',
 		},
 		env: {
 			dir: '../../',

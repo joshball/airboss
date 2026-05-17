@@ -1,15 +1,15 @@
 <script lang="ts">
 import { aggregateCertCoverage, type LensLeaf, type LensTreeNode } from '@ab/bc-study';
-import { COURSE_STATUS_LABELS, type CourseStatus, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import { COURSE_STATUS_LABELS, COURSE_STEP_LEVELS, type CourseStatus, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import NotesList from '@ab/ui/components/notes/NotesList.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import { renderMarkdown } from '@ab/utils';
 import CertGapsPanel from '$lib/components/CertGapsPanel.svelte';
-import type { PageData } from './$types';
+import type { ActionData, PageData } from './$types';
 
-let { data }: { data: PageData } = $props();
+let { data, form }: { data: PageData; form: ActionData } = $props();
 
 const course = $derived(data.course);
 const lensResult = $derived(data.lensResult);
@@ -17,6 +17,8 @@ const overlayActive = $derived(data.overlayActive);
 const overlaySyllabusId = $derived(data.overlaySyllabusId);
 const stepCodeById = $derived(data.stepCodeById);
 const courseNotes = $derived(data.courseNotes);
+const primaryGoalId = $derived(data.primaryGoalId);
+const inGoal = $derived(data.inGoal);
 // `+ Note` pre-fills the course context so the standalone composer
 // opens with this course already selected.
 const newNoteHref = $derived(`${ROUTES.NOTES_NEW}?${QUERY_PARAMS.NOTE_COURSE_ID}=${encodeURIComponent(course.id)}`);
@@ -47,7 +49,8 @@ function statusLabel(status: string): string {
 
 function pct(num: number, den: number): number {
 	if (den === 0) return 0;
-	return Math.round((num / den) * 100);
+	// Clamp to [0, 100] -- guards against a rollup where mastered > total.
+	return Math.min(100, Math.max(0, Math.round((num / den) * 100)));
 }
 
 function masteryStateLabel(leaf: LensLeaf): string {
@@ -91,32 +94,14 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 {/snippet}
 
 {#snippet treeNode(node: LensTreeNode, depth: number)}
-	{@const isSection = node.level === 'section'}
-	{@const isLesson = node.level === 'lesson'}
+	{@const isSection = node.level === COURSE_STEP_LEVELS.SECTION}
+	{@const isLesson = node.level === COURSE_STEP_LEVELS.LESSON}
 	{@const hLevel = headingLevel(depth)}
 	<li class={isSection ? 'section-card' : 'lesson-card'} data-depth={depth}>
 		<header class={isSection ? 'section-head' : 'lesson-head'}>
-			{#if hLevel === 2}
-				<h2 class="node-title">
-					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
-				</h2>
-			{:else if hLevel === 3}
-				<h3 class="node-title">
-					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
-				</h3>
-			{:else if hLevel === 4}
-				<h4 class="node-title">
-					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
-				</h4>
-			{:else if hLevel === 5}
-				<h5 class="node-title">
-					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
-				</h5>
-			{:else}
-				<h6 class="node-title">
-					<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
-				</h6>
-			{/if}
+			<svelte:element this={`h${hLevel}`} class="node-title">
+				<a class="node-link" href={ROUTES.COURSE_STEP(course.slug, codeFor(node.id))}>{node.title}</a>
+			</svelte:element>
 			<div class="node-stats">
 				{#if node.rollup.totalLeaves > 0}
 					<span class="node-rollup">
@@ -167,7 +152,29 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 		{#snippet titleSuffix()}
 			<span class="status status-{course.status}">{statusLabel(course.status)}</span>
 		{/snippet}
+		{#snippet actions()}
+			{#if inGoal || form?.success === true}
+				<span class="in-goal-indicator" data-testid="course-in-goal">In your goal</span>
+			{:else if primaryGoalId !== null}
+				<form method="POST" action={ROUTES.STUDY_GOAL_ADD_COURSE_ACTION}>
+					<input type="hidden" name="goalId" value={primaryGoalId} />
+					<input type="hidden" name="courseId" value={course.id} />
+					<Button type="submit" variant="primary">Add to goal</Button>
+				</form>
+			{/if}
+		{/snippet}
 	</PageHeader>
+
+	<div class="banner-live" aria-live="assertive">
+		{#if form?.error}
+			<p class="banner banner-error" role="alert">{form.error}</p>
+		{/if}
+	</div>
+	<div class="banner-live" aria-live="polite">
+		{#if form?.success === true}
+			<p class="banner banner-ok" role="status">Course added to goal.</p>
+		{/if}
+	</div>
 
 	{#if course.description !== ''}
 		<div class="prose description">{@html renderMarkdown(course.description)}</div>
@@ -189,6 +196,7 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 				aria-valuemin="0"
 				aria-valuemax={root.rollup.totalLeaves}
 				aria-valuenow={root.rollup.masteredLeaves}
+				aria-valuetext="{root.rollup.masteredLeaves} of {root.rollup.totalLeaves} leaves mastered"
 			>
 				<span
 					class="mastery-fill"
@@ -286,6 +294,43 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 		background: var(--surface-sunken);
 	}
 
+	.banner-live:empty {
+		display: none;
+	}
+
+	.banner {
+		margin: 0;
+		padding: var(--space-md);
+		border-radius: var(--radius-md);
+		border: 1px solid;
+	}
+
+	.banner-error {
+		background: var(--signal-danger-wash);
+		color: var(--signal-danger-ink);
+		border-color: var(--signal-danger-edge);
+	}
+
+	.banner-ok {
+		background: var(--signal-success-wash);
+		color: var(--ink-body);
+		border-color: var(--signal-success-edge);
+	}
+
+	.in-goal-indicator {
+		display: inline-flex;
+		align-items: center;
+		padding: var(--space-2xs) var(--space-sm);
+		font-size: var(--type-ui-caption-size);
+		font-weight: 600;
+		border-radius: var(--radius-pill);
+		color: var(--action-default-hover);
+		background: var(--action-default-wash);
+		border: 1px solid var(--action-default-edge);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
+	}
+
 	.description {
 		color: var(--ink-body);
 	}
@@ -331,7 +376,7 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 
 	.mastery-bar {
 		width: 100%;
-		height: 8px;
+		height: var(--space-2xs);
 		background: var(--edge-default);
 		border-radius: var(--radius-pill);
 		overflow: hidden;
@@ -464,6 +509,12 @@ function headingLevel(depth: number): 2 | 3 | 4 | 5 | 6 {
 	.leaf-link:hover {
 		border-color: var(--action-default-edge);
 		background: var(--surface-muted);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.leaf-link {
+			transition: none;
+		}
 	}
 
 	.leaf-title {

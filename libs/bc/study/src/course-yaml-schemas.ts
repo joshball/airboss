@@ -48,6 +48,8 @@
 
 import {
 	COURSE_KIND_VALUES,
+	COURSE_SLUG_REGEX,
+	COURSE_SLUG_REGEX_SOURCE,
 	COURSE_STATUS_VALUES,
 	COURSE_STATUSES,
 	COURSE_STEP_LEVELS,
@@ -56,12 +58,6 @@ import {
 	type CourseStatus,
 } from '@ab/constants';
 import { z } from 'zod';
-
-// `course.slug` shape -- mirrors the DB CHECK
-// (`course_slug_shape_check` in `libs/bc/study/src/schema.ts`). Keeping the
-// regex literal here avoids leaking schema constants into the runtime
-// barrel; the DB still has the final word at insert time.
-const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
 
 /**
  * Top-level `manifest.yaml` for a course directory.
@@ -77,7 +73,7 @@ const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
 export const courseManifestSchema = z
 	.object({
 		slug: z.string().regex(COURSE_SLUG_REGEX, {
-			message: 'course slug must match ^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$',
+			message: `course slug must match ${COURSE_SLUG_REGEX_SOURCE}`,
 		}),
 		kind: z.enum(COURSE_KIND_VALUES as [CourseKind, ...CourseKind[]]),
 		title: z.string().min(1),

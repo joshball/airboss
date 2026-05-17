@@ -794,7 +794,7 @@ describe('courseWithCertOverlayLens -- course covers all cert leaves', () => {
 			expect(leaf.sources?.certCode).toBeDefined();
 		}
 		// And the standalone `getCourseGaps` agrees.
-		const standaloneGaps = await getCourseGaps(goalId, courseId, SYL_ID);
+		const standaloneGaps = await getCourseGaps(courseId, SYL_ID);
 		expect(standaloneGaps).toEqual([]);
 	});
 });
@@ -832,7 +832,7 @@ describe('courseWithCertOverlayLens -- course covers some cert leaves', () => {
 		expect(bLeaf?.sources?.certCode).toBe(`${SUITE_TOKEN}-V.A.K2`);
 
 		// Standalone helper agrees on the gap shape.
-		const standaloneGaps = await getCourseGaps(goalId, courseId, SYL_ID);
+		const standaloneGaps = await getCourseGaps(courseId, SYL_ID);
 		expect(standaloneGaps).toHaveLength(1);
 		expect(standaloneGaps[0]?.syllabusNodeId).toBe(SYL_LEAF_C_ID);
 	});

@@ -14,7 +14,6 @@ Deferred items, why they're deferred, and the trigger that should make us revisi
 
 | Item                                                            | Status       | Trigger to revisit                                              |
 | --------------------------------------------------------------- | ------------ | --------------------------------------------------------------- |
-| Real WX chart embedding in step reader                          | Follow-on WP | When the wx symbology library lands                             |
 | Truth-aware wx engine integration                               | Follow-on WP | When the wx symbology library lands AND a generator runs        |
 | Personal-course authoring UI                                    | Deferred     | When the learner-as-author use case earns its own WP            |
 | Course-to-course prerequisite UX                                | Deferred     | When the course-primitive WP unblocks course_prereq             |
@@ -29,24 +28,24 @@ Deferred items, why they're deferred, and the trigger that should make us revisi
 | `:::chart` markdown extension parser                            | Follow-on WP | When real chart rendering ships and the syntax stabilizes       |
 | In-place reorder via drag-and-drop                              | Deferred     | When manual ordinal entry creates real authoring friction       |
 
-## Real WX chart embedding in step reader
+## WX chart embedding (reconciled 2026-05-17)
 
-Status: Follow-on WP
+Status: Shipped (component) / Follow-on WP (directive parser)
 
-What was postponed:
-The actual chart rendering inside `<CourseStepChart slug="..." />`. This WP ships the component as a placeholder (bordered container with the slug visible in development, empty wrapper in production). Real rendering -- pulling chart data, decoding NWS symbology, projecting to airboss style -- is a separate concern with its own WP-sized scope.
+Reconciliation note:
+The original scope deferred chart rendering and shipped `<CourseStepChart>` as a placeholder stub. The component shipped as a REAL chart renderer instead: it fetches an SVG from the study app's `/api/charts/[...slug]/chart.svg` catch-all endpoint (`apps/study/src/routes/api/charts/[...slug]/+server.ts`), which reads `data/charts/wx/<slug>/...` from disk. In development the slug shows as a `<figcaption>`; in production only the chart renders. This OUT-OF-SCOPE entry, the spec, and the test plan originally described a stub that no longer exists -- they were reconciled in the 2026-05-17 review-fixes PR.
 
-Why:
-Per the prompt that opened this WP: chart embedding is gated on the wx symbology library, which is being prototyped via parallel spike work but is not a dependency of this WP. The dual UI can ship and be useful (real weather course readable in study app, editable in hangar) before any chart renders. Building the renderer in this WP would block the surface on a research-grade dependency.
+What remains deferred:
+Only the `:::chart` markdown-directive parser (its own row in the summary table above). `<CourseStepChart>` is a real component, but no content render path mounts it yet -- node bodies and step bodies are Markdown, and the directive parser that would detect `:::chart slug="..."` blocks and mount the component is the gating concern. Until that parser ships, the component is reachable only by its own unit test.
 
 Trigger that fires the follow-on:
-The wx symbology library is shipped as a public component lib (a stable component API, design tokens, and a chart catalog). Once that exists, the follow-on WP wires the symbology lib into the chart-stub component without changing call sites.
+The `:::chart` embed syntax stabilizes and the project's Markdown processor gains directive support.
 
 References:
 
 - WP prompt (2026-05-09): "WX chart embedding ships later"
-- `docs/log/` for any merged spike work on wx-chart symbology
-- `docs/work-packages/course-primitive/spec.md` (which deferred chart rendering as well)
+- `apps/study/src/routes/api/charts/[...slug]/+server.ts` (the shipped chart endpoint)
+- `apps/study/src/lib/components/CourseStepChart.svelte` (the shipped component)
 
 ## Truth-aware wx engine integration
 
@@ -282,7 +281,7 @@ Why:
 The chart component is a Svelte primitive; the markdown integration depends on which markdown processor the project uses (the existing 7-phase node renderer). Adding a directive parser is a project-wide change that affects every markdown-rendered surface, not just the course step reader.
 
 Trigger that fires the follow-on:
-Real chart rendering ships AND the syntax for embedding stabilizes. Today an author can embed the component manually if they're authoring a Svelte file (which they aren't -- node bodies are markdown, step bodies are markdown). So the directive parser is the gating concern.
+The syntax for embedding stabilizes. Real chart rendering already shipped (`<CourseStepChart>` fetches a real SVG -- see the reconciliation note above), so the directive parser is now the only gating concern. Today an author can embed the component manually only by authoring a Svelte file, which they do not -- node bodies and step bodies are Markdown.
 
 Implementation pattern when triggered:
 Mirror the existing markdown extensions (callouts, fenced code blocks). Hook into the markdown processor. Test against the existing renderer surfaces.

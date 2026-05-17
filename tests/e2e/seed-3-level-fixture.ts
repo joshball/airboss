@@ -2,16 +2,16 @@
  * E2e fixture seeder for the 3-level course tree
  * (`course/courses/_fixtures/three-level-tree-fixture/`).
  *
- * The seed pipeline at `scripts/db/seed-courses.ts` skips the `_fixtures/`
- * top-level directory so test-only courses don't ship in the default
- * reseed. Specs that exercise N-deep tree behaviour (Phase D of
+ * The seed pipeline (`libs/bc/study/src/seed-courses.ts`) skips the
+ * `_fixtures/` top-level directory so test-only courses don't ship in the
+ * default reseed. Specs that exercise N-deep tree behaviour (Phase D of
  * course-tree-arbitrary-depth WP) call this helper to opt the fixture
  * into the local e2e DB.
  *
  * Idempotent: runs `seedCourses` with `coursesDir` overridden to the
  * `_fixtures/` directory and `slug` pinned to `three-level-tree-fixture`
- * (matches the manifest's slug + the directory name, per the
- * seed-courses.ts contract that dir name === manifest slug).
+ * (matches the manifest's slug + the directory name, per the seed
+ * pipeline contract that dir name === manifest slug).
  *
  * Also links the fixture course and the dev-seeded `weather-comprehensive`
  * course to Abby's primary goal via `goal_course`. `courseLens` returns
@@ -26,9 +26,9 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postgres from 'postgres';
-import { DEV_DB_URL_E2E } from '../../libs/constants/src';
+import { seedCourses } from '../../libs/bc/study/src/seed-courses';
 import { course, goal, goalCourse } from '../../libs/bc/study/src/schema';
-import { seedCourses } from '../../scripts/db/seed-courses';
+import { DEV_DB_URL_E2E } from '../../libs/constants/src';
 
 /** Slug authored in the manifest + used as the directory name. */
 export const THREE_LEVEL_FIXTURE_SLUG = 'three-level-tree-fixture';

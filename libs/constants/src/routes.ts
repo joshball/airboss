@@ -942,6 +942,14 @@ export const ROUTES = {
 	/** One step inside a course, keyed by course slug + step code (e.g. `s1.3`). */
 	COURSE_STEP: (slug: string, stepCode: string) =>
 		`/courses/${encodeURIComponent(slug)}/${encodeURIComponent(stepCode)}` as const,
+	/**
+	 * SVG chart endpoint for the course step reader's `CourseStepChart`
+	 * component. The route is a `[...slug]` catch-all (`apps/study/src/routes/
+	 * api/charts/[...slug]/+server.ts`) -- it consumes slashes transparently,
+	 * so `slug` passes through verbatim and must NOT be `encodeURIComponent`-ed
+	 * (encoding the slashes would break the catch-all match).
+	 */
+	API_CHART: (slug: string) => `/api/charts/${slug}/chart.svg` as const,
 } as const;
 
 /**

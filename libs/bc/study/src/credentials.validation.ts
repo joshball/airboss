@@ -221,6 +221,18 @@ export const addGoalNodeInputSchema = z.object({
 export type AddGoalNodeInput = z.infer<typeof addGoalNodeInputSchema>;
 
 /**
+ * Input for `addGoalCourse`. The `goal_course.weight` column reuses the
+ * syllabus weight range (`goal_course_weight_check` mirrors
+ * `GOAL_SYLLABUS_WEIGHT_MIN/MAX`); a `.min/.max` here rejects out-of-range
+ * input at the BC boundary rather than letting the DB CHECK 500 the request.
+ */
+export const addGoalCourseInputSchema = z.object({
+	courseId: z.string().min(1),
+	weight: z.number().min(GOAL_SYLLABUS_WEIGHT_MIN).max(GOAL_SYLLABUS_WEIGHT_MAX).default(1.0),
+});
+export type AddGoalCourseInput = z.infer<typeof addGoalCourseInputSchema>;
+
+/**
  * Targeting-list schemas wired into `setGoalFocusDomains`,
  * `setGoalSkipDomains`, and `setGoalSkipNodes`. The arrays are validated
  * against `DOMAIN_VALUES` so a caller that bypasses the route layer

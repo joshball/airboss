@@ -68,7 +68,7 @@ In:
 - Three study-app pages: `/courses` (index), `/courses/[slug]` (detail), `/courses/[slug]/[stepCode]` (step reader)
 - Three hangar-app pages: `/courses` (index), `/courses/[slug]` (course editor), `/courses/[slug]/sections/[code]` (section editor)
 - One existing-page extension: `/program/goals/[id]` adds a Courses tab + 3 form actions (`addCourse`, `removeCourse`, `setCourseWeight`)
-- One stub component: `<CourseStepChart slug="..." />` -- placeholder for future WX chart embedding
+- One chart component: `<CourseStepChart slug="..." />` -- renders a real SVG weather chart fetched from the study app's `/api/charts/[...slug]/chart.svg` endpoint (the component shipped as a real fetch/render rather than the originally-scoped stub; see the reconciliation note below)
 - Two BC read-helpers (if not already present): `listAllCourses(db)` for the editor index; `listCoursesForReader(db, opts)` for the study index with optional status filter
 - Hangar BC writes: a small surface that wraps "edit YAML file + trigger seed" as an idempotent unit (filesystem write + child-process spawn or BC call into `seedCourses`)
 - Constants: `ROUTES.HANGAR_COURSES`, `ROUTES.HANGAR_COURSE`, `ROUTES.HANGAR_COURSE_SECTION`, plus form-action labels under existing route constants. New `KNOWLEDGE_NODE_KIND_LABELS` already shipped via course-primitive WP -- this WP consumes them
@@ -119,7 +119,7 @@ Conditional rendering:
 - **Empty step body** (`body_md === ''`): skip section 1 (the framing block); render section 2 (linked node body) directly.
 - **Empty linked node body** (`lifecycle === 'skeleton'`): render the framing block plus a "content authoring in progress" placeholder for the node body.
 
-The chart stub: a Svelte component `<CourseStepChart slug="..." />` is available to embed in step body_md or node body markdown via a markdown extension (e.g., `:::chart slug="sfc-analysis-2026-05-09"\n:::`). This WP ships the component with a placeholder body (a bordered container + the slug visible as text in development; an empty wrapper in production). The real chart implementation is its own WP.
+The chart component: a Svelte component `<CourseStepChart slug="..." />` is available to embed in step body_md or node body markdown. Reconciliation note (2026-05-17 review): the shipped component is NOT the originally-scoped stub. It renders a real SVG chart, fetched from the study app's `/api/charts/[...slug]/chart.svg` catch-all endpoint (which reads `data/charts/wx/<slug>/...` from disk). In development the slug stays visible beneath the chart as a `<figcaption>`; in production only the chart renders. The only remaining deferral is the `:::chart` markdown-directive parser that would mount the component from authored markdown -- the component itself is unmounted by any content render path until that parser ships (see OUT-OF-SCOPE.md).
 
 ### Goal composer extension: Courses tab on `/program/goals/[id]`
 
@@ -267,7 +267,7 @@ The seed pipeline's existing rejections (duplicate ordinals, missing `knowledge_
 - **YAML file write succeeds but seed fails for a non-validation reason** (e.g., DB connection lost): editor reverts the YAML write, surfaces a message of the form `seed failed: <error>; your edits were reverted` (the placeholder is the error text). The user must retry.
 - **Encoded-text product slug list grows**: adding a new slug to `WX_DECODE_PRODUCT_SLUGS` is a one-line constants change. No data migration; the rendering hint is content-driven.
 - **A goal-with-overlay where the lens picks syllabus A, but the learner wants overlay against syllabus B**: deferred. Today the page picks the highest-weight syllabus deterministically. A picker UI is its own concern (deferred per OUT-OF-SCOPE).
-- **Step body_md uses `<CourseStepChart slug="..." />` directive** (or a `:::chart slug="..."` markdown extension): the renderer detects the directive and mounts the chart-stub component. In dev the slug is visible; in prod the placeholder is empty. Same for node body_md.
+- **Step body_md uses a `:::chart slug="..."` markdown directive**: the directive parser that detects `:::chart` blocks and mounts `<CourseStepChart>` is deferred (see OUT-OF-SCOPE.md). The component itself renders a real chart; it is simply not yet reachable from authored markdown.
 
 ## Out of scope
 

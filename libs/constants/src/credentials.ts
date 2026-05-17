@@ -231,6 +231,37 @@ export const COURSE_STATUS_LABELS: Record<CourseStatus, string> = {
 };
 
 /**
+ * Canonical `course.slug` shape. Single source of truth -- mirrored by the
+ * DB CHECK (`course_slug_shape_check` in `libs/bc/study/src/schema.ts`), the
+ * course YAML manifest schema, the hangar create/edit form actions, and the
+ * `pattern=` attribute on the slug input. Kebab-case: starts and ends with an
+ * alphanumeric, 3-64 chars total.
+ */
+export const COURSE_SLUG_REGEX = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
+
+/**
+ * The {@link COURSE_SLUG_REGEX} pattern as a bare string. HTML `pattern=`
+ * attributes and user-facing error messages need the source text, not a
+ * `RegExp` object; reading `.source` keeps them locked to the same value.
+ */
+export const COURSE_SLUG_REGEX_SOURCE = COURSE_SLUG_REGEX.source;
+
+/**
+ * Max length of a course / section / step title. Matches the other titled
+ * entities in the project (`GOAL_TITLE_MAX_LENGTH`, `PLAN_TITLE_MAX_LENGTH`).
+ * Enforced server-side in the hangar editor actions and as the `maxlength`
+ * attribute on the title inputs.
+ */
+export const COURSE_TITLE_MAX_LENGTH = 200;
+
+/**
+ * Cap on how many knowledge-node candidates the hangar step-editor's
+ * `KnowledgeNodePicker` dropdown renders at once. Keeps the typed-ahead
+ * filter snappy; the goal-composer node picker shares this limit.
+ */
+export const KNOWLEDGE_NODE_PICKER_LIMIT = 50;
+
+/**
  * `course_step.level` values. Closed enum mirrored by a DB CHECK.
  *
  * Arbitrary-depth pedagogical tree (course-tree-arbitrary-depth WP). The

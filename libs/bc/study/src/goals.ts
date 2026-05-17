@@ -31,6 +31,7 @@
 
 import {
 	type Cert,
+	COURSE_STATUSES,
 	type Domain,
 	GOAL_STATUSES,
 	type GoalStatus,
@@ -42,6 +43,8 @@ import { generateGoalId } from '@ab/utils';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
+	type AddGoalCourseInput,
+	addGoalCourseInputSchema,
 	type AddGoalNodeInput,
 	type AddGoalSyllabusInput,
 	addGoalNodeInputSchema,
@@ -56,9 +59,11 @@ import {
 } from './credentials.validation';
 import { UpsertReturnedNoRowError } from './errors';
 import {
+	course,
 	courseStep,
 	credential,
 	credentialSyllabus,
+	type GoalCourseRow,
 	type GoalNodeRow,
 	type GoalRow,
 	type GoalSyllabusRow,
@@ -94,6 +99,47 @@ export class GoalNotOwnedError extends Error {
 	) {
 		super(`Goal ${goalId} is not owned by user ${userId}`);
 		this.name = 'GoalNotOwnedError';
+	}
+}
+
+/** Thrown by `addGoalCourse` when the `courseId` matches no `course` row. */
+export class CourseNotFoundError extends Error {
+	constructor(public readonly courseId: string) {
+		super(`Course not found: ${courseId}`);
+		this.name = 'CourseNotFoundError';
+	}
+}
+
+/** Thrown by `addGoalCourse` when the target course is not `status='active'`. */
+export class CourseNotActiveError extends Error {
+	constructor(public readonly courseId: string) {
+		super(`Course is not active: ${courseId}`);
+		this.name = 'CourseNotActiveError';
+	}
+}
+
+/** Thrown by `addGoalCourse` when the course is already linked to the goal. */
+export class CourseAlreadyInGoalError extends Error {
+	constructor(
+		public readonly goalId: string,
+		public readonly courseId: string,
+	) {
+		super(`Course ${courseId} is already in goal ${goalId}`);
+		this.name = 'CourseAlreadyInGoalError';
+	}
+}
+
+/**
+ * Thrown by `removeGoalCourse` / `setGoalCourseWeight` when the
+ * `(goal_id, course_id)` pair has no `goal_course` row.
+ */
+export class CourseNotInGoalError extends Error {
+	constructor(
+		public readonly goalId: string,
+		public readonly courseId: string,
+	) {
+		super(`Course ${courseId} is not in goal ${goalId}`);
+		this.name = 'CourseNotInGoalError';
 	}
 }
 
@@ -511,6 +557,89 @@ export async function setGoalNodeWeight(
 		.update(goalNode)
 		.set({ weight })
 		.where(and(eq(goalNode.goalId, existing.id), eq(goalNode.knowledgeNodeId, knowledgeNodeId)));
+}
+
+// ---------------------------------------------------------------------------
+// Goal courses (course-reader-and-editor WP)
+// ---------------------------------------------------------------------------
+
+/**
+ * Every `goal_course` link row for a goal. Used by the goal-composer loader
+ * to read each course's per-link weight. The goal-ownership check is the
+ * loader's responsibility (it already calls `getOwnedGoal`); this is a pure
+ * read keyed on `goal_id`.
+ */
+export async function getGoalCourseLinks(goalId: string, db: Db = defaultDb): Promise<GoalCourseRow[]> {
+	return db.select().from(goalCourse).where(eq(goalCourse.goalId, goalId));
+}
+
+/**
+ * Add a course to a goal.
+ *
+ * Validates, in order: goal ownership, course exists, course is `active`,
+ * course is not already linked. Each failure throws a typed error the route
+ * action maps to a `fail(400, ...)`. The insert uses `onConflictDoNothing`
+ * so a request that races a duplicate insert collapses the TOCTOU window --
+ * an empty `returning()` means the row already existed.
+ */
+export async function addGoalCourse(
+	goalId: string,
+	userId: string,
+	input: AddGoalCourseInput,
+	db: Db = defaultDb,
+): Promise<GoalCourseRow> {
+	const parsed = addGoalCourseInputSchema.parse(input);
+	const existing = await getOwnedGoal(goalId, userId, db);
+	const courseRows = await db.select().from(course).where(eq(course.id, parsed.courseId)).limit(1);
+	const courseRow = courseRows[0];
+	if (courseRow === undefined) throw new CourseNotFoundError(parsed.courseId);
+	if (courseRow.status !== COURSE_STATUSES.ACTIVE) throw new CourseNotActiveError(parsed.courseId);
+	const [row] = await db
+		.insert(goalCourse)
+		.values({ goalId: existing.id, courseId: parsed.courseId, weight: parsed.weight })
+		.onConflictDoNothing({ target: [goalCourse.goalId, goalCourse.courseId] })
+		.returning();
+	if (row === undefined) throw new CourseAlreadyInGoalError(existing.id, parsed.courseId);
+	return row;
+}
+
+/**
+ * Remove a course from a goal. Throws `CourseNotInGoalError` when the
+ * `(goal_id, course_id)` pair has no row -- the route action surfaces this
+ * so a stale form / double-submit does not report a false success.
+ */
+export async function removeGoalCourse(
+	goalId: string,
+	userId: string,
+	courseId: string,
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	const result = await db
+		.delete(goalCourse)
+		.where(and(eq(goalCourse.goalId, existing.id), eq(goalCourse.courseId, courseId)))
+		.returning();
+	if (result.length === 0) throw new CourseNotInGoalError(existing.id, courseId);
+}
+
+/**
+ * Update the per-link weight on an existing `goal_course` row. Throws
+ * `CourseNotInGoalError` when the course is not linked to the goal.
+ */
+export async function setGoalCourseWeight(
+	goalId: string,
+	userId: string,
+	courseId: string,
+	weight: number,
+	db: Db = defaultDb,
+): Promise<void> {
+	const existing = await getOwnedGoal(goalId, userId, db);
+	const result = await db
+		.update(goalCourse)
+		.set({ weight })
+		.where(and(eq(goalCourse.goalId, existing.id), eq(goalCourse.courseId, courseId)))
+		.returning();
+	if (result.length === 0) throw new CourseNotInGoalError(existing.id, courseId);
 }
 
 // ---------------------------------------------------------------------------

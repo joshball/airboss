@@ -84,7 +84,7 @@ export interface PrevNextResult {
 export function computePrevNextLeaves(
 	currentId: string,
 	rows: ReadonlyArray<PrevNextRow>,
-	leaves: ReadonlyArray<LensLeaf>,
+	leaves: ReadonlyArray<PrevNextLeaf>,
 ): PrevNextResult {
 	if (leaves.length === 0) return { prev: null, next: null };
 
@@ -128,6 +128,94 @@ export function computePrevNextLeaves(
 		prev: prev !== null ? { id: prev.id, title: prev.title } : null,
 		next: { id: next.id, title: next.title },
 	};
+}
+
+/**
+ * Minimal course-step row shape for ancestor-chain construction. Decoupled
+ * from `CourseStepRow` so the helper stays browser-safe and unit-testable
+ * without a DB connection.
+ */
+export interface AncestorChainRow {
+	id: string;
+	parentId: string | null;
+	code: string;
+	title: string;
+	level: string;
+}
+
+/** One ancestor in the chain returned by `buildAncestorChain`. */
+export interface AncestorCrumb {
+	code: string;
+	title: string;
+	level: string;
+}
+
+/**
+ * Walk the parent chain from `rowId` upward and return the ordered list of
+ * ancestors (root-first, NOT including `rowId` itself). Iterations are
+ * capped at the row count as a defensive cycle guard. Used by the course
+ * step reader to build its breadcrumb trail.
+ *
+ * Pure helper -- browser-safe, no DB.
+ */
+export function buildAncestorChain(rowId: string, rows: ReadonlyArray<AncestorChainRow>): AncestorCrumb[] {
+	const byId = new Map<string, AncestorChainRow>();
+	for (const row of rows) byId.set(row.id, row);
+	const current = byId.get(rowId);
+	if (current === undefined) return [];
+	const chain: AncestorCrumb[] = [];
+	let parentId = current.parentId;
+	for (let i = 0; i < rows.length && parentId !== null; i += 1) {
+		const ancestor = byId.get(parentId);
+		if (ancestor === undefined) break;
+		chain.push({ code: ancestor.code, title: ancestor.title, level: ancestor.level });
+		parentId = ancestor.parentId;
+	}
+	chain.reverse();
+	return chain;
+}
+
+/** Minimal course-step row shape for `flattenLeafRowsDepthFirst`. */
+export interface LeafOrderRow {
+	id: string;
+	parentId: string | null;
+	ordinal: number;
+	title: string;
+	isLeaf: boolean;
+}
+
+/**
+ * Flatten course-step rows into the document-order list of leaf rows,
+ * without a lens pass. `getCourseStepsByCourse` returns rows sorted by
+ * `(parent_id NULLS FIRST, ordinal)` -- a flat sort, NOT a pre-order
+ * traversal -- so the loader must walk the parent map to recover document
+ * order. Used by the step reader's prev/next when no overlay is active
+ * (the overlay path gets the leaf list from the lens for free).
+ *
+ * Pure helper -- browser-safe, no DB.
+ */
+export function flattenLeafRowsDepthFirst(rows: ReadonlyArray<LeafOrderRow>): PrevNextLeaf[] {
+	const childrenByParent = new Map<string | null, LeafOrderRow[]>();
+	for (const row of rows) {
+		const list = childrenByParent.get(row.parentId) ?? [];
+		list.push(row);
+		childrenByParent.set(row.parentId, list);
+	}
+	for (const list of childrenByParent.values()) {
+		list.sort((a, b) => a.ordinal - b.ordinal);
+	}
+	const leaves: PrevNextLeaf[] = [];
+	const walk = (parentId: string | null): void => {
+		for (const row of childrenByParent.get(parentId) ?? []) {
+			if (row.isLeaf) {
+				leaves.push({ id: row.id, title: row.title });
+			} else {
+				walk(row.id);
+			}
+		}
+	};
+	walk(null);
+	return leaves;
 }
 
 /**
