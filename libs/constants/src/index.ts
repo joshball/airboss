@@ -945,7 +945,7 @@ export {
 	SECONDS_PER_YEAR,
 } from './time';
 export { TOAST_DISMISS_MS, TOAST_DISMISS_SHORT_MS, Z_INDEX, type ZIndexTier } from './ui';
-export { MPS_TO_KNOTS } from './units';
+export { HPA_TO_INHG, MPS_TO_KNOTS } from './units';
 export {
 	WP_AGENT_REVIEW_STATUSES,
 	WP_CATEGORIES,
@@ -996,6 +996,7 @@ export {
 	AIRMET_FAMILIES,
 	AIRMET_FAMILY_VALUES,
 	type AirmetFamily,
+	WX_DEFAULT_TAF_VALID_HOURS,
 	WX_PRACTICE_ITEM_COUNTS,
 	WX_PRACTICE_MASTERY_STATE_VALUES,
 	WX_PRACTICE_MASTERY_STATES,

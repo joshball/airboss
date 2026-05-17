@@ -22,7 +22,7 @@ import type { CloudLayer, ParsedMetar, SkyCover } from './metar/types';
  * overcast, or obscured layer is reported. Ignores layers with `null`
  * heightFtAgl (defensive against an unparseable height token).
  */
-export function ceilingFtAgl(clouds: readonly CloudLayer[]): number | null {
+export function ceilingFtAgl(clouds: readonly Pick<CloudLayer, 'cover' | 'heightFtAgl'>[]): number | null {
 	let lowest: number | null = null;
 	for (const c of clouds) {
 		if (c.cover !== 'BKN' && c.cover !== 'OVC' && c.cover !== 'VV') continue;
@@ -37,7 +37,7 @@ export function ceilingFtAgl(clouds: readonly CloudLayer[]): number | null {
  * cloud-cover circle when authors prefer the `summary` rendering over
  * the `stack` (per-layer) rendering. SKC/CLR/NSC are equivalent.
  */
-export function summarizeCover(clouds: readonly CloudLayer[]): SkyCover {
+export function summarizeCover(clouds: readonly Pick<CloudLayer, 'cover'>[]): SkyCover {
 	if (clouds.length === 0) return 'SKC';
 	const order: Record<SkyCover, number> = { SKC: 0, CLR: 0, NSC: 0, FEW: 1, SCT: 2, BKN: 3, OVC: 4, VV: 5 };
 	let max: SkyCover = 'SKC';
@@ -74,7 +74,10 @@ export function flightCategory(ceilingFt: number | null, visibilitySM: number | 
  * Convenience: derive flight category directly from a parsed METAR.
  * Equivalent to `flightCategory(ceilingFtAgl(parsed.clouds), parsed.visibilitySM)`.
  */
-export function computeFlightCategory(parsed: Pick<ParsedMetar, 'clouds' | 'visibilitySM'>): FaaFlightCategory {
+export function computeFlightCategory(parsed: {
+	clouds: readonly Pick<CloudLayer, 'cover' | 'heightFtAgl'>[];
+	visibilitySM: number | null;
+}): FaaFlightCategory {
 	return flightCategory(ceilingFtAgl(parsed.clouds), parsed.visibilitySM);
 }
 

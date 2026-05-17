@@ -17,6 +17,7 @@
  * Browser-safe: pure regex + arithmetic, no Node imports.
  */
 
+import { HPA_TO_INHG, MPS_TO_KNOTS } from '@ab/constants';
 import type { CloudLayer, ParsedMetar, SkyCover, WindGroup } from './types';
 
 const WX_TOKEN_REGEX =
@@ -29,7 +30,7 @@ const WIND_VARIABLE_DIRS_REGEX = /^\d{3}V\d{3}$/;
 const VIS_FRACTION_REGEX = /^M?\d+(?:\/\d+)?SM$/;
 const VIS_WHOLE_REGEX = /^\d+$/;
 const VIS_FRACTION_FOLLOW_REGEX = /^\d+\/\d+SM$/;
-const CLOUD_REGEX = /^(SKC|CLR|NSC|FEW|SCT|BKN|OVC)(\d{3})?(?:CB|TCU)?$/;
+const CLOUD_REGEX = /^(SKC|CLR|NSC|FEW|SCT|BKN|OVC)(\d{3})?(CB|TCU)?$/;
 const VV_REGEX = /^VV(\d{3})$/;
 const TEMP_DEW_REGEX = /^(M?\d{2})\/(M?\d{2})?$/;
 const ALTIMETER_INHG_REGEX = /^A\d{4}$/;
@@ -82,7 +83,7 @@ export function parseMetar(raw: string): ParsedMetar {
 			const speedRaw = Number(wm[2]);
 			const gustRaw = wm[3] !== undefined ? Number(wm[3]) : null;
 			const unit = wm[4];
-			const factor = unit === 'MPS' ? 1.94384 : 1;
+			const factor = unit === 'MPS' ? MPS_TO_KNOTS : 1;
 			const speedKt = Math.round(speedRaw * factor);
 			const gustKt = gustRaw !== null ? Math.round(gustRaw * factor) : null;
 			const calm = dir === '000' && speedKt === 0;
@@ -95,7 +96,7 @@ export function parseMetar(raw: string): ParsedMetar {
 			};
 			i += 1;
 			if (tokens[i]?.match(WIND_VARIABLE_DIRS_REGEX)) i += 1;
-		} else if (/^\/{3,}KT$/.test(candidateWindToken) || candidateWindToken === '/////KT') {
+		} else if (/^\/{3,}KT$/.test(candidateWindToken)) {
 			// Sensor-out wind report (e.g. `/////KT` from a MADIS 5-minute
 			// report). Suppress the shaft and warn.
 			warnings.push(`unparseable wind token '${candidateWindToken}' -- shaft suppressed`);
@@ -143,12 +144,13 @@ export function parseMetar(raw: string): ParsedMetar {
 		if (cm !== null) {
 			const cover = cm[1] as SkyCover;
 			const heightFtAgl = cm[2] !== undefined ? Number(cm[2]) * 100 : null;
-			clouds.push({ cover, heightFtAgl });
+			const cloudType = cm[3] === 'CB' || cm[3] === 'TCU' ? cm[3] : null;
+			clouds.push({ cover, heightFtAgl, cloudType });
 			continue;
 		}
 		const vvm = t.match(VV_REGEX);
 		if (vvm !== null) {
-			clouds.push({ cover: 'VV', heightFtAgl: Number(vvm[1]) * 100 });
+			clouds.push({ cover: 'VV', heightFtAgl: Number(vvm[1]) * 100, cloudType: null });
 			continue;
 		}
 
@@ -164,7 +166,7 @@ export function parseMetar(raw: string): ParsedMetar {
 			continue;
 		}
 		if (ALTIMETER_HPA_REGEX.test(t)) {
-			altimeterInHg = Number(t.slice(1)) * 0.02953;
+			altimeterInHg = Number(t.slice(1)) * HPA_TO_INHG;
 			continue;
 		}
 
@@ -196,9 +198,14 @@ export function parseMetar(raw: string): ParsedMetar {
 function tryParseVisibility(s: string): number | null {
 	const stripped = s.replace(/SM$/, '');
 	if (stripped.startsWith('M')) {
+		// `M` is ICAO "less than": `M1/4SM` means visibility is below 1/4 SM.
+		// The FAA/NWS convention reports it AT the threshold value, so the
+		// numeric field decodes to the threshold itself. Inventing a halved
+		// value (the prior `v / 2`) fabricated a reading that never appeared
+		// in the observation. The "less than" qualifier lives in the prose
+		// decode line (`@ab/wx-explain`), not the numeric field.
 		const inner = stripped.slice(1);
-		const v = fractionToNumber(inner);
-		return v === null ? null : v / 2;
+		return fractionToNumber(inner);
 	}
 	return fractionToNumber(stripped);
 }

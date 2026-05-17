@@ -70,7 +70,12 @@ export function deriveMetar(truth: TruthModel, stationIcao: string, observationT
 	const cloudTopFt = airMass.meanCloudTopFtAgl;
 	let visibilitySm = 10;
 	const weatherCodes: string[] = [];
-	const additionalLayers: Array<{ cover: 'FEW' | 'SCT' | 'BKN' | 'OVC'; baseFt: number }> = [];
+	const additionalLayers: Array<{
+		cover: 'FEW' | 'SCT' | 'BKN' | 'OVC';
+		baseFt: number;
+		/** `CB` tags a convective layer so the encoded METAR carries the cumulonimbus marker. */
+		cloudType?: 'CB' | 'TCU';
+	}> = [];
 
 	// Pressure -> altimeter (inHg, nearest 0.01).
 	const slpMb = samplePressureMb(truth, [station.lon, station.lat]);
@@ -118,7 +123,7 @@ export function deriveMetar(truth: TruthModel, stationIcao: string, observationT
 		const dNm = dKm / KM_PER_NM;
 		if (dNm <= cell.radiusKm / KM_PER_NM + 10) {
 			weatherCodes.push('+TSRA');
-			additionalLayers.push({ cover: 'BKN', baseFt: 1500 });
+			additionalLayers.push({ cover: 'BKN', baseFt: 1500, cloudType: 'CB' });
 			additionalLayers.push({ cover: 'OVC', baseFt: 6000 });
 			visibilitySm = Math.min(visibilitySm, 3);
 		}
@@ -151,7 +156,9 @@ export function deriveMetar(truth: TruthModel, stationIcao: string, observationT
 		cloudTokens.push('SKC');
 	} else {
 		if (cloudBaseFt !== null) cloudTokens.push(formatCloudLayer(cloudCover, cloudBaseFt));
-		for (const layer of additionalLayers) cloudTokens.push(formatCloudLayer(layer.cover, layer.baseFt));
+		for (const layer of additionalLayers) {
+			cloudTokens.push(formatCloudLayer(layer.cover, layer.baseFt, layer.cloudType));
+		}
 		// If a top is far above base and no additional layer was inserted, add a higher OVC.
 		if (
 			cloudTopFt !== null &&
@@ -207,9 +214,9 @@ function formatVisibility(sm: number): string {
 	return `${Math.floor(sm)}SM`;
 }
 
-function formatCloudLayer(cover: string, ft: number): string {
+function formatCloudLayer(cover: string, ft: number, cloudType?: 'CB' | 'TCU'): string {
 	const hundreds = Math.round(ft / 100);
-	return `${cover}${String(hundreds).padStart(3, '0')}`;
+	return `${cover}${String(hundreds).padStart(3, '0')}${cloudType ?? ''}`;
 }
 
 function formatTempPart(c: number): string {

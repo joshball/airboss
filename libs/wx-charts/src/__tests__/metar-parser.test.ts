@@ -20,7 +20,7 @@ describe('parseMetar', () => {
 		expect(p.wind).toEqual({ directionDeg: 90, speedKt: 15, gustKt: 22, variable: false, calm: false });
 		expect(p.visibilitySM).toBe(10);
 		expect(p.clouds).toHaveLength(1);
-		expect(p.clouds[0]).toEqual({ cover: 'SCT', heightFtAgl: 24000 });
+		expect(p.clouds[0]).toEqual({ cover: 'SCT', heightFtAgl: 24000, cloudType: null });
 		expect(p.tempC).toBe(-9);
 		expect(p.dewpointC).toBe(-19);
 		expect(p.altimeterInHg).toBe(30.12);
@@ -36,10 +36,18 @@ describe('parseMetar', () => {
 		expect(p.wind?.speedKt).toBe(7);
 		expect(p.visibilitySM).toBe(1);
 		expect(p.clouds).toHaveLength(3);
-		expect(p.clouds[0]).toEqual({ cover: 'FEW', heightFtAgl: 300 });
-		expect(p.clouds[1]).toEqual({ cover: 'BKN', heightFtAgl: 600 });
-		expect(p.clouds[2]).toEqual({ cover: 'OVC', heightFtAgl: 1200 });
+		expect(p.clouds[0]).toEqual({ cover: 'FEW', heightFtAgl: 300, cloudType: null });
+		expect(p.clouds[1]).toEqual({ cover: 'BKN', heightFtAgl: 600, cloudType: null });
+		expect(p.clouds[2]).toEqual({ cover: 'OVC', heightFtAgl: 1200, cloudType: null });
 		expect(p.weather).toContain('BR');
+	});
+
+	it('captures the CB / TCU cloud-type tag on a layer', () => {
+		const raw = 'KOKC 122253Z 17012G24KT 4SM +TSRA BKN025CB OVC050TCU 24/22 A2978';
+		const p = parseMetar(raw);
+		expect(p.clouds).toHaveLength(2);
+		expect(p.clouds[0]).toEqual({ cover: 'BKN', heightFtAgl: 2500, cloudType: 'CB' });
+		expect(p.clouds[1]).toEqual({ cover: 'OVC', heightFtAgl: 5000, cloudType: 'TCU' });
 	});
 
 	it('parses a calm-wind METAR (00000KT)', () => {
@@ -62,8 +70,10 @@ describe('parseMetar', () => {
 		const raw = 'KBOS 131153Z 09005KT M1/4SM FG VV001 M02/M03 A2999';
 		const p = parseMetar(raw);
 		expect(p.visibilitySM).not.toBeNull();
-		// M1/4 -> v / 2 = 0.125
-		expect(p.visibilitySM).toBeCloseTo(0.125, 3);
+		// `M` is ICAO "less than": M1/4SM decodes to the 1/4 SM threshold
+		// (0.25), not a fabricated halved value. The "less than" qualifier
+		// belongs in the prose decode line, not the numeric field.
+		expect(p.visibilitySM).toBeCloseTo(0.25, 3);
 	});
 
 	it('handles 1 1/2SM visibility (whole + fraction)', () => {

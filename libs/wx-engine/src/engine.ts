@@ -46,6 +46,7 @@ import {
 	chartSlugToDir,
 	WX_CHART_ARTIFACTS,
 	WX_CHART_FAMILIES,
+	WX_DEFAULT_TAF_VALID_HOURS,
 	type WxScenario,
 	wxScenarioBundleDir,
 } from '@ab/constants';
@@ -140,7 +141,7 @@ export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	const truth = loadScenario(slug);
 
 	// === Phase B: products ===
-	const tafValidHours = truth.tafValidHours ?? 12;
+	const tafValidHours = truth.tafValidHours ?? WX_DEFAULT_TAF_VALID_HOURS;
 	const metars = truth.routeStations.map((icao) => deriveMetar(truth, icao));
 	const tafs = truth.routeStations.map((icao) => deriveTaf(truth, icao, { validHours: tafValidHours }));
 	const airmets = deriveAirmets(truth);

@@ -56,6 +56,13 @@ export const WX_TEMPORAL_DEFAULT_STEP_MINUTES = 60;
 export const WX_TEMPORAL_MIN_STEP_MINUTES = 5;
 
 /**
+ * Default TAF valid-period length (hours) used when a truth model omits
+ * `tafValidHours`. Twelve hours is the FAA standard short-form TAF window;
+ * the engine and the consistency validator both fall back to this.
+ */
+export const WX_DEFAULT_TAF_VALID_HOURS = 12;
+
+/**
  * Named-curve presets for `TemporalCell.intensityCurve`. Each maps the
  * normalized cell-life fraction (0 = genesis, 1 = dissipation) to a
  * reflectivity multiplier applied to the cell's template `peakDbz`.
