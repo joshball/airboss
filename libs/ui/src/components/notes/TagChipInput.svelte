@@ -302,7 +302,7 @@ const showDropdown = $derived(dropdownOpen && filteredSuggestions.length > 0);
 		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
-		box-shadow: var(--shadow-md, 0 4px 12px rgba(0, 0, 0, 0.08));
+		box-shadow: var(--shadow-md);
 		z-index: 12;
 	}
 	.suggestion {

@@ -28,17 +28,17 @@ let {
 		align-items: center;
 		gap: var(--space-3xs);
 		padding: var(--space-3xs) var(--space-xs);
-		border-radius: var(--radius-pill, 999px);
+		border-radius: var(--radius-pill);
 		font-size: var(--type-ui-label-size);
 		font-weight: 500;
 		border: 1px solid currentColor;
 	}
 	.badge[data-variant='open'] {
-		background: color-mix(in srgb, var(--signal-warning, #d97706) 14%, transparent);
-		color: var(--signal-warning, #b45309);
+		background: var(--signal-warning-wash);
+		color: var(--signal-warning-ink);
 	}
 	.badge[data-variant='done'] {
-		background: color-mix(in srgb, var(--signal-success, #16a34a) 14%, transparent);
-		color: var(--signal-success, #15803d);
+		background: var(--signal-success-wash);
+		color: var(--signal-success-ink);
 	}
 </style>

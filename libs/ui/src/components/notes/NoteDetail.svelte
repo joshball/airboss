@@ -13,6 +13,7 @@
  */
 
 import { ROUTES } from '@ab/constants';
+import ConfirmAction from '../ConfirmAction.svelte';
 import FollowUpBadge from './FollowUpBadge.svelte';
 import NoteComposer from './NoteComposer.svelte';
 import NoteContextChips from './NoteContextChips.svelte';
@@ -123,15 +124,14 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 						<button type="submit" class="btn ghost" data-testid="note-detail-archive">Archive</button>
 					</form>
 				{/if}
-				<form
-					method="POST"
-					action="{formAction}?/delete"
-					onsubmit={(e) => {
-						if (!confirm('Delete this note? This can\'t be undone.')) e.preventDefault();
-					}}
-				>
-					<button type="submit" class="btn danger" data-testid="note-detail-delete">Delete</button>
-				</form>
+				<ConfirmAction
+					label="Delete"
+					confirmLabel="Delete note"
+					cancelLabel="Keep"
+					formAction="{formAction}?/delete"
+					triggerVariant="ghost"
+					confirmVariant="danger"
+				/>
 				<button type="button" class="btn ghost" disabled title="Coming soon" data-testid="note-detail-promote">
 					Promote to card draft
 				</button>
@@ -194,8 +194,8 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 	}
 	.banner {
 		padding: var(--space-sm) var(--space-md);
-		background: color-mix(in srgb, var(--signal-warning, #d97706) 12%, transparent);
-		color: var(--signal-warning, #b45309);
+		background: var(--signal-warning-wash);
+		color: var(--signal-warning-ink);
 		border-radius: var(--radius-sm);
 	}
 	.head {
@@ -213,7 +213,7 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 	}
 	.title {
 		margin: 0;
-		font-size: var(--font-size-xl, 1.5rem);
+		font-size: var(--font-size-xl);
 		font-weight: 600;
 		color: var(--ink-strong);
 	}
@@ -240,11 +240,6 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 		background: var(--action-default);
 		color: var(--ink-inverse);
 		border-color: transparent;
-	}
-	.btn.danger {
-		background: transparent;
-		color: var(--signal-danger, #dc2626);
-		border-color: currentColor;
 	}
 	.btn.ghost {
 		background: transparent;
@@ -286,7 +281,7 @@ const detailHref = $derived(ROUTES.NOTE_DETAIL(note.id));
 		padding: var(--space-sm) var(--space-md);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-sm);
-		background: color-mix(in srgb, var(--signal-warning, #d97706) 6%, transparent);
+		background: var(--signal-warning-wash);
 	}
 	.followup h3 {
 		margin: 0;
