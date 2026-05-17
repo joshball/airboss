@@ -277,6 +277,50 @@ TAF KGRR 121120Z 1212/1318 09015G22KT 5SM -RA OVC020 PROB40 1218/1224 3SM -FZRA 
 
 Grand Rapids overrunning warm air; light rain at the surface with a 40% chance the warm nose erodes and freezing rain develops. Triage: PROB40 window, FZRA risk, ceiling.
 
+## Scenario-derived examples
+
+The TAFs below are emitted verbatim by the wx-engine truth-model scenarios under `libs/wx-engine/`. Each is the terminal forecast a scenario derives from its synoptic truth, so the `generatedBy` pointer in the manifest is literal: the catalog example *is* the scenario's output. They round-trip through `parseTaf` because the engine enforces that on every product it emits.
+
+### Frontal passage - VCSH with an FM wind shift
+
+```text
+TAF KSTL 191820Z 1919/2007 20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025
+```
+
+St Louis in the `frontal-xc-march` scenario: pre-frontal southerly flow with showers in the vicinity, then an `FM` group at 2000Z marking the cold-front passage - wind veers to 320 with gusts to 30 and the ceiling drops to 2,500 ft overcast.
+
+### Summer thunderstorm - PROB30 with CB
+
+```text
+TAF KIAH 152020Z 1521/1609 13010KT 3SM OVC015 PROB30 1521/1605 4SM -TSRA BKN045CB
+```
+
+Houston in the `summer-thunderstorms-tx` scenario: a low overcast initial body with a long `PROB30` window for light thunderstorm with rain and a cumulonimbus layer - the forecaster's 30% confidence in convective coverage over the terminal.
+
+### Mountain downslope - clean strong-wind forecast
+
+```text
+TAF KASE 122020Z 1221/1309 27025G38KT 6SM FEW060
+```
+
+Aspen in the `mountain-wave-rockies` scenario: a clean forecast with no change groups, but strong westerly downslope wind at 25 gusting 38 across the whole window. The gust factor and mountain-wave turbulence are the entire story.
+
+### Marine layer - SKC clearing to a BKN deck via FM
+
+```text
+TAF KSCK 181520Z 1816/1904 03006KT 6SM SKC FM181900 30008G12KT 6SM BKN008
+```
+
+Stockton in the `marine-stratus-pacific-nw` scenario: clear early, then an `FM` group at 1900Z as the marine push arrives - wind backs onshore and an 800-ft broken deck moves in.
+
+### Winter icing regime - low IFR overcast forecast
+
+```text
+TAF KCLE 221420Z 2215/2303 32020G30KT 3SM OVC015
+```
+
+Cleveland in the `winter-icing-great-lakes` scenario: a single-body forecast holding low IFR the whole window - NW gales at 320G30, 3 SM, overcast at 1,500 ft. The forecaster sees no break in the upslope/lake-effect regime.
+
 ## Catalog manifest
 
 The structured metadata below is what the catalog build script reads. Every example round-trips through `parseTaf` with zero warnings; failing examples block `bun run check`.
@@ -323,14 +367,14 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 4, prevailing forecast structure
-    examples: [taf-ord-vfr, taf-bgr-cold-clear, taf-boi-vfr]
+    examples: [taf-ord-vfr, taf-bgr-cold-clear, taf-boi-vfr, taf-scenario-ase-mtnwave, taf-scenario-cle-icing]
   - slug: fm-from
     label: FM (from) - definite shift
     decode: FM + DDhhmm marks a definite lasting change. The new body replaces the prevailing until the next FM (or validity end).
     references:
       - source: AC 00-45H
         detail: Chapter 4, FM group
-    examples: [taf-fm-stl, taf-fm-multi, taf-marine-fm]
+    examples: [taf-fm-stl, taf-fm-multi, taf-marine-fm, taf-scenario-stl-frontal-fm, taf-scenario-sck-marine-fm]
   - slug: tempo-transient
     label: TEMPO - transient excursion
     decode: TEMPO + DDHH/DDHH marks brief excursions (< 1 hour, less than half the period). The prevailing returns when the window ends.
@@ -344,7 +388,7 @@ token_families:
     references:
       - source: AC 00-45H
         detail: Chapter 4, PROB groups
-    examples: [taf-prob30-ict, taf-prob30-okc, taf-prob30-msy]
+    examples: [taf-prob30-ict, taf-prob30-okc, taf-prob30-msy, taf-scenario-iah-prob30]
   - slug: prob40
     label: PROB40 - 40% probability
     decode: PROB40 + DDHH/DDHH. Same shape as PROB30 with a 40-50% confidence range.
@@ -495,4 +539,29 @@ examples:
     token_families: [header-routine, validity-window, initial-vfr, fm-from]
     synoptic: Aspen westerly downslope through the day, easing slightly after 22Z.
     triage_drivers: [gust factor, mountain wave, ceiling (operationally non-binding)]
+  - slug: taf-scenario-stl-frontal-fm
+    raw: TAF KSTL 191820Z 1919/2007 20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025
+    token_families: [header-routine, validity-window, initial-vfr, fm-from]
+    synoptic: St Louis cold-front passage in the frontal-xc-march scenario; an FM group at 2000Z veers the wind to 320G30 and drops the ceiling.
+    triage_drivers: [FM timing, wind shift, ceiling]
+  - slug: taf-scenario-iah-prob30
+    raw: TAF KIAH 152020Z 1521/1609 13010KT 3SM OVC015 PROB30 1521/1605 4SM -TSRA BKN045CB
+    token_families: [header-routine, validity-window, initial-vfr, prob30]
+    synoptic: Houston in the summer-thunderstorms-tx scenario; a long PROB30 window for light thunderstorm with a CB layer over the terminal.
+    triage_drivers: [PROB30 window, TSRA, CB]
+  - slug: taf-scenario-ase-mtnwave
+    raw: TAF KASE 122020Z 1221/1309 27025G38KT 6SM FEW060
+    token_families: [header-routine, validity-window, initial-vfr]
+    synoptic: Aspen in the mountain-wave-rockies scenario; a clean no-change-group forecast with strong westerly downslope gusts to 38.
+    triage_drivers: [gust factor, mountain wave, wind direction]
+  - slug: taf-scenario-sck-marine-fm
+    raw: TAF KSCK 181520Z 1816/1904 03006KT 6SM SKC FM181900 30008G12KT 6SM BKN008
+    token_families: [header-routine, validity-window, initial-vfr, fm-from]
+    synoptic: Stockton in the marine-stratus-pacific-nw scenario; an FM group at 1900Z brings the marine push and an 800-ft broken deck.
+    triage_drivers: [FM timing, ceiling, wind shift]
+  - slug: taf-scenario-cle-icing
+    raw: TAF KCLE 221420Z 2215/2303 32020G30KT 3SM OVC015
+    token_families: [header-routine, validity-window, initial-vfr]
+    synoptic: Cleveland in the winter-icing-great-lakes scenario; a single-body forecast holding low IFR with NW gales the whole window.
+    triage_drivers: [ceiling, gust factor, visibility]
 ```

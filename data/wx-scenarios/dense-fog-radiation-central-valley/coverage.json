@@ -1,4 +1,6 @@
 {
   "scenario": "dense-fog-radiation-central-valley",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "metar-scenario-fat-tule-fog"
+  ]
 }

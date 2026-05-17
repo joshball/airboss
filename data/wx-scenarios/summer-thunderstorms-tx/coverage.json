@@ -1,4 +1,9 @@
 {
   "scenario": "summer-thunderstorms-tx",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "fb-scenario-summer-texas",
+    "metar-scenario-aus-summer-vfr",
+    "metar-scenario-iah-tsra",
+    "taf-scenario-iah-prob30"
+  ]
 }

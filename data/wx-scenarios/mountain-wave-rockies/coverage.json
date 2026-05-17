@@ -1,4 +1,11 @@
 {
   "scenario": "mountain-wave-rockies",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "fb-scenario-mountain-wave-rockies",
+    "metar-scenario-ase-mtnwave",
+    "metar-scenario-den-mtnwave",
+    "pirep-scenario-apa-sev-turb",
+    "pirep-scenario-bjc-mod-turb",
+    "taf-scenario-ase-mtnwave"
+  ]
 }

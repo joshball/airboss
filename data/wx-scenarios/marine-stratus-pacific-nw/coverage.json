@@ -1,4 +1,6 @@
 {
   "scenario": "marine-stratus-pacific-nw",
-  "coversCatalogExamples": []
+  "coversCatalogExamples": [
+    "taf-scenario-sck-marine-fm"
+  ]
 }

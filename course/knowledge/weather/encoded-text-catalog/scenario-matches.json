@@ -1,12 +1,140 @@
 {
-	"generatedAt": "2026-05-15T18:20:27.816Z",
-	"matches": {},
+	"generatedAt": "2026-05-17T02:56:51.655Z",
+	"matches": {
+		"fb-scenario-mountain-wave-rockies": {
+			"scenario": "mountain-wave-rockies",
+			"station": "FB",
+			"observationTime": "2026-02-12T21:00:00Z"
+		},
+		"fb-scenario-summer-texas": {
+			"scenario": "summer-thunderstorms-tx",
+			"station": "FB",
+			"observationTime": "2026-07-15T21:00:00Z"
+		},
+		"fb-scenario-winter-great-lakes": {
+			"scenario": "winter-icing-great-lakes",
+			"station": "FB",
+			"observationTime": "2026-01-22T15:00:00Z"
+		},
+		"metar-scenario-ase-mtnwave": {
+			"scenario": "mountain-wave-rockies",
+			"station": "KASE",
+			"observationTime": "2026-02-12T21:53:00.000Z"
+		},
+		"metar-scenario-aus-summer-vfr": {
+			"scenario": "summer-thunderstorms-tx",
+			"station": "KAUS",
+			"observationTime": "2026-07-15T21:53:00.000Z"
+		},
+		"metar-scenario-cle-icing": {
+			"scenario": "winter-icing-great-lakes",
+			"station": "KCLE",
+			"observationTime": "2026-01-22T15:53:00.000Z"
+		},
+		"metar-scenario-den-mtnwave": {
+			"scenario": "mountain-wave-rockies",
+			"station": "KDEN",
+			"observationTime": "2026-02-12T21:53:00.000Z"
+		},
+		"metar-scenario-fat-tule-fog": {
+			"scenario": "dense-fog-radiation-central-valley",
+			"station": "KFAT",
+			"observationTime": "2026-02-08T10:53:00.000Z"
+		},
+		"metar-scenario-iah-tsra": {
+			"scenario": "summer-thunderstorms-tx",
+			"station": "KIAH",
+			"observationTime": "2026-07-15T21:53:00.000Z"
+		},
+		"metar-scenario-spi-frontal-rain": {
+			"scenario": "frontal-xc-march",
+			"station": "KSPI",
+			"observationTime": "2026-03-19T19:53:00.000Z"
+		},
+		"pirep-scenario-apa-sev-turb": {
+			"scenario": "mountain-wave-rockies",
+			"station": "KAPA",
+			"observationTime": "2026-02-12T20:30:00.000Z"
+		},
+		"pirep-scenario-bjc-mod-turb": {
+			"scenario": "mountain-wave-rockies",
+			"station": "KBJC",
+			"observationTime": "2026-02-12T20:40:00.000Z"
+		},
+		"pirep-scenario-cak-icing": {
+			"scenario": "winter-icing-great-lakes",
+			"station": "KCAK",
+			"observationTime": "2026-01-22T14:30:00.000Z"
+		},
+		"pirep-scenario-mli-light-turb": {
+			"scenario": "frontal-xc-march",
+			"station": "KMLI",
+			"observationTime": "2026-03-19T18:55:00.000Z"
+		},
+		"pirep-scenario-spi-mod-turb": {
+			"scenario": "frontal-xc-march",
+			"station": "KSPI",
+			"observationTime": "2026-03-19T18:48:00.000Z"
+		},
+		"taf-scenario-ase-mtnwave": {
+			"scenario": "mountain-wave-rockies",
+			"station": "KASE",
+			"observationTime": "2026-05-12T20:20:00.000Z"
+		},
+		"taf-scenario-cle-icing": {
+			"scenario": "winter-icing-great-lakes",
+			"station": "KCLE",
+			"observationTime": "2026-04-22T14:20:00.000Z"
+		},
+		"taf-scenario-iah-prob30": {
+			"scenario": "summer-thunderstorms-tx",
+			"station": "KIAH",
+			"observationTime": "2026-05-15T20:20:00.000Z"
+		},
+		"taf-scenario-sck-marine-fm": {
+			"scenario": "marine-stratus-pacific-nw",
+			"station": "KSCK",
+			"observationTime": "2026-04-18T15:20:00.000Z"
+		},
+		"taf-scenario-stl-frontal-fm": {
+			"scenario": "frontal-xc-march",
+			"station": "KSTL",
+			"observationTime": "2026-04-19T18:20:00.000Z"
+		}
+	},
 	"coverage": {
-		"dense-fog-radiation-central-valley": [],
-		"frontal-xc-march": [],
-		"marine-stratus-pacific-nw": [],
-		"mountain-wave-rockies": [],
-		"summer-thunderstorms-tx": [],
-		"winter-icing-great-lakes": []
+		"dense-fog-radiation-central-valley": [
+			"metar-scenario-fat-tule-fog"
+		],
+		"frontal-pressure-march": [],
+		"frontal-xc-march": [
+			"metar-scenario-spi-frontal-rain",
+			"pirep-scenario-mli-light-turb",
+			"pirep-scenario-spi-mod-turb",
+			"taf-scenario-stl-frontal-fm"
+		],
+		"marine-stratus-pacific-nw": [
+			"taf-scenario-sck-marine-fm"
+		],
+		"mountain-wave-rockies": [
+			"fb-scenario-mountain-wave-rockies",
+			"metar-scenario-ase-mtnwave",
+			"metar-scenario-den-mtnwave",
+			"pirep-scenario-apa-sev-turb",
+			"pirep-scenario-bjc-mod-turb",
+			"taf-scenario-ase-mtnwave"
+		],
+		"summer-thunderstorms-tx": [
+			"fb-scenario-summer-texas",
+			"metar-scenario-aus-summer-vfr",
+			"metar-scenario-iah-tsra",
+			"taf-scenario-iah-prob30"
+		],
+		"winter-icing-great-lakes": [
+			"fb-scenario-winter-great-lakes",
+			"metar-scenario-cle-icing",
+			"pirep-scenario-cak-icing",
+			"taf-scenario-cle-icing"
+		]
 	}
 }
