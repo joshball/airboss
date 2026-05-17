@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Full-codebase correctness sweep across `libs/bc/study`, `libs/auth`, `libs/sources`, `libs/utils`, and the SvelteKit route layer in `apps/study`. Overall the bounded-context code is in solid shape: typed errors, dual-gate auth, transactional skips, atomic UPSERTs, and bounded windows on streak/calibration scans. The findings below are predominantly defensive gaps (missing status filters, divergent helper semantics, leaky filtering of empty inputs) rather than active data-corruption bugs. No critical issues found.

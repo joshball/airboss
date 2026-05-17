@@ -29,14 +29,14 @@ bun run sources extract handbooks <doc> --edition <e> [options]
 
 Options:
 
-| Flag                | What it does                                                              |
-| ------------------- | ------------------------------------------------------------------------- |
-| `--edition <e>`     | Override the YAML's edition tag                                           |
-| `--chapter <code>`  | Restrict to a single chapter (e.g. `12`)                                  |
-| `--dry-run`         | Validate without writing files (TOC strategy only)                        |
-| `--force`           | Re-extract even if hashes match                                           |
-| `--strategy <kind>` | `toc`, `prompt`, or `compare`. Default = read from `<doc>.yaml`           |
-| `--no-archive`      | Skip writing `archive/<run-id>/` for `--strategy prompt` runs             |
+| Flag                | What it does                                                    |
+| ------------------- | --------------------------------------------------------------- |
+| `--edition <e>`     | Override the YAML's edition tag                                 |
+| `--chapter <code>`  | Restrict to a single chapter (e.g. `12`)                        |
+| `--dry-run`         | Validate without writing files (TOC strategy only)              |
+| `--force`           | Re-extract even if hashes match                                 |
+| `--strategy <kind>` | `toc`, `prompt`, or `compare`. Default = read from `<doc>.yaml` |
+| `--no-archive`      | Skip writing `archive/<run-id>/` for `--strategy prompt` runs   |
 
 `<doc>` is the document slug (`phak`, `afh`, `avwx`, etc.); the per-document
 config in `scripts/sources/config/handbooks/<doc>.yaml` (post chapter-source-
@@ -241,16 +241,16 @@ dormant plumbing for the day the policy flips.
 
 ## Validation gates
 
-| Rule                                                                 | Severity |
-| -------------------------------------------------------------------- | -------- |
-| PDF outline parsed cleanly into chapter/section/subsection           | error    |
-| Every chapter's text is non-empty                                    | error    |
-| Every figure caption matching `Figure N-N.` binds to an image        | warning  |
-| Every cross-page table merged without a gap                          | warning  |
-| TOC entry verifies against body heading (font/color/size)            | warning  |
-| Compare strategy: prompt-flow JSON missing or malformed              | error    |
-| Compare strategy: source PDF SHA-256 differs from prompt-run record  | error    |
-| Internal "see Chapter N" cross-reference resolves                    | warning  |
+| Rule                                                                | Severity |
+| ------------------------------------------------------------------- | -------- |
+| PDF outline parsed cleanly into chapter/section/subsection          | error    |
+| Every chapter's text is non-empty                                   | error    |
+| Every figure caption matching `Figure N-N.` binds to an image       | warning  |
+| Every cross-page table merged without a gap                         | warning  |
+| TOC entry verifies against body heading (font/color/size)           | warning  |
+| Compare strategy: prompt-flow JSON missing or malformed             | error    |
+| Compare strategy: source PDF SHA-256 differs from prompt-run record | error    |
+| Internal "see Chapter N" cross-reference resolves                   | warning  |
 
 Errors fail the run; warnings print and continue. Manifest records counts
 and detail.

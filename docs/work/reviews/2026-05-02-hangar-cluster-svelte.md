@@ -212,28 +212,28 @@ Fix: Drop `<svelte:window>` and put `onkeydown` on the `<details>` -- the menu c
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MAJOR: visual CSS in routes | CLOSED | PR #464 -- `Breadcrumbs`, `FilterBar`, `FilterField`, `RolePill`, `Badge`, `EmptyState`, `Banner`, `PageHeader`, `Button`, `ConfirmDialog`, `DataTable`, `EmptyValue` all in `@ab/ui`; routes consume them. Status pills closed via PR #440. |
-| MAJOR: two `MarkdownPreview.svelte` files | CLOSED | This audit -- file preview renamed to `MarkdownFilePreview.svelte`; route + test updated |
-| MAJOR: repeated `state_referenced_locally` suppressions | CLOSED | PR #467 wave -- standardised on `untrack(...)` for prop-seeded state |
-| MAJOR: FlowDiagram `$effect` reads booleans | CLOSED | PR #548 -- effect split into ResizeObserver-install + arrows-recompute derivations |
-| MAJOR: audit/[id] setTimeout no cleanup | CLOSED | PR #548 -- per-key timer Map + onDestroy teardown |
-| MINOR: pollLog no AbortController | CLOSED | PR #453 -- AbortController + aborted check on resolution |
-| MINOR: targetIdValue sentinel reads | CLOSED | PR #467 wave -- swept five routes, replaced sentinel with `$derived` URL + dedupe-effect pattern |
-| MINOR: diff `{#each}` index key | CLOSED | PR #467 wave -- key on `${kind}:${index}` with comment |
-| MINOR: actor/target URL placeholder base | CLOSED | PR #467 wave -- replaced with URLSearchParams-only construction |
-| MINOR: layout double-mirror appearance | CLOSED | PR #548 -- root layout owns the matchMedia listener; (app) consumes the resolved value |
-| MINOR: audit menu keyboard nav | CLOSED | PR #455 -- full ARIA combobox |
-| MINOR: glossary filter sentinel | CLOSED | PR #467 wave -- `$derived` URL + dedupe |
-| MINOR: jobs filter syncs even on mount | CLOSED | PR #467 wave -- shared helper, dedupe by URL string |
-| MINOR: root vs (app) double matchMedia | CLOSED | PR #548 -- single source of truth in root |
-| NIT: repeated formatBytes | CLOSED | PR #464 -- centralised in `@ab/utils` |
-| NIT: repeated formatDate | CLOSED | PR #464 -- presets in `@ab/utils` |
-| NIT: brand "airboss / hangar" | CLOSED | PR #467 wave -- removed spaces around slash |
-| NIT: Nav active-route duplicate | CLOSED | PR #467 wave -- predicate extracted |
-| NIT: diff `<pre>` template tightness | CLOSED | PR #548 -- `<div>` per line with `white-space: pre` |
-| NIT: UserActionResult handwritten type | CLOSED | PR #467 wave -- discriminated union exported from server, `import type` used |
-| NIT: details menu keyboard handler | CLOSED | PR #548 -- moved off `<svelte:window>` to local handler |
+| Finding                                                 | Verdict | Closure                                                                                                                                                                                                                                      |
+| ------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MAJOR: visual CSS in routes                             | CLOSED  | PR #464 -- `Breadcrumbs`, `FilterBar`, `FilterField`, `RolePill`, `Badge`, `EmptyState`, `Banner`, `PageHeader`, `Button`, `ConfirmDialog`, `DataTable`, `EmptyValue` all in `@ab/ui`; routes consume them. Status pills closed via PR #440. |
+| MAJOR: two `MarkdownPreview.svelte` files               | CLOSED  | This audit -- file preview renamed to `MarkdownFilePreview.svelte`; route + test updated                                                                                                                                                     |
+| MAJOR: repeated `state_referenced_locally` suppressions | CLOSED  | PR #467 wave -- standardised on `untrack(...)` for prop-seeded state                                                                                                                                                                         |
+| MAJOR: FlowDiagram `$effect` reads booleans             | CLOSED  | PR #548 -- effect split into ResizeObserver-install + arrows-recompute derivations                                                                                                                                                           |
+| MAJOR: audit/[id] setTimeout no cleanup                 | CLOSED  | PR #548 -- per-key timer Map + onDestroy teardown                                                                                                                                                                                            |
+| MINOR: pollLog no AbortController                       | CLOSED  | PR #453 -- AbortController + aborted check on resolution                                                                                                                                                                                     |
+| MINOR: targetIdValue sentinel reads                     | CLOSED  | PR #467 wave -- swept five routes, replaced sentinel with `$derived` URL + dedupe-effect pattern                                                                                                                                             |
+| MINOR: diff `{#each}` index key                         | CLOSED  | PR #467 wave -- key on `${kind}:${index}` with comment                                                                                                                                                                                       |
+| MINOR: actor/target URL placeholder base                | CLOSED  | PR #467 wave -- replaced with URLSearchParams-only construction                                                                                                                                                                              |
+| MINOR: layout double-mirror appearance                  | CLOSED  | PR #548 -- root layout owns the matchMedia listener; (app) consumes the resolved value                                                                                                                                                       |
+| MINOR: audit menu keyboard nav                          | CLOSED  | PR #455 -- full ARIA combobox                                                                                                                                                                                                                |
+| MINOR: glossary filter sentinel                         | CLOSED  | PR #467 wave -- `$derived` URL + dedupe                                                                                                                                                                                                      |
+| MINOR: jobs filter syncs even on mount                  | CLOSED  | PR #467 wave -- shared helper, dedupe by URL string                                                                                                                                                                                          |
+| MINOR: root vs (app) double matchMedia                  | CLOSED  | PR #548 -- single source of truth in root                                                                                                                                                                                                    |
+| NIT: repeated formatBytes                               | CLOSED  | PR #464 -- centralised in `@ab/utils`                                                                                                                                                                                                        |
+| NIT: repeated formatDate                                | CLOSED  | PR #464 -- presets in `@ab/utils`                                                                                                                                                                                                            |
+| NIT: brand "airboss / hangar"                           | CLOSED  | PR #467 wave -- removed spaces around slash                                                                                                                                                                                                  |
+| NIT: Nav active-route duplicate                         | CLOSED  | PR #467 wave -- predicate extracted                                                                                                                                                                                                          |
+| NIT: diff `<pre>` template tightness                    | CLOSED  | PR #548 -- `<div>` per line with `white-space: pre`                                                                                                                                                                                          |
+| NIT: UserActionResult handwritten type                  | CLOSED  | PR #467 wave -- discriminated union exported from server, `import type` used                                                                                                                                                                 |
+| NIT: details menu keyboard handler                      | CLOSED  | PR #548 -- moved off `<svelte:window>` to local handler                                                                                                                                                                                      |
 
 Total: 20 closed / 0 open. `review_status` was already `done` -- preserved.

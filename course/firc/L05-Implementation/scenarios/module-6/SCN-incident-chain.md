@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     6.3
 Title:           Afternoon Pattern Work After an Extended Lesson
 Module:          6
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_5, FAA_TOPIC.A_11]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RM-1', 'RM-2', 'AC-1', 'CJ-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Accumulating Risk Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1 -- Chain Link 1: Fatigue
 
-```
+```text
 id:           tick_1
 scene:        Downwind leg. Student has been flying for 2.5 hours. Response time to your instructions has been getting slower. Student missed the last altitude call-out by 3 seconds. Yawning has increased in the last 20 minutes.
 studentSpeech:Sorry, what did you say? I heard "abeam" but I forgot what I'm supposed to do at the numbers. Wait, I know this...
@@ -72,7 +72,7 @@ criticalWindow:[ask]
 
 ### Tick 2 -- Chain Link 2: Weather
 
-```
+```text
 id:           tick_2
 scene:        Turning base. Visibility has dropped from 8 miles to 5 miles in the last hour. Ceiling is lowering. A rain shower is visible 5 miles southwest, moving toward the airport. Wind has shifted and increased -- now 15 gusting 22, creating a crosswind on the landing runway.
 studentSpeech:It's getting bumpy. The wind changed. And is that rain over there? I can still see the runway though.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3 -- Chain Link 3: Approach Instability
 
-```
+```text
 id:           tick_3
 scene:        On final, 300 AGL. Gust hits. Student over-corrects, airspeed drops to 62 knots, then spikes to 78 as they push the nose down. The approach is unstable -- airspeed fluctuating, altitude varying, centerline drifting. Student is task-saturated.
 studentSpeech:I've got it, I've got it... just need to stabilize... the wind keeps pushing me off...
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4 -- Chain Completes
 
-```
+```text
 id:           tick_4
 scene:        Student continues the unstable approach. 100 AGL. Airspeed 60 knots. The rain shower hits -- visibility drops to 3 miles instantly. Student freezes on the controls.
 studentSpeech:...
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                 \       \         \-> terminal_safe (direct/take_controls)
                  \       \-> terminal_safe (direct/take_controls)

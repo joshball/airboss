@@ -83,11 +83,11 @@ Mirrors sim's auth model -- avionics doesn't host login.
 
 ## Theme tokens audit
 
-| ID    | Scenario                                          | Expected                               |
-| ----- | ------------------------------------------------- | -------------------------------------- |
-| AV-33 | `grep -ER '#[0-9A-Fa-f]{3,8}' apps/avionics/src/` | Zero hits (every color through tokens) |
-| AV-34  | `grep -ER 'href="/' apps/avionics/src/ \| grep -v routes.ts`         | Zero hits (every route through `ROUTES`)                                                  |
-| AV-35  | `grep -ER 'localhost\|airboss.test' apps/avionics/src/`              | Zero hits (every host through `HOSTS`)                                                    |
+| ID    | Scenario                                          | Expected                               |                                          |
+| ----- | ------------------------------------------------- | -------------------------------------- | ---------------------------------------- |
+| AV-33 | `grep -ER '#[0-9A-Fa-f]{3,8}' apps/avionics/src/` | Zero hits (every color through tokens) |                                          |
+| AV-34 | `grep -ER 'href="/' apps/avionics/src/ \          | grep -v routes.ts`                     | Zero hits (every route through `ROUTES`) |
+| AV-35 | `grep -ER 'localhost\                             | airboss.test' apps/avionics/src/`      | Zero hits (every host through `HOSTS`)   |
 
 ## Browser matrix
 

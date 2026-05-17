@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.6
 Title:           TAA Transition Briefing
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1, FAA_TOPIC.A_12]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-1', 'ES-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Transitioning Instrument Student
 Parameters:
   skillLevel:         0.6
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Planning table. The TAA approach plate is open on the iPad. The student is looking at the IAF sectors, the step-down fixes, and the T-shaped arrangement. Their expression shows confusion.
 studentSpeech:This looks completely different from a normal approach. Where's the feeder route? Where do I get established? I don't even know where to start reading this.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student identifies the final approach segment and the missed approach. But the TAA sectors -- the pie-shaped sectors around the IAFs -- are still confusing. The student doesn't understand how to determine which IAF to use.
 studentSpeech:OK, the final approach course is the same idea. But these sectors with the different altitudes... how do I know which one I'm in? And why are there three IAFs?
@@ -93,7 +93,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is starting to understand the T structure. But now they're trying to reconcile the TAA with the ACS standards they memorized for their checkride. Confused about what the examiner would expect.
 studentSpeech:Wait, if I'm teaching this to a student, what does the ACS say about TAAs? Is this an area of operation? I prepared for my checkride using PTS -- I don't even know where TAA fits in the ACS.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student is nodding, confidence building. They pull up the ACS on the iPad and find the approach section. A light-bulb moment as they see how TAA fits the existing framework.
 studentSpeech:Oh, I see. It's not a separate thing -- it's just a different kind of approach with the same standards. So if I can teach a student to brief any approach systematically, TAA is just another version of that skill?
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

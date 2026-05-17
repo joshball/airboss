@@ -11,12 +11,12 @@ Source reviews: `docs/work/reviews/2026-05-05-study-ia-cleanup-phase2-{architect
 
 ## Convergent finding count by severity
 
-| Severity | Count | Disposition                                                                                  |
-| -------- | ----- | -------------------------------------------------------------------------------------------- |
-| critical | 0     | --                                                                                           |
-| major    | 2     | UX-1 + PT-1 -- both intentional design choices; documented + accepted, not fixed (see below) |
-| minor    | 9     | one actionable (S-1); rest documented + accepted                                              |
-| nit / info | 8   | accepted as-is                                                                                |
+| Severity   | Count | Disposition                                                                                  |
+| ---------- | ----- | -------------------------------------------------------------------------------------------- |
+| critical   | 0     | --                                                                                           |
+| major      | 2     | UX-1 + PT-1 -- both intentional design choices; documented + accepted, not fixed (see below) |
+| minor      | 9     | one actionable (S-1); rest documented + accepted                                             |
+| nit / info | 8     | accepted as-is                                                                               |
 
 ## Fixes applied this sweep
 
@@ -24,13 +24,13 @@ Source reviews: `docs/work/reviews/2026-05-05-study-ia-cleanup-phase2-{architect
 
 ## Findings deliberately deferred (with explicit triggers)
 
-| Finding | Why not fixed now                                                            | Trigger to revisit                                                              |
-| ------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| UX-1    | Spec design.md Q1 explicitly asks for "one mental destination -> deep link"  | First user-contact feedback -- if Joshua hits "I want the LIST," flip the default |
-| PT-1    | The `program-tab-{name}` testid pattern IS the documented contract           | Phase 4 CI guard for `data-testid="page-anchor"` -- extend to validate sub-tab pattern |
-| UX-2    | Coverage placeholder is intentional Phase 2 scope; deeper view is later WP   | When the gap-coverage matrix WP starts                                          |
-| AR-2 / P-1 | `getPrimaryGoal` duplicate per `/program/quals` request is sub-ms        | When a load test surfaces the bottleneck, or coverage tab grows beyond a placeholder |
-| C-3 / A-2 | `<span>` + testid wrap of Button is the documented escape hatch          | `Button.svelte` gets a `testid` prop -- new follow-on issue                     |
+| Finding    | Why not fixed now                                                           | Trigger to revisit                                                                     |
+| ---------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| UX-1       | Spec design.md Q1 explicitly asks for "one mental destination -> deep link" | First user-contact feedback -- if Joshua hits "I want the LIST," flip the default      |
+| PT-1       | The `program-tab-{name}` testid pattern IS the documented contract          | Phase 4 CI guard for `data-testid="page-anchor"` -- extend to validate sub-tab pattern |
+| UX-2       | Coverage placeholder is intentional Phase 2 scope; deeper view is later WP  | When the gap-coverage matrix WP starts                                                 |
+| AR-2 / P-1 | `getPrimaryGoal` duplicate per `/program/quals` request is sub-ms           | When a load test surfaces the bottleneck, or coverage tab grows beyond a placeholder   |
+| C-3 / A-2  | `<span>` + testid wrap of Button is the documented escape hatch             | `Button.svelte` gets a `testid` prop -- new follow-on issue                            |
 
 No "consider later" with no trigger.
 

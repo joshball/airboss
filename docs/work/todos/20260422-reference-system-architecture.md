@@ -33,13 +33,13 @@ Treat every authoritative chunk the app shows as a typed **Reference** stored in
 
 Captured from the 2026-04-22 design round so the work packages don't relitigate:
 
-| #   | Decision                                                                                               | Rationale                                                                                                                                 |
-| --- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Drop the legacy `domain` field.** Use the new tag system (`aviationTopic` etc.) only.                | `domain` is not FIRC-specific; it is airboss-firc's pre-redesign single-valued taxonomy. Keeping it duplicates `aviationTopic[0]` and invites authors to disagree with themselves. |
-| 2   | **`data/sources/` gitignored for now.** Per-source decision at the end of phase 5 (first extractions). | Report back then with actual file sizes; move small files into git, crossing-5MB into LFS, heavyweight binaries into external storage (S3 / artifact bucket). |
-| 3   | **Scanner runs synchronously pre-dev, fast-fail on broken links.**                                     | The SCANNER is fast (regex over content files). Only the EXTRACTION pipeline is slow, and that is a manual command authors invoke deliberately. If the scanner ever crosses a perceptible threshold at scale, fall back to async-with-banner. |
+| #   | Decision                                                                                               | Rationale                                                                                                                                                                                                                                             |
+| --- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Drop the legacy `domain` field.** Use the new tag system (`aviationTopic` etc.) only.                | `domain` is not FIRC-specific; it is airboss-firc's pre-redesign single-valued taxonomy. Keeping it duplicates `aviationTopic[0]` and invites authors to disagree with themselves.                                                                    |
+| 2   | **`data/sources/` gitignored for now.** Per-source decision at the end of phase 5 (first extractions). | Report back then with actual file sizes; move small files into git, crossing-5MB into LFS, heavyweight binaries into external storage (S3 / artifact bucket).                                                                                         |
+| 3   | **Scanner runs synchronously pre-dev, fast-fail on broken links.**                                     | The SCANNER is fast (regex over content files). Only the EXTRACTION pipeline is slow, and that is a manual command authors invoke deliberately. If the scanner ever crosses a perceptible threshold at scale, fall back to async-with-banner.         |
 | 4   | **Cross-library search is faceted, explicitly labeled, no hidden cross-library ranking.**              | Results clearly labeled (`aviation` / `help`, with source-type subtags). Filters narrow by library / source / tag. Power users get `tag:weather rules:ifr` query syntax. Implicit ranking hides decisions from the user; faceting gives them control. |
-| 5   | **Help library is named `libs/help/` (not `libs/app-help/`).**                                         | Symmetric with `libs/aviation/`. Apps register per-app content with the library; the library provides primitives + the cross-app search facade. |
+| 5   | **Help library is named `libs/help/` (not `libs/app-help/`).**                                         | Symmetric with `libs/aviation/`. Apps register per-app content with the library; the library provides primitives + the cross-app search facade.                                                                                                       |
 
 Open questions that remain are in the section at the bottom; these five are closed.
 
@@ -379,11 +379,11 @@ Canonical form: `[[DISPLAY::id]]`.
 
 Three valid modes:
 
-| Form                                 | When                                                                             | Renders as                                                      |
-| ------------------------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| `[[VFR minimums::cfr-14-91-155]]`    | Both known                                                                       | "VFR minimums" as a link/tooltip to the 91.155 reference        |
-| `[[VFR minimums::]]`                 | Text known, id not yet decided                                                   | "VFR minimums" with a yellow "needs link" underline in dev      |
-| `[[::cfr-14-91-155]]`                | Id known, want the reference's `displayName` as the text                         | Renders as "14 CFR 91.155" (the reference's displayName)        |
+| Form                              | When                                                     | Renders as                                                 |
+| --------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
+| `[[VFR minimums::cfr-14-91-155]]` | Both known                                               | "VFR minimums" as a link/tooltip to the 91.155 reference   |
+| `[[VFR minimums::]]`              | Text known, id not yet decided                           | "VFR minimums" with a yellow "needs link" underline in dev |
+| `[[::cfr-14-91-155]]`             | Id known, want the reference's `displayName` as the text | Renders as "14 CFR 91.155" (the reference's displayName)   |
 
 Invalid / disallowed:
 
@@ -413,15 +413,15 @@ Invalid / disallowed:
 
 The tagging research landed at [20260422-tagging-architecture-research.md](./20260422-tagging-architecture-research.md). Five required axes plus one optional axis plus freeform keywords, faceted (each axis independent). Summary:
 
-| Axis                  | Required | Multi | Values                                                                                                        |
-| --------------------- | -------- | ----- | ------------------------------------------------------------------------------------------------------------- |
-| `source-type`         | yes      | no    | `cfr` / `aim` / `pcg` / `ac` / `acs` / `phak` / `afh` / `ifh` / `poh` / `ntsb` / `gajsc` / `aopa` / `faa-safety` / `sop` / `authored` / `derived` |
-| `aviation-topic`      | yes      | yes (1-4) | `regulations` / `weather` / `navigation` / `communications` / `airspace` / `aerodynamics` / `performance` / `weight-balance` / `aircraft-systems` / `flight-instruments` / `procedures` / `human-factors` / `medical` / `certification` / `maintenance` / `airports` / `emergencies` / `training-ops` |
-| `flight-rules`        | yes      | no    | `vfr` / `ifr` / `both` / `na`                                                                                 |
-| `knowledge-kind`      | yes      | no    | `definition` / `regulation` / `concept` / `procedure` / `limit` / `system` / `safety-concept` / `reference`   |
-| `phase-of-flight`     | cond.    | yes (0-3) | `preflight` / `ground-ops` / `takeoff` / `climb` / `cruise` / `descent` / `approach` / `landing` / `missed` / `emergency` (required when `source-type in { poh, aim, ac, sop }` or `knowledge-kind = procedure`) |
-| `cert-applicability`  | no       | yes   | `student` / `sport` / `recreational` / `private` / `instrument` / `commercial` / `cfi` / `cfii` / `atp` / `all` |
-| `keywords`            | no       | yes   | Freeform, validated only for length                                                                           |
+| Axis                 | Required | Multi     | Values                                                                                                                                                                                                                                                                                                |
+| -------------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source-type`        | yes      | no        | `cfr` / `aim` / `pcg` / `ac` / `acs` / `phak` / `afh` / `ifh` / `poh` / `ntsb` / `gajsc` / `aopa` / `faa-safety` / `sop` / `authored` / `derived`                                                                                                                                                     |
+| `aviation-topic`     | yes      | yes (1-4) | `regulations` / `weather` / `navigation` / `communications` / `airspace` / `aerodynamics` / `performance` / `weight-balance` / `aircraft-systems` / `flight-instruments` / `procedures` / `human-factors` / `medical` / `certification` / `maintenance` / `airports` / `emergencies` / `training-ops` |
+| `flight-rules`       | yes      | no        | `vfr` / `ifr` / `both` / `na`                                                                                                                                                                                                                                                                         |
+| `knowledge-kind`     | yes      | no        | `definition` / `regulation` / `concept` / `procedure` / `limit` / `system` / `safety-concept` / `reference`                                                                                                                                                                                           |
+| `phase-of-flight`    | cond.    | yes (0-3) | `preflight` / `ground-ops` / `takeoff` / `climb` / `cruise` / `descent` / `approach` / `landing` / `missed` / `emergency` (required when `source-type in { poh, aim, ac, sop }` or `knowledge-kind = procedure`)                                                                                      |
+| `cert-applicability` | no       | yes       | `student` / `sport` / `recreational` / `private` / `instrument` / `commercial` / `cfi` / `cfii` / `atp` / `all`                                                                                                                                                                                       |
+| `keywords`           | no       | yes       | Freeform, validated only for length                                                                                                                                                                                                                                                                   |
 
 Reasons for the shape:
 
@@ -527,17 +527,17 @@ Warns (reports but doesn't fail) on:
 
 Numbered to match the glossary port plan's step numbers where possible.
 
-| Phase                                                                           | What lands                                                                                                            | Gates when it lands                              |
-| ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| 1. Schema + infra + 175 aviation entries                                        | `libs/aviation/` with types, registry, validation, 175 hand-authored references (paraphrase-only), retagged under the new 5-axis system | Ids unique, tags filled                          |
-| 2. `[[::]]` parser + `ReferenceText` + `ReferenceTerm`                          | Renders wiki-links in any prose                                                                                       | Parser fails on malformed                        |
-| 3. `/glossary` route mounted in study                                           | User can browse + filter + search                                                                                     | Category views work                              |
-| 4. Scanner + manifest + scanner wired into `bun run dev` and `bun run check`    | Fails fast on broken wiki-links; prints TBD-id count                                                                  | Sync, sub-second                                 |
-| 5. CFR source parser + 10 most-cited CFR sections extracted                     | Verbatim present for highest-value regs                                                                               | Version-stamped, diffable                        |
-| 6. AIM / POH / PCG / AC parsers                                                 | Incremental, one source at a time                                                                                     | Same contract as CFR parser                      |
-| 7. `libs/help/` + study `/help` route + cross-library search widget             | App-specific help separated from aviation reference; search spans both                                                | Faceted search works                             |
-| 8. NTSB + AOPA + hand-authored articles                                         | Longer-tail sources                                                                                                   |                                                  |
-| 9. Yearly refresh tooling + diff-first review mode + `data/sources/` size report | Makes the refresh trivial; user decides per-source storage (commit / LFS / external) from actual sizes               |                                                  |
+| Phase                                                                            | What lands                                                                                                                              | Gates when it lands         |
+| -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| 1. Schema + infra + 175 aviation entries                                         | `libs/aviation/` with types, registry, validation, 175 hand-authored references (paraphrase-only), retagged under the new 5-axis system | Ids unique, tags filled     |
+| 2. `[[::]]` parser + `ReferenceText` + `ReferenceTerm`                           | Renders wiki-links in any prose                                                                                                         | Parser fails on malformed   |
+| 3. `/glossary` route mounted in study                                            | User can browse + filter + search                                                                                                       | Category views work         |
+| 4. Scanner + manifest + scanner wired into `bun run dev` and `bun run check`     | Fails fast on broken wiki-links; prints TBD-id count                                                                                    | Sync, sub-second            |
+| 5. CFR source parser + 10 most-cited CFR sections extracted                      | Verbatim present for highest-value regs                                                                                                 | Version-stamped, diffable   |
+| 6. AIM / POH / PCG / AC parsers                                                  | Incremental, one source at a time                                                                                                       | Same contract as CFR parser |
+| 7. `libs/help/` + study `/help` route + cross-library search widget              | App-specific help separated from aviation reference; search spans both                                                                  | Faceted search works        |
+| 8. NTSB + AOPA + hand-authored articles                                          | Longer-tail sources                                                                                                                     |                             |
+| 9. Yearly refresh tooling + diff-first review mode + `data/sources/` size report | Makes the refresh trivial; user decides per-source storage (commit / LFS / external) from actual sizes                                  |                             |
 
 Phases 1 and 2 are the minimum viable. Everything after is incremental and parallelizable.
 

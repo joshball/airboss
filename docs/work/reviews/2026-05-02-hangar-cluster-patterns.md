@@ -50,6 +50,7 @@ Fix: `${ROUTES.HANGAR_JOB_LOG(data.job.id)}?${QUERY_PARAMS.SINCE_SEQ}=${latestSe
 ### MINOR: Un-commented `as unknown as ReadableStream` casts on Node fs streams
 
 Files:
+
 - `apps/hangar/src/routes/(app)/sources/[id]/thumbnail/+server.ts:50`
 - `apps/hangar/src/routes/(app)/sources/[id]/download/+server.ts:47`
 - `apps/hangar/src/routes/(app)/sources/[id]/files/raw/+server.ts:87`
@@ -89,6 +90,7 @@ Fix: Add a one-line comment on first usage; the second can reference it.
 ### NIT: `targetId: 'registry'` sentinel string repeated in build/validate handlers
 
 Files:
+
 - `libs/bc/hangar/src/source-jobs.ts:321`
 - `libs/bc/hangar/src/source-jobs.ts:382`
 
@@ -105,17 +107,17 @@ Fix: Either `const SINCE_SEQ_BEGINNING = -1;` at module scope, or a single-line 
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MINOR: redirectTo magic-string | CLOSED | `+layout.server.ts:37` and `login/+page.server.ts:86` use `QUERY_PARAMS.REDIRECT_TO` |
-| MINOR: `'event'` magic-string in appendJobLog | CLOSED | `enqueue.ts:214` uses `JOB_LOG_STREAMS.EVENT` |
-| MINOR: `?sinceSeq=` inline param | CLOSED | `jobs/[id]/+page.svelte:69` uses `QUERY_PARAMS.SINCE_SEQ`; trim-notice fallback link updated to match (this audit) |
-| MINOR: un-commented `as unknown as ReadableStream` casts | CLOSED | All three streaming routes carry the Node->Web stream coercion comment |
-| MINOR: drain-loop sleep magic 25 | CLOSED | `worker.ts:87` `DRAIN_POLL_INTERVAL_MS` constant |
-| MINOR: client poll interval magic 1000 | CLOSED | `JOB_DETAIL_POLL_INTERVAL_MS` in `@ab/constants` (`jobs.ts`) |
-| NIT: pickAllowedValue cast comment | CLOSED | `filters.ts:82-85` carries the includes() narrowing rationale |
-| NIT: `as JobStatus` casts | CLOSED | `jobs/[id]/+page.svelte:38-39` carries the trust-boundary rationale |
-| NIT: `'registry'` sentinel duplicated | CLOSED | `REGISTRY_TARGET_ID` constant at `source-jobs.ts:51` |
-| NIT: `sinceSeq ?? -1` magic | CLOSED | Inline comment at `enqueue.ts:104-106` documents the sentinel |
+| Finding                                                  | Verdict | Closure                                                                                                            |
+| -------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| MINOR: redirectTo magic-string                           | CLOSED  | `+layout.server.ts:37` and `login/+page.server.ts:86` use `QUERY_PARAMS.REDIRECT_TO`                               |
+| MINOR: `'event'` magic-string in appendJobLog            | CLOSED  | `enqueue.ts:214` uses `JOB_LOG_STREAMS.EVENT`                                                                      |
+| MINOR: `?sinceSeq=` inline param                         | CLOSED  | `jobs/[id]/+page.svelte:69` uses `QUERY_PARAMS.SINCE_SEQ`; trim-notice fallback link updated to match (this audit) |
+| MINOR: un-commented `as unknown as ReadableStream` casts | CLOSED  | All three streaming routes carry the Node->Web stream coercion comment                                             |
+| MINOR: drain-loop sleep magic 25                         | CLOSED  | `worker.ts:87` `DRAIN_POLL_INTERVAL_MS` constant                                                                   |
+| MINOR: client poll interval magic 1000                   | CLOSED  | `JOB_DETAIL_POLL_INTERVAL_MS` in `@ab/constants` (`jobs.ts`)                                                       |
+| NIT: pickAllowedValue cast comment                       | CLOSED  | `filters.ts:82-85` carries the includes() narrowing rationale                                                      |
+| NIT: `as JobStatus` casts                                | CLOSED  | `jobs/[id]/+page.svelte:38-39` carries the trust-boundary rationale                                                |
+| NIT: `'registry'` sentinel duplicated                    | CLOSED  | `REGISTRY_TARGET_ID` constant at `source-jobs.ts:51`                                                               |
+| NIT: `sinceSeq ?? -1` magic                              | CLOSED  | Inline comment at `enqueue.ts:104-106` documents the sentinel                                                      |
 
 Total: 10 closed / 0 open. `review_status` flipped to `done`.

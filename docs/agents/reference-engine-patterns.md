@@ -7,7 +7,7 @@ Originally extracted from airboss-game (2026-03-24). airboss-firc's `libs/engine
 
 ## 1. Monorepo Structure
 
-```
+```text
 apps/
   cli/              CLI tools (replay, benchmark, campaign)
   tui/              Terminal UI (live sim, replay, watch)
@@ -67,7 +67,7 @@ The engine is the primary API. WebSocket/HTTP are transport layers wrapping it. 
 
 ### Tick Loop
 
-```
+```text
 1. Build public WorldState from InternalWorld
 2. Call player function with WorldState
 3. Player returns Command[]
@@ -182,7 +182,7 @@ ERR_INSUFFICIENT_BATTERY;
 
 ## 4. Constants Organization
 
-```
+```text
 packages/constants/src/
   index.ts           (main export barrel)
   simulation.ts      (tick defaults, statuses, priorities)
@@ -293,7 +293,7 @@ UI, narrative, CLI all use `game.vocabulary.vehicleSingular` instead of hardcodi
 
 ### Game -> Campaign -> Mission Hierarchy
 
-```
+```text
 GameDefinition
   id, name, complexity, vocabulary, scenarioDefaults
   campaigns: CampaignDefinition[]
@@ -305,7 +305,7 @@ GameDefinition
 
 **For airboss-firc:** Maps to course structure:
 
-```
+```text
 CourseDefinition (the FIRC)
   modules: ModuleDefinition[] (6 modules from COURSE_STRUCTURE.md)
     scenarios: ScenarioMeta[]
@@ -352,7 +352,7 @@ Per-scenario thresholds. Par score is optional but recommended.
 
 ### JSONL Format (one JSON per line)
 
-```
+```text
 {"type": "header", "data": { version, simulationId, scenarioId }}
 {"type": "tick", "data": { tick, commands, validation, events }}
 ...
@@ -386,7 +386,7 @@ Short version: TypeScript theme objects in `libs/themes/{app}/{name}/` emit `tok
 
 ### Script Organization
 
-```
+```text
 scripts/
   lib/args.ts       argument parsing dispatcher
   game.ts           game review, scoring, score-check

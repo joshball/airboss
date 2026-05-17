@@ -236,16 +236,16 @@ The simulator credit rules are wrinkled enough that working CFIs always check th
 
 ### Locate the section
 
-| Question                                                                | Section            |
-| ----------------------------------------------------------------------- | ------------------ |
-| Where is the private pilot total-time requirement?                       | §61.109            |
-| Where is the commercial pilot total-time requirement?                   | §61.129            |
-| Where is the ATP total-time requirement?                                | §61.159            |
-| Where are the cross-country definitions?                                 | §61.1(b)(3)         |
-| Where are the PIC logging rules?                                         | §61.51(e)           |
-| Where is the TAA definition?                                             | §61.129(j)          |
-| Where is the R-ATP carve-out?                                            | §61.160             |
-| Where are the simulator credit limits for the commercial?                | §61.129(i)          |
+| Question                                                  | Section     |
+| --------------------------------------------------------- | ----------- |
+| Where is the private pilot total-time requirement?        | §61.109     |
+| Where is the commercial pilot total-time requirement?     | §61.129     |
+| Where is the ATP total-time requirement?                  | §61.159     |
+| Where are the cross-country definitions?                  | §61.1(b)(3) |
+| Where are the PIC logging rules?                          | §61.51(e)   |
+| Where is the TAA definition?                              | §61.129(j)  |
+| Where is the R-ATP carve-out?                             | §61.160     |
+| Where are the simulator credit limits for the commercial? | §61.129(i)  |
 
 ### Apply the rules
 

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.6
 Title:           Pattern Work at a Towered Airport
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_6]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-1', 'OD-2', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Parroting Student
 Parameters:
   skillLevel:         0.2
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Downwind leg, 1,200 AGL. Tower said "Extend downwind, I'll call your base, traffic is a Cessna 3-mile final." Student reads back "Roger, turning base, traffic in sight" and begins a left turn toward base.
 studentSpeech:I see the Cessna. Turning base now.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student has either continued turning or leveled off depending on prior intervention. Tower calls: "[Callsign], I said extend downwind, not turn base. Continue downwind, I'll call your base."
 studentSpeech:Oh... I thought they said turn base. Sorry, going back to downwind.
@@ -93,7 +93,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Extended downwind, now 2 miles from the runway. Tower calls: "[Callsign], turn base, runway 24, cleared to land." Student reads back: "Turning base, cleared to land, runway 24."  But the student begins turning toward runway 28, not 24.
 studentSpeech:Base turn for 24... wait, which one is 24?
@@ -114,7 +114,7 @@ criticalWindow:[ask]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student has turned toward runway 28 and is established on a base leg for the wrong runway. Another aircraft is on final for 28 and calls traffic in sight. Tower calls: "[Callsign], you are heading for runway 28. Runway 24 is to your south. Turn left immediately."
 studentSpeech:I'm sorry, I'm lost. Which way do I go?
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt)
                         \         \-> terminal_safe (coach/direct/take_controls)
                          \-> terminal_safe (prompt/coach/direct)

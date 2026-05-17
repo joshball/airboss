@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The study app's security baseline is strong: hooks.server.ts hydrates sessions once, a bans-guard short-circuits the response, security headers + CSP are applied defense-in-depth, and every BC read/write function takes `userId` and scopes its query with `and(eq(…id, id), eq(…userId, userId))`. Every `+page.server.ts` I read enforces `requireAuth` on both load and actions and passes `user.id` through to the BC rather than trusting IDs from the form. Zod schemas exist at the BC boundary and are re-used by the route actions. There are no raw SQL string-interpolations of user input, no `{@html}` sanitization bypasses, no open redirects, and no `$env/dynamic/public` leaks of secrets.

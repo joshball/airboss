@@ -6,14 +6,14 @@ The thread connecting these: reducing surprise. A pilot who has mentally walked 
 
 ## Products
 
-| ID | Name                   | Priority | Status |
-| -- | ---------------------- | -------- | ------ |
-| prd:pre:route-walkthrough | Route Walkthrough      | 1        | idea   |
-| prd:pre:airport-cards | Airport Cards          | 3        | idea   |
-| prd:pre:approach-rehearsal | Approach Rehearsal     | 2        | idea   |
-| prd:pre:diversion-drill | Diversion Drill        | 4        | idea   |
+| ID                          | Name                   | Priority | Status |
+| --------------------------- | ---------------------- | -------- | ------ |
+| prd:pre:route-walkthrough   | Route Walkthrough      | 1        | idea   |
+| prd:pre:airport-cards       | Airport Cards          | 3        | idea   |
+| prd:pre:approach-rehearsal  | Approach Rehearsal     | 2        | idea   |
+| prd:pre:diversion-drill     | Diversion Drill        | 4        | idea   |
 | prd:pre:what-could-go-wrong | What-Could-Go-Wrong    | 3        | idea   |
-| prd:pre:notam-triage | NOTAM Triage           | 4        | idea   |
-| prd:pre:pre-flight-imsafe | Pre-flight IMSAFE      | 4        | idea   |
-| prd:pre:passenger-brief | Passenger Brief Script | 4        | idea   |
-| prd:pre:cold-start-recall | Cold-Start Recall      | 4        | idea   |
+| prd:pre:notam-triage        | NOTAM Triage           | 4        | idea   |
+| prd:pre:pre-flight-imsafe   | Pre-flight IMSAFE      | 4        | idea   |
+| prd:pre:passenger-brief     | Passenger Brief Script | 4        | idea   |
+| prd:pre:cold-start-recall   | Cold-Start Recall      | 4        | idea   |

@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.9
 Title:           Private Pilot Asks About Adding Part 107
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_13]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Remote Pilot Applicant
 Parameters:
   skillLevel:         0.0
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO office. The applicant shows you their private pilot certificate (current, with valid medical) and asks you to sign them off for the remote pilot certificate.
 studentSpeech:I read that if I have a pilot certificate, I can skip the Part 107 test. I just need an instructor to sign off a training course, right? Can you do that today? I have a big job next Tuesday.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        The applicant has not completed the FAA Part 107 initial training course (Part 107.74). They assumed that having a pilot certificate was sufficient and that an instructor sign-off was all that was needed.
 studentSpeech:I didn't take a course. I thought the instructor just reviews my knowledge and signs me off. That's how flight reviews work, right? Same concept?
@@ -93,7 +93,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Applicant is frustrated about the delay but understands. They ask about what happens after they complete the online course. They want to know the exact steps so they can have the certificate by Tuesday.
 studentSpeech:OK, so I do the online course. Then what? How quickly can we get the certificate processed? I really need this by next week. Is there anything I can do to speed it up?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

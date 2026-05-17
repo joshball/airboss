@@ -13,19 +13,19 @@ Per project rule, every feature is hand-tested before ship. This plan covers aut
 
 ## Test surface inventory
 
-| Layer | Tests | Where |
-| --- | --- | --- |
-| YAML schemas | Zod validation, count assertions | `scripts/sources/config/__tests__/` |
-| YAML loader | Round-trip parse, error cases | `scripts/sources/config/loader.test.ts` |
-| Plan builder | YAML in, plans out, all corpora | `scripts/sources/download/plans.test.ts` (extend existing) |
-| Two-hop scrape | Mocked HTTP, URL resolution, 404 hard-fail | `scripts/sources/download/scrape.test.ts` |
-| HTML fetch | Mocked HTTP, atomic write, content-type validation | `scripts/sources/download/html-fetch.test.ts` |
-| Manifest schema | Read/write, schema_version, atomicity | `scripts/sources/download/manifest.test.ts` (extend existing) |
-| URL verifier | Mocked HTTP, structured error output | `scripts/sources/verify-urls.test.ts` |
-| Inventory generator | Byte-equal regen, sorted output | `scripts/sources/inventory.test.ts` |
-| AIM HTML extraction | Fixture HTML in, section tree out | `tools/handbook-ingest/tests/test_aim_html_extract.py` |
+| Layer                 | Tests                                                | Where                                                                |
+| --------------------- | ---------------------------------------------------- | -------------------------------------------------------------------- |
+| YAML schemas          | Zod validation, count assertions                     | `scripts/sources/config/__tests__/`                                  |
+| YAML loader           | Round-trip parse, error cases                        | `scripts/sources/config/loader.test.ts`                              |
+| Plan builder          | YAML in, plans out, all corpora                      | `scripts/sources/download/plans.test.ts` (extend existing)           |
+| Two-hop scrape        | Mocked HTTP, URL resolution, 404 hard-fail           | `scripts/sources/download/scrape.test.ts`                            |
+| HTML fetch            | Mocked HTTP, atomic write, content-type validation   | `scripts/sources/download/html-fetch.test.ts`                        |
+| Manifest schema       | Read/write, schema_version, atomicity                | `scripts/sources/download/manifest.test.ts` (extend existing)        |
+| URL verifier          | Mocked HTTP, structured error output                 | `scripts/sources/verify-urls.test.ts`                                |
+| Inventory generator   | Byte-equal regen, sorted output                      | `scripts/sources/inventory.test.ts`                                  |
+| AIM HTML extraction   | Fixture HTML in, section tree out                    | `tools/handbook-ingest/tests/test_aim_html_extract.py`               |
 | Chapter-PDF plaintext | Chapter PDF in, full-text sidecar out, no truncation | `tools/handbook-ingest/tests/test_chapter_plaintext_chapter_mode.py` |
-| Python config loader | New `WholeDoc` + `ChapterPdfs` fields | `tools/handbook-ingest/tests/test_config_loader_chapters.py` |
+| Python config loader  | New `WholeDoc` + `ChapterPdfs` fields                | `tools/handbook-ingest/tests/test_config_loader_chapters.py`         |
 
 ## Unit tests
 

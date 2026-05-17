@@ -16,19 +16,19 @@ counts:
 
 Walked every finding against current main. 9 of 11 closed; 2 carried (low-impact mechanical).
 
-| Severity | Finding                                                    | Verdict                                                                                      |
-| -------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| CRITICAL | `bauth_session.user_id` not indexed                        | CLOSED -- `bauth_session_user_idx` in libs/auth/src/schema.ts:56                             |
-| CRITICAL | `bauth_session.expires_at` not indexed                     | CLOSED -- `bauth_session_expires_at_idx` in libs/auth/src/schema.ts:59                       |
-| MAJOR    | `bauth_account.user_id` unindexed FK                       | CLOSED -- `bauth_account_user_idx` + `bauth_account_provider_account_idx` (schema.ts:86-87)  |
-| MAJOR    | `bauth_verification.identifier` no lookup index            | CLOSED -- `bauth_verification_identifier_idx` in schema.ts:104                               |
-| MAJOR    | `audit_log.timestamp` standalone scans uncovered           | CLOSED -- `audit_log_timestamp_idx` in audit/schema.ts:80                                    |
-| MAJOR    | `bauth_session.impersonated_by` is free text, no FK        | CLOSED -- `references(() => bauthUser.id, { onDelete: 'set null' })` at schema.ts:49         |
-| MINOR    | `bauth_user.role` has no check / FK                        | STILL OPEN -- carried below; better-auth manages writes to that column                       |
-| MINOR    | `bauth_*` tables sit in public, mixed with future identity | CLOSED -- `SCHEMAS.IDENTITY` documented + reserved (libs/constants/src/schemas.ts:38-46)     |
+| Severity | Finding                                                    | Verdict                                                                                       |
+| -------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| CRITICAL | `bauth_session.user_id` not indexed                        | CLOSED -- `bauth_session_user_idx` in libs/auth/src/schema.ts:56                              |
+| CRITICAL | `bauth_session.expires_at` not indexed                     | CLOSED -- `bauth_session_expires_at_idx` in libs/auth/src/schema.ts:59                        |
+| MAJOR    | `bauth_account.user_id` unindexed FK                       | CLOSED -- `bauth_account_user_idx` + `bauth_account_provider_account_idx` (schema.ts:86-87)   |
+| MAJOR    | `bauth_verification.identifier` no lookup index            | CLOSED -- `bauth_verification_identifier_idx` in schema.ts:104                                |
+| MAJOR    | `audit_log.timestamp` standalone scans uncovered           | CLOSED -- `audit_log_timestamp_idx` in audit/schema.ts:80                                     |
+| MAJOR    | `bauth_session.impersonated_by` is free text, no FK        | CLOSED -- `references(() => bauthUser.id, { onDelete: 'set null' })` at schema.ts:49          |
+| MINOR    | `bauth_user.role` has no check / FK                        | STILL OPEN -- carried below; better-auth manages writes to that column                        |
+| MINOR    | `bauth_*` tables sit in public, mixed with future identity | CLOSED -- `SCHEMAS.IDENTITY` documented + reserved (libs/constants/src/schemas.ts:38-46)      |
 | MINOR    | `bauthRateLimit` lacks created_at / sweep-friendly column  | CLOSED -- comment block at libs/auth/src/schema.ts:108-127 documents the better-auth contract |
 | NIT      | `auditColumns()` returns only `*_by` not `*_at`            | STILL OPEN -- carried below; helper has no live call sites yet                                |
-| NIT      | `metadata` jsonb default is `{}` literal                   | CLOSED -- `default(sql\`'{}'::jsonb\`)` in audit/schema.ts:72                                |
+| NIT      | `metadata` jsonb default is `{}` literal                   | CLOSED -- `default(sql\`'{}'::jsonb\`)` in audit/schema.ts:72                                 |
 
 ### Carried-forward design items
 

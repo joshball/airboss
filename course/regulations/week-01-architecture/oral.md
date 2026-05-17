@@ -69,26 +69,26 @@ For an examiner who wants the integration without the deep dive:
 
 ## What goes wrong (failure modes)
 
-| Failure mode                                     | Diagnosis |
-| ------------------------------------------------ | --------- |
-| Recites Title 14 chapter and subchapter list     | Comes across as memorized table-of-contents; doesn't show navigation skill |
-| Says "Part 91 is for non-commercial flying"      | Misses the cumulative-stack mental model. Part 91 is the floor for *all* civil flight. |
-| Cites only the AIM for ATC procedures            | Misses that AIM is non-regulatory; can't articulate the 91.13 enforcement path |
-| Forgets BasicMed lives in 49 USC, not 14 CFR     | Common gap. Part 68 is in the CFR but the underlying authority is 49 USC 44703. |
-| Locates NTSB rules in Title 14                   | The accident-reporting rule lives at 49 CFR 830. Mistaking the title is mistaking the agency. |
-| Names parts without describing them              | "61, 91, 141, 135, 121" with no scope -- looks like memorization without comprehension |
-| Routes "I'm flying IFR tonight" to a single part | Cross-cutting questions need a sequence. Pilot first, flight second. Walking only Part 91 misses the currency check in 61. |
-| Confuses "Subchapter F" (Part 91 lives here) with "Subpart F" of Part 91 | Different levels of granularity. Be precise. |
+| Failure mode                                                             | Diagnosis                                                                                                                  |
+| ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Recites Title 14 chapter and subchapter list                             | Comes across as memorized table-of-contents; doesn't show navigation skill                                                 |
+| Says "Part 91 is for non-commercial flying"                              | Misses the cumulative-stack mental model. Part 91 is the floor for *all* civil flight.                                     |
+| Cites only the AIM for ATC procedures                                    | Misses that AIM is non-regulatory; can't articulate the 91.13 enforcement path                                             |
+| Forgets BasicMed lives in 49 USC, not 14 CFR                             | Common gap. Part 68 is in the CFR but the underlying authority is 49 USC 44703.                                            |
+| Locates NTSB rules in Title 14                                           | The accident-reporting rule lives at 49 CFR 830. Mistaking the title is mistaking the agency.                              |
+| Names parts without describing them                                      | "61, 91, 141, 135, 121" with no scope -- looks like memorization without comprehension                                     |
+| Routes "I'm flying IFR tonight" to a single part                         | Cross-cutting questions need a sequence. Pilot first, flight second. Walking only Part 91 misses the currency check in 61. |
+| Confuses "Subchapter F" (Part 91 lives here) with "Subpart F" of Part 91 | Different levels of granularity. Be precise.                                                                               |
 
 ## Variant prompts
 
-| Variant                                                                          | What changes |
-| -------------------------------------------------------------------------------- | ------------ |
-| "Walk me through Title 14 from the perspective of a brand-new student pilot."     | Drop CFI subpart H emphasis, add Part 61 subpart C (student pilot rules), emphasize Part 67 medical because they're getting their first one |
-| "Walk me through Title 14 from the perspective of a CFI candidate."               | Same as model answer; the CFI subpart H is the centerpiece |
-| "Walk me through Title 14 like you're explaining it to your check airman who's been an airline pilot for 30 years and isn't familiar with GA regulations." | Emphasize Part 91 as the GA floor, contrast with Part 121 they know, and point out that 91 subpart D special ops are unfamiliar to airline pilots |
-| "I'm a former Part 121 pilot returning to GA. What's the structural difference?"  | Same content, but emphasize Part 91 vs Part 121 contrast: 91 has no chief pilot, no ops specs, no MEL by default, but 91.13 and 91.103 still apply |
-| "Show me Title 14 like you'd show it to a non-pilot who wants to understand how aviation is regulated." | Drop the technical vocabulary, lead with "the FAA writes and enforces these rules; the NTSB investigates after something goes wrong; airlines and charters operate under stricter rules than private pilots." |
+| Variant                                                                                                                                                    | What changes                                                                                                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Walk me through Title 14 from the perspective of a brand-new student pilot."                                                                              | Drop CFI subpart H emphasis, add Part 61 subpart C (student pilot rules), emphasize Part 67 medical because they're getting their first one                                                                   |
+| "Walk me through Title 14 from the perspective of a CFI candidate."                                                                                        | Same as model answer; the CFI subpart H is the centerpiece                                                                                                                                                    |
+| "Walk me through Title 14 like you're explaining it to your check airman who's been an airline pilot for 30 years and isn't familiar with GA regulations." | Emphasize Part 91 as the GA floor, contrast with Part 121 they know, and point out that 91 subpart D special ops are unfamiliar to airline pilots                                                             |
+| "I'm a former Part 121 pilot returning to GA. What's the structural difference?"                                                                           | Same content, but emphasize Part 91 vs Part 121 contrast: 91 has no chief pilot, no ops specs, no MEL by default, but 91.13 and 91.103 still apply                                                            |
+| "Show me Title 14 like you'd show it to a non-pilot who wants to understand how aviation is regulated."                                                    | Drop the technical vocabulary, lead with "the FAA writes and enforces these rules; the NTSB investigates after something goes wrong; airlines and charters operate under stricter rules than private pilots." |
 
 ## Related material
 

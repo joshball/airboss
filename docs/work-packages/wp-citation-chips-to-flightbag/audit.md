@@ -10,54 +10,54 @@ Inventory of every site that generates a study `/library/...` URL or imports a `
 
 These are the actual `+page.svelte` and `+page.server.ts` files that define study's `/library/...` routes:
 
-| File | Notes |
-|------|-------|
-| `apps/study/src/routes/(app)/library/handbook/[slug]/+page.svelte` | Handbook landing |
-| `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.svelte` | Chapter |
-| `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte` | Section |
-| `apps/study/src/routes/(app)/library/regulations/+page.svelte` | Regs index |
-| `apps/study/src/routes/(app)/library/regulations/[kind]/+page.svelte` | Per-kind |
-| `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/+page.svelte` | Per-group |
-| `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/[section]/+page.svelte` | Section |
+| File                                                                                    | Notes            |
+| --------------------------------------------------------------------------------------- | ---------------- |
+| `apps/study/src/routes/(app)/library/handbook/[slug]/+page.svelte`                      | Handbook landing |
+| `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.svelte`            | Chapter          |
+| `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte`  | Section          |
+| `apps/study/src/routes/(app)/library/regulations/+page.svelte`                          | Regs index       |
+| `apps/study/src/routes/(app)/library/regulations/[kind]/+page.svelte`                   | Per-kind         |
+| `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/+page.svelte`           | Per-group        |
+| `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/[section]/+page.svelte` | Section          |
 
 These routes stay alive during the migration. Eventually deprecate after flightbag has feature parity.
 
 ### Category B: Citation chip / link components (REWIRE to flightbag URLs)
 
-| File | Notes |
-|------|-------|
-| `libs/aviation/src/ui/handbooks/HandbookCard.svelte` | Card component used in /library; rewire its target URL |
-| `libs/aviation/src/ui/handbooks/HandbookChapterListItem.svelte` | Chapter row |
-| `libs/aviation/src/ui/handbooks/HandbookSectionListItem.svelte` | Section row |
-| `libs/aviation/src/ui/LibraryCard.svelte` | Generic library card |
+| File                                                            | Notes                                                  |
+| --------------------------------------------------------------- | ------------------------------------------------------ |
+| `libs/aviation/src/ui/handbooks/HandbookCard.svelte`            | Card component used in /library; rewire its target URL |
+| `libs/aviation/src/ui/handbooks/HandbookChapterListItem.svelte` | Chapter row                                            |
+| `libs/aviation/src/ui/handbooks/HandbookSectionListItem.svelte` | Section row                                            |
+| `libs/aviation/src/ui/LibraryCard.svelte`                       | Generic library card                                   |
 
 These get the highest-leverage rewire: change them to call `urlForReference(uri)` from `@ab/sources`.
 
 ### Category C: BC + helpers (UPDATE if they construct URLs)
 
-| File | Notes |
-|------|-------|
+| File                               | Notes                                                |
+| ---------------------------------- | ---------------------------------------------------- |
 | `libs/bc/study/src/regulations.ts` | Regs view aggregator -- inspect for URL construction |
-| `libs/bc/study/src/references.ts` | Reference loader -- may emit URL data |
-| `libs/aviation/src/slugs.ts` | Slug helpers, possibly URL-related |
+| `libs/bc/study/src/references.ts`  | Reference loader -- may emit URL data                |
+| `libs/aviation/src/slugs.ts`       | Slug helpers, possibly URL-related                   |
 
 Inspect each. If they construct URLs, route through `urlForReference`. If they just emit slugs/codes for the URL builder, leave as-is.
 
 ### Category D: Constants definitions (UPDATE: ADD flightbag, KEEP library for transition)
 
-| File | Notes |
-|------|-------|
+| File                           | Notes                                                                   |
+| ------------------------------ | ----------------------------------------------------------------------- |
 | `libs/constants/src/routes.ts` | `ROUTES.LIBRARY_*` lives here. Already has `ROUTES.FLIGHTBAG_*` (#524). |
-| `libs/constants/src/index.ts` | Re-exports |
-| `libs/constants/src/study.ts` | Study-specific constants |
+| `libs/constants/src/index.ts`  | Re-exports                                                              |
+| `libs/constants/src/study.ts`  | Study-specific constants                                                |
 
 ### Category E: Tests (UPDATE in lockstep)
 
-| File | Notes |
-|------|-------|
+| File                                    | Notes                                         |
+| --------------------------------------- | --------------------------------------------- |
 | `libs/aviation/__tests__/slugs.test.ts` | URL/slug tests; may have `/library/` literals |
-| `libs/bc/study/src/regulations.test.ts` | Regs tests; same |
-| `libs/bc/study/src/references.test.ts` | Same |
+| `libs/bc/study/src/regulations.test.ts` | Regs tests; same                              |
+| `libs/bc/study/src/references.test.ts`  | Same                                          |
 
 Update assertions when their corresponding source is rewired.
 

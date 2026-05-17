@@ -16,15 +16,15 @@ Companion reading:
 
 ## Why hangar, not ops
 
-| Property                                  | hangar           | ops              |
-| ----------------------------------------- | ---------------- | ---------------- |
-| FIRC scope                                | content + compliance + references | users + enrollments + certificates |
-| Target role                               | `AUTHOR | OPERATOR | ADMIN` | `OPERATOR | ADMIN` |
-| Reads/writes content domain               | yes              | no               |
-| Reads/writes source documents             | yes (metadata today, binaries tomorrow) | no |
-| Triggers validation / build / release    | yes              | no               |
-| Runs user admin                           | no               | yes              |
-| Fits airboss data-management              | yes              | poor             |
+| Property                              | hangar                                  | ops                                |        |           |        |
+| ------------------------------------- | --------------------------------------- | ---------------------------------- | ------ | --------- | ------ |
+| FIRC scope                            | content + compliance + references       | users + enrollments + certificates |        |           |        |
+| Target role                           | `AUTHOR                                 | OPERATOR                           | ADMIN` | `OPERATOR | ADMIN` |
+| Reads/writes content domain           | yes                                     | no                                 |        |           |        |
+| Reads/writes source documents         | yes (metadata today, binaries tomorrow) | no                                 |        |           |        |
+| Triggers validation / build / release | yes                                     | no                                 |        |           |        |
+| Runs user admin                       | no                                      | yes                                |        |           |        |
+| Fits airboss data-management          | yes                                     | poor                               |        |           |        |
 
 Ops can still be stood up later if user management needs a home; it's a different axis.
 
@@ -97,14 +97,14 @@ Every bracketed affordance is a **form action** on the same page. Clicking "Fetc
 
 Below the diagram, a **status panel**:
 
-| Metric                                | Value today              |
-| ------------------------------------- | ------------------------ |
-| Registered sources                    | 15                       |
-| Downloaded                            | 0 / 15                   |
-| Verbatim blocks materialized          | 0 / 175 references cited |
-| TBD wiki-links in content             | 3                        |
-| Validation                            | green (0 errors)         |
-| Freshness                             | oldest source: never     |
+| Metric                       | Value today              |
+| ---------------------------- | ------------------------ |
+| Registered sources           | 15                       |
+| Downloaded                   | 0 / 15                   |
+| Verbatim blocks materialized | 0 / 175 references cited |
+| TBD wiki-links in content    | 3                        |
+| Validation                   | green (0 errors)         |
+| Freshness                    | oldest source: never     |
 
 ### Per-source detail
 
@@ -202,19 +202,19 @@ For sources we don't parse yet (e.g. raw NTSB CSV with no extraction):
 
 Direct port (low effort):
 
-| FIRC                                                 | airboss target                                              |
-| ---------------------------------------------------- | ----------------------------------------------------------- |
-| `libs/auth/src/auth.ts` (`requireAuth`, `requireRole`) | `libs/auth/src/auth.ts` (same shape; already partly there) |
-| `libs/audit` lib                                     | `libs/audit/` (new)                                         |
-| `libs/constants/src/roles.ts` + `app-urls.ts`        | `libs/constants/src/roles.ts`                               |
-| `apps/hangar/src/routes/+layout*` + `hooks.server.ts` | `apps/hangar/src/routes/+layout*`                          |
-| `scripts/faa-ingest/lib/download.ts`                 | `libs/aviation/src/sources/download.ts`                     |
-| `scripts/faa-ingest/lib/manifest-state.ts`           | Already aligned with `libs/aviation/src/sources/meta.ts`; reconcile |
-| `scripts/faa-ingest/commands/status.ts` logic        | `/sources` index page loader                                |
-| `apps/hangar/DataTable.svelte` + `FormStack` + `ConfirmDialog` | `libs/ui/src/components/*`                         |
-| `apps/hangar/ValidationReport.svelte`                | `libs/ui/src/components/ValidationReport.svelte`            |
-| `apps/hangar/docs/*` filesystem browser              | `/sources/[id]/files`                                       |
-| `apps/ops/users/*` (later)                           | `apps/ops/src/routes/(app)/users/*`                         |
+| FIRC                                                           | airboss target                                                      |
+| -------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `libs/auth/src/auth.ts` (`requireAuth`, `requireRole`)         | `libs/auth/src/auth.ts` (same shape; already partly there)          |
+| `libs/audit` lib                                               | `libs/audit/` (new)                                                 |
+| `libs/constants/src/roles.ts` + `app-urls.ts`                  | `libs/constants/src/roles.ts`                                       |
+| `apps/hangar/src/routes/+layout*` + `hooks.server.ts`          | `apps/hangar/src/routes/+layout*`                                   |
+| `scripts/faa-ingest/lib/download.ts`                           | `libs/aviation/src/sources/download.ts`                             |
+| `scripts/faa-ingest/lib/manifest-state.ts`                     | Already aligned with `libs/aviation/src/sources/meta.ts`; reconcile |
+| `scripts/faa-ingest/commands/status.ts` logic                  | `/sources` index page loader                                        |
+| `apps/hangar/DataTable.svelte` + `FormStack` + `ConfirmDialog` | `libs/ui/src/components/*`                                          |
+| `apps/hangar/ValidationReport.svelte`                          | `libs/ui/src/components/ValidationReport.svelte`                    |
+| `apps/hangar/docs/*` filesystem browser                        | `/sources/[id]/files`                                               |
+| `apps/ops/users/*` (later)                                     | `apps/ops/src/routes/(app)/users/*`                                 |
 
 Net-new for airboss (not in FIRC):
 

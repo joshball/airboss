@@ -6,9 +6,9 @@ Most pilots debrief informally or not at all. These products make reflection str
 
 ## Products
 
-| ID | Name                           | Priority | Status |
-| -- | ------------------------------ | -------- | ------ |
-| prd:ref:per-flight-journal | Per-Flight Journal             | 3        | idea   |
-| prd:ref:skill-heatmap | Skill Heatmap                  | 3        | idea   |
+| ID                                   | Name                           | Priority | Status |
+| ------------------------------------ | ------------------------------ | -------- | ------ |
+| prd:ref:per-flight-journal           | Per-Flight Journal             | 3        | idea   |
+| prd:ref:skill-heatmap                | Skill Heatmap                  | 3        | idea   |
 | prd:ref:currency-proficiency-tracker | Currency & Proficiency Tracker | 4        | idea   |
-| prd:ref:decision-diary | Decision Diary                 | 4        | idea   |
+| prd:ref:decision-diary               | Decision Diary                 | 4        | idea   |

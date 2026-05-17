@@ -20,19 +20,19 @@ The study app (`apps/study/`) is the first surface app in the [Option 7 architec
 
 ### Reuse from existing libs
 
-| Lib               | What we reuse                                                       |
-| ----------------- | ------------------------------------------------------------------- |
-| `libs/auth/`      | `createAuth()`, `requireAuth()`, cross-subdomain cookies            |
-| `libs/db/`        | Shared Drizzle connection                                           |
+| Lib               | What we reuse                                                        |
+| ----------------- | -------------------------------------------------------------------- |
+| `libs/auth/`      | `createAuth()`, `requireAuth()`, cross-subdomain cookies             |
+| `libs/db/`        | Shared Drizzle connection                                            |
 | `libs/ui/`        | FocusShell, Header, Button, Badge, Panel, StatCard, ProgressBar, etc |
-| `libs/themes/`    | `aviation` theme + `focus` family                                   |
-| `libs/constants/` | Add `STUDY_*` routes, `PORTS.STUDY`, `HOSTS.STUDY`, `SCHEMAS.STUDY` |
-| `libs/utils/`     | ID generators -- add `crd_`, `rev_`, `rep_`, `rat_` prefixes        |
+| `libs/themes/`    | `aviation` theme + `focus` family                                    |
+| `libs/constants/` | Add `STUDY_*` routes, `PORTS.STUDY`, `HOSTS.STUDY`, `SCHEMAS.STUDY`  |
+| `libs/utils/`     | ID generators -- add `crd_`, `rev_`, `rep_`, `rat_` prefixes         |
 
 ### New code
 
 | New thing                | Location                                           | Why                                                                                    |
-| ------------------------ | -------------------------------------------------- | ------------------------------------------------------------------                     |
+| ------------------------ | -------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | `libs/bc/study/`         | New [BC](../../decisions/002-LIB_STRUCTURE.md) lib | Spaced rep, cards, reviews, scenarios, calibration. All biz logic.                     |
 | `study` DB schema        | New Postgres namespace                             | Cards, reviews, scenarios, calibration. Separate from course/etc.                      |
 | Study-specific constants | `libs/constants/src/study.ts`                      | Domains, card types, review ratings, FSRS parameters                                   |
@@ -72,28 +72,28 @@ A running SvelteKit app at `study.firc.test:7650` with login, authenticated shel
 
 ### Files to create
 
-| File                                              | Purpose                                   |
-| ------------------------------------------------- | ----------------------------------------- |
-| `apps/study/package.json`                         | `@firc/study`, port 7650                  |
-| `apps/study/svelte.config.js`                     | Adapter-node, `@firc/*` aliases           |
-| `apps/study/vite.config.ts`                       | SvelteKit plugin                          |
-| `apps/study/tsconfig.json`                        | Extends `.svelte-kit/tsconfig.json`       |
-| `apps/study/src/app.html`                         | `data-theme-id="aviation"`, focus family  |
-| `apps/study/src/app.d.ts`                         | `App.Locals` with session/user            |
-| `apps/study/src/hooks.server.ts`                  | Auth handler (copy sim pattern)           |
-| `apps/study/src/routes/+layout.svelte`            | Theme CSS, layout                         |
-| `apps/study/src/routes/(app)/+layout.svelte`      | FocusShell + nav (Memory, Reps, Calibration) |
-| `apps/study/src/routes/(app)/+page.svelte`        | Dashboard: due cards, reps, streak        |
-| `apps/study/src/routes/(public)/login/+page.svelte` | Login page                             |
+| File                                                | Purpose                                      |
+| --------------------------------------------------- | -------------------------------------------- |
+| `apps/study/package.json`                           | `@firc/study`, port 7650                     |
+| `apps/study/svelte.config.js`                       | Adapter-node, `@firc/*` aliases              |
+| `apps/study/vite.config.ts`                         | SvelteKit plugin                             |
+| `apps/study/tsconfig.json`                          | Extends `.svelte-kit/tsconfig.json`          |
+| `apps/study/src/app.html`                           | `data-theme-id="aviation"`, focus family     |
+| `apps/study/src/app.d.ts`                           | `App.Locals` with session/user               |
+| `apps/study/src/hooks.server.ts`                    | Auth handler (copy sim pattern)              |
+| `apps/study/src/routes/+layout.svelte`              | Theme CSS, layout                            |
+| `apps/study/src/routes/(app)/+layout.svelte`        | FocusShell + nav (Memory, Reps, Calibration) |
+| `apps/study/src/routes/(app)/+page.svelte`          | Dashboard: due cards, reps, streak           |
+| `apps/study/src/routes/(public)/login/+page.svelte` | Login page                                   |
 
 ### Config changes
 
-| File                          | Change                               |
-| ----------------------------- | ------------------------------------ |
-| `libs/constants/src/ports.ts` | Add `STUDY: 7650`                    |
-| `libs/constants/src/hosts.ts` | Add `STUDY: 'study.firc.test'`       |
-| `libs/constants/src/schemas.ts` | Add `STUDY: 'study'`               |
-| `tsconfig.json` (root)       | Add `@firc/bc/study` path alias      |
+| File                            | Change                          |
+| ------------------------------- | ------------------------------- |
+| `libs/constants/src/ports.ts`   | Add `STUDY: 7650`               |
+| `libs/constants/src/hosts.ts`   | Add `STUDY: 'study.firc.test'`  |
+| `libs/constants/src/schemas.ts` | Add `STUDY: 'study'`            |
+| `tsconfig.json` (root)          | Add `@firc/bc/study` path alias |
 
 **MVP:** app runs, login works, empty dashboard renders.
 
@@ -151,24 +151,24 @@ study.card_state (materialized current state -- avoids scanning all reviews)
 
 ### BC lib: `libs/bc/study/`
 
-| File                  | Purpose                                            |
-| --------------------- | -------------------------------------------------- |
-| `src/schema.ts`       | Drizzle schema for `study` namespace               |
-| `src/srs.ts`          | FSRS-5 algorithm. Pure functions, ~100 lines.      |
-| `src/srs.test.ts`     | Unit tests with known FSRS test vectors            |
-| `src/cards.ts`        | Card CRUD, `getDueCards(userId)`                   |
-| `src/reviews.ts`      | `submitReview()` -- runs FSRS, writes review + card_state |
-| `src/stats.ts`        | Dashboard stats: due count, reviewed today, streak |
+| File              | Purpose                                                   |
+| ----------------- | --------------------------------------------------------- |
+| `src/schema.ts`   | Drizzle schema for `study` namespace                      |
+| `src/srs.ts`      | FSRS-5 algorithm. Pure functions, ~100 lines.             |
+| `src/srs.test.ts` | Unit tests with known FSRS test vectors                   |
+| `src/cards.ts`    | Card CRUD, `getDueCards(userId)`                          |
+| `src/reviews.ts`  | `submitReview()` -- runs FSRS, writes review + card_state |
+| `src/stats.ts`    | Dashboard stats: due count, reviewed today, streak        |
 
 ### App routes
 
-| Route                               | Purpose                              |
-| ----------------------------------- | ------------------------------------ |
-| `(app)/memory/+page.svelte`         | Memory dashboard: due count, start review |
-| `(app)/memory/review/+page.svelte`  | Card review flow: front -> reveal -> rate |
-| `(app)/memory/new/+page.svelte`     | Card creation form                   |
-| `(app)/memory/browse/+page.svelte`  | Card browser with domain/search filters |
-| `(app)/memory/[id]/+page.svelte`    | Card detail/edit                     |
+| Route                              | Purpose                                   |
+| ---------------------------------- | ----------------------------------------- |
+| `(app)/memory/+page.svelte`        | Memory dashboard: due count, start review |
+| `(app)/memory/review/+page.svelte` | Card review flow: front -> reveal -> rate |
+| `(app)/memory/new/+page.svelte`    | Card creation form                        |
+| `(app)/memory/browse/+page.svelte` | Card browser with domain/search filters   |
+| `(app)/memory/[id]/+page.svelte`   | Card detail/edit                          |
 
 **MVP:** create cards, review due cards with FSRS scheduling, see due count per domain. Enough to start studying regs and airspace.
 
@@ -208,19 +208,19 @@ study.rep_attempt
 
 ### BC additions
 
-| File                     | Purpose                              |
-| ------------------------ | ------------------------------------ |
-| `src/scenarios.ts`       | Scenario CRUD, `getNextScenarios()`, `submitAttempt()` |
-| `src/scenarios.test.ts`  | Unit tests                           |
+| File                    | Purpose                                                |
+| ----------------------- | ------------------------------------------------------ |
+| `src/scenarios.ts`      | Scenario CRUD, `getNextScenarios()`, `submitAttempt()` |
+| `src/scenarios.test.ts` | Unit tests                                             |
 
 ### App routes
 
-| Route                              | Purpose                               |
-| ---------------------------------- | ------------------------------------- |
-| `(app)/reps/+page.svelte`         | Reps dashboard: available, stats      |
-| `(app)/reps/session/+page.svelte`  | Rep flow: situation -> confidence -> choose -> outcome |
-| `(app)/reps/browse/+page.svelte`   | Scenario browser                      |
-| `(app)/reps/new/+page.svelte`      | Scenario creation form                |
+| Route                             | Purpose                                                |
+| --------------------------------- | ------------------------------------------------------ |
+| `(app)/reps/+page.svelte`         | Reps dashboard: available, stats                       |
+| `(app)/reps/session/+page.svelte` | Rep flow: situation -> confidence -> choose -> outcome |
+| `(app)/reps/browse/+page.svelte`  | Scenario browser                                       |
+| `(app)/reps/new/+page.svelte`     | Scenario creation form                                 |
 
 **MVP:** author micro-scenarios, run rep sessions with confidence rating + outcome reveal. ~50 scenarios across 4 domains for useful rotation.
 
@@ -239,10 +239,10 @@ Calibration data comes from existing columns:
 
 ### BC additions
 
-| File                      | Purpose                                          |
-| ------------------------- | ------------------------------------------------ |
+| File                      | Purpose                                           |
+| ------------------------- | ------------------------------------------------- |
 | `src/calibration.ts`      | Aggregate confidence vs accuracy by domain/bucket |
-| `src/calibration.test.ts` | Unit tests with known data sets                  |
+| `src/calibration.test.ts` | Unit tests with known data sets                   |
 
 ### Shared component
 
@@ -309,10 +309,10 @@ The hangar dashboard page reads the JSON at build time (or fetches it as a stati
 
 **Routes (in hangar app):**
 
-| Route                                    | Purpose                            |
-| ---------------------------------------- | ---------------------------------- |
-| `(app)/dashboard/products/+page.svelte`  | Product grid with filters and sort |
-| `(app)/dashboard/products/+page.ts`      | Load product-index.json            |
+| Route                                   | Purpose                            |
+| --------------------------------------- | ---------------------------------- |
+| `(app)/dashboard/products/+page.svelte` | Product grid with filters and sort |
+| `(app)/dashboard/products/+page.ts`     | Load product-index.json            |
 
 **MVP:** grid of 53 products with status badges, sortable by priority. Filter by category. Click to open PRD. Takes ~2 hours to build once the script exists.
 

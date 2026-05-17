@@ -66,7 +66,7 @@ The timestamp in the ULID is not a privacy concern for this system -- creation t
 
 Published content (scenarios, modules, micro-lessons) exposes human-readable slugs in learner-facing URLs:
 
-```
+```text
 /scenario/loc-base-to-final-approach   -- URL uses slug
 published.scenario.id = 'scn-042'      -- DB PK is synthetic Tier A ID
 published.scenario.slug = 'loc-base-to-final-approach'  -- unique indexed column

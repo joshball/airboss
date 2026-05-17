@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.7
 Title:           WINGS Phase Planning for a Returning Pilot
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_7]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['PS-2', 'ES-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Returning Pilot
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO briefing room. The pilot has their logbook showing 18 months of inactivity. Last flight review was 20 months ago (expired). Total time is 280 hours, mostly VFR cross-country.
 studentSpeech:I know I need a flight review, but I don't want to just check the box. I want to actually get sharp again. Someone mentioned WINGS -- is that something I should look into? I'm not sure how it works or whether it's worth the trouble.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot explains they mostly flew VFR cross-country trips with family. They want to get comfortable enough to resume those trips. They admit their radio work and airspace knowledge feel rusty.
 studentSpeech:Mostly cross-country trips -- weekend getaways with my wife. I was comfortable with that before. But last time I flew, I fumbled the radio calls at a Class C airport and it shook my confidence. I also haven't kept up with any airspace changes or TFR procedures.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot is engaged and writing notes. Asks about the specific structure of a WINGS phase and how to track progress.
 studentSpeech:OK, I like that it's structured. How does the tracking work? Do I just log into a website? And how many activities do I need to complete? I want to make sure I'm actually doing enough, not just gaming the system.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Pilot is ready to commit. Asks about timeline and how to maintain proficiency after the initial phase.
 studentSpeech:How long should this take? And once I'm current again, how do I keep from getting rusty? I don't want to be back here in another 18 months having the same conversation.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ### Tick 5
 
-```
+```text
 id:           tick_5
 scene:        Pilot asks about connecting with the local FAASTeam representative and whether there are local events worth attending.
 studentSpeech:You mentioned FAASTeam resources. Is there someone local I should connect with? And are those safety seminars worth going to, or are they just PowerPoint presentations?
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
 ```
 

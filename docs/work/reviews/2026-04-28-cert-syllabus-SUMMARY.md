@@ -14,20 +14,20 @@ scope: PRs #248, #254, #264, #270 (cumulative WP)
 
 ## Findings by category
 
-| Category     | Critical | Major | Minor | Nit | Total |
-|--------------|----------|-------|-------|-----|-------|
-| ux           | 0        | 0     | 0     | 0   | 0     |
-| svelte       | 0        | 0     | 0     | 0   | 0     |
-| security     | 0        | 0     | 0     | 0   | 0     |
-| perf         | 0        | 0     | 2     | 0   | 2     |
-| architecture | 0        | 1     | 1     | 0   | 2     |
-| patterns     | 0        | 1     | 4     | 0   | 5     |
-| correctness  | 2        | 2     | 1     | 3   | 8     |
-| a11y         | 0        | 0     | 0     | 0   | 0     |
-| backend      | 0        | 0     | 0     | 0   | 0     |
-| schema       | 0        | 0     | 3     | 0   | 3     |
-| testing      | 0        | 1     | 1     | 0   | 2     |
-| **TOTAL**    | **2**    | **5** | **12**| **3** | **22** |
+| Category     | Critical | Major | Minor  | Nit   | Total  |
+| ------------ | -------- | ----- | ------ | ----- | ------ |
+| ux           | 0        | 0     | 0      | 0     | 0      |
+| svelte       | 0        | 0     | 0      | 0     | 0      |
+| security     | 0        | 0     | 0      | 0     | 0      |
+| perf         | 0        | 0     | 2      | 0     | 2      |
+| architecture | 0        | 1     | 1      | 0     | 2      |
+| patterns     | 0        | 1     | 4      | 0     | 5      |
+| correctness  | 2        | 2     | 1      | 3     | 8      |
+| a11y         | 0        | 0     | 0      | 0     | 0      |
+| backend      | 0        | 0     | 0      | 0     | 0      |
+| schema       | 0        | 0     | 3      | 0     | 3      |
+| testing      | 0        | 1     | 1      | 0     | 2      |
+| **TOTAL**    | **2**    | **5** | **12** | **3** | **22** |
 
 (testing + correctness overlap on the same root cause -- counted once but tracked in both files.)
 

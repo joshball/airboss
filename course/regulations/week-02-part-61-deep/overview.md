@@ -18,16 +18,16 @@ The pilot side of "the pilot / the flight / the operation." This week is deep. H
 
 ## Lesson structure
 
-| File | Topic |
-| --- | --- |
-| 01-subpart-walk.md | Front-to-back commentary on Part 61 subparts A-G |
-| 02-aeronautical-experience.md | Hour requirements per cert level; the parallel structure |
-| 03-currency-vs-recency-vs-proficiency.md | Three different concepts; pilots conflate them |
-| 04-flight-review-and-equivalents.md | 61.56 and what counts as equivalent |
-| 05-ifr-currency.md | 61.57(c) -- six-six-HIT |
-| 06-medical-certificates.md | Part 67 + BasicMed |
-| drills.md | "Given this pilot, what currency requirements apply?" |
-| oral.md | Currency for a private pilot flying IFR at night with passengers tomorrow |
+| File                                     | Topic                                                                     |
+| ---------------------------------------- | ------------------------------------------------------------------------- |
+| 01-subpart-walk.md                       | Front-to-back commentary on Part 61 subparts A-G                          |
+| 02-aeronautical-experience.md            | Hour requirements per cert level; the parallel structure                  |
+| 03-currency-vs-recency-vs-proficiency.md | Three different concepts; pilots conflate them                            |
+| 04-flight-review-and-equivalents.md      | 61.56 and what counts as equivalent                                       |
+| 05-ifr-currency.md                       | 61.57(c) -- six-six-HIT                                                   |
+| 06-medical-certificates.md               | Part 67 + BasicMed                                                        |
+| drills.md                                | "Given this pilot, what currency requirements apply?"                     |
+| oral.md                                  | Currency for a private pilot flying IFR at night with passengers tomorrow |
 
 ## Authoring status
 

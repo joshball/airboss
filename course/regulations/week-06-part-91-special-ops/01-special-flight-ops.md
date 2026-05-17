@@ -231,20 +231,20 @@ The shape: subpart D is "operations that aren't normal." Aerobatics, parachutes,
 
 ## Drills
 
-| Question                                                                  | Section / source                |
-| ------------------------------------------------------------------------- | ------------------------------- |
-| Where is the aerobatic-flight rule?                                       | [@cite](airboss-ref:regs/cfr-14/91/303?at=2026) |
-| What is the minimum altitude for aerobatic flight?                        | 1,500 ft AGL ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e)) |
-| What flight visibility is required for aerobatic flight?                  | 3 SM ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(f)) |
-| Where is the parachute pack cycle?                                        | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026) (180 / 60 days) |
-| When must occupants wear parachutes?                                      | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) -- aerobatic flight, more than one person aboard |
-| Where is the bank-angle / pitch-attitude trigger for parachutes?           | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) -- > 60 deg bank, > 30 deg pitch |
-| Where is the CFI-instruction parachute exception?                         | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(d) |
-| Where is the glider-tow rule?                                             | [@cite](airboss-ref:regs/cfr-14/91/309?at=2026) |
-| Where is banner-towing covered?                                           | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026) -- requires LOA |
-| Where is the formation-flight rule?                                       | [@cite](airboss-ref:regs/cfr-14/91/111?at=2026) |
-| Can a Part 135 charter fly in formation?                                  | No -- [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c) |
-| Where is the parachute-jumper rule (jumper side)?                         | 14 CFR Part 105                 |
+| Question                                                         | Section / source                                                                                    |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Where is the aerobatic-flight rule?                              | [@cite](airboss-ref:regs/cfr-14/91/303?at=2026)                                                     |
+| What is the minimum altitude for aerobatic flight?               | 1,500 ft AGL ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(e))                                   |
+| What flight visibility is required for aerobatic flight?         | 3 SM ([@cite](airboss-ref:regs/cfr-14/91/303?at=2026)(f))                                           |
+| Where is the parachute pack cycle?                               | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026) (180 / 60 days)                                     |
+| When must occupants wear parachutes?                             | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c) -- aerobatic flight, more than one person aboard |
+| Where is the bank-angle / pitch-attitude trigger for parachutes? | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(c)(1) -- > 60 deg bank, > 30 deg pitch              |
+| Where is the CFI-instruction parachute exception?                | [@cite](airboss-ref:regs/cfr-14/91/307?at=2026)(d)                                                  |
+| Where is the glider-tow rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/309?at=2026)                                                     |
+| Where is banner-towing covered?                                  | [@cite](airboss-ref:regs/cfr-14/91/311?at=2026) -- requires LOA                                     |
+| Where is the formation-flight rule?                              | [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)                                                     |
+| Can a Part 135 charter fly in formation?                         | No -- [@cite](airboss-ref:regs/cfr-14/91/111?at=2026)(c)                                            |
+| Where is the parachute-jumper rule (jumper side)?                | 14 CFR Part 105                                                                                     |
 
 ### Apply the rules
 

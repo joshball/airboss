@@ -113,13 +113,17 @@ When an ingestion WP for a new corpus lands:
 
 1. Pick the corpus root. Top-level directory, kebab-case, plural noun (`handbooks/`, `regulations/`, `aim/`, `audio/`, `pohs/`).
 2. Add the LFS filter line to `.gitattributes`:
+
    ```text
    <corpus-root>/**/*.<source-ext> filter=lfs diff=lfs merge=lfs -text
    ```
+
 3. Add the gitignore line to `.gitignore`:
+
    ```text
    <corpus-root>/**/*.<source-ext>
    ```
+
 4. Pipeline writes source to the cache per ADR 021: handbooks at `$AIRBOSS_HANDBOOK_CACHE/<corpus-root>/<doc-slug>/<edition-tag>/<edition-tag>.<ext>` (per-edition dir, primary + errata co-located); flat corpora at `$AIRBOSS_HANDBOOK_CACHE/<corpus-root>/<doc-id>.<ext>` with a per-corpus `manifest.json`.
 5. Pipeline writes derivatives inline at `<corpus-root>/<doc-slug>/<edition-tag>/...` in the repo.
 6. Seed pipeline reads inline derivatives and writes DB rows.
@@ -138,15 +142,15 @@ That's the whole procedure. No ADR needed per corpus once this policy is in plac
 
 Sources expected today and as airboss grows. Each gets a `.gitattributes` filter + `.gitignore` block at the corpus root.
 
-| Corpus              | Repo root        | Cache root                                      | Source ext | Status                |
-| ------------------- | ---------------- | ----------------------------------------------- | ---------- | --------------------- |
-| Handbooks           | `handbooks/`     | `$AIRBOSS_HANDBOOK_CACHE/handbooks/`            | `.pdf`     | First WP shipping     |
-| Advisory Circulars  | `regulations/ac/`| `$AIRBOSS_HANDBOOK_CACHE/regulations/ac/`       | `.pdf`     | Deferred WP           |
-| ACS / PTS           | `acs/`           | `$AIRBOSS_HANDBOOK_CACHE/acs/`                  | `.pdf`     | Phase 1+ of ADR 016   |
-| AIM                 | `aim/`           | `$AIRBOSS_HANDBOOK_CACHE/aim/`                  | `.pdf`     | Deferred WP           |
-| NTSB reports        | `ntsb/`          | `$AIRBOSS_HANDBOOK_CACHE/ntsb/`                 | `.pdf`     | Deferred WP           |
-| POH excerpts        | `pohs/`          | `$AIRBOSS_HANDBOOK_CACHE/pohs/`                 | `.pdf`     | Per aircraft profile  |
-| Audio masters       | `audio/`         | `$AIRBOSS_HANDBOOK_CACHE/audio/`                | `.wav`     | Future audio surface  |
+| Corpus             | Repo root         | Cache root                                | Source ext | Status               |
+| ------------------ | ----------------- | ----------------------------------------- | ---------- | -------------------- |
+| Handbooks          | `handbooks/`      | `$AIRBOSS_HANDBOOK_CACHE/handbooks/`      | `.pdf`     | First WP shipping    |
+| Advisory Circulars | `regulations/ac/` | `$AIRBOSS_HANDBOOK_CACHE/regulations/ac/` | `.pdf`     | Deferred WP          |
+| ACS / PTS          | `acs/`            | `$AIRBOSS_HANDBOOK_CACHE/acs/`            | `.pdf`     | Phase 1+ of ADR 016  |
+| AIM                | `aim/`            | `$AIRBOSS_HANDBOOK_CACHE/aim/`            | `.pdf`     | Deferred WP          |
+| NTSB reports       | `ntsb/`           | `$AIRBOSS_HANDBOOK_CACHE/ntsb/`           | `.pdf`     | Deferred WP          |
+| POH excerpts       | `pohs/`           | `$AIRBOSS_HANDBOOK_CACHE/pohs/`           | `.pdf`     | Per aircraft profile |
+| Audio masters      | `audio/`          | `$AIRBOSS_HANDBOOK_CACHE/audio/`          | `.wav`     | Future audio surface |
 
 Anything not on this list is *not* under the source-artifact policy. Random PDFs dropped into a doc folder, scratch test fixtures, etc. should land outside the repo (in `$AIRBOSS_HANDBOOK_CACHE` or a developer-local scratch dir). The previous `data/sources/**` gitignore-escape-valve tier was retired alongside the legacy in-repo source pipeline; it never carried committed bytes.
 

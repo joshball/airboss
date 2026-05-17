@@ -15,11 +15,11 @@ counts:
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     5 |      4 |    1 |
-| minor    |     6 |      1 |    5 |
-| nit      |     4 |      0 |    4 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 5     | 4      | 1    |
+| minor    | 6     | 1      | 5    |
+| nit      | 4     | 0      | 4    |
 
 ### MAJOR: scenario_option.scenario_id leading-column index -- CLOSED
 

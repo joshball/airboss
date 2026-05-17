@@ -154,28 +154,28 @@ This is the whole reason the architecture works. Part 91 is the foundation; ever
 
 Internalize this. Ten seconds per question:
 
-| Question contains the words...                  | Look in (first)   | Then check (often)         |
-| ------------------------------------------------ | ----------------- | -------------------------- |
-| "Can this pilot..."                              | Part 61           | Part 67 if medical-related |
-| "Is this medical..."                              | Part 67 / Part 68 |                            |
-| "What endorsement..."                             | Part 61 + AC 61-65|                            |
-| "Currency / flight review / IPC..."               | Part 61           |                            |
-| "What's required to..." (about a flight)         | Part 91           | + 135 / 141 if commercial  |
-| "Equipment for..."                                | Part 91 subpart C |                            |
-| "Inspection due..."                               | Part 91 subpart E | + Part 43                  |
-| "Weather minimums..."                             | Part 91 subpart B | + AIM Chapter 7            |
-| "IFR alternate / fuel / filing..."               | Part 91 subpart B (91.167 - 91.171) |          |
-| "Approach / DH / MDA..."                          | Part 91.175 + Part 97 |                       |
-| "Oxygen at altitude..."                           | Part 91.211       |                            |
-| "Transponder / ADS-B..."                          | Part 91.215 / 91.225 |                          |
-| "Aerobatic / parachute / towing..."               | Part 91 subpart D |                            |
-| "Is this flight school's syllabus OK?"            | Part 141          | + 91 (the floor)           |
-| "Can this charter / air taxi..."                  | Part 135          | + 91, + 119                |
-| "Does this airline..."                            | Part 121          | + 91, + 119                |
-| "Repair station maintenance..."                   | Part 145          | + 43                       |
-| "Did something happen we have to report?"         | 49 CFR 830       | (NOT Title 14)             |
-| "Is this airspace this class?"                    | Part 71          | + chart                    |
-| "Does this AD apply?"                             | Part 39           |                            |
+| Question contains the words...            | Look in (first)                     | Then check (often)         |
+| ----------------------------------------- | ----------------------------------- | -------------------------- |
+| "Can this pilot..."                       | Part 61                             | Part 67 if medical-related |
+| "Is this medical..."                      | Part 67 / Part 68                   |                            |
+| "What endorsement..."                     | Part 61 + AC 61-65                  |                            |
+| "Currency / flight review / IPC..."       | Part 61                             |                            |
+| "What's required to..." (about a flight)  | Part 91                             | + 135 / 141 if commercial  |
+| "Equipment for..."                        | Part 91 subpart C                   |                            |
+| "Inspection due..."                       | Part 91 subpart E                   | + Part 43                  |
+| "Weather minimums..."                     | Part 91 subpart B                   | + AIM Chapter 7            |
+| "IFR alternate / fuel / filing..."        | Part 91 subpart B (91.167 - 91.171) |                            |
+| "Approach / DH / MDA..."                  | Part 91.175 + Part 97               |                            |
+| "Oxygen at altitude..."                   | Part 91.211                         |                            |
+| "Transponder / ADS-B..."                  | Part 91.215 / 91.225                |                            |
+| "Aerobatic / parachute / towing..."       | Part 91 subpart D                   |                            |
+| "Is this flight school's syllabus OK?"    | Part 141                            | + 91 (the floor)           |
+| "Can this charter / air taxi..."          | Part 135                            | + 91, + 119                |
+| "Does this airline..."                    | Part 121                            | + 91, + 119                |
+| "Repair station maintenance..."           | Part 145                            | + 43                       |
+| "Did something happen we have to report?" | 49 CFR 830                          | (NOT Title 14)             |
+| "Is this airspace this class?"            | Part 71                             | + chart                    |
+| "Does this AD apply?"                     | Part 39                             |                            |
 
 This table is the muscle memory we are building. By the end of the course you'll have it without the table.
 
@@ -225,28 +225,28 @@ Hits two:
 
 For each question, name the three-subject category and the first Part to consult:
 
-| Question                                                                  | Subject       | Part |
-| ------------------------------------------------------------------------- | ------------- | ---- |
-| Can a 100-hour pilot carry their grandmother in a 172?                    | Pilot         | 61   |
-| Does this 172 need a transponder for IFR in Class B?                      | Flight        | 91   |
-| Does the local flight school need to be 141 to teach my student?          | Operation     | 141  |
-| What endorsement is required for high-performance airplanes?              | Pilot         | 61   |
-| What's the IFR alternate weather forecast minimum?                        | Flight        | 91   |
-| Can the school's 172 be used for hire without a 100-hour inspection?      | Flight        | 91 (specifically .409) |
-| Can a charter operator have one chief pilot for two operating bases?      | Operation     | 119 + 135 |
-| What must I do if I have an accident?                                     | (not Title 14) | 49 CFR 830 |
-| Is my BasicMed valid for an IFR flight with passengers?                   | Pilot         | 61.113(i) + Part 68 |
-| What altitude requires supplemental oxygen for the crew?                  | Flight        | 91.211 |
+| Question                                                             | Subject        | Part                   |
+| -------------------------------------------------------------------- | -------------- | ---------------------- |
+| Can a 100-hour pilot carry their grandmother in a 172?               | Pilot          | 61                     |
+| Does this 172 need a transponder for IFR in Class B?                 | Flight         | 91                     |
+| Does the local flight school need to be 141 to teach my student?     | Operation      | 141                    |
+| What endorsement is required for high-performance airplanes?         | Pilot          | 61                     |
+| What's the IFR alternate weather forecast minimum?                   | Flight         | 91                     |
+| Can the school's 172 be used for hire without a 100-hour inspection? | Flight         | 91 (specifically .409) |
+| Can a charter operator have one chief pilot for two operating bases? | Operation      | 119 + 135              |
+| What must I do if I have an accident?                                | (not Title 14) | 49 CFR 830             |
+| Is my BasicMed valid for an IFR flight with passengers?              | Pilot          | 61.113(i) + Part 68    |
+| What altitude requires supplemental oxygen for the crew?             | Flight         | 91.211                 |
 
 ### Spot the cross-cutting question
 
 Some questions hit multiple subjects. Identify the *sequence* of Parts to consult:
 
-| Question                                                              | Sequence |
-| --------------------------------------------------------------------- | -------- |
-| "I'm flying IFR at night with a passenger tomorrow."                  | Pilot (61) -> Flight (91) |
-| "My commercial student wants to start flying for a 135 operator."      | Pilot (61) -> Operation (135 + 119) |
-| "I'm a CFI giving a flight review in the student's club airplane."     | Pilot (61) -> Flight (91) |
+| Question                                                                | Sequence                                                          |
+| ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| "I'm flying IFR at night with a passenger tomorrow."                    | Pilot (61) -> Flight (91)                                         |
+| "My commercial student wants to start flying for a 135 operator."       | Pilot (61) -> Operation (135 + 119)                               |
+| "I'm a CFI giving a flight review in the student's club airplane."      | Pilot (61) -> Flight (91)                                         |
 | "Can I put my 141 student on a solo cross-country in marginal weather?" | Pilot (61.93) -> Flight (91.155) -> Operation (141 syllabus mins) |
 
 ## Where this lesson sits

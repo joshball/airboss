@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.1
 Title:           VFR Cross-Country Near Restricted Airspace
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_2]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-3', 'RM-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Eager Cross-Country Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Planning table, 30 minutes before departure. Student has the route plotted on ForeFlight. The original TFR was 15 miles north of the route. The current TFR (updated 45 minutes ago) is centered on the route.
 studentSpeech:Route looks good. I checked NOTAMs this morning -- there's a TFR but it's north of us. We clear it by at least 10 miles. Ready to go.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student refreshes NOTAMs. The TFR has moved. It now overlaps the planned route by 5 miles. Student stares at the screen, confused.
 studentSpeech:Wait, it moved? How can a TFR move? I checked this morning and it was north of us. Now it's right on top of our route. Can they do that?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student replans the route but the detour adds 25 minutes and crosses near restricted airspace. Student is looking at the fuel calculation.
 studentSpeech:OK, we can go south around it, but that takes us close to R-4001. And it adds 25 minutes -- we'll be tight on fuel reserves if the winds aren't what's forecast.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student decides to depart on the original route, reasoning that the TFR "probably won't be enforced" at their altitude. They've already loaded the original GPS route.
 studentSpeech:You know what, I bet we can just fly under it. The inner ring is only up to 18,000 feet, and we'll be at 5,500. The outer ring says "no restrictions below 5,000." I think we're fine on the original route.
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt)
                         \         \-> terminal_safe (coach/direct)
                          \-> terminal_safe (coach/direct)

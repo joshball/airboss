@@ -14,47 +14,47 @@ Two layers: automated tests live alongside the code and run in CI; manual tests 
 
 ### Unit -- constants ([libs/constants/src/sim.test.ts](../../../libs/constants/src/sim.test.ts))
 
-| Case                                                                  | Expected                                       |
-| --------------------------------------------------------------------- | ---------------------------------------------- |
-| Every key in `SIM_SCENARIO_NODE_MAPPINGS` is a current `SimScenarioId`| `SIM_SCENARIO_ID_VALUES.includes(key)` for all |
-| `playground` and `playground-pa28` are the only excluded scenarios    | Exhaustiveness check via `Exclude<...>`        |
-| Every value array length >= 1                                         | Pass                                           |
-| Every `weight` in `(0, 1]`                                            | Pass                                           |
-| Every `nodeId` matches `/^[a-z0-9]+(-[a-z0-9]+)*$/`                   | Pass                                           |
-| `ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR` is in `(0, 1]`        | Pass                                           |
+| Case                                                                   | Expected                                       |
+| ---------------------------------------------------------------------- | ---------------------------------------------- |
+| Every key in `SIM_SCENARIO_NODE_MAPPINGS` is a current `SimScenarioId` | `SIM_SCENARIO_ID_VALUES.includes(key)` for all |
+| `playground` and `playground-pa28` are the only excluded scenarios     | Exhaustiveness check via `Exclude<...>`        |
+| Every value array length >= 1                                          | Pass                                           |
+| Every `weight` in `(0, 1]`                                             | Pass                                           |
+| Every `nodeId` matches `/^[a-z0-9]+(-[a-z0-9]+)*$/`                    | Pass                                           |
+| `ENGINE_SCORING.STRENGTHEN.SIM_PRESSURE_FACTOR` is in `(0, 1]`         | Pass                                           |
 
 ### Unit -- aggregation ([libs/bc/study/src/sim-bias.test.ts](../../../libs/bc/study/src/sim-bias.test.ts))
 
 `aggregateSimNodePressure` is a pure function over signals + mappings. Tests use hand-built signals and a stub mapping.
 
-| Case                                                                                  | Expected                                                |
-| ------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| Empty signals                                                                         | Empty map                                               |
-| One scenario at weight 0.4, mapped to two nodes at edge weights 1.0 and 0.5           | `{ nodeA: 0.4, nodeB: 0.2 }`                            |
-| Two scenarios sharing one node, summed pressure exceeds 1.0                           | Clamped to exactly 1.0                                  |
-| Scenario weakness signal that has no mapping row (defensive)                          | Ignored, no throw, other nodes unaffected               |
-| Stable insertion order                                                                | Map iteration deterministic across runs (seed-friendly) |
+| Case                                                                        | Expected                                                |
+| --------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Empty signals                                                               | Empty map                                               |
+| One scenario at weight 0.4, mapped to two nodes at edge weights 1.0 and 0.5 | `{ nodeA: 0.4, nodeB: 0.2 }`                            |
+| Two scenarios sharing one node, summed pressure exceeds 1.0                 | Clamped to exactly 1.0                                  |
+| Scenario weakness signal that has no mapping row (defensive)                | Ignored, no throw, other nodes unaffected               |
+| Stable insertion order                                                      | Map iteration deterministic across runs (seed-friendly) |
 
 ### Unit -- engine ([libs/bc/study/src/engine.test.ts](../../../libs/bc/study/src/engine.test.ts))
 
-| Case                                                                                                  | Expected                                                          |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| `simNodePressure: {}` for all existing scenarios                                                      | Existing engine tests pass unchanged                              |
-| Two cards otherwise identical, one with `simNodePressure[nodeId] = 0.8`                               | Pressured card scored higher, picked first into strengthen slice  |
-| Card with `nodeId: null`                                                                              | Sim pressure contributes 0; never throws                          |
-| Card whose nodeId is in pressure map but not in pool filter focus                                     | Still receives lift; not gated on focus                           |
-| Lift magnitude check: `pressure * SIM_PRESSURE_FACTOR` matches expected delta                         | Exact arithmetic                                                  |
-| Reason code attribution: when sim pressure dominates, slot row has `STRENGTHEN_SIM_WEAKNESS_CARD`     | Pass                                                              |
-| Rep candidate path: `simNodePressure` lifts strengthen rep score, sets `STRENGTHEN_SIM_WEAKNESS_REP`  | Pass                                                              |
+| Case                                                                                                 | Expected                                                         |
+| ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `simNodePressure: {}` for all existing scenarios                                                     | Existing engine tests pass unchanged                             |
+| Two cards otherwise identical, one with `simNodePressure[nodeId] = 0.8`                              | Pressured card scored higher, picked first into strengthen slice |
+| Card with `nodeId: null`                                                                             | Sim pressure contributes 0; never throws                         |
+| Card whose nodeId is in pressure map but not in pool filter focus                                    | Still receives lift; not gated on focus                          |
+| Lift magnitude check: `pressure * SIM_PRESSURE_FACTOR` matches expected delta                        | Exact arithmetic                                                 |
+| Reason code attribution: when sim pressure dominates, slot row has `STRENGTHEN_SIM_WEAKNESS_CARD`    | Pass                                                             |
+| Rep candidate path: `simNodePressure` lifts strengthen rep score, sets `STRENGTHEN_SIM_WEAKNESS_REP` | Pass                                                             |
 
 ### Seed validation
 
 Run by `bun run db:seed:check` (or the existing seed validator).
 
-| Case                                                                              | Expected                                |
-| --------------------------------------------------------------------------------- | --------------------------------------- |
-| Every `nodeId` in `SIM_SCENARIO_NODE_MAPPINGS` resolves to a `knowledge_node` row | Exit 0                                  |
-| Deliberately mistyped `nodeId` (e.g. `nav-localizer-glideslope`)                  | Exit non-zero, lists offending pair(s)  |
+| Case                                                                              | Expected                               |
+| --------------------------------------------------------------------------------- | -------------------------------------- |
+| Every `nodeId` in `SIM_SCENARIO_NODE_MAPPINGS` resolves to a `knowledge_node` row | Exit 0                                 |
+| Deliberately mistyped `nodeId` (e.g. `nav-localizer-glideslope`)                  | Exit non-zero, lists offending pair(s) |
 
 ## Manual
 
@@ -99,13 +99,13 @@ Pre-conditions:
 
 ## Coverage map
 
-| Spec section                              | Where verified                          |
-| ----------------------------------------- | --------------------------------------- |
-| Authored mapping covers every graded id   | Constants unit test                     |
-| `weight` in `(0, 1]`                      | Constants unit test                     |
-| Node ids resolve in DB                    | Seed validator + MT-5                   |
-| `simWeaknessByNode` aggregation rule      | sim-bias unit test (sum-then-clamp)     |
-| Engine strengthen lift                    | Engine unit test + MT-1, MT-2           |
-| `null nodeId` card ignored                | Engine unit test + MT-4                 |
-| No regression when no signal              | Engine unit test + MT-3                 |
-| Reason-code attribution                   | Engine unit test + MT-1                 |
+| Spec section                            | Where verified                      |
+| --------------------------------------- | ----------------------------------- |
+| Authored mapping covers every graded id | Constants unit test                 |
+| `weight` in `(0, 1]`                    | Constants unit test                 |
+| Node ids resolve in DB                  | Seed validator + MT-5               |
+| `simWeaknessByNode` aggregation rule    | sim-bias unit test (sum-then-clamp) |
+| Engine strengthen lift                  | Engine unit test + MT-1, MT-2       |
+| `null nodeId` card ignored              | Engine unit test + MT-4             |
+| No regression when no signal            | Engine unit test + MT-3             |
+| Reason-code attribution                 | Engine unit test + MT-1             |

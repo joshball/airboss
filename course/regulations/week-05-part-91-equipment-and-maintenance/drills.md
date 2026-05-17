@@ -21,41 +21,41 @@ Format 1 -> navigation flash cards in apps/study. Format 2 -> scenario cards. Fo
 
 Cover the right column. Time yourself: 60 seconds per row.
 
-| Prompt                                                                  | Answer                |
-| ----------------------------------------------------------------------- | --------------------- |
-| Where is the AROW documents requirement?                                 | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026) (A and R) + [@cite](airboss-ref:regs/cfr-14/91/9?at=2026) (O and W) |
-| Where is the PIC airworthiness determination?                            | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026)         |
-| Where is VFR day equipment (ATOMATOFLAMES)?                              | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(b)    |
-| Where is VFR night equipment (FLAPS additions)?                          | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)    |
-| Where is IFR equipment (GRABCARD additions)?                             | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)    |
-| Where is the ELT requirement?                                            | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)       |
-| Where is the ELT 50-nm training-flight exemption?                        | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2) |
-| Where is the ELT battery rule?                                           | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(c)    |
-| Where is the position-lights window (sunset to sunrise)?                 | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a)    |
-| Where is the anticollision-lights "any time" rule?                       | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d)    |
-| Where is the no-MEL deferral pathway?                                    | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)    |
-| Where is the placard step in the no-MEL pathway?                         | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(3) |
-| Where is the Mode C transponder rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)       |
-| Where is the Mode C veil definition?                                     | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(2) |
-| Where is the no-electrical-system Mode C veil carve-out?                 | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(3) |
-| Where is ADS-B Out airspace?                                             | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(d)    |
-| Where is the ADS-B Out 1090ES Class A rule?                              | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(a)    |
-| Where are the ADS-B Out NIC/NACp/NACv/SIL/SDA thresholds?                | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(b)    |
-| Where is the ADS-B Out deviation provision?                              | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(g)    |
-| Where is the owner/operator maintenance responsibility?                  | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)       |
-| Where is the post-maintenance return-to-service rule?                    | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a)    |
-| Where is the post-maintenance test-flight requirement?                   | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(b)    |
-| Where is the annual inspection requirement?                              | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(a)    |
-| Where is the 100-hour inspection requirement?                            | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)    |
-| Where is the 100-hour 10-hour ferry overrun?                             | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)    |
-| Where is the altimeter / static / encoder 24-month check?                | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)       |
-| Where is the transponder 24-month check?                                 | [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)       |
-| Where is the maintenance records list?                                   | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)       |
-| Where is the records-on-sale transfer rule?                              | [@cite](airboss-ref:regs/cfr-14/91/419?at=2026)       |
-| Where are the preventive maintenance items the pilot may perform?        | 14 CFR Part 43 Appendix A |
-| Where are the annual / 100-hour inspection scope items?                  | 14 CFR Part 43 Appendix D |
-| Where are the altimeter / static system test procedures?                 | 14 CFR Part 43 Appendix E |
-| Where are the transponder test procedures?                               | 14 CFR Part 43 Appendix F |
+| Prompt                                                            | Answer                                                                                                              |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Where is the AROW documents requirement?                          | [@cite](airboss-ref:regs/cfr-14/91/203?at=2026) (A and R) + [@cite](airboss-ref:regs/cfr-14/91/9?at=2026) (O and W) |
+| Where is the PIC airworthiness determination?                     | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026)                                                                       |
+| Where is VFR day equipment (ATOMATOFLAMES)?                       | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(b)                                                                  |
+| Where is VFR night equipment (FLAPS additions)?                   | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)                                                                  |
+| Where is IFR equipment (GRABCARD additions)?                      | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(d)                                                                  |
+| Where is the ELT requirement?                                     | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)                                                                     |
+| Where is the ELT 50-nm training-flight exemption?                 | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2)                                                               |
+| Where is the ELT battery rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(c)                                                                  |
+| Where is the position-lights window (sunset to sunrise)?          | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a)                                                                  |
+| Where is the anticollision-lights "any time" rule?                | [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d)                                                                  |
+| Where is the no-MEL deferral pathway?                             | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)                                                                  |
+| Where is the placard step in the no-MEL pathway?                  | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d)(3)                                                               |
+| Where is the Mode C transponder rule?                             | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)                                                                     |
+| Where is the Mode C veil definition?                              | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(2)                                                               |
+| Where is the no-electrical-system Mode C veil carve-out?          | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(3)                                                               |
+| Where is ADS-B Out airspace?                                      | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(d)                                                                  |
+| Where is the ADS-B Out 1090ES Class A rule?                       | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(a)                                                                  |
+| Where are the ADS-B Out NIC/NACp/NACv/SIL/SDA thresholds?         | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(b)                                                                  |
+| Where is the ADS-B Out deviation provision?                       | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(g)                                                                  |
+| Where is the owner/operator maintenance responsibility?           | [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)                                                                     |
+| Where is the post-maintenance return-to-service rule?             | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a)                                                                  |
+| Where is the post-maintenance test-flight requirement?            | [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(b)                                                                  |
+| Where is the annual inspection requirement?                       | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(a)                                                                  |
+| Where is the 100-hour inspection requirement?                     | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)                                                                  |
+| Where is the 100-hour 10-hour ferry overrun?                      | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b)                                                                  |
+| Where is the altimeter / static / encoder 24-month check?         | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026)                                                                     |
+| Where is the transponder 24-month check?                          | [@cite](airboss-ref:regs/cfr-14/91/413?at=2026)                                                                     |
+| Where is the maintenance records list?                            | [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)                                                                     |
+| Where is the records-on-sale transfer rule?                       | [@cite](airboss-ref:regs/cfr-14/91/419?at=2026)                                                                     |
+| Where are the preventive maintenance items the pilot may perform? | 14 CFR Part 43 Appendix A                                                                                           |
+| Where are the annual / 100-hour inspection scope items?           | 14 CFR Part 43 Appendix D                                                                                           |
+| Where are the altimeter / static system test procedures?          | 14 CFR Part 43 Appendix E                                                                                           |
+| Where are the transponder test procedures?                        | 14 CFR Part 43 Appendix F                                                                                           |
 
 ## Format 2 -- 20 scenarios
 
@@ -257,24 +257,24 @@ Blocker: The airplane is not airworthy until AD compliance is confirmed and docu
 
 For each statement, identify the misreading and correct it.
 
-| Statement                                                            | Trap and correction |
-| -------------------------------------------------------------------- | ------------------- |
-| "AROW is in 91.203."                                                  | Half-true. 91.203 covers A and R. O and W are in [@cite](airboss-ref:regs/cfr-14/91/9?at=2026). Cite both. |
-| "Anticollision lights only required at night."                        | Wrong. [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d) requires them whenever operating, day or night, if installed. |
-| "The Mode C veil and the ADS-B rule airspace are the same thing."    | Almost. Differences exist (Class E above 10,000 MSL, Gulf of Mexico carve-out). Operationally similar but not identical. |
-| "If I placard an inop item INOPERATIVE, I can fly with it."          | Wrong. [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d) is a four-step process. Placard is step 3, after clearing the four no-defer authorities and before the hazard determination. |
-| "The 100-hour applies to every airplane used for training."          | Wrong. [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b) applies when *the instructor provides the aircraft*. CFI in student's personal airplane: no 100-hour. |
-| "After maintenance, the mechanic's signature is enough to fly with passengers." | Wrong. [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a) covers signoff; (b) requires a test flight without passengers when work may have appreciably changed flight characteristics. |
-| "91.411 covers the transponder."                                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/411?at=2026) covers altimeter / static / encoder. [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) covers the transponder unit. They overlap on data correspondence. |
-| "91.413 only applies to IFR."                                        | Wrong. [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) applies to any operation with an installed transponder. VFR pilots are bound. |
-| "All maintenance records have to be kept forever."                   | Wrong. [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(b)(1) is 1-year for routine entries. (b)(2) is perpetual for total time, AD status, life-limited parts, Form 337s. |
-| "The seller can keep the maintenance logs as a souvenir of their old airplane." | Wrong. [@cite](airboss-ref:regs/cfr-14/91/419?at=2026) requires transfer at sale. The seller hands them to the buyer. |
-| "ATOMATOFLAMES requires a landing light for VFR night."              | Wrong. The L in FLAPS is recommended but [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(2) requires it only "if the aircraft is operated for hire." Private night flying does not require a landing light. |
-| "AD compliance is the mechanic's job."                                | Wrong. [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)(a) places AD compliance on the owner/operator. The mechanic does the work; the owner is responsible. |
-| "The 100-hour 10-hour overrun lets me operate to 110 hours."         | Wrong. The 10 hours is for *ferry* to a maintenance base. Not for student flights or revenue use. |
-| "If I'm under 50 nm from the airport, I don't need an ELT."         | Wrong. [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2) is for *training flights* within 50 nm. A non-training A-to-B flight at 40 nm is not exempt. |
-| "Position lights are required from civil twilight."                   | Wrong. [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a) is sunset-to-sunrise. Civil twilight is the [@cite](airboss-ref:regs/cfr-14/61/51?at=2026) logging concept. |
-| "ADS-B Out is required for any IFR flight."                          | Wrong. [@cite](airboss-ref:regs/cfr-14/91/225?at=2026) is airspace-based, not flight-rules-based. IFR in pure Class E below 10,000 MSL with no Class B/C transitions: ADS-B Out not required. |
+| Statement                                                                       | Trap and correction                                                                                                                                                                                            |
+| ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "AROW is in 91.203."                                                            | Half-true. 91.203 covers A and R. O and W are in [@cite](airboss-ref:regs/cfr-14/91/9?at=2026). Cite both.                                                                                                     |
+| "Anticollision lights only required at night."                                  | Wrong. [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(d) requires them whenever operating, day or night, if installed.                                                                                        |
+| "The Mode C veil and the ADS-B rule airspace are the same thing."               | Almost. Differences exist (Class E above 10,000 MSL, Gulf of Mexico carve-out). Operationally similar but not identical.                                                                                       |
+| "If I placard an inop item INOPERATIVE, I can fly with it."                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)(d) is a four-step process. Placard is step 3, after clearing the four no-defer authorities and before the hazard determination.                         |
+| "The 100-hour applies to every airplane used for training."                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)(b) applies when *the instructor provides the aircraft*. CFI in student's personal airplane: no 100-hour.                                                |
+| "After maintenance, the mechanic's signature is enough to fly with passengers." | Wrong. [@cite](airboss-ref:regs/cfr-14/91/407?at=2026)(a) covers signoff; (b) requires a test flight without passengers when work may have appreciably changed flight characteristics.                         |
+| "91.411 covers the transponder."                                                | Wrong. [@cite](airboss-ref:regs/cfr-14/91/411?at=2026) covers altimeter / static / encoder. [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) covers the transponder unit. They overlap on data correspondence.  |
+| "91.413 only applies to IFR."                                                   | Wrong. [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) applies to any operation with an installed transponder. VFR pilots are bound.                                                                           |
+| "All maintenance records have to be kept forever."                              | Wrong. [@cite](airboss-ref:regs/cfr-14/91/417?at=2026)(b)(1) is 1-year for routine entries. (b)(2) is perpetual for total time, AD status, life-limited parts, Form 337s.                                      |
+| "The seller can keep the maintenance logs as a souvenir of their old airplane." | Wrong. [@cite](airboss-ref:regs/cfr-14/91/419?at=2026) requires transfer at sale. The seller hands them to the buyer.                                                                                          |
+| "ATOMATOFLAMES requires a landing light for VFR night."                         | Wrong. The L in FLAPS is recommended but [@cite](airboss-ref:regs/cfr-14/91/205?at=2026)(c)(2) requires it only "if the aircraft is operated for hire." Private night flying does not require a landing light. |
+| "AD compliance is the mechanic's job."                                          | Wrong. [@cite](airboss-ref:regs/cfr-14/91/403?at=2026)(a) places AD compliance on the owner/operator. The mechanic does the work; the owner is responsible.                                                    |
+| "The 100-hour 10-hour overrun lets me operate to 110 hours."                    | Wrong. The 10 hours is for *ferry* to a maintenance base. Not for student flights or revenue use.                                                                                                              |
+| "If I'm under 50 nm from the airport, I don't need an ELT."                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/207?at=2026)(e)(2) is for *training flights* within 50 nm. A non-training A-to-B flight at 40 nm is not exempt.                                                      |
+| "Position lights are required from civil twilight."                             | Wrong. [@cite](airboss-ref:regs/cfr-14/91/209?at=2026)(a) is sunset-to-sunrise. Civil twilight is the [@cite](airboss-ref:regs/cfr-14/61/51?at=2026) logging concept.                                          |
+| "ADS-B Out is required for any IFR flight."                                     | Wrong. [@cite](airboss-ref:regs/cfr-14/91/225?at=2026) is airspace-based, not flight-rules-based. IFR in pure Class E below 10,000 MSL with no Class B/C transitions: ADS-B Out not required.                  |
 
 ## Hardcover drill -- 90 seconds, no notes
 

@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The codebase shows a solid accessibility baseline: skip link, landmarks, aria-current on nav, labeled form primitives (TextField/Select), role=status/alert on banners, progressbar semantics on session and mastery bars, and a working `prefers-reduced-motion` override in `libs/themes/tokens.css`. The primitives (`Button`, `ConfidenceSlider`, `TextField`, `Select`, `Banner`, `KbdHint`, `PanelShell`) are exemplary.

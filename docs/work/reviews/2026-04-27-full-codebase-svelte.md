@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 The codebase is fully on Svelte 5 runes -- a wide grep for Svelte 4 holdovers (`export let`, `$:`, `<slot>`, `svelte/store`, `$app/stores`, `createEventDispatcher`) returned zero matches across 218 `.svelte` / `.svelte.ts` files. Rune usage is consistent and idiomatic in the bulk of the code (1000+ rune call sites). The notable issues are: (1) eight `.svelte.ts` files in `apps/sim/` that contain no runes and should be plain `.ts`; (2) a broken focus-outline declaration in `ConfirmAction`; (3) several pages and lib components carrying substantial visual CSS that belongs in `libs/ui/` token-driven primitives; (4) a recurring "prop -> $state via $effect" sync pattern in app layouts that would be cleaner as `$derived`. No critical reactivity bugs, no infinite-loop effects, no unsafe `{@html}` paths -- every `{@html}` site is fed by an HTML-escaping renderer (`renderMarkdown`, Shiki output, or the controlled `substituteTokens` reference resolver).

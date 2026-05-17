@@ -59,13 +59,13 @@ to archive every run.)
 
 ## Templates as of this run
 
-| Template               | SHA-256                       |
-| ---------------------- | ----------------------------- |
-| `parameters.md`        | `{parameters_md_sha256}`      |
-| `section_tree.md`      | `{section_tree_md_sha256}`    |
-| `orchestrator.md`      | `{orchestrator_md_sha256}`    |
-| `chapter.md`           | `{chapter_md_sha256}`         |
-| `run_readme.md`        | `{run_readme_md_sha256}`      |
+| Template          | SHA-256                    |
+| ----------------- | -------------------------- |
+| `parameters.md`   | `{parameters_md_sha256}`   |
+| `section_tree.md` | `{section_tree_md_sha256}` |
+| `orchestrator.md` | `{orchestrator_md_sha256}` |
+| `chapter.md`      | `{chapter_md_sha256}`      |
+| `run_readme.md`   | `{run_readme_md_sha256}`   |
 
 A reviewer can verify that this directory's `_parameters.md`,
 `_section_tree_contract.md`, etc. match these template hashes by running

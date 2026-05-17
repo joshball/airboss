@@ -6,12 +6,12 @@ These aren't separate apps. They're modes or content packs that adapt the core p
 
 ## Products
 
-| ID | Name              | Priority | Status |
-| -- | ----------------- | -------- | ------ |
-| prd:spec:helicopter | Helicopter Mode   | 5        | idea   |
-| prd:spec:glider | Glider Mode       | 5        | idea   |
-| prd:spec:aerobatics | Aerobatics        | 5        | idea   |
-| prd:spec:sim-community | Sim Community     | 5        | idea   |
-| prd:spec:aviation-curious | Aviation-Curious  | 5        | idea   |
-| prd:spec:returning-pilots | Returning Pilots  | 4        | idea   |
-| prd:spec:passenger-pilots | Passenger-Pilots  | 5        | idea   |
+| ID                        | Name             | Priority | Status |
+| ------------------------- | ---------------- | -------- | ------ |
+| prd:spec:helicopter       | Helicopter Mode  | 5        | idea   |
+| prd:spec:glider           | Glider Mode      | 5        | idea   |
+| prd:spec:aerobatics       | Aerobatics       | 5        | idea   |
+| prd:spec:sim-community    | Sim Community    | 5        | idea   |
+| prd:spec:aviation-curious | Aviation-Curious | 5        | idea   |
+| prd:spec:returning-pilots | Returning Pilots | 4        | idea   |
+| prd:spec:passenger-pilots | Passenger-Pilots | 5        | idea   |

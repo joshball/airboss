@@ -15,11 +15,11 @@ counts:
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     1 |      1 |    0 |
-| major    |     4 |      4 |    0 |
-| minor    |     6 |      3 |    3 |
-| nit      |     4 |      1 |    3 |
+| -------- | ----- | ------ | ---- |
+| critical | 1     | 1      | 0    |
+| major    | 4     | 4      | 0    |
+| minor    | 6     | 3      | 3    |
+| nit      | 4     | 1      | 3    |
 
 ### CRITICAL: `applyCertGoalsToPrimaryGoal` non-transactional -- CLOSED
 

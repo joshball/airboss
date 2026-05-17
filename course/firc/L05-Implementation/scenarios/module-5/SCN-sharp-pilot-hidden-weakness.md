@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.3
 Title:           IPC for an Instrument-Rated Private Pilot
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-1', 'ES-2', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Competent Pilot with Blind Spot
 Parameters:
   skillLevel:         0.7
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Under the hood, flying an ILS approach. Localizer tracking is surprisingly good -- within a dot. But as the pilot descends on the glideslope, altitude corrections are erratic. The pilot is chasing the glideslope needle with pitch changes that create a roller-coaster descent profile.
 studentSpeech:Localizer looks good. Glideslope is... bouncing around a lot. Is the glideslope signal always this sensitive?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot reveals their scan: they're looking at the glideslope indicator, adjusting pitch, then looking back at the glideslope indicator. They're not including airspeed or VSI in the cross-check. The scan is fixated on one instrument.
 studentSpeech:I'm just watching the glideslope needle and adjusting. That's how I was taught. Isn't that how everyone does it? I keep the needle centered.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot tries the new technique. The descent stabilizes significantly. Glideslope tracking improves. The pilot is surprised by the improvement.
 studentSpeech:Wow, that's completely different. The needle is barely moving now. I've been doing it wrong for years. How did I not know this?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Second approach. Glideslope tracking is much better. Pilot's overall instrument performance is now within IPC standards. Debrief time.
 studentSpeech:That second approach felt completely different. My scan needs work, clearly. Am I going to pass the IPC? I know the first approach was bad.
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

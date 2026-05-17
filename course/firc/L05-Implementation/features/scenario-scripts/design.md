@@ -17,7 +17,7 @@ Every scenario follows the `TickScript` type from `libs/types/src/engine-types.t
 
 Ticks form a directed graph, not a linear list. Branching creates replayability.
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
               \         \-> terminal_unsafe
                \-> tick_2b -> terminal_safe
@@ -49,7 +49,7 @@ Most scenarios follow one of these patterns.
 
 **Pattern A: Escalating Crisis** (LOC, stall/spin, engine failure)
 
-```
+```text
 nominal -> degrading -> critical -> terminal
 ```
 
@@ -57,7 +57,7 @@ The student deteriorates unless the CFI intervenes. Each tick raises the stakes.
 
 **Pattern B: Pressure Decision** (ethics, signoff, compliance)
 
-```
+```text
 nominal -> pressure_1 -> pressure_2 -> decision_point -> outcome
 ```
 
@@ -65,7 +65,7 @@ External pressure builds. The CFI must recognize the pressure and resist or comp
 
 **Pattern C: Diagnostic Puzzle** (hidden weakness, rusty pilot, automation dependency)
 
-```
+```text
 nominal -> cue_1 -> cue_2 -> diagnosis -> evaluation_plan -> outcome
 ```
 
@@ -73,7 +73,7 @@ The student appears fine on the surface. Subtle cues reveal a hidden weakness. T
 
 **Pattern D: Multi-Beat Administrative** (TSA, applications, records)
 
-```
+```text
 intake -> verification -> decision -> documentation -> outcome
 ```
 
@@ -81,7 +81,7 @@ A walk-in or scenario triggers an administrative workflow. Each beat requires th
 
 **Pattern E: Integrated Capstone** (multiple topics, branching day-in-the-life)
 
-```
+```text
 setup -> branch_A (LOC event)
      \-> branch_B (compliance event)
      \-> branch_C (teaching event)

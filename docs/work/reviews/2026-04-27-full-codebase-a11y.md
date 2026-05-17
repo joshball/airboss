@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 The shared UI primitives in `libs/ui/` are largely solid: Dialog, Drawer, Tabs, RadioGroup, ConfirmAction, JumpToCardPopover, and the focus-trap helper all implement `aria-modal`, role, focus-restore, ESC, and Tab cycling correctly. Forms route through TextField/Select with associated labels, `aria-invalid`, `aria-describedby`, and `role="alert"` errors, and the theme system has a WCAG contrast matrix test in `libs/themes/__tests__/contrast-matrix.test.ts`. The major gaps live one tier up: route-level pages (especially `/memory/new`, `/reps/new`, `/sessions/[id]`, `/memory/[id]`, the dashboard MapPanel, and the handbook list components) duplicate the form/control plumbing manually and quietly drop `outline: none` on `:focus-visible` without an equivalent replacement, render the dashboard mastery grid as colour-only links, and use ARIA roles in places where simpler semantics would do better. The `ConfirmAction` `:focus-visible` rule is also broken by a `var(2px)` typo, silently disabling focus rings on every destructive trigger in the app.

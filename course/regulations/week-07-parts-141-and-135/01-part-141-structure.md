@@ -140,22 +140,22 @@ This bridge is bidirectional in spirit but unidirectional in regulation: 141 gra
 
 ## The appendices, named
 
-| Appendix | Course                                                          | Hours floor (typical course)                                                  |
-| -------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| A        | Recreational pilot                                              | 30 hr                                                                         |
-| B        | Private pilot                                                   | 35 hr                                                                         |
-| C        | Instrument rating                                               | 35 hr (vs 40 hr under [@cite](airboss-ref:regs/cfr-14/61/65?at=2026))         |
-| D        | Commercial pilot                                                | 120 hr (vs 250 hr total under [@cite](airboss-ref:regs/cfr-14/61/129?at=2026)) |
-| E        | Airline transport pilot                                         | (uses 1500 hr total time floor under [@cite](airboss-ref:regs/cfr-14/61/159?at=2026); 141 governs the curriculum, not the hours) |
-| F        | Flight instructor (CFI)                                         | 25 hr training                                                                |
-| G        | Flight instructor instrument (CFII)                             | 15 hr training                                                                |
-| H        | Ground instructor                                               | (no flight requirement)                                                       |
-| I        | Additional aircraft category or class rating                    | varies                                                                        |
-| J        | Aircraft type rating (other than ATP)                           | varies                                                                        |
-| K        | Special preparation (e.g. agricultural, banner tow, ferry)      | varies                                                                        |
-| L        | Pilot ground school                                             | ground only                                                                   |
-| M        | Combined private + instrument                                   | 190 hr                                                                        |
-| N        | Test course (for new courses awaiting approval)                 | varies                                                                        |
+| Appendix | Course                                                     | Hours floor (typical course)                                                                                                     |
+| -------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| A        | Recreational pilot                                         | 30 hr                                                                                                                            |
+| B        | Private pilot                                              | 35 hr                                                                                                                            |
+| C        | Instrument rating                                          | 35 hr (vs 40 hr under [@cite](airboss-ref:regs/cfr-14/61/65?at=2026))                                                            |
+| D        | Commercial pilot                                           | 120 hr (vs 250 hr total under [@cite](airboss-ref:regs/cfr-14/61/129?at=2026))                                                   |
+| E        | Airline transport pilot                                    | (uses 1500 hr total time floor under [@cite](airboss-ref:regs/cfr-14/61/159?at=2026); 141 governs the curriculum, not the hours) |
+| F        | Flight instructor (CFI)                                    | 25 hr training                                                                                                                   |
+| G        | Flight instructor instrument (CFII)                        | 15 hr training                                                                                                                   |
+| H        | Ground instructor                                          | (no flight requirement)                                                                                                          |
+| I        | Additional aircraft category or class rating               | varies                                                                                                                           |
+| J        | Aircraft type rating (other than ATP)                      | varies                                                                                                                           |
+| K        | Special preparation (e.g. agricultural, banner tow, ferry) | varies                                                                                                                           |
+| L        | Pilot ground school                                        | ground only                                                                                                                      |
+| M        | Combined private + instrument                              | 190 hr                                                                                                                           |
+| N        | Test course (for new courses awaiting approval)            | varies                                                                                                                           |
 
 The hour numbers in the appendices are *floors*. A specific school's TCO can require more, never less. Appendix M (combined private + instrument) is the most common 141 course at university aviation programs.
 

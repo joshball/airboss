@@ -26,11 +26,11 @@ FIRC compliance machinery is dormant per [ADR 017](../decisions/017-firc-complia
 
 Ordered by what unblocks the most downstream work.
 
-| Surface | Work                                                                                                            |
-| ------- | --------------------------------------------------------------------------------------------------------------- |
-| study   | Calibration improvements, more knowledge-graph content, content authoring polish                                |
-| sim     | Phase 7 horizon view continuation; cockpit panel extraction (per ADR 015 follow-up note); more scenarios        |
-| hangar  | Playwright e2e infra; remaining authoring surfaces (scenarios, cards)                                           |
+| Surface | Work                                                                                                     |
+| ------- | -------------------------------------------------------------------------------------------------------- |
+| study   | Calibration improvements, more knowledge-graph content, content authoring polish                         |
+| sim     | Phase 7 horizon view continuation; cockpit panel extraction (per ADR 015 follow-up note); more scenarios |
+| hangar  | Playwright e2e infra; remaining authoring surfaces (scenarios, cards)                                    |
 
 Specifics live in each app's roadmap and the per-feature work packages.
 

@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Overall the codebase is in good shape on perf. The dashboard fans queries out via `Promise.allSettled`, the engine is a pure function with batched pool fetches and per-call memoization, and the schema carries appropriate composite indexes for the user-scoped read paths (`card_user_status_idx`, `sir_user_kind_completed_idx`, etc.). Most BC queries already aggregate in SQL rather than JS, and `getCertAndDomainMatrix` is a deliberate reuse of one node scan + one mastery map. The issues below are mostly latent: hot paths that work today at MVP scale (~30 nodes, dozens of cards/scenarios) but will degrade as content grows. The biggest single risk is the citation picker against `hangar.reference.tags` (jsonb subfield filter with no GIN index plus full-table ilike), which is hit on every keystroke in the picker.

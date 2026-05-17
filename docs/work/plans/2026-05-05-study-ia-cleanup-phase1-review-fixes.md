@@ -6,10 +6,10 @@ Total findings: 28 (5 major, 13 minor, 10 nit). Critical: 0. Convergent fixes co
 
 ## Convergent fixes
 
-| Group               | Findings        | Root cause                                        | Fix                                                                                                                              |
-| ------------------- | --------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Tooltip duplicate id | C-1, A-1       | `tooltipId` derived from key only                | Per-instance unique id via module counter or `crypto.randomUUID()` once per mount                                                |
-| pageKey allowlist   | PT-1, SEC-2    | string literal at call site, no server allowlist | New `PAGE_EXPLAINER_KEYS` const + `PAGE_EXPLAINER_KEY_VALUES` validator on the endpoint                                          |
+| Group                | Findings    | Root cause                                       | Fix                                                                                     |
+| -------------------- | ----------- | ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| Tooltip duplicate id | C-1, A-1    | `tooltipId` derived from key only                | Per-instance unique id via module counter or `crypto.randomUUID()` once per mount       |
+| pageKey allowlist    | PT-1, SEC-2 | string literal at call site, no server allowlist | New `PAGE_EXPLAINER_KEYS` const + `PAGE_EXPLAINER_KEY_VALUES` validator on the endpoint |
 
 ## Plan, execution order
 
@@ -45,14 +45,14 @@ Total findings: 28 (5 major, 13 minor, 10 nit). Critical: 0. Convergent fixes co
 
 ### Deliberately deferred (with explicit triggers per CLAUDE.md)
 
-| Item   | Reason                                                                                                                          | Trigger to revisit                                                       |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| C-5    | Discriminated-union `Props` for Tooltip (`for` XOR `term+definition`). Type-level clean-up, current runtime behavior is correct. | When a third Tooltip mode lands.                                         |
-| PT-3   | `clampNonNegative` util in `@ab/utils`. Two sites is below the project's "third-instance" rule.                                  | When a third site appears.                                               |
-| S-3    | `$derived.by` -> `$derived` stylistic nit. Functionally identical.                                                                | Drop into the next sweep.                                                |
-| UX-3   | Hover tooltip on the `?` reopen affordance. Want C-1/C-2 closed first so we can reuse the primitive.                               | Reopen once Tooltip a11y fixes have shipped.                             |
-| UX-4   | Glossary editorial copy. Out of scope for engineering review; user / CFI to revise.                                              | User explicitly assigns to a copy reviewer.                              |
-| AR-2   | API route placement (`apps/study` vs `libs/`). Single consumer today; second consumer settles the call.                            | When a second app needs the explainer.                                    |
+| Item | Reason                                                                                                                           | Trigger to revisit                           |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| C-5  | Discriminated-union `Props` for Tooltip (`for` XOR `term+definition`). Type-level clean-up, current runtime behavior is correct. | When a third Tooltip mode lands.             |
+| PT-3 | `clampNonNegative` util in `@ab/utils`. Two sites is below the project's "third-instance" rule.                                  | When a third site appears.                   |
+| S-3  | `$derived.by` -> `$derived` stylistic nit. Functionally identical.                                                               | Drop into the next sweep.                    |
+| UX-3 | Hover tooltip on the `?` reopen affordance. Want C-1/C-2 closed first so we can reuse the primitive.                             | Reopen once Tooltip a11y fixes have shipped. |
+| UX-4 | Glossary editorial copy. Out of scope for engineering review; user / CFI to revise.                                              | User explicitly assigns to a copy reviewer.  |
+| AR-2 | API route placement (`apps/study` vs `libs/`). Single consumer today; second consumer settles the call.                          | When a second app needs the explainer.       |
 
 ## Verification protocol per wave
 

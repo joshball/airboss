@@ -109,16 +109,16 @@ Five things to extract from the literal text:
 
 AC 61-98D (current as of 2026) recommends a flight review structure that aligns with the [WINGS Pilot Proficiency Program](https://www.faasafety.gov/wings) phases. Concretely:
 
-| Element                           | Recommended (AC 61-98)                                                              |
-| --------------------------------- | ----------------------------------------------------------------------------------- |
-| Pre-review pilot self-assessment  | A short questionnaire identifying weak areas the pilot wants to focus on            |
-| Ground portion                    | Part 91 review, weather, performance, airspace updates, accident-trend conversation |
-| Flight portion (preflight)        | Risk management briefing, go/no-go discussion                                       |
-| Flight portion (basic maneuvers)  | Slow flight, stalls, steep turns, ground reference                                  |
-| Flight portion (emergency)        | Engine-out, lost-comm, system failure                                               |
-| Flight portion (instrument)       | If the pilot is instrument-rated, partial-panel and unusual attitude recovery       |
-| Post-flight                       | Debrief, areas for continued study, the endorsement                                 |
-| Recommended duration              | 2-3 hours total when AC 61-98 elements are honored                                  |
+| Element                          | Recommended (AC 61-98)                                                              |
+| -------------------------------- | ----------------------------------------------------------------------------------- |
+| Pre-review pilot self-assessment | A short questionnaire identifying weak areas the pilot wants to focus on            |
+| Ground portion                   | Part 91 review, weather, performance, airspace updates, accident-trend conversation |
+| Flight portion (preflight)       | Risk management briefing, go/no-go discussion                                       |
+| Flight portion (basic maneuvers) | Slow flight, stalls, steep turns, ground reference                                  |
+| Flight portion (emergency)       | Engine-out, lost-comm, system failure                                               |
+| Flight portion (instrument)      | If the pilot is instrument-rated, partial-panel and unusual attitude recovery       |
+| Post-flight                      | Debrief, areas for continued study, the endorsement                                 |
+| Recommended duration             | 2-3 hours total when AC 61-98 elements are honored                                  |
 
 AC 61-98 is *guidance*. The regulation requires only 1+1. A CFI who signs a 1+1 review meeting only the §61.56(a) elements is technically compliant. A CFI who signs a 1+1 review for a 30-month-lapsed pilot in a Cirrus they've never flown before is technically compliant *and* irresponsible. The AC tells the working CFI what compliance plus competence looks like.
 
@@ -253,18 +253,18 @@ For airplane pilots, the analog reflection is: nothing in §61.56 *requires* a s
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the flight review requirement?                                  | §61.56                  |
-| Where is the 24-calendar-month rule?                                     | §61.56(c)               |
-| Where is the practical-test equivalent?                                  | §61.56(d)               |
-| Where is the WINGS phase equivalent?                                     | §61.56(f)               |
-| Where is the rotorcraft autorotation requirement?                        | §61.56(h)               |
-| Where is the "authorized instructor" definition?                         | §61.1(b)                |
-| Where is the recommended endorsement wording?                            | AC 61-65 Endorsement A.1 |
-| Where is the recommended flight review content?                          | AC 61-98                |
-| Where does CFI authority to sign flight reviews live?                    | §61.193(a)(3)           |
-| Where does the WINGS program documentation live?                         | AC 61-91 series         |
+| Question                                              | Section / source         |
+| ----------------------------------------------------- | ------------------------ |
+| Where is the flight review requirement?               | §61.56                   |
+| Where is the 24-calendar-month rule?                  | §61.56(c)                |
+| Where is the practical-test equivalent?               | §61.56(d)                |
+| Where is the WINGS phase equivalent?                  | §61.56(f)                |
+| Where is the rotorcraft autorotation requirement?     | §61.56(h)                |
+| Where is the "authorized instructor" definition?      | §61.1(b)                 |
+| Where is the recommended endorsement wording?         | AC 61-65 Endorsement A.1 |
+| Where is the recommended flight review content?       | AC 61-98                 |
+| Where does CFI authority to sign flight reviews live? | §61.193(a)(3)            |
+| Where does the WINGS program documentation live?      | AC 61-91 series          |
 
 ### Apply the rules
 

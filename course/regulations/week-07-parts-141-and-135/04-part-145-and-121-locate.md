@@ -90,15 +90,15 @@ The two sections to know:
 
 Repair station ratings are the operational shape of the certificate:
 
-| Rating               | Authorizes                                                        |
-| -------------------- | ----------------------------------------------------------------- |
-| Airframe             | Work on airframes (limited or unlimited by class)                 |
-| Powerplant           | Work on engines (limited or unlimited by class)                   |
-| Propeller            | Work on propellers                                                |
-| Radio                | Work on radio / avionics equipment                                |
-| Instrument           | Work on instruments                                               |
-| Accessory            | Work on accessories (pumps, generators, actuators, etc.)          |
-| Limited              | A specific scope authorized by the FSDO (e.g. limited to one model) |
+| Rating     | Authorizes                                                          |
+| ---------- | ------------------------------------------------------------------- |
+| Airframe   | Work on airframes (limited or unlimited by class)                   |
+| Powerplant | Work on engines (limited or unlimited by class)                     |
+| Propeller  | Work on propellers                                                  |
+| Radio      | Work on radio / avionics equipment                                  |
+| Instrument | Work on instruments                                                 |
+| Accessory  | Work on accessories (pumps, generators, actuators, etc.)            |
+| Limited    | A specific scope authorized by the FSDO (e.g. limited to one model) |
 
 A 145 station may hold multiple ratings. The certificate lists them. A station with airframe + powerplant ratings can do a full annual inspection in-house. A station with only an instrument rating can rebuild a directional gyro but not return an airplane to service.
 
@@ -165,11 +165,11 @@ Three sections to know cold:
 
 Three kinds of 121 operation:
 
-| Kind          | What it is                                                                    |
-| ------------- | ----------------------------------------------------------------------------- |
-| Domestic      | Scheduled service entirely within the 48 contiguous states (with extensions to AK/HI) |
-| Flag          | Scheduled service across international borders (the "flag-carrier" model)     |
-| Supplemental  | Charter or non-scheduled airline-style operations, large aircraft             |
+| Kind         | What it is                                                                            |
+| ------------ | ------------------------------------------------------------------------------------- |
+| Domestic     | Scheduled service entirely within the 48 contiguous states (with extensions to AK/HI) |
+| Flag         | Scheduled service across international borders (the "flag-carrier" model)             |
+| Supplemental | Charter or non-scheduled airline-style operations, large aircraft                     |
 
 For a CFI sending a student to "the airlines," 121 domestic is what they'll experience at most regional and major carriers. 121 flag is the international long-haul model.
 
@@ -177,29 +177,29 @@ For a CFI sending a student to "the airlines," 121 domestic is what they'll expe
 
 The two on-demand-vs-scheduled distinction is the headline, but operationally:
 
-| Area                | Part 135                                                                          | Part 121                                                                                            |
-| ------------------- | --------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Operation type      | Charter, on-demand, smaller scheduled                                             | Scheduled airline, large aircraft                                                                   |
+| Area                | Part 135                                                                           | Part 121                                                                                            |
+| ------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Operation type      | Charter, on-demand, smaller scheduled                                              | Scheduled airline, large aircraft                                                                   |
 | Pilot minimums      | [@cite](airboss-ref:regs/cfr-14/135/243?at=2026) -- typically 1,200 hr for IFR PIC | ATP required for PIC ([@cite](airboss-ref:regs/cfr-14/61/153?at=2026)); 1,500 hr or R-ATP carve-out |
-| Crew requirement    | Often single-pilot                                                                | Always two-pilot, often three with relief crew                                                      |
-| Dispatcher          | None typically                                                                    | Required (subpart P) -- shared operational control with the captain                                 |
-| Training            | Operator's program (subpart H)                                                    | Operator's program (subpart N) -- usually more extensive, full-motion sim                           |
-| Rest rules          | Subpart F                                                                         | Subparts Q-S ("FAR 117")                                                                            |
-| Maintenance program | Subpart J / continuing airworthiness                                              | Subparts U-Z / continuous airworthiness maintenance program (CAMP)                                  |
-| Operations manual   | Required, lighter                                                                 | Required, much heavier (subpart G)                                                                  |
+| Crew requirement    | Often single-pilot                                                                 | Always two-pilot, often three with relief crew                                                      |
+| Dispatcher          | None typically                                                                     | Required (subpart P) -- shared operational control with the captain                                 |
+| Training            | Operator's program (subpart H)                                                     | Operator's program (subpart N) -- usually more extensive, full-motion sim                           |
+| Rest rules          | Subpart F                                                                          | Subparts Q-S ("FAR 117")                                                                            |
+| Maintenance program | Subpart J / continuing airworthiness                                               | Subparts U-Z / continuous airworthiness maintenance program (CAMP)                                  |
+| Operations manual   | Required, lighter                                                                  | Required, much heavier (subpart G)                                                                  |
 
 Both 121 and 135 hang off a Part 119 certificate. The certificate's ops specs determine which part applies.
 
 ## When you might hear about these parts
 
-| Situation                                                                          | Part involved |
-| ---------------------------------------------------------------------------------- | ------------- |
-| Reading a logbook entry after an annual or major repair                            | 145           |
-| A student asks about flying for Delta / American / United                          | 121           |
-| A student asks about flying for a regional that you've never heard of              | 121 (most regionals are 121 domestic) |
-| A student asks about flying for NetJets / Wheels Up / a fractional owner-pilot     | 135 typically (some now 91K -- fractional ownership rules) |
-| You're considering buying an avionics upgrade -- the shop must be 145-certificated for the work | 145 |
-| The maintenance facility your club uses *isn't* a 145 station, just an A&P/IA      | Part 43 + Part 65 (individual mechanic), not 145 |
+| Situation                                                                                       | Part involved                                              |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Reading a logbook entry after an annual or major repair                                         | 145                                                        |
+| A student asks about flying for Delta / American / United                                       | 121                                                        |
+| A student asks about flying for a regional that you've never heard of                           | 121 (most regionals are 121 domestic)                      |
+| A student asks about flying for NetJets / Wheels Up / a fractional owner-pilot                  | 135 typically (some now 91K -- fractional ownership rules) |
+| You're considering buying an avionics upgrade -- the shop must be 145-certificated for the work | 145                                                        |
+| The maintenance facility your club uses *isn't* a 145 station, just an A&P/IA                   | Part 43 + Part 65 (individual mechanic), not 145           |
 
 ## Common misreadings
 

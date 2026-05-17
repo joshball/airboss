@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.1
 Title:           Stage Check Preparation at 80 Hours
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'PS-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Overconfident Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Pre-maneuver briefing. Student is leaning back, relaxed, arms crossed. You ask about the procedure for power-on stall entry and recovery.
 studentSpeech:Yeah, I know this. Full power, pull back, feel the buffet, push forward and add power. I've done this a bunch of times.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        In the air, student sets up for power-on stall. Enters at wrong airspeed (too fast), adds full power before establishing pitch. The entry is sloppy but the student doesn't notice.
 studentSpeech:OK, stall coming... here we go. See? I told you I know this.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        During stall recovery, student pitches forward aggressively, loses 200 feet, and adds power late. Student maintains coordinated flight but the recovery is well outside ACS tolerances. Student looks satisfied.
 studentSpeech:Recovered! See, no problem. Can we move on to the next thing?
@@ -114,7 +114,7 @@ criticalWindow:[ask]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        You've provided feedback. Student's body language shifts -- arms cross again, jaw tightens. The overconfidence mask is starting to crack.
 studentSpeech:I mean, it wasn't that bad. My last instructor said I was doing great. Are you sure you're not being too strict?
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 5
 
-```
+```text
 id:           tick_5
 scene:        Student is quiet, clearly frustrated. Staring out the window. The defensive posture is gone but replaced by withdrawal. They attempt another stall -- entry is better but recovery is still sloppy.
 studentSpeech:Fine. Whatever you say.
@@ -156,7 +156,7 @@ criticalWindow:[prompt]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
                                    \-> terminal_safe (coach)
 ```

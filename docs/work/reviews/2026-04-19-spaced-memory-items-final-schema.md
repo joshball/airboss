@@ -35,7 +35,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Schema Review: spaced-memory-items
 
 Scope: `git diff docs/initial-migration..HEAD` on branch `build/spaced-memory-items`.
@@ -277,28 +276,28 @@ columns (`card_user_domain_type_source_idx`), watch the limit.
 
 ## Checklist against review points
 
-| # | Item | Status |
-| -- | --- | --- |
-| 1  | Column types match spec (text IDs, real stability/difficulty, smallint rating/confidence, jsonb tags, timestamptz) | Clean -- all exact matches |
-| 2  | NOT NULL / DEFAULT / nullable correctness | Clean -- every spec row matches |
-| 3a | card.user_id -> bauth_user.id ON DELETE CASCADE | Clean |
-| 3b | card_state.card_id -> card.id ON DELETE CASCADE | Clean |
-| 3c | card_state.user_id -> bauth_user.id ON DELETE CASCADE | Clean |
-| 3d | card_state.last_review_id -> review.id ON DELETE SET NULL | Clean |
-| 3e | review.card_id -> card.id ON DELETE RESTRICT | Clean -- preserves history per comment at `schema.ts:79-82` |
-| 3f | review.user_id -> bauth_user.id ON DELETE CASCADE | Clean |
-| 4  | Composite PK on card_state (card_id, user_id) | Clean (`schema.ts:131`) |
-| 5  | Indexes per spec (card: user+status, user+domain, user+created; review: card+reviewed, user+reviewed; card_state: user+due) | Clean -- all present and correctly named |
-| 6a | card CHECKs: card_type_check, card_source_type_check, card_status_check | Clean |
-| 6b | review CHECKs: rating BETWEEN 1 AND 4, confidence NULL or 1-5, state in CARD_STATES | Clean |
-| 6c | card_state CHECK: state in CARD_STATES | Clean |
-| 7  | card_state.last_reviewed_at maintained by submitReview | Clean -- `reviews.ts:137` sets it on every upsert, `cards.ts:121` initializes to NULL |
-| 8  | jsonb tags typed string[] via `.$type<string[]>()` | Clean (`schema.ts:56`) |
-| 9  | Schema namespacing via SCHEMAS constant; schemaFilter covers public + 3 schemas | Clean -- `drizzle.config.ts:6-9` uses SCHEMAS constant |
-| 10 | Migration workflow -- artifacts needed for prod | Major finding above |
-| 11 | ID prefix not enforced at DB | Accepted as MVP trade-off |
-| 12 | Text column length cap | Nit above |
-| 13 | No timestamps on card_state (intentional, derived state) | Documented in file header comment |
+| #   | Item                                                                                                                        | Status                                                                                |
+| --- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| 1   | Column types match spec (text IDs, real stability/difficulty, smallint rating/confidence, jsonb tags, timestamptz)          | Clean -- all exact matches                                                            |
+| 2   | NOT NULL / DEFAULT / nullable correctness                                                                                   | Clean -- every spec row matches                                                       |
+| 3a  | card.user_id -> bauth_user.id ON DELETE CASCADE                                                                             | Clean                                                                                 |
+| 3b  | card_state.card_id -> card.id ON DELETE CASCADE                                                                             | Clean                                                                                 |
+| 3c  | card_state.user_id -> bauth_user.id ON DELETE CASCADE                                                                       | Clean                                                                                 |
+| 3d  | card_state.last_review_id -> review.id ON DELETE SET NULL                                                                   | Clean                                                                                 |
+| 3e  | review.card_id -> card.id ON DELETE RESTRICT                                                                                | Clean -- preserves history per comment at `schema.ts:79-82`                           |
+| 3f  | review.user_id -> bauth_user.id ON DELETE CASCADE                                                                           | Clean                                                                                 |
+| 4   | Composite PK on card_state (card_id, user_id)                                                                               | Clean (`schema.ts:131`)                                                               |
+| 5   | Indexes per spec (card: user+status, user+domain, user+created; review: card+reviewed, user+reviewed; card_state: user+due) | Clean -- all present and correctly named                                              |
+| 6a  | card CHECKs: card_type_check, card_source_type_check, card_status_check                                                     | Clean                                                                                 |
+| 6b  | review CHECKs: rating BETWEEN 1 AND 4, confidence NULL or 1-5, state in CARD_STATES                                         | Clean                                                                                 |
+| 6c  | card_state CHECK: state in CARD_STATES                                                                                      | Clean                                                                                 |
+| 7   | card_state.last_reviewed_at maintained by submitReview                                                                      | Clean -- `reviews.ts:137` sets it on every upsert, `cards.ts:121` initializes to NULL |
+| 8   | jsonb tags typed string[] via `.$type<string[]>()`                                                                          | Clean (`schema.ts:56`)                                                                |
+| 9   | Schema namespacing via SCHEMAS constant; schemaFilter covers public + 3 schemas                                             | Clean -- `drizzle.config.ts:6-9` uses SCHEMAS constant                                |
+| 10  | Migration workflow -- artifacts needed for prod                                                                             | Major finding above                                                                   |
+| 11  | ID prefix not enforced at DB                                                                                                | Accepted as MVP trade-off                                                             |
+| 12  | Text column length cap                                                                                                      | Nit above                                                                             |
+| 13  | No timestamps on card_state (intentional, derived state)                                                                    | Documented in file header comment                                                     |
 
 ## Clean (verified unchanged from Phase 1)
 

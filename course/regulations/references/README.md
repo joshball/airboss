@@ -10,36 +10,36 @@ Authoritative sources cited by the course. These are *external* references -- th
 
 ## ACs frequently cited in this course
 
-| AC | Title | Used in |
-| --- | --- | --- |
-| AC 00-6 | Aviation Weather | Lessons referencing weather decisions |
-| AC 60-22 | Aeronautical Decision Making | ADM-adjacent lessons |
-| AC 61-65 | Certification: Pilots and Flight and Ground Instructors -- endorsements | Week 3 (CFI) |
-| AC 61-83 | Nationally Scheduled, FAA-Approved Industry-Conducted Flight Instructor Refresher Course | Reference for FIRC mechanics |
-| AC 61-98 | Currency Requirements and Guidance for the Flight Review and IPC | Week 2 (currency) |
-| AC 90-66 | Non-Towered Airport Flight Operations | Week 4 (flight rules) |
-| AC 91-79 | Mitigating the Risks of a Runway Overrun Upon Landing | Week 4-5 |
-| AC 91-92 | Pilot's Guide to a Preflight Briefing | Week 4 (91.103 preflight) |
-| AC 120-71 | Standard Operating Procedures and Pilot Monitoring Duties for Flight Deck Crewmembers | Week 7 (135/121 awareness) |
+| AC        | Title                                                                                    | Used in                               |
+| --------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
+| AC 00-6   | Aviation Weather                                                                         | Lessons referencing weather decisions |
+| AC 60-22  | Aeronautical Decision Making                                                             | ADM-adjacent lessons                  |
+| AC 61-65  | Certification: Pilots and Flight and Ground Instructors -- endorsements                  | Week 3 (CFI)                          |
+| AC 61-83  | Nationally Scheduled, FAA-Approved Industry-Conducted Flight Instructor Refresher Course | Reference for FIRC mechanics          |
+| AC 61-98  | Currency Requirements and Guidance for the Flight Review and IPC                         | Week 2 (currency)                     |
+| AC 90-66  | Non-Towered Airport Flight Operations                                                    | Week 4 (flight rules)                 |
+| AC 91-79  | Mitigating the Risks of a Runway Overrun Upon Landing                                    | Week 4-5                              |
+| AC 91-92  | Pilot's Guide to a Preflight Briefing                                                    | Week 4 (91.103 preflight)             |
+| AC 120-71 | Standard Operating Procedures and Pilot Monitoring Duties for Flight Deck Crewmembers    | Week 7 (135/121 awareness)            |
 
 ## Chief Counsel interpretations
 
 Chief Counsel letters bind FAA enforcement and clarify regulatory meaning. Lessons cite them when the regulation alone is ambiguous.
 
-| Letter | Year | Subject | Used in |
-| --- | --- | --- | --- |
-| Mangiamele | 2009 | 61.113 cost-sharing -- common purpose, pro-rata limits | Week 2 / Week 7 |
-| Hicks | 2010 | "Acting as PIC" includes anyone manipulating the controls | Week 2 / Week 3 |
-| Walker | 2017 | 91.103 "all available information" standard | Week 4 |
-| Murphy | 2014 | 61.51 logging -- when a CFI logs PIC vs. instruction given | Week 2 / Week 3 |
+| Letter     | Year | Subject                                                    | Used in         |
+| ---------- | ---- | ---------------------------------------------------------- | --------------- |
+| Mangiamele | 2009 | 61.113 cost-sharing -- common purpose, pro-rata limits     | Week 2 / Week 7 |
+| Hicks      | 2010 | "Acting as PIC" includes anyone manipulating the controls  | Week 2 / Week 3 |
+| Walker     | 2017 | 91.103 "all available information" standard                | Week 4          |
+| Murphy     | 2014 | 61.51 logging -- when a CFI logs PIC vs. instruction given | Week 2 / Week 3 |
 
 ## NTSB and case law
 
-| Source | Subject | Used in |
-| --- | --- | --- |
-| 49 CFR 830 (NTSB Part 830) | Notification and reporting of aircraft accidents and incidents | Week 9 |
-| Administrator v. Merrell | "Careless or reckless" precedent | Week 9 |
-| Administrator v. Lobeiko | 91.13 standard | Week 9 |
+| Source                     | Subject                                                        | Used in |
+| -------------------------- | -------------------------------------------------------------- | ------- |
+| 49 CFR 830 (NTSB Part 830) | Notification and reporting of aircraft accidents and incidents | Week 9  |
+| Administrator v. Merrell   | "Careless or reckless" precedent                               | Week 9  |
+| Administrator v. Lobeiko   | 91.13 standard                                                 | Week 9  |
 
 ## Other regulatory ecosystems
 

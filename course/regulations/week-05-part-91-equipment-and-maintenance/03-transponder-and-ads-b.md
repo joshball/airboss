@@ -173,10 +173,10 @@ The "no engine-driven electrical system" exemption is real. A Champ on a private
 
 The transponder generations:
 
-| Generation | What it transmits                                   | Where required |
-| ---------- | --------------------------------------------------- | -------------- |
-| Mode A     | A 4096-code beacon (the squawk code) only           | Legacy; not sufficient alone for Mode-C airspace |
-| Mode C     | Mode A + pressure altitude (encoded altimeter)      | The "Mode C" airspace requirement is for a Mode-A-and-C-equipped transponder |
+| Generation | What it transmits                                             | Where required                                                                                            |
+| ---------- | ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Mode A     | A 4096-code beacon (the squawk code) only                     | Legacy; not sufficient alone for Mode-C airspace                                                          |
+| Mode C     | Mode A + pressure altitude (encoded altimeter)                | The "Mode C" airspace requirement is for a Mode-A-and-C-equipped transponder                              |
 | Mode S     | Mode A + Mode C + a unique 24-bit aircraft address + datalink | Required for ADS-B Out installations using a 1090ES transponder; also the standard for newer transponders |
 
 A pilot who has a Mode A transponder only -- no altitude reporting -- is *not* compliant with 91.215(b). The "Mode C airspace" rule is named for the altitude-reporting capability, not for any specific frequency band. A non-altitude-reporting Mode A transponder is operationally indistinguishable from no transponder for the purposes of 91.215(b).
@@ -302,16 +302,16 @@ ADS-B Out required in:
 
 The two airspaces are similar -- but not identical. The differences:
 
-| Feature                                        | 91.215 (Mode C)       | 91.225 (ADS-B Out)    |
-| ---------------------------------------------- | --------------------- | --------------------- |
-| Class A                                        | Required              | Required              |
-| Class B, C                                     | Required              | Required              |
-| Mode C veil (30 nm around Class B primaries)   | Required              | Required              |
-| Above Class B/C ceiling up to 10,000 MSL       | Required              | Required              |
-| All airspace at and above 10,000 MSL (48 contig states) | Required        | Class E only          |
-| Within 10 nm of Appendix D Section 2 airports  | Required (transponder) | Not specifically called out (covered by Class C/B if applicable) |
-| Class E over Gulf of Mexico                    | Not specifically      | Required at and above 3,000 MSL within 12 nm of coast |
-| Carve-outs for non-electrical aircraft         | Yes (91.215(b)(3))    | Yes (91.225 implicit; pre-2020 aircraft) |
+| Feature                                                 | 91.215 (Mode C)        | 91.225 (ADS-B Out)                                               |
+| ------------------------------------------------------- | ---------------------- | ---------------------------------------------------------------- |
+| Class A                                                 | Required               | Required                                                         |
+| Class B, C                                              | Required               | Required                                                         |
+| Mode C veil (30 nm around Class B primaries)            | Required               | Required                                                         |
+| Above Class B/C ceiling up to 10,000 MSL                | Required               | Required                                                         |
+| All airspace at and above 10,000 MSL (48 contig states) | Required               | Class E only                                                     |
+| Within 10 nm of Appendix D Section 2 airports           | Required (transponder) | Not specifically called out (covered by Class C/B if applicable) |
+| Class E over Gulf of Mexico                             | Not specifically       | Required at and above 3,000 MSL within 12 nm of coast            |
+| Carve-outs for non-electrical aircraft                  | Yes (91.215(b)(3))     | Yes (91.225 implicit; pre-2020 aircraft)                         |
 
 The biggest practical difference: the 91.215 Mode C requirement covers *all airspace* at and above 10,000 MSL in the contiguous 48; 91.225 covers Class E at and above 10,000 MSL in the same area. The two rules align in practice (above 10,000 MSL most airspace is Class E or higher), but the 91.225 wording is more specific.
 
@@ -427,19 +427,19 @@ The FAA publishes ADS-B performance reports through their Public Performance Rep
 
 ### Locate the section
 
-| Question                                                                | Section / source         |
-| ----------------------------------------------------------------------- | ------------------------ |
-| Where is the Mode C transponder rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)            |
-| Where is the Mode C veil definition?                                     | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(2)      |
-| Where is the transponder-on requirement?                                 | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(c)         |
-| Where is the inop-transponder deviation?                                 | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(d)(1)      |
-| Where is the no-transponder deviation (1-hour notice)?                   | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(d)(2)      |
-| Where is the no-electrical-system carve-out?                             | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(3)      |
-| Where is the ADS-B Out airspace?                                         | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(d)         |
-| Where is the ADS-B Out 1090ES requirement for Class A?                   | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(a)         |
-| Where are the ADS-B Out NIC/NACp/NACv/SIL/SDA thresholds?                | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(b)         |
-| Where is the ADS-B Out deviation provision?                              | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(g)         |
-| Where is the ADS-B Out position source authorization?                    | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(f)         |
+| Question                                                  | Section / source                                      |
+| --------------------------------------------------------- | ----------------------------------------------------- |
+| Where is the Mode C transponder rule?                     | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)       |
+| Where is the Mode C veil definition?                      | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(2) |
+| Where is the transponder-on requirement?                  | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(c)    |
+| Where is the inop-transponder deviation?                  | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(d)(1) |
+| Where is the no-transponder deviation (1-hour notice)?    | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(d)(2) |
+| Where is the no-electrical-system carve-out?              | [@cite](airboss-ref:regs/cfr-14/91/215?at=2026)(b)(3) |
+| Where is the ADS-B Out airspace?                          | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(d)    |
+| Where is the ADS-B Out 1090ES requirement for Class A?    | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(a)    |
+| Where are the ADS-B Out NIC/NACp/NACv/SIL/SDA thresholds? | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(b)    |
+| Where is the ADS-B Out deviation provision?               | [@cite](airboss-ref:regs/cfr-14/91/225?at=2026)(g)    |
+| Where is the ADS-B Out position source authorization?     | [@cite](airboss-ref:regs/cfr-14/91/227?at=2026)(f)    |
 
 ### Apply the rules
 

@@ -68,15 +68,15 @@ captured-by: agent
 
 ## Triage summary
 
-| Item | Severity | Class | Owner |
-|------|----------|-------|-------|
-| A1 (process: full step text) | low | process | agent (this doc going forward) |
-| B1 (Phase label two-line) | minor | UI | small fix |
-| B2 (browse filter overflow) | minor | UI | small fix |
-| B3 (preset focusDomains cap) | critical | logic | small fix (raise cap or split schema) |
-| B4 (submitRep DB error) | critical | data layer | needs investigation |
-| B5 (preset tile overlap + grid) | major | UI | layout rework |
-| S1 (no seeded scenarios) | major | content | new seed file + script entry |
+| Item                            | Severity | Class      | Owner                                 |
+| ------------------------------- | -------- | ---------- | ------------------------------------- |
+| A1 (process: full step text)    | low      | process    | agent (this doc going forward)        |
+| B1 (Phase label two-line)       | minor    | UI         | small fix                             |
+| B2 (browse filter overflow)     | minor    | UI         | small fix                             |
+| B3 (preset focusDomains cap)    | critical | logic      | small fix (raise cap or split schema) |
+| B4 (submitRep DB error)         | critical | data layer | needs investigation                   |
+| B5 (preset tile overlap + grid) | major    | UI         | layout rework                         |
+| S1 (no seeded scenarios)        | major    | content    | new seed file + script entry          |
 
 ## Walkthrough completion
 

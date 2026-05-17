@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.1
 Title:           Flight Review with a 350-Hour Private Pilot
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-1', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Rusty Pilot
 Parameters:
   skillLevel:         0.3
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Ground review complete. Pilot answered every question well. You're walking to the aircraft. Pilot is relaxed, chatting about aviation news, seems perfectly prepared.
 studentSpeech:I've been reading the handbooks and watching videos for the past month. I feel really sharp. Should be a quick flight, right?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        In the aircraft, preflight complete. Pilot starts the engine. Runs through the checklist smoothly but you notice they fumbled the mixture control and had to look twice at the avionics power-up sequence. Small motor-skill hesitations. Verbal knowledge: perfect. Physical execution: rusty.
 studentSpeech:Let me just get the avionics... there we go. Been a while since I've done this in the actual airplane versus the checklist in my living room.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Airborne, practicing steep turns. Pilot enters the turn confidently but execution is rough: altitude excursion of 150 feet, bank angle wandering between 40-50 degrees, airspeed fluctuating 15 knots. Pilot seems surprised by their own performance.
 studentSpeech:That was... not great. I know how to do this. My hands just aren't doing what my brain is telling them. It's weird.
@@ -114,7 +114,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        After several more maneuvers -- some improving, some still rough. Landing pattern. Pilot flies the pattern well (procedural knowledge) but the landing is hard and off-centerline. Pilot is frustrated.
 studentSpeech:I'm embarrassed. I know every procedure cold. But I can't seem to land this thing smoothly. Am I going to pass this review?
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 5
 
-```
+```text
 id:           tick_5
 scene:        Pilot absorbs the feedback. The frustration eases as they realize this is normal and there's a clear plan. They ask about next steps.
 studentSpeech:OK. Three or four hours makes sense. Can we schedule those this week? I'd rather get this done right than just have someone sign me off and hope for the best.
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
 ```
 

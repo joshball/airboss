@@ -131,10 +131,10 @@ It is also not a defense the pilot invokes. The agency makes the Compliance vs. 
 
 Translate the policy into the operational reality:
 
-| Track             | Trigger                                                  | Outcome                                                              |
-| ----------------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
-| Compliance Action | Inadvertent, non-criminal, willing pilot, no recent priors | Counseling, training, written commitment. No certificate action.     |
-| Legal enforcement | Reckless, intentional, criminal, repeat, or lack of qual | Notice of Proposed Certificate Action -> suspension/revocation. NTSB-appealable. |
+| Track             | Trigger                                                    | Outcome                                                                          |
+| ----------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Compliance Action | Inadvertent, non-criminal, willing pilot, no recent priors | Counseling, training, written commitment. No certificate action.                 |
+| Legal enforcement | Reckless, intentional, criminal, repeat, or lack of qual   | Notice of Proposed Certificate Action -> suspension/revocation. NTSB-appealable. |
 
 The choice between the two tracks gets made early in the FSDO's review, often before the pilot even submits a written response to the LOI. That means **the pilot's first interaction with the FSDO matters**. It is not the time to be defensive, evasive, or hostile. It is also not the time to volunteer a confession of every speculative misstep that may have contributed.
 
@@ -237,15 +237,15 @@ The Compliance Program defangs §91.13 in the inadvertent-violation context: the
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is the FAA's Compliance Program policy?                              | FAA Order 8000.373B           |
-| Where is the FAA's operational enforcement handbook?                       | FAA Order 2150.3              |
-| Where is the catch-all "careless or reckless" rule?                        | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026) |
-| Where is the alcohol/drug *operating* rule?                                | [@cite](airboss-ref:regs/cfr-14/91/17?at=2026) |
-| Where is the alcohol/drug *conviction-reporting* rule?                     | [@cite](airboss-ref:regs/cfr-14/61/15?at=2026) |
-| Where is the medical-fraud rule?                                           | [@cite](airboss-ref:regs/cfr-14/67/403?at=2026) |
-| Where is the Pilot's Bill of Rights statutory authority?                   | 49 USC 44703 note             |
+| Question                                                 | Section / source                                |
+| -------------------------------------------------------- | ----------------------------------------------- |
+| Where is the FAA's Compliance Program policy?            | FAA Order 8000.373B                             |
+| Where is the FAA's operational enforcement handbook?     | FAA Order 2150.3                                |
+| Where is the catch-all "careless or reckless" rule?      | [@cite](airboss-ref:regs/cfr-14/91/13?at=2026)  |
+| Where is the alcohol/drug *operating* rule?              | [@cite](airboss-ref:regs/cfr-14/91/17?at=2026)  |
+| Where is the alcohol/drug *conviction-reporting* rule?   | [@cite](airboss-ref:regs/cfr-14/61/15?at=2026)  |
+| Where is the medical-fraud rule?                         | [@cite](airboss-ref:regs/cfr-14/67/403?at=2026) |
+| Where is the Pilot's Bill of Rights statutory authority? | 49 USC 44703 note                               |
 
 ### Apply
 

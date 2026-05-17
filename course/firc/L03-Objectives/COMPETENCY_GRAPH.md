@@ -621,7 +621,7 @@ That richness is the whole point.
 
 ## Mastery Model (Per User)
 
-```
+```text
 MasteryState {
   competencyId: string
   knowledgeScore: number

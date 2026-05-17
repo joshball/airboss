@@ -192,14 +192,14 @@ beats:
 
 ## Evidence Logged
 
-| Signal                         | Description                                               | Maps to                  |
+| Signal                         | Description                                               | Maps to                  |             |               |      |
 | ------------------------------ | --------------------------------------------------------- | ------------------------ | ----------- | ------------- | ---- |
-| `first_cue_tick`               | When IP-1 cues first appeared (T+5)                       | baseline                 |
-| `first_intervention_tick`      | When instructor first acted                               | CJ-1 -- did they notice? |
-| `intervention_delay_sec`       | `first_intervention_tick - first_cue_tick`                | CJ-1, AC-1               |
-| `intervention_level`           | Which ladder level was chosen at each IP                  | CJ-2                     |
-| `intervention_appropriateness` | Was chosen level appropriate to the window?               | CJ-2                     |
-| `student_verbal_dismissed`     | Did student say "I've got it" and instructor accepted it? | CJ-1, CJ-3               |
+| `first_cue_tick`               | When IP-1 cues first appeared (T+5)                       | baseline                 |             |               |      |
+| `first_intervention_tick`      | When instructor first acted                               | CJ-1 -- did they notice? |             |               |      |
+| `intervention_delay_sec`       | `first_intervention_tick - first_cue_tick`                | CJ-1, AC-1               |             |               |      |
+| `intervention_level`           | Which ladder level was chosen at each IP                  | CJ-2                     |             |               |      |
+| `intervention_appropriateness` | Was chosen level appropriate to the window?               | CJ-2                     |             |               |      |
+| `student_verbal_dismissed`     | Did student say "I've got it" and instructor accepted it? | CJ-1, CJ-3               |             |               |      |
 | `outcome`                      | recovered_early                                           | recovered_late           | stall_break | ground_impact | RM-2 |
 
 ## Debrief

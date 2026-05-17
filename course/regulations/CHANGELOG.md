@@ -33,18 +33,18 @@ Decisions:
 
 Status of week-by-week authoring:
 
-| Week | Status |
-| --- | --- |
-| 1 -- Architecture | **Authored** |
-| 2 -- Part 61 deep | **Authored** |
-| 3 -- Part 61 CFI | **Authored** |
-| 4 -- Part 91 general/flight rules | **Authored** |
-| 5 -- Part 91 equipment/maintenance | **Authored** |
-| 6 -- Part 91 special ops | **Authored** |
-| 7 -- Parts 141/135 | **Authored** |
-| 8 -- Companion documents | **Authored** |
-| 9 -- Enforcement | **Authored** |
-| 10 -- Capstone | **Authored** (4/4 sibling capstones authored: night-ifr-passenger, gear-up-night-ifr, friend-flight-review, ppl-applies-for-ir) |
+| Week                               | Status                                                                                                                          |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| 1 -- Architecture                  | **Authored**                                                                                                                    |
+| 2 -- Part 61 deep                  | **Authored**                                                                                                                    |
+| 3 -- Part 61 CFI                   | **Authored**                                                                                                                    |
+| 4 -- Part 91 general/flight rules  | **Authored**                                                                                                                    |
+| 5 -- Part 91 equipment/maintenance | **Authored**                                                                                                                    |
+| 6 -- Part 91 special ops           | **Authored**                                                                                                                    |
+| 7 -- Parts 141/135                 | **Authored**                                                                                                                    |
+| 8 -- Companion documents           | **Authored**                                                                                                                    |
+| 9 -- Enforcement                   | **Authored**                                                                                                                    |
+| 10 -- Capstone                     | **Authored** (4/4 sibling capstones authored: night-ifr-passenger, gear-up-night-ifr, friend-flight-review, ppl-applies-for-ir) |
 
 ## 2026-04-29 -- Week 2 (Part 61 deep)
 
@@ -66,18 +66,18 @@ Decisions:
 
 Status of week-by-week authoring:
 
-| Week | Status |
-| --- | --- |
-| 1 -- Architecture | **Authored** |
-| 2 -- Part 61 deep | **Authored** |
-| 3 -- Part 61 CFI | Skeleton |
-| 4 -- Part 91 general/flight rules | Skeleton |
-| 5 -- Part 91 equipment/maintenance | Skeleton |
-| 6 -- Part 91 special ops | Skeleton |
-| 7 -- Parts 141/135 | Skeleton |
-| 8 -- Companion documents | Skeleton |
-| 9 -- Enforcement | Skeleton |
-| 10 -- Capstone | Capstone orals authored 2/4 (night-ifr-passenger, gear-up-night-ifr); 2 more (friend-flight-review, ppl-applies-for-ir) deferred until ADR 019 lands |
+| Week                               | Status                                                                                                                                               |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 -- Architecture                  | **Authored**                                                                                                                                         |
+| 2 -- Part 61 deep                  | **Authored**                                                                                                                                         |
+| 3 -- Part 61 CFI                   | Skeleton                                                                                                                                             |
+| 4 -- Part 91 general/flight rules  | Skeleton                                                                                                                                             |
+| 5 -- Part 91 equipment/maintenance | Skeleton                                                                                                                                             |
+| 6 -- Part 91 special ops           | Skeleton                                                                                                                                             |
+| 7 -- Parts 141/135                 | Skeleton                                                                                                                                             |
+| 8 -- Companion documents           | Skeleton                                                                                                                                             |
+| 9 -- Enforcement                   | Skeleton                                                                                                                                             |
+| 10 -- Capstone                     | Capstone orals authored 2/4 (night-ifr-passenger, gear-up-night-ifr); 2 more (friend-flight-review, ppl-applies-for-ir) deferred until ADR 019 lands |
 
 ## 2026-04-27 -- Week 1 (architecture) + 1 sibling capstone
 
@@ -102,18 +102,18 @@ Decisions:
 
 Status of week-by-week authoring:
 
-| Week | Status |
-| --- | --- |
-| 1 -- Architecture | **Authored** |
-| 2 -- Part 61 deep | Skeleton |
-| 3 -- Part 61 CFI | Skeleton |
-| 4 -- Part 91 general/flight rules | Skeleton |
-| 5 -- Part 91 equipment/maintenance | Skeleton |
-| 6 -- Part 91 special ops | Skeleton |
-| 7 -- Parts 141/135 | Skeleton |
-| 8 -- Companion documents | Skeleton |
-| 9 -- Enforcement | Skeleton |
-| 10 -- Capstone | Capstone orals authored 2/4 (night-ifr-passenger, gear-up-night-ifr); 2 more (friend-flight-review, ppl-applies-for-ir) deferred until ADR 019 lands |
+| Week                               | Status                                                                                                                                               |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1 -- Architecture                  | **Authored**                                                                                                                                         |
+| 2 -- Part 61 deep                  | Skeleton                                                                                                                                             |
+| 3 -- Part 61 CFI                   | Skeleton                                                                                                                                             |
+| 4 -- Part 91 general/flight rules  | Skeleton                                                                                                                                             |
+| 5 -- Part 91 equipment/maintenance | Skeleton                                                                                                                                             |
+| 6 -- Part 91 special ops           | Skeleton                                                                                                                                             |
+| 7 -- Parts 141/135                 | Skeleton                                                                                                                                             |
+| 8 -- Companion documents           | Skeleton                                                                                                                                             |
+| 9 -- Enforcement                   | Skeleton                                                                                                                                             |
+| 10 -- Capstone                     | Capstone orals authored 2/4 (night-ifr-passenger, gear-up-night-ifr); 2 more (friend-flight-review, ppl-applies-for-ir) deferred until ADR 019 lands |
 
 ## 2026-04-26 -- Course bootstrap
 

@@ -37,6 +37,7 @@ Column: `(job_id, seq)`
 Problem: `appendJobLog()` (`libs/hangar-jobs/src/enqueue.ts:128-140`) computes `seq` via a `coalesce(max(seq), -1) + 1` subselect inside the `INSERT VALUES` -- under default `READ COMMITTED` isolation, two concurrent appends (e.g. orphan-recovery loop in `recoverOrphanedRunning` writing one line per orphaned job, plus a worker still flushing the previous run's lines) can both observe the same `max(seq)` and insert the same `seq`. Worse, `makeContext` (`libs/hangar-jobs/src/worker.ts:103-112`) uses a plain in-memory `seq++` counter -- if the same job ever has overlapping handler invocations (cancellation race, the orphan recovery flow re-queueing a `running` job whose previous worker is still draining), both processes will start their counter at 0 and collide. Because `readJobLog` orders by `seq` and the polling cursor is `seq > sinceSeq`, a duplicate `seq` produces non-deterministic ordering for the UI live tail and -- if two rows share `seq = N` -- the cursor will skip one of them on the next `sinceSeq = N` page.
 Rule: A monotonic per-parent sequence must be enforced by a unique constraint and either generated atomically (database side) or guarded by a transaction.
 Fix:
+
 1. Add `unique('hangar_job_log_job_seq_unique').on(t.jobId, t.seq)` to the table builder.
 2. Replace `appendJobLog`'s `coalesce(max(seq)...)+1` pattern with an `INSERT ... SELECT` inside an explicit transaction taking a row-level lock, or move the seq generator to a `bigserial` per-job side counter (e.g. `hangar.job` gains a `nextLogSeq integer` column bumped by `UPDATE ... RETURNING`).
 3. Audit `recoverOrphanedRunning` and the worker's `makeContext` so both paths route through the same atomic generator instead of the in-memory `seq++`.
@@ -49,11 +50,13 @@ Column: `status, created_at`
 Problem: `hangar_job_status_idx` is a full B-tree on `(status, created_at)`. `claimNext` (`libs/hangar-jobs/src/worker.ts:74-91`) only ever asks for `status = 'queued'`, sorted by `asc(created_at)`. The job table is the long-running activity ledger -- after a few days of operation almost every row is `complete`/`failed`/`cancelled`. A partial index `WHERE status = 'queued'` would be one to maybe a few hundred rows in steady state vs the entire history, with a much smaller cache footprint. The same observation applies to `listRunningJobs` (`libs/bc/hangar/src/jobs-queries.ts:86-92`) which always filters `status = 'running'`.
 Rule: Index hot-path predicates partially when the predicate value is a small subset of the table.
 Fix: Replace `jobStatusIdx` with two partial indexes:
+
 ```typescript
 jobQueuedIdx: index('hangar_job_queued_idx').on(t.createdAt).where(sql`${t.status} = 'queued'`),
 jobRunningIdx: index('hangar_job_running_idx').on(t.startedAt).where(sql`${t.status} = 'running'`),
 jobStatusKindIdx: index('hangar_job_status_idx').on(t.status, t.createdAt), // keep for ad-hoc admin filters
 ```
+
 The third is cheap to keep for `listJobs(options.status=...)` admin queries; the first two are the perf-critical ones.
 
 ### MAJOR: `getLatestCompleteJobByKind` / `getLatestCompleteJobForTarget` have no covering index
@@ -63,6 +66,7 @@ Column: `kind, status, finished_at` and `kind, target_id, status, finished_at`
 Problem: `getLatestCompleteJobByKind` (`libs/bc/hangar/src/jobs-queries.ts:51-62`) filters `kind = ? AND status = 'complete'` and orders by `desc(finished_at)`. The closest index is `jobKindIdx (kind, created_at)`, which doesn't cover `status` and orders by `created_at` rather than `finished_at`. `getLatestCompleteJobForTarget` adds `target_id` and has the same problem -- `jobTargetIdx (target_type, target_id, created_at)` doesn't include `status` or `finished_at`. Both queries land on the `/sources` and `/sources/[id]/diff` pages, so they're rendered on every page load.
 Rule: Compose-index columns in `(equality..., range/order)` order so `ORDER BY ... LIMIT 1` becomes an index seek.
 Fix: Add two partial indexes scoped to terminal-complete rows:
+
 ```typescript
 jobKindCompleteIdx: index('hangar_job_kind_complete_idx')
   .on(t.kind, t.finishedAt)
@@ -71,6 +75,7 @@ jobKindTargetCompleteIdx: index('hangar_job_kind_target_complete_idx')
   .on(t.kind, t.targetId, t.finishedAt)
   .where(sql`${t.status} = 'complete'`),
 ```
+
 Drop or keep `jobTargetIdx` depending on whether `listRecentJobsForTarget` (which orders by `created_at desc`) is hot enough to justify it -- it's the only consumer.
 
 ### MAJOR: `hangar.job.target_type` and `hangar.source.format` are free-text with no check constraint
@@ -80,6 +85,7 @@ Columns: `hangar.job.target_type`, `hangar.source.format`
 Problem: The schema relies on `check` constraints + a `*_VALUES` constant for `kind`, `status`, `stream`, `outcome`, sync `kind` -- but `target_type` (used by the worker to scope per-target serialisation, by audit metadata, and by `listRecentJobsForTarget`) is unconstrained text. There is no `TARGET_TYPE_VALUES` in `@ab/constants`. Same for `hangar.source.format` -- the registry filter (`registry.ts:339`) does `eq(hangarSource.format, options.format)` with no enum validation. A typo in a payload (`"reference"` vs `"References"`) silently produces an orphan row that survives every constraint check and never surfaces on any list page.
 Rule: All literal values used in WHERE clauses live in `libs/constants/` and are enforced via DB check (CLAUDE.md: "All literal values in libs/constants/" + "No magic strings").
 Fix:
+
 1. Define `JOB_TARGET_TYPES = { REFERENCE: 'reference', SOURCE: 'source', REGISTRY: 'registry' } as const` in `libs/constants/src/jobs.ts`, export `JOB_TARGET_TYPE_VALUES`.
 2. Add a check constraint on `hangar.job.target_type` (allow null, since null is the "system" target).
 3. Define `SOURCE_FORMATS` (`pdf`, `html`, `txt`, `xml`, `geotiff` etc. -- whatever the ingest pipeline actually emits) in `libs/constants/src/reference-tags.ts` next to `REFERENCE_SOURCE_TYPES`, add a check constraint on `hangar.source.format`.
@@ -156,20 +162,20 @@ Fix: Either add `...timestamps()` (cheap, one column duplicates `started_at`) or
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| CRITICAL: `(job_id, seq)` no unique constraint, non-atomic seq | CLOSED | PR #448 -- `unique('hangar_job_log_job_seq_unique')` (`hangar-jobs/schema.ts:102`) + atomic seq allocator |
-| MAJOR: worker poll path scans non-partial index | OPEN (deferred) | Single non-partial `(status, created_at)` index remains. Not load-bearing today (queue is small); deferred until job-table volume warrants a migration. Tracked under perf scaling work. |
-| MAJOR: `getLatestComplete*` no covering index | OPEN (deferred) | Same trade-off; queries are bounded by `kind` + `LIMIT 1`. Deferred until volume justifies. |
-| MAJOR: `target_type` / `format` free-text | OPEN (deferred) | No `JOB_TARGET_TYPES` constant + check yet. Application-side validation prevents bad inputs today; check-constraint hardening tracked separately. |
-| MAJOR: `rev_snapshot` no runtime validator | CLOSED | PR #452 -- `RevSnapshotSchema` + `assertRevSnapshot` in `schema-types.ts`; `loadState` parses through it |
-| MINOR: `*_live_idx` redundant against PK | OPEN (deferred) | Existing partial indexes carry no behavioral risk; cosmetic schema cleanup deferred to a future migration. |
-| MINOR: `sync_log.kind` no index | OPEN (deferred) | Anticipatory index for an unbuilt admin surface; deferred until that surface lands. |
-| MINOR: `job_log.at` no index | CLOSED | PR #448 wave -- `jobLogAtIdx: index('hangar_job_log_at_idx').on(t.at)` (`hangar-jobs/schema.ts:110`) |
-| MINOR: `pending-download` sentinel string | OPEN (deferred) | `PENDING_DOWNLOAD` extracted as a constant; column-type migration (text->timestamp + nullable) deferred to a focused schema pass. |
-| MINOR: `reviewed_at` text vs date | OPEN (deferred) | TOML round-trip remains text-friendly today; migration deferred. |
-| NIT: `inList` SQL composer hand-rolled | CLOSED | Functional today; documented escape rationale at the call site |
-| NIT: `progress` jsonb no Zod validation | OPEN (deferred) | Worker is the only writer; typo risk is bounded. Deferred until handler authoring opens up. |
-| NIT: `sync_log` lacks `...timestamps()` | OPEN (deferred) | Cosmetic deviation; documented in file header |
+| Finding                                                        | Verdict         | Closure                                                                                                                                                                                  |
+| -------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CRITICAL: `(job_id, seq)` no unique constraint, non-atomic seq | CLOSED          | PR #448 -- `unique('hangar_job_log_job_seq_unique')` (`hangar-jobs/schema.ts:102`) + atomic seq allocator                                                                                |
+| MAJOR: worker poll path scans non-partial index                | OPEN (deferred) | Single non-partial `(status, created_at)` index remains. Not load-bearing today (queue is small); deferred until job-table volume warrants a migration. Tracked under perf scaling work. |
+| MAJOR: `getLatestComplete*` no covering index                  | OPEN (deferred) | Same trade-off; queries are bounded by `kind` + `LIMIT 1`. Deferred until volume justifies.                                                                                              |
+| MAJOR: `target_type` / `format` free-text                      | OPEN (deferred) | No `JOB_TARGET_TYPES` constant + check yet. Application-side validation prevents bad inputs today; check-constraint hardening tracked separately.                                        |
+| MAJOR: `rev_snapshot` no runtime validator                     | CLOSED          | PR #452 -- `RevSnapshotSchema` + `assertRevSnapshot` in `schema-types.ts`; `loadState` parses through it                                                                                 |
+| MINOR: `*_live_idx` redundant against PK                       | OPEN (deferred) | Existing partial indexes carry no behavioral risk; cosmetic schema cleanup deferred to a future migration.                                                                               |
+| MINOR: `sync_log.kind` no index                                | OPEN (deferred) | Anticipatory index for an unbuilt admin surface; deferred until that surface lands.                                                                                                      |
+| MINOR: `job_log.at` no index                                   | CLOSED          | PR #448 wave -- `jobLogAtIdx: index('hangar_job_log_at_idx').on(t.at)` (`hangar-jobs/schema.ts:110`)                                                                                     |
+| MINOR: `pending-download` sentinel string                      | OPEN (deferred) | `PENDING_DOWNLOAD` extracted as a constant; column-type migration (text->timestamp + nullable) deferred to a focused schema pass.                                                        |
+| MINOR: `reviewed_at` text vs date                              | OPEN (deferred) | TOML round-trip remains text-friendly today; migration deferred.                                                                                                                         |
+| NIT: `inList` SQL composer hand-rolled                         | CLOSED          | Functional today; documented escape rationale at the call site                                                                                                                           |
+| NIT: `progress` jsonb no Zod validation                        | OPEN (deferred) | Worker is the only writer; typo risk is bounded. Deferred until handler authoring opens up.                                                                                              |
+| NIT: `sync_log` lacks `...timestamps()`                        | OPEN (deferred) | Cosmetic deviation; documented in file header                                                                                                                                            |
 
 Total: 4 closed (1 critical, 1 major, 1 minor, 1 nit) / 9 deferred-with-rationale. Each open finding has a stated trigger; no "maybe someday" entries. `review_status` flipped to `done` -- punch-list closed for this audit; remaining items are tracked work-package candidates rather than chunk-6 follow-ups.

@@ -222,14 +222,14 @@ This proves the staleness machinery works end-to-end and is the closure the spec
 
 ## Failure modes
 
-| Failure                                       | Behavior                                                                              |
-| --------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Old edition's body file missing on disk       | Outcome `missing-old`; report flags but does not error out.                           |
-| New edition's body file missing on disk       | Outcome `missing-new`; same as above.                                                 |
+| Failure                                                                                             | Behavior                                                                                              |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Old edition's body file missing on disk                                                             | Outcome `missing-old`; report flags but does not error out.                                           |
+| New edition's body file missing on disk                                                             | Outcome `missing-new`; same as above.                                                                 |
 | Both editions have the section but with different entry IDs (renumbering) and no alias entry exists | Outcome `needs-review` (the body-hash compare can't run; the report row carries an explanatory note). |
-| `git status --porcelain` non-empty when running `advance` | Exit code 2 with stderr message; no rewrite. Operator stashes / commits / cleans before retry. |
-| Report file does not exist when running `advance --report=<path>` | Exit code 2 with stderr; no rewrite.                                                                |
-| Report's `editionPair.old` does not match any lesson pins | RewriteReport reports `filesRewritten: 0`; exit 0. (Not a failure.)                                  |
+| `git status --porcelain` non-empty when running `advance`                                           | Exit code 2 with stderr message; no rewrite. Operator stashes / commits / cleans before retry.        |
+| Report file does not exist when running `advance --report=<path>`                                   | Exit code 2 with stderr; no rewrite.                                                                  |
+| Report's `editionPair.old` does not match any lesson pins                                           | RewriteReport reports `filesRewritten: 0`; exit 0. (Not a failure.)                                   |
 
 ## Open questions resolved before implementation
 

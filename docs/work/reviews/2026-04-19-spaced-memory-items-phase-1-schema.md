@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 1 Schema Review
 
 Scope: HEAD (`a3dbe04`) vs HEAD~1 (`966da01`). Phase 1 adds the data layer for the
@@ -269,6 +268,7 @@ matches the project's documented workflow. For production this means:
 
 **Impact:** None today (no prod deploy). A speed bump once a deploy target exists.
 **Fix:** Before the first deploy to any shared DB, switch to `drizzle-kit generate`
+
 + `drizzle-kit migrate` for the shared target and keep `push` for ephemeral dev
 only. Add a note to `tasks.md` for Phase 2+.
 

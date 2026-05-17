@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.8
 Title:           Prospective Student Pilot Visits the School
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_13]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- First-Time Student Pilot Applicant
 Parameters:
   skillLevel:         0.0
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO desk. The applicant's laptop is open to the IACRA portal showing a partially completed student pilot certificate application. Several fields are highlighted in red. The applicant looks confused.
 studentSpeech:I started this online but I'm stuck. Some fields won't accept what I'm putting in. And do I need a medical first, or can I get the student certificate first? The internet says different things.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        You review the application. The applicant entered an incorrect certificate type, left the English proficiency field blank, and used a P.O. Box instead of a physical address. The medical question needs clarification.
 studentSpeech:I didn't know which certificate type to pick -- there were so many options. And do I really need to put my home address? I use a P.O. Box for everything.
@@ -93,7 +93,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Application is mostly corrected. The applicant asks about your role as the recommending instructor. They want to know what happens after they submit.
 studentSpeech:So you sign this as my instructor? Does that mean you're recommending me for a certificate? I haven't even flown yet. And what happens after I submit -- how long until I get the plastic card?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

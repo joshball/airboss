@@ -35,7 +35,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Foundational layering (constants -> utils/types -> auth/db -> bc -> apps) is mostly intact and dependency direction is honored: no app -> app imports, no BC -> app imports, no foundational lib pulling from a higher tier. The big drift is on the hangar side: there is no `libs/bc/hangar/`, and ~2,400 lines of BC-shaped logic plus a wad of direct `db.select().from(hangarSource)` Drizzle queries live in `apps/hangar/src/lib/server/` and route load functions, which is exactly the smear the architecture forbids. Other recurring issues are BC-owned schemas mounted under `libs/db/src/` instead of their owning BC, the study app reaching across BCs into `hangarReference` directly, very heavy route .svelte files (688/566/493 line `<style>` blocks) defining visual styling that belongs to `libs/ui`, and several documentation/import-alias bookkeeping drifts. Cross-BC coupling exists (bc-citations -> bc-study, bc-study -> bc-sim/persistence) and is moderately leaky -- citations imports raw Drizzle table objects from bc-study rather than going through a public read API.

@@ -19,19 +19,19 @@ review_status: done
 
 All 10 per-category files walked heading-by-heading against current main. **97 of 119 findings closed; 22 carried forward as design items with concrete triggers.** All 4 critical findings closed. Every remaining open item is a deferred design question with a documented trigger (typically "first authenticated write endpoint on sim/avionics", "first BC consumer of `auditColumns`", or "first proxy-fronted deploy").
 
-| Category     | Closed | Open | Total | Per-category file                                                            |
-| ------------ | -----: | ---: | ----: | ---------------------------------------------------------------------------- |
-| correctness  |     11 |    2 |    13 | [correctness review](2026-05-01-auth-identity-audit-correctness.md)          |
-| security     |     14 |    3 |    17 | [security review](2026-05-01-auth-identity-audit-security.md)                |
-| perf         |      9 |    2 |    11 | [perf review](2026-05-01-auth-identity-audit-perf.md)                        |
-| architecture |      6 |    2 |     8 | [architecture review](2026-05-01-auth-identity-audit-architecture.md)        |
-| a11y         |     11 |    0 |    11 | [a11y review](2026-05-01-auth-identity-audit-a11y.md)                        |
-| patterns     |      4 |    4 |     8 | [patterns review](2026-05-01-auth-identity-audit-patterns.md)                |
-| testing      |     12 |    2 |    14 | [testing review](2026-05-01-auth-identity-audit-testing.md)                  |
-| dx           |     13 |    1 |    14 | [dx review](2026-05-01-auth-identity-audit-dx.md)                            |
-| schema       |      9 |    2 |    11 | [schema review](2026-05-01-auth-identity-audit-schema.md)                    |
-| backend      |      9 |    3 |    12 | [backend review](2026-05-01-auth-identity-audit-backend.md)                  |
-| **TOTAL**    | **98** | **21** | **119** |                                                                          |
+| Category     | Closed | Open   | Total   | Per-category file                                                     |
+| ------------ | ------ | ------ | ------- | --------------------------------------------------------------------- |
+| correctness  | 11     | 2      | 13      | [correctness review](2026-05-01-auth-identity-audit-correctness.md)   |
+| security     | 14     | 3      | 17      | [security review](2026-05-01-auth-identity-audit-security.md)         |
+| perf         | 9      | 2      | 11      | [perf review](2026-05-01-auth-identity-audit-perf.md)                 |
+| architecture | 6      | 2      | 8       | [architecture review](2026-05-01-auth-identity-audit-architecture.md) |
+| a11y         | 11     | 0      | 11      | [a11y review](2026-05-01-auth-identity-audit-a11y.md)                 |
+| patterns     | 4      | 4      | 8       | [patterns review](2026-05-01-auth-identity-audit-patterns.md)         |
+| testing      | 12     | 2      | 14      | [testing review](2026-05-01-auth-identity-audit-testing.md)           |
+| dx           | 13     | 1      | 14      | [dx review](2026-05-01-auth-identity-audit-dx.md)                     |
+| schema       | 9      | 2      | 11      | [schema review](2026-05-01-auth-identity-audit-schema.md)             |
+| backend      | 9      | 3      | 12      | [backend review](2026-05-01-auth-identity-audit-backend.md)           |
+| **TOTAL**    | **98** | **21** | **119** |                                                                       |
 
 By severity:
 
@@ -61,19 +61,19 @@ The audit found four carried items trivial enough to close inline rather than de
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total | File |
-|--------------|---------:|------:|------:|----:|------:|------|
-| correctness  |        1 |     4 |     5 |   3 |    13 | [link](2026-05-01-auth-identity-audit-correctness.md) |
-| security     |        1 |     5 |     7 |   4 |    17 | [link](2026-05-01-auth-identity-audit-security.md) |
-| perf         |        0 |     3 |     5 |   3 |    11 | [link](2026-05-01-auth-identity-audit-perf.md) |
-| architecture |        0 |     1 |     4 |   3 |     8 | [link](2026-05-01-auth-identity-audit-architecture.md) |
-| a11y         |        0 |     2 |     5 |   4 |    11 | [link](2026-05-01-auth-identity-audit-a11y.md) |
-| patterns     |        0 |     2 |     4 |   2 |     8 | [link](2026-05-01-auth-identity-audit-patterns.md) |
-| testing      |        0 |     6 |     5 |   3 |    14 | [link](2026-05-01-auth-identity-audit-testing.md) |
-| dx           |        0 |     4 |     6 |   4 |    14 | [link](2026-05-01-auth-identity-audit-dx.md) |
-| schema       |        2 |     4 |     3 |   2 |    11 | [link](2026-05-01-auth-identity-audit-schema.md) |
-| backend      |        0 |     4 |     5 |   3 |    12 | [link](2026-05-01-auth-identity-audit-backend.md) |
-| **TOTAL**    |    **4** |**35** |**49** |**31**|**119**| |
+| Category     | Critical | Major  | Minor  | Nit    | Total   | File                                                   |
+| ------------ | -------- | ------ | ------ | ------ | ------- | ------------------------------------------------------ |
+| correctness  | 1        | 4      | 5      | 3      | 13      | [link](2026-05-01-auth-identity-audit-correctness.md)  |
+| security     | 1        | 5      | 7      | 4      | 17      | [link](2026-05-01-auth-identity-audit-security.md)     |
+| perf         | 0        | 3      | 5      | 3      | 11      | [link](2026-05-01-auth-identity-audit-perf.md)         |
+| architecture | 0        | 1      | 4      | 3      | 8       | [link](2026-05-01-auth-identity-audit-architecture.md) |
+| a11y         | 0        | 2      | 5      | 4      | 11      | [link](2026-05-01-auth-identity-audit-a11y.md)         |
+| patterns     | 0        | 2      | 4      | 2      | 8       | [link](2026-05-01-auth-identity-audit-patterns.md)     |
+| testing      | 0        | 6      | 5      | 3      | 14      | [link](2026-05-01-auth-identity-audit-testing.md)      |
+| dx           | 0        | 4      | 6      | 4      | 14      | [link](2026-05-01-auth-identity-audit-dx.md)           |
+| schema       | 2        | 4      | 3      | 2      | 11      | [link](2026-05-01-auth-identity-audit-schema.md)       |
+| backend      | 0        | 4      | 5      | 3      | 12      | [link](2026-05-01-auth-identity-audit-backend.md)      |
+| **TOTAL**    | **4**    | **35** | **49** | **31** | **119** |                                                        |
 
 ## CRITICAL findings (4) -- read these first
 
@@ -96,6 +96,7 @@ Better-auth's session sweeper seq-scans the table on every tick. Append-only gro
 ## Convergent / root-cause findings
 
 ### Cross-app session-hydration drift (4 reviewers)
+
 - **architecture (major)**: `hooks.server.ts` duplicated 4x with subtle drift -- sim/avionics swallow errors, study/hangar log; differing `Role` import-vs-import-type style.
 - **patterns (major)**: 20-line `session.user -> AuthUser` mapping (with `as Record<string, unknown>` casts) byte-for-byte in all 4 hooks files.
 - **backend (major)**: study + hangar login actions byte-for-byte duplicates; logout same. Violates "thin shells calling `@ab/auth`" rule.
@@ -103,16 +104,19 @@ Better-auth's session sweeper seq-scans the table on every tick. Append-only gro
 - **Root cause**: hoist `hydrateLocals(event, auth, log)` and `mapBetterAuthSession` and `handleEmailLoginAction(event, { logTag })` into `@ab/auth`. One extraction closes 4 majors across 4 reviewers.
 
 ### sim/avionics auth gaps (3 reviewers)
+
 - **correctness (major)**: sim hooks hydrate `event.locals.user` but never check `banned` -- banned users keep full sim access while study/hangar reject them.
 - **backend (major)**: avionics + sim populate `banned` but never short-circuit; avionics + sim omit security headers (`X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`, HSTS) that study/hangar emit. Same session cookie flows to those subdomains.
 - **Root cause**: bring sim/avionics hooks up to study/hangar parity in the same `hydrateLocals` extraction.
 
 ### No audit emission on auth events (2 reviewers)
+
 - **backend (major)**: audit schema explicitly carves out login as canonical `ACTION` row with nullable `actor_id` for failed sign-ins. Auth is the conspicuous gap. Hangar admin home cannot answer "who signed in", "is this email being brute-forced", "did admin log out before role change."
 - **security (major)**: same finding -- brute-force traffic and bans invisible to the audit log explorer.
 - **Root cause**: add `AUTH_LOGIN`/`AUTH_LOGOUT` to `AUDIT_TARGETS` + CHECK-constraint migration; emit `auditWrite` on login success/fail/lockout/banned-block/logout.
 
 ### Missing FK + lookup indexes (3 reviewers, 2 critical schema findings)
+
 - **schema (critical x2)**: `bauth_session.user_id`, `bauth_session.expires_at` (above)
 - **schema (major)**: `bauth_account.user_id`, `bauth_verification.identifier`, `audit_log.timestamp` standalone, `bauth_session.impersonated_by` is plain text with no FK back to `bauth_user`
 - **perf (major)**: same set -- `bauth_session.user_id`, `bauth_account.user_id`, `bauth_account(provider_id, account_id)`, `bauth_verification.identifier` all unindexed despite being better-auth's routine lookup paths
@@ -122,34 +126,42 @@ Better-auth's session sweeper seq-scans the table on every tick. Append-only gro
 - **Root cause**: one schema migration adds the 5 missing indexes + FK on `impersonated_by`; one logic fix to `auditRecent` filter precedence.
 
 ### `clearSessionCookies` brittleness (2 reviewers)
+
 - **correctness (major)**: cookie-clear detection relies on literal `'expires=thu, 01 jan 1970'` substring -- if better-auth changes format, "delete" silently turns into "set with 7-day TTL".
 - **correctness (major)**: only enumerates two cookies; better-auth admin/magic-link plugins emit additional cookies that linger after logout.
 - **dx (major)**: hard-coded two-name list; no test pins drift; better-auth adds cookies between minor versions.
 - **Root cause**: rewrite cookie-clear to enumerate all `bauth_*` cookies on the request rather than a hard-coded list; add a test that pins better-auth's cookie surface.
 
 ### `cookieCache` ban-propagation window (2 reviewers, stacks with critical #2)
+
 - **security (major)**: `cookieCache.maxAge: 5 * 60` means banned user keeps working up to 5 min.
 - **correctness (critical)**: `forwardAuthCookies` extends this to 7 days (above).
 - **Root cause**: fix critical #2 (cookie max-age override). After that, the 5-min cache is the documented expected window.
 
 ### Test coverage gaps (1 reviewer, broad)
+
 - **testing (6x major)**: per-IP isolation in rate-limit not tested (would pass with global key); window expiry never exercised; sign-in success path never asserted (all attempts use wrong password); zero tests for magic-link / password-reset / email-verification token flows; `cookies.ts` and `logout.ts` ship without unit tests; `requireVerifiedEmail` exported but not tested.
 - **dx (major)**: `requireVerifiedEmail` has **zero call sites** -- known-issue dead-code on sensitive surface.
 - **Root cause**: testing the missing flows will surface whether `requireVerifiedEmail` should be wired or removed.
 
 ### XFF/proxy trust (1 reviewer)
+
 - **security (major)**: `getClientAddress()` forwarded as XFF to better-auth's rate-limit bucket key with no proxy-trust validation. Misconfigured deploy = either share one bucket across all users (lockout amplification) or accept spoofed XFF (target-the-victim).
 
 ### Password-reset timing oracle (1 reviewer)
+
 - **security (major)**: sync `sendResetPassword` callback only fires when user exists; SMTP latency observable. User-existence enumeration.
 
 ### Login a11y (1 reviewer)
+
 - **a11y (major x2)**: failed-submit doesn't move focus (banner alone signals); H1 says "airboss" branding instead of "Sign in" (page purpose missing from heading semantics).
 
 ### Patterns minors
+
 - **patterns (major)**: `requireAuth` builds `?redirectTo=` literal instead of using `QUERY_PARAMS.REDIRECT_TO` (which exists and consumers read).
 
 ### Hangar dev password leak
+
 - **security (major)**: hangar login page prints `DEV_PASSWORD` to screen; study deliberately doesn't.
 
 ## What's clean (preserve)

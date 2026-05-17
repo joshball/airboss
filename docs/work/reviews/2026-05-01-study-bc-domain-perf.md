@@ -15,11 +15,11 @@ counts:
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     5 |      5 |    0 |
-| minor    |     6 |      3 |    3 |
-| nit      |     3 |      0 |    3 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 5     | 5      | 0    |
+| minor    | 6     | 3      | 3    |
+| nit      | 3     | 0      | 3    |
 
 ### MAJOR: `listReferencesByTopic` reads-then-filters in JS -- CLOSED
 
@@ -164,6 +164,7 @@ index on `subjects` the inverted-index path is even cheaper.
 ### MAJOR: No batch helper for `getHandbookProgress`; lens index does N round-trips
 
 Files:
+
 - `libs/bc/study/src/references.ts:496-531`
 - `apps/study/src/routes/(app)/lens/handbook/+page.server.ts:17-22` (call site)
 
@@ -179,6 +180,7 @@ read-state ship, this scales linearly. Will stay invisible until WAN
 latency dominates on prod.
 
 Fix: Add `getHandbookProgressBatch(userId, referenceIds)` that:
+
 1. Single grouped query: count sections per (referenceId) for the
    non-chapter level filter.
 2. Single grouped query: count read/reading/comprehended per
@@ -193,6 +195,7 @@ regardless of handbook count.
 ### MAJOR: No batch helper for `getNodesCitingSection`; multi-section pages fan out
 
 Files:
+
 - `libs/bc/study/src/references.ts:338-358`
 - Call sites: `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.server.ts:46`,
   `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.server.ts:44`,
@@ -214,6 +217,7 @@ per-section "cited by" counts, that's 20 trips for a single chapter render.
 
 Fix: Add `getNodesCitingSectionsBatch({ referenceId, sectionsOf: Array<{
 chapter, section? }> })` that:
+
 1. Issues one `@>` query for the (referenceId, kind=handbook) probe,
    returning every candidate node + its `references` jsonb once.
 2. In one in-memory pass, partitions hits across the requested locator

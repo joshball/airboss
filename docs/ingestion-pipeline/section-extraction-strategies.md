@@ -25,11 +25,11 @@ Companion docs:
 The TOC parser and the LLM parser look at different inputs and answer
 different questions. They are not redundant.
 
-| Strategy | Input                          | Question it answers                                                         |
-| -------- | ------------------------------ | --------------------------------------------------------------------------- |
-| TOC      | Printed table-of-contents text | "What sections did the FAA's editor say exist?"                             |
-| LLM      | Chapter body markdown          | "What sections actually exist as headings in the body text?"                |
-| compare  | Both trees                     | "Where do TOC and LLM disagree, and which one is probably right per case?"  |
+| Strategy | Input                          | Question it answers                                                        |
+| -------- | ------------------------------ | -------------------------------------------------------------------------- |
+| TOC      | Printed table-of-contents text | "What sections did the FAA's editor say exist?"                            |
+| LLM      | Chapter body markdown          | "What sections actually exist as headings in the body text?"               |
+| compare  | Both trees                     | "Where do TOC and LLM disagree, and which one is probably right per case?" |
 
 The TOC parser is deterministic but limited by what the printed TOC
 contains. The LLM reads body text directly and finds real headings the
@@ -63,12 +63,12 @@ Source: [sections_via_toc.py](../../tools/handbook-ingest/ingest/sections_via_to
 
 ### What it gets wrong
 
-| Limitation                             | Cause                                                                                                                                          |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Limitation                             | Cause                                                                                                                                                                    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Over-flattens hierarchy                | The FAA's printed TOC promotes most subsections to L1 because they're indented identically. Real hierarchy (Powerplant -> Propeller -> Fixed-Pitch Propeller) gets lost. |
-| Misses body headings absent from TOC   | PHAK ch 1 has "History of the Federal Aviation Administration (FAA)" as a real L1 in body text; not in the printed TOC.                        |
-| Treats list-item labels as sections    | "Privileges:" / "Limitations:" become L2 because they're indented like sections in the TOC.                                                    |
-| Page anchor only when TOC included one | If the FAA omitted a page in the printed TOC, the parser can't fabricate one.                                                                  |
+| Misses body headings absent from TOC   | PHAK ch 1 has "History of the Federal Aviation Administration (FAA)" as a real L1 in body text; not in the printed TOC.                                                  |
+| Treats list-item labels as sections    | "Privileges:" / "Limitations:" become L2 because they're indented like sections in the TOC.                                                                              |
+| Page anchor only when TOC included one | If the FAA omitted a page in the printed TOC, the parser can't fabricate one.                                                                                            |
 
 ### Observed scale (phak FAA-H-8083-25C)
 
@@ -112,15 +112,15 @@ plus the JSON contract in
 
 The original v1 contract had several gaps the v2/v3 rewrite addressed. Status table:
 
-| Pitfall                               | v1 behavior                                                                                                          | Fix                                                                                                                                            |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| Input truncation                      | `chapter_text_max_chars` cap fed truncated plaintext to model; 11 of 17 PHAK chapters hit the 60000 cap silently.    | Per-handbook caps raised empirically (PR #332/#335). Chapter-source-ingestion bypasses cap entirely for handbooks with chapter PDFs (PR #337). |
-| Boilerplate omission                  | Contract silent; model dropped Introduction / Chapter Summary.                                                       | Contract v2 mandates inclusion as L1 entries when present in body text (PR #342).                                                              |
-| No page anchors                       | LLM emitted literal `"no-anchor"` everywhere; contract didn't ask for real anchors.                                  | Contract v2 forbids the `"no-anchor"` literal; mandates `null` or a real `<chapter>-<page>` anchor (PR #342).                                  |
-| Hierarchy mis-flattening              | Contract silent on TOC-vs-body precedence; LLM sometimes promoted subsections to L1 to mirror the printed TOC.       | Contract v2 explicitly favors body-text nesting (PR #342).                                                                                     |
-| Output truncation (silent short tree) | No coverage check; tree could end mid-chapter without raising.                                                       | Contract v2 added a coverage self-check; v3 amended for figure-only trailing pages (PR #355).                                                  |
-| Level explosion (L4+)                 | Contract said "L3 rare" but didn't cap; ch 17's first pass emitted 44/95 entries at L4.                              | Contract v3 caps levels at 3 with a worked example for flattening (PR #355).                                                                   |
-| Model variance                        | Two paste runs may still differ slightly in casing.                                                                  | Inherent. Compare report surfaces it as small "TOC only" / "LLM only" deltas; tolerate.                                                        |
+| Pitfall                               | v1 behavior                                                                                                       | Fix                                                                                                                                            |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Input truncation                      | `chapter_text_max_chars` cap fed truncated plaintext to model; 11 of 17 PHAK chapters hit the 60000 cap silently. | Per-handbook caps raised empirically (PR #332/#335). Chapter-source-ingestion bypasses cap entirely for handbooks with chapter PDFs (PR #337). |
+| Boilerplate omission                  | Contract silent; model dropped Introduction / Chapter Summary.                                                    | Contract v2 mandates inclusion as L1 entries when present in body text (PR #342).                                                              |
+| No page anchors                       | LLM emitted literal `"no-anchor"` everywhere; contract didn't ask for real anchors.                               | Contract v2 forbids the `"no-anchor"` literal; mandates `null` or a real `<chapter>-<page>` anchor (PR #342).                                  |
+| Hierarchy mis-flattening              | Contract silent on TOC-vs-body precedence; LLM sometimes promoted subsections to L1 to mirror the printed TOC.    | Contract v2 explicitly favors body-text nesting (PR #342).                                                                                     |
+| Output truncation (silent short tree) | No coverage check; tree could end mid-chapter without raising.                                                    | Contract v2 added a coverage self-check; v3 amended for figure-only trailing pages (PR #355).                                                  |
+| Level explosion (L4+)                 | Contract said "L3 rare" but didn't cap; ch 17's first pass emitted 44/95 entries at L4.                           | Contract v3 caps levels at 3 with a worked example for flattening (PR #355).                                                                   |
+| Model variance                        | Two paste runs may still differ slightly in casing.                                                               | Inherent. Compare report surfaces it as small "TOC only" / "LLM only" deltas; tolerate.                                                        |
 
 ## Compare strategy deep dive
 
@@ -143,22 +143,22 @@ Output:
 
 The top table is the executive summary. Key columns:
 
-| Column                          | Read it as                                                                                                                          |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `TOC L1` vs `LLM L1`            | If drastically different, one is over-flattening (almost always TOC).                                                               |
-| `TOC total` vs `LLM total`      | If LLM is much smaller (>2x ratio), suspect input truncation. Check `_chapter_plaintext.txt` size against `chapter_text_max_chars`. |
-| `parent diff`                   | Always nonzero. That's the structural-hierarchy disagreement, usually the LLM's nesting being correct.                              |
-| `level diff`                    | Same headline as parent diff; the LLM saw a subsection where TOC said top-level.                                                    |
+| Column                     | Read it as                                                                                                                          |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `TOC L1` vs `LLM L1`       | If drastically different, one is over-flattening (almost always TOC).                                                               |
+| `TOC total` vs `LLM total` | If LLM is much smaller (>2x ratio), suspect input truncation. Check `_chapter_plaintext.txt` size against `chapter_text_max_chars`. |
+| `parent diff`              | Always nonzero. That's the structural-hierarchy disagreement, usually the LLM's nesting being correct.                              |
+| `level diff`               | Same headline as parent diff; the LLM saw a subsection where TOC said top-level.                                                    |
 
 Per-category interpretation:
 
-| Category          | Most common explanation                                                                       | What to do                                                                |
-| ----------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Agreement         | Both saw the same heading.                                                                    | Trust it.                                                                 |
-| TOC only          | Either real headings the LLM missed, OR boilerplate the LLM intentionally skipped.            | Check body text. If real -> truncation or omission bug. If boilerplate -> tolerate. |
-| LLM only          | Real body headings the FAA didn't include in their printed TOC.                               | Usually valid finds; verify in body text.                                 |
-| Level mismatch    | LLM nested a subsection that TOC promoted to L1.                                              | LLM is usually correct.                                                   |
-| Parent mismatch   | Same heading, different parent. The two trees disagree about which L1 owns it.                | LLM is usually correct.                                                   |
+| Category        | Most common explanation                                                            | What to do                                                                          |
+| --------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Agreement       | Both saw the same heading.                                                         | Trust it.                                                                           |
+| TOC only        | Either real headings the LLM missed, OR boilerplate the LLM intentionally skipped. | Check body text. If real -> truncation or omission bug. If boilerplate -> tolerate. |
+| LLM only        | Real body headings the FAA didn't include in their printed TOC.                    | Usually valid finds; verify in body text.                                           |
+| Level mismatch  | LLM nested a subsection that TOC promoted to L1.                                   | LLM is usually correct.                                                             |
+| Parent mismatch | Same heading, different parent. The two trees disagree about which L1 owns it.     | LLM is usually correct.                                                             |
 
 ## Patterns observed in the phak FAA-H-8083-25C runs
 
@@ -251,17 +251,17 @@ not to make them.
 Cross-references the failure mode table in
 [handbook-ingest-pipeline.md](handbook-ingest-pipeline.md).
 
-| Strategy | Failure                              | Symptom                                              | Resolution                                                    |
-| -------- | ------------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------- |
-| TOC      | `OutlineError`                       | Pipeline aborts before section parse                 | Fix YAML `toc:` block (page_start / page_end / heading style) |
-| TOC      | Empty body / chapter markdown blank  | Fingerprint validation fails for every node          | Re-run extract; check upstream chapter markdown emission      |
-| TOC      | Fingerprint warnings (non-fatal)     | `manifest.json` has many warnings                    | Acceptable noise; only act if warning count is unusual        |
-| LLM      | Sidecar SHA mismatch                 | CLI rejects `_llm_section_tree.json` on read         | Re-paste using the exact run.md flow; do not hand-edit JSON   |
-| LLM      | Malformed JSON                       | Parse error during ingest                            | Re-paste; sub-agent likely added prose or fencing             |
-| LLM      | Missing `_model_self_report.txt`     | Validation rejects the run                           | Re-paste; sub-agent skipped the self-report step              |
-| LLM      | Output truncation                    | Tree ends mid-chapter; back-half sections missing    | Bump `chapter_text_max_chars`; re-emit prompt; re-paste       |
-| compare  | PDF SHA mismatch                     | Compare refuses to run                               | Re-emit prompts so sidecars match current PDF                 |
-| compare  | Sidecar missing                      | Per-chapter row blank in report                      | Re-paste run.md for that chapter                              |
+| Strategy | Failure                             | Symptom                                           | Resolution                                                    |
+| -------- | ----------------------------------- | ------------------------------------------------- | ------------------------------------------------------------- |
+| TOC      | `OutlineError`                      | Pipeline aborts before section parse              | Fix YAML `toc:` block (page_start / page_end / heading style) |
+| TOC      | Empty body / chapter markdown blank | Fingerprint validation fails for every node       | Re-run extract; check upstream chapter markdown emission      |
+| TOC      | Fingerprint warnings (non-fatal)    | `manifest.json` has many warnings                 | Acceptable noise; only act if warning count is unusual        |
+| LLM      | Sidecar SHA mismatch                | CLI rejects `_llm_section_tree.json` on read      | Re-paste using the exact run.md flow; do not hand-edit JSON   |
+| LLM      | Malformed JSON                      | Parse error during ingest                         | Re-paste; sub-agent likely added prose or fencing             |
+| LLM      | Missing `_model_self_report.txt`    | Validation rejects the run                        | Re-paste; sub-agent skipped the self-report step              |
+| LLM      | Output truncation                   | Tree ends mid-chapter; back-half sections missing | Bump `chapter_text_max_chars`; re-emit prompt; re-paste       |
+| compare  | PDF SHA mismatch                    | Compare refuses to run                            | Re-emit prompts so sidecars match current PDF                 |
+| compare  | Sidecar missing                     | Per-chapter row blank in report                   | Re-paste run.md for that chapter                              |
 
 ## Source files
 

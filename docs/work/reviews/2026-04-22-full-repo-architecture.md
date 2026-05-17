@@ -38,7 +38,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The overall layering (`constants -> types -> bc -> apps`) holds cleanly at the lib level: no cross-BC imports, no lib-to-app dependencies, `@ab/*` aliases used consistently across lib boundaries, and `bc-sim` is pure (safe for client bundles). The failures are concentrated at the app/routes layer: ~18 study routes each redefine the same visual primitives (`.btn`, `.banner`, `.error`, `.field`, `.card`) as inline CSS; formatter/narrowing helpers are duplicated 8-20 times across routes while the official versions sit in `@ab/utils` and `@ab/constants`; two browse routes import Drizzle table objects and hand-build queries in the route server, bypassing the BC; and the sim route carries ~280 lines of visual CSS with ~30 raw hex values. These are the exact patterns that will multiply when a second surface app (`spatial`, `avionics`, `reflect`, `hangar`) lands.

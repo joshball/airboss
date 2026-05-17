@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.10
 Title:           Post-Flight Debrief After Instrument Training
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_12]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-3', 'CJ-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Instrument Student Pre-Checkride
 Parameters:
   skillLevel:         0.7
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Post-flight debrief at the FBO. Student is satisfied with the flight, reviewing their approach tracking on a tablet. All approaches were within standard tolerances.
 studentSpeech:I think that went well! My ILS was within a dot the whole way, and the GPS approach was right on centerline. I feel ready for the checkride. What do you think?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student pauses and thinks about the weather decision. They realize they didn't really have a plan for deteriorating conditions.
 studentSpeech:Honestly, I noticed the weather was getting worse but the approach was going well, so I just kept going. I figured if the needles were good, the approach was good. Was that wrong?
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student understands the framework. Now asks about the approach briefing they skipped.
 studentSpeech:OK, that makes sense. What about the approach briefing? I know I'm supposed to do one but honestly, I've flown that ILS so many times I didn't think I needed to brief it. The DPE won't care about a familiar approach, will they?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student is processing the ACS framework seriously now. Asks what they need to do before the checkride.
 studentSpeech:So basically I need to demonstrate all three -- knowledge, risk management, and skill -- for every Task? How do I practice the risk management part? I can't practice bad weather decisions in a Cessna.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

@@ -30,7 +30,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final UX Review
 
 End-to-end UX review of the `spaced-memory-items` feature on branch `build/spaced-memory-items`. Scope: diff of 9 commits against `docs/initial-migration`, seven SvelteKit page files plus their load/action servers and the layout.
@@ -41,10 +40,10 @@ The feature works. The core review loop is tight, keyboard-first, and correctly 
 
 | Severity | Count |
 | -------- | ----- |
-| Critical |     2 |
-| Major    |     8 |
-| Minor    |    10 |
-| Nit      |     7 |
+| Critical | 2     |
+| Major    | 8     |
+| Minor    | 10    |
+| Nit      | 7     |
 
 ## Findings
 
@@ -100,6 +99,7 @@ A newly authenticated user who hits `/` after login has no path forward: no nav 
 **Impact:** Dulls the meaning of "there is something to do." Violates the "visible scheduling" intent of the spec -- the UI should tell you "0 due, nothing to review now."
 
 **Fix:** Swap primary emphasis based on state:
+
 - `dueNow > 0`: "Start review" primary, "New card" secondary. Optionally append `(N)` to the label.
 - `dueNow === 0`: "New card" primary, "Start review" demoted to ghost or hidden. Show next-due timestamp next to it so the user understands why.
 
@@ -140,6 +140,7 @@ The prompt text ("Before revealing -- how confident are you?") reads like a wron
 **Impact:** Every first-time confidence prompt is a small "wait what" moment. For a daily reviewer hitting this ~50% of the time, it's friction that pattern-learning will dull but never eliminate.
 
 **Fix:** Two options, pick one:
+
 1. **Preferred:** Show the confidence row *below* the front, always rendered on cards that qualify, with the "Show answer" button below it. User rates confidence, then the same button continues to the reveal. No branching phase. Keyboard shortcut unchanged.
 2. **Minimal:** Rename the button on confidence-prompted cards from "Show answer" to "Rate confidence -> reveal" so the user isn't surprised.
 
@@ -250,6 +251,7 @@ The prompt text ("Before revealing -- how confident are you?") reads like a wron
 **Impact:** Misses an opportunity the spec explicitly calls out ("algorithm-over-willpower"). A user who sees raw FSRS parameters but not their meaning will either tune them out (bad) or come up with wrong mental models (worse).
 
 **Fix:** Add a one-line caption under the schedule panel or inline tooltips:
+
 - **Stability:** "Your estimated memory half-life -- higher = you'll remember longer."
 - **Difficulty:** "1 is easy, 10 is hard. Adjusts with each rating."
 - **Next review:** consider adding a visual timeline (last review marker -> due marker -> now) -- already have the recent reviews table with dates; a thin visualization closes the loop.

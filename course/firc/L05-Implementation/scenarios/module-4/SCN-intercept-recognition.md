@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.3
 Title:           Cross-Country Near a Restricted Area
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_2]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Average Student
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Cruising at 5,500. A military fighter is visible at your 9 o'clock, same altitude, closing fast. It pulls alongside, approximately 1,000 feet to your left. The pilot is visible, rocking wings.
 studentSpeech:What is THAT? Is that a fighter jet? Why is it so close to us? What do we do?!
@@ -72,7 +72,7 @@ criticalWindow:[coach]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        The fighter pilot makes a slow turn to the right, looking back at you. This is the signal to follow. Your radio is now working (you fixed the stuck mic). Guard frequency is active.
 studentSpeech:They're turning! Are we supposed to follow them? I don't know what any of this means!
@@ -93,7 +93,7 @@ criticalWindow:[coach]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        You've been following the interceptor (or not). Guard frequency: "[Callsign], this is [callsign], turn to heading 090 and contact approach on 124.5." The interceptor breaks away after seeing your compliance.
 studentSpeech:OK, OK. Heading 090. They're leaving. Is it over? Are we in trouble?
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
                 \-> terminal_safe (direct/take_controls)
 ```

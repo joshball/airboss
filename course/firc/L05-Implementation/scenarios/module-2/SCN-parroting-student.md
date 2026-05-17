@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.3
 Title:           Emergency Procedures Review Before Checkride
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Parroting Student
 Parameters:
   skillLevel:         0.2
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Ground briefing. You ask the student to describe engine failure after takeoff. Student responds immediately and smoothly with a textbook answer -- pitch for best glide, identify a field, attempt restart if altitude permits.
 studentSpeech:Maintain Vy minus five until best glide is established, look for a field within a 30-degree cone, run the checklist if above 1,000 AGL. That's from the POH, section 3.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student pauses at the unexpected question. Looks at notes, then back at you. Gives an answer that partially makes sense but reveals a fundamental misunderstanding about energy management.
 studentSpeech:I'd... turn to find a better field? The airplane has enough energy to maneuver at best glide, right? You can turn as much as you want at best glide speed.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        In the air now. You simulate an engine failure at 2,000 AGL. Student immediately pitches for best glide (correct), identifies a field (correct), then begins a series of S-turns while descending -- maneuvering extensively while burning altitude.
 studentSpeech:I'm doing what we briefed. Best glide, field selected. Now I need to get lined up. Let me try from this angle... no, that's not right. Let me turn back...
@@ -114,7 +114,7 @@ criticalWindow:[ask]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        1,200 AGL now. Student has lost 800 feet maneuvering. The selected field is still reachable but the margin is thin. Student finally notices the altitude and looks alarmed.
 studentSpeech:Wait, I've lost a lot of altitude. I thought best glide meant I wouldn't lose much height in turns?
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
                          \-> terminal_safe (direct/take_controls)
 ```

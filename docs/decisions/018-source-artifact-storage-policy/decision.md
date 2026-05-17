@@ -15,11 +15,11 @@ supersedes: null
 
 Airboss adopts a three-tier storage rule for content artifacts. Source documents (FAA PDFs, AC PDFs, audio masters, etc.) are kept in a **developer-local cache directory outside the repo**, with **LFS plumbing left in place** so the storage decision can flip later without breaking commit history. Extracted derivatives stay inline. Generated artifacts stay out of the repo.
 
-| Tier                      | Examples                                                                  | Where                                                                                                  | Tracked how                                     |
-| ------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------- |
-| **Source documents**      | FAA handbook PDFs, AC PDFs, ACS publications, NTSB reports, audio masters | `$AIRBOSS_HANDBOOK_CACHE/<doc>/<edition>/source.<ext>` (default `~/Documents/airboss-handbook-cache/`) | Local cache + gitignore + LFS plumbing dormant  |
-| **Extracted derivatives** | Section markdown, figure PNGs, table HTML, manifest.json, transcripts     | Alongside the corpus root, inline tree                                                                 | Inline git                                      |
-| **Generated artifacts**   | DB rows, search indexes, computed graph edges                             | Postgres / app runtime                                                                                 | Not in repo at all                              |
+| Tier                      | Examples                                                                  | Where                                                                                                  | Tracked how                                    |
+| ------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
+| **Source documents**      | FAA handbook PDFs, AC PDFs, ACS publications, NTSB reports, audio masters | `$AIRBOSS_HANDBOOK_CACHE/<doc>/<edition>/source.<ext>` (default `~/Documents/airboss-handbook-cache/`) | Local cache + gitignore + LFS plumbing dormant |
+| **Extracted derivatives** | Section markdown, figure PNGs, table HTML, manifest.json, transcripts     | Alongside the corpus root, inline tree                                                                 | Inline git                                     |
+| **Generated artifacts**   | DB rows, search indexes, computed graph edges                             | Postgres / app runtime                                                                                 | Not in repo at all                             |
 
 The canonical reference for contributors and agents is [docs/platform/STORAGE.md](../../platform/STORAGE.md). Every new content corpus added to the repo follows this rule.
 

@@ -81,10 +81,10 @@ hangar
 
 ### Bucket card vs item card
 
-| Card type | Drag? | Click | Visual                                         |
-| --------- | ----- | ----- | ---------------------------------------------- |
-| Bucket    | No    | Expand drawer with item list | Bold title + small kind badge + count chip      |
-| Item      | Yes   | Open per-kind review view    | Title + status pills + ref subtext             |
+| Card type | Drag? | Click                        | Visual                                     |
+| --------- | ----- | ---------------------------- | ------------------------------------------ |
+| Bucket    | No    | Expand drawer with item list | Bold title + small kind badge + count chip |
+| Item      | Yes   | Open per-kind review view    | Title + status pills + ref subtext         |
 
 Buckets sit in their derived column based on majority/aggregate item state. Items the user has explicitly pinned (dragged) override their derived column.
 
@@ -270,11 +270,11 @@ The frontend renders `snippet` as HTML (the `<mark>` tags are part of the search
 
 `/review/admin/buckets` -- table view:
 
-| Name                       | Kind         | Filter summary                              | Items | Sort | Actions     |
-| -------------------------- | ------------ | ------------------------------------------- | ----- | ---- | ----------- |
-| WP Specs -- unread         | wp_spec      | frontmatterStatus = unread                  | 34    | 0    | Edit Delete |
-| WP Test Plans -- pending   | wp_test_plan | parent.reviewStatus = pending               | 21    | 1    | Edit Delete |
-| ...                        | ...          | ...                                         | ...   | ...  | ...         |
+| Name                     | Kind         | Filter summary                | Items | Sort | Actions     |
+| ------------------------ | ------------ | ----------------------------- | ----- | ---- | ----------- |
+| WP Specs -- unread       | wp_spec      | frontmatterStatus = unread    | 34    | 0    | Edit Delete |
+| WP Test Plans -- pending | wp_test_plan | parent.reviewStatus = pending | 21    | 1    | Edit Delete |
+| ...                      | ...          | ...                           | ...   | ...  | ...         |
 
 Form (new + edit):
 
@@ -385,12 +385,12 @@ Add to `libs/themes` if not already present. No hex literals in components.
 
 ## Component map
 
-| Component                  | Lib                       | Reuse?                          |
-| -------------------------- | ------------------------- | ------------------------------- |
-| Markdown renderer          | `libs/library`            | Yes, RenderedSection            |
-| File tree                  | new in `libs/ui`          | New (or borrow from sources UI) |
-| Board / columns / cards    | new in `libs/ui`          | New, port shape from firc       |
-| Walker step row            | new in `libs/ui`          | New                             |
-| TOC spot-check pane        | new in `libs/ui`          | New                             |
-| ConfirmDialog              | `libs/ui`                 | Existing                        |
-| StatusPill                 | `libs/ui`                 | Existing or trivial new         |
+| Component               | Lib              | Reuse?                          |
+| ----------------------- | ---------------- | ------------------------------- |
+| Markdown renderer       | `libs/library`   | Yes, RenderedSection            |
+| File tree               | new in `libs/ui` | New (or borrow from sources UI) |
+| Board / columns / cards | new in `libs/ui` | New, port shape from firc       |
+| Walker step row         | new in `libs/ui` | New                             |
+| TOC spot-check pane     | new in `libs/ui` | New                             |
+| ConfirmDialog           | `libs/ui`        | Existing                        |
+| StatusPill              | `libs/ui`        | Existing or trivial new         |

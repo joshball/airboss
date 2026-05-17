@@ -222,14 +222,14 @@ Behaviors:
 
 Failure modes:
 
-| Case | Behavior |
-| --- | --- |
-| Author writes unpinned, runs `--fix` against current registry | Stamps current `accepted` edition. Author sees the stamp in `git diff`. |
-| Author copy-pastes a stale pin from another lesson | Validator emits WARNING when any pin is older than current `accepted` by more than 1 edition. |
-| Stale registry (`pending` for current edition, `accepted` only for previous) | `--fix` stamps the most-recent `accepted` edition. PR review catches the lag if relevant. |
-| Mid-PR registry change (new edition lands while PR is in review) | `--fix` is opt-in; only re-stamps when author runs it. PR diff stays stable until author chooses. |
-| Multi-machine workflow | `--fix` is opt-in per machine. Branch tip is the source of truth; merge resolves divergences. |
-| Author wants explicit unpinned (rare) | Use `airboss-ref:regs/cfr-14/91/103?at=unpinned`. Validator emits WARNING (not ERROR). For lessons that genuinely speak about a regulation abstractly. |
+| Case                                                                         | Behavior                                                                                                                                               |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Author writes unpinned, runs `--fix` against current registry                | Stamps current `accepted` edition. Author sees the stamp in `git diff`.                                                                                |
+| Author copy-pastes a stale pin from another lesson                           | Validator emits WARNING when any pin is older than current `accepted` by more than 1 edition.                                                          |
+| Stale registry (`pending` for current edition, `accepted` only for previous) | `--fix` stamps the most-recent `accepted` edition. PR review catches the lag if relevant.                                                              |
+| Mid-PR registry change (new edition lands while PR is in review)             | `--fix` is opt-in; only re-stamps when author runs it. PR diff stays stable until author chooses.                                                      |
+| Multi-machine workflow                                                       | `--fix` is opt-in per machine. Branch tip is the source of truth; merge resolves divergences.                                                          |
+| Author wants explicit unpinned (rare)                                        | Use `airboss-ref:regs/cfr-14/91/103?at=unpinned`. Validator emits WARNING (not ERROR). For lessons that genuinely speak about a regulation abstractly. |
 
 #### Resolution rules
 
@@ -271,32 +271,32 @@ Build-time validation is tiered.
 
 Rules are evaluated **in order**; the validator emits exactly one error per identifier (the first matching rule).
 
-| # | Rule | Severity |
-| --- | --- | --- |
-| 0 | Identifier uses `unknown` magic prefix (e.g. `airboss-ref:unknown/<descriptive-string>`) | ERROR with message: "Transitional reference; cannot publish. Replace with a real identifier or wait for ingestion of the relevant corpus." |
-| 1 | Identifier must parse (URL form is path-rootless per §1.1.1, corpus is enumerated in §1.2 — `unknown` is excluded from this check, handled by row 0 — and locator is syntactically valid for that corpus's resolver) | ERROR |
-| 2 | Identifier resolves to an `accepted` or `superseded` registry entry | ERROR |
-| 3 | Pinned edition exists in registry; **OR** for unpinned identifiers, the locator precision permits unpinned (doc-or-chapter-level OK; page / paragraph / quote precision is ERROR). Per the amendment, an unpinned doc-or-chapter-level citation whose slug has no current edition emits a registry-aware ERROR with the suggested pin. | ERROR |
-| 4 | Identifier resolves to `pending`, `draft`, or `retired` | ERROR (message distinguishes the state: "entry is pending review", "entry is in draft", "entry is retired") |
-| 6 | Pinned edition is older than current `accepted` by > 1 edition | WARNING |
-| 7 | Link text is empty (after stripping Markdown markup) | ERROR |
-| 8 | Bare identifier in prose (not in link) | NOTICE |
-| 9 | Lazy link text (just the section number echoed back, no token) | NOTICE |
-| 10 | Renumbering alias within section, content unchanged | (silent auto-resolve) |
-| 11 | Renumbering alias, content changed | WARNING |
-| 12 | Cross-section move (a `cross-section` `AliasEntry`) | ERROR. The resolver does NOT walk past a `cross-section` alias; chain resolution stops at the first cross-section hop. Author must manually re-pin to the new identifier. See §6.1. |
-| 13 | Reference to superseded entry without `acknowledgments` entry | WARNING |
-| 14 | Reason slug in acknowledgments exceeds 48 characters | NOTICE |
-| 15 | Drift sentinel mismatch (captured `chapter_title`/`section_title`/`paragraph_text`/`page_heading` differs from resolver's value for the resolved edition) | NOTICE (does not block publish per §1.6) |
-| 16 | Sentinel updated in same commit as a registry edition advance for the cited slug (sentinel-laundering safeguard) | NOTICE (does not block publish per §1.6) |
+| #   | Rule                                                                                                                                                                                                                                                                                                                                   | Severity                                                                                                                                                                            |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0   | Identifier uses `unknown` magic prefix (e.g. `airboss-ref:unknown/<descriptive-string>`)                                                                                                                                                                                                                                               | ERROR with message: "Transitional reference; cannot publish. Replace with a real identifier or wait for ingestion of the relevant corpus."                                          |
+| 1   | Identifier must parse (URL form is path-rootless per §1.1.1, corpus is enumerated in §1.2 — `unknown` is excluded from this check, handled by row 0 — and locator is syntactically valid for that corpus's resolver)                                                                                                                   | ERROR                                                                                                                                                                               |
+| 2   | Identifier resolves to an `accepted` or `superseded` registry entry                                                                                                                                                                                                                                                                    | ERROR                                                                                                                                                                               |
+| 3   | Pinned edition exists in registry; **OR** for unpinned identifiers, the locator precision permits unpinned (doc-or-chapter-level OK; page / paragraph / quote precision is ERROR). Per the amendment, an unpinned doc-or-chapter-level citation whose slug has no current edition emits a registry-aware ERROR with the suggested pin. | ERROR                                                                                                                                                                               |
+| 4   | Identifier resolves to `pending`, `draft`, or `retired`                                                                                                                                                                                                                                                                                | ERROR (message distinguishes the state: "entry is pending review", "entry is in draft", "entry is retired")                                                                         |
+| 6   | Pinned edition is older than current `accepted` by > 1 edition                                                                                                                                                                                                                                                                         | WARNING                                                                                                                                                                             |
+| 7   | Link text is empty (after stripping Markdown markup)                                                                                                                                                                                                                                                                                   | ERROR                                                                                                                                                                               |
+| 8   | Bare identifier in prose (not in link)                                                                                                                                                                                                                                                                                                 | NOTICE                                                                                                                                                                              |
+| 9   | Lazy link text (just the section number echoed back, no token)                                                                                                                                                                                                                                                                         | NOTICE                                                                                                                                                                              |
+| 10  | Renumbering alias within section, content unchanged                                                                                                                                                                                                                                                                                    | (silent auto-resolve)                                                                                                                                                               |
+| 11  | Renumbering alias, content changed                                                                                                                                                                                                                                                                                                     | WARNING                                                                                                                                                                             |
+| 12  | Cross-section move (a `cross-section` `AliasEntry`)                                                                                                                                                                                                                                                                                    | ERROR. The resolver does NOT walk past a `cross-section` alias; chain resolution stops at the first cross-section hop. Author must manually re-pin to the new identifier. See §6.1. |
+| 13  | Reference to superseded entry without `acknowledgments` entry                                                                                                                                                                                                                                                                          | WARNING                                                                                                                                                                             |
+| 14  | Reason slug in acknowledgments exceeds 48 characters                                                                                                                                                                                                                                                                                   | NOTICE                                                                                                                                                                              |
+| 15  | Drift sentinel mismatch (captured `chapter_title`/`section_title`/`paragraph_text`/`page_heading` differs from resolver's value for the resolved edition)                                                                                                                                                                              | NOTICE (does not block publish per §1.6)                                                                                                                                            |
+| 16  | Sentinel updated in same commit as a registry edition advance for the cited slug (sentinel-laundering safeguard)                                                                                                                                                                                                                       | NOTICE (does not block publish per §1.6)                                                                                                                                            |
 
 Severity tiers:
 
-| Tier | Effect | Surfaced in |
-| --- | --- | --- |
-| ERROR | Blocks `bun run check`; blocks merge | CLI, CI, IDE |
-| WARNING | Visible in CI; doesn't block | CLI, CI, IDE |
-| NOTICE | IDE language server only | IDE |
+| Tier    | Effect                               | Surfaced in  |
+| ------- | ------------------------------------ | ------------ |
+| ERROR   | Blocks `bun run check`; blocks merge | CLI, CI, IDE |
+| WARNING | Visible in CI; doesn't block         | CLI, CI, IDE |
+| NOTICE  | IDE language server only             | IDE          |
 
 `bun run check` exits non-zero on any ERROR. CI optionally has a no-warnings-on-main gate as a separate enforcement.
 
@@ -426,13 +426,13 @@ draft → pending → accepted → retired
                   superseded
 ```
 
-| State | Meaning | Validator behavior |
-| --- | --- | --- |
-| `draft` | Corpus WP author writing entries before bulk-load. Not visible to validator. | N/A |
-| `pending` | Ingestion-loaded, awaiting engineer review. | ERROR on resolution |
-| `accepted` | Engineer-reviewed, valid. | OK on resolution |
-| `retired` | Was correct, no longer current (e.g. sunset clause with no successor). | ERROR on resolution (lessons must `acknowledge` or update) |
-| `superseded` | Replaced by another entry (`superseded_by` populated). | WARNING on resolution unless lesson acknowledges |
+| State        | Meaning                                                                      | Validator behavior                                         |
+| ------------ | ---------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `draft`      | Corpus WP author writing entries before bulk-load. Not visible to validator. | N/A                                                        |
+| `pending`    | Ingestion-loaded, awaiting engineer review.                                  | ERROR on resolution                                        |
+| `accepted`   | Engineer-reviewed, valid.                                                    | OK on resolution                                           |
+| `retired`    | Was correct, no longer current (e.g. sunset clause with no successor).       | ERROR on resolution (lessons must `acknowledge` or update) |
+| `superseded` | Replaced by another entry (`superseded_by` populated).                       | WARNING on resolution unless lesson acknowledges           |
 
 Transition rules:
 
@@ -463,15 +463,15 @@ export function substituteTokens(body: string, resolved: ResolvedIdentifierMap, 
 
 Render surfaces:
 
-| Surface | Loading pattern |
-| --- | --- |
-| Lesson page (SvelteKit SSR + hydration) | Server load function calls `extractIdentifiers` + `batchResolve`; passes `data` to component; component substitutes |
-| RAG citation snippet builder | Same, called from RAG indexer |
-| Share-card preview generator (1200x630 image) | Same, called from image builder |
-| RSS feed | Same, called from feed generator |
-| CLI PDF export | Same, called from CLI tool |
-| CLI bibliography export | Same, called from CLI tool |
-| Search-result snippet | Same, called from search service |
+| Surface                                       | Loading pattern                                                                                                     |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Lesson page (SvelteKit SSR + hydration)       | Server load function calls `extractIdentifiers` + `batchResolve`; passes `data` to component; component substitutes |
+| RAG citation snippet builder                  | Same, called from RAG indexer                                                                                       |
+| Share-card preview generator (1200x630 image) | Same, called from image builder                                                                                     |
+| RSS feed                                      | Same, called from feed generator                                                                                    |
+| CLI PDF export                                | Same, called from CLI tool                                                                                          |
+| CLI bibliography export                       | Same, called from CLI tool                                                                                          |
+| Search-result snippet                         | Same, called from search service                                                                                    |
 
 All TypeScript surfaces consume the same `@ab/sources/render` API. No per-surface batch-resolve reimplementation.
 
@@ -489,13 +489,13 @@ Lessons should not be authored for a corpus until that corpus's bulk ingestion h
 
 ### 2.7 Registry availability and consistency
 
-| Concern | Resolution |
-| --- | --- |
+| Concern                             | Resolution                                                                                                                                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Registry unavailable at render time | Static parts (`SourceEntry`) are constants in TypeScript, loaded at build. Dynamic parts (indexed content, current text) are fetched at render time per §2.5. If indexed tier is down, renderer falls back to live URL display. |
-| Registry diverges between dev/prod | Static registry is identical across deployments (in code). Indexed tier varies; the renderer surfaces an ENV-tagged build identifier so dev/prod divergence is debuggable. |
-| Registry queried by external tools | `@ab/sources` exports the query API as a public lib; external scripts import it directly. No HTTP API in v3 scope. |
-| Registry deletion safety | `accepted` entries are not deletable. They transition to `retired` with explicit reason. Lessons referencing retired entries get WARNING. |
-| Registry diverges between branches | Static registry is a TypeScript module; PR diff shows registry changes. PR review catches divergence before merge. |
+| Registry diverges between dev/prod  | Static registry is identical across deployments (in code). Indexed tier varies; the renderer surfaces an ENV-tagged build identifier so dev/prod divergence is debuggable.                                                      |
+| Registry queried by external tools  | `@ab/sources` exports the query API as a public lib; external scripts import it directly. No HTTP API in v3 scope.                                                                                                              |
+| Registry deletion safety            | `accepted` entries are not deletable. They transition to `retired` with explicit reason. Lessons referencing retired entries get WARNING.                                                                                       |
+| Registry diverges between branches  | Static registry is a TypeScript module; PR diff shows registry changes. PR review catches divergence before merge.                                                                                                              |
 
 ## 3. Inline syntax
 
@@ -513,47 +513,47 @@ Tokens in link text are substituted from the registry at render time. The token 
 
 Initial vocabulary:
 
-| Token | Substitutes with | Example |
-| --- | --- | --- |
-| `@short` | `canonical_short` field | `§91.103` |
-| `@formal` | `canonical_formal` field | `14 CFR § 91.103` |
-| `@title` | `canonical_title` field | `Preflight action` |
-| `@cite` | `canonical_short` + space + `canonical_title` | `§91.103 Preflight action` |
-| `@list` | normalized list (when adjacent identifiers same corpus + pin); single ref produces list-of-one | `§91.103, §91.104, §91.106, §91.107` |
-| `@as-of` | the pin, as a literal | `2026` (just the value; author writes "as of @as-of") |
-| `@text` | inline current text of the section | (full quoted text -- short refs only; long refs use `@quote`) |
-| `@quote` | block-quoted full text with citation footer | (full text + citation) |
-| `@last-amended` | date this section was last amended (per-section, from `SourceEntry.last_amended_date`) | `2024-09-15` |
-| `@deeplink` | the resolver service URL only, for "see also" formatting | (URL) |
-| `@chapter` / `@subpart` / `@part` | containing-element titles, for breadcrumb rendering | `Subpart B - Flight Rules` |
+| Token                             | Substitutes with                                                                               | Example                                                       |
+| --------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `@short`                          | `canonical_short` field                                                                        | `§91.103`                                                     |
+| `@formal`                         | `canonical_formal` field                                                                       | `14 CFR § 91.103`                                             |
+| `@title`                          | `canonical_title` field                                                                        | `Preflight action`                                            |
+| `@cite`                           | `canonical_short` + space + `canonical_title`                                                  | `§91.103 Preflight action`                                    |
+| `@list`                           | normalized list (when adjacent identifiers same corpus + pin); single ref produces list-of-one | `§91.103, §91.104, §91.106, §91.107`                          |
+| `@as-of`                          | the pin, as a literal                                                                          | `2026` (just the value; author writes "as of @as-of")         |
+| `@text`                           | inline current text of the section                                                             | (full quoted text -- short refs only; long refs use `@quote`) |
+| `@quote`                          | block-quoted full text with citation footer                                                    | (full text + citation)                                        |
+| `@last-amended`                   | date this section was last amended (per-section, from `SourceEntry.last_amended_date`)         | `2024-09-15`                                                  |
+| `@deeplink`                       | the resolver service URL only, for "see also" formatting                                       | (URL)                                                         |
+| `@chapter` / `@subpart` / `@part` | containing-element titles, for breadcrumb rendering                                            | `Subpart B - Flight Rules`                                    |
 
 Render-mode behavior:
 
-| Render mode | Behavior |
-| --- | --- |
-| Web (HTML, default) | Tokens substitute; identifier becomes hyperlink |
-| Print export (PDF) | Tokens substitute; identifier becomes inline text + footnote with resolver service URL |
-| Audio TTS | Tokens substitute; identifier omitted from spoken output. Author's choice of token determines length: `@cite` is read fully; `@text`/`@quote` reads the regulation aloud (intentional -- if you wanted shorter, use `@cite`). |
-| Screen reader | Same as web; aria-label set from `@cite` |
-| Plain-text export | Tokens substitute; **resolver service URL** appended as `(<URL>)` after substituted text |
-| RSS / email digest | Same as web; URLs are absolute |
-| Share-card preview (1200x630) | Tokens substitute to abbreviated form; truncate at 80 chars; identifier omitted |
-| RAG citation footnote | `@formal` (or `@cite` if length permits) plus resolver service URL; identifier preserved as machine-readable hint |
-| Slack / iMessage unfurl | Title from `@cite`; description from lesson title |
-| Transclusion (lesson included in another lesson) | Tokens substitute against the **included lesson's pins** (mandatory pinning means each ref carries its edition; transclusion preserves) |
-| Tooltip / hover preview | Author's chosen token rendered; truncate at 200 chars (does not override author choice) |
+| Render mode                                      | Behavior                                                                                                                                                                                                                      |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web (HTML, default)                              | Tokens substitute; identifier becomes hyperlink                                                                                                                                                                               |
+| Print export (PDF)                               | Tokens substitute; identifier becomes inline text + footnote with resolver service URL                                                                                                                                        |
+| Audio TTS                                        | Tokens substitute; identifier omitted from spoken output. Author's choice of token determines length: `@cite` is read fully; `@text`/`@quote` reads the regulation aloud (intentional -- if you wanted shorter, use `@cite`). |
+| Screen reader                                    | Same as web; aria-label set from `@cite`                                                                                                                                                                                      |
+| Plain-text export                                | Tokens substitute; **resolver service URL** appended as `(<URL>)` after substituted text                                                                                                                                      |
+| RSS / email digest                               | Same as web; URLs are absolute                                                                                                                                                                                                |
+| Share-card preview (1200x630)                    | Tokens substitute to abbreviated form; truncate at 80 chars; identifier omitted                                                                                                                                               |
+| RAG citation footnote                            | `@formal` (or `@cite` if length permits) plus resolver service URL; identifier preserved as machine-readable hint                                                                                                             |
+| Slack / iMessage unfurl                          | Title from `@cite`; description from lesson title                                                                                                                                                                             |
+| Transclusion (lesson included in another lesson) | Tokens substitute against the **included lesson's pins** (mandatory pinning means each ref carries its edition; transclusion preserves)                                                                                       |
+| Tooltip / hover preview                          | Author's chosen token rendered; truncate at 200 chars (does not override author choice)                                                                                                                                       |
 
 ### 3.2 Authoring posture
 
-| Pattern | Severity | Notes |
-| --- | --- | --- |
-| `[<text>](airboss-ref:.../...?at=2026)` | OK | Standard form |
-| `[<text>](airboss-ref:.../...)` (no pin, slug doesn't encode) | ERROR | Author must run `--fix` or add pin |
-| `[](airboss-ref:.../...?at=2026)` empty link text | ERROR | |
-| `airboss-ref:.../...` bare in prose | NOTICE | IDE-only; encourages link wrapping |
-| `[91.103](airboss-ref:.../91/103?at=2026)` lazy text | NOTICE | Encourages `@short` or `@cite` |
-| `[@cite](airboss-ref:.../91/103?at=2026)` | OK | Recommended default |
-| `[*emphasized text*](airboss-ref:...)` | OK | Markdown emphasis allowed; "empty" check is on stripped text |
+| Pattern                                                       | Severity | Notes                                                        |
+| ------------------------------------------------------------- | -------- | ------------------------------------------------------------ |
+| `[<text>](airboss-ref:.../...?at=2026)`                       | OK       | Standard form                                                |
+| `[<text>](airboss-ref:.../...)` (no pin, slug doesn't encode) | ERROR    | Author must run `--fix` or add pin                           |
+| `[](airboss-ref:.../...?at=2026)` empty link text             | ERROR    |                                                              |
+| `airboss-ref:.../...` bare in prose                           | NOTICE   | IDE-only; encourages link wrapping                           |
+| `[91.103](airboss-ref:.../91/103?at=2026)` lazy text          | NOTICE   | Encourages `@short` or `@cite`                               |
+| `[@cite](airboss-ref:.../91/103?at=2026)`                     | OK       | Recommended default                                          |
+| `[*emphasized text*](airboss-ref:...)`                        | OK       | Markdown emphasis allowed; "empty" check is on stripped text |
 
 ### 3.3 Bibliography is derived
 
@@ -623,13 +623,13 @@ Lesson-level shortcut for "the whole lesson is historical context" -- every refe
 
 ADR 018 has three tiers (source / derivative / generated). This ADR introduces two more:
 
-| Tier | What it is | Where | Owner | Invalidation trigger |
-| --- | --- | --- | --- | --- |
-| **Source** | Original artifact published by an outside authority | `$AIRBOSS_HANDBOOK_CACHE/` outside repo | External | Outside our control |
-| **Derivative** | Pipeline-extracted markdown, figures, tables, manifest | In repo, committed | Corpus pipeline | Source change |
-| **Indexed** | Structured DB rows mirroring derivatives | Postgres | Corpus pipeline | Derivative change OR ingestion schema migration |
-| **Computed** | Embeddings, full-text indexes, knowledge graph edges, cross-corpus joins | Postgres (different tables) | Platform | Per-artifact dependency contract (see §4.1) |
-| **Generated** | User-state computations (mastery scores, leaderboards, recommendations) | Postgres (different tables) | Platform | Continuously, from user interaction |
+| Tier           | What it is                                                               | Where                                   | Owner           | Invalidation trigger                            |
+| -------------- | ------------------------------------------------------------------------ | --------------------------------------- | --------------- | ----------------------------------------------- |
+| **Source**     | Original artifact published by an outside authority                      | `$AIRBOSS_HANDBOOK_CACHE/` outside repo | External        | Outside our control                             |
+| **Derivative** | Pipeline-extracted markdown, figures, tables, manifest                   | In repo, committed                      | Corpus pipeline | Source change                                   |
+| **Indexed**    | Structured DB rows mirroring derivatives                                 | Postgres                                | Corpus pipeline | Derivative change OR ingestion schema migration |
+| **Computed**   | Embeddings, full-text indexes, knowledge graph edges, cross-corpus joins | Postgres (different tables)             | Platform        | Per-artifact dependency contract (see §4.1)     |
+| **Generated**  | User-state computations (mastery scores, leaderboards, recommendations)  | Postgres (different tables)             | Platform        | Continuously, from user interaction             |
 
 ADR 018 / [STORAGE.md](../../platform/STORAGE.md) updated to reflect.
 
@@ -757,19 +757,19 @@ For lesson-level groupings, the grouping lives in link prose -- one link per ide
 
 Bulk ingestion lands before the renderer. Lesson authoring resumes against a populated registry.
 
-| Phase | Work package | Deliverable | Prereq |
-| --- | --- | --- | --- |
-| 0 | This ADR | Decision document | -- |
-| 1 | reference-identifier-scheme-validator | Markdown parser; validator runs at `bun run check` time. Produces ERROR/WARNING/NOTICE per §1.5. Falls back to per-corpus URL formula for `unknown:` references. | ADR approved |
-| 2 | reference-source-registry-core | `@ab/sources` lib: schema, types, query API, resolver registration. Empty registry. | Phase 1 |
-| 3 | reference-cfr-ingestion-bulk | Full eCFR ingestion (Title 14, 49 CFR 830, 49 CFR 1552). Populates registry to `pending`; reviewer promotes to `accepted`. | Phase 2 |
-| 4 | reference-renderer-runtime | Renderer in `apps/study/` resolves identifiers at render time, performs token substitution, applies render-mode rules. `@ab/sources/render` exposed for all surfaces. | Phases 1-3 |
-| 5 | reference-versioning-tooling | Annual diff job, hash-compare, lesson rewrite generator. | Phases 1-3 |
-| 6 | reference-handbook-ingestion | PHAK + AFH ingestion (per ADR 018 cache pattern). | Phase 2 |
-| 7 | reference-aim-ingestion | AIM ingestion. | Phase 2 |
-| 8 | reference-ac-ingestion | AC catalog ingestion (full text where licensing permits). | Phase 2 |
-| 9 | reference-lesson-migration | One-pass migration of pre-ADR-019 lessons to identifier syntax (see §9). | Phases 1-4 |
-| 10 | reference-irregular-corpora | NTSB reports, Chief Counsel letters, FAA Orders, sectionals, plates, ACS, etc. -- per-corpus WPs as needed. | Phase 2 |
+| Phase | Work package                          | Deliverable                                                                                                                                                           | Prereq       |
+| ----- | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| 0     | This ADR                              | Decision document                                                                                                                                                     | --           |
+| 1     | reference-identifier-scheme-validator | Markdown parser; validator runs at `bun run check` time. Produces ERROR/WARNING/NOTICE per §1.5. Falls back to per-corpus URL formula for `unknown:` references.      | ADR approved |
+| 2     | reference-source-registry-core        | `@ab/sources` lib: schema, types, query API, resolver registration. Empty registry.                                                                                   | Phase 1      |
+| 3     | reference-cfr-ingestion-bulk          | Full eCFR ingestion (Title 14, 49 CFR 830, 49 CFR 1552). Populates registry to `pending`; reviewer promotes to `accepted`.                                            | Phase 2      |
+| 4     | reference-renderer-runtime            | Renderer in `apps/study/` resolves identifiers at render time, performs token substitution, applies render-mode rules. `@ab/sources/render` exposed for all surfaces. | Phases 1-3   |
+| 5     | reference-versioning-tooling          | Annual diff job, hash-compare, lesson rewrite generator.                                                                                                              | Phases 1-3   |
+| 6     | reference-handbook-ingestion          | PHAK + AFH ingestion (per ADR 018 cache pattern).                                                                                                                     | Phase 2      |
+| 7     | reference-aim-ingestion               | AIM ingestion.                                                                                                                                                        | Phase 2      |
+| 8     | reference-ac-ingestion                | AC catalog ingestion (full text where licensing permits).                                                                                                             | Phase 2      |
+| 9     | reference-lesson-migration            | One-pass migration of pre-ADR-019 lessons to identifier syntax (see §9).                                                                                              | Phases 1-4   |
+| 10    | reference-irregular-corpora           | NTSB reports, Chief Counsel letters, FAA Orders, sectionals, plates, ACS, etc. -- per-corpus WPs as needed.                                                           | Phase 2      |
 
 CFR ingestion (Phase 3) before renderer (Phase 4) so the validator's resolution check is meaningful when authoring resumes. Lessons authored in Phase 3 (post-CFR-ingestion, pre-renderer) display via per-corpus URL formula fallback (live eCFR URL); the renderer is enhancement, not foundation.
 
@@ -785,11 +785,11 @@ Pre-ADR-019 lessons (Week 1 + 2 capstones) reference regulations in three forms:
 
 Migration is per-lesson, interactive (not fully mechanical):
 
-| Form | Migration rule |
-| --- | --- |
-| Existing eCFR URL | Parse URL, extract section, generate identifier. Pin to the **year of the lesson's last meaningful edit** (read from `git log`). Surface as a WARNING during migration; author reviews each batch. |
-| Bold prose without URL | Treated as bare prose -- interactive review. |
-| Bare prose | Migration tool presents candidate matches; author confirms each. Some occurrences are intentional ("the §91.103 family of rules"); migration tool offers "leave as prose" option. |
+| Form                   | Migration rule                                                                                                                                                                                     |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Existing eCFR URL      | Parse URL, extract section, generate identifier. Pin to the **year of the lesson's last meaningful edit** (read from `git log`). Surface as a WARNING during migration; author reviews each batch. |
+| Bold prose without URL | Treated as bare prose -- interactive review.                                                                                                                                                       |
+| Bare prose             | Migration tool presents candidate matches; author confirms each. Some occurrences are intentional ("the §91.103 family of rules"); migration tool offers "leave as prose" option.                  |
 
 Edition pinning: each migrated reference pins to the year the lesson was last meaningfully edited. The git log is the audit trail. After migration, references are pinned; they participate in the annual rollover diff job from the next cycle onward.
 
@@ -797,17 +797,17 @@ The migration tool itself is a Phase 9 WP deliverable; this ADR specifies the ru
 
 ## 10. Resolved deferrals
 
-| Topic | Resolution |
-| --- | --- |
-| Internationalization (ICAO, EASA, translations) | DEFERRED with trigger: when first non-English / non-FAA corpus is ingested (see [revisit.md](revisit.md)). |
-| Audio transcript spoken-form citations | DEFERRED with trigger: when `apps/audio/` ships its first surface that consumes content from the registry (see [revisit.md](revisit.md)). |
-| Pub/sub regulation-diff alerts | DEFERRED with trigger: when learner notifications surface ships in `apps/study/` (see [revisit.md](revisit.md)). |
-| Cross-reference staleness modeling | DEFERRED with trigger: when third lesson is flagged for cross-reference issues during annual rollover (see [revisit.md](revisit.md)). |
-| Hangar UI for non-engineer-edited registry entries | DEFERRED with trigger: when `apps/hangar/` ships content authoring (see [revisit.md](revisit.md)). |
-| Academic citation formatters | DROPPED. No concrete trigger. If a real need arises, the need itself becomes the trigger; we don't pre-author a deferral. |
-| Resolver service infrastructure (`refs.airboss.dev`) | DROPPED from v3 scope. External-viewer fallback is the per-corpus live URL (eCFR for regs, faa.gov for AIM/ACs). Resolver service can be added later as enhancement; not load-bearing. |
-| `@unspecified` pin form | DROPPED. Mandatory pinning is the discipline; "deliberately ambiguous" cases use `+historical` ack on a representative pin instead. |
-| `?at=unpinned` query value | DROPPED per [amendment 2026-05](amendment-2026-05-optional-edition.md) D3. The amendment makes edition optional for chapter-and-doc-level locators; authors omit `?at=` instead of writing `?at=unpinned`. The literal is now silently treated as a missing pin by the validator. |
+| Topic                                                | Resolution                                                                                                                                                                                                                                                                        |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Internationalization (ICAO, EASA, translations)      | DEFERRED with trigger: when first non-English / non-FAA corpus is ingested (see [revisit.md](revisit.md)).                                                                                                                                                                        |
+| Audio transcript spoken-form citations               | DEFERRED with trigger: when `apps/audio/` ships its first surface that consumes content from the registry (see [revisit.md](revisit.md)).                                                                                                                                         |
+| Pub/sub regulation-diff alerts                       | DEFERRED with trigger: when learner notifications surface ships in `apps/study/` (see [revisit.md](revisit.md)).                                                                                                                                                                  |
+| Cross-reference staleness modeling                   | DEFERRED with trigger: when third lesson is flagged for cross-reference issues during annual rollover (see [revisit.md](revisit.md)).                                                                                                                                             |
+| Hangar UI for non-engineer-edited registry entries   | DEFERRED with trigger: when `apps/hangar/` ships content authoring (see [revisit.md](revisit.md)).                                                                                                                                                                                |
+| Academic citation formatters                         | DROPPED. No concrete trigger. If a real need arises, the need itself becomes the trigger; we don't pre-author a deferral.                                                                                                                                                         |
+| Resolver service infrastructure (`refs.airboss.dev`) | DROPPED from v3 scope. External-viewer fallback is the per-corpus live URL (eCFR for regs, faa.gov for AIM/ACs). Resolver service can be added later as enhancement; not load-bearing.                                                                                            |
+| `@unspecified` pin form                              | DROPPED. Mandatory pinning is the discipline; "deliberately ambiguous" cases use `+historical` ack on a representative pin instead.                                                                                                                                               |
+| `?at=unpinned` query value                           | DROPPED per [amendment 2026-05](amendment-2026-05-optional-edition.md) D3. The amendment makes edition optional for chapter-and-doc-level locators; authors omit `?at=` instead of writing `?at=unpinned`. The literal is now silently treated as a missing pin by the validator. |
 
 ## 11. Acceptance criteria
 

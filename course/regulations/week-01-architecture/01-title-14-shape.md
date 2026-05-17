@@ -102,15 +102,15 @@ Subchapter F (Air Traffic and General Operating Rules)
 
 Each level is named, not numbered the same way:
 
-| Level       | Example        | What it is                                            |
-| ----------- | -------------- | ----------------------------------------------------- |
-| Title       | Title 14       | The whole subject (aeronautics and space)             |
-| Chapter     | Chapter I      | Which agency wrote it (the FAA)                       |
-| Subchapter  | Subchapter F   | Which broad category (air traffic / general operating)|
-| Part        | Part 91        | A specific regulatory regime                          |
-| Subpart     | Subpart B      | A topical group within the Part                       |
-| Section     | §91.103        | One specific rule                                     |
-| Paragraph   | (a)(1)         | Sub-clauses of the section                            |
+| Level      | Example      | What it is                                             |
+| ---------- | ------------ | ------------------------------------------------------ |
+| Title      | Title 14     | The whole subject (aeronautics and space)              |
+| Chapter    | Chapter I    | Which agency wrote it (the FAA)                        |
+| Subchapter | Subchapter F | Which broad category (air traffic / general operating) |
+| Part       | Part 91      | A specific regulatory regime                           |
+| Subpart    | Subpart B    | A topical group within the Part                        |
+| Section    | §91.103      | One specific rule                                      |
+| Paragraph  | (a)(1)       | Sub-clauses of the section                             |
 
 You read a citation as `Part.Section(paragraph)(sub)(item)`. We cover that mechanically in [02-how-to-read-a-citation.md](02-how-to-read-a-citation.md).
 
@@ -118,28 +118,28 @@ You read a citation as `Part.Section(paragraph)(sub)(item)`. We cover that mecha
 
 Out of ~270 distinct parts in Title 14, only about 15 affect a working pilot directly. The rest exist for airlines, manufacturers, repair stations, NASA, drone operators, etc.
 
-| Part      | Title                                                              | Why it matters to you                            |
-| --------- | ------------------------------------------------------------------ | ------------------------------------------------ |
-| **1**     | Definitions and abbreviations                                       | The FAA's dictionary. You will reference it constantly |
-| 21        | Certification procedures for products and articles                  | Aircraft certification (rare CFI need)           |
-| 23 / 25 / 27 / 29 | Airworthiness standards (small / large / rotorcraft normal / transport) | Background; you don't memorize these |
-| 39        | Airworthiness directives                                            | ADs apply to you if you fly an airplane          |
-| 43        | Maintenance, preventive maintenance, rebuilding, alteration         | What pilots can and can't do to airplanes        |
-| **61**    | Certification: pilots, flight instructors, ground instructors       | **The pilot.** Most-used part you'll ever read   |
-| 65        | Certification: airmen other than flight crewmembers                 | Mechanics, dispatchers, ATC                      |
-| **67**    | Medical standards and certification                                 | Where your medical lives                         |
-| 71        | Designation of class A, B, C, D, E airspace                         | Airspace classification                          |
-| 77        | Safe, efficient use, and preservation of navigable airspace         | Obstruction standards                            |
-| **91**    | General operating and flight rules                                  | **The flight.** Even more-used than 61          |
-| 97        | Standard instrument procedures                                      | The legal home of every published approach       |
-| 119       | Certification: air carriers and commercial operators                | Sets up Parts 121 / 125 / 135                    |
-| 121       | Operating requirements: domestic, flag, supplemental ops            | Airline ops                                      |
-| 125       | Certification and operations: airplanes 6,000+ lbs                  | Niche                                            |
-| 135       | Operating requirements: commuter and on-demand ops                  | On-demand commercial                             |
-| **141**   | Pilot schools                                                       | **The operation.** Structured training          |
-| 142       | Training centers                                                    | Type-rating training centers                     |
-| 145       | Repair stations                                                     | Where overhauls live                             |
-| 183       | Representatives of the Administrator                                | DPEs, CFIs as designees                          |
+| Part              | Title                                                                   | Why it matters to you                                  |
+| ----------------- | ----------------------------------------------------------------------- | ------------------------------------------------------ |
+| **1**             | Definitions and abbreviations                                           | The FAA's dictionary. You will reference it constantly |
+| 21                | Certification procedures for products and articles                      | Aircraft certification (rare CFI need)                 |
+| 23 / 25 / 27 / 29 | Airworthiness standards (small / large / rotorcraft normal / transport) | Background; you don't memorize these                   |
+| 39                | Airworthiness directives                                                | ADs apply to you if you fly an airplane                |
+| 43                | Maintenance, preventive maintenance, rebuilding, alteration             | What pilots can and can't do to airplanes              |
+| **61**            | Certification: pilots, flight instructors, ground instructors           | **The pilot.** Most-used part you'll ever read         |
+| 65                | Certification: airmen other than flight crewmembers                     | Mechanics, dispatchers, ATC                            |
+| **67**            | Medical standards and certification                                     | Where your medical lives                               |
+| 71                | Designation of class A, B, C, D, E airspace                             | Airspace classification                                |
+| 77                | Safe, efficient use, and preservation of navigable airspace             | Obstruction standards                                  |
+| **91**            | General operating and flight rules                                      | **The flight.** Even more-used than 61                 |
+| 97                | Standard instrument procedures                                          | The legal home of every published approach             |
+| 119               | Certification: air carriers and commercial operators                    | Sets up Parts 121 / 125 / 135                          |
+| 121               | Operating requirements: domestic, flag, supplemental ops                | Airline ops                                            |
+| 125               | Certification and operations: airplanes 6,000+ lbs                      | Niche                                                  |
+| 135               | Operating requirements: commuter and on-demand ops                      | On-demand commercial                                   |
+| **141**           | Pilot schools                                                           | **The operation.** Structured training                 |
+| 142               | Training centers                                                        | Type-rating training centers                           |
+| 145               | Repair stations                                                         | Where overhauls live                                   |
+| 183               | Representatives of the Administrator                                    | DPEs, CFIs as designees                                |
 
 Read the bold ones in their entirety eventually. Read the others when a specific question demands it.
 
@@ -147,17 +147,17 @@ Read the bold ones in their entirety eventually. Read the others when a specific
 
 A surprising amount of pilot-relevant law lives outside Title 14. Knowing where to look is half the skill:
 
-| Source                        | What it covers                                                         | Where it lives                  |
-| ----------------------------- | ---------------------------------------------------------------------- | ------------------------------- |
-| **49 CFR 830**                | NTSB accident / incident reporting                                      | Title 49, NOT 14                |
-| **49 CFR 1552**               | TSA flight training rule (foreign students)                            | Title 49                        |
-| **49 USC 44703**              | BasicMed statutory basis (the underlying authority for 14 CFR 61.113(i)) | The U.S. Code, not the CFR    |
-| **AIM**                       | Aeronautical Information Manual -- procedural guidance                  | FAA-published, NOT a regulation but enforceable indirectly via 91.13 |
-| **ACs**                       | Advisory Circulars -- non-binding guidance                              | FAA-published                   |
-| **Chief Counsel letters**     | Authoritative interpretation when regulation is ambiguous              | FAA-published                   |
-| **NTSB Board orders**         | Case-law-equivalent enforcement precedent                               | NTSB-published                  |
-| **FAA Order 2150.3**          | FAA enforcement handbook                                                | FAA-published                   |
-| **FAA Order 8900.1**          | Flight Standards Information Management System (FSDO operations)        | FAA-published                   |
+| Source                    | What it covers                                                           | Where it lives                                                       |
+| ------------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------- |
+| **49 CFR 830**            | NTSB accident / incident reporting                                       | Title 49, NOT 14                                                     |
+| **49 CFR 1552**           | TSA flight training rule (foreign students)                              | Title 49                                                             |
+| **49 USC 44703**          | BasicMed statutory basis (the underlying authority for 14 CFR 61.113(i)) | The U.S. Code, not the CFR                                           |
+| **AIM**                   | Aeronautical Information Manual -- procedural guidance                   | FAA-published, NOT a regulation but enforceable indirectly via 91.13 |
+| **ACs**                   | Advisory Circulars -- non-binding guidance                               | FAA-published                                                        |
+| **Chief Counsel letters** | Authoritative interpretation when regulation is ambiguous                | FAA-published                                                        |
+| **NTSB Board orders**     | Case-law-equivalent enforcement precedent                                | NTSB-published                                                       |
+| **FAA Order 2150.3**      | FAA enforcement handbook                                                 | FAA-published                                                        |
+| **FAA Order 8900.1**      | Flight Standards Information Management System (FSDO operations)         | FAA-published                                                        |
 
 We treat these as **companion documents** -- next lesson, [03-companion-documents.md](03-companion-documents.md).
 
@@ -165,20 +165,20 @@ We treat these as **companion documents** -- next lesson, [03-companion-document
 
 When you encounter a question, ask yourself: *what kind of thing is the question about?*
 
-| Kind of question                                       | Where to look first |
-| ------------------------------------------------------ | ------------------- |
-| "Can this person legally do X?" (cert / currency / endorsement) | Part 61             |
-| "Is this person medically allowed to fly?"             | Part 67 (or BasicMed via 61.113(i)) |
-| "Is this *flight* allowed under these conditions?"     | Part 91             |
-| "Does this aircraft have the required equipment?"      | Part 91 subpart C   |
-| "When is the next inspection due?"                     | Part 91 subpart E (or Part 43) |
-| "What can I as a pilot do to the airplane myself?"     | Part 43 appendix A  |
-| "Is this approach legal?"                              | Part 97 + Part 91 (91.175) |
-| "Is this airspace this class?"                         | Part 71             |
-| "Does this AD apply?"                                  | Part 39             |
-| "Is this a 91, 135, 141, or 121 operation?"            | Part 119 + the relevant operating part |
-| "Does my school need to be 141?"                       | Part 141 (vs Part 61)|
-| "Did something happen that I have to report?"          | 49 CFR 830 (NTSB)   |
+| Kind of question                                                | Where to look first                    |
+| --------------------------------------------------------------- | -------------------------------------- |
+| "Can this person legally do X?" (cert / currency / endorsement) | Part 61                                |
+| "Is this person medically allowed to fly?"                      | Part 67 (or BasicMed via 61.113(i))    |
+| "Is this *flight* allowed under these conditions?"              | Part 91                                |
+| "Does this aircraft have the required equipment?"               | Part 91 subpart C                      |
+| "When is the next inspection due?"                              | Part 91 subpart E (or Part 43)         |
+| "What can I as a pilot do to the airplane myself?"              | Part 43 appendix A                     |
+| "Is this approach legal?"                                       | Part 97 + Part 91 (91.175)             |
+| "Is this airspace this class?"                                  | Part 71                                |
+| "Does this AD apply?"                                           | Part 39                                |
+| "Is this a 91, 135, 141, or 121 operation?"                     | Part 119 + the relevant operating part |
+| "Does my school need to be 141?"                                | Part 141 (vs Part 61)                  |
+| "Did something happen that I have to report?"                   | 49 CFR 830 (NTSB)                      |
 
 We refine this map all course. By Week 10 you'll do it without the table.
 

@@ -60,6 +60,7 @@ machine, IO funneled through injected writers, no app concerns leaking in.
 ### CRITICAL: package-level circular dependency between bc-hangar, hangar-jobs, and hangar-sync
 
 **File:**
+
 - `libs/bc/hangar/package.json` (depends on `@ab/hangar-jobs`, `@ab/hangar-sync`)
 - `libs/hangar-jobs/package.json` (depends on `@ab/bc-hangar`)
 - `libs/hangar-sync/package.json` (depends on `@ab/bc-hangar`, `@ab/hangar-jobs`)
@@ -132,6 +133,7 @@ DAG, no cycles.
 ### MAJOR: `@ab/hangar-jobs` claims to be generic infra but couples to bc-hangar's schema
 
 **File:**
+
 - `libs/hangar-jobs/src/index.ts` (comment header)
 - `libs/hangar-jobs/src/worker.ts:20`
 - `libs/hangar-jobs/src/enqueue.ts:10`
@@ -230,6 +232,7 @@ authored by a sibling lib.
 ### MAJOR: REPO_ROOT computed twice with different ascent counts; both exported
 
 **File:**
+
 - `libs/bc/hangar/src/source-jobs.ts:30-32`
 - `libs/hangar-sync/src/paths.ts:21-22`
 
@@ -323,6 +326,7 @@ two ways to break the cycle.
 ### MINOR: hangar app re-implements job-enqueue error handling at every form action
 
 **File:**
+
 - `apps/hangar/src/routes/(app)/sources/+page.server.ts:161-184`
 - `apps/hangar/src/routes/(app)/sources/[id]/+page.server.ts:96-127`
 - `apps/hangar/src/routes/(app)/sources/[id]/diff/+page.server.ts:46-89`
@@ -391,19 +395,19 @@ return shape.
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| CRITICAL: 3-way package cycle (bc-hangar / hangar-jobs / hangar-sync) | CLOSED | PR #435 -- job tables relocated to `libs/hangar-jobs/src/schema.ts`; handler-map assembled in `apps/hangar/src/lib/server/`; `bc-hangar` no longer depends on `hangar-sync` |
-| MAJOR: `@ab/hangar-jobs` not actually generic | CLOSED | PR #435 -- owns its own schema + JobKind opaque to the lib |
-| MAJOR: filesystem traversal in `/sources/[id]/files` route | CLOSED | PR #467 wave -- `listSourceFiles` extracted to BC; route renders the resolved entries |
-| MAJOR: aviation.ts artifact parsed by regex | CLOSED | PR #453 -- replaced with `countLiveReferences` / `countVerbatimReferences` (closes both perf and architecture findings together) |
-| MAJOR: REPO_ROOT computed twice | OPEN (deferred) | Two ascent-count copies still present (`source-jobs.ts:43` + `paths.ts:22`); tracked as architecture follow-up but path resolves identically and no behavioral risk. Marked done by reviewer at original sweep -- preserved. |
-| MINOR: reference row-to-form-initial mapper duplicated in route | CLOSED | PR #467 -- `referenceRowToInitial` in `reference-form.ts` |
-| MINOR: `JobKind` defined in `@ab/constants` | CLOSED | PR #435 -- relocated alongside the schema |
-| MINOR: `hangar-sync`'s registration reaches into bc-hangar + sibling | CLOSED | PR #435 -- handler map in `apps/hangar/src/lib/server/jobs.ts` |
-| MINOR: enqueue-and-redirect boilerplate duplicated | CLOSED | PR #464 -- `$lib/server/enqueue-and-redirect.ts` shared helper |
-| NIT: `hangar-jobs/index.ts` references WP codenames | CLOSED | PR #467 wave -- replaced with persistent reference to `bc/hangar/src/jobs.ts` registry |
-| NIT: `run-sync-job.ts` "spec + design.md" reference | CLOSED | PR #467 wave -- linked to the actual work-package path |
-| NIT: `CommitAndMaybePrInput` casing | CLOSED | PR #467 wave -- renamed to `CommitAndMaybePRInput` |
+| Finding                                                               | Verdict         | Closure                                                                                                                                                                                                                      |
+| --------------------------------------------------------------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CRITICAL: 3-way package cycle (bc-hangar / hangar-jobs / hangar-sync) | CLOSED          | PR #435 -- job tables relocated to `libs/hangar-jobs/src/schema.ts`; handler-map assembled in `apps/hangar/src/lib/server/`; `bc-hangar` no longer depends on `hangar-sync`                                                  |
+| MAJOR: `@ab/hangar-jobs` not actually generic                         | CLOSED          | PR #435 -- owns its own schema + JobKind opaque to the lib                                                                                                                                                                   |
+| MAJOR: filesystem traversal in `/sources/[id]/files` route            | CLOSED          | PR #467 wave -- `listSourceFiles` extracted to BC; route renders the resolved entries                                                                                                                                        |
+| MAJOR: aviation.ts artifact parsed by regex                           | CLOSED          | PR #453 -- replaced with `countLiveReferences` / `countVerbatimReferences` (closes both perf and architecture findings together)                                                                                             |
+| MAJOR: REPO_ROOT computed twice                                       | OPEN (deferred) | Two ascent-count copies still present (`source-jobs.ts:43` + `paths.ts:22`); tracked as architecture follow-up but path resolves identically and no behavioral risk. Marked done by reviewer at original sweep -- preserved. |
+| MINOR: reference row-to-form-initial mapper duplicated in route       | CLOSED          | PR #467 -- `referenceRowToInitial` in `reference-form.ts`                                                                                                                                                                    |
+| MINOR: `JobKind` defined in `@ab/constants`                           | CLOSED          | PR #435 -- relocated alongside the schema                                                                                                                                                                                    |
+| MINOR: `hangar-sync`'s registration reaches into bc-hangar + sibling  | CLOSED          | PR #435 -- handler map in `apps/hangar/src/lib/server/jobs.ts`                                                                                                                                                               |
+| MINOR: enqueue-and-redirect boilerplate duplicated                    | CLOSED          | PR #464 -- `$lib/server/enqueue-and-redirect.ts` shared helper                                                                                                                                                               |
+| NIT: `hangar-jobs/index.ts` references WP codenames                   | CLOSED          | PR #467 wave -- replaced with persistent reference to `bc/hangar/src/jobs.ts` registry                                                                                                                                       |
+| NIT: `run-sync-job.ts` "spec + design.md" reference                   | CLOSED          | PR #467 wave -- linked to the actual work-package path                                                                                                                                                                       |
+| NIT: `CommitAndMaybePrInput` casing                                   | CLOSED          | PR #467 wave -- renamed to `CommitAndMaybePRInput`                                                                                                                                                                           |
 
 Total: 11 closed / 1 deferred-and-marked-done. `review_status` was already `done` at the original sweep -- preserved.

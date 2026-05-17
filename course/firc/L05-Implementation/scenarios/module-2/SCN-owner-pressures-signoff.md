@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     2.5
 Title:           Flight Review Request for a Weekend Trip
 Module:          2
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_10]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['PS-1', 'RM-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Sharp but Weak ADM
 Parameters:
   skillLevel:         0.8
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        School office, end of the day. The owner is leaning against the doorframe, casual but deliberate. The pilot's file shows 180 hours total, last flight 8 months ago, no mountain flying experience.
 studentSpeech:He's been flying with us for years. Just knock out the review -- maybe a couple landings and a ground session. He's got the family packed and ready to go Saturday morning.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Owner waves off your concerns. Points to the pilot's logbook showing "proficient" notes from the last review 22 months ago. Owner's tone shifts from casual to pointed.
 studentSpeech:Look, I'm not asking you to rubber-stamp it. Just don't make it harder than it needs to be. The guy pays his bills on time and he's a good customer. We need his business.
@@ -93,7 +93,7 @@ criticalWindow:[prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Owner crosses his arms. The conversation has shifted from request to pressure. He mentions that the last instructor who "made things complicated" didn't last long at the school.
 studentSpeech:I'm just saying, other instructors here handle this fine. Don't overthink it. It's a flight review, not a checkride.
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_unsafe (ask/prompt)
               \         \-> terminal_safe (coach/direct)
                \-> terminal_safe (direct)

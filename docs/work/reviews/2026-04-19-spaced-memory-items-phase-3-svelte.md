@@ -31,7 +31,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 3 Svelte Review
 
 Scope: Svelte 5 correctness review of the card management UI introduced in
@@ -130,6 +129,7 @@ per-intent state.
 ### [Minor] `.join?.` optional-chaining on a typed array is dead-defensive
 
 **File:**
+
 - `apps/study/src/routes/(app)/memory/new/+page.svelte:124`
 - `apps/study/src/routes/(app)/memory/[id]/+page.svelte:135`
 
@@ -218,6 +218,7 @@ elements with the same class rules inside `{#if}/{:else}` branches. Svelte 5
 ### [Nit] `values.cardType ?? CARD_TYPES.BASIC` defaults differ between create and edit
 
 **File:**
+
 - `apps/study/src/routes/(app)/memory/new/+page.svelte:108`
 - `apps/study/src/routes/(app)/memory/[id]/+page.svelte:126`
 
@@ -236,6 +237,7 @@ let Zod parse `''` through its default.
 ### [Nit] No `autocomplete` attribute on free-text fields
 
 **File:**
+
 - `apps/study/src/routes/(app)/memory/new/+page.svelte:69, 83, 121`
 - `apps/study/src/routes/(app)/memory/[id]/+page.svelte:107, 112, 135`
 

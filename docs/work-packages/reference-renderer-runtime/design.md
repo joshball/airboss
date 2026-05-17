@@ -65,6 +65,7 @@ review_status: pending
 - Each token's `substitute(ctx)` is a pure function. Tests can register a custom token and verify it dispatches correctly; the production registry stays untouched.
 
 **Cost accepted:** Mutable global state at module init. Mitigated by:
+
 - Test helper resets the registry to defaults between tests.
 - Re-registering with the same name throws (loud error; not silent overwrite).
 
@@ -157,6 +158,7 @@ review_status: pending
 **Question:** SvelteKit serializes `data` from server to client as JSON. `Map<string, ResolvedIdentifier>` and `Date` aren't JSON-safe. How does the helper return them?
 
 **Chosen:** Two helper functions in `libs/sources/src/render/serialize.ts`:
+
 - `toSerializable(map: ResolvedIdentifierMap): SerializableResolvedMap` -- flattens the Map to a `Record`, ISO-encodes Date fields.
 - `fromSerializable(record: SerializableResolvedMap): ResolvedIdentifierMap` -- restores the Map and parses Dates.
 
@@ -204,15 +206,15 @@ The server helper calls `toSerializable` before returning; the component calls `
 
 **Chosen:** Implement them all, even when downstream consumers don't yet exist. Each is a small function (5-15 lines) that emits the §3.1-specified surface. They share the same `LinkRenderContext` plumbing as the production modes.
 
-| Mode | Behavior |
-| --- | --- |
-| `screen-reader` | Wraps the anchor in a `<span aria-label>` with the `@cite`-form annotation included. |
-| `rss` | Same as `web` but `<a href>` URLs are absolute (the per-corpus live URL is already absolute). |
-| `share-card` | Token-substituted text only, identifier stripped, truncated to 80 chars per §3.1. |
-| `rag` | `@formal`-form text followed by ` (${liveUrl})` followed by ` <!-- airboss-ref:... -->` machine-readable comment. |
-| `slack-unfurl` | Title from `@cite`, description from the lesson title (passed in via context). |
-| `transclusion` | Same as `web`; pin preserves per §3.1 transclusion-preserves-pins rule (the pin lives on the resolved entry's `raw` field; transclusion doesn't touch it). |
-| `tooltip` | Token-substituted text, truncated to 200 chars per §3.1. |
+| Mode            | Behavior                                                                                                                                                   |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `screen-reader` | Wraps the anchor in a `<span aria-label>` with the `@cite`-form annotation included.                                                                       |
+| `rss`           | Same as `web` but `<a href>` URLs are absolute (the per-corpus live URL is already absolute).                                                              |
+| `share-card`    | Token-substituted text only, identifier stripped, truncated to 80 chars per §3.1.                                                                          |
+| `rag`           | `@formal`-form text followed by ` (${liveUrl})` followed by ` <!-- airboss-ref:... -->` machine-readable comment.                                          |
+| `slack-unfurl`  | Title from `@cite`, description from the lesson title (passed in via context).                                                                             |
+| `transclusion`  | Same as `web`; pin preserves per §3.1 transclusion-preserves-pins rule (the pin lives on the resolved entry's `raw` field; transclusion doesn't touch it). |
+| `tooltip`       | Token-substituted text, truncated to 200 chars per §3.1.                                                                                                   |
 
 **Why:**
 

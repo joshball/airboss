@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     5.4
 Title:           IPC in a Cirrus SR22
 Module:          5
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_9, FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['ES-2', 'AV-1', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Under the hood, outbound on a procedure turn. You've asked the pilot to disconnect the autopilot and hand-fly. The moment the autopilot disconnects, the pilot's heading begins wandering. Altitude starts oscillating +/- 100 feet. The pilot is gripping the sidestick tightly.
 studentSpeech:OK, autopilot is off. This feels... different. The airplane seems twitchy. It's hard to hold a heading without the autopilot trimming for me.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Pilot admits they almost never hand-fly. Maybe 5 minutes per month, during takeoff and landing. Everything else is autopilot. The hand-flying stabilizes slightly after your intervention but is still rough.
 studentSpeech:Honestly? I hand-fly for takeoff and the first 500 feet, then I turn the autopilot on. Same coming in -- I hand-fly the last 200 feet after I disconnect. Everything in between is George. That's what the airplane is designed for, right?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Pilot attempts to hand-fly the procedure turn. The turn inbound is 30 degrees off the intended heading. Altitude is lost during the turn. The pilot is clearly working very hard.
 studentSpeech:This is harder than I remember. I used to be able to do this. I think the airplane is harder to hand-fly than the one I trained in.
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        After working through the approach, pilot lands (adequately, with you ready to take over). Debrief. The pilot is humbled but receptive.
 studentSpeech:I had no idea I'd gotten this bad at hand-flying. I thought because I fly all the time, I was proficient. What do I need to do?
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

@@ -81,12 +81,12 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The structural pattern, by altitude band:
 
-| Cabin pressure altitude | Required flight crew oxygen | Passenger oxygen        |
-| ----------------------- | --------------------------- | ----------------------- |
-| <= 12,500 MSL           | Not required                | Not required            |
-| 12,501 - 14,000 MSL     | Required after 30 minutes   | Not required            |
-| 14,001 - 15,000 MSL     | Required at all times       | Not required            |
-| > 15,000 MSL            | Required at all times       | Provided to each occupant|
+| Cabin pressure altitude | Required flight crew oxygen | Passenger oxygen          |
+| ----------------------- | --------------------------- | ------------------------- |
+| <= 12,500 MSL           | Not required                | Not required              |
+| 12,501 - 14,000 MSL     | Required after 30 minutes   | Not required              |
+| 14,001 - 15,000 MSL     | Required at all times       | Not required              |
+| > 15,000 MSL            | Required at all times       | Provided to each occupant |
 
 Three operative concepts:
 
@@ -137,15 +137,15 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The structural pattern of §91.215(b):
 
-| Trigger                                                | Transponder + Mode C required |
-| ------------------------------------------------------ | ----------------------------- |
-| Class A airspace (above FL180)                         | Yes                           |
-| Class B airspace (and within 30 NM of B primary)       | Yes (the "Mode C veil")       |
-| Class C airspace                                       | Yes                           |
-| Above 10,000 MSL (excluding within 2,500 AGL)          | Yes                           |
-| Within Class B/C lateral boundaries below 10,000 MSL   | Yes                           |
-| Specific airports listed in appendix D                 | Yes                           |
-| Otherwise                                              | Not required (but recommended)|
+| Trigger                                              | Transponder + Mode C required  |
+| ---------------------------------------------------- | ------------------------------ |
+| Class A airspace (above FL180)                       | Yes                            |
+| Class B airspace (and within 30 NM of B primary)     | Yes (the "Mode C veil")        |
+| Class C airspace                                     | Yes                            |
+| Above 10,000 MSL (excluding within 2,500 AGL)        | Yes                            |
+| Within Class B/C lateral boundaries below 10,000 MSL | Yes                            |
+| Specific airports listed in appendix D               | Yes                            |
+| Otherwise                                            | Not required (but recommended) |
 
 Two structural points:
 

@@ -24,17 +24,17 @@ The scenarios reinforce this by crossing topic boundaries. SCN 1.6 (TAA transiti
 
 ## Time Budget
 
-| Category | Minutes | Notes |
-| --- | --- | --- |
-| Tutorial (TUT-1) | 8 | Guided (5 min) + unguided replay (3 min) |
-| Scan exercises + debriefs | 12 | ISE-1.1 (3+3 min) + ISE-1.2/1.3 later (3+3 min) |
-| Tick scenarios (core) | 55 | 5 scenarios everyone plays |
-| Tick scenarios (adaptive) | 25-35 | System selects 2-3 based on performance |
-| Micro lessons | 13 | Short teaching content between scenarios |
-| Knowledge checks | 20 | 15-18 questions across 3 checks |
-| Transitions/debriefs | 7 | Scenario debriefs, bridges |
-| Module close | 8 | Journal reflection + competency summary |
-| **Total** | **~165** | |
+| Category                  | Minutes  | Notes                                           |
+| ------------------------- | -------- | ----------------------------------------------- |
+| Tutorial (TUT-1)          | 8        | Guided (5 min) + unguided replay (3 min)        |
+| Scan exercises + debriefs | 12       | ISE-1.1 (3+3 min) + ISE-1.2/1.3 later (3+3 min) |
+| Tick scenarios (core)     | 55       | 5 scenarios everyone plays                      |
+| Tick scenarios (adaptive) | 25-35    | System selects 2-3 based on performance         |
+| Micro lessons             | 13       | Short teaching content between scenarios        |
+| Knowledge checks          | 20       | 15-18 questions across 3 checks                 |
+| Transitions/debriefs      | 7        | Scenario debriefs, bridges                      |
+| Module close              | 8        | Journal reflection + competency summary         |
+| **Total**                 | **~165** |                                                 |
 
 ---
 
@@ -46,32 +46,32 @@ Not every learner plays every scenario. The system selects based on performance 
 
 These are the minimum path through Module 1. Each one introduces a key concept or competency that later content depends on.
 
-| Scenario | Duration | Why core |
-| --- | --- | --- |
-| SCN 1.1: GPS Database Expired | 10 min | First scenario in the course. Establishes automation-as-hazard frame. Canonical AV-3. |
-| SCN 1.2: Autopilot Mode Confusion | 12 min | The only AV-2 scenario in Module 1. Mode confusion is irreducible. |
-| SCN 1.6: TAA Transition Briefing | 10 min | Bridges A.1 and A.12. First ACS application. |
-| SCN 1.7: Old Lesson Plan vs Current | 8 min | Bridges A.8 and A.12. Peer intervention. |
-| SCN 1.10: ACS Risk Management Debrief | 15 min | The deepest A.12 scenario. Skill-vs-judgment distinction. |
+| Scenario                              | Duration | Why core                                                                              |
+| ------------------------------------- | -------- | ------------------------------------------------------------------------------------- |
+| SCN 1.1: GPS Database Expired         | 10 min   | First scenario in the course. Establishes automation-as-hazard frame. Canonical AV-3. |
+| SCN 1.2: Autopilot Mode Confusion     | 12 min   | The only AV-2 scenario in Module 1. Mode confusion is irreducible.                    |
+| SCN 1.6: TAA Transition Briefing      | 10 min   | Bridges A.1 and A.12. First ACS application.                                          |
+| SCN 1.7: Old Lesson Plan vs Current   | 8 min    | Bridges A.8 and A.12. Peer intervention.                                              |
+| SCN 1.10: ACS Risk Management Debrief | 15 min   | The deepest A.12 scenario. Skill-vs-judgment distinction.                             |
 
 ### Reinforcement (system selects 2-3, ~25 min)
 
 These deepen A.1 competencies. Selected when the learner needs more practice on specific automation hazards.
 
-| Scenario | Duration | When selected |
-| --- | --- | --- |
-| SCN 1.3: RAIM/GPS Approach | 10 min | Weak on GPS limitations (AV-3 low in SCN 1.1) |
-| SCN 1.4: Busy Pattern Non-Towered | 12 min | Weak on heads-up teaching (AV-1 low in SCN 1.6) |
-| SCN 1.5: XC Planning with Cockpit Weather | 8 min | Weak on FIS-B limitations or risk identification |
+| Scenario                                  | Duration | When selected                                    |
+| ----------------------------------------- | -------- | ------------------------------------------------ |
+| SCN 1.3: RAIM/GPS Approach                | 10 min   | Weak on GPS limitations (AV-3 low in SCN 1.1)    |
+| SCN 1.4: Busy Pattern Non-Towered         | 12 min   | Weak on heads-up teaching (AV-1 low in SCN 1.6)  |
+| SCN 1.5: XC Planning with Cockpit Weather | 8 min    | Weak on FIS-B limitations or risk identification |
 
 ### Deep Practice (system selects 0-1, ~20 min)
 
 Longer diagnostic scenarios for learners who demonstrate strong A.1 skills but need currency discipline practice.
 
-| Scenario | Duration | When selected |
-| --- | --- | --- |
-| SCN 1.8: Returning Instrument Pilot | 20 min | Needs deeper RC-4 practice (regulatory source use) |
-| SCN 1.9: XC Planning Before Checkride | 20 min | Needs deeper RC-4 + ES-3 integration |
+| Scenario                              | Duration | When selected                                      |
+| ------------------------------------- | -------- | -------------------------------------------------- |
+| SCN 1.8: Returning Instrument Pilot   | 20 min   | Needs deeper RC-4 practice (regulatory source use) |
+| SCN 1.9: XC Planning Before Checkride | 20 min   | Needs deeper RC-4 + ES-3 integration               |
 
 ---
 
@@ -347,11 +347,11 @@ Knowledge check A
 
 Each topic must accumulate >= 45 min. Time from scenarios, micro lessons, and knowledge checks all count.
 
-| Topic | Scenarios | Micro Lessons | Knowledge Checks | Total (min path) | Total (max path) |
-| --- | --- | --- | --- | --- | --- |
-| A.1 | 1.1 (10) + 1.2 (12) + 1.6 (10, shared) | TUT-1 (8) + TAA/ADS-B (5) + ISE-1.1 (6) | check A (8) | 59 min | 89 min |
-| A.8 | 1.7 (8, shared) + 1.8 or 1.9 (20) | currency (5) | check B (partial, 3) + check C (5) | 41 min | 56 min |
-| A.12 | 1.6 (10, shared) + 1.7 (8, shared) + 1.10 (15) | ACS (5) + IBR (3) | check B (partial, 4) | 45 min | 45 min |
+| Topic | Scenarios                                      | Micro Lessons                           | Knowledge Checks                   | Total (min path) | Total (max path) |
+| ----- | ---------------------------------------------- | --------------------------------------- | ---------------------------------- | ---------------- | ---------------- |
+| A.1   | 1.1 (10) + 1.2 (12) + 1.6 (10, shared)         | TUT-1 (8) + TAA/ADS-B (5) + ISE-1.1 (6) | check A (8)                        | 59 min           | 89 min           |
+| A.8   | 1.7 (8, shared) + 1.8 or 1.9 (20)              | currency (5)                            | check B (partial, 3) + check C (5) | 41 min           | 56 min           |
+| A.12  | 1.6 (10, shared) + 1.7 (8, shared) + 1.10 (15) | ACS (5) + IBR (3)                       | check B (partial, 4)               | 45 min           | 45 min           |
 
 **A.8 minimum path concern:** 41 min is below the 45 min target. This is resolved by:
 

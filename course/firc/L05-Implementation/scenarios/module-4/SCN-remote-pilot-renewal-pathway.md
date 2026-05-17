@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     4.11
 Title:           Remote Pilot Certificate Renewal Pathway
 Module:          4
@@ -19,19 +19,19 @@ Pattern:         Multi-Beat Admin
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_13]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-3', 'RC-4']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Part 107 Remote Pilot
 Parameters:
   skillLevel:         0.3
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        FBO lobby. The remote pilot approaches you because they heard you can "sign them off" for their Part 107 renewal. They have their remote pilot certificate and private pilot certificate.
 studentSpeech:Hey, I need my Part 107 renewed. My buddy said a flight instructor can just sign me off and I'm good for another two years. I've got my private pilot cert too, so I figured it would be quick. Can we do this today?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Remote pilot explains they initially took the full Part 107 knowledge test. They've been flying commercially for mapping and inspection work.
 studentSpeech:I took the full Part 107 test at the testing center two years ago. Got an 88. Now I need to do something before it expires, right? And since I also have a private pilot certificate, does that make it easier? I don't want to take another test if I don't have to.
@@ -93,7 +93,7 @@ criticalWindow:[]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Remote pilot is surprised about the online course option. Asks about the differences between Part 107 and Part 61 privileges and whether their private certificate gives them additional drone authority.
 studentSpeech:Wait, so I can just do it online? That's easy. One more question -- since I have a private pilot certificate, can I fly drones in controlled airspace without a LAANC authorization? I heard that manned aircraft pilots have more privileges.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Remote pilot absorbs the airspace correction. Asks about their responsibilities as a commercial drone operator that they might not be aware of.
 studentSpeech:OK, I definitely don't want a violation. Is there anything else I should know? I've been doing this commercially for a year and I want to make sure I'm not missing something obvious.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

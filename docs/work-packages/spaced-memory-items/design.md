@@ -160,42 +160,42 @@ export type ConfidenceLevel = (typeof CONFIDENCE_LEVELS)[keyof typeof CONFIDENCE
 
 ### Server load functions
 
-| Route | Load | Returns |
-| --- | --- | --- |
-| `(app)/memory/+page.server.ts` | `getDashboardStats(userId)` | due count by domain, reviewed today, streak, state counts |
-| `(app)/memory/review/+page.server.ts` | `getDueCards(userId, limit: 20)` | batch of due cards with card_state |
-| `(app)/memory/browse/+page.server.ts` | `getCards(userId, filters)` | paginated cards with filters |
-| `(app)/memory/new/+page.server.ts` | -- | Just needs DOMAINS and CARD_TYPES constants |
-| `(app)/memory/[id]/+page.server.ts` | `getCard(cardId, userId)` | single card with state and recent reviews |
+| Route                                 | Load                             | Returns                                                   |
+| ------------------------------------- | -------------------------------- | --------------------------------------------------------- |
+| `(app)/memory/+page.server.ts`        | `getDashboardStats(userId)`      | due count by domain, reviewed today, streak, state counts |
+| `(app)/memory/review/+page.server.ts` | `getDueCards(userId, limit: 20)` | batch of due cards with card_state                        |
+| `(app)/memory/browse/+page.server.ts` | `getCards(userId, filters)`      | paginated cards with filters                              |
+| `(app)/memory/new/+page.server.ts`    | --                               | Just needs DOMAINS and CARD_TYPES constants               |
+| `(app)/memory/[id]/+page.server.ts`   | `getCard(cardId, userId)`        | single card with state and recent reviews                 |
 
 ### Form actions
 
-| Route | Action | What it does |
-| --- | --- | --- |
-| `(app)/memory/new/+page.server.ts` | `default` | Validate + create card + card_state |
-| `(app)/memory/[id]/+page.server.ts` | `update` | Validate + update card (only if is_editable) |
-| `(app)/memory/[id]/+page.server.ts` | `suspend` | Set status to 'suspended' |
-| `(app)/memory/[id]/+page.server.ts` | `archive` | Set status to 'archived' |
-| `(app)/memory/review/+page.server.ts` | `submitReview` | Run FSRS, insert review, upsert card_state |
+| Route                                 | Action         | What it does                                 |
+| ------------------------------------- | -------------- | -------------------------------------------- |
+| `(app)/memory/new/+page.server.ts`    | `default`      | Validate + create card + card_state          |
+| `(app)/memory/[id]/+page.server.ts`   | `update`       | Validate + update card (only if is_editable) |
+| `(app)/memory/[id]/+page.server.ts`   | `suspend`      | Set status to 'suspended'                    |
+| `(app)/memory/[id]/+page.server.ts`   | `archive`      | Set status to 'archived'                     |
+| `(app)/memory/review/+page.server.ts` | `submitReview` | Run FSRS, insert review, upsert card_state   |
 
 ### BC functions (libs/bc/study/)
 
-| File | Function | Signature |
-| --- | --- | --- |
-| `cards.ts` | `createCard` | `(db, data: NewCard) -> Card` |
-| `cards.ts` | `updateCard` | `(db, cardId, userId, data: Partial<Card>) -> Card` |
-| `cards.ts` | `getCard` | `(db, cardId, userId) -> Card & CardState` |
-| `cards.ts` | `getDueCards` | `(db, userId, limit?) -> (Card & CardState)[]` |
-| `cards.ts` | `getCards` | `(db, userId, filters?) -> Card[]` |
-| `cards.ts` | `setCardStatus` | `(db, cardId, userId, status) -> void` |
-| `reviews.ts` | `submitReview` | `(db, cardId, userId, rating, confidence?) -> Review` |
-| `srs.ts` | `fsrsSchedule` | `(state: CardState, rating: Rating, now: Date) -> ScheduleResult` |
-| `srs.ts` | `fsrsInitialState` | `() -> CardStateValues` |
-| `srs.ts` | `fsrsDefaultParams` | `() -> FsrsParams` |
-| `stats.ts` | `getDashboardStats` | `(db, userId) -> DashboardStats` |
-| `stats.ts` | `getCardMastery` | `(db, userId, domain?) -> MasteryStats` |
-| `stats.ts` | `getReviewStats` | `(db, userId, dateRange?) -> ReviewStats` |
-| `stats.ts` | `getDomainBreakdown` | `(db, userId) -> DomainStats[]` |
+| File         | Function             | Signature                                                         |
+| ------------ | -------------------- | ----------------------------------------------------------------- |
+| `cards.ts`   | `createCard`         | `(db, data: NewCard) -> Card`                                     |
+| `cards.ts`   | `updateCard`         | `(db, cardId, userId, data: Partial<Card>) -> Card`               |
+| `cards.ts`   | `getCard`            | `(db, cardId, userId) -> Card & CardState`                        |
+| `cards.ts`   | `getDueCards`        | `(db, userId, limit?) -> (Card & CardState)[]`                    |
+| `cards.ts`   | `getCards`           | `(db, userId, filters?) -> Card[]`                                |
+| `cards.ts`   | `setCardStatus`      | `(db, cardId, userId, status) -> void`                            |
+| `reviews.ts` | `submitReview`       | `(db, cardId, userId, rating, confidence?) -> Review`             |
+| `srs.ts`     | `fsrsSchedule`       | `(state: CardState, rating: Rating, now: Date) -> ScheduleResult` |
+| `srs.ts`     | `fsrsInitialState`   | `() -> CardStateValues`                                           |
+| `srs.ts`     | `fsrsDefaultParams`  | `() -> FsrsParams`                                                |
+| `stats.ts`   | `getDashboardStats`  | `(db, userId) -> DashboardStats`                                  |
+| `stats.ts`   | `getCardMastery`     | `(db, userId, domain?) -> MasteryStats`                           |
+| `stats.ts`   | `getReviewStats`     | `(db, userId, dateRange?) -> ReviewStats`                         |
+| `stats.ts`   | `getDomainBreakdown` | `(db, userId) -> DomainStats[]`                                   |
 
 ## Data Flow
 

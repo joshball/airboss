@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.7
 Title:           Taxi Back to the Ramp at a Class D Airport
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_6]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['OD-1', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Taxiing on Charlie toward the runway 14/32 crossing. Student is staring at the GPS moving map which shows taxiway Delta as available, but Delta is closed for construction. Student is taxiing at a brisk pace.
 studentSpeech:The GPS shows we can take Delta to save time. Should we go that way instead?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Approaching the hold-short line for runway 14/32. Ground cleared "cross runway 14/32" but there are two hold-short lines -- one for 14/32 and one for a parallel taxiway that looks similar at night. Student slows but is aimed at the wrong line.
 studentSpeech:OK, hold short here... this is the runway, right?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student has stopped but at the wrong marking -- they are on the runway edge, not at the hold-short line. The aircraft's nosewheel is past the hold-short marking. A Cessna is on short final for runway 32.
 studentSpeech:Wait, this doesn't look right. Are we on the runway?
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student hesitates, then begins taxiing forward across the runway without looking. The Cessna on final executes a go-around. Tower transmits: "[Callsign], you have crossed runway 32 without authorization. Contact ground on 121.7."
 studentSpeech:Oh no, oh no. I'm sorry. Where do I go?
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                 \       \         \-> terminal_safe (direct/take_controls)
                  \       \-> terminal_safe (direct/take_controls)

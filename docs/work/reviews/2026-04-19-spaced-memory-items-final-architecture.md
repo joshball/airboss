@@ -38,7 +38,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Architecture Review -- spaced-memory-items
 
 Scope: the full `build/spaced-memory-items` branch, diffed against
@@ -58,10 +57,10 @@ without a refactor round.
 
 | Severity | Count |
 | -------- | ----- |
-| Critical |     0 |
-| Major    |     2 |
-| Minor    |     7 |
-| Nit      |     4 |
+| Critical | 0     |
+| Major    | 2     |
+| Minor    | 7     |
+| Nit      | 4     |
 
 **Overall:** architecturally sound. The core structure the design doc called
 for -- one `libs/bc/study/` BC, a thin route layer that talks to the BC
@@ -156,6 +155,7 @@ BC boundary across three or four products sharing one set of tables.
 ### [MAJOR] `libs/bc/study` is not actually a workspace package (root `workspaces` glob is `libs/*`, not `libs/bc/*`)
 
 **Files:**
+
 - `package.json:5` -- `"workspaces": ["apps/*", "libs/*"]`
 - `libs/bc/study/package.json` -- declares `"name": "@ab/bc-study"`
 - `node_modules/@ab/` -- does not exist; none of the `@ab/*` libs are actually linked as workspaces
@@ -252,6 +252,7 @@ This doesn't block shipping. It becomes painful on the next two events:
   graph, which is upside-down.
 
 **Fix (can defer to pre-reps):**
+
 - Move `DOMAINS`, `DOMAIN_LABELS`, `CARD_TYPES`, `CARD_TYPE_LABELS`,
   `CARD_STATES`, `REVIEW_RATINGS`, `CONFIDENCE_LEVELS`, `CONTENT_SOURCES`,
   `CARD_STATUSES`, `MASTERY_STABILITY_DAYS`, `CONFIDENCE_SAMPLE_RATE`,
@@ -276,6 +277,7 @@ author knows where their enums belong.
 ### [MINOR] `escapeLikePattern` is duplicated between `@ab/db` and `libs/bc/study`
 
 **Files:**
+
 - `libs/db/src/escape.ts:5-7` -- exported as `escapeLikePattern` from `@ab/db`
 - `libs/bc/study/src/cards.ts:67-69` -- private `escapeLikePattern` with the same body
 
@@ -323,6 +325,7 @@ explicit path reference) and to internal BC code, not to the app layer.
 ### [MINOR] Scripts use relative cross-lib imports (`../../libs/...`) instead of `@ab/*` aliases
 
 **Files:**
+
 - `scripts/db/seed-dev-users.ts:16,25,26`
 - `scripts/smoke/study-bc.ts:14,23-26`
 
@@ -398,6 +401,7 @@ into the shared `ROUTES`.
 ### [MINOR] `@ab/bc-study` alias name doesn't match directory structure or CLAUDE.md docs
 
 **Files:**
+
 - `libs/bc/study/package.json` -- `"name": "@ab/bc-study"`
 - `tsconfig.json:37-38` -- `"@ab/bc-study": [...]`
 - `apps/study/svelte.config.js:24-25` -- `'@ab/bc-study': ...`
@@ -463,6 +467,7 @@ Nothing to fix now; keeping on the radar for the next BC integration.
 ### [NIT] Per-app `$lib/server/{auth,cookies}.ts` are thin wrappers that will proliferate
 
 **Files:**
+
 - `apps/study/src/lib/server/auth.ts` -- 14 lines, wraps `createAuth` with
   `building`/`dev` awareness.
 - `apps/study/src/lib/server/cookies.ts` -- 11 lines, wraps `forwardAuthCookies`
@@ -558,22 +563,22 @@ Nit because drift hasn't bitten yet.
 
 ## Architectural checks -- explicitly requested in review scope
 
-| # | Check                                                          | Verdict | Notes                                                                                         |
-| - | -------------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------- |
-| 1 | Cross-lib imports via `@ab/*`                                  | mostly  | All app + lib code uses `@ab/*`. Scripts use `../../` (Minor).                                 |
-| 2 | Dependency direction clean                                     | yes     | `constants -> utils -> db -> auth -> bc/study -> app`. Cycle-free.                             |
-| 3 | App vs lib split correct                                       | mostly  | One route bypasses BC into raw tables (Major finding).                                         |
-| 4 | BC functions accept optional `db: Db`                          | yes     | Every exported function has `db: Db = defaultDb` as the trailing arg.                          |
-| 5 | BC barrel exports complete and scoped                          | mostly  | Complete -- but exposes raw tables (Minor). Fix with Major #1.                                 |
-| 6 | `bauthUser` deep-imported from `@ab/auth/schema` with comment  | yes     | `libs/bc/study/src/schema.ts:12-14` has the comment. Pattern is exactly right.                 |
-| 7 | `libs/bc/study/src/validation.ts` consumed by BC + routes      | yes     | BC (`cards.ts:27,74,142`, `reviews.ts`) and routes (`new/`, `[id]/`, `review/`) both use it.   |
-| 8 | Study constants placement                                      | see MINOR | Decision was "follow spec." Unchanged after full branch review; will hurt at BC #2.           |
-| 9 | Route file layout under `(app)/memory/*` consistent            | yes     | `+page.server.ts` + `+page.svelte` at each level. `/memory`, `/memory/review`, `/memory/new`, `/memory/browse`, `/memory/[id]`. |
-| 10| `/memory/review` lives at `(app)/memory/review/`               | yes     | Correct.                                                                                      |
-| 11| ADR 011 extensibility -- `source_type`/`source_ref`/`is_editable`, `node_id` placeholder | mostly | `source_type` + `source_ref` + `is_editable` are on `card`. `node_id` is not yet added -- the ADR explicitly says "not prematurely during steps 1-3," so this is correct. Extension is additive (backward-compat NULL column). No refactor needed. |
-| 12| Per-app `$lib/server/{auth,cookies}.ts` pattern                | yes     | Thin wrappers exist. Will proliferate (Nit).                                                  |
-| 13| Drizzle config schema list (manual registration per BC)        | yes     | `drizzle.config.ts:6` explicit list. Glob option noted in Nit.                                 |
-| 14| Vitest config aliases match tsconfig paths                     | yes     | Every `@ab/*` present. Drift risk (Nit).                                                      |
+| #   | Check                                                                                    | Verdict   | Notes                                                                                                                                                                                                                                              |
+| --- | ---------------------------------------------------------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Cross-lib imports via `@ab/*`                                                            | mostly    | All app + lib code uses `@ab/*`. Scripts use `../../` (Minor).                                                                                                                                                                                     |
+| 2   | Dependency direction clean                                                               | yes       | `constants -> utils -> db -> auth -> bc/study -> app`. Cycle-free.                                                                                                                                                                                 |
+| 3   | App vs lib split correct                                                                 | mostly    | One route bypasses BC into raw tables (Major finding).                                                                                                                                                                                             |
+| 4   | BC functions accept optional `db: Db`                                                    | yes       | Every exported function has `db: Db = defaultDb` as the trailing arg.                                                                                                                                                                              |
+| 5   | BC barrel exports complete and scoped                                                    | mostly    | Complete -- but exposes raw tables (Minor). Fix with Major #1.                                                                                                                                                                                     |
+| 6   | `bauthUser` deep-imported from `@ab/auth/schema` with comment                            | yes       | `libs/bc/study/src/schema.ts:12-14` has the comment. Pattern is exactly right.                                                                                                                                                                     |
+| 7   | `libs/bc/study/src/validation.ts` consumed by BC + routes                                | yes       | BC (`cards.ts:27,74,142`, `reviews.ts`) and routes (`new/`, `[id]/`, `review/`) both use it.                                                                                                                                                       |
+| 8   | Study constants placement                                                                | see MINOR | Decision was "follow spec." Unchanged after full branch review; will hurt at BC #2.                                                                                                                                                                |
+| 9   | Route file layout under `(app)/memory/*` consistent                                      | yes       | `+page.server.ts` + `+page.svelte` at each level. `/memory`, `/memory/review`, `/memory/new`, `/memory/browse`, `/memory/[id]`.                                                                                                                    |
+| 10  | `/memory/review` lives at `(app)/memory/review/`                                         | yes       | Correct.                                                                                                                                                                                                                                           |
+| 11  | ADR 011 extensibility -- `source_type`/`source_ref`/`is_editable`, `node_id` placeholder | mostly    | `source_type` + `source_ref` + `is_editable` are on `card`. `node_id` is not yet added -- the ADR explicitly says "not prematurely during steps 1-3," so this is correct. Extension is additive (backward-compat NULL column). No refactor needed. |
+| 12  | Per-app `$lib/server/{auth,cookies}.ts` pattern                                          | yes       | Thin wrappers exist. Will proliferate (Nit).                                                                                                                                                                                                       |
+| 13  | Drizzle config schema list (manual registration per BC)                                  | yes       | `drizzle.config.ts:6` explicit list. Glob option noted in Nit.                                                                                                                                                                                     |
+| 14  | Vitest config aliases match tsconfig paths                                               | yes       | Every `@ab/*` present. Drift risk (Nit).                                                                                                                                                                                                           |
 
 ---
 
@@ -653,18 +658,18 @@ or three route-layer leaks accumulate.
 
 ## Appendix A: file/line index for the findings
 
-| Finding  | Files referenced                                                                     |
-| -------- | ------------------------------------------------------------------------------------ |
-| Major #1 | `apps/study/src/routes/(app)/memory/[id]/+page.server.ts:1,10-12,32-47`; `libs/bc/study/src/index.ts:8` |
+| Finding  | Files referenced                                                                                                                                            |
+| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Major #1 | `apps/study/src/routes/(app)/memory/[id]/+page.server.ts:1,10-12,32-47`; `libs/bc/study/src/index.ts:8`                                                     |
 | Major #2 | `package.json:5`; `libs/bc/study/package.json`; `tsconfig.json:37-38`; `apps/study/svelte.config.js:24-25`; `vitest.config.ts:15`; `CLAUDE.md` Import Rules |
-| Minor #1 | `libs/constants/src/study.ts`; `libs/constants/src/index.ts:40-66`; `libs/bc/study/src/schema.ts:18-23` |
-| Minor #2 | `libs/db/src/escape.ts:5-7`; `libs/bc/study/src/cards.ts:67-69`                      |
-| Minor #3 | `libs/bc/study/src/index.ts:8`                                                       |
-| Minor #4 | `scripts/db/seed-dev-users.ts:16,25,26`; `scripts/smoke/study-bc.ts:14,23-26`        |
-| Minor #5 | `libs/constants/src/routes.ts:8-23`                                                  |
-| Minor #6 | `libs/bc/study/package.json`; `tsconfig.json:37-38`; `apps/study/svelte.config.js:24-25`; `vitest.config.ts:15`; CLAUDE.md Import Rules |
-| Minor #7 | every `libs/bc/study/src/*.ts` BC function                                           |
-| Nit #1   | `apps/study/src/lib/server/auth.ts`; `apps/study/src/lib/server/cookies.ts`          |
-| Nit #2   | `drizzle.config.ts:6`                                                                |
-| Nit #3   | `tsconfig.json:41`                                                                   |
-| Nit #4   | `vitest.config.ts:5-17` vs `tsconfig.json:22-39`                                     |
+| Minor #1 | `libs/constants/src/study.ts`; `libs/constants/src/index.ts:40-66`; `libs/bc/study/src/schema.ts:18-23`                                                     |
+| Minor #2 | `libs/db/src/escape.ts:5-7`; `libs/bc/study/src/cards.ts:67-69`                                                                                             |
+| Minor #3 | `libs/bc/study/src/index.ts:8`                                                                                                                              |
+| Minor #4 | `scripts/db/seed-dev-users.ts:16,25,26`; `scripts/smoke/study-bc.ts:14,23-26`                                                                               |
+| Minor #5 | `libs/constants/src/routes.ts:8-23`                                                                                                                         |
+| Minor #6 | `libs/bc/study/package.json`; `tsconfig.json:37-38`; `apps/study/svelte.config.js:24-25`; `vitest.config.ts:15`; CLAUDE.md Import Rules                     |
+| Minor #7 | every `libs/bc/study/src/*.ts` BC function                                                                                                                  |
+| Nit #1   | `apps/study/src/lib/server/auth.ts`; `apps/study/src/lib/server/cookies.ts`                                                                                 |
+| Nit #2   | `drizzle.config.ts:6`                                                                                                                                       |
+| Nit #3   | `tsconfig.json:41`                                                                                                                                          |
+| Nit #4   | `vitest.config.ts:5-17` vs `tsconfig.json:22-39`                                                                                                            |

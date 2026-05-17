@@ -266,20 +266,20 @@ The shape of subpart D: aerobatics-and-special-ops sections first ([@cite](airbo
 
 ## Drills
 
-| Question                                                                  | Answer / section                                              |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Where is the restricted-category operating rule?                          | [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)              |
-| Where is the experimental operating rule?                                 | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)              |
-| Where is the limited-category operating rule?                             | [@cite](airboss-ref:regs/cfr-14/91/315?at=2026)              |
-| What is the default flight rule for experimentals?                        | VFR day only ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2)) |
-| Where is the experimental over-densely-populated restriction?             | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(b)           |
-| What must a pilot tell every passenger in an experimental?                | The airplane is experimental ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1)) |
-| Can a restricted-category aircraft carry persons for hire?                | No ([@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(c))      |
-| Can an experimental fly IFR?                                              | Only if specifically authorized in the operating limitations  |
-| Where do the substantive Phase I restrictions live?                       | The operating-limitations document, not the reg alone         |
+| Question                                                                         | Answer / section                                                                                                                       |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Where is the restricted-category operating rule?                                 | [@cite](airboss-ref:regs/cfr-14/91/313?at=2026)                                                                                        |
+| Where is the experimental operating rule?                                        | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)                                                                                        |
+| Where is the limited-category operating rule?                                    | [@cite](airboss-ref:regs/cfr-14/91/315?at=2026)                                                                                        |
+| What is the default flight rule for experimentals?                               | VFR day only ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(2))                                                                   |
+| Where is the experimental over-densely-populated restriction?                    | [@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(b)                                                                                     |
+| What must a pilot tell every passenger in an experimental?                       | The airplane is experimental ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(1))                                                   |
+| Can a restricted-category aircraft carry persons for hire?                       | No ([@cite](airboss-ref:regs/cfr-14/91/313?at=2026)(c))                                                                                |
+| Can an experimental fly IFR?                                                     | Only if specifically authorized in the operating limitations                                                                           |
+| Where do the substantive Phase I restrictions live?                              | The operating-limitations document, not the reg alone                                                                                  |
 | What is the difference between special light-sport and experimental light-sport? | Factory-built ASTM ([@cite](airboss-ref:regs/cfr-14/91/327?at=2026)) vs kit/modified ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)) |
-| Where is the special-purpose list for restricted certificates?            | 14 CFR 21.25                                                  |
-| What does a tower need to be told for an experimental?                    | The experimental nature ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(3)) |
+| Where is the special-purpose list for restricted certificates?                   | 14 CFR 21.25                                                                                                                           |
+| What does a tower need to be told for an experimental?                           | The experimental nature ([@cite](airboss-ref:regs/cfr-14/91/319?at=2026)(d)(3))                                                        |
 
 ### Apply the rules
 

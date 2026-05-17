@@ -11,15 +11,15 @@ review_status: pending
 
 ## Automated tests
 
-| Suite                       | Lib                       | Coverage                                                                                                                              |
-| --------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| `locator.test.ts`           | `libs/sources/src/aim/`   | Every accepted locator shape (chapter / section / paragraph / glossary entry / appendix); rejection messages for malformed input      |
-| `citation.test.ts`          | `libs/sources/src/aim/`   | All three styles (`short`, `formal`, `title`) for paragraph / section / chapter / glossary / appendix                                 |
-| `url.test.ts`               | `libs/sources/src/aim/`   | Live URL for paragraph, chapter, glossary entry, appendix; null for malformed SourceId; pin stripping                                  |
-| `derivative-reader.test.ts` | `libs/sources/src/aim/`   | Read fixture manifest; find entry by parsed locator; null for unknown locator                                                          |
-| `resolver.test.ts`          | `libs/sources/src/aim/`   | All `CorpusResolver` methods against fixture; `getCurrentEdition` returns the right slug                                              |
-| `ingest.test.ts`            | `libs/sources/src/aim/`   | Fixture-driven ingest produces expected SourceEntries + Edition; re-run idempotent; manifest-missing surfaces clear error             |
-| `smoke.test.ts`             | `libs/sources/src/aim/`   | Validator accepts `[@cite](airboss-ref:aim/5-1-7?at=2026-09)` after ingest                                                            |
+| Suite                       | Lib                     | Coverage                                                                                                                         |
+| --------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `locator.test.ts`           | `libs/sources/src/aim/` | Every accepted locator shape (chapter / section / paragraph / glossary entry / appendix); rejection messages for malformed input |
+| `citation.test.ts`          | `libs/sources/src/aim/` | All three styles (`short`, `formal`, `title`) for paragraph / section / chapter / glossary / appendix                            |
+| `url.test.ts`               | `libs/sources/src/aim/` | Live URL for paragraph, chapter, glossary entry, appendix; null for malformed SourceId; pin stripping                            |
+| `derivative-reader.test.ts` | `libs/sources/src/aim/` | Read fixture manifest; find entry by parsed locator; null for unknown locator                                                    |
+| `resolver.test.ts`          | `libs/sources/src/aim/` | All `CorpusResolver` methods against fixture; `getCurrentEdition` returns the right slug                                         |
+| `ingest.test.ts`            | `libs/sources/src/aim/` | Fixture-driven ingest produces expected SourceEntries + Edition; re-run idempotent; manifest-missing surfaces clear error        |
+| `smoke.test.ts`             | `libs/sources/src/aim/` | Validator accepts `[@cite](airboss-ref:aim/5-1-7?at=2026-09)` after ingest                                                       |
 
 ## Fixture
 
@@ -58,10 +58,10 @@ Expected:
 
 ## Risks + edge cases
 
-| Risk                                                        | Mitigation                                                                                                                                                |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Manifest schema drift across editions                        | The reader validates required fields (`edition`, `entries`); throws clear error if missing.                                                                |
-| Year-month edition slug collision (multiple cycles per year) | The slug is `YYYY-MM`; the FAA publishes at most one revision per month, so collisions are not realistic.                                                  |
-| Glossary slug ambiguity                                     | Slugs are kebab-case lowercase, normalized at ingest from the manifest's title; the parser enforces the format.                                            |
-| Sub-paragraph identifiers requested                         | Phase 7 only parses the documented shapes. Sub-paragraph requests are a follow-up; ADR 019 §1.2 currently stops at paragraph.                              |
-| Re-ingest after operator re-runs source pipeline             | Phase 7 doesn't depend on hash matching; the lifecycle overlay handles idempotence.                                                                        |
+| Risk                                                         | Mitigation                                                                                                                    |
+| ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Manifest schema drift across editions                        | The reader validates required fields (`edition`, `entries`); throws clear error if missing.                                   |
+| Year-month edition slug collision (multiple cycles per year) | The slug is `YYYY-MM`; the FAA publishes at most one revision per month, so collisions are not realistic.                     |
+| Glossary slug ambiguity                                      | Slugs are kebab-case lowercase, normalized at ingest from the manifest's title; the parser enforces the format.               |
+| Sub-paragraph identifiers requested                          | Phase 7 only parses the documented shapes. Sub-paragraph requests are a follow-up; ADR 019 §1.2 currently stops at paragraph. |
+| Re-ingest after operator re-runs source pipeline             | Phase 7 doesn't depend on hash matching; the lifecycle overlay handles idempotence.                                           |

@@ -91,6 +91,7 @@ Microbursts have received much space in the aviation and popular press in the pa
 Mountain valleys are often conducive to the formation of temperature inversions and valley fog at night. This should play a part in your arrival and departure planning. Since the inversion breaks and the fog dissipates by late morning, you may have to delay slightly at some airports.
 
 <!-- markdownlint-disable-next-line MD024 -->
+
 ## Density Altitude
 
 ### Effects on the Airplane

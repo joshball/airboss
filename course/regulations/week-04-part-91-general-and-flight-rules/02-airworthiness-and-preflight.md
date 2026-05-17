@@ -293,20 +293,20 @@ Subpart B -- Flight Rules - General
 
 ### Locate the section
 
-| Question                                                          | Section                                                |
-| ----------------------------------------------------------------- | ------------------------------------------------------ |
-| Where is the airworthiness operating prohibition?                 | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (a)     |
-| Where is the PIC airworthiness-determination requirement?         | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (b)     |
-| Where is the in-flight discontinuation requirement?               | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (b)     |
-| Where is the AFM-and-placard requirement?                         | [@cite](airboss-ref:regs/cfr-14/91/9?at=2026)         |
-| Where is the preflight action requirement?                        | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026)       |
-| Where is "all available information"?                             | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026) intro |
-| Where are the runway-length and performance requirements?         | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026) (b)   |
-| Where is the canonical NOTAM interpretation?                      | Walker (1991) Chief Counsel letter                     |
-| Where is the inoperative-equipment process?                       | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)       |
-| Where do annual and 100-hour inspections live?                    | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)       |
-| Where do transponder and pitot-static inspections live?           | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026), [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) |
-| Where do ADs live (the regulation, not specific ADs)?             | Part 39                                                |
+| Question                                                  | Section                                                                                          |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Where is the airworthiness operating prohibition?         | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (a)                                                |
+| Where is the PIC airworthiness-determination requirement? | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (b)                                                |
+| Where is the in-flight discontinuation requirement?       | [@cite](airboss-ref:regs/cfr-14/91/7?at=2026) (b)                                                |
+| Where is the AFM-and-placard requirement?                 | [@cite](airboss-ref:regs/cfr-14/91/9?at=2026)                                                    |
+| Where is the preflight action requirement?                | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026)                                                  |
+| Where is "all available information"?                     | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026) intro                                            |
+| Where are the runway-length and performance requirements? | [@cite](airboss-ref:regs/cfr-14/91/103?at=2026) (b)                                              |
+| Where is the canonical NOTAM interpretation?              | Walker (1991) Chief Counsel letter                                                               |
+| Where is the inoperative-equipment process?               | [@cite](airboss-ref:regs/cfr-14/91/213?at=2026)                                                  |
+| Where do annual and 100-hour inspections live?            | [@cite](airboss-ref:regs/cfr-14/91/409?at=2026)                                                  |
+| Where do transponder and pitot-static inspections live?   | [@cite](airboss-ref:regs/cfr-14/91/411?at=2026), [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) |
+| Where do ADs live (the regulation, not specific ADs)?     | Part 39                                                                                          |
 
 ### Apply the rules
 

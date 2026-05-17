@@ -35,14 +35,14 @@ The `airboss-ref:` URI scheme (ADR 019) maps to flightbag URLs via `urlForRefere
 
 ## Architecture
 
-| Layer | Where it lives |
-|-------|-----------|
-| App | `apps/flightbag/` |
-| Citation rendering primitives (`<RenderedSection>`, `<CitationChip>`) | `libs/library/` |
-| URL constants | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) |
-| URI-to-URL bridge | `libs/sources/src/url-for-reference.ts` |
-| Data layer (resolvers, manifests, registry) | `libs/sources/` (existing) |
-| Reference content (markdown bodies, manifests) | `handbooks/`, `aim/`, `ac/`, `acs/`, `regulations/` |
+| Layer                                                                 | Where it lives                                        |
+| --------------------------------------------------------------------- | ----------------------------------------------------- |
+| App                                                                   | `apps/flightbag/`                                     |
+| Citation rendering primitives (`<RenderedSection>`, `<CitationChip>`) | `libs/library/`                                       |
+| URL constants                                                         | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) |
+| URI-to-URL bridge                                                     | `libs/sources/src/url-for-reference.ts`               |
+| Data layer (resolvers, manifests, registry)                           | `libs/sources/` (existing)                            |
+| Reference content (markdown bodies, manifests)                        | `handbooks/`, `aim/`, `ac/`, `acs/`, `regulations/`   |
 
 ## Reading model
 

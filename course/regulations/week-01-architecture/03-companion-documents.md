@@ -46,13 +46,13 @@ The CFR sets the legal frame. The companion documents fill in what compliance ac
 
 ## The five document types
 
-| Type            | Source                  | Force                                          | When to consult |
-| --------------- | ----------------------- | ---------------------------------------------- | --------------- |
-| **Regulation**  | CFR (FAA + NTSB sections) | Binding law                                    | Always first    |
-| **Guidance**    | Advisory Circulars       | Non-binding; describes one acceptable means    | When the regulation says "in a manner approved by the Administrator" or similar |
-| **Expected**    | AIM                     | Non-regulatory; deviation can support a 91.13 charge | When ATC procedures, weather, or airspace operations are at issue |
-| **Interpretive**| Chief Counsel letters    | Binds the FAA's enforcement position            | When a regulation's meaning is contested |
-| **Case law**    | NTSB Board orders        | Binding precedent on FAA enforcement           | When defending or arguing an interpretation |
+| Type             | Source                    | Force                                                | When to consult                                                                 |
+| ---------------- | ------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------- |
+| **Regulation**   | CFR (FAA + NTSB sections) | Binding law                                          | Always first                                                                    |
+| **Guidance**     | Advisory Circulars        | Non-binding; describes one acceptable means          | When the regulation says "in a manner approved by the Administrator" or similar |
+| **Expected**     | AIM                       | Non-regulatory; deviation can support a 91.13 charge | When ATC procedures, weather, or airspace operations are at issue               |
+| **Interpretive** | Chief Counsel letters     | Binds the FAA's enforcement position                 | When a regulation's meaning is contested                                        |
+| **Case law**     | NTSB Board orders         | Binding precedent on FAA enforcement                 | When defending or arguing an interpretation                                     |
 
 Each of these is a different kind of authority. Mistaking one for another is the most common technical mistake on oral exams.
 
@@ -123,32 +123,32 @@ AC NN-NN
    +------ subject area, roughly mapping to a CFR Part
 ```
 
-| AC number | Topic                                    |
-| --------- | ---------------------------------------- |
-| AC 00-NN  | General                                  |
-| AC 20-NN  | Aircraft (Part 21+ subjects)              |
-| AC 60-NN  | Airmen (Part 60+ subjects)                |
-| AC 61-NN  | Pilots (Part 61 subjects specifically)    |
-| AC 90-NN  | Air traffic / general operating          |
-| AC 91-NN  | Part 91 subjects                          |
-| AC 120-NN | Part 121 / 135 subjects                   |
-| AC 145-NN | Part 145 (repair stations)                |
+| AC number | Topic                                  |
+| --------- | -------------------------------------- |
+| AC 00-NN  | General                                |
+| AC 20-NN  | Aircraft (Part 21+ subjects)           |
+| AC 60-NN  | Airmen (Part 60+ subjects)             |
+| AC 61-NN  | Pilots (Part 61 subjects specifically) |
+| AC 90-NN  | Air traffic / general operating        |
+| AC 91-NN  | Part 91 subjects                       |
+| AC 120-NN | Part 121 / 135 subjects                |
+| AC 145-NN | Part 145 (repair stations)             |
 
 ACs get revised. The revision letter is appended: `AC 61-65J`, `AC 61-65K`, etc. The current revision is what counts; a CFI signing endorsements in 2026 needs AC 61-65 in its current revision (J or later, depending on FAA cadence).
 
 ### ACs you'll cite often
 
-| AC          | Title                                                  | When you'll need it |
-| ----------- | ------------------------------------------------------ | ------------------- |
-| AC 00-6     | Aviation Weather                                        | Weather decision lessons |
-| AC 60-22    | Aeronautical Decision Making                            | ADM-related sections |
-| AC 61-65    | Certification of Pilots and Flight & Ground Instructors | Endorsement reference for CFIs |
-| AC 61-83    | Nationally Scheduled FAA-Approved Industry-Conducted FIRC | Reference for FIRC mechanics |
-| AC 61-98    | Currency Requirements and Guidance for the Flight Review and IPC | Currency lessons |
-| AC 90-66    | Non-Towered Airport Flight Operations                    | Pattern operations |
-| AC 91-79    | Mitigating the Risks of a Runway Overrun Upon Landing    | Landing technique |
-| AC 91-92    | Pilot's Guide to a Preflight Briefing                    | What "all available information" means in 91.103 |
-| AC 120-71   | Standard Operating Procedures and Pilot Monitoring Duties | 121/135 awareness |
+| AC        | Title                                                            | When you'll need it                              |
+| --------- | ---------------------------------------------------------------- | ------------------------------------------------ |
+| AC 00-6   | Aviation Weather                                                 | Weather decision lessons                         |
+| AC 60-22  | Aeronautical Decision Making                                     | ADM-related sections                             |
+| AC 61-65  | Certification of Pilots and Flight & Ground Instructors          | Endorsement reference for CFIs                   |
+| AC 61-83  | Nationally Scheduled FAA-Approved Industry-Conducted FIRC        | Reference for FIRC mechanics                     |
+| AC 61-98  | Currency Requirements and Guidance for the Flight Review and IPC | Currency lessons                                 |
+| AC 90-66  | Non-Towered Airport Flight Operations                            | Pattern operations                               |
+| AC 91-79  | Mitigating the Risks of a Runway Overrun Upon Landing            | Landing technique                                |
+| AC 91-92  | Pilot's Guide to a Preflight Briefing                            | What "all available information" means in 91.103 |
+| AC 120-71 | Standard Operating Procedures and Pilot Monitoring Duties        | 121/135 awareness                                |
 
 ### When an AC actually matters
 
@@ -160,12 +160,12 @@ The FAA Chief Counsel periodically issues letters interpreting a regulation when
 
 Letters are public, indexed by recipient name and year:
 
-| Letter                | Year | What it settled                                                              |
-| --------------------- | ---- | ---------------------------------------------------------------------------- |
-| **Mangiamele**        | 2009 | §61.113 cost-sharing -- "common purpose" requires the pilot have an actual independent reason to be at the destination, not just to share the trip |
-| **Hicks**             | 2010 | §61.51 / "acting as PIC" -- a CFI manipulating the controls is acting as PIC; a private pilot rated and current can simultaneously log PIC time |
-| **Walker**            | 2017 | §91.103 "all available information" -- includes information the pilot reasonably should have sought, not just information that arrived passively |
-| **Murphy**            | 2014 | §61.51(e) PIC logging -- specifically when a CFI giving instruction may log PIC vs. when only "instruction given" is appropriate |
+| Letter         | Year | What it settled                                                                                                                                    |
+| -------------- | ---- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Mangiamele** | 2009 | §61.113 cost-sharing -- "common purpose" requires the pilot have an actual independent reason to be at the destination, not just to share the trip |
+| **Hicks**      | 2010 | §61.51 / "acting as PIC" -- a CFI manipulating the controls is acting as PIC; a private pilot rated and current can simultaneously log PIC time    |
+| **Walker**     | 2017 | §91.103 "all available information" -- includes information the pilot reasonably should have sought, not just information that arrived passively   |
+| **Murphy**     | 2014 | §61.51(e) PIC logging -- specifically when a CFI giving instruction may log PIC vs. when only "instruction given" is appropriate                   |
 
 You can read these letters on the FAA's site. They're cited in oral exams the way case law is cited in legal exams: by the recipient's name.
 
@@ -184,11 +184,11 @@ Example: a private pilot wants to fly with a coworker and split fuel costs. Look
 
 The NTSB hears appeals from FAA enforcement actions. Their decisions are precedent that binds the FAA. Cases are cited in the form `Administrator v. <name>` followed by the order number.
 
-| Case                              | What it established                                 |
-| --------------------------------- | --------------------------------------------------- |
-| Administrator v. Merrell           | The §91.13 "careless or reckless" standard          |
-| Administrator v. Lobeiko           | Refines the §91.13 careless standard                |
-| Administrator v. Pirsch            | "Knowledge of weather" required by 91.103           |
+| Case                     | What it established                        |
+| ------------------------ | ------------------------------------------ |
+| Administrator v. Merrell | The §91.13 "careless or reckless" standard |
+| Administrator v. Lobeiko | Refines the §91.13 careless standard       |
+| Administrator v. Pirsch  | "Knowledge of weather" required by 91.103  |
 
 Pilots don't usually cite NTSB orders in oral exams unless the examiner is specifically testing enforcement awareness (more in [Week 9 -- Enforcement](../week-09-enforcement/overview.md)).
 
@@ -215,10 +215,10 @@ For CFIs only: if you provide flight training to a foreign student (someone who 
 
 FAA Orders are internal-agency documents that govern how the FAA operates -- how inspectors conduct ramp checks, how FSDOs handle enforcement, how DPEs administer practical tests. Pilots rarely cite them but should know they exist:
 
-| Order        | What it covers                                       |
-| ------------ | ---------------------------------------------------- |
-| FAA Order 2150.3 | Compliance and enforcement program (the enforcement handbook) |
-| FAA Order 8900.1 | Flight Standards Information Management System -- FSDO operations |
+| Order              | What it covers                                                                          |
+| ------------------ | --------------------------------------------------------------------------------------- |
+| FAA Order 2150.3   | Compliance and enforcement program (the enforcement handbook)                           |
+| FAA Order 8900.1   | Flight Standards Information Management System -- FSDO operations                       |
 | FAA Order 8000.373 | Compliance philosophy -- the formal statement of when to use enforcement vs. compliance |
 
 If you ever need to know how the FAA itself says it should investigate or prosecute, these orders are the source.
@@ -237,24 +237,24 @@ If you ever need to know how the FAA itself says it should investigate or prosec
 
 For each, identify whether it's regulation, guidance (AC), expected practice (AIM), interpretation (Chief Counsel), or case law (NTSB):
 
-| Statement                                                                     | Type |
-| ----------------------------------------------------------------------------- | ---- |
-| "The PIC must become familiar with all available information."                | Regulation (§91.103) |
-| "Pilot self-briefing should include weather, NOTAMs, fuel, and alternates."   | Guidance (AC 91-92) |
-| "ATC clearance readback must include the call sign and the clearance limit." | Expected (AIM 4-4-7) |
-| "Common purpose under 61.113 requires an independent reason to fly."          | Interpretation (Mangiamele letter) |
-| "Reckless operation requires a willful disregard for safety."                  | Case law (Administrator v. Lobeiko) |
+| Statement                                                                    | Type                                |
+| ---------------------------------------------------------------------------- | ----------------------------------- |
+| "The PIC must become familiar with all available information."               | Regulation (§91.103)                |
+| "Pilot self-briefing should include weather, NOTAMs, fuel, and alternates."  | Guidance (AC 91-92)                 |
+| "ATC clearance readback must include the call sign and the clearance limit." | Expected (AIM 4-4-7)                |
+| "Common purpose under 61.113 requires an independent reason to fly."         | Interpretation (Mangiamele letter)  |
+| "Reckless operation requires a willful disregard for safety."                | Case law (Administrator v. Lobeiko) |
 
 ### Locate the source
 
-| Question                                                                       | Look in |
-| ------------------------------------------------------------------------------ | ------- |
-| What endorsement language do I use for a complex airplane signoff?              | AC 61-65 |
-| When must I report an accident to the NTSB?                                    | 49 CFR 830.5 |
-| What's the FAA's enforcement progression after a violation?                    | FAA Order 2150.3 |
-| Is two-way ATC communication required for Class C?                             | §91.130 |
-| What does "all available information" actually require?                        | §91.103 + Walker letter (2017) + AC 91-92 |
-| Can I be cited for using non-standard ATC phraseology?                         | Indirectly via §91.13; AIM 4-2 describes standard phraseology |
+| Question                                                           | Look in                                                       |
+| ------------------------------------------------------------------ | ------------------------------------------------------------- |
+| What endorsement language do I use for a complex airplane signoff? | AC 61-65                                                      |
+| When must I report an accident to the NTSB?                        | 49 CFR 830.5                                                  |
+| What's the FAA's enforcement progression after a violation?        | FAA Order 2150.3                                              |
+| Is two-way ATC communication required for Class C?                 | §91.130                                                       |
+| What does "all available information" actually require?            | §91.103 + Walker letter (2017) + AC 91-92                     |
+| Can I be cited for using non-standard ATC phraseology?             | Indirectly via §91.13; AIM 4-2 describes standard phraseology |
 
 ## Where this lesson sits
 

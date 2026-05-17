@@ -16,19 +16,19 @@ review_status: done
 
 Re-greped main against every finding. All 11 findings closed.
 
-| Severity | Finding | Verdict | Evidence |
-| -------- | ------- | ------- | -------- |
-| MAJOR    | LibraryRegulationsKind discriminants use magic strings | CLOSED | route logic moved into `libs/bc/study/src/regulations.ts`; thin adapters dispatch via `LIBRARY_REGULATIONS_KINDS` constant + `parseRegulationKind` helper |
-| MAJOR    | Inline pathname `'/lens'` in app layout | CLOSED | `libs/constants/src/routes.ts:306` -- `ROUTES.LENS = '/lens'`. `apps/study/src/routes/(app)/+layout.svelte:112` -- `pathMatches(page.url.pathname, ROUTES.LENS)` |
-| MAJOR    | handbook-asset URL shape not in ROUTES | CLOSED | `ROUTES.HANDBOOK_ASSET(path)` exists; all three figure-URL builders route through it (`library/handbook/[slug]/[chapter]/+page.svelte:40`, `[section]/+page.svelte:185`, `library/regulations/[kind]/[group]/[section]/+page.svelte:32`) |
-| MAJOR    | `?domain=...` deep links bypass `QUERY_PARAMS.DOMAIN` | CLOSED | every grep'd call site (`memory/+page.svelte:395`, `calibration/+page.svelte:178`, `dashboard/_panels/*Panel.svelte`, `lens/weakness/+page.svelte`, `reps/+page.svelte:115`) now uses `${QUERY_PARAMS.DOMAIN}=${...}` |
-| MINOR    | `QUERY_PARAMS.CREATED` defined but server inlines `'created'` | CLOSED | `apps/study/src/routes/(app)/memory/new/+page.server.ts:86` -- `[QUERY_PARAMS.CREATED]: created.id` |
-| MINOR    | `?created=...` inline in reps redirect | CLOSED | `apps/study/src/routes/(app)/reps/new/+page.server.ts:127` -- `${QUERY_PARAMS.CREATED}=${...}` |
-| MINOR    | `?mode=...` inline in dev references page | CLOSED | `apps/study/src/routes/(dev)/references/+page.svelte:29` -- `${QUERY_PARAMS.MODE}=${mode}` |
-| MINOR    | `'required'` / `'recommended'` inline in credentials detail | CLOSED | `credentials/[slug]/+page.svelte:25-26` uses `CREDENTIAL_PREREQ_KINDS.REQUIRED` / `.RECOMMENDED` |
-| MINOR    | Toast duration `3000` magic number duplicated | CLOSED | `libs/constants` exposes `TOAST_DISMISS_MS`; `plans/[id]/+page.svelte:19,63` imports + uses it. Memory toast pieces moved into the review-session component, no longer using bare 3000 |
-| NIT      | `min-height: 100vh` on login page | CLOSED | `apps/study/src/routes/login/+page.svelte:126` -- `min-height: 100dvh` |
-| NIT      | `max-height: 120px` on calibration sparkline | CLOSED | `apps/study/src/routes/(app)/calibration/+page.svelte:808` -- `max-height: 7.5rem` |
+| Severity | Finding                                                       | Verdict | Evidence                                                                                                                                                                                                                                 |
+| -------- | ------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| MAJOR    | LibraryRegulationsKind discriminants use magic strings        | CLOSED  | route logic moved into `libs/bc/study/src/regulations.ts`; thin adapters dispatch via `LIBRARY_REGULATIONS_KINDS` constant + `parseRegulationKind` helper                                                                                |
+| MAJOR    | Inline pathname `'/lens'` in app layout                       | CLOSED  | `libs/constants/src/routes.ts:306` -- `ROUTES.LENS = '/lens'`. `apps/study/src/routes/(app)/+layout.svelte:112` -- `pathMatches(page.url.pathname, ROUTES.LENS)`                                                                         |
+| MAJOR    | handbook-asset URL shape not in ROUTES                        | CLOSED  | `ROUTES.HANDBOOK_ASSET(path)` exists; all three figure-URL builders route through it (`library/handbook/[slug]/[chapter]/+page.svelte:40`, `[section]/+page.svelte:185`, `library/regulations/[kind]/[group]/[section]/+page.svelte:32`) |
+| MAJOR    | `?domain=...` deep links bypass `QUERY_PARAMS.DOMAIN`         | CLOSED  | every grep'd call site (`memory/+page.svelte:395`, `calibration/+page.svelte:178`, `dashboard/_panels/*Panel.svelte`, `lens/weakness/+page.svelte`, `reps/+page.svelte:115`) now uses `${QUERY_PARAMS.DOMAIN}=${...}`                    |
+| MINOR    | `QUERY_PARAMS.CREATED` defined but server inlines `'created'` | CLOSED  | `apps/study/src/routes/(app)/memory/new/+page.server.ts:86` -- `[QUERY_PARAMS.CREATED]: created.id`                                                                                                                                      |
+| MINOR    | `?created=...` inline in reps redirect                        | CLOSED  | `apps/study/src/routes/(app)/reps/new/+page.server.ts:127` -- `${QUERY_PARAMS.CREATED}=${...}`                                                                                                                                           |
+| MINOR    | `?mode=...` inline in dev references page                     | CLOSED  | `apps/study/src/routes/(dev)/references/+page.svelte:29` -- `${QUERY_PARAMS.MODE}=${mode}`                                                                                                                                               |
+| MINOR    | `'required'` / `'recommended'` inline in credentials detail   | CLOSED  | `credentials/[slug]/+page.svelte:25-26` uses `CREDENTIAL_PREREQ_KINDS.REQUIRED` / `.RECOMMENDED`                                                                                                                                         |
+| MINOR    | Toast duration `3000` magic number duplicated                 | CLOSED  | `libs/constants` exposes `TOAST_DISMISS_MS`; `plans/[id]/+page.svelte:19,63` imports + uses it. Memory toast pieces moved into the review-session component, no longer using bare 3000                                                   |
+| NIT      | `min-height: 100vh` on login page                             | CLOSED  | `apps/study/src/routes/login/+page.svelte:126` -- `min-height: 100dvh`                                                                                                                                                                   |
+| NIT      | `max-height: 120px` on calibration sparkline                  | CLOSED  | `apps/study/src/routes/(app)/calibration/+page.svelte:808` -- `max-height: 7.5rem`                                                                                                                                                       |
 
 ## Summary
 
@@ -43,6 +43,7 @@ No critical violations. Patterns are mostly load-bearing in the right direction;
 ### MAJOR: `LibraryRegulationsKind` discriminants use magic strings instead of `LIBRARY_REGULATIONS_KINDS`
 
 **File**:
+
 - `apps/study/src/routes/(app)/library/regulations/+page.server.ts` (lines 28-36)
 - `apps/study/src/routes/(app)/library/regulations/[kind]/+page.server.ts` (lines 84-148)
 - `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/+page.server.ts` (lines 62-145)
@@ -59,6 +60,7 @@ No critical violations. Patterns are mostly load-bearing in the right direction;
 **File**: `apps/study/src/routes/(app)/+layout.svelte:102`
 
 **Problem**:
+
 ```typescript
 const lensActive = $derived(page.url.pathname.startsWith('/lens'));
 ```
@@ -72,6 +74,7 @@ Every other nav-active check in this file routes through `ROUTES.*` constants (l
 ### MAJOR: `handbook-asset` URL shape not in `ROUTES`
 
 **File**:
+
 - `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/[section]/+page.svelte:127-129`
 - `apps/study/src/routes/(app)/library/handbook/[slug]/[chapter]/+page.svelte:36-40`
 - `apps/study/src/routes/(app)/library/regulations/[kind]/[group]/[section]/+page.svelte:32`
@@ -85,6 +88,7 @@ Every other nav-active check in this file routes through `ROUTES.*` constants (l
 ### MAJOR: `?domain=...` deep links bypass `QUERY_PARAMS.DOMAIN`
 
 **File**:
+
 - `apps/study/src/routes/(app)/memory/+page.svelte:395`
 - `apps/study/src/routes/(app)/calibration/+page.svelte:178`
 - `apps/study/src/routes/(app)/dashboard/_panels/ScheduledRepsPanel.svelte:24`
@@ -105,6 +109,7 @@ Every other nav-active check in this file routes through `ROUTES.*` constants (l
 **File**: `apps/study/src/routes/(app)/memory/new/+page.server.ts:86`
 
 **Problem**:
+
 ```typescript
 const next = new URLSearchParams({
     created: created.id,
@@ -124,6 +129,7 @@ The first key is bare string `created:` while sibling keys use `[QUERY_PARAMS.DO
 **File**: `apps/study/src/routes/(app)/reps/new/+page.server.ts:119`
 
 **Problem**:
+
 ```typescript
 redirect(303, `${ROUTES.REPS_BROWSE}?created=${encodeURIComponent(created.id)}`);
 ```
@@ -139,6 +145,7 @@ Same `created` query key -- `QUERY_PARAMS.CREATED` exists.
 **File**: `apps/study/src/routes/(dev)/references/+page.svelte:28`
 
 **Problem**:
+
 ```svelte
 <a href={`?mode=${mode}`} ...>
 ```
@@ -154,6 +161,7 @@ Same `created` query key -- `QUERY_PARAMS.CREATED` exists.
 **File**: `apps/study/src/routes/(app)/credentials/[slug]/+page.svelte:19-20`
 
 **Problem**:
+
 ```typescript
 const requiredPrereqs = $derived(prereqs.filter((p) => p.kind === 'required'));
 const recommendedPrereqs = $derived(prereqs.filter((p) => p.kind === 'recommended'));
@@ -168,6 +176,7 @@ const recommendedPrereqs = $derived(prereqs.filter((p) => p.kind === 'recommende
 ### MINOR: Toast duration `3000` is a magic number duplicated across files
 
 **File**:
+
 - `apps/study/src/routes/(app)/memory/[id]/+page.svelte:101, 131`
 - `apps/study/src/routes/(app)/plans/[id]/+page.svelte:62`
 

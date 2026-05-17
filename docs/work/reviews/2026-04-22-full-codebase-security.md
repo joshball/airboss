@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Overall posture is solid. Every `(app)` route is gated by `requireAuth` at the layout level, every BC function that takes a `userId` constrains the subsequent query to that user (including joins through `session_item_result` and `card_state`), form actions validate inputs against Zod or constant enums before hitting the BC, and mutation is restricted to SvelteKit form actions (no custom API endpoints, so the framework-provided origin/CSRF check remains in effect). Drizzle is used exclusively; the one `sql.raw` usage only interpolates compile-time constants from `@ab/constants`. Cookies are `httpOnly`, `sameSite=lax`, and `secure` in non-dev, with the Domain attribute resolved per-request so session fixation via a spoofed Host is scoped to the configured dev/prod domain. Dev seed users are explicitly refused when `DATABASE_URL` is not a local dev host, the dev-account quick-fill UI is `{#if dev}`-gated in the page template, and `DEV_PASSWORD` is a static string imported only in dev contexts. Main gap is the absence of any `Content-Security-Policy` or related security headers. A few smaller items are called out below.

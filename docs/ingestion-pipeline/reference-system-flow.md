@@ -20,11 +20,11 @@ The [[VFR weather minimums::cfr-14-91-155]] define cloud clearance for Class E.
 
 Three valid shapes:
 
-| Form                                       | When                                 | Renders as                                       |
-| ------------------------------------------ | ------------------------------------ | ------------------------------------------------ |
-| `[[display::id]]`                          | Both known                           | "display" as a link / tooltip to the id          |
-| `[[display::]]`                            | Text known, id TBD                   | "display" with a yellow "needs link" underline   |
-| `[[::id]]`                                 | Id known, want the registry's displayName | The registry's `displayName` as the link text    |
+| Form              | When                                      | Renders as                                     |
+| ----------------- | ----------------------------------------- | ---------------------------------------------- |
+| `[[display::id]]` | Both known                                | "display" as a link / tooltip to the id        |
+| `[[display::]]`   | Text known, id TBD                        | "display" with a yellow "needs link" underline |
+| `[[::id]]`        | Id known, want the registry's displayName | The registry's `displayName` as the link text  |
 
 Content locations the scanner walks:
 
@@ -110,10 +110,10 @@ Every box below is a decision or artifact a human produces. The scripts move dat
 | Id doesn't exist yet         | Add a Reference entry to `aviation.ts` (or let extractor produce it)         | Registry has a new entry                        |
 | Source not downloaded yet    | Download XML/PDF/CSV, place under `data/sources/<type>/`, write `.meta.json` | Binary + meta sidecar on disk                   |
 | Registry entry out of date   | Update `libs/aviation/src/sources/registry.ts` with new version + checksum   | Registry tracks the new source version          |
-| Want the verbatim             | `bun run references extract --id <id>` or `--source <source-id>`             | Generated file carries the `VerbatimBlock`      |
-| Yearly refresh                | Download new annual bulk, update registry, run `build`, review `diff`        | PR with the diff, hand-curated paraphrase edits |
-| Tag author-review needed      | Triage the ambiguity report, pick correct tag values                         | Updated reference tags                          |
-| Orphan references             | Decide: cite in content or delete                                            | Either new wiki-link or removed reference       |
+| Want the verbatim            | `bun run references extract --id <id>` or `--source <source-id>`             | Generated file carries the `VerbatimBlock`      |
+| Yearly refresh               | Download new annual bulk, update registry, run `build`, review `diff`        | PR with the diff, hand-curated paraphrase edits |
+| Tag author-review needed     | Triage the ambiguity report, pick correct tag values                         | Updated reference tags                          |
+| Orphan references            | Decide: cite in content or delete                                            | Either new wiki-link or removed reference       |
 
 ## Commands
 
@@ -131,13 +131,13 @@ All under the single dispatcher `bun run references <command>` (symmetric with `
 
 ## Automatic vs manual
 
-| Happens automatically                               | Happens manually                         |
-| --------------------------------------------------- | ---------------------------------------- |
-| `scan` + `validate` on every `bun run dev`          | Author a new reference entry             |
-| `scan` + `validate` on every `bun run check`        | Download a source binary                 |
-| Registry merge at app boot                          | `bun run references extract` / `build`   |
-| `/glossary` + `/help` renders on route load         | `diff` review during yearly refresh      |
-| Wiki-link resolution in `ReferenceText.svelte`      | Decide commit / LFS / external per source|
+| Happens automatically                          | Happens manually                          |
+| ---------------------------------------------- | ----------------------------------------- |
+| `scan` + `validate` on every `bun run dev`     | Author a new reference entry              |
+| `scan` + `validate` on every `bun run check`   | Download a source binary                  |
+| Registry merge at app boot                     | `bun run references extract` / `build`    |
+| `/glossary` + `/help` renders on route load    | `diff` review during yearly refresh       |
+| Wiki-link resolution in `ReferenceText.svelte` | Decide commit / LFS / external per source |
 
 Architecture decision #3 keeps extraction out of the dev loop on purpose -- parsers can be slow (large PDFs, XML) and shouldn't block the author's edit-save-reload cycle. The scan + validate path is sub-second.
 

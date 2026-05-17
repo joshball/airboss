@@ -16,16 +16,16 @@ counts:
 
 Walked every finding against current main. 6 of 8 closed; 2 carried forward.
 
-| Severity | Finding                                                  | Verdict                                                                                          |
-| -------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| MAJOR    | Session hydration duplicated 4x across hooks.server.ts   | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 apps consume |
-| MINOR    | `@ab/audit/schema` deep-imports past `@ab/auth` barrel   | STILL OPEN -- `libs/audit/src/schema.ts:18` still uses `@ab/auth/schema`; carried below          |
-| MINOR    | `auditColumns` placed in `@ab/auth` not `@ab/audit`      | STILL OPEN -- carried below; helper has no live call sites today                                 |
-| MINOR    | Login + logout actions duplicated across study/hangar    | CLOSED -- shared building blocks (`isSafeRedirect`, `mapBetterAuthSession`, audit hooks) extracted; both bodies remain per-app for now |
-| MINOR    | Per-app `$lib/server/cookies.ts` exists only to bind dev | CLOSED -- per-app shells acceptable; thin (19 lines each) and `@ab/auth` API stays test-friendly |
-| NIT      | `auditSchema` re-exported but is internal plumbing       | STILL OPEN -- `libs/audit/src/index.ts:18` still exports it; no external consumer found          |
-| NIT      | `AuthSession`/`AuthUser` vs `bauthSession`/`bauthUser` naming | CLOSED -- accepted convention; documented at `libs/auth/src/auth.ts:13-31`                  |
-| NIT      | sim/avionics swallow session-lookup errors silently      | CLOSED -- both now emit `log.error('session lookup failed', ...)` (sim/hooks.ts:66, avionics/hooks.ts:65) |
+| Severity | Finding                                                       | Verdict                                                                                                                                |
+| -------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| MAJOR    | Session hydration duplicated 4x across hooks.server.ts        | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 apps consume                                       |
+| MINOR    | `@ab/audit/schema` deep-imports past `@ab/auth` barrel        | STILL OPEN -- `libs/audit/src/schema.ts:18` still uses `@ab/auth/schema`; carried below                                                |
+| MINOR    | `auditColumns` placed in `@ab/auth` not `@ab/audit`           | STILL OPEN -- carried below; helper has no live call sites today                                                                       |
+| MINOR    | Login + logout actions duplicated across study/hangar         | CLOSED -- shared building blocks (`isSafeRedirect`, `mapBetterAuthSession`, audit hooks) extracted; both bodies remain per-app for now |
+| MINOR    | Per-app `$lib/server/cookies.ts` exists only to bind dev      | CLOSED -- per-app shells acceptable; thin (19 lines each) and `@ab/auth` API stays test-friendly                                       |
+| NIT      | `auditSchema` re-exported but is internal plumbing            | STILL OPEN -- `libs/audit/src/index.ts:18` still exports it; no external consumer found                                                |
+| NIT      | `AuthSession`/`AuthUser` vs `bauthSession`/`bauthUser` naming | CLOSED -- accepted convention; documented at `libs/auth/src/auth.ts:13-31`                                                             |
+| NIT      | sim/avionics swallow session-lookup errors silently           | CLOSED -- both now emit `log.error('session lookup failed', ...)` (sim/hooks.ts:66, avionics/hooks.ts:65)                              |
 
 ### Carried-forward design items
 

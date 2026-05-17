@@ -26,15 +26,15 @@ The spec is large (3 surfaces, 7+ new tables, 10+ routes, FTS, walker, bucket ad
 
 These were discovered during pre-build read-through and need a one-line decision to avoid mid-build stalls:
 
-| # | Gap                                                                                                                                         | Recommended resolution                                                                                                                         |
-| - | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1 | `knowledge_node` discovery rule looks for `discovery_review: pending` frontmatter; **no knowledge node has it today** (46 nodes, 0 matches). | Phase 2: emit ALL `course/knowledge/**/node.md` as `knowledge_node` items with `cachedStatus.frontmatterStatus = 'unread'` if `discovery_review` is missing. Reviewer can flip via the per-kind view. |
-| 2 | `reference_toc` discovery rule references `review_session` outcomes recursively (rule queries the same table the loader is filling).         | Phase 2: emit one `reference_toc` item per `hangar.reference` row whose `verbatim` jsonb has TOC content; "needs review" derived in the bucket filter, not the discovery rule. |
-| 3 | spec says `task` table "mirrors airboss-firc shape" -- there is no `airboss-firc` checked out into the worktree.                            | Build a thin in-airboss task shape from spec column list. Fields: `id`, `boardId`, `columnId`, `title`, `description` (text), `type` (text -- enum lives in constants), `productArea` (text), `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt`. No port; pure new. |
-| 4 | `TASK_TYPES` and `PRODUCT_AREAS` "ported from airboss-firc" -- not ported, not specced inline.                                              | Use `['bug', 'feature', 'chore', 'investigation', 'follow-up']` for TASK_TYPES; `['hangar', 'study', 'sim', 'flightbag', 'platform', 'docs']` for PRODUCT_AREAS. Aligns with Joshua's product taxonomy memory entry. |
-| 5 | spec route `/review/items/[itemId]` (dispatcher) is in design.md but not in tasks.md.                                                       | Add to Phase 4 -- thin redirect to per-kind route based on `kindId` lookup.                                                                    |
-| 6 | spec adds `/docs` and `/review` to hangar sidebar -- existing `Nav.svelte` shows Sources / Glossary / Users / Jobs.                          | Phase 3 adds `Docs`, Phase 4 adds `Review`. No re-org of existing entries.                                                                     |
-| 7 | "Browser-bundled libs must not statically import `node:*`" -- the loader needs `fs` to walk `docs/**`.                                      | Loader lives in `libs/bc/hangar/src/review-loader.ts` (BC, not browser-bundled). Test-plan parser similarly server-only. Frontmatter writer also server-only -- if any of this needs to land in `libs/utils/`, gate via `process.getBuiltinModule('node:fs')` per CLAUDE.md. |
+| #   | Gap                                                                                                                                          | Recommended resolution                                                                                                                                                                                                                                                             |
+| --- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `knowledge_node` discovery rule looks for `discovery_review: pending` frontmatter; **no knowledge node has it today** (46 nodes, 0 matches). | Phase 2: emit ALL `course/knowledge/**/node.md` as `knowledge_node` items with `cachedStatus.frontmatterStatus = 'unread'` if `discovery_review` is missing. Reviewer can flip via the per-kind view.                                                                              |
+| 2   | `reference_toc` discovery rule references `review_session` outcomes recursively (rule queries the same table the loader is filling).         | Phase 2: emit one `reference_toc` item per `hangar.reference` row whose `verbatim` jsonb has TOC content; "needs review" derived in the bucket filter, not the discovery rule.                                                                                                     |
+| 3   | spec says `task` table "mirrors airboss-firc shape" -- there is no `airboss-firc` checked out into the worktree.                             | Build a thin in-airboss task shape from spec column list. Fields: `id`, `boardId`, `columnId`, `title`, `description` (text), `type` (text -- enum lives in constants), `productArea` (text), `assigneeId`, `createdBy`, `sortOrder`, `createdAt`, `updatedAt`. No port; pure new. |
+| 4   | `TASK_TYPES` and `PRODUCT_AREAS` "ported from airboss-firc" -- not ported, not specced inline.                                               | Use `['bug', 'feature', 'chore', 'investigation', 'follow-up']` for TASK_TYPES; `['hangar', 'study', 'sim', 'flightbag', 'platform', 'docs']` for PRODUCT_AREAS. Aligns with Joshua's product taxonomy memory entry.                                                               |
+| 5   | spec route `/review/items/[itemId]` (dispatcher) is in design.md but not in tasks.md.                                                        | Add to Phase 4 -- thin redirect to per-kind route based on `kindId` lookup.                                                                                                                                                                                                        |
+| 6   | spec adds `/docs` and `/review` to hangar sidebar -- existing `Nav.svelte` shows Sources / Glossary / Users / Jobs.                          | Phase 3 adds `Docs`, Phase 4 adds `Review`. No re-org of existing entries.                                                                                                                                                                                                         |
+| 7   | "Browser-bundled libs must not statically import `node:*`" -- the loader needs `fs` to walk `docs/**`.                                       | Loader lives in `libs/bc/hangar/src/review-loader.ts` (BC, not browser-bundled). Test-plan parser similarly server-only. Frontmatter writer also server-only -- if any of this needs to land in `libs/utils/`, gate via `process.getBuiltinModule('node:fs')` per CLAUDE.md.       |
 
 If any of (1)-(7) need a different call, dispatcher should reply with the override before approval. Otherwise proceeding with the recommended resolutions.
 
@@ -185,16 +185,16 @@ Reviewers (Phase 8): full 10x pass.
 
 ## Per-phase reviewer matrix
 
-| Phase                                         | Reviewers                                               |
-| --------------------------------------------- | ------------------------------------------------------- |
-| 1 (constants + schema + BC)                   | schema, backend, correctness                            |
-| 2 (frontmatter + parser + loader)             | backend, correctness, patterns                          |
-| 3 (`/docs` + FTS)                             | svelte, ux, a11y, perf                                  |
-| 4 (board + drag)                              | svelte, ux, a11y, backend, patterns                     |
-| 5 (WP spec + walker)                          | svelte, ux, a11y, correctness                           |
-| 6 (TOC + knowledge + tasks)                   | svelte, ux, a11y, correctness                           |
-| 7 (admin)                                     | svelte, ux, a11y, backend, security                     |
-| 8 (e2e + polish + status flip)                | full 10x (ux, svelte, security, perf, architecture, patterns, correctness, a11y, backend, schema) |
+| Phase                             | Reviewers                                                                                         |
+| --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| 1 (constants + schema + BC)       | schema, backend, correctness                                                                      |
+| 2 (frontmatter + parser + loader) | backend, correctness, patterns                                                                    |
+| 3 (`/docs` + FTS)                 | svelte, ux, a11y, perf                                                                            |
+| 4 (board + drag)                  | svelte, ux, a11y, backend, patterns                                                               |
+| 5 (WP spec + walker)              | svelte, ux, a11y, correctness                                                                     |
+| 6 (TOC + knowledge + tasks)       | svelte, ux, a11y, correctness                                                                     |
+| 7 (admin)                         | svelte, ux, a11y, backend, security                                                               |
+| 8 (e2e + polish + status flip)    | full 10x (ux, svelte, security, perf, architecture, patterns, correctness, a11y, backend, schema) |
 
 ## Commit cadence
 

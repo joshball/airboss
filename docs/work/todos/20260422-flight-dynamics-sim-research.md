@@ -54,11 +54,11 @@ JSBSim is the FDM behind FlightGear, NASA research, and many ArduPilot/PX4 SITL 
 
 **Reference implementations to study (do not depend on):**
 
-| Repo | Status | Notes |
-| ------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------------- |
-| [JSBSim-Team/jsbsim](https://github.com/JSBSim-Team/jsbsim) | Upstream; active | LGPL-2.1. The source of truth. |
-| [csbrandt/JSBSim.js](https://github.com/csbrandt/JSBSim.js) | Stale (v0.0.4, old) | Old Emscripten port. Reference only; likely out of date vs current JSBSim. |
-| [0x62/jsbsim-wasm](https://github.com/0x62/jsbsim-wasm) | Active (Feb 2026, v1.2.4-beta.4) | 2 stars, single-author. MIT wrapper + LGPL WASM. Auto-generates TS bindings from `FGFDMExec.h`. Excellent **reference** for our own build. |
+| Repo                                                        | Status                           | Notes                                                                                                                                      |
+| ----------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| [JSBSim-Team/jsbsim](https://github.com/JSBSim-Team/jsbsim) | Upstream; active                 | LGPL-2.1. The source of truth.                                                                                                             |
+| [csbrandt/JSBSim.js](https://github.com/csbrandt/JSBSim.js) | Stale (v0.0.4, old)              | Old Emscripten port. Reference only; likely out of date vs current JSBSim.                                                                 |
+| [0x62/jsbsim-wasm](https://github.com/0x62/jsbsim-wasm)     | Active (Feb 2026, v1.2.4-beta.4) | 2 stars, single-author. MIT wrapper + LGPL WASM. Auto-generates TS bindings from `FGFDMExec.h`. Excellent **reference** for our own build. |
 
 **Security posture:** do not take either jsbsim-wasm or JSBSim.js as a npm dep. Read their build scripts, understand the binding generator, write our own in `tools/jsbsim-port/` from upstream JSBSim. Every line of glue code is ours and reviewable. WASM blob is built from pinned upstream JSBSim commit + our bindings, checked into the repo with a hash.
 

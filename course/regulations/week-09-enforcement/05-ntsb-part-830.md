@@ -113,13 +113,13 @@ Note: paraphrase. Read the actual reg before referencing in exam.
 
 The four definitions every pilot needs cold:
 
-| Term                | Bright-line test                                                          |
-| ------------------- | ------------------------------------------------------------------------- |
-| Aircraft accident   | Death OR serious injury OR substantial damage during operation            |
-| Fatal injury        | Death within 30 days of the event                                         |
-| Serious injury      | >48 hr hospitalization, fracture (not finger/toe/nose), severe damage     |
-| Substantial damage  | Adverse effect on strength / performance / flight, requires major repair |
-| Incident            | Anything other than accident that affects or could affect safety          |
+| Term               | Bright-line test                                                         |
+| ------------------ | ------------------------------------------------------------------------ |
+| Aircraft accident  | Death OR serious injury OR substantial damage during operation           |
+| Fatal injury       | Death within 30 days of the event                                        |
+| Serious injury     | >48 hr hospitalization, fracture (not finger/toe/nose), severe damage    |
+| Substantial damage | Adverse effect on strength / performance / flight, requires major repair |
+| Incident           | Anything other than accident that affects or could affect safety         |
 
 ### What "substantial damage" excludes
 
@@ -353,12 +353,12 @@ The form itself is straightforward: aircraft data, pilot data, flight data, narr
 
 Part 830 is NTSB. FAA enforcement is Title 14. They are independent.
 
-| Event class                                  | NTSB notification (Part 830) | FAA notification (custom) | FAA enforcement (potential) |
-| -------------------------------------------- | ---------------------------- | ------------------------- | --------------------------- |
-| Accident under §830.2                        | Required immediately          | Customary                 | Possible                    |
-| §830.5(a) incident (e.g., in-flight fire)    | Required immediately          | Customary                 | Possible                    |
-| Other incident affecting safety              | Not required                  | Customary if FAA-noticed  | Possible                    |
-| FAA-noticed deviation, no injury, no damage  | Not required                  | Required (LOI response)   | Likely                      |
+| Event class                                 | NTSB notification (Part 830) | FAA notification (custom) | FAA enforcement (potential) |
+| ------------------------------------------- | ---------------------------- | ------------------------- | --------------------------- |
+| Accident under §830.2                       | Required immediately         | Customary                 | Possible                    |
+| §830.5(a) incident (e.g., in-flight fire)   | Required immediately         | Customary                 | Possible                    |
+| Other incident affecting safety             | Not required                 | Customary if FAA-noticed  | Possible                    |
+| FAA-noticed deviation, no injury, no damage | Not required                 | Required (LOI response)   | Likely                      |
 
 The two reporting systems answer different questions. NTSB is interested in safety -- understanding what happened and preventing recurrence. FAA is interested in compliance -- whether rules were broken and what to do about it. They share information but have separate rules.
 
@@ -413,17 +413,17 @@ Adjacent NTSB regulations:
 
 ### Locate
 
-| Question                                                                  | Section / source             |
-| ------------------------------------------------------------------------- | ---------------------------- |
-| Where is "aircraft accident" defined?                                      | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026) |
-| Where is the immediate-notification list?                                  | [@cite](airboss-ref:regs/cfr-49/830/5?at=2026) |
-| Where is the wreckage-preservation rule?                                   | [@cite](airboss-ref:regs/cfr-49/830/10?at=2026) |
-| Where is the 10-day written report rule?                                   | [@cite](airboss-ref:regs/cfr-49/830/15?at=2026) |
-| Where is "substantial damage" defined?                                     | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026) |
-| Where is "serious injury" defined?                                         | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026) |
-| What's the form for the 10-day written report?                             | NTSB Form 6120.1              |
-| What's the immediate-notification deadline?                                | "Immediately, by the most expeditious means" |
-| Where do you file the §830.15 report?                                      | Nearest NTSB field office     |
+| Question                                       | Section / source                                |
+| ---------------------------------------------- | ----------------------------------------------- |
+| Where is "aircraft accident" defined?          | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026)  |
+| Where is the immediate-notification list?      | [@cite](airboss-ref:regs/cfr-49/830/5?at=2026)  |
+| Where is the wreckage-preservation rule?       | [@cite](airboss-ref:regs/cfr-49/830/10?at=2026) |
+| Where is the 10-day written report rule?       | [@cite](airboss-ref:regs/cfr-49/830/15?at=2026) |
+| Where is "substantial damage" defined?         | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026)  |
+| Where is "serious injury" defined?             | [@cite](airboss-ref:regs/cfr-49/830/2?at=2026)  |
+| What's the form for the 10-day written report? | NTSB Form 6120.1                                |
+| What's the immediate-notification deadline?    | "Immediately, by the most expeditious means"    |
+| Where do you file the §830.15 report?          | Nearest NTSB field office                       |
 
 ### Apply -- accident, incident, or neither?
 

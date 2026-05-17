@@ -1,54 +1,26 @@
 
-
 ---
 
 ## Cover
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Title
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Copyright
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Copyright © 2017 by Ross Bentley and Phil Wilkes 
  All rights reserved. 
  ISBN-13: 978-1507861585 
@@ -68,24 +40,17 @@
  Procedural trainer photograph courtesy of Aerosim Technologies 
  Artwork by MazArt Design ( mazartdesigns@netspace.net.au ) 
  Editing by Red Herring Ink ( robin@redherringink.com ) 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Contents
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  CONTENTS 
- 
+
  Introduction 
  How The Pilot’s Mind Works 
  Brain Integration 
@@ -108,24 +73,17 @@
  Summary 
  About The Authors 
  Index 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Introduction
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Introduction 
- 
+
  F lying an aircraft is something learned mostly through hands-on experience; it’s putting hours in your log book. You may have heard pilots say, or may have even said yourself, “All I need are more hours in my log book - more hours to develop the feel and skills to fly consistently at my peak.” Sure, there is some truth in this statement, but to simply “sit around” in the pilot’s seat and wait for the logged hours to give you the feel and the skills is time wasted. 
  You don’t need to be sitting in an aircraft to take steps to improve your skills. You can make great leaps in developing and improving your skill level by utilizing the strategies presented in this book in preparation for your next venture into the wild-blue yonder. Effective preparation strategies away from the cockpit allow you to learn more quickly once you’re behind the controls. If you understand the theory, if you can picture it clearly in your head before you start to fly, you will be more sensitive and able to relate to the experience and will learn to fly with proficiency much sooner. You may save years of trial and error learning (and dollars on flying lessons) by simply reading and understanding this book. 
  Any respectable flying instructor can teach you an attitude for straight and level, advise you where to aim during final approach to land, how much anticipation is required to level off from a climb or descent, or even how to fly accurately on a limited panel in instrument conditions. This book aims to add the mental game of flying and, most important, practice strategies that will get you to proficiency more quickly. 
@@ -142,50 +100,33 @@
  Some of the strategies we suggest may not seem or feel “right” to you, while others will. Use the ones that feel right immediately and try the others now and then making a note of the changes in your performance over time. Just because a strategy doesn’t feel right or seem to be making a difference immediately, it doesn’t mean you should dismiss it completely. The more strategies you use on a regular basis, the better a pilot you will be. 
  Using the strategies presented in this book requires a commitment. Motivation and commitment can be developed more easily when you believe that what you are doing will be effective. This belief, however, is subject to your understanding of the process. Without that understanding, few people will accept the strategies. That is why we will explain the whys and hows in this book. The better you understand the concepts, the stronger your belief in their effectiveness will be, and the stronger your motivation will be to use them. 
  Evidence of some success is also necessary to provide continued motivation, but without implementing these strategies, there can be no evidence. We have all heard people say, “I tried that once, and it didn’t work” or “I knew it wouldn’t work!” If you’d witnessed the success we’ve achieved with pilots and athletes utilizing the strategies presented, you would have all the evidence and motivation you need. You may be able to argue about the theory of something, but when you see and experience the results, there is no argument. Once you begin to use these strategies, you will experience firsthand the results and gain all the motivation you need to continue. 
- 
- 
- 
- 
- 
- 
+
  You must implement the strategies for them to work. 
- 
+
  Throughout the book, you will find Performance Tips that serve as memory jogs for the most important concepts covered. You can flip open to most pages and pick up something that’s meaningful and helpful to you. 
  This book means to act as a tool for pilots who want to operate at a peak level of performance. The one thing we know for sure is that if you don’t use what we write about in this book, it won’t help you at all. It’s as simple as that. 
  It’s one thing to read a book, but an entirely other matter to put to use what you’ve read. This book is not one to read once and place on a shelf. Our hope is that you’ll refer to it on a regular basis throughout your career, keeping it nearby, either at home or in your nav bag. 
  To assist your ongoing use of our book, we have included a summary at the end. A larger scale version of the summary can also be downloaded from our website ( www.performancepilot.net/summary ) and laminated so you can use it as a guide to all of the important strategies within the book. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_1
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  How The Pilot’s Mind Works 
- 
+
  Y ogi Berra, the famous US baseball player, coach and manager, said, “Baseball is 90% mental; the other half is physical.” If you ignore the math, you could have equally made this comment about flying. The physical act of flying an aircraft is relatively simple in comparison with the mental aspects. In other words, your results are largely dependent upon your mental performance. 
  If you want to perform at your peak while flying, having an understanding of how your mind works is not only beneficial, it is critical. The goal of this chapter is to give you enough information so that you will buy into the concepts and tools we want you to use. Without this basic understanding, it is doubtful you will believe in the concepts and, therefore, will not use them. With this as a framework, let’s dive into the pilot’s mind. 
  The Performance Model 
  Ronn Langford, Ross’s friend, developed The Performance Model. It’s used to explain and understand how humans perform practically any activity. The model works like this: information, primarily from our senses, is input into our brains, which we can look at as operating like a computer. In this “bio-computer,” the information is processed based on our software or programming, resulting in output. When it comes to flying an aircraft, this output is some form of action or reaction: using the control column or rudder pedals, looking at something, making a decision, behaving a certain way, having self-confidence or millions of other actions. 
  Within your software, or mental programming, are your psychomotor skills (physical actions and movements that you can do without having conscious thought), your state of mind, decisions, behavioral traits and your belief system. 
  You could have the latest and greatest supercomputer, with the very best software or programming available, but if the input you give it is of poor quality or very little quantity, you will not get the output you were seeking. Conversely, if you give an old computer, with a slow processor, lots of great quality input, you still will not get the output you were looking for (at least not as quickly as is needed when flying). In other words, the combination of your brain’s processing speed and your software (programming) determine the output which, in this case, is your flying performance. 
- 
- 
- 
- 
- 
- 
+
  The Performance Model. 
- 
+
  Using Your Whole Brain 
  Have you ever had days or times when you feel completely switched on and performing at a high level and other days when it seems you can’t get out of your own way? Part of the reason for this is how well you’re using your whole brain. When you switch on and are performing at your best, you’re using your whole brain and processing information quickly and efficiently. When you’re not performing well, it’s as if you’re only using half a brain; you’re not processing information very fast. 
  It’s surprising to many pilots that they can use some exercises to speed up their brain’s ability to process information and therefore fly more proficiently and smarter. We’ll look into brain integration and how you can improve your brain’s functioning in the next chapter. 
@@ -196,33 +137,12 @@
  The kinesthetic sense involves much more than just the sense of touch. It also includes your proprioceptive system (the ability to sense forces acting against your body) and your vestibular system (sense of balance). Is your sense of balance important to flying an aircraft? Is your ability to sense the g-forces against your body important? Is your ability to feel the control forces being fed back through the yoke, stick, pedals and seat important? Yes, yes, and yes! 
  Some people seem to think that auditory input is not that important when it comes to flying aircraft. It is true that our auditory sense is the first to suffer when we are mentally overloaded. If you don’t believe us, consider how many radio calls you have missed while concentrating intently on just flying or how many times your spouse has accused you of selective hearing! Having said that, a great pilot still receives a lot of input from their hearing. At your most aware, you just know when you are getting a little slow turning final or are approaching the stall as your auditory senses pick up the decreasing sound of the air rushing past the cockpit. The sound of the engine tells you a lot about whether your throttle adjustment was in the ballpark. Sounds out of the ordinary pinpoint our errors for us; we haven’t moved the propeller control to fine pitch on final, we left the gear down after take-off or forgot to select it down on final! 
  The overall message you should be getting from this is that anything you can do to improve the quantity and quality of sensory information going into your brain the better your performance will be. We’ll get into the details of how exactly to do this in the chapter on Sensory Input. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The better the quality and the more quantity of input from your senses that you can process, the better the output and the better your performance will be. 
- 
-             
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
  A pilot’s primary sensory inputs come from their eyes, ears and touch. 
- 
-   
+
  Your Software 
  Everything you do behind the controls of the aircraft (and in life for that matter) is a result of the programming in your brain. What do we mean by programming? Each and every time you do something, anything, the synapses in your brain that relate to that activity fire off bio-electrical current from one to another. This pathway now becomes the program for doing this act. The more often the act is completed, the deeper the programming becomes. 
  Let us make one thing very clear; you must fly an aircraft at the subconscious level and not the conscious level. Why? The aviation environment is far too dynamic for an aircraft to be flown effectively at the conscious level. A pilot cannot think through each skill and technique as they fly the aircraft. Let’s consider the captain of a jet airliner conducting a take-off at the distance-limited performance weight limit from a contaminated runway. Imagine now that the captain is rejecting the take-off close to V1. Imagine them thinking themselves through the entire process. “Ok! Start braking now by moving my feet up onto the brakes and squeezing them down together while keeping the aircraft straight with rudder, simultaneously moving my right hand to the reverse thrust levers and applying maximum reverse thrust suitable for the conditions while being prepared to use asymmetric thrust on the applicable side if we start to aquaplane on this contaminated runway….” Where do you think they would end up? Quite possibly in a post-crash investigation into why they took so long to complete the reject actions as they were sliding off the end of the runway! 
@@ -234,42 +154,25 @@
           •    Faster Processing – The faster and more efficiently you process the information in your brain, the better your performance will be. 
           •    Quality Input – The better the quality and the more quantity of input from your senses that you can process, the better the output and the better your performance will be. 
           •    Quality Programming – The better your mental programming (your software) is, the better your performance will be. 
- 
- 
- 
- 
- 
- 
+
  The three keys to improving flying performance. 
- 
+
  Because these are so critical to your performance, we’re devoting the next four chapters to discussing methods you can use to improve in these three areas. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_2
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Brain Integration 
- 
+
  Y ou are most likely aware of the fact that your brain is made up of two halves or hemispheres. Each hemisphere has certain primary responsibilities: the left hemisphere for logic, math, language, and details; the right for creativity, intuition, art and the big picture. 
- 
- 
- 
- 
- 
- 
+
  The right and left hemispheres of your brain each have their own duties. 
- 
+
  How would you describe yourself? Are you a left-brain dominant person; logical, factual, and detail-oriented? Or are you more right-brain dominant; creative, intuitive, and able to see the big picture? 
  Which do you suppose is the ideal for a pilot? If you answered “both” you are correct. You must be able to see the details and the big picture, be logical and creative, factual, and intuitive. You must be what is called “integrated;” both hemispheres of your brain working at their peak and together. In fact, sports researchers have shown that one of the most important factors leading to an athlete performing “in the zone” or “in the flow” is having a fully-integrated mind. 
  Between the two hemispheres of your brain is a bundle of nerve fibers called the corpus callosum. The corpus callosum acts as a communications link transferring bio-electrical current between the hemispheres, much like the function of a network cable between two computers. 
@@ -280,57 +183,31 @@
  As we mentioned, the right hemisphere of your brain controls the left side of your body and vice versa. There is, or at least should be, cross lateral communication from one side of the body to the opposite side of the brain. This communication occurs at a high level when you are integrated and not so much when you are less integrated (i.e., dis-integrated). 
  Almost any physical movement that connects one side of the body with the other will help your level of brain integration. However, the simple cross-crawl exercise may be the most effective. Here’s how it works: 
  While standing, raise your right leg, bending it at the knee, and bring your left arm over and touch the right knee. Return to standing. Then raise your left leg and touch the knee with your right hand. Return to standing, and then continue, alternating sides. Keep your head facing forward, but let your eyes follow the path of your hands as they touch each knee. You will find yourself marching in one place while alternately touching your knees with your opposite hands. Cross-crawls are a lot like marching on the spot, so all you military pilots should be good at this one! 
- 
- 
- 
- 
- 
- 
+
  The cross-crawl exercise. 
- 
+
  At first, do this at what is a comfortable rate for you and then slow it down to the slowest pace you can. Doing it at a slow pace puts more stress on your sense of balance, improving it over time. Then speed it up until you are almost running on the spot while touching the opposite knee with your hands. At speed, this is a great exercise to get your body warmed up before getting into the aircraft. 
  There is a reason this exercise is called a cross-crawl. When babies first begin to crawl they most often do it in a unilateral motion; they move their right hand and leg forward, then their left hand and leg and so on; one side moves and then the other. After a week (or more for most babies) they change to a cross-lateral crawling movement where they move the right hand with the left leg, then the left hand with the right leg and so on. This cross-crawling movement is the first step in the integration process of brain development. 
  Children who don’t do enough cross-crawling (often because they go almost directly from unilateral crawling to walking) may miss out on becoming fully integrated at an early age. In many cases, this leads to the child being slightly uncoordinated or even having what some people call learning disabilities. By simply using the cross-crawl exercise many children have been able to “recover” from learning difficulties and have become far more physically coordinated. This exercise is extremely powerful. 
  Do cross-crawls for about 30 seconds each morning, in the evening, and especially just before getting into the aircraft. After doing this for a few weeks, you will begin to be aware of when you need to become more integrated by doing more cross-crawls. You will just feel better - more in the zone - when you’re integrated. For the self-conscious, there are many “more private” places you can perform cross-crawls before flying: in a quiet corner of the airline or flying school car-park, an empty briefing room, or behind a hangar door. We would urge you to trust and persist with all of the techniques presented in this book, but if you are looking for something a little less obvious, or even something to do in addition to cross-crawls, then the next exercise is a good one. 
  Head and Eye Motion Integration 
  As you sit in the cockpit or flight deck, do a combination of the following actions: 
- 
- 
- 
- 
- 
+
           •    With your eyes, look to the left while at the same time moving your head to the right, 
- 
- 
- 
- 
- 
+
           •    With your eyes, look to the right while at the same time moving your head to the left, 
- 
- 
- 
- 
- 
+
           •    With your eyes, look up while at the same time moving your head down, and 
- 
- 
- 
- 
- 
+
           •    With your eyes, look down while at the same time moving your head up. 
  Randomize the order you do these actions and vary the speed at which you do them. This exercise is a lot harder than it sounds, but once you have been doing it for a couple of minutes (and your brain starts to be integrated), you will notice that it becomes easier. Continue the exercise until you can consistently do it without error and your brain has become integrated. You have now set yourself up for a great performance. 
  Lazy-8s 
  The following integration exercise is especially effective in helping integrate your vision. Just as there is a cross lateral connection between your brain and body, there is a similar connection between your brain and eyes. In this case, the information coming into your right eye is sent primarily to the left hemisphere of your brain and the information from your left eye is sent primarily to your right hemisphere. Once it is in your brain, the information is processed and constructed into what you “see.” 
  If communication between your eyes and brain and from hemisphere to hemisphere is in any way restricted, you may miss a piece of the picture. At the speed you’re traveling in the aircraft, missing just the tiniest piece of information could be catastrophic. Believe us when we say that a large percentage of the population, even professional pilots, have visual processing problems resulting in incomplete visual pictures. You see it on your drive to the airport with drivers making the wrong decisions when trying to cut between two cars while overtaking. As for a pilot-specific example, it is those small errors of turning final too late and overshooting the runway centerline or misjudging your flare height and thumping on the landing. These may be the ultimate result of a visual processing problem that the lazy-8s exercise can help correct. 
  Here’s how it works. Stand with one arm stretched directly out in front of you with a slight bend in your elbow and your hand in the thumbs-up position. Trace an imaginary figure eight lying on its side (that’s where the “lazy-8s” name comes from) with your thumb while you keep your head steady; follow your thumb with your eyes. Your eyes will track this lazy-8 (or infinity) figure. 
- 
- 
- 
- 
- 
- 
+
  Lazy-8s exercise. 
- 
+
  Do this exercise for about 20 to 30 seconds with each hand and then with both hands. When doing it with both hands, make two fists, place the knuckles from each hand together, and make a cross with your two thumbs. While flexing your arms and shoulders, trace the lazy-8s while focusing on the cross of your two thumbs. Again, make sure your head stays steady. 
  At first, have someone watch your eyes closely while you do this. Do they move smoothly and congruently (together)? Or are they “notchy;” jumping ahead in certain areas and skipping parts of the figure eight? If so, they may be missing information in that area of your visual field. 
  If your eyes do have some “notchiness,” jumping or incongruence in tracking doing some lazy-8s for even 30 seconds to a minute will probably begin to make some improvement. Even if you didn’t notice any problems with the way your eyes track, this exercise would benefit you. Again, it helps with brain integration and, specifically, visual integration. 
@@ -341,42 +218,24 @@
  Any instrument-rated pilot who has experienced “the leans” will know that your sense of balance is as critical as the aircraft’s and if your sense of balance is disturbed, you need to take action to restore it. In a case of “the leans,” we accomplish this by trusting our instruments until our brain has a chance to make sense of everything and restores our sense of balance. So, if we can agree that our sense of balance is vital to operating at peak performance, can we improve our sense of balance? Yes. How? One way is by “centering.” 
  Centering is a technique that has been used by Tibetan monks for over 2,000 years, in the martial arts, and more recently by sports psychologists. One centering technique involves pressing a couple of fingers from one hand upon your navel and focusing all your attention on this center point of the body. 
  Another centering technique is to lightly press the tip of your tongue to the roof of your mouth towards the front behind your upper teeth (where peanut butter sticks!). This area in a person’s mouth is a strong acupressure point which triggers brain integration and an improved sense of balance. You could even try centering while doing cross-crawls! 
- 
- 
- 
- 
- 
- 
+
  Center yourself by placing your tongue on the roof of your mouth. 
- 
+
  Obviously, you cannot fly the aircraft while pressing your navel, but you can place the tip of your tongue on the roof of your mouth, particularly at times of high workload or stress. When approaching decision altitude on an ILS approach, trying to make very small changes to the flight path to remain on the localizer and glideslope while at the same time avoiding pilot-induced oscillations, center (placing your tongue on the roof of your mouth) and breathe. Just before you taxi out onto the runway for take-off, center. Before you disconnect the autopilot for a hand-flown approach, center. Before your first solo or on your flight test, center. By centering when you most need to be integrated, sensitive to what the aircraft is telling you, and balanced, you will be. 
  This centering technique also has a stress-relieving or relaxing effect. An uptight, stressed-out pilot will rarely perform at their peak. By centering you will be more relaxed, learn at a quicker rate, and perform at your best more consistently. By practicing centering regularly, you will notice a difference in and out of the aircraft. Over a short period, this will trigger a calm, focused, integrated brain. 
- 
- 
- 
- 
- 
- 
+
  Ask yourself, when could centering help you? 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_3
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Sensory Input 
- 
+
  M ost people would agree that hand-eye coordination is a very important part of flying an aircraft, but few could give you a clue as to how to improve it. Here is what hand-eye coordination is: your brain processes information fed to it through your eyes and then your hand (or any other part of your body) is instructed to perform the appropriate action. From this simple explanation, it is easy to see why any improvement in the quality or quantity of the information going from your eyes to your brain should result in a more “coordinated” action. 
  On the other hand, imagine trying to fly an aircraft with restricted sensory input. Imagine trying to maintain the ideal approach path if you restricted your vision by 90%. Isn’t this similar to what we do when we learn to fly on instruments while wearing the hood or “under the bag?” Restricting all peripheral vision deprives our brain of its major source of sensory input, and we are forced to be totally reliant on our instruments for information. We have to expend a great deal of concentration to generate the same level of situational awareness that we have with unobstructed vision in clear skies. As the old saying implies, “a peek is worth a thousand scans!” 
  What if your body was completely isolated from the aircraft so that you could not feel any of the vibrations, g-forces, roll, or pitch? What if you were deaf and couldn’t hear any sound whatsoever from the aircraft? Would that affect your ability to fly the aircraft at your peak? Absolutely! 
@@ -393,67 +252,32 @@
  If you restrict the amount of information your eyes can send to your brain but ask your brain for just as much information output, it is up to your brain to make up the difference. In other words, send your brain a little bit of data and expect your brain to output a lot of information. Now we can probably all agree that going flying with your vision even slightly restricted is dangerous. But what if you practiced taking the same amount of data from your eyes as you usually do, while asking your brain to output more information using that little data? What you are doing, in fact, is practicing being more aware; practicing using your brain’s vision construction abilities; and practicing being sensitive to visual data. 
  It is, in fact, something you can and should practice not only with your flying. It is something you can practice while driving on the street and also in all other activities in your life. For example, while driving down the highway on your way to the airport (in fact the more often, the better) and using your vision as you normally do, ask your brain for as much information as possible. Ask it to be aware of everything along the side of the roadway. Make a note of the ground, the grass, and the trees in great detail as you pass by, but don’t just take notice of the amount of them. Note the color, type, and amount of leaves on the trees, the condition of the bark, whether the ground is made up of mostly dirt or rocks, etc., and the speed at which they pass. 
  When doing this, don’t look directly at the ground, grass, and trees. Look down the road like you normally would, but allow your brain to take in more peripheral information (actually construct more information from the data your eyes are supplying to it). While driving in traffic on the street practice being aware of every car, truck, pedestrian, and anything else. Ask your brain to provide more information. There is a physical limit to how much your eyes can take in, but it is practically limitless what your brain can do with that information. 
- 
- 
- 
- 
- 
- 
+
  Practice taking in more visual information. 
- 
+
  Think also of all the situations in your flying where you can complete a similar exercise: joining a busy traffic pattern (i.e., a circuit for those from the Commonwealth of Nations), turning onto the base leg of the pattern, coming in to land, pulling up from a loop. You are surely able to think up dozens of examples. Imagine yourself looking where you normally look, but noticing so much more around you. Noticing more is the goal of this exercise. The example of coming in to land is one Phil has used personally to try and improve the consistency of his flare height. 
  What you are doing here is practicing becoming more aware of everything around you while using the same amount of visual data supplied by your eyes. Practicing this in your everyday world will greatly enhance your performance in the air. The more you practice this, the more aware you will be of everything happening around you in the cockpit or on the flight deck and in the air without having to put much, if any, concentration on it. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Every day, practice being aware. 
- 
-             
- 
- 
- 
-   
+
  One of the more difficult visual challenges you may face is seeing a long way ahead of the aircraft. Often your view is restricted by atmospheric conditions: cloud, haze, fog. If you consciously try to stretch your vision, trying to look as far ahead as possible (even if it means using your imagination), over and over again when practicing, eventually it will become a habit or a mental program. Then, it will be something that you do without any conscious thought. It’s as if you are building a mental picture to fill in the holes in the visual picture. 
  A great example of this is when you pre-brief what lights you are expecting to see when you break visual from an instrument approach and where the runway will be in the windscreen. 
  Another example is taking off in low visibility conditions and consciously building a mental picture of how the runway ahead of you would look if you were actually in CAVOK (Ceiling and Visibility OK) conditions. The A330 captain who gave Phil this example swears that this mental picture helps him with runway centerline retention in reduced visibility. 
- 
- 
- 
- 
- 
- 
+
  Build a mental picture. 
- 
+
  At all times, you are receiving information from the aircraft. The more sensitive you are to receiving that feedback, the more able you will be to fly the aircraft well. People always talk about the feedback a pilot gets through the “seat of their pants.” Well, we don’t know about you, but we have many more nerve endings in our heads than in our rear-ends! You receive more information through your vision than through any of the other senses (smell and taste have relatively little to do with flying; hearing does play a role, and feel is certainly important, but not as important as vision). 
  Much of the feel of flying comes from your vision. Imagine yourself looking just over the nose of the aircraft on take-off. If the aircraft begins to diverge off the centerline, you will be looking at a section of runway hardly displaced from the runway centerline at all. If you were looking farther ahead, almost to the horizon, the horizontal displacement of your sight from the centerline is much larger. In other words, the farther ahead you look, the more sensitive you will be to very slight changes in the direction of the aircraft. 
- 
- 
- 
- 
- 
- 
+
  Directional change is more obvious when looking further ahead. 
- 
+
  One of the most significant ways you can improve your visual input is to learn to juggle. Juggling for just five minutes a day can drastically improve your visual sampling rate, thinking speed, focus, and peripheral vision. Improved peripheral vision improves your ability to be attentive and alert by enhancing what you notice around you. 
  Unfortunately, peripheral vision deteriorates with age. Ever wondered why Grandpa is such a lousy driver? Left to its own devices, by the age of 80 your peripheral vision has roughly halved from its peak. The good news is peripheral vision is recoverable through training of the eyes and brain. Juggling is an excellent way to reverse the clock on peripheral vision by decades. 
  Let’s just call it a bonus that on top of its benefits to visual input, juggling also acts as an excellent brain integration exercise! 
- 
- 
- 
- 
- 
- 
+
  Improve your visual input through juggling. 
- 
+
  Only the central few degrees of our visual field provides high-resolution vision. We subconsciously use rapid eye movements (saccades) several times per second to change our visual fixation point between points of interest and capture detailed snapshots that our brain then builds into a coherent understanding of our visual environment. 
  Consider that the serving speed of professional tennis players routinely exceeds 150 mph. At this speed, an opponent has only around 0.4 seconds before the ball arrives at their end of the court. Table tennis balls travel at only half that speed, but traverse the length of the table in less than 0.1 seconds! 
  To play successfully, in the time it takes for the ball to reach you, you’ve analyzed the body language of your opponent as they struck the ball. You’ve made an early assessment of the likely trajectory of the ball. You’ve visually acquired the ball and judged its trajectory and bounce. You’ve determined what stroke to play in return and moved into position to execute the required return. 
@@ -475,99 +299,39 @@
  If you have ever done a simulator session with the volume turned down or off, you will know this sensation entirely. It just feels different. It feels like you have to work harder to remain situationally aware. By the end of the session, you’ve got your flying rhythm back and you’ve learned to adapt to the lack of auditory input. The fact is, your brain is extremely adaptable and, in that short session, it had learned to perform nearly at the same level as it did before you restricted your auditory input. It has learned to be more sensitive. If you have access to a simulator and haven’t tried this then why not do a session with the sound off to work on your other senses? 
  Alternatively, try flying while using earplugs (or heavier duty earplugs if you already wear them while flying) to restrict your auditory input. Then remove the earplugs (or go back to your regular ones) and notice how much more auditory input you receive. In single-pilot operations, or outside of a simulated flight environment, it may not be feasible or safe for you to try this exercise but if you can, the benefits are worthwhile. 
  Consider when you are back in the aircraft for a subsequent flight, but this time with your regular level of hearing protection. Now you have an abundance of auditory input. In fact, you may not have even realized how much sensory input you took in through your hearing before, but now you do. You are hearing the engine’s throttle response like never before and are much more aware of the alteration in noise level with a change in your airspeed. You had never noticed all the sounds associated with the gear, flaps, and spoilers before. Wow! What a session! What a performance! You were magic in the aircraft. You were so much more aware. It was easy. That’s what happens when you crank up the boost on just one of your sensory inputs. 
- 
- 
- 
- 
- 
- 
+
  Processing auditory input. 
- 
+
  Again, what you are doing is forcing your brain to work with restricted sensory input. Then, when it has gotten used to constructing the information with little data input, give back all the sensory input you can, when it counts. 
  Errors and Sensory Input 
  Do you think experienced, exceptional pilots make any fewer errors than inexperienced pilots do? We don’t think so. The only difference is the experienced pilot is better at minimizing the effects of them. They simply recognize errors earlier (due to taking in more sensory input) and react to them sooner and in a more subtle way. In other words, they minimize errors. 
  For example, when the experienced pilot makes an error such as flaring too early, they recognize it immediately and make small subtle corrections to either or both of their flare and thrust retardation rates - they make the best of the situation. When a less-experienced pilot makes the same error, they may not recognize it until they have floated deep into the runway or run out of airspeed and crunched it on. 
  One way of reducing errors is by the use of reference points or gates. Gates are precise targets you have established for where you want to be in space and in what energy state: when, how high, how fast, what g, and in what configuration. The more reference points or gates you have for a sequence or a maneuver, the fewer errors you will make. 
- 
- 
- 
- 
- 
- 
+
  Use reference points or gates. 
- 
+
  Most pilots have numerous reference power and attitude settings memorized for each phase of flight. Great pilots have dozens more of these reference points stored away subconsciously. To become a great pilot, you need to practice soaking up more information from your environment so that you see much more than just the basic reference attitudes for each phase of flight. You need an almost continual path of attitudes. These need to be in your mind at the subconscious level. That way, if you flare too late on landing, you recognize this instantly (at the subconscious level) rather than immediately before the main wheels impact the runway. The sooner you recognize it, the more subtle and effective the correction will be and the less negative impact it will have. At that level, you may not even notice the errors yourself; you seem to correct them before they even occur. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The more reference points you have, the fewer errors you will make. 
- 
-             
- 
- 
- 
-   
+
  But where and how does a pilot acquire more reference points? Is it only through more experience, more seat time? As a pilot gains experience, they usually get better at absorbing information to input into their computer - their brain - but this is a trend rather than a rule. Just because a pilot has lots of experience doesn’t necessarily mean they have more reference points and therefore will be better at minimizing the effects of errors. Likewise, it doesn’t necessarily mean that inexperienced pilots have fewer reference points. 
  A novice can be better at taking in information than other pilots who have been at it for twenty years. A pilot can also speed up the process by increasing the quality and quantity of sensory input. The more sensory information, the clearer the picture is of what’s going on, and therefore, the better your reactions. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Minimize errors through maximizing sensory input. 
- 
-             
- 
- 
- 
-   
+
  You can increase the quality and quantity of your sensory input by doing sensory input sessions. Of all the “tools” you can use to improve your flying performance, this is one of the most effective and yet most pilots have never done it. The ones who have often end up with a reputation for being very accurate, not making mistakes, and being great pilots because of their sensitive and accurate feedback on what the aircraft is doing. 
  Sensory input sessions can reduce the number and extent of errors, both short-term and long-term, but how? Can you think of a pilot who has a reputation for making “bad decisions” in the aircraft? Often, the reason a pilot makes poor decisions or lacks awareness is that they lack the information upon which to base the decision. For some reason, the pilot making the error is missing some sensory input. It’s like trying to make the decision to invest in a stock without having any past financial statements or annual reports. 
  Just like having more information about the financial performance of a company can help you make a better investment decision, the more information you have as you begin a sequence or maneuver, the better your decisions, physical actions, and corrections are going to be. In what attitude is the aircraft? Where around you is other traffic (friendlies or bogies) situated? What is the aircraft’s energy state (airspeed and altitude)? How much g-force am I applying? What vibrations am I feeling? What can I hear from the engine and airflow? 
- 
- 
- 
- 
- 
- 
+
  Better information leads to better outcomes. 
- 
+
  A lack of good information and a lack of quality sensory input may be the cause of many of the errors you make. If you are constantly landing beyond your desired touchdown zone, you and others may say you flared at the wrong height or rate. If you want to know the real reason why you’re landing long, you have to dig to the core of the problem. You may know that you flared at the wrong height or rate but what is the reason, or cause, for you flaring where and how you did? What you saw as an adequate flare height or rate was not. Maybe you lack quality sensory input. You didn’t have all the information, a complete picture. With more quality sensory input your decision-making will improve whether you currently make good decisions or not. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The better the information your senses provide to your brain, the more sensitive you’ll be to what the aircraft is doing and what it needs. 
- 
-             
- 
- 
- 
-   
+
  Sensory Input Sessions 
  Sensory input sessions are a relatively simple way of improving the quality and quantity of sensory input you take in when flying. As we have stressed already, the better the quality and the more quantity of input from your senses that you can process, the better the quality of your performance. 
  First, go out for a flight, lesson, or simulator session with the sole objective of dedicating part of that flight or session to taking in extra sensory input. The best way of doing this is to determine how much time you have to do this exercise and then split that up over three flights or sessions. You should dedicate at least ten minutes, but not much more than fifteen, of each of the sessions to complete this exercise. 
@@ -581,26 +345,16 @@
  Power + Attitude Sensing 
  One of the very first and most basic lessons you will have learned while learning to fly is that power plus attitude equals performance. 
  Just to ensure we are all on the same page, what we are saying here is that every combination of power setting (N1, EPR, RPM, RPM/torque, or RPM/MP) and attitude (bank angle and pitch) will equate to some level of performance. For example, in one of the light singles Phil instructed on, a power setting of 2,300 RPM and an attitude placing the horizon visually four finger widths above the glare shield would equate to flying straight and level at 110 KIAS (Knots Indicated Airspeed) at most cruise altitudes and weights. For an A330 in approach configuration, at a typical landing weight, if you set power at 57% N1 and the aircraft attitude at four degrees nose up you should be pretty close to the desired three-degree glideslope required for an ILS (Instrument Landing System) approach. No doubt you have, or should have, numerous combinations of power plus attitude combinations for your aircraft type to cover all phases of flight: take-off, climb, level off, turns, descent, traffic patterns, and the flare - all for different weights and configurations. 
- 
- 
- 
- 
- 
- 
+
  Power + Attitude = Performance. 
- 
+
  As you become more experienced on the type (through muscle memory), you start to be able to accurately set power and attitudes with less reference to the instruments. Whereas you may have once relied on the gauges to set power and attitude, with familiarity you can do it instinctively, and accurately, with checks of the instruments becoming more for confirmation and fine-tuning. What if there was a quicker way to obtain this muscle memory? There is! In fact, there’s more than one method! One is through the use of mental imagery (covered in a later chapter of this book), and the other is through power and attitude sensing exercises. 
  The aim here is to be able to set power and attitude very accurately without reference to your instruments. Most pilots develop this with time on type; however, there are a couple of exercises you can use to fine-tune your ability to do this. These exercises will enhance and expedite the process of developing this skill. 
  The first is done to develop your ability to estimate the power setting simply using sensory input without reference to the power gauges. While flying, every time you need to make a large power setting change for a change of phase of flight (e.g., cruise to climb or descent, entering a steep turn, setting up for an aerobatic maneuver), change the power setting with no reference to the engine instruments. Once you are satisfied that you have the thrust levers or throttles approximately where they should be, check to see how accurate you were. Correct any inaccuracy and then mentally note what the engine note sounds like with the power set accurately. How much did you have to move your hand to move the levers/throttle? With your hand on the levers/throttle, how does your new hand position feel in relationship to your body? 
  At the same time, when adjusting the attitude of the visual horizon for the new phase of flight, manipulate the controls to achieve the nose attitude and bank angle that you desire then check your attitude indicator to see how accurate you were. Adjust. Once you have the attitude set accurately, mentally note how much you had to manipulate the controls to reach the new attitude. Note also how your hand and arm position feel in relationship to your body. Where is the horizon cutting through various points in the windscreen? What can you see in your peripheral vision? 
- 
- 
- 
- 
- 
- 
+
  Where does the horizon cut through the windscreen? 
- 
+
  If you do these exercises over and over again you will become very accurate and, most importantly, consistent at judging and establishing desired power and attitude settings purely by engine note, visual reference, and muscle memory using sensory input as your guide. 
  Along similar lines, a practice of many of the pilots we spoke to in writing this book, is the deliberate practice of techniques that are supplementary or used less often. For example, once a month, or perhaps once per trip, the pilots we spoke to ensure they practice landing with manual thrust or using the flap setting they would use in wind shear conditions. Neither of these techniques is the normal procedure for the various models flown, but the pilots we interviewed were purposefully acquainting themselves with attitudes and power setting targets for the alternate configurations and, at the same time, developing muscle memories of the control inputs required. By deliberately practicing in benign conditions, our pilots were developing the sensory memories they would require to utilize these techniques in more challenging conditions successfully. 
  G-Awareness 
@@ -612,70 +366,38 @@
  “But I’m not a fighter pilot or involved in competitive flying. How does this relate to me?” Good question! For the vast majority of aviators, peak performance as a pilot requires we stay very far away from the edges of the performance envelope. In this instance, g-awareness comes into play when we are practicing steep turns. We may be practicing steep turns as a cross-reference exercise to build our skills or perhaps we are acquainting ourselves with what it feels like to be diverging from 1g flight so that we instinctively know to reduce the bank angle in an inadvertent spiral dive or reduce back pressure on the controls to avoid stalling. 
  The Federal Aviation Administration (FAA) (and most other civil aviation regulators) requires proficiency in steep turns as part of the Commercial Pilot Syllabus. So even if you are not flying to the full g-limit of your aircraft type, g-awareness exercises will be handy to become familiar with the 1.4g or 2g required to make level 45 or 60 degrees bank angle turns respectively. 
  If you use these techniques on a regular basis, we guarantee your g-awareness will improve, and that will lead to your ability to fly more consistently at the limit or an appropriate g-load. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Use g-sensing sessions to improve your ability to fly at the appropriate g-load for the maneuver you’re flying. 
- 
-             
- 
- 
- 
-   
+
  Manipulation 
  As a further experiment, try holding the controls with your whole hand wrapped around the yoke or stick (so that your palm is fully in contact with the controls) in a tight grip. Notice the vibrations back through the controls. Next, hold the controls with just your fingers in a light, relaxed touch. Now notice the vibrations through the controls. Which provides the most feedback? In which way do you feel the most vibrations? Which allows you to make more subtle changes? You feel the most and fly more accurately with the light touch of the fingers on the controls, right? 
  Does this tell you something about how you should hold the controls? We hope so. If you consciously practice holding the controls with a light touch of your fingers, in all phases of flight, it will become a habit - a program. Yes, we know that some aircraft require more of a grip on the controls than what just your fingers can apply, but if you make a light touch a habit, you will apply the lightest touch possible on your aircraft controls. That will lead to increased sensitivity and therefore increased sensory perception abilities. 
- 
- 
- 
- 
- 
- 
+
  Don’t choke the yoke! Tips are tops! 
- 
+
  Protecting Our Senses 
  Having established the importance of the sensory information provided by the vestibular and auditory systems (affecting our senses of balance and hearing), and how we can improve this sensory information, it is worth noting what we can do to protect what we already possess. 
  A word of warning here; a serious one: flying an aircraft, or just hanging around the tarmac, without adequate hearing protection is a big mistake. In just a very short amount of time you can permanently damage your hearing. You should now know just how much your flying performance will be negatively affected if there is a reduction in your auditory input. So, before you get any ideas of heading out onto the tarmac with little or no hearing protection, don’t! 
  As they age, or through exposure to a noisy work environment, many pilots begin to suffer from spatial hearing loss or spatial processing deficit. One of the ways this presents itself is the loss of the “cocktail party effect”; the ability to understand or focus on a single conversation in a noisy room in the presence of background noise. 
  Research indicates that it may be possible to train away some of this deficit. If you are having difficulty understanding chatter at a conversational level, practice watching television at a volume very slightly lower than what you usually do. With concentration, see if you can follow your programs as successfully as you had with the volume higher. If you can, then over time repeat the process and lower the volume again. Your end goal would be to be able to watch television at a normal, conversational level and hopefully restore some of the pre-training hearing deficit. 
  Upper respiratory tract infections (URTIs) can play havoc with our sense of balance. Not being able to achieve pressure equilibrium between our Eustachian tubes and ambient cockpit pressure stresses our eardrums and puts them at risk of rupturing. A ruptured eardrum has the potential to lead to a permanent hearing deficit. Therefore, for both immediate and ongoing peak performance flying considerations, it is of vital importance not to risk flying with a head cold. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_4
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Mental Programming 
- 
+
  Neural Pathways 
  I magine taking a cup of water and pouring it on top of a big mound of dirt and letting the water run down the hill. The first time you do this, the water will try to follow the path of least resistance and will begin to make a shallow pathway. The second time you pour a cup of water on top of the hill, it may follow the same path or it may find an easier, more natural, pathway. If it follows the same path, that pathway will become deeper and more ingrained. If it takes another path, it begins the path-building process all over again. Now, imagine pouring that same cup of water on the top of the hill a few thousand times a year for over twenty years. The pathway would be extremely well-routed, and it would be almost impossible for the water to follow any other pathway. 
- 
- 
- 
- 
- 
- 
+
  Establishing neural pathways. 
- 
+
  In much the same way, your brain starts to form neural pathways after doing something for the first time; they’re there, but not very well established. The more you repeat an action, the more ingrained the neural pathways become. 
  Every action you take in life is a result of your neural pathways (your mental programming). Consider the act of throwing a ball. At an early age, you probably observed someone throwing a ball. Then, maybe one of your parents tossed a ball to you and asked you to throw it back. Rather crudely, and without coordination, you managed to toss the ball in some direction. At that point, a neural pathway formed in your brain representing the physical act of throwing a ball. You threw the ball again, and the pathway became a little stronger. You threw again, and the pathway grew stronger yet again and so on. The first few times you threw the ball you had to think about how to do it consciously. At some point, when the neural programming became strong enough, you no longer had to think about it. Automatically, subconsciously, you ran the mental program and threw the ball. 
  The same is true of the techniques required to fly an aircraft. At first, while you are learning or programming an unfamiliar technique, you are consciously thinking about how to do it. Then, with repetition, your brain forms neural pathways or programs allowing you to sit on the flight deck or in the cockpit and simply execute the appropriate program at the appropriate time. 
@@ -697,25 +419,10 @@
           •    You’ll find it difficult to change your flying physically. If you’re trying to do something that you’ve never done before, it can be almost impossible to do it physically. As proof, have you ever known that a particular sequence can be flown (plenty of other pilots are flying it), but you just can’t seem to get it together yourself no matter how hard you try and no matter how many times you tell yourself that you can do it? 
           •    It can be risky. Experimenting with a new technique could lead to a miscalculation and result in an incident, or even worse, an accident! 
  Another method for changing your programming, and avoiding the pitfalls of relying only on physical practice, is through the use of mental imagery. Mental imagery is the deliberate use of what most people refer to as visualization. You may have also heard it referred to as “bedroom” or “armchair” flying. Why the distinction between visualization and mental imagery? Visualization, by the very definition of the word, uses only one sense (vision) in your imagined experience. As we will discuss in the next chapter, mental imagery involves more than just the sense of vision. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Practice doesn’t make perfect; only perfect practice makes perfect. 
- 
-             
- 
- 
- 
-   
+
  Using mental imagery to practice has many benefits and is very effective for numerous reasons: 
           •    It’s perfectly safe. You can never hurt either the aircraft or yourself. 
           •    You can mentally practice anywhere. You don’t need an airport or an aircraft and, because of that, it’s free. You don’t need to sell this benefit to anyone paying for flying lessons by the hour! 
@@ -725,77 +432,32 @@
           •    You can mentally prepare for things that rarely occur in actual operations or that are open-ended scenarios. Student pilots can pre-rehearse engine failures after take-off (EFATO) or forced landings. Aerobatic pilots can string maneuvers together that may be part of the “unknown sequence.” Fighter pilots can visualize dogfight scenarios, and commercial pilots can visualize complex failure scenarios. When you discuss “what if” scenarios with other pilots, you are helping each other mentally rehearse strategy and techniques. The result, when confronted with an abnormal situation, is that you are more prepared for it as you have practiced elements of scenarios so many times. 
           •    Mental practice before actually flying forces you to automatically focus and concentrate. 
  Mental imagery is such a powerful tool that we are going to devote the entire next chapter to this one method of changing your mental programming. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_5
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Mental Imagery 
- 
+
  T here are many parallels to draw between flying and sport: passionate participants, considerable physical ability and skills involved, and competitive elements (air racers, aerobatics, aerial combat, or the driven student pilot aiming to best their previous efforts). Subsequently, there are many lessons pilots can take from the world of sport concerning preparation. Building a mental model, through mental imagery, is something that practically every superstar of every sport does. Do you want to be a superstar? Do you just want to improve your abilities and have more fun? Either way, mental imagery can provide you with a model of how to do things, when to do things, and even why to do things. 
  Your brain does not distinguish between real and imagined occurrences. Fortunately for you, it sees and accepts all images as if they were real. Therefore, it makes sense to “visualize,” imagine or mentally practice flying. 
  Mental imagery is no stranger to aviation. Red Bull Air Race pilots set up drink cans to walk through a visual model of the track they will race. When given the sequence to be flown in a competition, aerobatic pilots draw the aerobatic box on the ground and walk through it over and over to learn the sequence. One of Phil’s friends holds a pretend joystick and throttle as he walks through a sequence a few times before competing in his Pitts Special. Airlines and air forces all over the world provide their pilot trainees with cardboard cockpits and part-task-trainers so they can practice “touch drills.” Fighter pilots use models on sticks to “see” different air combat scenarios unfolding. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Fly in your mind before flying in the aircraft. 
- 
-             
- 
- 
- 
- 
- 
- 
- 
- 
- 
+
  Front panel of an Airbus A330 
- 
- 
- 
- 
- 
- 
- 
+
  Overhead panel of an Airbus A330 
- 
- 
- 
- 
- 
- 
- 
+
  Pedestal panel of an Airbus A330 
- 
+
 -->
- 
- 
- 
- 
- 
- 
- 
+
  Effectiveness of Mental Imagery 
  But how effective is mental imagery compared to physically doing something? Of the many research studies and examples of the impact of mental imagery, here are three: 
           •    Hunter College basketball players study: A group of basketball players was asked to shoot free-throws, and the success percentage was measured. The players then split into three separate groups. The first group was told not to practice whatsoever, physically or mentally. The second group was asked to practice daily by actually shooting free-throws. The third group was asked only to do mental imagery of shooting perfect free-throws each day and not physically touch a basketball. When checking the players’ free-throw percentage a week later, the results were interesting. Unsurprisingly, the first “no practice” group showed no improvement whatsoever. The second group, the ones that had physically practiced each and every day shooting free-throws, improved their shooting accuracy 23%. The last group, the ones that only did mental imagery each day and did not touch a basketball? Well, they improved their free-throw shooting percentage 22%. Without touching a basketball, they improved 22%, essentially the same amount as the group that physically practiced each day. 
@@ -813,14 +475,9 @@
  “Now, bring the lemon to your mouth, stick out your tongue, and slowly lick the juices off the face of the lemon. Taste the juice. 
  “Continue to taste the lemon juice in your mouth. 
  “Okay. When you’re comfortable, slowly open your eyes as you mentally come back into the room.” 
- 
- 
- 
- 
- 
- 
+
  “See the lemon, feel the lemon, smell the lemon, taste the lemon…” 
- 
+
  What happened? What did you experience? Did your mouth pucker up? Did you have saliva build up in your mouth? Yes? If you’re like most people, your mouth began to salivate. Why? Your brain is unable to tell the difference between a real and an imagined event. Because your brain thought there was real lemon juice coming into your mouth, your brain triggered saliva to water down the citric acid of the lemon. 
  This exercise is a simple example of the power of mental imagery. It’s why superstar athletes, and, in fact, anyone who depends on performing at a high level, use it. It’s why, if you want to make a change in your behavior or improve or develop a skill, using mental imagery is a critical step - perhaps the most important. 
  Uses of Mental Imagery 
@@ -838,14 +495,9 @@
           •    Motivational Specific: Goals and goal attainment, e.g., setting mental objectives and goals for a flight and having these objectives and goals be more than just something you’ve thought about at the conscious level; they’ve become a part of your mental programming. 
           •    Motivational General : Arousal control, self-confidence, mental toughness, e.g., where you develop mental programming of your beliefs, confidence, state of mind, behavioral traits, overcoming pre-test nerves, not giving up, control or use of emotions, and the “rewards” of a job well done. 
  Mental imagery can also be “associated” or “dissociated.” Associated means you see, feel, and hear yourself in the very act. That is, you’re behind the controls, and your view is from this vantage point. Dissociated is as if you see yourself from above or from a camera view and not from behind the controls. For some reason, some people naturally do mental imagery from an associated perspective while others do it from a dissociated perspective. 
- 
- 
- 
- 
- 
- 
+
  Associated vs dissociated mental imagery. 
- 
+
  So, which is best, associated or dissociated? Some people will tell you that neither one is better than the other; however, we disagree. Doing some mental imagery from a dissociated perspective (watching yourself perform from an instructor’s viewpoint) is valuable, but it’s best to program your mind from the perspective you’ll experience when flying - behind the controls. 
  The key is to make your mental imagery as real as possible by seeing the view from the cockpit, by feeling the aircraft and motions from the seat and hearing everything from behind the controls. A message you’ll hear over and over from us is that the more realistic you can make your mental imagery, the more effective this whole process will be. 
  Getting Started 
@@ -886,23 +538,13 @@
  The more senses you include in your mental imagery, the more effective it will be. Notice in the lemon example that you used all five senses. You “saw” the lemon (visual), you “felt” the lemon (kinesthetic), you “heard” the knife cutting the lemon (auditory), you “smelled” the lemon juice (olfactory), and you “tasted” the lemon (taste). But in actuality did you see, feel, hear, smell, and taste the lemon? Yes, but only in your mind, right? Yes, only in your imagination. By involving all five senses, you made the experience very real in your imagination. If you had only “seen” the lemon, using only your visual sense, it’s likely that your mouth would not have salivated because you would not have made it real enough to your mind. 
  Obviously, your smell and taste have relatively little to do with flying an aircraft but certainly visual, kinesthetic, and auditory senses have a lot to do with it. Most people who claim to do mental imagery in actuality are only visualizing. That is, they only imagine the visual scene in their minds; they do not imagine what they feel and hear. That’s the difference between mental imagery and visualization - mental imagery involves more than just your visual sense and visualization doesn’t. 
  We need to stress again that the more senses you involve in mental imagery, the more effective the programming will be. Use your hands; hold the control column or stick (even if it’s an imaginary one). Move your feet; feel the rudder pedals. Hear the engine, the wind noise, the gear, flaps, and speed brakes actuating. 
- 
- 
- 
- 
- 
- 
+
  Mental imagery session in progress. 
- 
+
  By sitting at a cardboard cut-out representation of the cockpit, or in a part-task trainer, pilots can short-cut some of the imagination elements using actual visual images. Along the same lines, “walking through” an aerobatic maneuver by turning in the direction he was going to be looking in the cockpit helped a friend of Phil’s when he was learning to fly barrel rolls. Most of the student pilots on Phil’s military pilots’ course used this same method to “walk through” traffic patterns and forced landing procedures. 
- 
- 
- 
- 
- 
- 
+
  Part-task trainer. 
- 
+
  Remember, the more you use your body, the more the session will program muscle memory to do things right when you’re flying. If you don’t use your aircraft, use as many “props” as you can to make it as realistic as possible. You can wear your helmet or headset, and you can hold a real control column or something to simulate it. You can ask someone to sit on the floor in front of you and use their feet as rudder pedals. Using a partner’s feet as rudder pedals is a very effective technique as you can even have them provide feedback to you on the amount of pressure you’re applying and the progressiveness of the application. Sitting in a flight simulator is fantastic since you can begin by flying a sequence and then go into your mental imagery session. Of course, you have a yoke or stick and pedals to use with a simulator as well. Again, the more realistic you can make your imagery session, the more effective it will be. 
  In addition to your visual, kinesthetic, and auditory senses, experience all the emotions and feelings that you possibly can. The more you tie your emotions and feelings to each mental imagery session the more real it will become to your mind. More importantly, the easier it will be to trigger the specific mental program in the future. This motivational piece of mental imagery is critical to your success. 
  Staying Focused During a Session 
@@ -932,24 +574,17 @@
  If you are having difficulty mastering a particular part of your flying, many simulators allow you to isolate tasks and divide complicated procedures into subparts by allowing you to pre-set your starting position. You can (for example) place yourself on final to practice landings or at the beginning of an instrument approach. In this way, you can dispense with pre-flight checks, taxiing, take-off, climbing, transits, etc. and, instead, dedicate your valuable practice time to just the elements that need the most attention. Simulators also allow you to invest all your concentration on the task at hand without the distractions of real world flying such as dealing with other traffic, but that being said that, if desired some simulators even have the ability to add a traffic element. 
  At the end of each sequence flown, home simulators will usually allow you to replay flights using data captured while you were flying. You can use a replay to help debrief either by yourself or with an instructor in much the same way as fighter pilots review head up display (HUD) tapes or naval carrier pilots review their landings. Looking at a map overlay view of your flight, you can assess how accurately you’ve flown a traffic pattern, sector entry, holding pattern, or tracked the localizer and glideslope on an ILS. 
  Overall, simulation is another tool that pilots can and should use to develop and maximize their performance. Just as only using physical practice, simply studying manuals, or relying solely on mental imagery will limit your ability to learn, only using simulations will not result in you becoming the next “ace from space.” A simulator is not a substitute for time in the air but, combined with all the other tools a pilot has available, simulations are very valuable. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_6
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Learning 
- 
+
  I f you had to choose just one thing that separated the real superstars of any pursuit from the rest, what would it be? Superior hand-eye coordination. The desire to succeed? Work ethic? Natural talent? While all of these traits, and many others, are factors, the one thing that truly separates the greats from the not-so-greats is the ability to learn. In our opinion, the peak performers in any activity are not necessarily born with any more natural talent than anyone else. It is what they do with that natural talent that makes them great. 
  Rather than just assuming that you have only so much talent in your mind/body, why not learn more, why not develop your talents? This chapter is all about how we learn and presents a powerful strategy you can use for learning that builds on our discussion on mental imagery. 
  Learning as an Objective 
@@ -960,25 +595,10 @@
  An aircraft designer would never be successful at developing an aircraft without some plan. The same thing applies to learning and developing your flying. Without a plan, one of two things will happen: either no change and improvement will take place, or the wrong changes will take place. It’s critical to establish objectives before every flight to ensure the correct changes take place. One reason military flying instructors ask their students to brief them on what they intend to practice before letting the student depart on solo flights is to ensure they have established objectives. 
  The point is, without making a change it is doubtful your flying will improve. It would, therefore, be a complete waste of time to head into the air without two or three specific objectives. 
  One of the best ways of establishing objectives for a flight is to figure out what questions you plan to ask yourself after the session. If, for example, you’re going to ask where your aim point appears in the windscreen on final, what the rate of back stick application is when you begin your flare, and where the aircraft touches down on the runway, you have helped establish three specific objectives for the session. You have helped focus yourself. We will discuss this concept more in the next chapter on Self-Coaching. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The more you learn, the better you get; the better you get, the more successful you will be. Focus on learning and success will follow. 
- 
-             
- 
- 
- 
-   
+
  Learning Stages 
  Whether it is learning to walk, throw a ball, or fly an aircraft, all human beings go through four stages when learning something new: 
           •    Unconscious Incompetence 
@@ -995,14 +615,9 @@
  Now consider this scenario. You’ve been driving the same route to work for years. You drive to work, but sometimes don’t even remember the process of doing it; you just arrive. You are certainly competent at driving to work, so much so that you don’t even have to think about it consciously. At some stage, a highway construction crew builds a new road, a shortcut, which would cut your commute time in half. Because your conscious mind is off in another world, you don’t notice. Your conscious mind is unaware. 
  Unless your conscious mind is aware, you will never make any improvements. Yes, you will continue to fly very well at the subconscious, programmed level but you will never upgrade the performance of that programming. Many times, this is the reason for a plateau on the learning curve; a complete unawareness of what could or should be improved. 
  The ultimate goal of any pilot is to fly at the subconscious level, relying on and trusting their programming, while using their conscious mind to observe and be aware of ways to improve their programming. It should be as if the conscious mind is looking over the pilot’s shoulder, much like an in-cockpit camera would see it, watching for opportunities to upgrade the software. 
- 
- 
- 
- 
- 
- 
+
  The stages of learning explain how we learn. 
- 
+
  Learning From the Inside Out 
  Pilots and everyone else in the world learn in one of two ways: from the inside-out or from the outside-in. 
  Learning from the outside-in is what most people typically think of as learning. It is the method used within schools to teach us. Learning from the outside-in is what happens when you are “taught” something. You are told what to do or receive information; the information or knowledge comes from the outside (maybe from an instructor or coach) and “gets in” you. The “getting in” is not much of a problem, it is the staying in that is the challenge. Without it staying in, you haven’t learned it at all. 
@@ -1018,50 +633,25 @@
  Even if you aren’t able to imitate someone perfectly, your attempts will increase your awareness of what skills, techniques and mental approach you still need to develop. Of course, you must first be prepared to imitate someone. You can’t very well copy the advanced techniques of a World Champion before mastering the basics. 
  The Learning Formula 
  Perhaps the most important thing that you can take away from this entire chapter, if not the entire book, is what we call the Learning Formula. We cannot emphasize it enough: if you use it, this may just be the single most valuable piece of information in this entire book. 
- 
- 
- 
- 
- 
- 
+
  The Learning Formula. 
- 
+
  In the Learning Formula, “MI” represents Mental Image, “A” represents Awareness, and “G” is your Goal (what you are trying to learn). If you use the Learning Formula each and every time you are trying to learn or improve upon something (which should be at least every time you head into the air, if not every moment of every day), you will be amazed at your ability to learn and improve. 
  In recent years, Phil had an extended period off work recovering from an injury sustained in a sporting accident. Due to the length of time he was away from work, he needed to do a check flight on his return. When he was initially checked out on the A330, his training emphasized the need to avoid long landings to protect against the possibility of runway overrun excursions. All his training had emphasized aiming to touchdown 1,000ft into the runway with a requirement to go-around if the aircraft was not down by 2,000ft. Subsequently, Phil had a firmly established mental image (program) for touching down as close to 1,000ft as possible. 
  During his check flight, Phil began his final approach with the aim to have the aircraft down by 1,000ft into the runway. In the flare, and in an attempt to impress the check pilot, Phil tried hard to finesse the aircraft onto the runway right at 1,000ft. After the extended absence, the finesse wasn’t there, and he touched down just shy of 1,000ft. He thought he had done a reasonable job, as he had crossed the threshold at the correct height, touched down just shy of the point he was aiming for, and well before the 2,000ft limit emphasized in his initial training. He was totally surprised when the check pilot told him that he would need to go back to the simulator for retraining. 
  In his extended absence, the fleet had recorded numerous short landings. The check pilot explained that the emphasis now was that the touchdown must be between 1,000 and 2,000ft rather than at the beginning of the touchdown zone (Phil’s paradigm). A subtle but important difference from Phil’s initial training. The check pilot suggested using 1,500ft as a new aim point; right in the middle of the acceptable limits and giving a margin of error either way. This new aim point obviously made perfect sense but was a divergence from Phil’s programming to that point. A change was required. So, what did Phil do to update his programming and how does this fit into the Learning Formula? 
  Fortunately, the check captain Phil had been flying with was able to provide him with all three components of the Learning Formula. Previously, Phil had been using an aim point slightly ahead of the far end of the 1,000ft markers on the runway to achieve main wheels touchdown at 1,000ft. To achieve the new Goal (the “G” in our Learning Formula) of main wheels touchdown at 1,500ft into the runway, the check pilot suggested Phil change his aim point to the beginning of the 1,500ft markers as a start point. This new aim point is the “MI,” or Mental Image, element of our Learning Formula. This new mental image also gave Phil a start point for his mental imagery sessions before his retraining in the simulator. It gave him a clear mental image of what he would be looking for from the cockpit. 
- 
- 
- 
- 
- 
- 
+
  Creating a new mental image. 
- 
+
  The final part of our Learning Formula is the “A” for Awareness. While mental imagery greatly increases our ability to learn and the speed at which learning takes place, being aware of the results gives us feedback on the effectiveness of our mental re-programming. Awareness speeds the process of creating or altering neural pathways. In our example, the check pilot provided Phil with the awareness cues required. He told Phil that every time he landed in his retraining, he needed to be aware of where he was touching down. Every time the aircraft touched down, he needed to note how deep into the runway it was and compare this to the desired goal of a 1,500ft touchdown. With this awareness, Phil would be able to adjust his mental image to achieve his goal of consistently touching down at 1,500ft. If his touchdowns were before 1,500ft, then the aim point needed to be deeper. Awareness of the main gear, touchdown point would help Phil adjust his mental image of his aim point until he found one that consistently worked. If he began to touchdown farther than 1,500ft, he’d need to bring the aim point closer to the threshold. The check pilot explained that while he could give Phil a start point for the aim point to use, the ultimate aim was for Phil to find an aim point that worked for him (modified with awareness) and to establish that as his new mental image. 
  Phil went away and conducted mental imagery sessions before his simulator retraining. He practiced using the new mental imagery, being aware of the actual touchdown point, and making adjustments to his mental image as required. Going into the simulator, this gave Phil both a new mental image as a start point and the programming to adjust the mental image as required if it wasn’t exactly right. 
  The result? His first landing in the simulator was around the 1,400ft point - just shy of the goal but comfortably within the desired range. The check captain running the simulator session exclaimed, “Well, I can tell this is going to be a waste of time! There isn’t any problem with your landings!” After a slight aim point (mental imagery) adjustment, the second landing was smack bang on 1,500ft. As the session was four hours long, the check captain explained that the original plan, to fix Phil’s touchdown point, was now obsolete. They decided to up the ante. With the remaining hours, they practiced landings at the maximum crosswind and tailwind limits, low visibility, at heavy and light weights, and with various failure scenarios. Phil consistently touched down around the 1,500ft point and was subsequently returned to the line with an excellent write up for the session. 
  Whenever you establish a goal (“G”) to make a change to your flying technique, use mental imagery to develop a clear “MI,” and then head into the air and simply be aware. Build your awareness (“A”) by asking yourself questions. Some awareness-building questions are: How was my aim point retention on final approach? Where did I touchdown? How close was I to the centerline? How much did my altitude vary in my steep turns? What was my speed tolerance on V2 on the climb out? How much g-force did I apply entering the maneuver? And so on. When used with the appropriate “MI,” these “A”-building questions help you achieve your goals quickly, efficiently, safely, and enjoyably. We don’t know of a faster way of learning anything than with utilization of the Learning Formula. Practice using it both in the air and on the ground. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  MI + A = G 
- 
-             
- 
- 
- 
-   
+
  Let’s use another example to demonstrate how it works. Let’s say you’re consistently getting slow in a particular part of a maneuver and you think it is because you either aren’t exerting enough g-force while entering the maneuver or your speed is slow on entry. You could just tell yourself over and over again to “pull more g” or “enter faster.” Will that work? Not likely. You could do some mental imagery, mental programming, of pulling a little harder or maybe flying a little faster. Will that work? Most likely, but it will take a while. 
  The reason it could take some time to take effect is that you may only have the “Mental Image” of what you want to do without awareness of what you are doing. Having determined the g-load and entry speed you think you need, you need to get back into the air and as you enter the maneuver ask yourself what the actual maximum g-load achieved was? How quickly did you apply the g-force? What was your actual entry speed? How close to the “Mental Image” of your “Goal” were you? Did this fix the speed problem mid-maneuver? If so, great! By combining the “Mental Image” with “Awareness,” you have achieved your “Goal.” If not then make changes. Try a slightly faster entry - what will this look, feel and sound like (“MI”)? Alternatively, change the amount of g-force applied or its rate of application. Once again, what will this look, feel and sound like (“MI”)? Try the maneuver again. What were your entry parameters this time (“A”)? Using the Learning Formula, you can nibble away at achieving your desired performance/goal (“G”) in a systematic and effective manner. 
  An example more relevant to a student pilot would be the goal (“G”) of establishing a consistent flare height. Your instructor would be well able to provide you with the actual flare height required and the visual cues you would expect to see from the correct seating position inside the cockpit. The facts provided by your instructor provide you with the information needed to create the images required before beginning mental imagery sessions (“MI”). With the beginning of performing actual landings comes the awareness (“A”). After each landing, you would assess the actual flare height compared to the ideal flare height. When you are just starting out, your instructor could help with this part. 
@@ -1069,14 +659,9 @@
  Learning Curve 
  Every pilot, no matter how much natural talent they think they have or don’t have, will continue to improve throughout their career. Even pilots reaching the ends of their professional flying careers are still improving in some areas. Unfortunately, other factors such as lack of motivation, desire, or a deterioration of physiological functions outweigh these improvements. How quickly and consistently you’ll improve all depends on you and your operating environment. 
  One thing is clear, though. No two pilots have ever, or ever will, progress at the same rate. Every pilot’s learning curve is different. Some pilots’ learning curves are mostly steady upward inclines while others’ are full of steps of all shapes and sizes. Some learn and progress quickly, others more slowly. It isn’t an indication of how much talent a pilot has. 
- 
- 
- 
- 
- 
- 
+
  Every pilot’s learning curve is different. 
- 
+
  Very common among pilots are periods where the rate of progress and improvement seems to plateau with little to no improvement at all. Often, you and the people working with you become frustrated with the lack of progress and the plateau lasts longer. Most times, plateaus are followed by a sharp incline in progress if you can control the frustration and instead focus on improving your awareness. 
  Many times, the plateaus even appear to be steps backward. It’s like one step back, two or three forward, one step back, two or three forward and so on. It’s like the calm before the storm. In this case, the calm is the apparent lack of progress, and the storm is the whirlwind of learning. 
  If you think back to the learning stages, you’ll understand why. Most often, for you to progress you must go back to the Conscious Competence stage where you’re thinking through each step in a mechanical manner and this results in too much conscious thought and an apparent step backward. If you don’t become frustrated by this, and with a little patience, this new technique, skill, or mental approach becomes part of your programming. You then progress to the Unconscious Competence stage where it becomes something that you seem to do naturally. At this point, there is a significant step up in the learning process 
@@ -1085,25 +670,10 @@
  A couple of months later she came to Ross and asked to have the training wheels taken off again. She had decided it was time to learn to ride a two-wheeler. Within minutes she had practically mastered it. Within thirty minutes she was showing Ross how she could ride up and down steep hills while holding on to the handlebars with one hand! There was no learning curve here, at least not when observed from the outside or probably even consciously on her part. It appeared as though her learning curve was completely flat then took a perfectly vertical step. In reality, even though neither she nor Ross was aware of what was going on, she was progressively learning. All of us closely follow the same pattern in our development. 
  The only pilots that do not seem to follow this pattern are the ones that get frustrated when they are on a plateau - the flat part of the curve. They get to that point where they don’t feel they are getting any better, get upset or frustrated, and stay at that level or even get worse. The one piece of advice we can give about the learning process is that if it seems as if you’re stuck at one level for some time, be patient. If you are using the strategies suggested here, you are about to make a big step up to the next level. You are almost ready to take the training wheels off. 
  One of Phil’s flying instructor friends makes the following observation about plateaus. If he found a student was plateauing with a certain aspect of their flying training, they could lose motivation very fast. What he would do was move onto a new sequence and away from the particular task with which they were having trouble. This break served to re-engage his student with the improvement curve and restore their confidence in their ability to learn. He would then come back to the difficult sequence later or in another session entirely. For example, he had a student who just couldn’t get his head around practice forced landings (PFLs), so he moved the emphasis of subsequent lessons to other sequences that the student grasped more readily and could focus on with enjoyment. The instructor would then “throw in” a PFL at the end of each lesson. Through exposure, the student eventually mastered PFLs but without the dread and stress that dedicated PFL lessons had been causing. You can equally apply this strategy of taking a break to your personal learning objectives. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  If it seems you’re not improving, you’re about to. 
- 
-             
- 
- 
- 
-   
+
  Trial And Error 
  Is there anything wrong with making an error? Obviously, it depends on how much the error costs and who’s paying for it, but if you want to improve or even just to perform at your very best right now, you must be willing to make a few errors. Why? Errors are valuable learning experiences when examined and used in the right manner. 
  As a very simple example of how recognizing errors can help us make improvements, consider a series of traffic patterns. If, on a particular day, your turn downwind is having you consistently rolling out on a wrong spacing then you either need to change the point you are beginning the turn or adjust the bank angle used for the given wind conditions. Likewise, for your turn onto final, if you are rolling out high or low on final then you would need to reconsider the power setting you are using to adjust the rate of descent around the base leg. If you constantly have to add or reduce power on final to acquire the correct glideslope, you need to reconsider your base turn point. 
@@ -1116,25 +686,10 @@
  When making a change to the way you fly, don’t assume that if something doesn’t work the first time that it will never work. It’s a very common “error.” Let’s look at an example. You suspect that a technique change will make a significant improvement to your flying. You head into the air and, after a couple of attempts at the new technique, you don’t see any improvement at all. Your conclusion is that the change to your technique won’t work and you go back to your original method. 
  In many cases, the problem is not the change in technique but rather a lack of finesse with the new technique. It may be a case of blaming the wrong “cause.” So, just because you can’t make a small change in your technique work, don’t discount it entirely. Rethink how you approach that maneuver. Maybe, by altering your technique slightly, using just a little more finesse, you can make the change in technique work, and it will have improved your flying as you initially suspected. 
  This being said, if a change does not work, you must also consider the possibility that you may have been working on an incorrect technique. If you suspect this at all, STOP! As we have already established, practicing the wrong technique will only reinforce the error, and you will find it very hard to unlearn the newly-entrenched bad habit. We suggest that if you try a technique that doesn’t work after several attempts, it’s time to change what you are doing or get some quality instruction. A good instructor should be able to identify and correct the error quickly. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  If a change doesn’t work the first time, rethink and retry. 
- 
-             
- 
- 
- 
-   
+
  You see, it is not a matter of making fewer errors, it is simply managing them. Once you realize this, you will undoubtedly make fewer of them. Why? In most cases, you will stop trying to avoid making them. Trying not to make an error is a sure-fire way to ensure you make them. When you buy into the idea that your job is simply to minimize the effects of errors, life gets much easier. 
  Managing errors is a large part of competition aerobatics. It would be great to fly perfect aerobatic routines and never make mistakes, but that is fantasy. A competition aerobatics pilot Phil knows made the following observations: “Sometimes managing a mistake better than the next guy can win you the contest. Therefore, during practice, take your errors and turn them into learning exercises. If you make a mistake, think about and visualize how you would minimize the consequences, so that if it happens in competition, you already have a plan to execute. For example, if you make a major error coming out of a figure off axis, it might be best to exit the box, wear the penalty, and be set up perfectly for the next figure. For minor errors, like being too slow for the next figure, have a plan or idea as to how to manage that. Maybe let the next figure be compromised to ensure you are back on energy for the subsequent part of the sequence.” 
  Mistakes are a natural process - don’t fight them. Instead, consider what you can learn from an error, then re-program or see yourself doing it the correct way and forge ahead. 
@@ -1149,130 +704,58 @@
  The next time out, simply compare your Mental Image with your Awareness of how close you are to that Mental Image of the ideal maneuver; MI + A = G - the simplest, quickest and most effective way of learning and improving. The stronger, more vivid, your Mental Image, and the more Awareness you have, the more effective this will be and the easier it is to achieve your Goal. 
  Let’s look at the real world example of one of the pilots we interviewed just after he had changed types from the Boeing 767 to the Airbus A320. How did he make the transition from landing a 767 to landing an A320? How did he move from the “known to the unknown”? Landing the A320 for the first time, he first sat down and thought about everything he could take from the things he knew from his 767 flying. His first landing in the A320 would be in a simulation of Sydney (Kingsford Smith). He knew what runway 16R in Sydney should look like and that it slopes down from the threshold. With reference to the FCOM, he knew the ballpark power settings and attitudes he would need to use. He also knew from the FCOM that he should reduce thrust to idle around 30ft and flare around 20ft. He presumed that his biggest challenges would be the avoiding the potential to lose his aim point retention below 500ft, using big pitch changes to correct, and over-controlling close to the ground which would increase his workload. He put all these known facts together and completed mental imagery sessions, utilizing what he did know and applying it to the unknown. It was a full mental rehearsal of what he needed to do, in the correct order, and with emphasis on making small, realistic corrections below 500ft. All he had to do, once he turned up to the simulator, was learn the nuances of flying the A320 and update his mental model, his database. 
  That’s the “secret” to flying a maneuver you’ve never seen before. Start with your database and then use your awareness as you do it, so that you can add that to your mental image. Of course, that adds to your database and the whole cycle continues, getting better and better each and every time you fly. That is, really, the secret - improving every time out. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Sensory input and awareness are the keys to flying proficiently, no matter what the maneuver is. 
- 
-             
- 
- 
- 
-   
+
  If you look at every flight, every flight phase, and every maneuver from the perspective that you are soaking up information to add to your database, you will make immediate improvements in your flying. There are two reasons for this. First, when you give your brain more information to work with, it will produce a better result. Second, with this approach, it is more likely that you will relax and fly more at the subconscious level rather than “trying.” 
  Learning Programs 
  If at all possible during either a simulator exercise, flight, or mental imagery session, try to end on a positive note. People tend to recall most vividly the last piece of information they encountered. This tendency to most deeply program into the brain what was most recently learned is called the “recency effect.” In other words, you will recall and mentally replay your last session in the air more than any other. Mentally recalling and replaying creates programming. We’re sure you would rather program a technically-correct, positive experience than the opposite. 
  The recency effect suggests how important it is that you recognize when you start to become tired, either physically or mentally, so that you can stop before you begin programming errors. The importance of stopping a session before we start to programming errors holds true for mental imagery sessions, simulator sessions, and flights. Remember, practice does not make perfect; only perfect practice makes perfect. It is far better to quit a session early than to practice and get good at making errors. Of course, if you physically or mentally tire before the end of a flight, you need to consider creating a fitness training program that will ensure it doesn’t happen again. 
  Perhaps the greatest ice hockey player of all time, Wayne Gretzky, said, “No matter who you are, no matter how good an athlete you are, we’re creatures of habit. The better your habits, the better they’ll be in pressure situations.” One of the roles of practice is to build better habits, better programming. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The better your programming, the better you’ll perform in pressure situations. 
- 
-             
- 
- 
- 
-   
+
  Of course, just practicing flying around the sky may not be the most efficient use of time. As only perfect practice makes perfect, any amount of flight time you get should be focused. If not, you may just get better at doing the wrong thing, no matter what your level of flying. 
  Notice how the greatest athletes in any sport are commonly credited with having superior natural talent and yet they all seem to practice more, harder, and with greater focus than their competitors. It makes you wonder if all that natural talent is, in actuality, just more (and better) practice. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Natural talent is just more (and better) practice. 
- 
-             
- 
- 
- 
-   
+
  Basketball great Michael Jordan would show up for a game before other members of his team to practice his shots. When Tiger Woods was not winning everything in sight in 2001, he claimed it was because he was working on shots he would need specifically for the Masters later that year. Some people doubted his claim until he won the Masters again. Martina Navratilova, winner of 167 singles titles in tennis including a record nine Wimbledon titles, said, “Every great shot you hit, you’ve hit a bunch of times in practice.” 
  The stories of Formula One driver Michael Schumacher’s commitment to practice and being the best is part of his legend. After a day of testing at Ferrari’s test track, where he had just completed the equivalent of two full Grands Prix race lengths, he would spend a couple of hours in the gym, working out. 
  Philosopher Will Durant wrote, “We are what we repeatedly do, therefore excellence is not an act, but a habit.” Numerous studies have shown that to achieve mastery in any complex field, a minimum of 10,000 hours of deliberate practice is the general requirement. 
  A study at Berlin’s elite Academy of Music divided the school’s violinists into three categories based on their potential. They then calculated the aggregate average time each group had spent practicing since they had begun playing the violin. All the subjects had started playing the violin at roughly the same age (five years old), but the amount of time they had spent practicing before arriving at the Academy varied greatly. By the time they had turned twenty years old, all the students with the potential to be virtuosos had totaled over 10,000 hours of practice and were averaging 30 hours of practice per week. Those students categorized as good enough to perform professionally, but not as virtuosos, had each totaled above 8,000 hours of practice. The students destined for amateur status, or to be music teachers, had totaled just over 4,000 hours each. 
  Other studies have added a very important point regarding the number of hours it takes someone to master an activity. It’s not just how much practice you put in, but also what you practice that matters. The virtuosos not only practiced more, but they also practiced more difficult pieces. Looking at superstars in all activities, they practice the challenging things. For example, while many professional golfers practice by playing rounds, Tiger Woods is famous for having spent hours dropping a ball in a sand trap, stepping on it to make it even more difficult to hit, and then practicing hitting out from there. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  What you practice is just as important as how much you practice. 
- 
-             
- 
- 
- 
-   
+
  The point is that you cannot expect to be a peak performance pilot if you don’t practice and the more you practice the most challenging maneuvers, the better you’ll be. Note that we have not mentioned any need for intrinsic talent. Study after study has found that it is the hours of practice that amount to mastery and not any genetic advantage. Practice is all about building better programming. The more you build better programming, the more credit you will receive for being “naturally talented.” 
  We often believe the more we practice a skill or technique, over and over again, the better we’ll get. This belief is not entirely true. In fact, every time you practice a technique incorrectly, you’re increasing your chances of doing it wrong again. It’s easy to become very experienced at repeating the same mistakes. So, don’t practice too much at first or you’re likely to develop incorrect patterns or movements. Instead, begin with shorter sessions, maintaining intense concentration and motivation. Continue practicing only while your concentration and interest are strong. If you begin to repeat an error, if your concentration or attention starts to fade, or if you start to become casual, then stop. Clear your head, get your concentration and motivation back, and then go again. 
  If you find that you have trained yourself in a bad technique, you will need to un-train it. You will need to reprogram yourself. In other words, if you are getting something wrong over and over, then it might mean you need to go back to basics and build up the technique again from the start. 
  General-aviation flying instructors are often inexperienced themselves. As a result, many pilots are not taught well in the ab initio phases. They carry these problems through to advanced flying such as aerobatics or instrument flying. If you find that your training has been substandard, it might be worth revisiting some relevant basic skills. For example, you won’t fly good formation if you never learned how to coordinate rudder and aileron correctly or how to trim. 
  A competition aerobatic pilot we spoke with relayed a story of how he was taught poor technique and procedures during his ab initio stall training. He didn’t realize this until he got serious about aerobatics. He had revisited his understanding of stalling by downloading articles written by people who knew what they were talking about and reeducated himself about the basics. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_7
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Self-Coaching 
- 
+
  I f you wanted to be the absolute best pilot you possibly could be, ideally every time you went into the air, you would take a qualified instructor with you to continually improve your performance. However, this is quite clearly impractical due to financial constraints and the fact there aren’t enough qualified instructors in existence to cover every pilot. Therefore, you need to learn to coach yourself. 
  Self-coaching is the technique of guiding yourself towards maximizing your performance and improvement in everything you do. Part of self-coaching is self-debriefing. The primary objective of debriefing is to increase your awareness. As we discussed in the previous chapter, without awareness, you will have a difficult time knowing what you should work on to improve or if you are making any progress. 
  No matter what level or type of flying you are involved in, after every flight, you should debrief. This debriefing may only take a minute or two, or it could last for hours. Your main aim in debriefing is to determine what the objectives should be for the next flight to make further improvements. 
  One of Phil’s friends, an airline captain, debriefs with his first officer after every sector by asking, “What did we do well?” and “What could we do better?” To avoid the emphasis being on the approach and landing (the most recent event in the flight), he finds it valuable to give himself time to replay the entire flight mentally for a minute or two before debriefing. He then breaks the debriefing down by the phase of flight. 
  To fundamentally improve your performance as a pilot, you should keep a record or journal with the details of each and every flight. As you go through this process, you will build your awareness of what both you and the aircraft are doing. The act of writing it down leads to a fuller awareness level. Without that awareness, you will not have the information you require to fly better nor will you have an awareness of what you need to change to improve your flying. 
- 
- 
- 
- 
- 
- 
+
  Keep a journal of your self-coaching debriefs. 
- 
+
  One of the best ways to debrief is to ask yourself questions and rate your performance and abilities in a variety of areas after each session. We’ve listed some example questions in Appendix B ; ones you could ask after each flight and ones to ask yourself before you even get to the airport. As you go through the process of digging deep in the attempt to answer them, you will coach yourself to a much higher level of performance behind the controls of an aircraft. The overall objective of these questions is to help you become more aware of exactly what you are doing. If you are aware of what you are doing now and know what you want to be doing differently or better, you will quickly and naturally make the necessary improvements. 
  To help facilitate debriefing, you could even make up a debrief form that includes all the areas on which you choose to assess your flying. Where applicable, you could even base your personal debrief form on the actual forms used by Designated Pilot Examiners/Examiners of Airmen/Departmental Examiners when they conduct practical flight tests for the issuance or renewal of licenses and rating. Obviously, you can debrief yourself without a form but physically writing notes will help you gain more from the strategy. The physical act of writing something seems to increase your awareness level as well as being more accurate. You will be more honest with yourself when you rate your flight on paper. You can also use these records to learn from as you look back at them when preparing for your next lesson, flight test, or simulator session or when you are having a problem with a specific area of your flying. 
  Another aid to debriefing is to use diagrams of the maneuvers flown and debrief with them. Make notes on the diagrams, writing down details on what the aircraft is doing: speeds, attitudes, power settings, g-forces, control forces, where you are looking, what you can hear, what you feel, etc. 
@@ -1283,25 +766,10 @@
  You should make notes of all the things you have learned each flight. If that isn’t a pretty extensive list, you are not doing your job. Regardless of how much experience you have, you will always be learning something new if you are aware. Obviously, writing down what you have learned will reduce the chances of you forgetting and having to learn the lesson all over again. 
  Serious competition aerobatic pilots use a ground-based coach who critiques their sequences into a voice or video recorder while observing the flight. Alternatively, if the student has the “head space,” the coach sometimes uses a radio to commentate, giving tips or instruction in real time. Either of these methods would help an aerobatic pilot compile their post-session notes. 
  If at all possible, to avoid comparing yourself to others, go through the debrief process before learning how your performance rated in a flight test or competitive environment. This methodology will improve the accuracy of your awareness and feedback. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Increase your awareness by debriefing. 
- 
-             
- 
- 
- 
-   
+
  Finally, you should rate your overall performance on a scale of 1 to 10 for each flight and make a note of how you felt and what you did leading up to it. That way, over time, a pattern will begin to emerge; one that spells out a routine or ritual that will lead to consistently great performances. For example, if you notice that whenever you physically warm-up before flying, or that a certain phrase used by you or another crew member seems to lead to “9” performances, you know what you must continue to do in the future. 
  To emphasize the power of ritual to great athletes, one need look no further than the most successful Olympian of all time, Michael Phelps. Phelps, winner of a record 28 medals (23 gold), has an extensively-reported on race day ritual. His routine includes: 
           •    what he eats for breakfast, 
@@ -1315,24 +783,17 @@
           •    donning his headset to listen to music to relax and get into his own world, and finally, 
           •    a set routine on the blocks. 
  It becomes much easier to develop a pre-flight ritual that will lead to a great performance if you make a note of factors affecting your performance. For examples, your state of mind, energy level, intensity, what you have eaten over the past day or two, who has been around you and what they have said, and how confident or nervous you felt. Without writing it down, it’s easy to miss patterns. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_8
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Preparation and Practice 
- 
+
  F lying an aircraft is a series of compromises: atmospheric conditions change, fuel and passenger loads vary, and traffic and subsequent air traffic control restrictions are never the same two traffic patterns in a row let alone for two entire flights. There is also the human element: who we are flying with, their personalities, and their adherence (or otherwise) to standard operating procedures. There are hundreds, perhaps thousands, of compromises and decisions to be made every flight. You constantly have to monitor and adjust your flying to best suit the conditions and variables as they present themselves to you. Practically every moment of the flight you have to consider and reconsider what your strategy should be. 
  The pilot that chooses the best compromises most often performs at the highest level in comparison to their peers. A pilot whose mind is best prepared is more likely to make the ultimate compromises. 
  Preparation 
@@ -1345,25 +806,10 @@
  Flying hours are valuable. Make them count. If possible, we strongly suggest giving yourself a few minutes immediately before each flight to sit and think about what you’ve planned to change or achieve. Make a plan and then work to that plan. 
  Also, take the time to consider what you will do if things don’t go according to the plan. For example, what happens if you fall out of the new maneuver you are about to practice? Having pre-considered your actions enables you to be mentally prepared for the consequences. It also helps your confidence level because you’ve prepared, you have it under control, and it doesn’t take you by surprise. 
  Many pilots wonder how they can visualize every possible scenario that could happen. You can’t. The same applies to using mental imagery for mentally preparing to fly an aircraft you have never flown before. How can you visualize something when you have no idea of how it would possibly look? In your preparation, you want to use a kind of open-ended mental imagery where you actualize yourself as being open and ready for anything. It’s not that you imagine every possible scenario, but that you are ready and make the right moves no matter what happens. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Preparation is not just one thing; it’s everything. 
- 
-             
- 
- 
- 
-   
+
  Practice 
  Your mental approach to practice and testing is important. There is no point in ever getting airborne if you’re not going to fly at 100%. There is no reason ever to think that a sloppy sequence is “good enough.” You don’t want to make “good enough” a habit. The only way to ensure that doesn’t happen is always to fly at 100%. 
  A lot of pilots practice bad habits when flying outside of the simulator or testing environment. They don’t hold the controls properly or use the controls smoothly, and they are slack with their standard operating procedures, altimetry, radiotelephony, and standard calls. How do they expect to fly any differently during a test when they’ve just programmed those techniques into their heads? It’s the same with sport. What do you think would happen if a tennis pro practiced hitting one-handed backhands all year and then went to Wimbledon and played using a two-handed backhand? 
@@ -1371,42 +817,20 @@
  A pilot can practice many of the techniques required to ace their tests during their everyday flying. Practice always being smooth and consistent, and not just on the primary flight controls; this applies equally to braking, using the throttles or thrust levers, rolling into and out of turns and keeping the aircraft balanced. 
  You don’t have to do this quickly either; this is not just physical practice. Just like a golfer or tennis player “grooves” their swing, you are “grooving” your aircraft control techniques. Each time you apply the brakes or move the controls your actions are being “programmed” into your brain. The more your technique is “programmed,” the easier, smoother and more natural it will be in the heat of the battle of a test or license renewal. 
  Treat practice and tests with the same respect and intensity. When you practice, it should be with the same mental focus and determination as if it were in a test. This focus programs your mind so that, under actual test conditions, you instinctively respond. During a test, you will be as relaxed and calm as if you were practicing. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Practice how you plan to test and then you’ll test as you practiced. 
- 
-             
- 
- 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_9
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Performance State of Mind 
- 
+
  Y our state of mind covers many areas: your levels of anxiety, happiness, anger, nervousness, fear, passion, enthusiasm, empathy, and so on. Your state of mind plays a huge role in your level of performance. In fact, it’s critical, right? 
  So, where does our state of mind typically originate? It originates from “out there;” things that happen to us, things that people say to us and external happenings (positive or negative). 
  What do we typically focus on when we’re in a poor state of mind? The rotten state of mind we’re in. We say things like: “I’m just in a bad mood today” or “I got up on the wrong side of the bed this morning.” Of course, that just leads to a further decline of our state of mind. In other words, it spirals out of control. 
@@ -1416,121 +840,49 @@
  You can hope that you show up for each flight in the right state of mind (but hoping is not a very effective strategy), or you can learn to trigger a performance state of mind. So, how do you induce a performance state of mind? 
  The best technique we know of is to simply ask yourself to recall, and replay in your mind, a great past performance. There is nothing that will build or improve your confidence as much as a little success. Fortunately, these successes do not necessarily have to be piloting an aircraft. You should feed off your successes no matter where and when they are in your life. 
  Whether it’s success playing another sport, a positive business experience, participation in a hobby or a great personal relationship experience, recalling past successes in anything will trigger a positive state of mind. So, focus on past successes. See them vividly in your mind’s eye. Replay every detail about those performances from a technique point of view, how you felt, your emotions, and your state of mind before, during, and afterward. Anything that results in being extremely positive, happy, energized, and calm will do the trick. 
- 
- 
- 
- 
- 
- 
+
  Vividly recall past successes to trigger a performance state of mind. 
- 
+
  In his role as a performance coach, Ross has used this technique often when coaching race car drivers, particularly just before a qualifying session. He likes to find out beforehand about a great performance in the driver’s past and then ask them to replay the story just before qualifying. He’s had drivers relate stories about a past hockey or soccer game, a previous qualifying session or race, or a positive business experience. In each case, he could see on their faces that they were in a positive, performance state of mind after telling their story. 
  At one stage of his career as a professional race car driver, Ross was averaging a gain of six places during the first two laps of a race. At one round of the World Sports Car Championship Ross had qualified in tenth position but at the end of the first lap was in second position. Before subsequent races in the series, he kept replaying that start over and over in his mind, and he kept getting great starts. He knew before the start of every race that he was going to pass at least four or five cars on the first lap. Replaying those successes in his head led to many more because Ross was in a performance state of mind. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Replay past successes to trigger a performance state of mind. 
- 
-             
- 
- 
- 
- 
-   
+
  Focus 
  Is there any danger in thinking about the past? There certainly can be. Anytime you spend focusing your attention on what has happened in the past is time that your attention is not being spent focusing on what is happening right now in the present. 
  Can you do anything about what has happened in the past? You can’t, absolutely not. If you make a mistake on the runway during take-off, does thinking about that while leveling off at acceleration altitude help or hinder? Hinder for sure. Does getting upset about the lack of support coming from the support pilot’s seat help? No. The second you make an error or something less than favorable happens, forget it. What you did, or what another pilot did, is not important now. 
  Can you do anything about what is going to happen in the future? Yes. How? You do this by the actions you are taking right now. When you focus your attention on the present, you increase your chances of performing at the level that will result in the goals you have set. 
  Thoughts 
  As you read this sentence, do not think about a pink elephant. Do not think about a pink elephant! So, what are you thinking about right now? You’re thinking about a pink elephant, right? In fact, it is impossible not to think about something. The only way you cannot think or focus on something you don’t want is to think or focus on something you do want. 
- 
- 
- 
- 
- 
- 
+
  “ Do not think about a pink elephant! ” 
- 
+
  For example, as you sit on the flight deck if you are having thoughts like “don’t mess up the landing this time,” or “don’t over-control,” you are setting yourself up to do the complete opposite. In these examples, you have made your brain focused on messing up the landing and over-controlling! Pilot-induced oscillations here we come! 
  Obviously, negative thoughts like this could also be implanted in your consciousness by others: your flying instructor, your support pilot, your ground crew, etc. It would be ideal if everyone around you could be aware that what they say can affect your performance but that is not always practical. So you must have a plan or strategy to manage whatever anyone says or does. 
  In the case of not not thinking about something someone says, the strategy is fairly simple. To demonstrate, imagine a blue elephant. Whenever anyone says “pink elephant” imagine a blue elephant. What you have done is developed a Pre-Planned Thought (PPT). Now when we say, “don’t think about a pink elephant,” what do you see in your head? Hopefully, you thought of a blue elephant! If you didn’t, you need to practice this some more. 
  You must have a PPT ready and available to take on any unwanted thoughts thrown at you, either intentionally or not. You need to develop a PPT and practice using it. Perhaps your PPT could be something similar to “smooth and confident.” Whenever anyone says anything that could distract your focus, or get you focusing on something you don’t want, simply say “smooth and confident” to yourself. When you say this phrase, you immediately conjure up an image of flying an aircraft smoothly and confidently. Isn’t this exactly what a peak performance pilot would do? Through practice, the image will become very strong and vivid, and one that will take the place of practically anything anyone says or does. You don’t have to use our example of “smooth and confident.” You can use anything you like that projects the thought patterns and behaviors you would like to emulate. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Develop and use a Pre-Planned Thought (PPT). 
- 
-             
- 
- 
- 
-   
+
  Behind the controls of your aircraft, have you ever thought to yourself, “That was a stupid mistake” or, “Why did I over-control the rudder on that V1 cut?” Did any of those thoughts do you any good? We doubt it. In fact, we bet they did more harm than good. 
  A study showed that the average person has approximately 66,000 thoughts every day with 70 to 80% of those being negative. We doubt that this study included any champion athletes! We would suggest that at least 70 to 80% of their thoughts are positive. 
  Focusing on negative thoughts or ideas will most likely adversely affect your performance. Thoughts like, “if I don’t apply g-force quickly enough I’m going to run out of energy” takes some concentration and attention away from the ideal, positive thought like “I need to apply five-g as quickly as possible as I enter the maneuver.” 
  If you are going to have some thoughts while flying (and there is no doubt you will - at least your passengers hope so!) make them non-judgmental thoughts. Turn everything you can into a positive. If you take every situation that other pilots consider a problem or unpleasant (bad weather, crosswinds, complex sequences, too much traffic, etc.) and turn them into positive challenges, you will perform better. Turn them into “watch this” situations, a chance to tackle a challenge head on and demonstrate your capabilities. For example, just by saying you love instrument flying over and over again will make you a better instrument pilot. It’s simply a matter of turning negative thoughts and questions into positive talk. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Make your thoughts non-judgmental. 
- 
-             
- 
- 
- 
-   
+
  In the chapter on Self-Coaching, we have already suggested that negatively-phrased instructions and thoughts should be replaced with positively-framed ones when writing self-briefing notes. 
  You can apply this same theory to where you look when you are flying. For example, if you have identified an issue with not looking far enough ahead when landing, or not taking in a wide visual picture from your peripheral vision, just thinking to yourself not to fixate on the threshold or aim point will not do any good. 
  The amazing thing about the mind is that if you put an image or thought into it, your mind will find some way to make it happen. When you say to yourself, “Don’t fixate on the aim point,” your mind only really registers the “fixate on the aim point” part of the message. Your mind fixates on the aim point even to the exclusion of lifting your eyes to the end of the runway for the flare or taking into account all the sensory information available in your peripheral vision. 
  So, instead of thinking, “Don’t fixate on the aim point,” you should think, “Look towards the end of the runway.” The only way of not thinking or looking at what you don’t want to think or look at is to think or look at what you do want; this might sound like a mouthful, but it is completely true. Go back and read it again. 
  Good skiers use this same strategy for avoiding rocks in the snow. Instead of focusing on the rocks (where they don’t want to go), they focus on where they do want to go (a path between the rocks). By focusing on a path between the rocks, their mind subconsciously orders signals to their legs to steer the skis to follow the path to avoid the rocks. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Replace negatively-phrased instructions and thoughts with positively-framed ones. Focus on what you want. 
- 
-             
- 
- 
- 
-   
+
  Consistency and Concentration 
  The mark of a great pilot is consistency. When you first start flying, you must concentrate on being consistent. Your goal should be to operate to the best of your ability consistently, to perform at your peak. Work on always being smooth and consistent with your technique, session after session. 
  To do that, you must remember what you did and keep doing it session after session or flight after flight. That is not as easy as it sounds, but it’s not until you fly with consistency that you can begin to work on really honing your skills to their finest level. 
@@ -1545,25 +897,10 @@
  Although we have emphasized always getting airborne with learning objectives, sometimes a constant focus on improvement may dull your joy of flying. If this is the case, just go and fly without thinking about improving or worrying about making mistakes. Relax and just “let it flow.” 
  Intensity Level 
  Every time you get behind the controls of an aircraft, you must perform at the same intensity level you want when it is going to count the most, for example, in a flight test or competition. There is no point practicing in a casual, “I don’t care how I do this flight; it’s a solo, and no one is watching; this flight is not very important,” attitude and then expect to perform any differently when it does count. Remember, practice is programming. If you program flying with a low-intensity level, that’s how you’ll perform in the heat of the battle. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Practice is programming. 
- 
-             
- 
- 
- 
-   
+
  You need to determine what level of “psyching” results in your best performance. Each pilot has an optimum level of being psyched - the optimum level of emotions, tension, anxiety, nervousness, and energy. The key is to be aware of what emotional state results in a superior or peak performance and then use that knowledge to program the corresponding emotional state so that you can recreate it over and over again. 
  Some pilots need to psych themselves up while others must calm themselves down. Not being energized or intense is not a problem for many people in a sport or profession like flying, but it is not uncommon for pilots to be too calm, relaxed, or even fatigued. If you find you are routinely too calm or relaxed before a flight, you need a program for energizing. Some things you could consider are: 
           •    seeing yourself alive and energized, 
@@ -1583,25 +920,10 @@
  Another thing people who perform physical skills to a high standard tend to have in common is a relaxed demeanor. Have you ever noticed how practically every great athletic performance looks almost easy or effortless? It is not a coincidence that most athletes have that appearance when performing at their best. 
  Great performances, and therefore the best results, are always achieved when you use the right amount of effort in the right places. This right amount of effort is usually less than you think necessary. Like what we said about psychomotor skills, the less unnecessary effort you spend, the more successful you will be. The key is to use appropriate effort - economy of movement. 
  Doing the wrong thing with more effort rarely results in a good performance. Great pilots use less effort to produce great performances and great results. The more intense the competition or test, the more they relax and just let it happen. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Relax, use less effort, and just let it happen. 
- 
-             
- 
- 
- 
-   
+
  Trying 
  Your goal in reading this book is most likely to improve your flying by being better at what you do behind the controls. Unfortunately, many pilots with this goal try to be better. The result is rarely what the pilot wants. 
  “Try” is a very negative word. Entertainers who use neuro-linguistic programming (NLP) or stage hypnosis consider “try” to be a failure word and will often use the word “try” in their patter when they want their subject to fail to do something. For example, if a hypnotist is hypnotizing a subject to believe that they cannot move they will use phrases like, “try and pull your hands apart, try and move.” Trying implies the possibility of failure and the hypnotized subject finds that they cannot move. When instructed that they “can” start to feel their hands coming apart and their bodies start moving, they can move again. 
@@ -1615,25 +937,10 @@
  We bet that every time you’ve ever been in the flow or zone in the past, there were two factors at play: you felt challenged, and you had confidence in your ability to handle the challenge. In fact, a combination of challenge and belief in yourself will do more for triggering flow than just about anything else. 
  If you’re not feeling challenged, you’ll almost feel bored. You’re unlikely to have the intensity it takes to get into the flow and perform at your peak. Of course, if the challenge seems too great, too daunting, it’s also unlikely you’ll perform at your best. You’ll feel overwhelmed and likely not have the inner belief that you can handle the challenge. On the other hand, if you feel challenged by what you’re doing, and you feel confident that you can overcome the challenge, you’re more likely to perform in the flow. 
  Framing flying as a tough challenge, but one you can handle, will help you perform better. Sometimes it’s a matter of doing just that: looking at it (framing it) as not easy but something you can handle, something not beyond your capabilities. With that mindset, you’re more likely to get into the flow, the zone, that magical state where you perform almost effortlessly, totally focused, where time seems to slow down, and where you just enjoy being in the moment. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Challenge + Belief = Flow 
- 
-             
- 
- 
- 
-   
+
  Just as you know when you’re in the flow you also know when you’re not. Often, when you’re not, it’s because you’re trying. 
  If you find yourself out of the flow, having to think about your flying, struggling to keep up, then it’s important to concentrate on getting back into the flow and regaining your rhythm. A couple of minutes of talking yourself around the sky may help. Better yet, you can use a trigger word for a performance state of mind. 
  Performance Versus Results 
@@ -1654,25 +961,10 @@
  Competitive people, people who want or need to feel they are above average, are the ones who most need to learn from their failures. If you become overly upset and focused on a failure, and never learn from it, you are bound to fail again and again. 
  So, here’s a question for you: do you typically perform at your best when you’re trying particularly hard or when you’re relaxed? We’re not suggesting that relaxed is not caring, being unfocused, or not performing at your maximum, but there is a huge difference between trying hard and being relaxed and focused. 
  Think back to some of your great performances in your life whether in a sport or anything else. Were you tense and aggressively trying, forcing yourself to perform well? Or were you relaxed, calm, focused, assertive, and simply doing what seemed to come naturally? We bet you were in the latter mode, not even aware that you trusted your subconscious programming to perform. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Focus on your performance and the results will look after themselves. 
- 
-             
- 
- 
- 
-   
+
  Again, focus on what you can control. Focus on what you want. Focus on where you want to go. Focus on the moment, your execution, your form, your technique, rather than on how much more of the flight there is to go, sequences you still need to complete, or how your assessment is going. 
  Expectations 
  Expectations - thinking about a competition result or test score - can limit your performance. With expectations, you focus on the outcome, the result, and that distracts you from the moment, your technique and ultimately your performance. 
@@ -1684,37 +976,17 @@
  Michael Jordan, one of the greatest athletes of all time, would recall images of past successes in high-pressure situations. As Jordan’s Chicago Bulls coach Phil Jackson says in his book, Sacred Hoops , “Jordan doesn’t believe in trying to visualize the shot in specific detail. ‘I know what I want the outcome to be,’ he says, ‘but I don’t try to see myself doing it beforehand. In 1982, I knew I wanted to make that shot [the last-second shot he used to take his University of North Carolina team to the NCAA Championship]. I didn’t know where I was going shoot it or what kind of shot I was going to take. I just believed I could do it, and I did.’” That’s open-ended imagery. That’s having an empty mind, a beginner’s mind - one without expectations. 
  Expectations are limitations, and you rarely exceed your expectations. Expectations program results into your mind, and your mind is very efficient at running those programs - sometimes too efficient! With expectations, you have pressure, stress, and anxiety that will negatively affect your performance. Plus, you will rarely ever exceed your expectations. Expectations can be dangerous things. 
  Possibilities and potentialities can be marvelous things. When you have no expectations, you have no limits and no preconceived ideas or thoughts to un-focus your mind. If you focus on your goals, such as performing at your very best, you then have a direction to follow, one that will more likely lead to the desired result. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Don’t set expectations; focus on the possibilities and your potential. 
- 
-             
- 
- 
- 
-   
+
  Pressure 
  It’s quite frustrating to observe the pressure the media often places on young athletes. It’s almost like they go around with a “can of pressure” and spray it all over the athletes, particularly during and leading up to the Olympic Games. The media seems to love to remind Olympic athletes of past failures and mistakes and ask them if they will be able to “put that out of their minds.” If they truly cared about the performances of the Olympic athletes they wouldn’t ask these types of questions. The same is true of our family, friends, work colleagues, and even ourselves. All can unwittingly pile added pressure on a pilot. For a pilot, having an understanding of and a strategy for controlling pressure is critical. 
  Their fear of failing limits many pilots’ performance levels. So much of their focus is on “not failing” (an outcome) and what failing will mean (at least, what they think failing will mean) that they are almost guaranteed to fail. It’s unfortunate, not to mention destructive, the amount of pressure (internal and external) some pilots put on themselves or have put on them by others. 
  For tasks with more than a simple degree of difficulty (e.g., flying), research has shown that there is a subtle relationship between pressure and performance. Up to a point, pressure has an energizing effect. Too little pressure (arousal) and we feel unchallenged and unmotivated and, subsequently, our performance is lackluster. Too much pressure (stress) and we start to “fall apart.” We are overwhelmed by demands or become task-saturated, and our cognitive processes (e.g., attention, memory and problem solving) are impaired. At a moderate level of pressure (neither too little arousal nor too much stress) we are “in the flow” and give our best performances. We are motivated to perform but not overwhelmed. 
- 
- 
- 
- 
- 
- 
+
  Peformance vs. Pressure curve 
- 
+
  Internal pressure is not necessarily a bad thing as long as we focus it in the right direction. In fact, this sometimes helps to drive or motivate a person, but most of the time the pressure to deliver an outcome results only in increased tension, stress, and anxiety which decrease performance. Make sure you focus any internal pressure you place on yourself on your performance, not the result. 
  External pressure is what a pilot puts on themself to perform in front of others or to live up to other’s expectations. It’s also the pressure others (family, friends, employers, managers, instructors or examiners) put on the pilot to perform. External pressure rarely, if ever, increases a pilot’s performance level and most often negatively impacts performance. 
  People who place this external pressure on you most probably don’t realize how much they can negatively affect you with their expectations. Understand that there is a difference between having and showing confidence in you and having high expectations. Having confidence is a performance-related thing. High expectations are result-orientated. Of course, you know which is best. 
@@ -1727,24 +999,17 @@
  Research by sports psychologists has shown that a skilled performance under pressure requires either reduced left hemisphere activity or enhanced right hemisphere activity. But how do we facilitate this? 
  An activity that activates one hemisphere of the brain creates an advantage for the performance of activities that rely on that hemisphere. Our upper limbs connect with the cross-lateral brain hemispheres, and extensive research has shown that by clenching your left fist for just 30 seconds at a time causes the right hemisphere of your brain to be activated. 
  So, to prime yourself for peak performance you should squeeze your left hand before performing a task under pressure as part of your pre-performance routine along with the mental imagery, PPT, and trigger word tools we have already mentioned. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_10
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Belief System 
- 
+
  A t one time, scientists, researchers, and athletes thought that if someone were to run the mile in less than four minutes, they would practically drop dead. Then, in 1954, along came Roger Bannister who didn’t believe these “laws of physics” and ran the first sub-four-minute mile. Within the following twelve months, four other runners ran a sub-four-minute mile, a limit that for decades had seemed impossible. Once armed with the knowledge - with the belief - that it was doable, it was relatively easy. 
  The power of your belief system is amazing. Our world, especially the world of sports and physical pursuits, has countless examples of the power of the belief system. This fact has been proven time and time again by world champions and amateurs alike. Watch any world champion, and you can’t help being impressed with more than their skills. It is the strength of their belief system, on a consistent basis, that is most impressive and what makes them as successful as they are. 
  Do you think that Tiger Woods consistently had stronger self-belief than his competitors when he set the record for the number of weeks leading the world golf rankings? What about Roger Federer? Do you think that he consistently had stronger self-belief than his competitors when he set the record for the number of weeks leading the world tennis rankings? There’s no doubt about it. You could hear it in the words of their competitors: they talked about having to beat Tiger or Roger, whereas Tiger or Roger mostly talked about themselves and their performance. What about the belief Lee Westwood must have had in himself to replace Tiger Woods as the number one golfer in the world after a record 281 weeks? You know that he must have known he could beat Tiger. Likewise, Rafael Nadal must have believed that he was every bit as good as, or better than, Roger Federer to displace him after 237 weeks at the top of the ATP rankings. In all these athletes, you can see it in their walk, you can see it in their eyes, you can hear it in their words, and you can see it on the court or links. 
@@ -1765,105 +1030,40 @@
  Right now, for a few minutes, imagine being in your aircraft ready for your next flight test, aerobatic competition, or whatever part of your flying gives you the opportunity to show off what you can do. Imagine as many of the details as possible: other traffic, the surrounding terrain, weather, sounds, the examiner, everything. Now, see yourself shutting down or sitting at the debriefing. Stop reading and do this. 
  Now, go back to your image of you about to start your flight test or competition and then sitting at the debriefing. How did you score? If you imagine yourself in any situation other than having been entirely successful, the likelihood of being entirely successful is small. If you can’t believe you can do something, it’s less likely that you will be able to do it. Until you can imagine yourself scoring a near perfect score, to do it would almost be a fluke. In other words, until you believe you can, it’s unlikely that you will. 
  Your mind, or should we say the use of your mind in a deliberate, productive manner, can shape reality. In other words, what you believe and what you mentally “see” can come true (become reality) if you focus on it. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  What you believe is what you get. 
- 
-             
- 
- 
- 
-   
+
  External/Internal Programming 
  Your belief system - what you believe about yourself - plays a critical role in your flying performance. In fact, what you believe about yourself, your deep-seated inner confidence, will have more of a bearing on your performance than just about anything else. 
  You and other people can have a significant effect on your belief system. If someone were to tell you continually that you’re a great pilot, over time, you could begin to believe that you’re a great pilot. Of course, the opposite is also true. 
  Your self-talk can also affect your beliefs. The more times you repeat a phrase, the more it will become a part of your belief system. If you tell yourself over and over again that you are a great instrument pilot, you will eventually truly believe you are a great instrument pilot, and the greater your chances are of being just that. If you keep telling yourself that you’re not proficient, it will have a negative effect. It is a self-fulfilling prophecy. 
  The bottom line is if you do not believe you’re a great pilot, you never will be. What you believe about yourself is the single biggest limitation to your performance. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Whether you believe you can or believe you can’t, either way you’re correct. 
- 
-             
- 
- 
- 
-   
+
  Changing Your Beliefs 
  The good news is that you can change your beliefs about yourself. The first step in changing your belief system is getting an awareness of just what your beliefs are. You should make a list of both your positive and negative beliefs, being totally honest with yourself. The list should include what you believe about yourself from both the physical technique aspect and the mental side. You do not need to share the list with anyone else. This list only serves for you to become more aware of yourself. After all, if you don’t know what to change, how are you going to change it? 
  Once you’re honestly aware of what your beliefs are, you can choose to reprogram any negative ones. That will rarely happen overnight. It usually requires doing a couple of mental imagery sessions per day, backing that up with some physical signs of improvement, more mental programming, more physical evidence and programming, and so on. Without the mental programming, it is unlikely your beliefs will ever change unless by some fluke you happen to improve, in which case you will have experienced it. 
- 
- 
- 
- 
- 
- 
+
  Changing belief systems. 
- 
+
  Let’s assume for a minute that you’ve never scored above average in a test or competition. If you begin doing mental imagery of great performances and see yourself now being above average, will that change your beliefs enough to enable you to achieve the perfect score the next time out? Maybe it will; maybe it won’t. The problem is that your mind (your current belief system) may not accept that much of an improvement. You know... you may be able to fool other people, but you can’t fool yourself. 
  Your belief system is a bit like an elastic band. You can stretch it, but if you stretch it too much, it can snap. Seeing yourself moving from average to “God’s gift to aviation” in one flight may be too much of a stretch; your belief system will then snap, and you won’t accept it. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Stretch your belief system, bit by bit, through self-talk and mental programming. 
- 
-             
- 
- 
- 
-   
+
  An effective way to stretch your belief system is to have a reason for stretching it. If you’ve not made any changes in your skills or your approach, it’s difficult to see why you should change your beliefs. However, if you’ve learned something new and put in place some strategies like those outlined in this book, then there is a reason for your belief to stretch. 
  The strategies, triggers, actions, centering and integration exercises presented in this book work in two ways. First, they physiologically and psychologically “switch you on.” Secondly, if you believe they will help you perform better, they will. That is the power of the belief system. 
  Having a reason to stretch your belief system is also one reason coaches for aerobatic pilots can help so much. While a good coach will help improve your technique and mental preparation, often a big reason for the improvement is that your belief system can accept there is a reason for improvement. If you believe you can or should improve, you will improve. By simply having a coach, a new set of mental strategies, or whatever, there’s a reason for your belief system to accept a stretch from average to excellence. 
  A powerful technique for replacing bad self-beliefs you may hold about your capabilities with positive self-beliefs is the contrary evidence technique. With the contrary evidence technique, you need to take the negative self-belief and look for as many pieces (at least ten) of evidence or examples from your past that you can think of that contradict that negative belief. Then, when you find yourself falling back on your negative self-beliefs, you can replay your examples of contrary evidence to dissuade yourself of these beliefs. 
  Let’s use the example of the pilot who doubts their ability to handle abnormal, non-normal, or emergency situations or doesn’t believe they can perform well in stressful conditions. The contrary evidence they could use would include specific examples of stressful situations they have handled well in the past, practice sessions where they coped well with complex simulated emergencies, important flight tests that ended in a great result, etc. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Use your strengths to program over the top of weaknesses. 
- 
-             
- 
- 
- 
-   
+
  If you truly want to change your beliefs, the best method of all would be a combination of the contrary evidence technique, mental programming, positive self-talk, and giving yourself a reason to accept the stretched belief. 
  Let’s consider the pilot who feels they start simulator sessions well but loses the edge approaching the end; they finish weak. This self-belief that they can’t sustain their performance level over the duration of a session leaves them very confident and proficient at the start of the session; they are so busy concentrating on getting everything right that they don’t have time to lose confidence and therefore they don’t make mistakes. As the session progresses, and they have time to think, they start to anticipate a degradation in their performance, and they lose confidence. As their confidence or belief in themselves fades, so does their performance. 
  It’s no use telling this pilot they should stop thinking that way. Telling a pilot who is not confident to be more confident is like telling a depressed person to be happy. That just doesn’t work. Until this pilot changes their mental programming, the kind of change they need isn’t going to happen. 
@@ -1874,37 +1074,25 @@
  This pilot’s mental imagery programming would consist of flying each sequence in turn, resetting between each sequence to refresh their mental imagery, and seeing, feeling, and hearing every detail of the sensations they experience at the start of a session when their confidence is highest. They would feel the emotions of flying those first sequences and the associated state of mind. They could even mix up the order of the sequences to be flown in the simulator so that the sequences to be flown at the end of the simulator session were, in fact, the opening sequences in their mental imagery session. Doing this over and over again in their mind creates a confident, assured self-image for flying all the sequences, no matter when they fly them within the simulator session. 
  Repeating these mental imagery sessions in the weeks leading up to the simulator session, every time our example pilot begins a new sequence they would also provide themselves a trigger word to reset this mindset of the confidence they already have at the start of a simulator session. At any time during the session, they could use something like, “begin again,” “reset,” or “first sequence” to trigger a pre-existing mental program for the confident feelings they previously associated with the beginning of a simulator session. 
  As time progresses, the pilot should find that they can sustain a level of performance over a longer period. Not only does this give them more examples to feed back into their contrary evidence work and mental imagery sessions but the actual physical improvement (combined with the application of the strategies) gives solid reasons to stretch their belief system to accept that they are a strong finisher after all. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_11
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  The Inner Game of Flying 
- 
+
  T his final chapter on mental aspects of flying looks at philosophical or attitudinal approaches to peak performance flying. Some of the concepts introduced tie together information and concepts from preceding chapters. 
  Comfort Zone 
  For the vast majority of pilots, most of their flying will be well within the structural and performance limits of the aircraft they fly and will, therefore, be well within the comfort zone of the experienced operator. There are, however, numerous situations that may cause you to feel uncomfortable at the controls. 
  There are many times when optimized performance (aircraft or personal) is required; well within the aircraft limits but that are taxing on the pilot and can stretch their comfort levels. If you are unfamiliar with the equipment you’re operating, time is critical, a complex operation requires task prioritization, it is crucial to optimize the aircraft performance or fly at the edge of its envelope, then you may very well find yourself operating at the very edges of your comfort zone. 
  When you are unfamiliar with the aircraft type you are flying or a more complex operational environment, it can sometimes feel as if everything is happening very quickly. In fact, it’s almost as if you can’t keep up or don’t have time to think. You almost feel as if you are trying to hold on to the horizontal stabilizer as the aircraft rockets away from you! With experience, your comfort zone expands as you become more comfortable with and accustomed to the speed and feel of the aircraft and you consequently feel confident flying in your new aircraft type or role. 
- 
- 
- 
- 
- 
- 
+
  Falling behind the aircraft; hanging on by the tail. 
- 
+
  Some pilots adapt more quickly than others to faster aircraft, a change of seat, or a new role. This adaptability doesn’t necessarily mean they are better pilots, just that they can expand the limits of their comfort zone more quickly. So what can we do to stretch our comfort zone? 
  Firstly, if it’s a case of you feeling as though things are happening too fast, as though you’re rushing, it may just mean you’re not looking or thinking far enough ahead. Being able to manage higher performance aircraft does not require thinking faster (we can only think at one speed), it requires thinking further ahead and anticipating. As an extreme example, the SR-71 had a minimum turning radius at altitude of about 80 nautical miles. If an SR-71 pilot waited until over a waypoint to begin a turn onto their next track, they would be creating work for themselves fixing the resulting track error on the next leg. Pick up your vision, or anticipate earlier, and your comfort zone will expand. 
  If you feel uncomfortable or lose confidence when loaded up or task-saturated, another way to stretch your comfort zone is to fly an aircraft that is more capable or complex than the one you normally operate (obviously this won’t always be practical). You could also take on duties beyond your normal role under the supervision of an instructor or safety pilot. By becoming accustomed to being loaded up, when you return to a normal workload it feels easy. The true objective is to help delay the point at which you begin to feel overloaded. 
@@ -1912,68 +1100,23 @@
  To be better, to improve as a pilot, or to be able to readily optimize the operation of your aircraft, your comfort zone will need to extend to at least the limits of your aircraft. In other words, if you are not comfortable flying the aircraft close to its operational limits (e.g., at maximum crosswind, maximum take-off weight, short strips) you will not be able to maximize your performance or fully utilize the aircraft. If we can stretch our comfort zone to at least encompass the operational envelope of the aircraft we fly, we can minimize the chances of finding ourselves in uncomfortable situations. 
  To expand our performance limits takes experience and constantly pushing the limits of your comfort zone. When we are talking about optimizing the performance of the aircraft, however, or operating it at its performance limits, we are talking in finites. There is no stretching to be had. The limits are limits, they are there for our safety, and we can’t breach them. However, there are many situations that will require us to optimize aircraft performance within very fine margins or even approach operational limits. The importance of precision when operating at the edges of the performance or operational envelope can bring with it a whole new level of anxiety and stress but, once again, there are ways we can expand our comfort zone so that we can be comfortable in these scenarios. 
  If you are a fighter or aerobatic pilot, you will no doubt sometimes push your aircraft to the very edge of its performance limits. Pilots familiar with operating on the edge of the stall or minimizing turn radius know that optimized flying at the performance limits means that sometimes you will exceed those limits, fall out of a maneuver or not have the aircraft performing optimally. For example, to fly a minimum radius turn, to get the g-load and speed exactly right, it’s a matter of flying a little over, under, over, under, over, until you average out being right at the very knife edge of optimized performance. Sure, you need to be smooth and tidy, but there are times when you can take that approach a little too far. If, for example, you have never pushed the aircraft deep into the buffet until you have stalled, how do you know how close to the limit you are? 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  If you need to optimize performance, explore the aircraft’s behavior. 
- 
-             
- 
- 
- 
-   
+
  If the type of flying you do (e.g., aerobatics or air combat maneuvering) necessitates you flying right up to an actual structural limitation, the importance of not exceeding those limits may be a cause of significant discomfort. Discomfort can cause us to stiffen up and this, in turn, inhibits real finesse on the controls right when finesse and a deft touch is precisely what is required. Some pilots understand that there may be a certain level of discomfort (or stress) when operating towards an aircraft limit, but they are uncomfortable with that. It’s like they know they need to be on that ragged edge but they don’t feel at home there. 
  Consider that the mental image you may need is of being slightly uncomfortable, but (and this is important) being comfortable being uncomfortable. Use mental imagery of other situations where you’ve not felt comfortable in the past. Replay anything that felt uncomfortable in the past and feel your comfort level matching it. Then see your comfort “envelope” stretching with everything you did feeling more and more comfortable. See yourself craving a little bit of uncomfortableness. Feel your body tingle with that uncomfortable feeling but still breathing normally and getting a big kick out of the feeling. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Be comfortable being uncomfortable. 
- 
-             
- 
- 
- 
-   
+
  Part of being comfortable is being prepared and ready for any condition or situation. For many pilots, the sight of the windsock rigidly at right angles to the runway sends them into a fit of nervousness and undermines their confidence. They “know” they are not good in a crosswind and therefore they are not good in a crosswind. Other pilots get a big grin at even the thought of it beginning to blow. It’s related to being comfortable being uncomfortable. But part of it is just feeling ready, which is another thing for which you can use mental imagery. 
  See, feel, and hear yourself being competent in all the tough stuff. Build a program for feeling comfortable when you’re uncomfortable and know that when you’re uncomfortable, other pilots are also uncomfortable. The difference is you’re ready for it; you’ve prepared, and therefore you’re comfortable being uncomfortable. 
  The best pilots love any condition or situation. It’s as if they get better when the conditions are worse; the tougher and more demanding the conditions, the more at home they are. They get to demonstrate to themselves that they are great pilots. You want to be comfortable being uncomfortable, no matter the conditions. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Be prepared by preparing mentally. 
- 
-             
- 
- 
- 
-   
+
  Apart from the use of mental imagery, the next step in stretching your comfort zone is to do so with an experienced instructor. You can still feel uncomfortable and push the limits, but you know that you’ll be safe as the instructor is there to make sure of that. If you go out and explore the limits of your airplane alone, then you may be setting up for disaster. Lots of pilots have killed themselves trying to teach themselves aerobatics or trying new things without having had the proper training or experience. Being uncomfortable is fine as long as it’s very carefully managed and, most preferably, with an experienced instructor with you. 
  To improve your performance level - to stretch the limits of your comfort zone - you have to push your limits in small increments, progressively. Some pilots never go beyond their comfort zone and never improve. Others go too far, too soon. If you take too big a leap, at best, you won’t improve. At worst, you will exceed an aircraft limit or crash! 
  If you are exploring your limits on your own, make sure you leave room for error. For example, say you are going out to practice spinning in a single-seater aerobatic aircraft for the first time. You may have a low-level aerobatic endorsement, but why start out spinning to your limits? Consider starting out with a “pull out or bail out” limit: e.g., “If I lose control and have not recovered by 3,000 feet, I’m parachuting out.” If you start feeling uncomfortable, listen to the little voice and don’t ignore the hairs on the back of your neck standing up. Back off, or knock off, the drill until you’ve established why you are uncomfortable. Sometimes being uncomfortable, but listening to that little voice and responding, keeps us safe. 
@@ -2000,25 +1143,10 @@
  Moderation can in fact help increase your motivation level. Taking a break from flying to the point where you miss it may be just what the motivation doctor ordered. Because it costs so much to get more flying hours in your log book, most pilots do not have to worry about flying too often! 
  Flying can be such an all-encompassing passion that many pilots spend practically 24 hours a day, seven days a week eating, breathing, and living flying. If that is you, when you finally get behind the controls of your aircraft some of the passion and burning desire to fly may be gone. 
  Keep your flying in perspective and a balance in your life. Remember why you fly. Do not take yourself, your career or your flying too seriously. Have fun. After all, that is why you started flying, wasn’t it? You may have to remind yourself of that now and then! 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Focus on what you love about flying. 
- 
-             
- 
- 
- 
-   
+
  Having said that, it is your level of commitment and burning desire that will determine more than anything else how well you perform and how far you go career-wise in professional flying (if that is your goal). 
  Much of your motivation comes from your expectations as to how you will do. If you believe you will not do well, most likely your motivation to do what is necessary to maximize your performance will not be there. Of course, this leads to a self-fulfilling prophecy. You don’t expect to do well, so you don’t prepare, which leads to poor performance, which leads to a poor result, which meets your expectations. 
  Again, this is why it is so important to focus on your performance and not the result. There is never any reason you cannot perform at your maximum so there should never be any reason to become demotivated. 
@@ -2035,24 +1163,17 @@
  Then write down why you want to achieve that level of success. Is it to make lots of money, have lots of fame, feel good about yourself, for the sense of accomplishment, to fulfill the dreams of a parent, for the thrill of controlling an aircraft, to win competitions, or because you haven’t found anything else at which you are truly proficient? 
  The point is, the reason doesn’t matter. One reason is not any better than another. The key is to know why, for your own personal motivation. The more honest you are with yourself, the more effective this information will be to your motivation level. When you need that little “pick-me-up,” focus on your ideal level of success and the reasons you want them to come to fruition. 
  As we mentioned, success (and feelings of success), leads to further success. Take some time to recall and write down at least three of the best performances of your life. These do not have to have anything to do with flying or have resulted in a victory or high grade. They can be how you performed in school, in another sport, something you accomplished in a job, or about a relationship. Make a note of how you felt before, during, and after these performances. Recall every detail you can about them. Relive them and write them down. Then, go back and read them now and then or update them with new experiences. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_12
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Pilot As Athlete 
- 
+
  I s a pilot an athlete? At the end of the day, who cares? It takes great physical skill and endurance to fly an aircraft well, not to mention the mental demands. If you want to be even the slightest bit successful in flying, you need to be in good physical condition. If you want to make flying your profession, it helps to be in very good condition. 
  Physical Fitness 
  Flying fighter or aerobatic aircraft at the limit of their envelopes requires aerobic fitness, muscle strength, flexibility, and proper nutritional habits. Without these, you will lack the strength and endurance to not only be successful but also to fly safely. Using the controls and dealing with the tremendous g-forces on your body demands a great deal more than most people think, especially with the extreme heat you may have to work in wearing helmets, g-suits, parachutes, or other safety equipment. 
@@ -2073,25 +1194,10 @@
  It is a well-known fact that an athlete’s diet is extremely important to their performance. Athletes from all fields are known to tailor their diets to the specific needs of their sports with both nutrition and hydration plans for training and competing. A pilot is no different. If you want to perform at your peak, follow a proper diet. Talk to a doctor or certified nutritionist. 
  Finally, do you drink much? How about smoking? We all know that alcohol and cigarettes affect your health. Even if there is a one-in-a-million chance that they could slow your reactions, affect your vision, or decrease your cardiovascular level, consider whether you want to take that chance. How committed are you to operating at your peak? 
  The effects of alcohol on your body and mind can last for a long time. It slows your reaction time, dulls your senses, and slows your ability to make decisions. Taking drugs to improve your performance is a major mistake. Not only will it not help, but it’s also very dangerous. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  If you want to perform at your absolute peak, you owe it to yourself to be as physically fit as possible. 
- 
-             
- 
- 
- 
-   
+
  Sleep 
  Another performance cue that pilots can borrow from the athletes’ playbook is the emphasis they put on getting adequate sleep. Athletes have long realized that, in addition to physical conditioning and sensible eating, the quality and amount of sleep they get plays a major role in their performance and results. The quality and amount of sleep athletes get can often be the key to winning. 
  While modern science cannot fully explain why we sleep, it generally accepts that it serves as a recovery period after being awake and prepares us for our next period of wakefulness. As such, our recent sleep history has a significant impact on our ability to perform at our peak. 
@@ -2137,33 +1243,21 @@
           •    Avoid stimulation before sleep: While activities like phoning home, watching television, catching up on emails or surfing the net may seem relaxing to you, in reality, they provide stimulation and engage your mind. By avoiding stimulating activities 30 minutes before sleep, you will ensure that you don’t begin to associate the bed with these activating tasks. Instead, do only mundane, unstimulating tasks or chores to allow your mind to slow down in preparation for sleep. 
           •    Relaxation: There are numerous routines you can go through to remove some of the major roadblocks to sleep. Instead of lying awake dwelling on thoughts and worries you need to address, or chores you haven’t done, put aside time before sleeping to write down anything on your mind so you can put it aside and address it the next day. Stretching, self-massage, or foam-rolling, muscle relaxation, and stress management techniques can relieve tension and help you fall asleep more quickly. Create the expectation of sound sleep by telling yourself that you are going to fall asleep easily and then wake before your alarm feeling alert and refreshed. If you wake up once or twice during the night, this is normal; don’t get stressed about it. 
           •    Create associations between your bed and sleep: As we have already stated, it is our subconscious habits and body rhythms that are the strongest determinant of when we fall asleep. Use your bed only for sleep or making love. Study in your office and watch television in your lounge room. If you’re in a hotel, go to a café, hotel lobby, or sit at the desk in your room but leave the bed for sleep. Furthermore, if you aren’t sleepy, don’t go to bed. Once you do go to bed, if you can’t sleep after 20 to 30 minutes, get back up. We can’t force ourselves to sleep, so lying awake in bed only serves to create associations between your bed and sleeplessness. When establishing these habits, you may stay up later for a few days, but then natural sleepiness will start to occur earlier. 
- 
- 
- 
- 
- 
- 
+
  Countdown to sleep. 
- 
+
  We will close out our discussion on sleep with a relatively recent theory on overcoming jet lag. Scientists have based this theory on the internal food clock which helps animals regulate sleep. This food clock is largely dormant in humans but can be activated by controlled fasting. Scientists theorize that fasting on long-haul flights before eating at the next meal time of the new time zone can help quickly reset your internal clock. Food for thought? 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_13
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Cockpit Comfort 
- 
+
  C ockpit comfort may seem like a strange topic to cover in a book about peak performance flying but being comfortable in the aircraft is critical. If you’re uncomfortable, not only will it take more physical energy to fly, it will also be overly tiring and affect you mentally. A painful body will reduce your concentration level. So, if you want to fly an aircraft to the best of your ability, you must first be seated properly in the cockpit or flight deck. 
  Aviation and motorsport have a lot in common and not just through shared engineering concepts, aerodynamics, and a closely-related history. Just like aviators, race drivers sit in the cockpits of expensive, sophisticated machinery while manipulating controls with their hands and feet. Just like aviators, feedback of a driver’s control inputs comes from sensory perception and gauges. In Europe, both are called pilots, and you could never argue that race drivers are not operating at the extreme limits of performance! So, what can we learn about the importance of a good seat from these ground-bound pilots? Top pilots in Indy Car and Formula One will spend dozens of hours working to make their seat fit just right and then fine-tune it all season long. 
  Never underestimate the importance of your position and comfort in the aircraft seat, particularly when beginning a new type rating or endorsement. Many student pilots, or experienced pilots doing a new type rating, are so wrapped up in getting prepared for their first few lessons that they forget to pay attention to establishing a good seating position. 
@@ -2174,25 +1268,10 @@
  You should also be able to fully depress the rudder pedals and actuate the brakes while still having a slight bend in your legs. This leg position is not only the least tiring (especially in an engine-out case for a multi-engine aircraft) but allows for ideal modulation of the brakes as you will be able to depress them by pivoting your feet at the ankles, not moving your entire leg in mid-air. You want to use the balls of your feet on the pedals. They are the strongest and most sensitive part of the foot. 
  If you are a competition aerobatics pilot or air racer, it is worth investigating the possibility of having a seat or seat insert custom-built for you. With a little thought and preparation, you can mold a seat yourself using expandable foam. This simple operation can greatly improve your flying performance. Use a two-part foam (available at fiberglass shops) poured into a plastic bag between your body and the seat shell or cockpit tub to form a solid polyurethane shell. Before pouring, be sure to cover everything (and we mean everything!) with plastic garbage bags as the foam is practically impossible to remove after it has set onto something. Upon removing the plastic bags, you can trim off the excess and use the body-shaped foam as either a seat insert or as a mold to make a carbon-fiber or fiberglass seat (if allowed by the aviation regulators in the country in which you live). Special memory-foam cushions made especially for pilots are also worth considering. One advantage of these is that you can carry them with you and use them in multiple aircraft types you might fly. You may want to ascertain the fire resistance of the material of manufacture. 
  Anytime you modify or adjust your seating position on the ground, you have to realize it will only be on the runway and in the air that you will know for sure how it feels. Once you have a seating position that works for you, make sure you jot down some notes on how to recreate this seating position consistently. Are there certain parts of the aircraft cockpit that line up when in this position? What can you see in your peripheral vision that would help you recreate this position? Where are you looking in relation to the glare shield? How many clicks up or forward is the seat if it has set positions? How many winds from full forward or aft is the rudder pedal adjustment? Manufacturers of more sophisticated aircraft may have fitted eye guides for lining up an ideal eye position. If your aircraft has them, use them. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Establish a good seating position. 
- 
-             
- 
- 
- 
-   
+
  Tarmacs are dirty and greasy areas so make sure you check your feet before climbing into your seat. Make sure that both the pedals and the bottom of your shoes are dry and clean. Having wet or greasy feet slipping on the rudder pedals or brakes does not lend itself to a peak performance on the runway or in the air! Aerobatic, air race, or fighter pilots may even want to resort to having a crewmember wipe their shoes with a clean rag before getting into the aircraft. Once again using a motorsport example, at wet races, Formula One drivers are sometimes seen being taken to their cars on a cart and being lifted straight from the cart into the cockpit of the car so that their feet won’t get wet. Others wear plastic bags over their shoes. 
  Not only are the safety harnesses in an aircraft there in case of a crash, but they also help support your body. If you own your aircraft, only use the very best seat belts and take good care of them. Keep them clean and inspect them often for wear and damage. Adjust them so they hold your body firmly and comfortably. Remember, they will stretch and loosen throughout the progression of a flight (particularly the shoulder harnesses) so ensure you can reach down and tighten them while flying. 
  If the type of flying you do involves abrupt or violent maneuvering, make sure any part of the cockpit that you could come in contact with during a flight is covered with a high-density foam rubber or consider wearing knee or elbow pads. Bruising and pain are not conducive to good concentration over a long weekend of flying competition aerobatics! 
@@ -2201,24 +1280,17 @@
  Other possible sources of sensory stimuli which will reduce performance, and therefore should be considerations for cockpit comfort, are excessive noise, vibration, and odors. Is your hearing protection adequate? What can you do to help eliminate vibration and smells entering the cockpit? 
  If you wear a parachute when you fly, as many competition aerobatic pilots do, make use of a qualified rigger to ensure it is both comfortable and worn correctly. Not all parachutes are equal; some are quite comfortable, and some are like sitting on a bag of potatoes (which would quite obviously be an unwelcome distraction when trying to concentrate fully on the task at hand). The parachute may even form part of the seat, and there are companies that can make custom cushioning to go with the parachute/seat combination. 
  Finally, do everything possible to help keep the cockpit temperature comfortable. If it is hot, make sure the air ducts are functioning and positioned to direct air at you. A hot or cold cockpit of an aircraft will adversely affect your stamina and performance. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Chapter_14
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  The Peak Performance Pilot 
- 
+
  I magine the pilot operating at the absolute peak of their profession. What makes them different from the average pilot? Let’s assume we are all born with the same amount of natural flying talent. Assuming we have the basic physical design, we all have the ability to be a flying superstar, a peak performance pilot. In other words, no one is born to be a pilot. If there is a difference between our peak performance pilot and you today, it is simply a result of what the two of you have done with the talent with which you were born. There were probably several events in the peak performance pilot’s life that have enabled them to take the basic talent they were born with and turn that talent into the superstar piloting abilities they demonstrate today. 
  You now know the value of being integrated (whole-brained) to achieving peak performance. Many children do not do enough integrating physical movement as babies to become as integrated as possible. The baby that does not do much “cross-crawling” action may not become as integrated as early in life. This lack of integration leads to a child who might stay away from physical activities because they have formed a belief that, “I’m not very good at it.” 
  Our peak performance pilot develops along a very different path. As a small child, they become integrated. The child feels and acts more coordinated. Comments from outside sources (parents, friends, coaches, etc.) serve to reinforce this belief system. They are encouraged to participate in numerous sports which leads to the further development of their coordination and sensory input skills. Success encourages the child to do even more physical movement which even further enhances brain integration. 
@@ -2226,109 +1298,42 @@
  We’re not suggesting that our peak performance pilot necessarily developed these abilities at a conscious level. We guess they “stumbled” into most of the techniques, just like many people do who become good at a physical task. On top of that, we suspect they learned some techniques in a very specific manner. 
  You see, much of the development of the peak performance pilot’s natural talent was a result of the environment they grew up in and the learning strategies they used. Assuming they started life with the same talent level as everyone around them, they were able to take that talent and develop it and enhance it faster. 
  The main ingredient that superstars of any pursuit have (that mere stars may not) is the ability to learn quickly. That is what gives them the edge. It doesn’t matter how much natural talent you believe you were born with, it is what you do with that talent that will determine the result. If you learn how to learn, and learn how to be better and smarter than other people with similar talent, you will be miles ahead. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Learn how to learn, and you will never stop improving. 
- 
-             
- 
- 
- 
-   
+
  Of course, the ability to learn quickly is not enough on its own. Peak performance in any pursuit doesn’t happen without some effort. Our peak performance pilot is probably well-known for the amount of time they spend working out physically and preparing mentally. You can probably think of a pilot you know, admire, or even envy that fits the description of our peak performance pilot. When you look at all the hard work they have put into developing their ability you have to ask, “Is that natural talent or hard work that got them to where they are?” 
  Have you ever seen a young and upcoming sportsperson who seems destined for greatness but whose career fizzles out to nothing? Their early performances appear to be effortless and gifted, and yet they just don’t cut it in the big league when destiny calls. This outcome tends to support the theory that it’s not how much talent you’re born with that’s going to make the difference, it’s what you do with that talent. 
  To do anything with your talent, you need to begin with an open or growth-oriented mindset - a mindset that is constantly looking for ways to improve. It’s a mindset of wanting to work harder at becoming better than anyone else. It’s an understanding that it’s through effort that any amount of talent you currently have will turn into something special. It’s knowing that, no matter how easy it’s been to be successful so far, you now need to work harder than anyone else to get to the very top. That’s the attitude that every great champion or superstar has ever had. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Be open to ever-improvement. 
- 
-             
- 
- 
- 
-   
+
  The aviation world is littered with pilots who were successful early in their careers, developed an attitude of, “I’m great, I’m gifted, and therefore I will make it to the top with this natural talent,” but didn’t amount to anything or even left the profession altogether. It takes commitment to doing what it takes to become as successful as you desire. It’s going to take effort; it’s going to take an open mind, even a craving, for learning and improvement. A desire to learn is a critical factor to success. It can inspire you to do whatever it takes to prepare. 
  There’s also no doubt that your level of success is directly proportional to your level of preparation. It’s no fluke that interviews with successful athletes will often focus on their preparation. Success and preparation come together. That’s all well and good for professional athletes who spend all their waking hours preparing to win, you say, but what about the poor amateur pilot? 
  The pilot operating at their peak never quits trying to get better still. If you want to be the world aerobatic champion or win the Reno Air Races, that’s a given. What isn’t a given is the attitude that even the most low-key amateur pilot needs to perform at their peak or just to have more fun. If thirty minutes a day is too much for you to commit to being the best pilot you possibly can be then, that’s okay. As long as you realize that you won’t improve much without some commitment of time to prepare. It’s okay as long as you don’t feel bitter or frustrated that you’re not improving as much or as quickly as other pilots who probably are committing time for preparation. We can’t emphasize this enough: the more you put into becoming a better pilot, the more fun you will have. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  The more you put into becoming a better pilot, the more fun you will have! 
- 
-             
- 
- 
- 
-   
+
  One of the things that will help you succeed in reaching your peak as a pilot is not letting your current successes or setbacks affect your attitude or mindset. You need to see the positives in practically everything that happens to you. If you’re not performing as you would like, happily focus on making things better. If you are performing well, happily focus on performing even better still. Your concentration of effort should always be on thinking about how you can always be performing better. The key is that you need to be always improving. Remember also to concentrate on performance over results. Great pilots focus more energy on ensuring their performance is at its maximum, trusting that that will look after the results, rather than any other focus. They know that they can’t control the results, but they can control their performance and ultimately it is their performance that will dictate the result. 
  You can also be sure that successful athletes included mental imagery as part of their preparation. You can use mental imagery to change your focus away from the results and onto your performance. Rather than doing mental imagery of achieving a certain result, do mental imagery of flying the aircraft perfectly. So, rather than having expectations, you are focused on your potential, on the possibilities. Rather than focusing on the result, see, feel, and hear yourself performing at your best, no matter what the conditions or competition levels are. Be open to whatever could happen if you perform at your very best, flying the aircraft consistently and accurately. 
  You also need to take full responsibility for whatever happens, good or bad, and not make excuses. What matters is performing at one’s best, learning how to become even better, and not blaming others for what happens. 
  Before you close your mind to what we’ve just said and think, “Oh, that’s fine for a young pilot who’s trying to become the next big thing, I just want to have fun doing what I do at my level,” think again. There are just as many amateur pilots who are putting in the effort to improve as there are young, up-and-coming world aerobatic champions. All around the world, there are amateur pilots, pilots who are older, pilots who are not out to become world aerobatic champions who still have the attitude that they can improve and are willing to do what it takes to do so. Why? For one reason, it’s more fun! In the end, that’s why anyone should fly and why you should put in the effort it takes to be successful: to have fun. 
-   
- 
- 
- 
- 
- 
- 
- 
- 
-             
- 
+
  PERFORMANCE TIP 
  Have Fun! 
- 
-             
- 
- 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Appendix_1
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Appendix A: Performance Tips 
- 
+
  •    The better the quality and the more quantity of input from your senses that you can process, the better the output and the better your performance will be. [ p15 ] 
  •    Every day, practice being aware. [ p30 ] 
  •    The more reference points you have, the fewer errors you will make. [ p37 ] 
@@ -2371,24 +1376,17 @@
  •    Be open to ever-improvement. [ p152 ] 
  •    The more you put into becoming a better pilot, the more fun you will have! [ p153 ] 
  •    Have fun! [ p153 ] 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Appendix_2
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Appendix B: Self-Coaching 
- 
+
  This list of sample self-coaching questions is not meant to be definitive or exhaustive. It serves purely to act as a guide to get you started developing your own list of self-coaching questions best suited to your needs. 
  Pre-Flight and Engine Start 
  •    Did I ensure that all required documentation was on board? 
@@ -2545,24 +1543,17 @@
  •    Did I remember to use anti-ice and de-ice as appropriate? 
  •    Were any non-normal conditions, systems anomalies or parameter exceedances picked up and the correct handling procedures applied? 
  •    Did I apply appropriate task prioritization? 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Appendix_3
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Appendix C: Resources 
- 
+
  Internet 
  www.performancepilot.net 
  Books 
@@ -2582,117 +1573,63 @@
  The Open Mind, Dawna Markova 
  The Power Behind Your Eyes, Robert-Michael Kaplan 
  Thinking Body, Dancing Mind, Chungliang Al Huang and Jerry Lynch 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Acknowledgments
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Acknowledgements 
- 
+
  A huge thank you to Andrew, Anthony, Barry, Brent, Chris, Feng, George, Jaimie, Mark, Marq, Maz, Robin, Russell, Thomas, and Zoë. Our book is all the better for your invaluable contributions. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Backmatter_1
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Summary 
- 
- 
- 
- 
- 
- 
- 
+
  Download this summary from www.performancepilot.net/summary 
- 
- 
- 
- 
- 
- 
- 
+
  Download this summary from www.performancepilot.net/summary 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Backmatter_2
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  My Notes 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Backmatter_3
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Author
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  About the Authors 
- 
+
  Ross Bentley 
- 
- 
- 
- 
- 
+
  I n 30 years, Ross has had four parallel careers. The most visible has been as a professional race car driver. Ross pursued a dream that he’d had since he was five years old: to race Indy Cars. He reached that goal in the early 90s, racing against the likes of Mario and Michael Andretti, Al Unser Jr, Nigel Mansell, Emerson Fittipaldi and Bobby Rahal. He then moved to racing sports cars, winning the 1998 United States Road Racing Championship, driving for the factory-backed PTG BMW M3 team. A definite highlight was winning the Rolex 24 Hours at Daytona in 2003. 
  His least-visible career is as entrepreneur and business owner. Ross is the founder, or co-founder, and builder of five companies. Through all phases of a business, from initial concept to planning stages, and through funding to maturation, he’s lived the adrenaline rush of the start-up, as well as the trials and tribulations of growth and day-to-day operations. While each company has had its challenges, it’s what he’s learned from the experiences that have been most meaningful to him. 
  Ross is also an established author. In 1997, he wrote his first book, Speed Secrets, about the art and science of race car driving. Since then, he’s added seven more titles to the series, as well as one on karting. Ross loves to write and, at the time of publication, is currently working on a few more projects, including those focused on performance in the workplace for leaders, managers, and employees. 
@@ -2700,32 +1637,21 @@
  Ross enjoys sharing his knowledge and experience, whether he’s conducting a seminar or giving a keynote speech. He has presented to corporate sales teams, government agencies, military flying units, service clubs, at industry conferences, and to a variety of automotive groups. 
  As a self-confessed learning junkie, Ross has extensively studied neuroscience, kinesiology, business practices, management technique, marketing, finance, sports psychology, coaching, and human learning. Ross’s specialty, however, is in bringing out the best performance in individuals and teams, no matter the environment. His overriding passion is performance. 
  Phil Wilkes 
- 
- 
- 
- 
- 
+
  P hil is a professional pilot. His eclectic flying career has spanned both military and civil aviation, in regional, domestic, and international operations. In the military, Phil was the academic dux of his pilot course and flew both jet-trainers and as the captain of military transport aircraft. The general-aviation phase of his career included low-level aerial power-line survey, managing and flying for a flying school and charter business, and fly-in fly-out staff changeovers for mining companies. He has flown turbo-props for a night freighter company and for a regional airline with the longest route structure of any turbo-props-based airline in the world. He has also flown both short and long haul types for the most iconic of Australian carriers. 
  Over his nearly 30 years as a pilot, to date, Phil has logged over 13,000 hours in 30 different types including HS748, Metro 23, Fokker Friendship, Shorts 360, DHC8, Boeing 747 (pilot and flight engineer licenses), Boeing 737 and Airbus A330. Phil also has considerable experience teaching aircraft systems and performance as well as aerodynamics. Phil loves to teach, holds a Certificate in Vocational Instruction, and has also worked as a management and leadership trainer in a military officer training establishment, driving coach, and ski instructor. 
  In his spare time, Phil is an amateur race car driver and used the techniques in Ross’s motorsport books to achieve three state titles and a Rookie of the Year award. It was Phil’s exposure to Ross’s books that lead to their collaboration on this book for pilots. 
- 
+
  OceanofPDF.com 
- 
 
 ---
 
 ## Index
 
- 
- 
  Performance Pilot 
- 
- 
- 
- 
- 
+
  Index 
- 
+
  Ab initio, 91 
  Abnormal, 8 , 16 , 51 , 52 , 58 , 59 , 61 , 64 , 69 , 80 , 104 , 124 , 147 , 159 
  Aches, 138 , 139 , 142 
@@ -3323,6 +2249,5 @@
  Yeager, Chuck, 8 , 132 
  Yoda, 110 
  Yoke. See Controls 
- 
+
  OceanofPDF.com 
- 

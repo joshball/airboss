@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.4
 Title:           Cross-Country Through a Valley at 3,000
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11, FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AC-2', 'RM-2', 'CJ-1', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Overwhelmed VFR Pilot
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Visibility 5 miles but hazy. Clouds building ahead. Terrain rises from 1,500 to 2,500 MSL in the next 10 miles. Student is following the GPS magenta line and hasn't looked outside in 30 seconds.
 studentSpeech:GPS says 22 miles to the next checkpoint. We're making good time.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Visibility 3 miles. Cloud base appears to be at 3,500. Terrain ahead rises to 2,800 MSL -- only 200 feet of clearance if ceiling is where it looks. Student is squinting through the windscreen.
 studentSpeech:It's getting kind of hazy... but I can still see the ridge. Should we keep going?
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 2b
 
-```
+```text
 id:           tick_2b
 scene:        Student has processed the coaching. Looks at the terrain chart, then outside. Visibility steady at 3 miles but not improving.
 studentSpeech:I think we should... maybe turn back? But we're so close to the checkpoint.
@@ -114,7 +114,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 3a
 
-```
+```text
 id:           tick_3a
 scene:        Visibility dropping to 2 miles. Cloud base at 3,200 -- you're only 200 feet below it. Terrain ahead is disappearing into haze. Student's scan has degraded to fixation on the GPS.
 studentSpeech:The GPS says we can go around the ridge to the right...
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Visibility 1 mile. In and out of cloud wisps. Student has entered a shallow right turn following the GPS suggestion. Spatial orientation deteriorating -- attitude indicator shows 15-degree bank the student hasn't noticed.
 studentSpeech:I can't see the ridge anymore. Where did it go?
@@ -156,7 +156,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3a -> tick_4 -> terminal_unsafe (ask/prompt/coach)
               \         \          \-> terminal_safe (direct/take_controls)
                \         \-> terminal_safe (direct/take_controls)

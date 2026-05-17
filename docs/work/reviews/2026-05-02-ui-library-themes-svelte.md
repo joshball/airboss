@@ -73,6 +73,7 @@ Fix: Token-pass MarkdownBody specifically. Map the rem values onto the existing 
 ### MINOR: Dialog / Drawer / SnoozeReasonPopover / JumpToCardPopover / ConfirmAction re-instantiate the focus trap on every keystroke
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/Dialog.svelte` (lines 49-53)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/Drawer.svelte` (lines 62-66)
 - `/Users/joshua/src/_me/aviation/airboss/libs/ui/src/components/SnoozeReasonPopover.svelte` (lines 96-100)
@@ -121,6 +122,7 @@ Fix: Materialize once with `const indices = $derived(Array.from({ length: totalC
 ### NIT: HelpLayout / HelpSearchPalette use raw breakpoint pixels in media queries
 
 Files:
+
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/ui/HelpLayout.svelte` (line 147 -- `@media (max-width: 640px)`)
 - `/Users/joshua/src/_me/aviation/airboss/libs/help/src/ui/HelpSearchPalette.svelte` (line 380 -- `@media (max-width: 640px)`)
 
@@ -130,17 +132,17 @@ Fix: Add the breakpoint to the theme contract (or a dedicated `breakpoints` toke
 
 ## Status as of 2026-05-04
 
-| # | Severity | Finding | Verdict |
-|---|----------|---------|---------|
-| 1 | Major | `ConfirmDialog` passes `open` without `bind:` | CLOSED -- `ConfirmDialog.svelte:54` accepts `open = $bindable(false)` and forwards via `<Dialog bind:open ... />` (`:105`). |
-| 2 | Minor | `HandbookSectionNotes` `$effect` clobbers in-flight typing | CLOSED -- now uses `let value = $state(notesMd)` initial-value pattern with `state_referenced_locally` ignore. |
-| 3 | Minor | `HelpSearchPalette` raw `rgba()` + breakpoint | CLOSED -- scrim is `var(--overlay-scrim)`, breakpoint annotated with `/* --ab-breakpoint-md */` comment. CSS @media can't reference CSS custom properties so the comment is the canonical pattern. |
-| 4 | Minor | `MarkdownBody` raw rem values | CLOSED -- spacing values migrated to `--space-*` tokens; remaining literal values are legitimate sizing dimensions (img, scroll-margin, list indent). |
-| 5 | Minor | Focus-trap re-instantiated per keystroke | CLOSED -- traps allocated once per modal-open, released on cleanup (see correctness #7). |
-| 6 | Nit | `CitationPicker` `activeType` self-loop effect | CLOSED -- write wrapped in `untrack` (`CitationPicker.svelte:94`). |
-| 7 | Nit | `CitationPicker` debounce timer redundant clear | CLOSED -- the cleanup-only path is the canonical Svelte 5 pattern; the leading clear was already harmless and was removed during the search-debounce refactor. |
-| 8 | Nit | `JumpToCardPopover` `Array.from(...)` per render | CLOSED -- memoized via `const indices = $derived(...)` (perf #11). |
-| 9 | Nit | `HelpLayout` / `HelpSearchPalette` raw breakpoint pixels | CLOSED -- the `/* --ab-breakpoint-md */` comment beside each `@media` is the canonical pattern; CSS `@media` cannot consume CSS custom properties. |
+| #   | Severity | Finding                                                    | Verdict                                                                                                                                                                                            |
+| --- | -------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Major    | `ConfirmDialog` passes `open` without `bind:`              | CLOSED -- `ConfirmDialog.svelte:54` accepts `open = $bindable(false)` and forwards via `<Dialog bind:open ... />` (`:105`).                                                                        |
+| 2   | Minor    | `HandbookSectionNotes` `$effect` clobbers in-flight typing | CLOSED -- now uses `let value = $state(notesMd)` initial-value pattern with `state_referenced_locally` ignore.                                                                                     |
+| 3   | Minor    | `HelpSearchPalette` raw `rgba()` + breakpoint              | CLOSED -- scrim is `var(--overlay-scrim)`, breakpoint annotated with `/* --ab-breakpoint-md */` comment. CSS @media can't reference CSS custom properties so the comment is the canonical pattern. |
+| 4   | Minor    | `MarkdownBody` raw rem values                              | CLOSED -- spacing values migrated to `--space-*` tokens; remaining literal values are legitimate sizing dimensions (img, scroll-margin, list indent).                                              |
+| 5   | Minor    | Focus-trap re-instantiated per keystroke                   | CLOSED -- traps allocated once per modal-open, released on cleanup (see correctness #7).                                                                                                           |
+| 6   | Nit      | `CitationPicker` `activeType` self-loop effect             | CLOSED -- write wrapped in `untrack` (`CitationPicker.svelte:94`).                                                                                                                                 |
+| 7   | Nit      | `CitationPicker` debounce timer redundant clear            | CLOSED -- the cleanup-only path is the canonical Svelte 5 pattern; the leading clear was already harmless and was removed during the search-debounce refactor.                                     |
+| 8   | Nit      | `JumpToCardPopover` `Array.from(...)` per render           | CLOSED -- memoized via `const indices = $derived(...)` (perf #11).                                                                                                                                 |
+| 9   | Nit      | `HelpLayout` / `HelpSearchPalette` raw breakpoint pixels   | CLOSED -- the `/* --ab-breakpoint-md */` comment beside each `@media` is the canonical pattern; CSS `@media` cannot consume CSS custom properties.                                                 |
 
 ## Convergent layout effect-mirror -- closed in this audit
 

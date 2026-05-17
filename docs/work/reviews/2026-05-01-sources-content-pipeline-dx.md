@@ -31,12 +31,14 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `scripts/sources/verify-urls.ts:198`, `scripts/sources/verify-urls.ts:147-180`
 - **Problem**: ADR 022 mandates that `verify-urls` surface 404s with copy-pasteable remediation. The AIM section-count branch does this beautifully (lines 167-173: prints the YAML field path, the actual count, and a `suggested edit (replace the array literal): sections_per_chapter: [...]` literal). The flat-URL branch, however, emits only `ERROR: ac.yaml#ac-61-65-j -- HEAD HTTP 404 for https://www.faa.gov/.../AC_61-65J.pdf`. There is no "the URL field for `ac-61-65-j` lives in `scripts/sources/config/ac.yaml` -- update the `url:` value and re-run", no link to the FAA's AC search page, and (notably) no suggestion that the operator might also need to bump `edition:` in the YAML when the FAA rotates a URL because of a revision bump.
 - **Fix**: In `verify-urls.ts:198`, change the error template to a multi-line block that mirrors the AIM-count branch:
+
     ```text
     ERROR: ac.yaml#ac-61-65-j
       HEAD HTTP 404 for https://www.faa.gov/.../AC_61-65J.pdf
       Edit: scripts/sources/config/ac.yaml entry doc_id=ac-61-65-j
       Hint: FAA URL rotations often coincide with revision bumps; check whether the `edition:` field also needs to advance. Confirm with the FAA AC search: https://www.faa.gov/regulations_policies/advisory_circulars/
     ```
+
     The `fieldPath` already carries enough info to compute the absolute file path; just emit it explicitly. Same treatment for the handbooks ancillary, AIM whole-doc, and AIM appendix branches.
 
 ### MAJOR: `runExtractHandbooks` silently falls back to system `python3` with no preflight diagnostics
@@ -44,6 +46,7 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `scripts/sources/extract/handbooks.ts:20-30`
 - **Problem**: When `tools/handbook-ingest/.venv/bin/python` is missing, the script falls back to `python3` on PATH and just runs the command. If the venv was never created (a fresh checkout), or if `python3` exists but the user did not run `pip install -e .[dev]`, the failure mode is: the python interpreter starts up, then dies inside `python -m ingest` with an `ImportError: No module named ingest` (or a missing dep). The bun-side log says only `> /usr/bin/python3 -m ingest phak --edition FAA-H-8083-25C` followed by the python error, with no breadcrumb pointing the operator at `tools/handbook-ingest/README.md`'s "Setup" section.
 - **Fix**: Before spawning, check whether the venv exists; if it does not, emit a one-line warning that points at the setup steps:
+
     ```text
     > /usr/bin/python3 -m ingest phak --edition FAA-H-8083-25C
     note: tools/handbook-ingest/.venv not found; using system python3.
@@ -51,6 +54,7 @@ The single critical finding is partial-state recovery on download failures: when
             cd tools/handbook-ingest && python3 -m venv .venv && source .venv/bin/activate && pip install -e .[dev]
           See tools/handbook-ingest/README.md.
     ```
+
     Then keep the existing fallback (it's the right escape hatch for CI), but make the failure mode legible.
 
 ### MAJOR: `register handbooks` and `register cfr` swallow argument errors that the dispatcher's `--help` doesn't surface
@@ -76,6 +80,7 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `scripts/setup.ts:113-141`
 - **Problem**: A fresh checkout runs `bun run setup`, which configures `/etc/hosts`, deps, `.env`, db container, schema, and dev users. It does NOT run `bun run sources download` (or even mention it). The contributor then runs `bun run sources extract handbooks phak ...` and hits `manifest not found` errors deep in the pipeline because no source bytes exist in the cache. Per the runbook in `docs/ingestion-pipeline/handbook-onboarding-checklist.md`, this is expected operator workflow; but the setup script doesn't mention it.
 - **Fix**: At the end of `setup.ts:139`, add a one-line pointer:
+
     ```text
     Ready. Start the app with: bun run dev
     Then open http://study.airboss.test:9600 and sign in as joshua@ball.dev / Pa33word!
@@ -85,6 +90,7 @@ The single critical finding is partial-state recovery on download failures: when
       bun run sources download         # fetch source bytes into the cache (~hundreds of MB, FAA-rate-limited)
     See scripts/README.sources.md.
     ```
+
     Optionally make this a fenced step in `setup.ts` ("seed source cache (optional, can take 10+ min)") gated on a flag like `--sources` so a contributor opting in gets it as part of `bun run setup --sources`.
 
 ### MAJOR: `read manifest` two-tier validation has no fix-it message for unknown handbook doc slugs
@@ -104,9 +110,11 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `libs/sources/src/fix.ts:106-108`
 - **Problem**: `applyFixes` returns `{filesScanned, filesModified, identifiersStamped}` and the CLI prints exactly those three counts: `Reference identifier --fix: 12 lesson(s) scanned, 4 file(s) modified, 11 identifier(s) stamped.` That tells you *something* changed but not *what*. ADR 019 §1.3's spec for auto-stamp explicitly says the CLI should "clearly say what it modified and log a diff hint." The skill prompt asks for this explicitly.
 - **Fix**: Per-file logging when verbose, plus an aggregate hint without it. After the summary line, append `(diff with: git diff <files>)`. To enable per-file logging, capture the per-edit `relPath -> Edit[]` mapping inside `applyFixes` and (in verbose mode) emit one line per modified file:
+
     ```text
     course/regulations/week-04-part-91-general-and-flight-rules/05-preflight-action.md: 3 identifier(s) stamped
     ```
+
     Add `--verbose` flag to `runFixCli`. Mirror the same convention used by `bun run sources download`.
 
 ### MINOR: Lesson-parser ruleId `-1` is opaque in the CLI output
@@ -132,11 +140,13 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `libs/sources/src/validator.ts:79-90`
 - **Problem**: The user-facing message `Transitional reference; cannot publish. Replace with a real identifier or wait for ingestion of the relevant corpus.` is the spec-mandated string and ships verbatim, which is correct. However: the validator emits one ERROR per occurrence (which is right -- one bad `unknown:foo` ref = one ERROR), but per ADR 019 §1.7 "the publish gate fails when ANY identifier is `unknown:`," the failure should be summarized at the bottom of the run with a count: `${N} unknown: identifiers prevent publish`. Instead, the CLI just prints all the row-0 messages and the standard `1 ERROR(s)` count. The author has no fast way to see whether all errors are unknown (= all transitional, can defer) or whether some are real registry mismatches (= actually broken).
 - **Fix**: In `runCli` (libs/sources/src/check.ts:143), partition findings into "transitional `unknown:` errors" vs "real errors" and emit a footer like:
+
     ```text
     Reference identifier validation: 12 ERROR(s)
       - 11 transitional (unknown: corpus)
       - 1 real (registry mismatch / parse error)
     ```
+
     The transitional count gives authors a concrete signal ("deferred ingestion = N references; real bug = M references").
 
 ### NIT: Color helpers don't honor `FORCE_COLOR=1` for piped output
@@ -156,6 +166,7 @@ The single critical finding is partial-state recovery on download failures: when
 - **File**: `scripts/sources/discover/run.ts:222-237`, `scripts/sources.ts:91-108`
 - **Problem**: `runDiscoverErrata` returns 0 (no candidates), 1 (every handbook scrape failed), or 2 (new candidates found). The COMMAND_HELP entry for `discover-errata` describes what it does but doesn't document these exit codes; an operator wiring this into a cron or CI gate has to read the source. Given the discovery system already auto-opens GitHub issues, this is a minor wart.
 - **Fix**: Add a `Exit codes` line to the help block:
+
     ```text
     Exit codes:
       0 -- run completed; no new candidates

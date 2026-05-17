@@ -81,38 +81,38 @@ Body sections (in order):
 
 ### Tier 1 -- full treatment in this pass
 
-| # | Slug                  | Short code   | Category           |
-|---|-----------------------|--------------|--------------------|
-| 1 | metar                 | METAR        | surface-obs        |
-| 2 | taf                   | TAF          | terminal-forecast  |
-| 3 | gfa                   | GFA          | area-product       |
-| 4 | airmet                | AIRMET       | hazard-advisory    |
-| 5 | sigmet                | SIGMET       | hazard-advisory    |
-| 6 | convective-sigmet     | WST          | hazard-advisory    |
-| 7 | pirep                 | UA / UUA     | pirep              |
-| 8 | winds-temps-aloft     | FB           | winds-temps        |
-| 9 | surface-analysis      | (chart)      | chart              |
-| 10| prog-chart            | (chart)      | chart              |
+| #   | Slug              | Short code | Category          |
+| --- | ----------------- | ---------- | ----------------- |
+| 1   | metar             | METAR      | surface-obs       |
+| 2   | taf               | TAF        | terminal-forecast |
+| 3   | gfa               | GFA        | area-product      |
+| 4   | airmet            | AIRMET     | hazard-advisory   |
+| 5   | sigmet            | SIGMET     | hazard-advisory   |
+| 6   | convective-sigmet | WST        | hazard-advisory   |
+| 7   | pirep             | UA / UUA   | pirep             |
+| 8   | winds-temps-aloft | FB         | winds-temps       |
+| 9   | surface-analysis  | (chart)    | chart             |
+| 10  | prog-chart        | (chart)    | chart             |
 
 ### Tier 2 -- stub pages in this pass, full treatment later
 
-| #  | Slug                       | Short code   | Category           |
-|----|----------------------------|--------------|--------------------|
-| 11 | speci                      | SPECI        | surface-obs        |
-| 12 | cwa                        | CWA          | hazard-advisory    |
-| 13 | g-airmet                   | G-AIRMET     | hazard-advisory    |
-| 14 | radar-mosaic               | (chart)      | radar-sat          |
-| 15 | satellite                  | (chart)      | radar-sat          |
-| 16 | icing-fip-cip              | FIP / CIP    | icing-turb         |
-| 17 | turbulence-gtg             | GTG          | icing-turb         |
-| 18 | ceiling-visibility-analysis| CVA          | chart              |
-| 19 | freezing-level             | FZLVL        | chart              |
-| 20 | convective-outlook         | (SPC outlook)| chart              |
-| 21 | sigwx-prog                 | (high alt)   | chart              |
-| 22 | volcanic-ash-advisory      | VAA          | hazard-advisory    |
-| 23 | tropical-cyclone-advisory  | TCA          | hazard-advisory    |
-| 24 | weather-tfr                | TFR          | tfr-notam          |
-| 25 | weather-notam              | NOTAM-D wx   | tfr-notam          |
+| #   | Slug                        | Short code    | Category        |
+| --- | --------------------------- | ------------- | --------------- |
+| 11  | speci                       | SPECI         | surface-obs     |
+| 12  | cwa                         | CWA           | hazard-advisory |
+| 13  | g-airmet                    | G-AIRMET      | hazard-advisory |
+| 14  | radar-mosaic                | (chart)       | radar-sat       |
+| 15  | satellite                   | (chart)       | radar-sat       |
+| 16  | icing-fip-cip               | FIP / CIP     | icing-turb      |
+| 17  | turbulence-gtg              | GTG           | icing-turb      |
+| 18  | ceiling-visibility-analysis | CVA           | chart           |
+| 19  | freezing-level              | FZLVL         | chart           |
+| 20  | convective-outlook          | (SPC outlook) | chart           |
+| 21  | sigwx-prog                  | (high alt)    | chart           |
+| 22  | volcanic-ash-advisory       | VAA           | hazard-advisory |
+| 23  | tropical-cyclone-advisory   | TCA           | hazard-advisory |
+| 24  | weather-tfr                 | TFR           | tfr-notam       |
+| 25  | weather-notam               | NOTAM-D wx    | tfr-notam       |
 
 ## Execution
 

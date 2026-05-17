@@ -25,15 +25,15 @@ Related docs:
 
 ### Route files (`+page.svelte` / `+layout.svelte`)
 
-| Don't                                                        | Do                                                                       | Why                                                                 |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------- |
-| Hand-roll `.btn` / `.banner` / `.field` / `.chip` in a route | Import `Button`, `Banner`, `TextField`, `Badge`, `Card` from `@ab/ui`    | Primitives ship focus-ring + tokens + a11y; routes drift without    |
-| Paint colors, paddings, shadows, radii in route `<style>`    | Route CSS carries layout only: `display`, `grid`, `gap`, `position`      | `scripts/check/styles.ts` enforces; tokens reskin, hex can't        |
-| `font-size: 0.875em` or `font-size: 14px`                    | `font-size: var(--ab-font-size-sm)` in `rem`                             | `em` parent-relative breaks root scale; `px` breaks zoom            |
-| Inline `humanize(domain)` / `labelFor(x)` helper             | Hoist into `@ab/utils` or `@ab/constants` label maps                     | Same helpers reinvented across pages drift in copy                  |
-| Magic route strings: `<a href="/plans/new">`                 | `<a href={ROUTES.PLAN_NEW}>` or typed `ROUTES.PLAN(id)`                  | Renaming a route misses inline strings                              |
-| `+page.ts` that loads DB-backed data                         | `+page.server.ts` so server-only libs stay out of the client bundle      | `@ab/aviation` and help data leaked through `+page.ts` (PR #54)     |
-| Root-level `const x = someServerFn()` at module scope        | `load` in `+page.ts`/`+page.server.ts` + `let { data } = $props()`       | Module-scope reads stale out the moment inputs become reactive      |
+| Don't                                                        | Do                                                                    | Why                                                              |
+| ------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Hand-roll `.btn` / `.banner` / `.field` / `.chip` in a route | Import `Button`, `Banner`, `TextField`, `Badge`, `Card` from `@ab/ui` | Primitives ship focus-ring + tokens + a11y; routes drift without |
+| Paint colors, paddings, shadows, radii in route `<style>`    | Route CSS carries layout only: `display`, `grid`, `gap`, `position`   | `scripts/check/styles.ts` enforces; tokens reskin, hex can't     |
+| `font-size: 0.875em` or `font-size: 14px`                    | `font-size: var(--ab-font-size-sm)` in `rem`                          | `em` parent-relative breaks root scale; `px` breaks zoom         |
+| Inline `humanize(domain)` / `labelFor(x)` helper             | Hoist into `@ab/utils` or `@ab/constants` label maps                  | Same helpers reinvented across pages drift in copy               |
+| Magic route strings: `<a href="/plans/new">`                 | `<a href={ROUTES.PLAN_NEW}>` or typed `ROUTES.PLAN(id)`               | Renaming a route misses inline strings                           |
+| `+page.ts` that loads DB-backed data                         | `+page.server.ts` so server-only libs stay out of the client bundle   | `@ab/aviation` and help data leaked through `+page.ts` (PR #54)  |
+| Root-level `const x = someServerFn()` at module scope        | `load` in `+page.ts`/`+page.server.ts` + `let { data } = $props()`    | Module-scope reads stale out the moment inputs become reactive   |
 
 ### Server load functions and form actions
 
@@ -65,17 +65,17 @@ The app has a **dual-gate auth contract**. Document it; don't remove it.
 
 ### Svelte 5 components
 
-| Don't                                                                              | Do                                                                                                                     | Why                                                                  |
-| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Use `$effect` to seed state from a prop                                            | `let x = $state<T>(propX ?? '')` -- seed at init, not in effect                                                        | Effect re-fires and overwrites user typing (login page svelte #4)    |
-| `$effect(() => { x = computeFromY(y); })`                                          | `const x = $derived(computeFromY(y))`                                                                                  | Derived is the right tool; effect-as-computed creates loops          |
-| `$effect` that reads and writes the same `$state`                                  | Restructure to `$derived`, or guard with `untrack(() => read())`                                                       | Classic infinite loop; HelpSearchPalette shipped one (PR #54)        |
-| Use `$effect` to reset state on slot change                                        | `{#key slotIndex}<Child />{/key}` to remount                                                                           | Remount is cheaper and can't race with renders                       |
-| `let foo = $state(bar)` where `bar` is a `$props()` value (and parent can re-seed) | Declare the prop reactive via `$derived`, OR add `// svelte-ignore state_referenced_locally` comment confirming intent | Compiler warns; silent prop drift otherwise                          |
-| `{#each items as item}` (no key)                                                   | `{#each items as item (item.id)}`                                                                                      | Unkeyed each rerenders all children on reorder, loses focus/input    |
-| `$state` on a value that never changes                                             | Plain `const`                                                                                                          | `$state` has cost; static values don't need it                       |
-| `createEventDispatcher`, `<slot>`, `$:`, `$app/stores`                             | Callback props, `{@render children()}`, `$derived`/`$effect`, `$app/state`                                             | All Svelte 4 legacy; linter and reviewers will flag                  |
-| Rune logic in `.ts`                                                                | `.svelte.ts` for modules that use runes outside components                                                             | Required by the compiler                                             |
+| Don't                                                                              | Do                                                                                                                     | Why                                                               |
+| ---------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Use `$effect` to seed state from a prop                                            | `let x = $state<T>(propX ?? '')` -- seed at init, not in effect                                                        | Effect re-fires and overwrites user typing (login page svelte #4) |
+| `$effect(() => { x = computeFromY(y); })`                                          | `const x = $derived(computeFromY(y))`                                                                                  | Derived is the right tool; effect-as-computed creates loops       |
+| `$effect` that reads and writes the same `$state`                                  | Restructure to `$derived`, or guard with `untrack(() => read())`                                                       | Classic infinite loop; HelpSearchPalette shipped one (PR #54)     |
+| Use `$effect` to reset state on slot change                                        | `{#key slotIndex}<Child />{/key}` to remount                                                                           | Remount is cheaper and can't race with renders                    |
+| `let foo = $state(bar)` where `bar` is a `$props()` value (and parent can re-seed) | Declare the prop reactive via `$derived`, OR add `// svelte-ignore state_referenced_locally` comment confirming intent | Compiler warns; silent prop drift otherwise                       |
+| `{#each items as item}` (no key)                                                   | `{#each items as item (item.id)}`                                                                                      | Unkeyed each rerenders all children on reorder, loses focus/input |
+| `$state` on a value that never changes                                             | Plain `const`                                                                                                          | `$state` has cost; static values don't need it                    |
+| `createEventDispatcher`, `<slot>`, `$:`, `$app/stores`                             | Callback props, `{@render children()}`, `$derived`/`$effect`, `$app/state`                                             | All Svelte 4 legacy; linter and reviewers will flag               |
+| Rune logic in `.ts`                                                                | `.svelte.ts` for modules that use runes outside components                                                             | Required by the compiler                                          |
 
 ### UI primitives and a11y
 

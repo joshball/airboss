@@ -38,7 +38,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 `apps/study` and `libs/*` are largely disciplined on the "house style" rules: no `any`, no non-null assertions, no Svelte 4 patterns, no raw `nanoid()/ulid()` outside `@ab/utils`, no relative cross-lib imports, ROUTES used consistently for `goto`/`redirect`/`href`. The critical propagatable issue is in `apps/sim` (the Phase 0.5 playground from PR #53): the entire panel/instrument layer bypasses the design-token system -- **216 hex color occurrences** across 16 `.svelte` files, raw `rgba(0,0,0,0.75)` backdrops, bare `font-family: ui-monospace, monospace`, and literal rem/px spacing instead of `var(--ab-space-*)`. This is the pattern that will get copied into every future instrument panel, every new sim scenario surface, and eventually spatial/avionics apps. Secondary issues: `--ab-*` tokens are sometimes used with hex fallbacks (`var(--ab-color-fg, #666)`), magic-string `kind === 'card'` comparisons in the session engine despite `SESSION_ITEM_KINDS` existing in `@ab/constants`, inconsistent media-query breakpoints (no breakpoint tokens exist), and 208 `as Foo` type assertions -- most are defensible (enum narrowing after `includes(x as T)` guards, `Record<string, string>` label indexing), but several could use proper Zod parsing.

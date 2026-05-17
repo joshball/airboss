@@ -56,15 +56,15 @@ canonical form (consumed by the study app); the MD is generated from it
 
 #### Inputs
 
-| Flag                | Meaning                                                                                            |
-| ------------------- | -------------------------------------------------------------------------------------------------- |
-| `--count`           | Total products to generate                                                                         |
-| `--products`        | Which product types to include (comma list)                                                        |
-| `--layout`          | `interleaved` = each product followed by its explanation; `two-section` = all products, then all explanations |
-| `--seed`            | Deterministic seed for reproducible packs                                                          |
-| `--from-scenarios` | `all` or comma-list of scenario slugs to sample from                                               |
-| `--coverage`        | `balanced` = even token-family coverage; `random` = uniform pick; `gap-filling` = prefer families catalog has but current pack missed |
-| `--output`          | Output basename (writes `.md` + `.json`)                                                           |
+| Flag               | Meaning                                                                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `--count`          | Total products to generate                                                                                                            |
+| `--products`       | Which product types to include (comma list)                                                                                           |
+| `--layout`         | `interleaved` = each product followed by its explanation; `two-section` = all products, then all explanations                         |
+| `--seed`           | Deterministic seed for reproducible packs                                                                                             |
+| `--from-scenarios` | `all` or comma-list of scenario slugs to sample from                                                                                  |
+| `--coverage`       | `balanced` = even token-family coverage; `random` = uniform pick; `gap-filling` = prefer families catalog has but current pack missed |
+| `--output`         | Output basename (writes `.md` + `.json`)                                                                                              |
 
 #### Output JSON shape
 
@@ -142,18 +142,18 @@ subcommand + new study-app routes.
 
 #### Exercise types
 
-| Type                    | Prompt                                                                                | Answer                                       |
-| ----------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------- |
-| `decode-token`          | Single token: "What does `BKN012` mean?"                                              | "Broken layer at 1,200 ft AGL"               |
-| `decode-group`          | Token group: "Decode this wind group: `23015G24KT 180V260`"                           | structured fields                            |
-| `decode-walk-metar`     | Full METAR shown; the student walks token-by-token, answering one question per token. See "Token-walk drill model" below. | per-token grading |
-| `encode-from-english`   | "Wind from 240° true at 12 kt, gusting 22, varying 200-280" → student types METAR wind | exact string match                           |
-| `triage-this-metar`     | Full METAR + scenario prompt ("VFR flight, 2 hrs, you're at the fuel pump"); student picks the three triage drivers | multi-select with rationale |
-| `synoptic-from-product` | Full METAR + 3 candidate synoptic stories; pick the right one                         | single-choice                                |
-| `taf-change-group`      | TAF with one change group highlighted; student decodes validity + condition shift     | structured                                   |
-| `find-the-gotcha`       | Real METAR with a subtle issue (AO1+near-freezing, etc.); student names the gotcha   | tagged answer                                |
-| `compare-two`           | Two METARs from same system 100 NM apart; student names the trend                     | open or tagged                               |
-| `tricky-decode`         | Unusual METAR (VV, SLPNO, M1/4SM, +TSGR, etc.); per-token walk biased to gotcha tokens | per-token grading                           |
+| Type                    | Prompt                                                                                                                    | Answer                         |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `decode-token`          | Single token: "What does `BKN012` mean?"                                                                                  | "Broken layer at 1,200 ft AGL" |
+| `decode-group`          | Token group: "Decode this wind group: `23015G24KT 180V260`"                                                               | structured fields              |
+| `decode-walk-metar`     | Full METAR shown; the student walks token-by-token, answering one question per token. See "Token-walk drill model" below. | per-token grading              |
+| `encode-from-english`   | "Wind from 240° true at 12 kt, gusting 22, varying 200-280" → student types METAR wind                                    | exact string match             |
+| `triage-this-metar`     | Full METAR + scenario prompt ("VFR flight, 2 hrs, you're at the fuel pump"); student picks the three triage drivers       | multi-select with rationale    |
+| `synoptic-from-product` | Full METAR + 3 candidate synoptic stories; pick the right one                                                             | single-choice                  |
+| `taf-change-group`      | TAF with one change group highlighted; student decodes validity + condition shift                                         | structured                     |
+| `find-the-gotcha`       | Real METAR with a subtle issue (AO1+near-freezing, etc.); student names the gotcha                                        | tagged answer                  |
+| `compare-two`           | Two METARs from same system 100 NM apart; student names the trend                                                         | open or tagged                 |
+| `tricky-decode`         | Unusual METAR (VV, SLPNO, M1/4SM, +TSGR, etc.); per-token walk biased to gotcha tokens                                    | per-token grading              |
 
 #### Token-walk drill model (replaces single-question "decode the whole METAR")
 
@@ -171,22 +171,22 @@ mastery get **repeated** within the same session and prioritized in the next.
 
 Every token in the parsed METAR maps to one of:
 
-| Token family                | Always asks?                | Question form                                                                  |
-| --------------------------- | --------------------------- | ------------------------------------------------------------------------------ |
-| Type indicator (METAR/SPECI) | Skip if mastered             | "Routine or special?"                                                          |
-| Station ID                  | Skip if mastered             | "Where is this airport?" (only asked occasionally; not a per-METAR drill axis) |
-| Date / time                 | Skip if mastered             | "Day, hour Z?" — auto-marked mastered after a few correct sessions             |
-| Modifier (AUTO/COR)         | Always when present          | "What does `AUTO` (or `COR`) tell you?"                                        |
-| Wind                        | Always — multiple sub-questions | direction → speed → gust → variability                                   |
-| Visibility                  | Always                       | "Decode `M1/4SM`" / "Decode `1 1/2SM`"                                         |
-| RVR                         | Always when present          | "Which runway? What value? What does `M` mean?"                                |
-| Weather phenomena           | Always when present, **one question per group** | "Decode `+TSRA`. Intensity? Descriptor? Phenomenon?"        |
-| Sky condition               | Always — **one per layer**   | per-layer cover + height; then a "what's the ceiling?" question                |
-| Temp / dew                  | Always                       | "Temp? Dew? Spread? What does the spread tell you?"                            |
-| Altimeter                   | Always (low cognitive cost — auto-masters fast) | "Altimeter value in inHg?"                              |
-| RMK tokens                  | Always when notable          | one question per significant remark (`SLPxxx`, `T-group`, `PK WND`, `LTGCG`, etc.) |
-| Composite "what's the ceiling?" | Always when ≥1 layer present | "Given the layers above, what's the operational ceiling?"                  |
-| Composite "triage drivers"  | Always after full walk       | "Of the tokens we walked, name the three drivers."                             |
+| Token family                    | Always asks?                                    | Question form                                                                      |
+| ------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Type indicator (METAR/SPECI)    | Skip if mastered                                | "Routine or special?"                                                              |
+| Station ID                      | Skip if mastered                                | "Where is this airport?" (only asked occasionally; not a per-METAR drill axis)     |
+| Date / time                     | Skip if mastered                                | "Day, hour Z?" — auto-marked mastered after a few correct sessions                 |
+| Modifier (AUTO/COR)             | Always when present                             | "What does `AUTO` (or `COR`) tell you?"                                            |
+| Wind                            | Always — multiple sub-questions                 | direction → speed → gust → variability                                             |
+| Visibility                      | Always                                          | "Decode `M1/4SM`" / "Decode `1 1/2SM`"                                             |
+| RVR                             | Always when present                             | "Which runway? What value? What does `M` mean?"                                    |
+| Weather phenomena               | Always when present, **one question per group** | "Decode `+TSRA`. Intensity? Descriptor? Phenomenon?"                               |
+| Sky condition                   | Always — **one per layer**                      | per-layer cover + height; then a "what's the ceiling?" question                    |
+| Temp / dew                      | Always                                          | "Temp? Dew? Spread? What does the spread tell you?"                                |
+| Altimeter                       | Always (low cognitive cost — auto-masters fast) | "Altimeter value in inHg?"                                                         |
+| RMK tokens                      | Always when notable                             | one question per significant remark (`SLPxxx`, `T-group`, `PK WND`, `LTGCG`, etc.) |
+| Composite "what's the ceiling?" | Always when ≥1 layer present                    | "Given the layers above, what's the operational ceiling?"                          |
+| Composite "triage drivers"      | Always after full walk                          | "Of the tokens we walked, name the three drivers."                                 |
 
 The "tricky ones are repeated" rule is operationalized two ways:
 
@@ -330,18 +330,18 @@ the input to the **next session sampler**, and the answer to the question
 Start easy, build up. The student progresses through tiers in the practice
 page rather than the catalog dumping everything at once.
 
-| Tier | What it tests                                                                              |
-| ---- | ------------------------------------------------------------------------------------------ |
-| 1    | One field at a time. Just wind. Just visibility. Just sky condition.                       |
-| 2    | Field-group decoding (full wind block, full sky block)                                     |
-| 3    | Full-METAR decode without time pressure                                                    |
-| 4    | Full-METAR decode under time pressure (60 s budget)                                        |
-| 5    | Triage drills (three drivers under a scenario constraint)                                  |
-| 6    | Synoptic interpretation (single METAR → identify the situation)                            |
-| 7    | Cross-station reasoning (two METARs → name the trend)                                      |
-| 8    | English-to-METAR encoding                                                                  |
-| 9    | Tricky / gotcha-heavy METARs (AO1+freezing, VV, SLPNO, RVR, +TSGR, +FC)                    |
-| 10   | TAF reasoning (change groups, amendments, validity windows)                                |
+| Tier | What it tests                                                           |
+| ---- | ----------------------------------------------------------------------- |
+| 1    | One field at a time. Just wind. Just visibility. Just sky condition.    |
+| 2    | Field-group decoding (full wind block, full sky block)                  |
+| 3    | Full-METAR decode without time pressure                                 |
+| 4    | Full-METAR decode under time pressure (60 s budget)                     |
+| 5    | Triage drills (three drivers under a scenario constraint)               |
+| 6    | Synoptic interpretation (single METAR → identify the situation)         |
+| 7    | Cross-station reasoning (two METARs → name the trend)                   |
+| 8    | English-to-METAR encoding                                               |
+| 9    | Tricky / gotcha-heavy METARs (AO1+freezing, VV, SLPNO, RVR, +TSGR, +FC) |
+| 10   | TAF reasoning (change groups, amendments, validity windows)             |
 
 CLI: `bun run wx-scenario practice --tier 3 --count 20 --output session.json` for
 offline / paper drills.

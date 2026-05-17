@@ -220,14 +220,14 @@ The first "real" cert most pilots hold. Subpart E is structured as:
 
 Same shape as subpart E, one level up. The parallel:
 
-| Topic                              | Private (E) | Commercial (F) |
-| ---------------------------------- | ----------- | -------------- |
-| Eligibility                        | §61.103     | §61.123        |
-| Aeronautical knowledge             | §61.105     | §61.125        |
-| Flight proficiency                 | §61.107     | §61.127        |
-| Aeronautical experience            | §61.109     | §61.129        |
-| Privileges and limitations (PIC)   | §61.113     | §61.133        |
-| Privileges and limitations (SIC)   | §61.117     | §61.135        |
+| Topic                            | Private (E) | Commercial (F) |
+| -------------------------------- | ----------- | -------------- |
+| Eligibility                      | §61.103     | §61.123        |
+| Aeronautical knowledge           | §61.105     | §61.125        |
+| Flight proficiency               | §61.107     | §61.127        |
+| Aeronautical experience          | §61.109     | §61.129        |
+| Privileges and limitations (PIC) | §61.113     | §61.133        |
+| Privileges and limitations (SIC) | §61.117     | §61.135        |
 
 **§61.129** -- 250 hours minimum, 100 PIC, 50 cross-country PIC, 10 of which by airplane, plus specific instrument time, complex/TAA time, night cross-country, and so on. The complex aircraft requirement (§61.129(a)(3)(ii)) was modified in 2018 to allow TAA (Technically Advanced Aircraft) as an alternative to a true complex.
 
@@ -237,13 +237,13 @@ Same shape as subpart E, one level up. The parallel:
 
 Same shape again, one level up. The parallel continues:
 
-| Topic                              | Commercial (F) | ATP (G)  |
-| ---------------------------------- | -------------- | -------- |
-| Eligibility                        | §61.123        | §61.153  |
-| Aeronautical knowledge             | §61.125        | §61.155  |
-| Flight proficiency                 | §61.127        | §61.157  |
-| Aeronautical experience            | §61.129        | §61.159 (airplane) / §61.161 (helicopter) |
-| Privileges and limitations (PIC)   | §61.133        | §61.167  |
+| Topic                            | Commercial (F) | ATP (G)                                   |
+| -------------------------------- | -------------- | ----------------------------------------- |
+| Eligibility                      | §61.123        | §61.153                                   |
+| Aeronautical knowledge           | §61.125        | §61.155                                   |
+| Flight proficiency               | §61.127        | §61.157                                   |
+| Aeronautical experience          | §61.129        | §61.159 (airplane) / §61.161 (helicopter) |
+| Privileges and limitations (PIC) | §61.133        | §61.167                                   |
 
 **§61.159** -- 1500 hours total, with subset requirements that include 500 cross-country, 100 night, 75 instrument, 250 PIC, and the famous ATP-CTP (ATP Certification Training Program) introduced after Colgan in 2013.
 

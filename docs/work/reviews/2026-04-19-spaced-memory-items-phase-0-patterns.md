@@ -34,7 +34,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 0 Patterns Review
 
 Scope: HEAD (`99c4c3b`) vs HEAD~1 (`cd43a21`). The commit ports auth, db, and logging

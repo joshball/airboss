@@ -16,42 +16,42 @@ The AC identifies six categories of automation hazard and three supporting sub-t
 
 ### Conceptual sub-areas
 
-| Sub-area | What it covers | AC basis |
-| --- | --- | --- |
-| Automation dependency | Inability to function when automation unavailable; lost pilotage/DR/VOR skills | A.1 main |
-| Automation fixation | Attention captured by display; heads-down time | A.1 main |
-| Mode confusion | Not understanding which mode is active/armed/capturing | A.1 main |
-| Database currency | Stale nav data, expired charts, outdated procedures in the box | A.1 main |
-| Automation complacency | Assuming the system is handling more than it is | A.1 main |
-| System limits and procedures | What the manufacturer says; what NOTAMs override | A.1 main |
-| Levels of automation | No single level appropriate for all situations; knowing when to disconnect | A.1 main |
-| Manual proficiency | Hand-flying, non-GPS nav, recovery from automation loss | A.1 main |
-| TAA definition and qualification | 14 CFR SS 61.1, SS 61.129(j); installed-component criteria | A.1.1 |
-| ADS-B | Out vs In; regulatory basis (SS 91.225/227); FIS-B weather latency | A.1.2 |
-| NextGen | PBN, ADS-B surveillance, modernized approach infrastructure | A.1.3 |
-| Transition training | Make/model/equipment-specific training from qualified CFI | A.1 main |
+| Sub-area                         | What it covers                                                                 | AC basis |
+| -------------------------------- | ------------------------------------------------------------------------------ | -------- |
+| Automation dependency            | Inability to function when automation unavailable; lost pilotage/DR/VOR skills | A.1 main |
+| Automation fixation              | Attention captured by display; heads-down time                                 | A.1 main |
+| Mode confusion                   | Not understanding which mode is active/armed/capturing                         | A.1 main |
+| Database currency                | Stale nav data, expired charts, outdated procedures in the box                 | A.1 main |
+| Automation complacency           | Assuming the system is handling more than it is                                | A.1 main |
+| System limits and procedures     | What the manufacturer says; what NOTAMs override                               | A.1 main |
+| Levels of automation             | No single level appropriate for all situations; knowing when to disconnect     | A.1 main |
+| Manual proficiency               | Hand-flying, non-GPS nav, recovery from automation loss                        | A.1 main |
+| TAA definition and qualification | 14 CFR SS 61.1, SS 61.129(j); installed-component criteria                     | A.1.1    |
+| ADS-B                            | Out vs In; regulatory basis (SS 91.225/227); FIS-B weather latency             | A.1.2    |
+| NextGen                          | PBN, ADS-B surveillance, modernized approach infrastructure                    | A.1.3    |
+| Transition training              | Make/model/equipment-specific training from qualified CFI                      | A.1 main |
 
 ### How the 10 scenarios cover A.1
 
-| Scenario | Sub-areas covered | Angle |
-| --- | --- | --- |
-| SCN 1.1: GPS Database Expired | Database currency, system limits | Student has expired data; 100-ft altitude discrepancy on approach. Tests: does the CFI catch it? |
-| SCN 1.2: Autopilot Mode Confusion | Mode confusion, levels of automation | Student in wrong vertical mode; crossing restriction bust. Tests: diagnosis under time pressure. |
-| SCN 1.3: RAIM Integrity Issue | System limits, manual proficiency | GPS RAIM unavailable at minimums. Tests: does CFI know what RAIM is, what to do, and how to teach it? |
-| SCN 1.4: Glass Cockpit Fixation | Automation fixation, automation dependency | Student heads-down on display, misses non-ADS-B traffic. Tests: recognizing over-reliance in a dynamic environment. |
-| SCN 1.5: ADS-B Weather Delay | ADS-B (FIS-B latency), automation complacency | Student uses 18-min-old weather for tactical avoidance. Tests: strategic vs tactical distinction. |
-| SCN 1.6: TAA Transition Briefing | TAA definition, transition training | Student confused by first TAA approach plate. Tests: teaching unfamiliar concepts by anchoring to known ones. |
+| Scenario                          | Sub-areas covered                             | Angle                                                                                                               |
+| --------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| SCN 1.1: GPS Database Expired     | Database currency, system limits              | Student has expired data; 100-ft altitude discrepancy on approach. Tests: does the CFI catch it?                    |
+| SCN 1.2: Autopilot Mode Confusion | Mode confusion, levels of automation          | Student in wrong vertical mode; crossing restriction bust. Tests: diagnosis under time pressure.                    |
+| SCN 1.3: RAIM Integrity Issue     | System limits, manual proficiency             | GPS RAIM unavailable at minimums. Tests: does CFI know what RAIM is, what to do, and how to teach it?               |
+| SCN 1.4: Glass Cockpit Fixation   | Automation fixation, automation dependency    | Student heads-down on display, misses non-ADS-B traffic. Tests: recognizing over-reliance in a dynamic environment. |
+| SCN 1.5: ADS-B Weather Delay      | ADS-B (FIS-B latency), automation complacency | Student uses 18-min-old weather for tactical avoidance. Tests: strategic vs tactical distinction.                   |
+| SCN 1.6: TAA Transition Briefing  | TAA definition, transition training           | Student confused by first TAA approach plate. Tests: teaching unfamiliar concepts by anchoring to known ones.       |
 
 **A.1 sub-areas with scenario coverage:** 8 of 12
 
 **A.1 sub-areas without dedicated scenarios:**
 
-| Sub-area | Coverage status | Notes |
-| --- | --- | --- |
-| Automation dependency (skill atrophy) | Partial -- SCN 1.4 touches it | No scenario tests the student who literally can't navigate without GPS |
-| Levels of automation | Implicit in SCN 1.2 | No scenario explicitly teaches "when to disconnect" as a decision point |
-| Manual proficiency | Implicit in SCN 1.3 | No scenario where the CFI must coach hand-flying after automation failure |
-| NextGen | Knowledge check only (M1-06) | AC says "overview level" -- knowledge check is appropriate per gap analysis |
+| Sub-area                              | Coverage status               | Notes                                                                       |
+| ------------------------------------- | ----------------------------- | --------------------------------------------------------------------------- |
+| Automation dependency (skill atrophy) | Partial -- SCN 1.4 touches it | No scenario tests the student who literally can't navigate without GPS      |
+| Levels of automation                  | Implicit in SCN 1.2           | No scenario explicitly teaches "when to disconnect" as a decision point     |
+| Manual proficiency                    | Implicit in SCN 1.3           | No scenario where the CFI must coach hand-flying after automation failure   |
+| NextGen                               | Knowledge check only (M1-06)  | AC says "overview level" -- knowledge check is appropriate per gap analysis |
 
 ### Candidate scenarios for A.1 expansion
 
@@ -79,34 +79,34 @@ The AC's scope is narrower than A.1 but conceptually deeper. ACS is both a docum
 
 ### Conceptual sub-areas
 
-| Sub-area | What it covers | AC basis |
-| --- | --- | --- |
-| ACS vs PTS | What changed; three dimensions (knowledge, risk management, skill) vs two (knowledge, skill) | A.12 main |
-| ACS as lesson planning tool | Using ACS to design instruction, not just prepare for checkrides | A.12 main |
-| ACS as debrief framework | Tracing errors to knowledge/risk/skill dimensions | A.12 main |
-| ACS as remediation tool | Designing targeted remediation based on which dimension is weak | A.12 main |
-| SS 61.14 IBR | 2024 final rule; 30 documents incorporated by reference; source currency implications | A.12 main |
-| Which ACS/PTS applies | Certificate/rating lookup; knowing where to find the current version | A.12 main |
-| Risk management as first-class dimension | The big conceptual shift -- skill mastery without risk awareness is not "ready" | A.12 main |
+| Sub-area                                 | What it covers                                                                               | AC basis  |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------- | --------- |
+| ACS vs PTS                               | What changed; three dimensions (knowledge, risk management, skill) vs two (knowledge, skill) | A.12 main |
+| ACS as lesson planning tool              | Using ACS to design instruction, not just prepare for checkrides                             | A.12 main |
+| ACS as debrief framework                 | Tracing errors to knowledge/risk/skill dimensions                                            | A.12 main |
+| ACS as remediation tool                  | Designing targeted remediation based on which dimension is weak                              | A.12 main |
+| SS 61.14 IBR                             | 2024 final rule; 30 documents incorporated by reference; source currency implications        | A.12 main |
+| Which ACS/PTS applies                    | Certificate/rating lookup; knowing where to find the current version                         | A.12 main |
+| Risk management as first-class dimension | The big conceptual shift -- skill mastery without risk awareness is not "ready"              | A.12 main |
 
 ### How the 10 scenarios cover A.12
 
-| Scenario | Sub-areas covered | Angle |
-| --- | --- | --- |
-| SCN 1.6: TAA Transition Briefing | ACS as lesson planning tool | Bridge scenario: A.1 content, A.12 assessment. Does the CFI plan using knowledge/risk/skill dimensions? |
-| SCN 1.7: Old Lesson Plan vs Current | ACS vs PTS, source currency | Peer teaching from PTS instead of ACS. How to intervene professionally. |
-| SCN 1.10: ACS Risk Management Debrief | Risk management as first-class dimension, ACS as debrief framework | The signature scenario. Perfect approaches + no risk awareness = not ready under ACS. |
+| Scenario                              | Sub-areas covered                                                  | Angle                                                                                                   |
+| ------------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| SCN 1.6: TAA Transition Briefing      | ACS as lesson planning tool                                        | Bridge scenario: A.1 content, A.12 assessment. Does the CFI plan using knowledge/risk/skill dimensions? |
+| SCN 1.7: Old Lesson Plan vs Current   | ACS vs PTS, source currency                                        | Peer teaching from PTS instead of ACS. How to intervene professionally.                                 |
+| SCN 1.10: ACS Risk Management Debrief | Risk management as first-class dimension, ACS as debrief framework | The signature scenario. Perfect approaches + no risk awareness = not ready under ACS.                   |
 
 **A.12 sub-areas with scenario coverage:** 4 of 7
 
 **A.12 sub-areas without dedicated scenarios:**
 
-| Sub-area | Coverage status | Notes |
-| --- | --- | --- |
-| ACS as remediation tool | Not covered | No scenario where the CFI designs targeted remediation using ACS dimensions |
-| SS 61.14 IBR | Micro lesson + knowledge check (M1-12) | Regulatory/factual -- knowledge check is appropriate |
-| Which ACS/PTS applies | Knowledge check only (M1-13) | Lookup skill -- knowledge check is appropriate |
-| ACS vs PTS (detailed comparison) | Implicit in SCN 1.7, 1.10 | No scenario that explicitly walks through the differences on a specific maneuver |
+| Sub-area                         | Coverage status                        | Notes                                                                            |
+| -------------------------------- | -------------------------------------- | -------------------------------------------------------------------------------- |
+| ACS as remediation tool          | Not covered                            | No scenario where the CFI designs targeted remediation using ACS dimensions      |
+| SS 61.14 IBR                     | Micro lesson + knowledge check (M1-12) | Regulatory/factual -- knowledge check is appropriate                             |
+| Which ACS/PTS applies            | Knowledge check only (M1-13)           | Lookup skill -- knowledge check is appropriate                                   |
+| ACS vs PTS (detailed comparison) | Implicit in SCN 1.7, 1.10              | No scenario that explicitly walks through the differences on a specific maneuver |
 
 ### Candidate scenarios for A.12 expansion
 
@@ -126,33 +126,33 @@ A.8 is unique among the 13 topics: it's inherently dynamic. The content changes 
 
 ### Conceptual sub-areas
 
-| Sub-area | What it covers | AC basis |
-| --- | --- | --- |
-| Why currency matters | Stale instruction is a safety problem, not just an administrative one | A.8 main |
-| Where to check | Federal Register, FAA orders, ACs, SAFOs, InFOs, FAA website | A.8 main |
-| How often to check | Continual monitoring vs occasional catch-up; triggered vs scheduled | A.8 main |
-| Recognizing stale material | Catching yourself or others teaching outdated content | A.8 main |
-| Source discrimination | Current primary guidance vs stale secondary summaries; official vs blog | A.8 main |
-| Specific regulatory changes | BasicMed, NOTAM format changes, IBR, Part 107, SFARs | A.8 main (dynamic) |
-| Provider update discipline | FIRC providers must update materials immediately when regulations change | A.8 main |
+| Sub-area                    | What it covers                                                           | AC basis           |
+| --------------------------- | ------------------------------------------------------------------------ | ------------------ |
+| Why currency matters        | Stale instruction is a safety problem, not just an administrative one    | A.8 main           |
+| Where to check              | Federal Register, FAA orders, ACs, SAFOs, InFOs, FAA website             | A.8 main           |
+| How often to check          | Continual monitoring vs occasional catch-up; triggered vs scheduled      | A.8 main           |
+| Recognizing stale material  | Catching yourself or others teaching outdated content                    | A.8 main           |
+| Source discrimination       | Current primary guidance vs stale secondary summaries; official vs blog  | A.8 main           |
+| Specific regulatory changes | BasicMed, NOTAM format changes, IBR, Part 107, SFARs                     | A.8 main (dynamic) |
+| Provider update discipline  | FIRC providers must update materials immediately when regulations change | A.8 main           |
 
 ### How the 10 scenarios cover A.8
 
-| Scenario | Sub-areas covered | Angle |
-| --- | --- | --- |
-| SCN 1.7: Old Lesson Plan vs Current | Recognizing stale material | Peer teaching from outdated PTS. Bridge with A.12. |
-| SCN 1.8: BasicMed Confusion | Specific regulatory changes, source discrimination | Returning pilot with layered BasicMed misconceptions. Extended diagnostic (20 min). |
-| SCN 1.9: NOTAM System Changes | Specific regulatory changes, how often to check | Student with outdated study guide. NOTAM format changes as specific content, but deeper lesson is source-currency discipline. |
+| Scenario                            | Sub-areas covered                                  | Angle                                                                                                                         |
+| ----------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| SCN 1.7: Old Lesson Plan vs Current | Recognizing stale material                         | Peer teaching from outdated PTS. Bridge with A.12.                                                                            |
+| SCN 1.8: BasicMed Confusion         | Specific regulatory changes, source discrimination | Returning pilot with layered BasicMed misconceptions. Extended diagnostic (20 min).                                           |
+| SCN 1.9: NOTAM System Changes       | Specific regulatory changes, how often to check    | Student with outdated study guide. NOTAM format changes as specific content, but deeper lesson is source-currency discipline. |
 
 **A.8 sub-areas with scenario coverage:** 4 of 7
 
 **A.8 sub-areas without dedicated scenarios:**
 
-| Sub-area | Coverage status | Notes |
-| --- | --- | --- |
-| Why currency matters | Micro lesson (M1-17) + knowledge check | Conceptual framing -- scenario not required |
-| Where to check | Knowledge check (M1-18) | Factual/procedural -- knowledge check appropriate |
-| Provider update discipline | Not covered and shouldn't be | This is about FIRC providers, not CFIs. Out of scope for learner-facing content. |
+| Sub-area                   | Coverage status                        | Notes                                                                            |
+| -------------------------- | -------------------------------------- | -------------------------------------------------------------------------------- |
+| Why currency matters       | Micro lesson (M1-17) + knowledge check | Conceptual framing -- scenario not required                                      |
+| Where to check             | Knowledge check (M1-18)                | Factual/procedural -- knowledge check appropriate                                |
+| Provider update discipline | Not covered and shouldn't be           | This is about FIRC providers, not CFIs. Out of scope for learner-facing content. |
 
 ### Candidate scenarios for A.8 expansion
 
@@ -170,38 +170,38 @@ A.8 is unique among the 13 topics: it's inherently dynamic. The content changes 
 
 Some scenarios serve multiple topics. This is deliberate -- it mirrors reality, where a CFI encounter involves tools, standards, and currency simultaneously.
 
-| Scenario | Primary topic | Secondary topics | Why multi-topic |
-| --- | --- | --- | --- |
-| SCN 1.6: TAA Transition Briefing | A.1 (TAA content) | A.12 (ACS lesson planning) | The content is avionics; the skill is standards-based instruction |
-| SCN 1.7: Old Lesson Plan vs Current | A.8 (stale material) | A.12 (PTS vs ACS) | The stale material IS the old standard |
-| SCN 1.4: Glass Cockpit Fixation | A.1 (automation fixation) | A.5 (safety trends -- near-miss data) | ADS-B blind spots are a current safety trend |
+| Scenario                            | Primary topic             | Secondary topics                      | Why multi-topic                                                   |
+| ----------------------------------- | ------------------------- | ------------------------------------- | ----------------------------------------------------------------- |
+| SCN 1.6: TAA Transition Briefing    | A.1 (TAA content)         | A.12 (ACS lesson planning)            | The content is avionics; the skill is standards-based instruction |
+| SCN 1.7: Old Lesson Plan vs Current | A.8 (stale material)      | A.12 (PTS vs ACS)                     | The stale material IS the old standard                            |
+| SCN 1.4: Glass Cockpit Fixation     | A.1 (automation fixation) | A.5 (safety trends -- near-miss data) | ADS-B blind spots are a current safety trend                      |
 
 ---
 
 ## What's Deliberately Excluded from Module 1
 
-| Excluded area | Why | Where it lives instead |
-| --- | --- | --- |
-| Instrument approach procedures in detail | A.1 teaches automation hazards, not approach procedure knowledge. IPCs and approaches are Module 5 territory. | Module 5 (A.9) |
-| Accident statistics and trends | A.5 data informs Module 2, not Module 1. Module 1 is about the current state of tools/standards/rules, not about what's going wrong. | Module 2 (A.5) |
-| Ethics of teaching with outdated material | A.10 covers professional ethics. Module 1 treats currency as a technical discipline, not a moral one. | Module 2 (A.10) |
-| Flight review procedures | A.9 covers evaluation events. Module 1's ACS content is about the framework, not the evaluation. | Module 5 (A.9) |
-| Helicopter-specific automation | A.1's AC text mentions rotorcraft briefly. Our scenarios are fixed-wing GA. Rotorcraft scenarios would require different aircraft models and different failure modes. | Out of scope (GA fixed-wing focus) |
-| Experimental/LSA avionics | The AC mentions "experimental aircraft" glass cockpits. Our scenarios assume certified avionics (G1000, GNS-series). Experimental avionics vary too widely to scenario-ize. | Out of scope |
+| Excluded area                             | Why                                                                                                                                                                         | Where it lives instead             |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Instrument approach procedures in detail  | A.1 teaches automation hazards, not approach procedure knowledge. IPCs and approaches are Module 5 territory.                                                               | Module 5 (A.9)                     |
+| Accident statistics and trends            | A.5 data informs Module 2, not Module 1. Module 1 is about the current state of tools/standards/rules, not about what's going wrong.                                        | Module 2 (A.5)                     |
+| Ethics of teaching with outdated material | A.10 covers professional ethics. Module 1 treats currency as a technical discipline, not a moral one.                                                                       | Module 2 (A.10)                    |
+| Flight review procedures                  | A.9 covers evaluation events. Module 1's ACS content is about the framework, not the evaluation.                                                                            | Module 5 (A.9)                     |
+| Helicopter-specific automation            | A.1's AC text mentions rotorcraft briefly. Our scenarios are fixed-wing GA. Rotorcraft scenarios would require different aircraft models and different failure modes.       | Out of scope (GA fixed-wing focus) |
+| Experimental/LSA avionics                 | The AC mentions "experimental aircraft" glass cockpits. Our scenarios assume certified avionics (G1000, GNS-series). Experimental avionics vary too widely to scenario-ize. | Out of scope                       |
 
 ---
 
 ## Coverage Summary
 
-| Metric | A.1 | A.8 | A.12 | Total |
-| --- | --- | --- | --- | --- |
-| Conceptual sub-areas | 12 | 7 | 7 | 26 |
-| Sub-areas with scenario coverage | 8 | 4 | 4 | 16 |
-| Sub-areas knowledge-check only | 1 | 2 | 2 | 5 |
-| Sub-areas uncovered | 3 | 1 | 1 | 5 |
-| Existing scenarios | 6 primary | 3 primary | 3 primary | 10 (with overlaps) |
-| Candidate expansion scenarios | 6 | 4 | 3 | 13 |
-| Questions | 48 (4 files) | 16 (1 file) | 16 (1 file) | 80 |
+| Metric                           | A.1          | A.8         | A.12        | Total              |
+| -------------------------------- | ------------ | ----------- | ----------- | ------------------ |
+| Conceptual sub-areas             | 12           | 7           | 7           | 26                 |
+| Sub-areas with scenario coverage | 8            | 4           | 4           | 16                 |
+| Sub-areas knowledge-check only   | 1            | 2           | 2           | 5                  |
+| Sub-areas uncovered              | 3            | 1           | 1           | 5                  |
+| Existing scenarios               | 6 primary    | 3 primary   | 3 primary   | 10 (with overlaps) |
+| Candidate expansion scenarios    | 6            | 4           | 3           | 13                 |
+| Questions                        | 48 (4 files) | 16 (1 file) | 16 (1 file) | 80                 |
 
 The 5 uncovered sub-areas are:
 

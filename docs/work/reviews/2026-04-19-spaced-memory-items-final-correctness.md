@@ -35,7 +35,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Correctness Review
 
 Scope: `git diff docs/initial-migration..HEAD` on branch `build/spaced-memory-items`
@@ -70,25 +69,25 @@ Three `[MAJOR]` issues to address before the user-facing test pass:
 
 ## Walkthrough against the test plan
 
-| ID     | Scenario                                          | Expected path exercised                                                                                             | Observed                                                                |
-| ------ | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| SMI-1  | Create a basic card                               | `newCardSchema` -> `createCard` tx -> insert card + card_state -> redirect to `ROUTES.MEMORY_CARD(id)`              | Correct                                                                 |
-| SMI-2  | Create with tags                                  | `parseTags` splits commas, trims, drops empties; stored as jsonb string[]                                           | Correct                                                                 |
-| SMI-3  | Validation rejects empty fields                   | Zod `trim().min(1)` on `front`/`back`; fail(400) with `fieldErrors` + `values` preserved                            | Correct                                                                 |
-| SMI-4  | Browse filters                                    | `narrowDomain` etc. narrow URL params; filters composed via `and(...)`, default status = ACTIVE                     | Correct                                                                 |
-| SMI-5  | Edit a personal card                              | `updateCard` checks `is_editable` and whitelists patch fields                                                       | Correct                                                                 |
-| SMI-6  | Dashboard due count                               | `getDashboardStats.dueNow` via `cardState.dueAt <= now AND card.status='active'`                                    | Correct                                                                 |
-| SMI-7  | Review flow first card                            | `getDueCards` -> front/answer -> `submitReview` tx                                                                  | Correct, but see [MAJOR] review advances on failure                      |
-| SMI-8  | FSRS scheduling                                   | `fsrsSchedule` with actual `lastReviewedAt` threaded via `card_state.lastReviewedAt`                                | Correct (Phase 2 fix landed)                                             |
-| SMI-9  | Again resets                                      | `prevState === REVIEW && result.state === RELEARNING` bumps `lapseCount`                                            | Correct                                                                 |
-| SMI-10 | Confidence slider                                 | `shouldPromptConfidence(cardId, now)` via djb2 on `cardId:YYYY-MM-DD`, compared to `CONFIDENCE_SAMPLE_RATE = 0.5`   | Correct -- deterministic per card per UTC day                            |
-| SMI-11 | Skip confidence                                   | `confidence: null` path, form omits the key, zod `.nullish()` accepts                                               | Correct                                                                 |
-| SMI-12 | No cards due                                      | `batch.length === 0` -> phase = 'complete' on load -> "All caught up" branch                                        | Correct                                                                 |
-| SMI-13 | Streak                                            | `computeStreakDays` walks distinct UTC review days desc from today                                                  | Correct, UTC-only (see `[MINOR]` TZ note)                                |
-| SMI-14 | Suspend                                           | `setCardStatus -> SUSPENDED`; `getDueCards` filters `status = 'active'`; browse can filter status                   | Correct (but see `[MAJOR]` submitReview status check)                    |
-| SMI-15 | Archive                                           | Same as suspend; redirect to `ROUTES.MEMORY_BROWSE` after archive                                                   | Correct                                                                 |
-| SMI-16 | Dashboard domain breakdown                        | `getDomainBreakdown` with per-domain `total`, `due`, `mastered` (stability > 30)                                    | Correct                                                                 |
-| SMI-17 | Non-editable card                                 | Detail page checks `card.isEditable` -> hides Edit button; `updateCard` rejects at BC                               | Correct                                                                 |
+| ID     | Scenario                        | Expected path exercised                                                                                           | Observed                                              |
+| ------ | ------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| SMI-1  | Create a basic card             | `newCardSchema` -> `createCard` tx -> insert card + card_state -> redirect to `ROUTES.MEMORY_CARD(id)`            | Correct                                               |
+| SMI-2  | Create with tags                | `parseTags` splits commas, trims, drops empties; stored as jsonb string[]                                         | Correct                                               |
+| SMI-3  | Validation rejects empty fields | Zod `trim().min(1)` on `front`/`back`; fail(400) with `fieldErrors` + `values` preserved                          | Correct                                               |
+| SMI-4  | Browse filters                  | `narrowDomain` etc. narrow URL params; filters composed via `and(...)`, default status = ACTIVE                   | Correct                                               |
+| SMI-5  | Edit a personal card            | `updateCard` checks `is_editable` and whitelists patch fields                                                     | Correct                                               |
+| SMI-6  | Dashboard due count             | `getDashboardStats.dueNow` via `cardState.dueAt <= now AND card.status='active'`                                  | Correct                                               |
+| SMI-7  | Review flow first card          | `getDueCards` -> front/answer -> `submitReview` tx                                                                | Correct, but see [MAJOR] review advances on failure   |
+| SMI-8  | FSRS scheduling                 | `fsrsSchedule` with actual `lastReviewedAt` threaded via `card_state.lastReviewedAt`                              | Correct (Phase 2 fix landed)                          |
+| SMI-9  | Again resets                    | `prevState === REVIEW && result.state === RELEARNING` bumps `lapseCount`                                          | Correct                                               |
+| SMI-10 | Confidence slider               | `shouldPromptConfidence(cardId, now)` via djb2 on `cardId:YYYY-MM-DD`, compared to `CONFIDENCE_SAMPLE_RATE = 0.5` | Correct -- deterministic per card per UTC day         |
+| SMI-11 | Skip confidence                 | `confidence: null` path, form omits the key, zod `.nullish()` accepts                                             | Correct                                               |
+| SMI-12 | No cards due                    | `batch.length === 0` -> phase = 'complete' on load -> "All caught up" branch                                      | Correct                                               |
+| SMI-13 | Streak                          | `computeStreakDays` walks distinct UTC review days desc from today                                                | Correct, UTC-only (see `[MINOR]` TZ note)             |
+| SMI-14 | Suspend                         | `setCardStatus -> SUSPENDED`; `getDueCards` filters `status = 'active'`; browse can filter status                 | Correct (but see `[MAJOR]` submitReview status check) |
+| SMI-15 | Archive                         | Same as suspend; redirect to `ROUTES.MEMORY_BROWSE` after archive                                                 | Correct                                               |
+| SMI-16 | Dashboard domain breakdown      | `getDomainBreakdown` with per-domain `total`, `due`, `mastered` (stability > 30)                                  | Correct                                               |
+| SMI-17 | Non-editable card               | Detail page checks `card.isEditable` -> hides Edit button; `updateCard` rejects at BC                             | Correct                                               |
 
 ## Findings
 
@@ -382,16 +381,16 @@ each define their own `humanize`. Extract to `libs/utils/src/text.ts`.
 
 ## Walkthrough against spec edge cases
 
-| Edge case                                              | Handled?                                                                                                                                 |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| No cards due                                           | Yes -- `batch.length === 0` lands on phase = 'complete' with copy "No cards due right now."                                               |
-| Card deleted during session                            | Yes -- `CardNotFoundError` -> `{ skipped: true }` path advances the session                                                               |
-| Rapid double-submit (5s idempotency)                   | Yes -- `REVIEW_DEDUPE_WINDOW_MS` window check inside the tx with FOR UPDATE serialization                                                 |
-| Confidence slider declined                             | Yes -- Escape or "Skip confidence" button sets `confidence = null`, form omits the key, zod `.nullish()` accepts                          |
-| All cards suspended/archived                           | Yes -- `getDueCards` filters `status = 'active'`, so queue is empty -> "All caught up"                                                    |
-| Source card uneditable                                 | Yes -- UI hides Edit; `updateCard` throws `Card X is not editable`; route maps to `fail(403)`                                              |
-| Same card same day -- confidence prompt is deterministic | Yes -- djb2 hash of `cardId:YYYY-MM-DD`                                                                                                   |
-| Card created without card_state                        | Not possible via `createCard` (single tx). External paths could break the update; see `[MINOR]` upsert suggestion.                        |
+| Edge case                                                | Handled?                                                                                                           |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| No cards due                                             | Yes -- `batch.length === 0` lands on phase = 'complete' with copy "No cards due right now."                        |
+| Card deleted during session                              | Yes -- `CardNotFoundError` -> `{ skipped: true }` path advances the session                                        |
+| Rapid double-submit (5s idempotency)                     | Yes -- `REVIEW_DEDUPE_WINDOW_MS` window check inside the tx with FOR UPDATE serialization                          |
+| Confidence slider declined                               | Yes -- Escape or "Skip confidence" button sets `confidence = null`, form omits the key, zod `.nullish()` accepts   |
+| All cards suspended/archived                             | Yes -- `getDueCards` filters `status = 'active'`, so queue is empty -> "All caught up"                             |
+| Source card uneditable                                   | Yes -- UI hides Edit; `updateCard` throws `Card X is not editable`; route maps to `fail(403)`                      |
+| Same card same day -- confidence prompt is deterministic | Yes -- djb2 hash of `cardId:YYYY-MM-DD`                                                                            |
+| Card created without card_state                          | Not possible via `createCard` (single tx). External paths could break the update; see `[MINOR]` upsert suggestion. |
 
 ## Conformance to prime-directive concerns
 

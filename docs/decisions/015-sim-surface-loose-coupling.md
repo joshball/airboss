@@ -18,11 +18,11 @@ A monolithic page that grows a `?withHorizon=true` flag would couple the two sur
 
 **Components are pure-prop, dumb, and surface-agnostic. Pages compose components and own the FDM-worker host.**
 
-| Layer        | Responsibility                                                                                       | Coupling rule |
-| ------------ | ---------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| Component    | Render. Accept primitives (numbers / radians / SI units) as props. No imports from `@ab/bc-sim`.      | Components do **not** import other components from sibling surfaces. |
-| Page         | Host the FDM worker, own the SNAPSHOT subscription, derive component props from `truth` / `display`. | Pages **do not** import other pages. Cross-page links go through `ROUTES`.            |
-| Routing      | `ROUTES.SIM_SCENARIO`, `SIM_SCENARIO_HORIZON`, `SIM_SCENARIO_DUAL` -- one route per surface.          | Routes are constants; never inline.           |
+| Layer     | Responsibility                                                                                       | Coupling rule                                                              |
+| --------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Component | Render. Accept primitives (numbers / radians / SI units) as props. No imports from `@ab/bc-sim`.     | Components do **not** import other components from sibling surfaces.       |
+| Page      | Host the FDM worker, own the SNAPSHOT subscription, derive component props from `truth` / `display`. | Pages **do not** import other pages. Cross-page links go through `ROUTES`. |
+| Routing   | `ROUTES.SIM_SCENARIO`, `SIM_SCENARIO_HORIZON`, `SIM_SCENARIO_DUAL` -- one route per surface.         | Routes are constants; never inline.                                        |
 
 `Horizon3D.svelte` takes `{ pitchRadians, rollRadians, headingRadians, altitudeMeters, groundElevationMeters }`. Nothing else. It does not know what produced those numbers; it does not know whether a cockpit is rendering next to it. The cockpit page does not import `Horizon3D`. The horizon page does not import the cockpit. The dual page imports both.
 

@@ -33,11 +33,11 @@ The specs answered "how does the database work?" but not "what problem does this
 
 **What changed:** Added a framing layer explaining WHY these three tools and how they connect:
 
-| Tool | What it does | The question it answers |
-| --- | --- | --- |
-| Spaced Memory Items | Smart flashcard scheduling | "Do I actually remember this?" |
-| Decision Reps | Quick scenario judgment practice | "Can I make the right call under pressure?" |
-| Calibration Tracker | Confidence vs. accuracy tracking | "Do I know what I don't know?" |
+| Tool                | What it does                     | The question it answers                     |
+| ------------------- | -------------------------------- | ------------------------------------------- |
+| Spaced Memory Items | Smart flashcard scheduling       | "Do I actually remember this?"              |
+| Decision Reps       | Quick scenario judgment practice | "Can I make the right call under pressure?" |
+| Calibration Tracker | Confidence vs. accuracy tracking | "Do I know what I don't know?"              |
 
 Described the learning cycle: study (cards) -> practice (reps) -> self-awareness (calibration) -> study smarter. Explained how the personal learning dashboard and product progress dashboard fit in.
 
@@ -106,15 +106,15 @@ The student derives the regulation themselves before seeing it. The regulation b
 
 Every knowledge node supports this learning sequence:
 
-| Phase | What the learner does | Content type |
-| --- | --- | --- |
-| **Context** | Understands why this matters | Scenario setup, real-world framing |
-| **Problem** | Faces a concrete situation | Question, thought experiment |
-| **Discover** | Reasons toward the answer | Guided questions, exercises, "what would you design?" |
-| **Reveal** | Sees the authoritative answer | Regulation text, formula, exact reference location |
-| **Practice** | Exercises the knowledge | Cards, drills, reps, calculations |
-| **Connect** | Sees relationships to other knowledge | Prerequisite/dependent links, "now what changes if..." |
-| **Verify** | Applies in a novel situation | Assessment scenario, teaching exercise |
+| Phase        | What the learner does                 | Content type                                           |
+| ------------ | ------------------------------------- | ------------------------------------------------------ |
+| **Context**  | Understands why this matters          | Scenario setup, real-world framing                     |
+| **Problem**  | Faces a concrete situation            | Question, thought experiment                           |
+| **Discover** | Reasons toward the answer             | Guided questions, exercises, "what would you design?"  |
+| **Reveal**   | Sees the authoritative answer         | Regulation text, formula, exact reference location     |
+| **Practice** | Exercises the knowledge               | Cards, drills, reps, calculations                      |
+| **Connect**  | Sees relationships to other knowledge | Prerequisite/dependent links, "now what changes if..." |
+| **Verify**   | Applies in a novel situation          | Assessment scenario, teaching exercise                 |
 
 Not every node needs all seven phases on day one. But the structure expects them. Empty phases are visible gaps, not failures.
 

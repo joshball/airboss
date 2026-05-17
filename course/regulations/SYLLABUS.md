@@ -6,18 +6,18 @@ Each week ends with an oral exam segment. The orals build cumulatively -- Week 5
 
 ## Course outline
 
-| Wk | Title                                            | Subject       | Treatment | Skip-and-name parts                              |
-| -- | ------------------------------------------------ | ------------- | --------- | ------------------------------------------------ |
-| 1  | The architecture of Title 14                     | Foundation    | Required  | None -- this week is the navigation map itself   |
-| 2  | Part 61 -- the pilot (certificates and currency) | The pilot     | Deep      | Subparts I-K (cursory: foreign / WSC / ATP transition logic) |
-| 3  | Part 61 -- the CFI (subpart H, endorsements, FOI) | The pilot     | Deep      | None -- you're becoming this                     |
-| 4  | Part 91 -- general + flight rules (subparts A-B) | The flight    | Very deep | None -- 91.3 and 91.13 are the most-cited rules in violations |
-| 5  | Part 91 -- equipment + maintenance (subparts C-E) | The flight    | Very deep | Skim subpart F (large/turbine) and subpart G (RVSM)            |
-| 6  | Part 91 -- special ops + integration             | The flight    | Deep      | Subparts H-N (foreign, fractional, SFAR overlays) -- name + locate |
-| 7  | Part 141 + Part 135 -- the operation             | The operation | Cursory   | Whole-part literacy + "when does it touch me as a CFI"          |
-| 8  | Companion documents -- AIM, AC, Chief Counsel    | Foundation    | Required  | None                                                            |
-| 9  | The enforcement system + NTSB Part 830           | Foundation    | Required  | None                                                            |
-| 10 | Capstone -- integrated oral                      | Integration   | Required  | None                                                            |
+| Wk  | Title                                             | Subject       | Treatment | Skip-and-name parts                                                |
+| --- | ------------------------------------------------- | ------------- | --------- | ------------------------------------------------------------------ |
+| 1   | The architecture of Title 14                      | Foundation    | Required  | None -- this week is the navigation map itself                     |
+| 2   | Part 61 -- the pilot (certificates and currency)  | The pilot     | Deep      | Subparts I-K (cursory: foreign / WSC / ATP transition logic)       |
+| 3   | Part 61 -- the CFI (subpart H, endorsements, FOI) | The pilot     | Deep      | None -- you're becoming this                                       |
+| 4   | Part 91 -- general + flight rules (subparts A-B)  | The flight    | Very deep | None -- 91.3 and 91.13 are the most-cited rules in violations      |
+| 5   | Part 91 -- equipment + maintenance (subparts C-E) | The flight    | Very deep | Skim subpart F (large/turbine) and subpart G (RVSM)                |
+| 6   | Part 91 -- special ops + integration              | The flight    | Deep      | Subparts H-N (foreign, fractional, SFAR overlays) -- name + locate |
+| 7   | Part 141 + Part 135 -- the operation              | The operation | Cursory   | Whole-part literacy + "when does it touch me as a CFI"             |
+| 8   | Companion documents -- AIM, AC, Chief Counsel     | Foundation    | Required  | None                                                               |
+| 9   | The enforcement system + NTSB Part 830            | Foundation    | Required  | None                                                               |
+| 10  | Capstone -- integrated oral                       | Integration   | Required  | None                                                               |
 
 ## Week-by-week
 

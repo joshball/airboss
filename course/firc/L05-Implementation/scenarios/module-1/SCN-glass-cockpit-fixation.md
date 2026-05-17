@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.4
 Title:           Busy Pattern at a Non-Towered Airport
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1, FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-1', 'AC-1', 'CJ-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Crosswind to downwind turn. Two aircraft ahead in the pattern visible outside. Student is looking at the MFD traffic page, head down.
 studentSpeech:I can see two targets on the traffic display. One is a mile ahead and one is two miles on base. We're well separated.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Midfield downwind. Student looked up briefly but went right back to the MFD. The Piper with no radio calls is at the student's 10 o'clock low, turning base. Not on the traffic display -- its transponder may not be ADS-B equipped. Student hasn't seen it.
 studentSpeech:All clear on the display. Nobody between us and the base turn. I'll start slowing down for the descent.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        The Piper has turned final and is now at the student's 9 o'clock, converging. Student saw the traffic (or didn't) and is now turning base. If the student continues the base turn, there will be a traffic conflict on final.
 studentSpeech:Turning base now... wait, is that a plane down there? It's not on my display!
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student completes the base turn despite the traffic. Now on a converging path with the Piper on short final. Separation is shrinking. The Piper pilot calls: "Traffic in the pattern, you're cutting me off on final."
 studentSpeech:Oh! I'm sorry! What do I do? Go around?
@@ -135,7 +135,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (direct/take_controls)

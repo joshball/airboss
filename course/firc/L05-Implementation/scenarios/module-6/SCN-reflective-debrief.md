@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     6.4
 Title:           End-of-Course Reflective Debrief
 Module:          6
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_4, FAA_TOPIC.A_5, FAA_TOPIC.A_9, FAA_TOPIC.A_10, FAA_TOPIC.A_7]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-3', 'PS-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- FIRC Learner (self-reflective)
 Parameters:
   skillLevel:         0.7
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1 -- Recognizing Your Own Gaps
 
-```
+```text
 id:           tick_1
 scene:        Quiet debrief room. The prompt on screen reads: "Think of a time in the past year when you could have intervened earlier with a student, but didn't. What held you back?"
 studentSpeech:(Internal reflection) There was that time with the student who kept overshooting final... I saw the bank angle increasing but I waited because I wanted to see if they'd recover. They didn't. I had to take over at the last minute.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2 -- Connecting to Safety Culture
 
-```
+```text
 id:           tick_2
 scene:        The next prompt: "When was the last time you had to refuse a flight, refuse a signoff, or tell a student something they didn't want to hear? How did you handle it?"
 studentSpeech:(Internal reflection) I had a student's parent push me to solo the student too early. I said no, but I didn't explain why well. The parent was angry and the student was embarrassed. I could have handled the communication better.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3 -- Building Your Proficiency Plan
 
-```
+```text
 id:           tick_3
 scene:        The prompt reads: "Based on what you've experienced in this course, what are two specific areas of your instructional practice you want to improve? And what will you do about them in the next 90 days?"
 studentSpeech:(Internal reflection) I think I need to get better at recognizing student fatigue early. And I want to learn the TAA approach structure better -- I've been avoiding airports with TAA-only approaches because I'm not confident teaching them.
@@ -114,7 +114,7 @@ criticalWindow:[]
 
 ### Tick 4 -- Commitment
 
-```
+```text
 id:           tick_4
 scene:        Final prompt: "What is one thing you will do differently the next time you fly with a student, based on what you learned in this course?"
 studentSpeech:(Internal reflection) I'm going to ask diagnostic questions before coaching. I always jumped straight to coaching because it felt efficient. But the scenarios showed me that asking first reveals what the student actually needs, not what I assume they need.
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_safe
 ```
 

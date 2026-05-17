@@ -17,20 +17,20 @@ counts:
 
 Walked every finding against current main. 9 of 11 closed; 2 carried (one open + cross-ref).
 
-| Severity | Finding                                                | Verdict                                                                                          |
-| -------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| MAJOR    | Missing index on `bauth_session.user_id`               | CLOSED -- `bauth_session_user_idx` in schema.ts:56                                               |
-| MAJOR    | Missing indexes on `bauth_account.user_id` + provider  | CLOSED -- `bauth_account_user_idx` + `bauth_account_provider_account_idx` in schema.ts:86-87     |
-| MAJOR    | `audit_log.timestamp` lacks standalone index           | CLOSED -- `audit_log_timestamp_idx` in audit/schema.ts:80                                        |
-| MINOR    | `auditRecent` cannot use index ordering on targetType  | CLOSED -- `audit_log_target_type_time_idx` (target_type, timestamp) in audit/schema.ts:85        |
-| MINOR    | `bauth_verification.identifier` not indexed            | CLOSED -- `bauth_verification_identifier_idx` in schema.ts:104                                   |
-| MINOR    | `auditWrite` `.returning()` drags jsonb back           | STILL OPEN -- design item, see below                                                             |
-| MINOR    | Session-hydration block duplicated across 4 hooks      | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 apps consume |
-| MINOR    | Sim and avionics hooks have no banned-user guard       | STILL OPEN -- tracked under correctness MAJOR; see that review for the trigger                   |
-| MINOR    | `forwardAuthCookies` parses every Set-Cookie on login  | CLOSED -- detection moved to parsed `parts` array via `parseCookieMaxAge` (cookies.ts:83-107)    |
-| NIT      | `requireAuth` re-encodes pathname + search per call    | CLOSED -- mentioned-for-completeness; per-request cost negligible                                |
-| NIT      | `crypto.randomUUID()` per request for request-id       | CLOSED -- mentioned-for-completeness; UUID kept for log correlation simplicity                   |
-| NIT      | `applySecurityHeaders` runs four .set calls            | CLOSED -- mentioned-for-completeness; cost is microseconds                                       |
+| Severity | Finding                                               | Verdict                                                                                          |
+| -------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| MAJOR    | Missing index on `bauth_session.user_id`              | CLOSED -- `bauth_session_user_idx` in schema.ts:56                                               |
+| MAJOR    | Missing indexes on `bauth_account.user_id` + provider | CLOSED -- `bauth_account_user_idx` + `bauth_account_provider_account_idx` in schema.ts:86-87     |
+| MAJOR    | `audit_log.timestamp` lacks standalone index          | CLOSED -- `audit_log_timestamp_idx` in audit/schema.ts:80                                        |
+| MINOR    | `auditRecent` cannot use index ordering on targetType | CLOSED -- `audit_log_target_type_time_idx` (target_type, timestamp) in audit/schema.ts:85        |
+| MINOR    | `bauth_verification.identifier` not indexed           | CLOSED -- `bauth_verification_identifier_idx` in schema.ts:104                                   |
+| MINOR    | `auditWrite` `.returning()` drags jsonb back          | STILL OPEN -- design item, see below                                                             |
+| MINOR    | Session-hydration block duplicated across 4 hooks     | CLOSED -- `mapBetterAuthSession` extracted to `libs/auth/src/session-map.ts`; all 4 apps consume |
+| MINOR    | Sim and avionics hooks have no banned-user guard      | STILL OPEN -- tracked under correctness MAJOR; see that review for the trigger                   |
+| MINOR    | `forwardAuthCookies` parses every Set-Cookie on login | CLOSED -- detection moved to parsed `parts` array via `parseCookieMaxAge` (cookies.ts:83-107)    |
+| NIT      | `requireAuth` re-encodes pathname + search per call   | CLOSED -- mentioned-for-completeness; per-request cost negligible                                |
+| NIT      | `crypto.randomUUID()` per request for request-id      | CLOSED -- mentioned-for-completeness; UUID kept for log correlation simplicity                   |
+| NIT      | `applySecurityHeaders` runs four .set calls           | CLOSED -- mentioned-for-completeness; cost is microseconds                                       |
 
 ### Carried-forward design items
 

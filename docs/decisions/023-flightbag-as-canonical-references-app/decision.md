@@ -25,20 +25,22 @@ Aviation-authentic, matches what every pilot literally carries (handbooks, chart
 
 ### Architecture
 
-| Concern | Lives in |
-|---------|-----------|
-| Reader app | `apps/flightbag/` |
-| Reference rendering primitives (`<RenderedSection>`, `<CitationChip>`) | `libs/library/` |
-| URL string templates | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) |
-| URI-to-URL bridge (`urlForReference(uri)`) | `libs/sources/` (next to existing resolvers) |
-| Data layer (manifests, registry, URI scheme) | `libs/sources/` (existing, unchanged) |
+| Concern                                                                | Lives in                                              |
+| ---------------------------------------------------------------------- | ----------------------------------------------------- |
+| Reader app                                                             | `apps/flightbag/`                                     |
+| Reference rendering primitives (`<RenderedSection>`, `<CitationChip>`) | `libs/library/`                                       |
+| URL string templates                                                   | `libs/constants/src/routes.ts` (`ROUTES.FLIGHTBAG_*`) |
+| URI-to-URL bridge (`urlForReference(uri)`)                             | `libs/sources/` (next to existing resolvers)          |
+| Data layer (manifests, registry, URI scheme)                           | `libs/sources/` (existing, unchanged)                 |
 
 URL templates go in `libs/constants/` (not in `libs/library/`) because:
+
 - Every other route in airboss already lives there (project rule, no inline path strings)
 - Constants is leaf in the dependency graph — any lib or app can import it
 - `libs/library/` should own RENDERING knowledge, not URL formatting
 
 The bridge helper goes in `libs/sources/` (not in `libs/library/`) because:
+
 - It takes an `airboss-ref:` URI as input — URI scheme is owned by `libs/sources/`
 - Output is built via `ROUTES.FLIGHTBAG_*` constants
 - `libs/sources/` already calls `libs/constants/`; this just adds another helper
@@ -48,6 +50,7 @@ The bridge helper goes in `libs/sources/` (not in `libs/library/`) because:
 Reference admin (TOC validation, force-reingest, per-reference health checks) lives in `apps/hangar/admin/references/` — NOT in flightbag.
 
 Reasons:
+
 - Hangar already has admin auth + audit log + content-authoring mission
 - Flightbag is public-facing (or eventually); admin UI doesn't belong there
 - Hangar already handles other admin surfaces (audit, users, invitations)

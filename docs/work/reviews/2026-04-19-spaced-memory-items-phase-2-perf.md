@@ -31,7 +31,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 2 Performance Review
 
 Scope: BC-layer queries added in commit `0bbde26` (libs/bc/study/src/cards.ts, reviews.ts, stats.ts). Target from spec: "dashboard loads in < 200ms with 1,000 cards."
@@ -144,13 +143,13 @@ Also consider running the totals query and the accuracy query via `Promise.all` 
 
 ## Missing indexes (queued for Phase 3)
 
-| Index                            | Query that wants it                    | Trigger scale        |
-| -------------------------------- | -------------------------------------- | -------------------- |
-| `card (user_id, updated_at)`     | `getCards` default ordering            | > 5k cards / user    |
-| `card (user_id, source_type)`    | Browse filter by source                | > 5k cards / user    |
-| `card (user_id, card_type)`      | Browse filter by card_type             | > 5k cards / user    |
-| `pg_trgm` / `tsvector` on front/back | `getCards` ilike search            | > 5k cards / user    |
-| `GIN` on `card.tags`             | Tag-based browse (not yet in UI)       | When tag UI ships    |
+| Index                                | Query that wants it              | Trigger scale     |
+| ------------------------------------ | -------------------------------- | ----------------- |
+| `card (user_id, updated_at)`         | `getCards` default ordering      | > 5k cards / user |
+| `card (user_id, source_type)`        | Browse filter by source          | > 5k cards / user |
+| `card (user_id, card_type)`          | Browse filter by card_type       | > 5k cards / user |
+| `pg_trgm` / `tsvector` on front/back | `getCards` ilike search          | > 5k cards / user |
+| `GIN` on `card.tags`                 | Tag-based browse (not yet in UI) | When tag UI ships |
 
 None block Phase 2 shipping. Add when the UI actually drives those query shapes and we can validate via explain plans.
 

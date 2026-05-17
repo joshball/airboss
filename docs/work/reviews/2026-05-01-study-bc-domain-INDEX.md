@@ -13,18 +13,18 @@ review_status: done
 
 ## Final close-out as of 2026-05-04
 
-| Category     | Critical | Major C/O | Minor C/O | Nit C/O | Total C/O |
-| ------------ | :------: | :-------: | :-------: | :-----: | :-------: |
-| correctness  |    -     |    4/0    |    2/4    |   0/2   |    6/6    |
-| security     |    -     |    2/0    |    1/4    |   1/2   |    4/6    |
-| perf         |    -     |    5/0    |    3/3    |   0/3   |    8/6    |
-| architecture |   1/0    |    -      |    2/1    |   0/1   |    3/2    |
-| patterns     |    -     |    -      |    1/0    |    -    |    1/0    |
-| testing      |    -     |    5/0    |    2/7    |   2/2   |    9/9    |
-| dx           |    -     |    3/1    |    3/2    |   1/2   |    7/5    |
-| schema       |    -     |    4/1    |    1/5    |   0/4   |    5/10   |
-| backend      |   1/0    |    4/0    |    3/3    |   1/3   |    9/6    |
-| **TOTAL**    | **2/0**  | **26/3**  | **18/29** | **5/19**| **52/50** |
+| Category     | Critical | Major C/O | Minor C/O | Nit C/O  | Total C/O |
+| ------------ | -------- | --------- | --------- | -------- | --------- |
+| correctness  | -        | 4/0       | 2/4       | 0/2      | 6/6       |
+| security     | -        | 2/0       | 1/4       | 1/2      | 4/6       |
+| perf         | -        | 5/0       | 3/3       | 0/3      | 8/6       |
+| architecture | 1/0      | -         | 2/1       | 0/1      | 3/2       |
+| patterns     | -        | -         | 1/0       | -        | 1/0       |
+| testing      | -        | 5/0       | 2/7       | 2/2      | 9/9       |
+| dx           | -        | 3/1       | 3/2       | 1/2      | 7/5       |
+| schema       | -        | 4/1       | 1/5       | 0/4      | 5/10      |
+| backend      | 1/0      | 4/0       | 3/3       | 1/3      | 9/6       |
+| **TOTAL**    | **2/0**  | **26/3**  | **18/29** | **5/19** | **52/50** |
 
 (Format: `Closed/Open`. Both chunk-2 CRITICALs (architecture package boundaries + backend transaction-wrap) are now closed -- see per-category detail. The library-by-cert perf pair (GIN index + `arrayContains` + `LATERAL` unnest) closed in the wave-2 perf cluster. The chunk-2 BC error-class hygiene sweep also closed: dx MAJOR (`SourceRefRequiredError` dedupe), dx MINOR (`UpsertReturnedNoRowError` shared), dx MINOR (`CitationNotOwnedError` typed), dx NIT (`LensError` `[lensKind]` prefix, prior PR #468), backend MINOR (upsert typed errors), backend NIT (`CredentialPrereqUnresolvedNodesError` typed). Both chunk-2 security MAJORs (build-only barrel split + goals BC Zod integration sweep) closed in this PR-series.)
 
@@ -36,39 +36,39 @@ review_status: done
 
 ### Convergent fixes that landed (root cause -> closed children)
 
-| Convergent finding | Landed via | Children closed |
-| ------------------ | ---------- | --------------- |
-| `recordItemResult` rewrite (typed errors, no upsert, single tx, audit emit) | PR #437 | correctness MAJOR ×2, backend MAJOR, dx MAJOR (`SessionNotFoundError` mislabel) |
-| `applyCertGoals` batched reads | PR #481 | perf MAJOR, backend (partial CRITICAL) |
-| Library-by-cert SQL-side filter (GIN index + `arrayContains` + `LATERAL` unnest counts) | this PR | perf MAJOR ×2 |
-| `applyCertGoalsToPrimaryGoal` transaction wrap | this PR | backend CRITICAL |
-| `updateCard` card+snooze transaction wrap | this PR | correctness MAJOR, backend MAJOR |
-| `renameSavedDeck` / `deleteSavedDeck` -> `onConflictDoUpdate` | this PR | backend MAJOR |
-| Package-boundary hardening (`@ab/bc-hangar` dep + barrel imports, explicit `exports` on `@ab/db`/`@ab/auth`/`@ab/bc-sim`) | this PR | architecture CRITICAL, architecture MINOR ×2 |
-| `getCredentialIdsCoveredBy` recursive CTE | PR #479 | perf MAJOR, backend MAJOR |
-| Per-test isolation across mastery / knowledge.progress / credentials / engine-targeting | PR #546 | testing MAJOR ×4 |
-| `sessions.test.ts` coverage expansion | PR #547 | testing MAJOR |
-| ENGINE_SCORING-style weak-area constants | PR #468 | patterns MINOR |
-| Schema indexes (chosen_option, card/goal updated_at, card_feedback created_at) | landed via #468 + earlier | schema MAJOR ×3 |
-| `knowledge_edge_no_self_loop_check` | landed via #468 + earlier | schema MINOR |
-| `library-by-cert` stderr -> `createLogger` | landed prior | dx MAJOR |
-| `seeders/section-tree.ts` consistent error throwing | landed prior | dx MINOR |
-| `MAX_SEARCH_LIMIT` clamping on citations search | landed prior | security MINOR |
-| `restoreCardByCard` userId leak | landed prior | security NIT |
-| `previewSession` plan dedupe | landed prior | perf MINOR |
-| `getHandbookProgress` Promise.all | landed prior | perf MINOR |
-| `fetchRecentSessionDomains` Promise.all | landed prior | perf MINOR |
-| `createGoal` primary clear narrowed | landed prior | correctness MINOR |
-| `submitAttemptSchema.chosenOptionId` cap raise | landed prior | correctness MINOR |
-| `createPlan` SQLSTATE | landed prior | backend MAJOR |
-| `getRepDashboard` docstring fix | landed prior | correctness MAJOR |
-| Calibration / dashboard dead-seed NITs | landed prior | testing NIT ×2 |
-| `escapeLikePattern` reuse from `@ab/db` | landed prior | backend MINOR |
-| `snooze.ts` magic-string + raw SQL | landed prior | backend MINOR |
-| BC error-class hygiene sweep (`SourceRefRequiredError` dedupe + shared `UpsertReturnedNoRowError` + typed `CitationNotOwnedError` + typed `CredentialPrereqUnresolvedNodesError`) | this PR | dx MAJOR + dx MINOR ×2 + backend MINOR + backend NIT |
-| `LensError` `[lensKind]` prefix removed | landed prior (PR #468) | dx NIT |
-| `@ab/bc-study` build-only barrel split (`./build` subpath; runtime barrel disjoint from build) | landed | security MAJOR (build-only upserts exposed without auth gate) |
-| Goals BC Zod integration sweep (`createGoal` / `updateGoal` / `addGoalSyllabus` / `addGoalNode` / `setGoalFocusDomains` / `setGoalSkipDomains` / `setGoalSkipNodes` / `applyCertGoalsToPrimaryGoal` parse at function entry) | this PR | security MAJOR |
+| Convergent finding                                                                                                                                                                                                           | Landed via                | Children closed                                                                 |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------- |
+| `recordItemResult` rewrite (typed errors, no upsert, single tx, audit emit)                                                                                                                                                  | PR #437                   | correctness MAJOR ×2, backend MAJOR, dx MAJOR (`SessionNotFoundError` mislabel) |
+| `applyCertGoals` batched reads                                                                                                                                                                                               | PR #481                   | perf MAJOR, backend (partial CRITICAL)                                          |
+| Library-by-cert SQL-side filter (GIN index + `arrayContains` + `LATERAL` unnest counts)                                                                                                                                      | this PR                   | perf MAJOR ×2                                                                   |
+| `applyCertGoalsToPrimaryGoal` transaction wrap                                                                                                                                                                               | this PR                   | backend CRITICAL                                                                |
+| `updateCard` card+snooze transaction wrap                                                                                                                                                                                    | this PR                   | correctness MAJOR, backend MAJOR                                                |
+| `renameSavedDeck` / `deleteSavedDeck` -> `onConflictDoUpdate`                                                                                                                                                                | this PR                   | backend MAJOR                                                                   |
+| Package-boundary hardening (`@ab/bc-hangar` dep + barrel imports, explicit `exports` on `@ab/db`/`@ab/auth`/`@ab/bc-sim`)                                                                                                    | this PR                   | architecture CRITICAL, architecture MINOR ×2                                    |
+| `getCredentialIdsCoveredBy` recursive CTE                                                                                                                                                                                    | PR #479                   | perf MAJOR, backend MAJOR                                                       |
+| Per-test isolation across mastery / knowledge.progress / credentials / engine-targeting                                                                                                                                      | PR #546                   | testing MAJOR ×4                                                                |
+| `sessions.test.ts` coverage expansion                                                                                                                                                                                        | PR #547                   | testing MAJOR                                                                   |
+| ENGINE_SCORING-style weak-area constants                                                                                                                                                                                     | PR #468                   | patterns MINOR                                                                  |
+| Schema indexes (chosen_option, card/goal updated_at, card_feedback created_at)                                                                                                                                               | landed via #468 + earlier | schema MAJOR ×3                                                                 |
+| `knowledge_edge_no_self_loop_check`                                                                                                                                                                                          | landed via #468 + earlier | schema MINOR                                                                    |
+| `library-by-cert` stderr -> `createLogger`                                                                                                                                                                                   | landed prior              | dx MAJOR                                                                        |
+| `seeders/section-tree.ts` consistent error throwing                                                                                                                                                                          | landed prior              | dx MINOR                                                                        |
+| `MAX_SEARCH_LIMIT` clamping on citations search                                                                                                                                                                              | landed prior              | security MINOR                                                                  |
+| `restoreCardByCard` userId leak                                                                                                                                                                                              | landed prior              | security NIT                                                                    |
+| `previewSession` plan dedupe                                                                                                                                                                                                 | landed prior              | perf MINOR                                                                      |
+| `getHandbookProgress` Promise.all                                                                                                                                                                                            | landed prior              | perf MINOR                                                                      |
+| `fetchRecentSessionDomains` Promise.all                                                                                                                                                                                      | landed prior              | perf MINOR                                                                      |
+| `createGoal` primary clear narrowed                                                                                                                                                                                          | landed prior              | correctness MINOR                                                               |
+| `submitAttemptSchema.chosenOptionId` cap raise                                                                                                                                                                               | landed prior              | correctness MINOR                                                               |
+| `createPlan` SQLSTATE                                                                                                                                                                                                        | landed prior              | backend MAJOR                                                                   |
+| `getRepDashboard` docstring fix                                                                                                                                                                                              | landed prior              | correctness MAJOR                                                               |
+| Calibration / dashboard dead-seed NITs                                                                                                                                                                                       | landed prior              | testing NIT ×2                                                                  |
+| `escapeLikePattern` reuse from `@ab/db`                                                                                                                                                                                      | landed prior              | backend MINOR                                                                   |
+| `snooze.ts` magic-string + raw SQL                                                                                                                                                                                           | landed prior              | backend MINOR                                                                   |
+| BC error-class hygiene sweep (`SourceRefRequiredError` dedupe + shared `UpsertReturnedNoRowError` + typed `CitationNotOwnedError` + typed `CredentialPrereqUnresolvedNodesError`)                                            | this PR                   | dx MAJOR + dx MINOR ×2 + backend MINOR + backend NIT                            |
+| `LensError` `[lensKind]` prefix removed                                                                                                                                                                                      | landed prior (PR #468)    | dx NIT                                                                          |
+| `@ab/bc-study` build-only barrel split (`./build` subpath; runtime barrel disjoint from build)                                                                                                                               | landed                    | security MAJOR (build-only upserts exposed without auth gate)                   |
+| Goals BC Zod integration sweep (`createGoal` / `updateGoal` / `addGoalSyllabus` / `addGoalNode` / `setGoalFocusDomains` / `setGoalSkipDomains` / `setGoalSkipNodes` / `applyCertGoalsToPrimaryGoal` parse at function entry) | this PR                   | security MAJOR                                                                  |
 
 ### Audit-pass mechanical fixes (this PR)
 
@@ -94,18 +94,18 @@ All nine per-category files have `review_status: done`. The user controls `statu
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total | File |
-|--------------|---------:|------:|------:|----:|------:|------|
-| correctness  |        0 |     4 |     6 |   2 |    12 | [link](2026-05-01-study-bc-domain-correctness.md) |
-| security     |        0 |     2 |     5 |   3 |    10 | [link](2026-05-01-study-bc-domain-security.md) |
-| perf         |        0 |     5 |     6 |   3 |    14 | [link](2026-05-01-study-bc-domain-perf.md) |
-| architecture |        1 |     0 |     3 |   1 |     5 | [link](2026-05-01-study-bc-domain-architecture.md) |
-| patterns     |        0 |     0 |     1 |   0 |     1 | [link](2026-05-01-study-bc-domain-patterns.md) |
-| testing      |        0 |     5 |     9 |   4 |    18 | [link](2026-05-01-study-bc-domain-testing.md) |
-| dx           |        0 |     4 |     5 |   3 |    12 | [link](2026-05-01-study-bc-domain-dx.md) |
-| schema       |        0 |     5 |     6 |   4 |    15 | [link](2026-05-01-study-bc-domain-schema.md) |
-| backend      |        1 |     4 |     6 |   4 |    15 | [link](2026-05-01-study-bc-domain-backend.md) |
-| **TOTAL**    |    **2** |**29** |**47** |**24**|**102**| |
+| Category     | Critical | Major  | Minor  | Nit    | Total   | File                                               |
+| ------------ | -------- | ------ | ------ | ------ | ------- | -------------------------------------------------- |
+| correctness  | 0        | 4      | 6      | 2      | 12      | [link](2026-05-01-study-bc-domain-correctness.md)  |
+| security     | 0        | 2      | 5      | 3      | 10      | [link](2026-05-01-study-bc-domain-security.md)     |
+| perf         | 0        | 5      | 6      | 3      | 14      | [link](2026-05-01-study-bc-domain-perf.md)         |
+| architecture | 1        | 0      | 3      | 1      | 5       | [link](2026-05-01-study-bc-domain-architecture.md) |
+| patterns     | 0        | 0      | 1      | 0      | 1       | [link](2026-05-01-study-bc-domain-patterns.md)     |
+| testing      | 0        | 5      | 9      | 4      | 18      | [link](2026-05-01-study-bc-domain-testing.md)      |
+| dx           | 0        | 4      | 5      | 3      | 12      | [link](2026-05-01-study-bc-domain-dx.md)           |
+| schema       | 0        | 5      | 6      | 4      | 15      | [link](2026-05-01-study-bc-domain-schema.md)       |
+| backend      | 1        | 4      | 6      | 4      | 15      | [link](2026-05-01-study-bc-domain-backend.md)      |
+| **TOTAL**    | **2**    | **29** | **47** | **24** | **102** |                                                    |
 
 ## Critical findings (2)
 
@@ -115,6 +115,7 @@ All nine per-category files have `review_status: done`. The user controls `statu
 ## Convergent / root-cause findings
 
 ### Missing transactions on multi-step writes
+
 - **backend (critical)**: `applyCertGoalsToPrimaryGoal` -- targeting patch + N `addGoalSyllabus` not wrapped
 - **correctness (major)**: `applyCertGoalsToPrimaryGoal` -- minor flag for same defect
 - **correctness (major)**: `updateCard` mutates `card` then `cardSnooze` outside a transaction; partial failure drops bad-question re-entry banner
@@ -122,6 +123,7 @@ All nine per-category files have `review_status: done`. The user controls `statu
 - **Root cause**: a small set of multi-write paths missed the project's transaction-wrap pattern (which is correctly applied across `submitReview`, `undoReview`, `commitSession`, `replaceNodeEdges`, `setPrimaryGoal`, etc.).
 
 ### `recordItemResult` upsert/error-mode bug
+
 - **correctness (major)**: `recordItemResult` upserts when slot is missing (contradicts docstring); `SessionSlotNotFoundError` throw is unreachable; caller-fabricated `slotIndex` produces ghost rows with wrong `presentedAt`
 - **correctness (major)**: `skipSessionSlot` inherits the upsert bug inside its outer transaction (phantom slot + content suspension applied)
 - **backend (major)**: `recordItemResult` (sessions.ts:874-881) throws `SessionNotFoundError` when bad input is foreign `reviewId`, conflating two failure modes
@@ -129,6 +131,7 @@ All nine per-category files have `review_status: done`. The user controls `statu
 - **Root cause**: rewrite `recordItemResult` to (1) raise `SessionSlotNotFoundError` when the slot is missing instead of upserting, and (2) emit the correct error class for review-row vs session-row vs slot-row failures.
 
 ### N+1 fan-outs (resolves chunk-1 N+1 majors)
+
 - **perf (major)**: `library-by-cert.ts:224-269` -- `listReferencesByTopic` + `getReferenceCountsByTopic` load every active reference and filter/sum in JS (function header even acknowledges Drizzle's `arrayContains`). Add GIN index on `subjects` and SQL-level filter.
 - **perf (major)**: missing `getHandbookProgressBatch` -- chunk-1 lens index does N parallel calls each costing 2 round-trips
 - **perf (major)**: missing batch variant of `getNodesCitingSection` -- multiple library/lens routes will fan out per-section
@@ -138,13 +141,16 @@ All nine per-category files have `review_status: done`. The user controls `statu
 - **Root cause**: BC layer needs four batch helpers (`getHandbookProgressBatch`, `getNodesCitingSectionBatch`, `getCredentialIdsCoveredBy` rewritten as recursive CTE, `applyCertGoalsToPrimaryGoal` rewritten with batched reads). These close all the chunk-1 route N+1s automatically.
 
 ### Unprotected build-only upserts in BC barrel
+
 - **security (major)**: build-only upserts (`upsertKnowledgeNode`, `replaceNodeEdges`, `upsertCredential*`, `upsertSyllabus*`, `upsertReference*`) are exported from the BC barrel without admin/actor checks. Any future route importing `@ab/bc-study` could mutate shared data.
 - **Root cause**: split the barrel into `@ab/bc-study` (read/user-write) and `@ab/bc-study/build` (admin/seeder upserts), or add actor assertions on the upsert path.
 
 ### Validation-schema bypass on goals
+
 - **security (major)**: `goals.ts` write paths skip the Zod schemas defined in `credentials.validation.ts` that the BC contract requires. Cards/scenarios honor it; goals don't.
 
 ### Mislabeled errors
+
 - **dx (major)**: `sessions.ts:880` throws `SessionNotFoundError` when review row lookup failed
 - **dx (major)**: `citations.ts:313` throws `CitationNotFoundError` when ownership failed (BC layer lies about ground truth)
 - **dx (major)**: two `SourceRefRequiredError` classes (cards.ts + scenarios.ts) are name-identical but different; only cards version barreled, so `instanceof` checks miss scenarios variant
@@ -152,14 +158,17 @@ All nine per-category files have `review_status: done`. The user controls `statu
 - **Root cause**: error-class hygiene pass -- align thrown errors with the actual failure mode, dedupe identically-named classes, route through SQLSTATE not regex.
 
 ### Inconsistent logging
+
 - **dx (major)**: only `dashboard.ts` + `engine-targeting.ts` use `createLogger`. `library-by-cert.ts:94` writes raw prose to `process.stderr` (no level, no logger name, unsearchable). `syllabi.ts:154-160` silently surfaces orphans at root with a comment claiming the opposite.
 - **dx (major)**: seeder inconsistency -- `seeders/section-tree.ts:57-58` silently substitutes empty body for missing files while sibling `seeders/whole-doc.ts:34-38` throws.
 
 ### Test independence (shared mutable state)
+
 - **testing (5x major)**: `mastery.test.ts`, `knowledge.progress.test.ts`, `credentials.test.ts`, `engine-targeting.test.ts` carry state across `it`/describe blocks. Comments confirm the coupling ("seedAttachedCards has already run from the prior test"). `sessions.test.ts` exercises only 1 of ~10 exports from `sessions.ts`.
 - **Root cause**: propagate the `withFreshUser` pattern (used correctly by `calibration.test.ts` + `dashboard.test.ts`) across these suites.
 
 ### Schema indexing gaps
+
 - **schema (major)**: missing FK index on `session_item_result.chosen_option_id`
 - **schema (major)**: un-covered ORDER BYs on `card.updated_at`, `goal.updated_at`, and `card_feedback` LIMIT 1
 - **schema (major)**: missing `updated_by` audit column on `knowledge_node`

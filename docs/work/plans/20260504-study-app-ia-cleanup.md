@@ -10,26 +10,26 @@ This is a proposal. Nothing has been changed yet. v2 adds: a glossary, an "expla
 
 These are the abbreviations and product terms used below. They also need to live in the in-app glossary surface (and surface as hover tooltips on the page elements that use them -- see "Explain everything" below).
 
-| Term            | Stands for / means                                                                                  |
-| --------------- | --------------------------------------------------------------------------------------------------- |
-| **CTA**         | Call-To-Action -- a button or link that's the obvious next thing to click on a page. The "primary CTA" is the one big button; "secondary CTAs" are smaller follow-ups. |
-| **IA**          | Information Architecture -- how the product is organized into pages and sections. The map. What's a top-level tab vs what's nested under one. |
-| **BC**          | Bounded Context (DDD) -- a backend module that owns one model and its rules. `bc/study` owns goals, plans, sessions, etc. as separate sub-aggregates.                  |
-| **Qual**        | A user-facing word for "credential" -- PPL, IR, CPL, CFI. The label the learner sees. The DB table is still `credential`; the UI says **Quals**.                       |
-| **Goal**        | The slice of study the learner is focused on, e.g. "Pass PPL written by July." A learner-defined bundle of one or more syllabi plus ad-hoc nodes.                      |
-| **Plan**        | The schedule + session shape attached to a goal -- session length, default mode, focus/skip domains. Drives `/session/start`.                                          |
-| **Syllabus**    | An ACS or PTS document -- a structured list of areas/tasks/elements published by the FAA, per certificate.                                                              |
-| **Knowledge node** | One atomic teachable concept in the airboss knowledge graph (ADR 011). Linked to syllabus tasks, FAA references, and review cards.                                    |
-| **Cards**       | Memory review (spaced repetition) -- short-form recall.                                                                                                                |
-| **Reps**        | Scenario reps -- decision-making mini-scenarios.                                                                                                                        |
-| **Session**     | One contiguous study sitting. The session engine picks the slices (cards, reps, reading) based on the active plan.                                                     |
-| **Domain**      | One of the FAA knowledge areas (e.g. Weather, Aerodynamics, Navigation). Used to focus or skip whole categories.                                                        |
-| **Lens**        | A reading mode that overlays the handbook with study annotations/citations.                                                                                            |
-| **Calibration** | Confidence calibration -- how well the learner's "I know this" matches their actual hit rate.                                                                          |
-| **First-run**   | A user with no goal, no plan, no decks, no history. The very first visit.                                                                                              |
-| **E2E**         | End-to-end test -- a Playwright test that drives a real browser through real pages.                                                                                    |
-| **testid**      | `data-testid="..."` -- a stable hook for tests, separate from CSS classes and visible text. Doesn't break when copy or styling changes.                                |
-| **Page anchor** | The single `data-testid="page-anchor"` element on each page. The flow test uses it as proof that the page rendered.                                                    |
+| Term               | Stands for / means                                                                                                                                                     |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **CTA**            | Call-To-Action -- a button or link that's the obvious next thing to click on a page. The "primary CTA" is the one big button; "secondary CTAs" are smaller follow-ups. |
+| **IA**             | Information Architecture -- how the product is organized into pages and sections. The map. What's a top-level tab vs what's nested under one.                          |
+| **BC**             | Bounded Context (DDD) -- a backend module that owns one model and its rules. `bc/study` owns goals, plans, sessions, etc. as separate sub-aggregates.                  |
+| **Qual**           | A user-facing word for "credential" -- PPL, IR, CPL, CFI. The label the learner sees. The DB table is still `credential`; the UI says **Quals**.                       |
+| **Goal**           | The slice of study the learner is focused on, e.g. "Pass PPL written by July." A learner-defined bundle of one or more syllabi plus ad-hoc nodes.                      |
+| **Plan**           | The schedule + session shape attached to a goal -- session length, default mode, focus/skip domains. Drives `/session/start`.                                          |
+| **Syllabus**       | An ACS or PTS document -- a structured list of areas/tasks/elements published by the FAA, per certificate.                                                             |
+| **Knowledge node** | One atomic teachable concept in the airboss knowledge graph (ADR 011). Linked to syllabus tasks, FAA references, and review cards.                                     |
+| **Cards**          | Memory review (spaced repetition) -- short-form recall.                                                                                                                |
+| **Reps**           | Scenario reps -- decision-making mini-scenarios.                                                                                                                       |
+| **Session**        | One contiguous study sitting. The session engine picks the slices (cards, reps, reading) based on the active plan.                                                     |
+| **Domain**         | One of the FAA knowledge areas (e.g. Weather, Aerodynamics, Navigation). Used to focus or skip whole categories.                                                       |
+| **Lens**           | A reading mode that overlays the handbook with study annotations/citations.                                                                                            |
+| **Calibration**    | Confidence calibration -- how well the learner's "I know this" matches their actual hit rate.                                                                          |
+| **First-run**      | A user with no goal, no plan, no decks, no history. The very first visit.                                                                                              |
+| **E2E**            | End-to-end test -- a Playwright test that drives a real browser through real pages.                                                                                    |
+| **testid**         | `data-testid="..."` -- a stable hook for tests, separate from CSS classes and visible text. Doesn't break when copy or styling changes.                                |
+| **Page anchor**    | The single `data-testid="page-anchor"` element on each page. The flow test uses it as proof that the page rendered.                                                    |
 
 ## "Explain everything" -- a product principle
 
@@ -140,13 +140,13 @@ The user-facing surface does not have to mirror the BC structure. We can keep th
 
 ### The five overlapping top-level concepts
 
-| Surface             | What it is (today)                                                  | First-time user reaction          |
-| ------------------- | ------------------------------------------------------------------- | --------------------------------- |
-| `/study`            | Five-tile entry row (Read / Cards / Sim / Scenarios / Flight).      | "Now what?"                       |
-| `/dashboard` (Stats) | Stats panels + the CTA panel ("Create a plan" or "Start session").  | "Why am I here, not on /study?"   |
-| `/plans`            | Study plans -- BC entity that drives session selection.             | "I made a goal. Why is plan separate?" |
-| `/goals`            | Goals -- BC entity that bundles syllabi + nodes.                    | "Why does goal exist if plan exists?" |
-| `/credentials` (Quals) | Quals (PPL/IR/CPL/...) that own syllabi.                         | "Is this the same as goal?"       |
+| Surface                | What it is (today)                                                 | First-time user reaction               |
+| ---------------------- | ------------------------------------------------------------------ | -------------------------------------- |
+| `/study`               | Five-tile entry row (Read / Cards / Sim / Scenarios / Flight).     | "Now what?"                            |
+| `/dashboard` (Stats)   | Stats panels + the CTA panel ("Create a plan" or "Start session"). | "Why am I here, not on /study?"        |
+| `/plans`               | Study plans -- BC entity that drives session selection.            | "I made a goal. Why is plan separate?" |
+| `/goals`               | Goals -- BC entity that bundles syllabi + nodes.                   | "Why does goal exist if plan exists?"  |
+| `/credentials` (Quals) | Quals (PPL/IR/CPL/...) that own syllabi.                           | "Is this the same as goal?"            |
 
 These are not five different things to a returning CFI. They are one thing: **"my study program."**
 
@@ -206,20 +206,20 @@ Help stays in the right cluster (global header). Glossary placement -- see open 
 
 ### What goes where
 
-| Today (top-level)  | Becomes                                       |
-| ------------------ | --------------------------------------------- |
-| Study              | **Home** (= `/study`, daily CTA)              |
-| Stats (Dashboard)  | Insights                                       |
-| Plans              | folded into Program (sub-tab)                  |
-| Quals (Credentials) | folded into Program (sub-tab)                  |
-| Lens               | folded into Insights                           |
-| Goals              | folded into Program (sub-tab)                  |
-| Memory             | Learn -> Cards (children stay as sub-routes, not nav items) |
-| Reps               | Learn -> Reps                                  |
-| Flight             | Learn -> (placeholder until WP 2)              |
-| Knowledge          | Reference -> Knowledge graph                   |
-| Glossary           | Reference -> Glossary (or right cluster -- see Q6) |
-| Calibration        | Insights -> Calibration                        |
+| Today (top-level)   | Becomes                                                     |
+| ------------------- | ----------------------------------------------------------- |
+| Study               | **Home** (= `/study`, daily CTA)                            |
+| Stats (Dashboard)   | Insights                                                    |
+| Plans               | folded into Program (sub-tab)                               |
+| Quals (Credentials) | folded into Program (sub-tab)                               |
+| Lens                | folded into Insights                                        |
+| Goals               | folded into Program (sub-tab)                               |
+| Memory              | Learn -> Cards (children stay as sub-routes, not nav items) |
+| Reps                | Learn -> Reps                                               |
+| Flight              | Learn -> (placeholder until WP 2)                           |
+| Knowledge           | Reference -> Knowledge graph                                |
+| Glossary            | Reference -> Glossary (or right cluster -- see Q6)          |
+| Calibration         | Insights -> Calibration                                     |
 
 ### First-run lands here
 
@@ -613,11 +613,11 @@ Net: ship the flow as the wide-coverage net, keep ~3 focused tests (auth, goal-c
 
 **Files to create (in `tests/e2e/`):**
 
-| File                          | What it does                                                                  |
-| ----------------------------- | ----------------------------------------------------------------------------- |
-| `ia-flow.spec.ts`             | The wide-coverage flow. Walks every top-level route + every section sub-tab in one test, asserts page-anchor visibility, fails on any console/page error. |
-| `ia-first-run.spec.ts`        | Focused: brand-new user (no goal, no plan) sees the "Set your first goal" CTA on Home and nothing else dangerous. |
-| `ia-goal-to-session.spec.ts`  | Focused: from a populated goal, "Start studying" reaches the session entry. (The load-bearing transition.) |
+| File                         | What it does                                                                                                                                              |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ia-flow.spec.ts`            | The wide-coverage flow. Walks every top-level route + every section sub-tab in one test, asserts page-anchor visibility, fails on any console/page error. |
+| `ia-first-run.spec.ts`       | Focused: brand-new user (no goal, no plan) sees the "Set your first goal" CTA on Home and nothing else dangerous.                                         |
+| `ia-goal-to-session.spec.ts` | Focused: from a populated goal, "Start studying" reaches the session entry. (The load-bearing transition.)                                                |
 
 **Components to instrument (add `data-testid`):**
 

@@ -13,7 +13,7 @@ Copy this template for each new scenario. Fill in all sections. See [design.md](
 
 ## Metadata
 
-```
+```text
 Scenario ID:     [module.number, e.g., 3.2]
 Title:           [short descriptive name]
 Module:          [1-6]
@@ -24,7 +24,7 @@ Pattern:         [Escalating Crisis | Pressure Decision | Diagnostic Puzzle | Mu
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_xx, FAA_TOPIC.A_xx]
 ```
 
@@ -32,7 +32,7 @@ List all FAA topics this scenario contributes time toward. Use `FAA_TOPIC` const
 
 ## Competency Links
 
-```
+```text
 competencies: ['XX-N', 'XX-N']
 ```
 
@@ -42,7 +42,7 @@ List all competencies exercised. Reference [COMPETENCY_GRAPH.md](../../COMPETENC
 
 Use an existing archetype or define a new one. See [design.md](design.md) archetype library.
 
-```
+```text
 Student Model:   [archetype name or "new"]
 Parameters:
   skillLevel:         [0-1]
@@ -62,7 +62,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        [What the CFI sees/hears. 1-2 sentences.]
 studentSpeech:[What the student says.]
@@ -83,7 +83,7 @@ criticalWindow:[intervention levels that are risky]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        [...]
 studentSpeech:[...]
@@ -108,7 +108,7 @@ criticalWindow:[...]
 
 Sketch the branching structure:
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
               \         \-> terminal_unsafe
                \-> tick_2b -> terminal_safe

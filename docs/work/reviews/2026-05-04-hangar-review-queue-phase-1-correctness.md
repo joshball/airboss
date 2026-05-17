@@ -25,6 +25,7 @@ Logic is mostly sound; tests cover the happy path for every BC primitive, idempo
 - **Problem**: When a soft-deleted row exists for `(boardId, kindId, ref)`, `upsertItem` clears `deletedAt` and overwrites `cachedStatus` with `input.cachedStatus`. That's the intended behavior. BUT: the new `cachedStatus` comes from a fresh frontmatter parse, so if the frontmatter changed while the file was "missing" (e.g. agent edited it via git), the resurrected row uses the new state. That's correct. The bug: `cachedAt` is stamped to the resurrection time, but `updatedAt` (from `timestamps()`) is set to the same `now`, which is fine. However the `pinnedColumnId` is **not** cleared. If a user pinned the row to "Done" before deletion, then the file resurrected with `frontmatterStatus: 'reading'`, the row stays pinned to Done -- silently masking a status downgrade.
 - **Trigger**: User pins WP card to Done -> file goes missing (loader prunes -> `softDeleteItem` -> `deletedAt` set, `pinnedColumnId` retained) -> file restored with `status: reading` -> `upsertItem` resurrects -> board still shows pinned to Done despite frontmatter saying reading.
 - **Fix**: On resurrection (existing row with `deletedAt IS NOT NULL`), clear `pinnedColumnId` to NULL. The user can re-pin if they want; better than a stale pin masking new state. Refactor:
+
   ```ts
   if (existing[0]) {
     const row = existing[0];
@@ -45,6 +46,7 @@ Logic is mostly sound; tests cover the happy path for every BC primitive, idempo
 - **Problem**: The `.filter(...).map((name, idx) => ({ ..., sortOrder: REVIEW_BOARD_DEFAULT_COLUMNS.indexOf(name as ReviewBoardDefaultColumn) === -1 ? idx : REVIEW_BOARD_DEFAULT_COLUMNS.indexOf(...) }))` block: every `name` reaching the `.map()` is a member of `REVIEW_BOARD_DEFAULT_COLUMNS` (it came from filtering that exact array), so `.indexOf()` is always `>= 0` and the `=== -1 ? idx :` branch is dead code. Not a bug, just confusing -- the type `ReviewBoardDefaultColumn` already enforces the invariant. Worse: if Phase 4 adds a custom column to `REVIEW_BOARD_DEFAULT_COLUMNS` later and a downstream caller expands the list at runtime, the dead branch would misorder columns by inserting them at filter-loop index instead of intended position.
 - **Trigger**: Today: never fires. Future: brittleness if seeders ever take a runtime list.
 - **Fix**: Simplify to:
+
   ```ts
   const toInsert = REVIEW_BOARD_DEFAULT_COLUMNS
     .filter((name) => !have.has(name))
@@ -55,6 +57,7 @@ Logic is mostly sound; tests cover the happy path for every BC primitive, idempo
       sortOrder: REVIEW_BOARD_DEFAULT_COLUMNS.indexOf(name),
     }));
   ```
+
   The `name` is typed `ReviewBoardDefaultColumn` already; no cast needed.
 
 ### MINOR: `startSession`'s race recovery silently loses the original error context
@@ -63,6 +66,7 @@ Logic is mostly sound; tests cover the happy path for every BC primitive, idempo
 - **Problem**: The catch block re-selects on unique-constraint loser, but if the insert failed for any *other* reason (e.g. FK violation because `itemId` doesn't exist, or DB connection drop), the error is swallowed and `getOpenSession` is called again. If the second `getOpenSession` returns null, the original error is re-thrown -- but the user-facing error is now indistinguishable between "race lost" and "FK violation". Also: if `getOpenSession` itself throws on the retry, that error masks the original.
 - **Trigger**: User passes a stale `itemId`; `startSession` throws a generic FK error; the `catch` block calls `getOpenSession`, which returns `null` because no session exists; the original FK error is rethrown -- correct behavior, but only after a redundant DB round-trip.
 - **Fix**: Inspect the error. Drizzle/postgres unique violations have code `23505`; only retry on that code. Pseudocode:
+
   ```ts
   } catch (err) {
     const isPgUnique = (err instanceof Error && 'code' in err && err.code === '23505');

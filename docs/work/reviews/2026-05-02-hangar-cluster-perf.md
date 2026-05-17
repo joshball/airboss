@@ -181,23 +181,23 @@ Fix: Same as above -- bundle into a single `Promise.all` once the source row is 
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MAJOR: audit log no timestamp index | CLOSED | Chunk-3 PR #426 added `audit_log_timestamp_idx` (`libs/audit/src/schema.ts:80`) |
-| MAJOR: `/sources` reads aviation.ts via regex | CLOSED | PR #453 -- replaced with DB counts (`countLiveReferences`, `countVerbatimReferences`) |
-| MAJOR: `listRunningJobs` no LIMIT, full row | CLOSED | PR #453 -- slim projection + `JOBS_LIST_HARD_CAP` (`jobs-queries.ts:93-108`) |
-| MAJOR: job log buffer unbounded on client | CLOSED | PR #453 -- `JOB_LOG_CLIENT_BUFFER_MAX = 5000` cap with drop-oldest + "trim notice" |
-| MAJOR: `revokeAllUserSessions` MAX_SAFE_INTEGER limit | CLOSED | PR #453 -- replaced with `countUserSessions` + targeted `hasUserSessionWithId` (`user-writes.ts:454-462`) |
-| MINOR: `listLiveSources` SELECT * | CLOSED | PR #453 -- column projection in dashboard-queries |
-| MINOR: `listJobs` SELECT * | CLOSED | PR #453 -- slim projection for /jobs index |
-| MINOR: `getActiveJobForTarget` / `listRecentJobsForTarget` SELECT * | CLOSED | PR #453 -- column projection |
-| MINOR: `countAllJobs` aggregates whole table | CLOSED | PR #453 -- scoped to recent + queued/running tile semantics |
-| MINOR: `recoverOrphanedRunning` per-row appendJobLog | CLOSED | PR #436 -- batched / Promise.all'd inside transaction |
-| MINOR: `claimNext` no SKIP LOCKED | CLOSED | Documented MVP trade-off in worker.ts; multi-host upgrade tracked separately |
-| MINOR: `getReference` / `getSource` full-row read | CLOSED | Acceptable trade-off; documented in registry.ts |
-| NIT: `referenceWhere` filter-vs-dirtyCount mismatch | CLOSED | Intentional product semantic; documented |
-| NIT: `getJob` SELECT * for polling | CLOSED | PR #453 -- slim status projection on the polling endpoint |
-| NIT: `/sources/[id]` two job queries serial | CLOSED | PR #453 -- Promise.all bundle |
-| NIT: `/sources/[id]` filesystem stat serial | CLOSED | PR #453 -- bundled into the same Promise.all |
+| Finding                                                             | Verdict | Closure                                                                                                   |
+| ------------------------------------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------- |
+| MAJOR: audit log no timestamp index                                 | CLOSED  | Chunk-3 PR #426 added `audit_log_timestamp_idx` (`libs/audit/src/schema.ts:80`)                           |
+| MAJOR: `/sources` reads aviation.ts via regex                       | CLOSED  | PR #453 -- replaced with DB counts (`countLiveReferences`, `countVerbatimReferences`)                     |
+| MAJOR: `listRunningJobs` no LIMIT, full row                         | CLOSED  | PR #453 -- slim projection + `JOBS_LIST_HARD_CAP` (`jobs-queries.ts:93-108`)                              |
+| MAJOR: job log buffer unbounded on client                           | CLOSED  | PR #453 -- `JOB_LOG_CLIENT_BUFFER_MAX = 5000` cap with drop-oldest + "trim notice"                        |
+| MAJOR: `revokeAllUserSessions` MAX_SAFE_INTEGER limit               | CLOSED  | PR #453 -- replaced with `countUserSessions` + targeted `hasUserSessionWithId` (`user-writes.ts:454-462`) |
+| MINOR: `listLiveSources` SELECT *                                   | CLOSED  | PR #453 -- column projection in dashboard-queries                                                         |
+| MINOR: `listJobs` SELECT *                                          | CLOSED  | PR #453 -- slim projection for /jobs index                                                                |
+| MINOR: `getActiveJobForTarget` / `listRecentJobsForTarget` SELECT * | CLOSED  | PR #453 -- column projection                                                                              |
+| MINOR: `countAllJobs` aggregates whole table                        | CLOSED  | PR #453 -- scoped to recent + queued/running tile semantics                                               |
+| MINOR: `recoverOrphanedRunning` per-row appendJobLog                | CLOSED  | PR #436 -- batched / Promise.all'd inside transaction                                                     |
+| MINOR: `claimNext` no SKIP LOCKED                                   | CLOSED  | Documented MVP trade-off in worker.ts; multi-host upgrade tracked separately                              |
+| MINOR: `getReference` / `getSource` full-row read                   | CLOSED  | Acceptable trade-off; documented in registry.ts                                                           |
+| NIT: `referenceWhere` filter-vs-dirtyCount mismatch                 | CLOSED  | Intentional product semantic; documented                                                                  |
+| NIT: `getJob` SELECT * for polling                                  | CLOSED  | PR #453 -- slim status projection on the polling endpoint                                                 |
+| NIT: `/sources/[id]` two job queries serial                         | CLOSED  | PR #453 -- Promise.all bundle                                                                             |
+| NIT: `/sources/[id]` filesystem stat serial                         | CLOSED  | PR #453 -- bundled into the same Promise.all                                                              |
 
 Total: 16 closed / 0 open. `review_status` flipped to `done`.

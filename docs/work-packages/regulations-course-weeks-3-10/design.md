@@ -80,15 +80,15 @@ This is a content authoring WP. Nothing runs at runtime. The content's only cons
 
 ## Risks and mitigations
 
-| Risk                                                                     | Mitigation                                                                                              |
-| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| Sub-agent goes shallow on a hard topic (e.g. ferry permits, MEL/CDL)     | Brief includes the SYLLABUS topic list verbatim; the lesson must address every named topic              |
-| Citation drift across sub-agents                                         | All citations validated by `bun scripts/airboss-ref.ts` in Phase 3; broken citations get fixed inline   |
+| Risk                                                                     | Mitigation                                                                                                                                                        |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Sub-agent goes shallow on a hard topic (e.g. ferry permits, MEL/CDL)     | Brief includes the SYLLABUS topic list verbatim; the lesson must address every named topic                                                                        |
+| Citation drift across sub-agents                                         | All citations validated by `bun scripts/airboss-ref.ts` in Phase 3; broken citations get fixed inline                                                             |
 | Voice drift -- Week 4 reads like a different course than Week 3          | Sub-agents required to read Week 1 + Week 2 in full before authoring; Phase 3 includes a manual voice check (read first paragraph of every overview side by side) |
-| Pedagogical drift -- Common Misreadings missing on a lesson              | Test plan checklist; final pass greps every lesson file for `## Common misreadings`                     |
-| Sub-agent edits files outside its assigned directory                     | Worktree boundary hook + brief explicitly forbids; if it happens, those edits get backed out before commit |
-| Capstone orals don't match `night-ifr-passenger.md` rigor                | Week 10 sub-agent reads `night-ifr-passenger.md` and `gear-up-night-ifr.md` first; tests-plan checklist requires same section structure |
-| `bun run check` fails after authoring (markdown lint or table alignment) | Phase 3 runs the check; fixes are inline; no separate cycle                                             |
+| Pedagogical drift -- Common Misreadings missing on a lesson              | Test plan checklist; final pass greps every lesson file for `## Common misreadings`                                                                               |
+| Sub-agent edits files outside its assigned directory                     | Worktree boundary hook + brief explicitly forbids; if it happens, those edits get backed out before commit                                                        |
+| Capstone orals don't match `night-ifr-passenger.md` rigor                | Week 10 sub-agent reads `night-ifr-passenger.md` and `gear-up-night-ifr.md` first; tests-plan checklist requires same section structure                           |
+| `bun run check` fails after authoring (markdown lint or table alignment) | Phase 3 runs the check; fixes are inline; no separate cycle                                                                                                       |
 
 ## What changes if a sub-agent fails
 

@@ -6,15 +6,15 @@ Build phase 1 of [ADR 019](../../decisions/019-reference-identifier-system/decis
 
 ## Shipped
 
-| Phase | What landed |
-| ----- | ------------------------------------------------------------------------------------------------- |
-| 1     | `libs/sources/` skeleton + types + `NULL_REGISTRY` stub; `@ab/sources` path alias                 |
-| 2     | `parser.ts` per §1.1 + §1.1.1; 20 vitest cases (path-rootless / path-absolute / authority / pin)  |
-| 3     | `validator.ts` per §1.5 -- 15 rules in order, exclusivity, alias chain, ack-aware rules           |
-| 4     | `lesson-parser.ts` per §3.4 -- frontmatter acks, inline+ref-style links, code skip, orphan acks   |
+| Phase | What landed                                                                                           |
+| ----- | ----------------------------------------------------------------------------------------------------- |
+| 1     | `libs/sources/` skeleton + types + `NULL_REGISTRY` stub; `@ab/sources` path alias                     |
+| 2     | `parser.ts` per §1.1 + §1.1.1; 20 vitest cases (path-rootless / path-absolute / authority / pin)      |
+| 3     | `validator.ts` per §1.5 -- 15 rules in order, exclusivity, alias chain, ack-aware rules               |
+| 4     | `lesson-parser.ts` per §3.4 -- frontmatter acks, inline+ref-style links, code skip, orphan acks       |
 | 5     | `check.ts` walks `course/regulations/**`; `scripts/airboss-ref.ts` CLI; wired into `scripts/check.ts` |
-| 6     | Smoke test inserted + reverted; 77 tests pass; `bun run check` clean                               |
-| 7     | PR opened (TODO -- next step)                                                                      |
+| 6     | Smoke test inserted + reverted; 77 tests pass; `bun run check` clean                                  |
+| 7     | PR opened (TODO -- next step)                                                                         |
 
 ### Files
 

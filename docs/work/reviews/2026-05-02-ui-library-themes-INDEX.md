@@ -19,18 +19,18 @@ closed_out: 2026-05-04
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total | File |
-|--------------|---------:|------:|------:|----:|------:|------|
-| correctness  |        0 |     4 |     9 |   3 |    16 | [link](2026-05-02-ui-library-themes-correctness.md) |
-| perf         |        0 |     4 |     6 |   2 |    12 | [link](2026-05-02-ui-library-themes-perf.md) |
-| architecture |        2 |     4 |     3 |   2 |    11 | [link](2026-05-02-ui-library-themes-architecture.md) |
-| a11y         |        6 |    17 |    11 |   5 |    39 | [link](2026-05-02-ui-library-themes-a11y.md) |
-| patterns     |        2 |     3 |     4 |   2 |    11 | [link](2026-05-02-ui-library-themes-patterns.md) |
-| testing      |        1 |     7 |    11 |   4 |    23 | [link](2026-05-02-ui-library-themes-testing.md) |
-| dx           |        0 |     4 |     7 |   5 |    16 | [link](2026-05-02-ui-library-themes-dx.md) |
-| ux           |        3 |    14 |     8 |   5 |    30 | [link](2026-05-02-ui-library-themes-ux.md) |
-| svelte       |        0 |     1 |     4 |   4 |     9 | [link](2026-05-02-ui-library-themes-svelte.md) |
-| **TOTAL**    |   **14** |**58** |**63** |**32**|**167**| |
+| Category     | Critical | Major  | Minor  | Nit    | Total   | File                                                 |
+| ------------ | -------- | ------ | ------ | ------ | ------- | ---------------------------------------------------- |
+| correctness  | 0        | 4      | 9      | 3      | 16      | [link](2026-05-02-ui-library-themes-correctness.md)  |
+| perf         | 0        | 4      | 6      | 2      | 12      | [link](2026-05-02-ui-library-themes-perf.md)         |
+| architecture | 2        | 4      | 3      | 2      | 11      | [link](2026-05-02-ui-library-themes-architecture.md) |
+| a11y         | 6        | 17     | 11     | 5      | 39      | [link](2026-05-02-ui-library-themes-a11y.md)         |
+| patterns     | 2        | 3      | 4      | 2      | 11      | [link](2026-05-02-ui-library-themes-patterns.md)     |
+| testing      | 1        | 7      | 11     | 4      | 23      | [link](2026-05-02-ui-library-themes-testing.md)      |
+| dx           | 0        | 4      | 7      | 5      | 16      | [link](2026-05-02-ui-library-themes-dx.md)           |
+| ux           | 3        | 14     | 8      | 5      | 30      | [link](2026-05-02-ui-library-themes-ux.md)           |
+| svelte       | 0        | 1      | 4      | 4      | 9       | [link](2026-05-02-ui-library-themes-svelte.md)       |
+| **TOTAL**    | **14**   | **58** | **63** | **32** | **167** |                                                      |
 
 ## Critical findings (14)
 
@@ -66,17 +66,20 @@ closed_out: 2026-05-04
 ## Convergent / root-cause findings
 
 ### Misplaced aviation-specific UI in @ab/ui (3 reviewers, 1 critical-adjacent)
+
 - **architecture (major)**: `libs/ui/src/handbooks/*` (9 components) is FAA-handbook-specific chrome consumed only by study/library routes. Belongs in `libs/aviation/src/ui/`.
 - **architecture (major)**: `libs/ui/src/library/LibraryCard.svelte` is the same shape -- aviation-taxonomy card consumed only by study library routes.
 - **architecture (major)**: `libs/help/src/ui/HelpSection.svelte` deep-imports `@ab/aviation/ui/ReferenceText.svelte` but `libs/aviation/package.json` has no `exports` field declaring the subpath.
 - **Root cause**: aviation-domain UI has accumulated in the generic UI lib. Move to `libs/aviation/src/ui/` (already houses `ReferenceCard`/`ReferenceText`); add `exports` to aviation `package.json`.
 
 ### Custom popovers reinvent Dialog/Button (2 reviewers)
+
 - **ux (convergent)**: 5 separate modal implementations (`SnoozeReasonPopover`, `SharePopover`, `JumpToCardPopover`, `CitationPicker`, `PfdKeyboardLegend`) each reinvent scrim + close button + `.btn primary/ghost` despite `Dialog.svelte` and `Button.svelte` existing. Same root cause behind inconsistent close glyph (`x` ASCII / `&times;` / `×`).
 - **a11y (major)**: same 5 popovers have inconsistent keyboard support -- no listbox/tabs/dialog roving-tabindex.
 - **Root cause**: refactor the 5 popovers onto `Dialog` + roving-tabindex helpers. Closes ~6 a11y findings + the UX inconsistency.
 
 ### Token bypass clusters (3 reviewers)
+
 - **patterns (critical)**: `HelpSearchPalette` raw `rgba()` scrim; `PfdKeyboardLegend` magic `z-index: 100`.
 - **patterns (major)**: `libs/help/src/ui/*` subtree bypasses `--space-*` token grid (8 files, ~25 raw rem values that map to existing tokens).
 - **patterns (major)**: 9 cockpit-panel instruments hardcode `width: 200px; height: 200px` on outer wrappers (should be rem or token-sized like Spinner).
@@ -85,51 +88,62 @@ closed_out: 2026-05-04
 - **Root cause**: one finishing-pass token migration once UX/Svelte fixes land.
 
 ### `:focus-visible { outline: none }` cluster
+
 - **a11y (critical)**: `BrowseListItem`, `HandbookCard`, `HandbookSectionListItem`, `LibraryCard` all suppress outline and only flip border color.
 - **Root cause**: same fix in 4 files -- restore visible focus ring meeting 3:1 contrast.
 
 ### Color-only link affordance
+
 - **a11y (multiple)**: `MarkdownBody`, `CitationChips`, `CitedByPanel`, `InfoTip` rely on color alone to mark links.
 - **Root cause**: add underline / explicit affordance to each link primitive once.
 
 ### Missing exports field on libs that have shipped subpath imports
+
 - **architecture (minor)**: `@ab/themes`, `@ab/help`, `@ab/activities`, `@ab/aviation` all ship documented subpath imports without an `exports` field in `package.json`. Only `@ab/ui` has the contract written.
 - **dx (major)**: `pre-hydration.ts:22-31` documents a real shipped outage caused by this exact resolution-order ambiguity, yet the fix wasn't generalized.
 - **Root cause**: add `exports` map to all 4 libs at once. Same shape as `@ab/ui`'s.
 
 ### Eager full-bundle imports
+
 - **perf (major)**: `(app)/+layout.svelte` static-imports `$lib/help/register` -- ~2,300 lines of help/concept content into every signed-in page bundle, even though only `/help/*` consumes the bodies.
 - **dx (minor)**: `ThemePicker` snapshots `listThemes()` at module-init.
 - **Root cause**: split the help registry into "navigation/index" (always loaded) + "content bodies" (lazy). Same trick applies to themes.
 
 ### Focus-trap allocation per keystroke
+
 - **perf (minor)**: `Dialog`, `Drawer`, `SnoozeReasonPopover`, `JumpToCardPopover`, `ConfirmAction`, `InfoTip` allocate fresh `createFocusTrap` per keystroke instead of once per modal-open.
 - **dx (major)**: same -- functionally correct today (because `release()` is a no-op), but a future change adding a real document listener would silently leak across 6 call sites.
 - **Root cause**: hoist `createFocusTrap()` to module-mount level inside each modal component (or share via a snippet helper).
 
 ### `libs/activities/` ships zero tests
+
 - **testing (major)**: cockpit-panel, crosswind-component, pfd source -- no tests at all.
 - **Root cause**: add per-component DOM-contract tests matching the `libs/ui/__tests__/` pattern. PFD and crosswind have rotation/mapping helpers ripe for unit tests if extracted.
 
 ### PFD/altitude tape rAF allocation
+
 - **perf (major)**: rAF loop runs at 60fps forever even at quiescence. AltitudeTape rebuilds tick array every frame even when bands haven't crossed boundaries.
 - **Root cause**: precompute tick ladder once; snap to band boundaries in `$derived`.
 
 ### Help search perf
+
 - **perf (major)**: sync-on-every-keystroke search with no precomputed lowercased haystacks and no debounce -- O(pages × sections × body_length) per keystroke.
 - **perf (major)**: markdown highlighting + section parsing run sequentially with await -- drawer-open latency is `sum(...)` instead of `max(...)`.
 - **perf (major)**: `HelpLayout` scroll handler reads `offsetTop` per section per scroll event with no rAF throttle and no IntersectionObserver -- forced layout × N sections per scroll.
 
 ### CitationPicker bugs
+
 - **correctness (major)**: stuck `loading` flag in CitationPicker race when switching to External-Ref mid-fetch.
 - **a11y (major)**: listbox has no keyboard navigation despite ARIA roles.
 - **Root cause**: refactor as part of the popover-to-Dialog migration.
 
 ### Markdown parser inconsistencies
+
 - **correctness (major)**: `findUnescaped` disagrees with `parseInlineUntil` on which `\<c>` sequences are escapes -- drops emphasis under literal backslashes.
 - **correctness (major)**: query-parser tokenizer doesn't break on `"` inside bare tokens; silently swallows unterminated quotes.
 
 ### `ConfirmDialog` reactivity bug
+
 - **svelte (major)**: passes `{open}` to child `Dialog` without `bind:`. Dialog writes `open = false` on close; non-reactive write because prop is not bindable from this caller. (Other Dialog caller, `CitationPicker`, uses `bind:open` correctly.)
 
 ## What's clean (preserve)
@@ -174,30 +188,30 @@ closed_out: 2026-05-04
 
 All 9 per-category reviews walked finding-by-finding against current main and updated with a "Status as of 2026-05-04" table. Per-category tally:
 
-| Category     | Total | Closed | Deferred | Dropped | File |
-|--------------|------:|-------:|---------:|--------:|------|
-| correctness  |    16 |     16 |        0 |       0 | [link](2026-05-02-ui-library-themes-correctness.md) |
-| perf         |    12 |     12 |        0 |       0 | [link](2026-05-02-ui-library-themes-perf.md) |
-| architecture |    11 |      9 |        0 |       2 | [link](2026-05-02-ui-library-themes-architecture.md) |
-| a11y         |    40 |     37 |        0 |       3 | [link](2026-05-02-ui-library-themes-a11y.md) |
-| patterns     |    11 |      7 |        4 |       0 | [link](2026-05-02-ui-library-themes-patterns.md) |
-| testing      |    24 |     17 |        1 |       6 | [link](2026-05-02-ui-library-themes-testing.md) |
-| dx           |    16 |     15 |        0 |       1 | [link](2026-05-02-ui-library-themes-dx.md) |
-| ux           |    31 |     23 |        3 |       5 | [link](2026-05-02-ui-library-themes-ux.md) |
-| svelte       |     9 |      9 |        0 |       0 | [link](2026-05-02-ui-library-themes-svelte.md) |
-| **TOTAL**    |**170**|**145** |    **8** |  **17** | |
+| Category     | Total   | Closed  | Deferred | Dropped | File                                                 |
+| ------------ | ------- | ------- | -------- | ------- | ---------------------------------------------------- |
+| correctness  | 16      | 16      | 0        | 0       | [link](2026-05-02-ui-library-themes-correctness.md)  |
+| perf         | 12      | 12      | 0        | 0       | [link](2026-05-02-ui-library-themes-perf.md)         |
+| architecture | 11      | 9       | 0        | 2       | [link](2026-05-02-ui-library-themes-architecture.md) |
+| a11y         | 40      | 37      | 0        | 3       | [link](2026-05-02-ui-library-themes-a11y.md)         |
+| patterns     | 11      | 7       | 4        | 0       | [link](2026-05-02-ui-library-themes-patterns.md)     |
+| testing      | 24      | 17      | 1        | 6       | [link](2026-05-02-ui-library-themes-testing.md)      |
+| dx           | 16      | 15      | 0        | 1       | [link](2026-05-02-ui-library-themes-dx.md)           |
+| ux           | 31      | 23      | 3        | 5       | [link](2026-05-02-ui-library-themes-ux.md)           |
+| svelte       | 9       | 9       | 0        | 0       | [link](2026-05-02-ui-library-themes-svelte.md)       |
+| **TOTAL**    | **170** | **145** | **8**    | **17**  |                                                      |
 
 (The original index counted 192; per-category headers tally to 170 -- the 22-finding delta is convergent items that appeared in multiple reviews and were only counted once per category.)
 
 ### Severity rollup (closed)
 
-| Severity | Closed | Deferred | Dropped |
-|----------|-------:|---------:|--------:|
-| Critical |     14 |        0 |       0 |
-| Major    |     56 |        0 |       2 |
-| Minor    |     54 |        4 |       6 |
-| Nit      |     21 |        4 |       9 |
-| **TOTAL**| **145**|    **8** |  **17** |
+| Severity  | Closed  | Deferred | Dropped |
+| --------- | ------- | -------- | ------- |
+| Critical  | 14      | 0        | 0       |
+| Major     | 56      | 0        | 2       |
+| Minor     | 54      | 4        | 6       |
+| Nit       | 21      | 4        | 9       |
+| **TOTAL** | **145** | **8**    | **17**  |
 
 ### Deferred (8) -- all with explicit triggers
 

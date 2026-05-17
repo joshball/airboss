@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Overall the codebase is in a healthy place: ADR 012's new `sir_user_kind_completed_idx` and `sir_scenario_completed_idx` cover the aggregator hot paths, Drizzle queries specify columns (not `select *` everywhere), pagination uses the correct limit+1 pattern, and the dashboard fans panels out through `Promise.allSettled`. The major weaknesses are two classic N+1 fans (knowledge browse calls `getNodeMastery` per visible node; session-engine prereq walk calls `isNodeMastered` per prerequisite), plus an unbounded `review` scan in `fetchCardCandidates` that grows with a user's full review history. Several supporting queries lack a driving index -- in particular `card_state.stability` / `card.node_id` filters run over sequential scans once data scales past single-digit thousands of rows.

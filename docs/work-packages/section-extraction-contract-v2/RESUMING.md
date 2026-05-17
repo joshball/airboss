@@ -22,13 +22,13 @@ The contract-v2 WP closed on 2026-04-30 in a production-ready state. The mutual-
 
 PR #366's 357 per-chapter disagreements (committed under `handbooks/phak/FAA-H-8083-25C/<NN>/_llm_disagreements.json`) are body-text-grounded reasoning about where the deterministic TOC parser is wrong. By type:
 
-| Type | Count | Pattern |
-| ---- | ----- | ------- |
-| `level_mismatch` | 257 | TOC over-flattens subsections to L1; the LLM correctly nests them. |
-| `extra_in_toc` | 67 | Real body headings the printed TOC doesn't list (e.g. "History of the FAA" with 8 nested children). |
-| `parent_mismatch` | 28 | Same heading, different parent. Often a downstream effect of `level_mismatch`. |
-| `missing_in_body` | 5 | Pseudo-headings the contract's difficult-cases catalog says to skip (e.g. "Privileges:", "Limitations:"). |
-| `anchor_mismatch` | 0 | Page anchors agreed everywhere this run. |
+| Type              | Count | Pattern                                                                                                   |
+| ----------------- | ----- | --------------------------------------------------------------------------------------------------------- |
+| `level_mismatch`  | 257   | TOC over-flattens subsections to L1; the LLM correctly nests them.                                        |
+| `extra_in_toc`    | 67    | Real body headings the printed TOC doesn't list (e.g. "History of the FAA" with 8 nested children).       |
+| `parent_mismatch` | 28    | Same heading, different parent. Often a downstream effect of `level_mismatch`.                            |
+| `missing_in_body` | 5     | Pseudo-headings the contract's difficult-cases catalog says to skip (e.g. "Privileges:", "Limitations:"). |
+| `anchor_mismatch` | 0     | Page anchors agreed everywhere this run.                                                                  |
 
 Each entry includes a `reason` field with body-text citations. This is **structured input data** for fixing `sections_via_toc.py`, not just advisory output.
 
@@ -50,10 +50,12 @@ The current production run is phak-only. If you want LLM-assisted extraction on 
 
 1. **Edit the YAML** at `scripts/sources/config/handbooks/<doc>.yaml` -- set `section_strategy: prompt` (or pass `--strategy prompt` at runtime).
 2. **Run the orchestrator** the same way phak ran:
+
    ```bash
    bun run sources extract handbooks <doc> --strategy prompt
    # then: claude < tools/handbook-ingest/prompts-out/<doc>/<edition>/out/_run.md
    ```
+
 3. **The orchestrator self-isolates, dispatches sub-agents, ships its own PR.** Same flow as PR #366.
 
 AFH and AVWX caps already raised (Phase 1 PR #332). Templates already v4. No new code needed.

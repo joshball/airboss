@@ -97,6 +97,7 @@ The handbook / library cards lack progress-bar ARIA semantics. `PanelShell` show
 
 **File:** `libs/help/src/ui/HelpSearchPalette.svelte:118-215, 218-228`
 **Problem:** Two issues conflated:
+
 1. Backdrop is `rgba(15, 23, 42, 0.4)` literal -- not a theme token. Won't switch with theme. Should be `var(--dialog-scrim)` or `var(--overlay-scrim)`.
 2. Palette is `role="dialog" aria-modal="true"` but Tab/Shift+Tab can move focus out of the palette to elements behind the scrim. No `createFocusTrap` is wired in. This is the project's most-used keyboard surface (Cmd+K) -- focus escape is a real defect.
 3. Spacing values like `0.75rem 1rem`, `0.25rem`, `0.5rem`, `6rem` padding are hardcoded literals instead of `var(--space-*)` tokens. Tokens drift, theme breaks.
@@ -116,6 +117,7 @@ The handbook / library cards lack progress-bar ARIA semantics. `PanelShell` show
 **Problem:** Footer renders raw `<button class="btn primary">` and `<button class="btn ghost">` with bespoke styles. Five+ duplicate definitions of "primary button" exist across the library (`SnoozeReasonPopover`, `SharePopover.action`, `PfdKeyboardLegend.ok`, `HandbookSectionNotes` save, `HandbookReadProgressControl.reread-btn`). Different border-radius, padding, hover treatment between them. This is the convergent finding from the headline.
 **Expected:** Every primary/ghost/danger button in the library is `<Button variant="...">`. Local CSS for buttons is forbidden in shared primitives.
 **Fix:** Replace all bespoke `.btn primary/ghost` blocks with `<Button>`. The only legitimate exceptions are:
+
 - `ConfirmAction.svelte` (which already documents why it duplicates -- it needs a `bind:this` ref).
 - `Button.svelte` itself.
 Everywhere else, route through the primitive.
@@ -146,6 +148,7 @@ Everywhere else, route through the primitive.
 **File:** `libs/ui/src/handbooks/HandbookSectionNotes.svelte:24-39`
 **Problem:** Save is a server-rendered POST. The user clicks "Save notes", the page reloads (or revalidates), and there is no banner / toast / "Saved" indicator. Violates the locked "Edit-then-stay" Confirmation-Not-Guesswork pattern from `DESIGN_PRINCIPLES.md` Principle 6.
 **Expected:** Either:
+
 - Server returns `{ success: true, message: 'Notes saved' }` and the client renders a `<Banner tone="success" dismissible>` for ~3s.
 - Or set a `?saved=1` query param and let the parent page render a banner on landing.
 **Fix:** Wire up an `onSuccess` snippet or callback prop. Update the parent page (handbook reader) to render the saved banner.
@@ -257,39 +260,39 @@ Everywhere else, route through the primitive.
 
 ## Status as of 2026-05-04
 
-| # | Severity | Finding | Verdict |
-|---|----------|---------|---------|
-| 1 | Critical | `.warn-badge` invisible (same color/background) | CLOSED -- color now `--action-hazard-ink`. |
-| 2 | Critical | Reading-progress segmented control not keyboard-operable | CLOSED -- sr-only clip pattern + `:focus-within` outline (a11y close-out). |
-| 3 | Critical | `Button.loading` no spinner | CLOSED in this audit -- inline CSS spinner shown whenever loading is true. |
-| 4 | Major | Five separate modal implementations | CLOSED -- `SnoozeReasonPopover`, `SharePopover`, `JumpToCardPopover`, `CitationPicker`, `PfdKeyboardLegend` all migrated to `<Dialog>` primitive. |
-| 5 | Major | `FilterChips` chip has no hover state | CLOSED -- distinct `.chip:hover` background/border/color and `.chip-x` opacity hover (`FilterChips.svelte:87-95`). |
-| 6 | Major | `DataTable` sort indicator ASCII | CLOSED -- `▲`/`▼` triangles. |
-| 7 | Major | `PanelShell` error has no retry | CLOSED -- `onRetry` callback prop renders a `<Button>` retry affordance. |
-| 8 | Major | `PanelShell` em-dash separator | CLOSED -- "Try refreshing." sentence-split. |
-| 9 | Major | `Banner` ASCII `x` dismiss | CLOSED -- `&times;` U+00D7. |
-| 10 | Major | `HelpSearchPalette` no focus trap + hardcoded scrim/spacing | CLOSED -- focus trap added in this audit; scrim is `--overlay-scrim`; spacing migrated to `--space-*`. |
-| 11 | Major | `CitationPicker` listbox no keyboard | CLOSED in this audit -- `handleResultKeyDown` arrow/Home/End nav with roving tabindex. |
-| 12 | Major | `CitationPicker` reimplements Button | DEFERRED -- the CitationPicker footer already uses `<Button>` for Cancel and submit; remaining inline `.btn` only on rows-as-listbox-options which is the right shape (option role, not button variant). |
-| 13 | Major | `EmptyState` hardcoded `<h2>` | CLOSED -- `headingLevel?: 2 \| 3 \| 4` prop. |
-| 14 | Major | Card progress bars no `role="progressbar"` | CLOSED in this audit -- HandbookCard + LibraryCard now ship full progressbar ARIA. |
-| 15 | Major | `--ink-inverse` used as surface color | CLOSED -- audited and replaced; no occurrences in any of the listed files. |
-| 16 | Major | `HandbookSectionNotes` save no confirmation | DEFERRED -- requires parent-page coordination (server returns + page renders banner). The component is intentionally bare-form; success feedback is a parent-page responsibility and the right place to land it is the handbook reader page. |
-| 17 | Major | `HandbookReadProgressControl` auto-submit no feedback | DEFERRED -- same parent-coordination shape as #16. |
-| 18 | Major | PFD `?` discoverability | CLOSED -- visible help-chip in upper-right of PFD frame (`Pfd.svelte:84-91`). |
-| 19 | Minor | `HelpSection` pre-wrap on parsed markdown | CLOSED -- `class:legacy={!nodes}` and `.body.legacy` only sets pre-wrap. |
-| 20 | Minor | Required-field marker invisible to AT | CLOSED -- `aria-required` mirrors `required` on TextField + Select inputs. |
-| 21 | Minor | `CitedByPanel` empty state | CLOSED -- uses shared `<EmptyState>` component. |
-| 22 | Minor | `LibraryCard` kind chip uses -edge token | CLOSED -- now `color: var(--signal-info)` on signal-info-wash. |
-| 23 | Minor | `InfoTip` mobile UX | CLOSED -- `isHoverDevice()` matchMedia gate on pointerenter/leave handlers. |
-| 24 | Minor | `Tabs` panel scroll into view | CLOSED -- `panelEl.scrollIntoView({ block: 'nearest' })` with prefers-reduced-motion respect. |
-| 25 | Minor | `Spinner` aria-label "Loading" | CLOSED -- JSDoc nudges callers toward specific labels (`Spinner.svelte:13-15`). |
-| 26 | Minor | `ConfirmAction` confirm not inflight | CLOSED -- `loading` + `loadingLabel` props with spinner via Button. |
-| 27 | Nit | `JumpToCardPopover` row status colors blur | DROPPED -- the `.row-rated.is-current` cascade is correct today and the recommended `--row-status-color` indirection is a refactor for marginal gain. |
-| 28 | Nit | `ResultSummary` `&ndash;` for ranges | CLOSED -- single hyphen `{start}-{end}`. |
-| 29 | Nit | `SharePopover` action-tile shape | DROPPED -- shape is intentional (action-tile pattern) and consistent with the surrounding card-style layout. Extracting an ActionTile primitive is a separate design call. |
-| 30 | Nit | `HandbookCard` `·` separator | DROPPED -- text-content separator with `aria-hidden` is the standard pattern; the proposed border-left CSS would change visual weight. |
-| 31 | Nit | `BrowseListItem` just-created glow intensity | DROPPED -- the design intent is celebratory and the current weight is verified-in-use. Optional softening punted to a future polish pass. |
+| #   | Severity | Finding                                                     | Verdict                                                                                                                                                                                                                                      |     |          |
+| --- | -------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | -------- |
+| 1   | Critical | `.warn-badge` invisible (same color/background)             | CLOSED -- color now `--action-hazard-ink`.                                                                                                                                                                                                   |     |          |
+| 2   | Critical | Reading-progress segmented control not keyboard-operable    | CLOSED -- sr-only clip pattern + `:focus-within` outline (a11y close-out).                                                                                                                                                                   |     |          |
+| 3   | Critical | `Button.loading` no spinner                                 | CLOSED in this audit -- inline CSS spinner shown whenever loading is true.                                                                                                                                                                   |     |          |
+| 4   | Major    | Five separate modal implementations                         | CLOSED -- `SnoozeReasonPopover`, `SharePopover`, `JumpToCardPopover`, `CitationPicker`, `PfdKeyboardLegend` all migrated to `<Dialog>` primitive.                                                                                            |     |          |
+| 5   | Major    | `FilterChips` chip has no hover state                       | CLOSED -- distinct `.chip:hover` background/border/color and `.chip-x` opacity hover (`FilterChips.svelte:87-95`).                                                                                                                           |     |          |
+| 6   | Major    | `DataTable` sort indicator ASCII                            | CLOSED -- `▲`/`▼` triangles.                                                                                                                                                                                                                 |     |          |
+| 7   | Major    | `PanelShell` error has no retry                             | CLOSED -- `onRetry` callback prop renders a `<Button>` retry affordance.                                                                                                                                                                     |     |          |
+| 8   | Major    | `PanelShell` em-dash separator                              | CLOSED -- "Try refreshing." sentence-split.                                                                                                                                                                                                  |     |          |
+| 9   | Major    | `Banner` ASCII `x` dismiss                                  | CLOSED -- `&times;` U+00D7.                                                                                                                                                                                                                  |     |          |
+| 10  | Major    | `HelpSearchPalette` no focus trap + hardcoded scrim/spacing | CLOSED -- focus trap added in this audit; scrim is `--overlay-scrim`; spacing migrated to `--space-*`.                                                                                                                                       |     |          |
+| 11  | Major    | `CitationPicker` listbox no keyboard                        | CLOSED in this audit -- `handleResultKeyDown` arrow/Home/End nav with roving tabindex.                                                                                                                                                       |     |          |
+| 12  | Major    | `CitationPicker` reimplements Button                        | DEFERRED -- the CitationPicker footer already uses `<Button>` for Cancel and submit; remaining inline `.btn` only on rows-as-listbox-options which is the right shape (option role, not button variant).                                     |     |          |
+| 13  | Major    | `EmptyState` hardcoded `<h2>`                               | CLOSED -- `headingLevel?: 2 \                                                                                                                                                                                                                | 3 \ | 4` prop. |
+| 14  | Major    | Card progress bars no `role="progressbar"`                  | CLOSED in this audit -- HandbookCard + LibraryCard now ship full progressbar ARIA.                                                                                                                                                           |     |          |
+| 15  | Major    | `--ink-inverse` used as surface color                       | CLOSED -- audited and replaced; no occurrences in any of the listed files.                                                                                                                                                                   |     |          |
+| 16  | Major    | `HandbookSectionNotes` save no confirmation                 | DEFERRED -- requires parent-page coordination (server returns + page renders banner). The component is intentionally bare-form; success feedback is a parent-page responsibility and the right place to land it is the handbook reader page. |     |          |
+| 17  | Major    | `HandbookReadProgressControl` auto-submit no feedback       | DEFERRED -- same parent-coordination shape as #16.                                                                                                                                                                                           |     |          |
+| 18  | Major    | PFD `?` discoverability                                     | CLOSED -- visible help-chip in upper-right of PFD frame (`Pfd.svelte:84-91`).                                                                                                                                                                |     |          |
+| 19  | Minor    | `HelpSection` pre-wrap on parsed markdown                   | CLOSED -- `class:legacy={!nodes}` and `.body.legacy` only sets pre-wrap.                                                                                                                                                                     |     |          |
+| 20  | Minor    | Required-field marker invisible to AT                       | CLOSED -- `aria-required` mirrors `required` on TextField + Select inputs.                                                                                                                                                                   |     |          |
+| 21  | Minor    | `CitedByPanel` empty state                                  | CLOSED -- uses shared `<EmptyState>` component.                                                                                                                                                                                              |     |          |
+| 22  | Minor    | `LibraryCard` kind chip uses -edge token                    | CLOSED -- now `color: var(--signal-info)` on signal-info-wash.                                                                                                                                                                               |     |          |
+| 23  | Minor    | `InfoTip` mobile UX                                         | CLOSED -- `isHoverDevice()` matchMedia gate on pointerenter/leave handlers.                                                                                                                                                                  |     |          |
+| 24  | Minor    | `Tabs` panel scroll into view                               | CLOSED -- `panelEl.scrollIntoView({ block: 'nearest' })` with prefers-reduced-motion respect.                                                                                                                                                |     |          |
+| 25  | Minor    | `Spinner` aria-label "Loading"                              | CLOSED -- JSDoc nudges callers toward specific labels (`Spinner.svelte:13-15`).                                                                                                                                                              |     |          |
+| 26  | Minor    | `ConfirmAction` confirm not inflight                        | CLOSED -- `loading` + `loadingLabel` props with spinner via Button.                                                                                                                                                                          |     |          |
+| 27  | Nit      | `JumpToCardPopover` row status colors blur                  | DROPPED -- the `.row-rated.is-current` cascade is correct today and the recommended `--row-status-color` indirection is a refactor for marginal gain.                                                                                        |     |          |
+| 28  | Nit      | `ResultSummary` `&ndash;` for ranges                        | CLOSED -- single hyphen `{start}-{end}`.                                                                                                                                                                                                     |     |          |
+| 29  | Nit      | `SharePopover` action-tile shape                            | DROPPED -- shape is intentional (action-tile pattern) and consistent with the surrounding card-style layout. Extracting an ActionTile primitive is a separate design call.                                                                   |     |          |
+| 30  | Nit      | `HandbookCard` `·` separator                                | DROPPED -- text-content separator with `aria-hidden` is the standard pattern; the proposed border-left CSS would change visual weight.                                                                                                       |     |          |
+| 31  | Nit      | `BrowseListItem` just-created glow intensity                | DROPPED -- the design intent is celebratory and the current weight is verified-in-use. Optional softening punted to a future polish pass.                                                                                                    |     |          |
 
 31 of 31 closed: 23 fixed (or fixed-by-prior-work), 5 dropped as
 acceptable-as-is, 3 deferred (1 architectural -- CitationPicker option-role

@@ -44,17 +44,17 @@ review_status: pending
 
 **Chosen order:**
 
-| # | Panel                   | Answers                        |
-| - | ----------------------- | ------------------------------ |
-| 1 | Primary CTA             | What do I do right now?        |
-| 2 | Reviews due today       | How much work is waiting?      |
-| 3 | Scheduled reps          | How much work is waiting?      |
-| 4 | Calibration summary     | How honest is my self-picture? |
-| 5 | Weak areas              | Where do I need attention?     |
-| 6 | Recent activity         | Have I been consistent?        |
-| 7 | Cert progress (gated)   | How far along am I?            |
-| 8 | The map (gated)         | Where across the territory?    |
-| 9 | Study plan (gated)      | What am I aiming at?           |
+| #   | Panel                 | Answers                        |
+| --- | --------------------- | ------------------------------ |
+| 1   | Primary CTA           | What do I do right now?        |
+| 2   | Reviews due today     | How much work is waiting?      |
+| 3   | Scheduled reps        | How much work is waiting?      |
+| 4   | Calibration summary   | How honest is my self-picture? |
+| 5   | Weak areas            | Where do I need attention?     |
+| 6   | Recent activity       | Have I been consistent?        |
+| 7   | Cert progress (gated) | How far along am I?            |
+| 8   | The map (gated)       | Where across the territory?    |
+| 9   | Study plan (gated)    | What am I aiming at?           |
 
 **Why this order:**
 

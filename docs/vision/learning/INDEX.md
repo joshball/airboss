@@ -10,22 +10,22 @@ The products structure (categories, PRDs, frontmatter) is wrong for learning. Pr
 
 A returning CFI needs competence across all of these:
 
-| #  | Domain                         | Notes                                                         |
-| -- | ------------------------------ | ------------------------------------------------------------- |
-| 1  | Regulations                    | FARs, AIM, current ADs, recent rule changes                   |
-| 2  | Weather                        | METARs, TAFs, PIREPs, radar, icing, thunderstorms, decisions  |
-| 3  | Airspace                       | Class A-G, special use, TFRs, ADIZ, what changed in 30 years |
-| 4  | Glass Cockpits                 | G1000, GTN, modern avionics workflow, automation management   |
-| 5  | IFR Procedures                 | Approaches, departures, enroute, holds, modern GPS/RNAV       |
-| 6  | VFR Operations                 | Pattern work, navigation, flight following, CTAF              |
-| 7  | Aerodynamics & Performance     | Refresher, weight/balance, DA/PA                              |
-| 8  | Teaching Methodology           | FOI concepts, scenario-based training, learning theory        |
-| 9  | ADM & Human Factors            | DECIDE, 3P, PAVE, IMSAFE, TEM, CRM, startle/surprise        |
-| 10 | Safety & Accident Analysis     | NTSB cases, common errors, safety culture                     |
-| 11 | Aircraft Systems               | Whatever types you'll fly                                     |
-| 12 | Flight Planning & Navigation   | Modern tools, EFBs, GPS vs pilotage                           |
-| 13 | Emergency Procedures           | Memory items, decision trees                                  |
-| 14 | FAA Practical Standards        | ACS for CFI, what's tested, how it's tested                   |
+| #   | Domain                       | Notes                                                        |
+| --- | ---------------------------- | ------------------------------------------------------------ |
+| 1   | Regulations                  | FARs, AIM, current ADs, recent rule changes                  |
+| 2   | Weather                      | METARs, TAFs, PIREPs, radar, icing, thunderstorms, decisions |
+| 3   | Airspace                     | Class A-G, special use, TFRs, ADIZ, what changed in 30 years |
+| 4   | Glass Cockpits               | G1000, GTN, modern avionics workflow, automation management  |
+| 5   | IFR Procedures               | Approaches, departures, enroute, holds, modern GPS/RNAV      |
+| 6   | VFR Operations               | Pattern work, navigation, flight following, CTAF             |
+| 7   | Aerodynamics & Performance   | Refresher, weight/balance, DA/PA                             |
+| 8   | Teaching Methodology         | FOI concepts, scenario-based training, learning theory       |
+| 9   | ADM & Human Factors          | DECIDE, 3P, PAVE, IMSAFE, TEM, CRM, startle/surprise         |
+| 10  | Safety & Accident Analysis   | NTSB cases, common errors, safety culture                    |
+| 11  | Aircraft Systems             | Whatever types you'll fly                                    |
+| 12  | Flight Planning & Navigation | Modern tools, EFBs, GPS vs pilotage                          |
+| 13  | Emergency Procedures         | Memory items, decision trees                                 |
+| 14  | FAA Practical Standards      | ACS for CFI, what's tested, how it's tested                  |
 
 ## Tracking
 

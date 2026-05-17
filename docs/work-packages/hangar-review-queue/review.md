@@ -34,9 +34,9 @@ Per-phase reviewers (schema, backend, correctness) authored inline (Task tool no
 
 | Reviewer    | Critical | Major | Minor | Nit | All fixed? |
 | ----------- | -------- | ----- | ----- | --- | ---------- |
-| schema      |   0      |   1   |   4   |  1  |   yes      |
-| backend     |   0      |   1   |   3   |  1  |   yes      |
-| correctness |   0      |   2   |   2   |  1  |   yes      |
+| schema      | 0        | 1     | 4     | 1   | yes        |
+| backend     | 0        | 1     | 3     | 1   | yes        |
+| correctness | 0        | 2     | 2     | 1   | yes        |
 
 Major findings closed:
 
@@ -75,12 +75,12 @@ The BC + schema + loader landed here are sufficient that any of Phases 3-8 can b
 
 ## Final review counts
 
-| Severity   | Phase 1 raised | Phase 1 closed | Phase 2 raised | Phase 2 closed |
-| ---------- | -------------- | -------------- | -------------- | -------------- |
-| critical   |       0        |       0        |       0        |       0        |
-| major      |       4        |       4        |       0        |       0        |
-| minor      |       9        |       9        |       0        |       0        |
-| nit        |       3        |       3        |       0        |       0        |
+| Severity | Phase 1 raised | Phase 1 closed | Phase 2 raised | Phase 2 closed |
+| -------- | -------------- | -------------- | -------------- | -------------- |
+| critical | 0              | 0              | 0              | 0              |
+| major    | 4              | 4              | 0              | 0              |
+| minor    | 9              | 9              | 0              | 0              |
+| nit      | 3              | 3              | 0              | 0              |
 
 (Phase 2 raised zero findings inline because the per-phase reviewer pass was deferred to the post-UI 10x sweep -- see "Phase 3-8" above.)
 

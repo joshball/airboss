@@ -36,7 +36,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Spaced Memory Items -- Final Patterns Review
 
 Scope: `git diff docs/initial-migration..HEAD` -- 83 files, +9,785 / -69 lines across Phase 0 (foundation port), Phase 1 (constants + schema + FSRS wrapper), Phase 2 (cards/reviews/stats BC), Phase 3 (card management UI), and Phase 4 (dashboard + review flow), with one post-phase fix commit per phase.
@@ -49,10 +48,10 @@ This review enumerates the remaining pattern deviations. No criticals. Two major
 
 | Severity | Count | Fix before merge? |
 | -------- | ----- | ----------------- |
-| Critical |     0 | n/a               |
-| Major    |     2 | yes               |
-| Minor    |     7 | preferred         |
-| Nit      |     3 | optional          |
+| Critical | 0     | n/a               |
+| Major    | 2     | yes               |
+| Minor    | 7     | preferred         |
+| Nit      | 3     | optional          |
 
 ## Findings
 

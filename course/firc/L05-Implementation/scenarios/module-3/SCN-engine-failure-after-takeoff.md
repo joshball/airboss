@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     3.2
 Title:           Third Takeoff in the Pattern
 Module:          3
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11, FAA_TOPIC.A_5]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AC-2', 'RM-2', 'CJ-2']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Overconfident Student
 Parameters:
   skillLevel:         0.4
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        400 AGL on crosswind, engine coughs and RPM drops from 2400 to 1800. Aircraft begins to sink. Student's hands tighten on the yoke.
 studentSpeech:What was that? The engine -- something's wrong!
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2a
 
-```
+```text
 id:           tick_2a
 scene:        350 AGL, RPM fluctuating 1600-1800. Airspeed 72 knots and holding. Student is scanning instruments but hasn't pitched for best glide or made a decision about direction.
 studentSpeech:Should I try to turn back? I think I can make the runway.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 2b
 
-```
+```text
 id:           tick_2b
 scene:        350 AGL, RPM fluctuating 1600-1800. Student is looking around but hands are steady. Airspeed 72 knots.
 studentSpeech:OK... power is low. What do I do here?
@@ -114,7 +114,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        250 AGL. RPM drops to 1400 and stabilizes. Airspeed 68 knots -- below best glide. Student begins a left turn back toward the runway. Bank angle 25 degrees.
 studentSpeech:I'm going to try for the runway -- I think I can make it.
@@ -135,7 +135,7 @@ criticalWindow:[coach]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        150 AGL. Turning through crosswind heading. Bank angle 30 degrees. Airspeed 63 knots. Stall horn chirps. The runway is behind and below.
 studentSpeech:...
@@ -156,7 +156,7 @@ criticalWindow:[direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2a -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
      \                   \         \-> terminal_safe (direct/take_controls)
       \                   \-> terminal_safe (direct/take_controls)

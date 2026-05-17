@@ -19,20 +19,20 @@ Recent sim weakness lifts the study cards / reps tied to the knowledge each scen
 
 ## Shipped
 
-| Surface                | What it does                                                                                  | Spec                                                                                  |
-| ---------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| `/`                    | Scenarios index. Lists available scenarios; click to fly.                                    | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
-| `/cockpit/[id]`        | Cockpit view. Six-pack + engine gauges + annunciator strip. Keyboard / mouse control.         | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
-| `/horizon/[id]`        | Outside-the-cockpit 3D horizon view. Surface-loose-coupled per ADR 015.                       | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)                          |
-| `/dual/[id]`           | Cockpit + horizon side-by-side. Composes both surfaces; spawns its own FDM worker.            | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)                          |
-| `/debrief/[runId]`     | Scrubbable post-run tape. Truth vs display per tick. Ideal-path overlay. Input tape view.     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
-| `/history`             | Per-pilot run history. Click into any prior run's debrief.                                    | --                                                                                    |
-| FDM worker             | JSBSim-style hand-rolled FDM running in a Web Worker. Truth state computed every tick.         | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
-| Aircraft profiles      | C172 (canonical), PA-28 (second profile).                                                     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
+| Surface                | What it does                                                                                                    | Spec                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `/`                    | Scenarios index. Lists available scenarios; click to fly.                                                       | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| `/cockpit/[id]`        | Cockpit view. Six-pack + engine gauges + annunciator strip. Keyboard / mouse control.                           | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| `/horizon/[id]`        | Outside-the-cockpit 3D horizon view. Surface-loose-coupled per ADR 015.                                         | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)           |
+| `/dual/[id]`           | Cockpit + horizon side-by-side. Composes both surfaces; spawns its own FDM worker.                              | [ADR 015](../../decisions/015-sim-surface-loose-coupling.md)           |
+| `/debrief/[runId]`     | Scrubbable post-run tape. Truth vs display per tick. Ideal-path overlay. Input tape view.                       | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| `/history`             | Per-pilot run history. Click into any prior run's debrief.                                                      | --                                                                     |
+| FDM worker             | JSBSim-style hand-rolled FDM running in a Web Worker. Truth state computed every tick.                          | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| Aircraft profiles      | C172 (canonical), PA-28 (second profile).                                                                       | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
 | Scenario library       | Departure stall, EFATO, vacuum, pitot/static, partial panel, unusual attitudes, aft-CG, nose-low, VMC-into-IMC. | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
-| Sim grading evaluator  | Tick-by-tick scoring against ideal path. Outputs run weaknesses keyed to knowledge nodes.     | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md)                |
-| Study scheduler bridge | Sim weakness pressure on study card / rep scorers per node.                                  | [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md)                      |
-| Engine sound + theme   | Harmonic stack engine audio; theme tokens for cockpit, horizon, debrief surfaces.            | --                                                                                    |
+| Sim grading evaluator  | Tick-by-tick scoring against ideal path. Outputs run weaknesses keyed to knowledge nodes.                       | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) |
+| Study scheduler bridge | Sim weakness pressure on study card / rep scorers per node.                                                     | [sim-card-mapping](../../work-packages/sim-card-mapping/spec.md)       |
+| Engine sound + theme   | Harmonic stack engine audio; theme tokens for cockpit, horizon, debrief surfaces.                               | --                                                                     |
 
 ## In flight or imminent
 

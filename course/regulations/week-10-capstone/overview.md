@@ -20,24 +20,24 @@ This is also a reflective week. The lessons run lighter than the deep weeks beca
 
 ## Lesson structure
 
-| File                                           | Topic |
-| ---------------------------------------------- | --------------------------------------------------------- |
-| [01-how-the-capstone-works.md](01-how-the-capstone-works.md) | The structure of the capstone day, the rubric, partner-exam mechanics, how scenarios cross weeks |
-| [02-the-four-canonical-scenarios.md](02-the-four-canonical-scenarios.md) | Brief on each of the four sibling capstone orals -- what each tests, what each builds toward |
-| [03-self-assessment-and-reflection.md](03-self-assessment-and-reflection.md) | Reflection on which subparts are slowest; using the weakness lens to drive practice |
-| [drills.md](drills.md)                         | Full mixed timed drill, 50 prompts, 60 seconds each. Pulls from any of Weeks 1-9. |
-| [oral.md](oral.md)                             | Pointer doc -- the four canonical capstone orals are the actual exam |
+| File                                                                         | Topic                                                                                            |
+| ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| [01-how-the-capstone-works.md](01-how-the-capstone-works.md)                 | The structure of the capstone day, the rubric, partner-exam mechanics, how scenarios cross weeks |
+| [02-the-four-canonical-scenarios.md](02-the-four-canonical-scenarios.md)     | Brief on each of the four sibling capstone orals -- what each tests, what each builds toward     |
+| [03-self-assessment-and-reflection.md](03-self-assessment-and-reflection.md) | Reflection on which subparts are slowest; using the weakness lens to drive practice              |
+| [drills.md](drills.md)                                                       | Full mixed timed drill, 50 prompts, 60 seconds each. Pulls from any of Weeks 1-9.                |
+| [oral.md](oral.md)                                                           | Pointer doc -- the four canonical capstone orals are the actual exam                             |
 
 ## The four canonical capstone orals
 
 The spine of this week. Each is a [@cite](airboss-ref:regs/cfr-14/61?at=2026)-and-[@cite](airboss-ref:regs/cfr-14/91?at=2026)-spanning integration that pulls from multiple weeks. Read each before the partner exam; deliver each without notes during the partner exam.
 
-| Title                                  | Source file                                          | Pulls from                                                                |
-| -------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------- |
-| Night IFR with a passenger             | [orals/night-ifr-passenger.md](../orals/night-ifr-passenger.md) | 91.103, 61.57, 91.409, 91.411, 91.413, 91.205, 91.211, 91.167, 91.169, 91.171, 91.215, 91.225, 91.203, 91.7, 91.213 |
-| Gear-up landing on a night IFR XC      | [orals/gear-up-night-ifr.md](../orals/gear-up-night-ifr.md)     | 91.3, 91.7, 91.13, 91.405, 91.407, 91.417, 49 CFR 830, PBR2, 61.51, 61.193 |
-| CFI giving a friend's flight review    | [orals/friend-flight-review.md](../orals/friend-flight-review.md) | 61.56, 61.57, 61.31, 61.59, 61.193, 61.195, 61.197, AC 61-65, AC 61-98 |
-| 250-hour PPL applies for the IR        | [orals/ppl-applies-for-ir.md](../orals/ppl-applies-for-ir.md)   | 61.65, 61.51, 61.57, 61.31, 61.49, 61.23, 61.189, 91.169, AC 61-65, AC 61-98 |
+| Title                               | Source file                                                       | Pulls from                                                                                                          |
+| ----------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Night IFR with a passenger          | [orals/night-ifr-passenger.md](../orals/night-ifr-passenger.md)   | 91.103, 61.57, 91.409, 91.411, 91.413, 91.205, 91.211, 91.167, 91.169, 91.171, 91.215, 91.225, 91.203, 91.7, 91.213 |
+| Gear-up landing on a night IFR XC   | [orals/gear-up-night-ifr.md](../orals/gear-up-night-ifr.md)       | 91.3, 91.7, 91.13, 91.405, 91.407, 91.417, 49 CFR 830, PBR2, 61.51, 61.193                                          |
+| CFI giving a friend's flight review | [orals/friend-flight-review.md](../orals/friend-flight-review.md) | 61.56, 61.57, 61.31, 61.59, 61.193, 61.195, 61.197, AC 61-65, AC 61-98                                              |
+| 250-hour PPL applies for the IR     | [orals/ppl-applies-for-ir.md](../orals/ppl-applies-for-ir.md)     | 61.65, 61.51, 61.57, 61.31, 61.49, 61.23, 61.189, 91.169, AC 61-65, AC 61-98                                        |
 
 The four are *siblings*, not duplicates. Each exercises a different mode of integration:
 
@@ -64,17 +64,17 @@ No new reading. Re-read [@cite](airboss-ref:regs/cfr-14/91?at=2026) subpart A (g
 
 The capstone week is the *integration* layer of the course. Every prior week contributed material to one or more of the four scenarios:
 
-| Week | Contributes to                                                |
-| ---- | ------------------------------------------------------------- |
-| 1    | The structural framing all four scenarios route through       |
-| 2    | Currency, recency, [@cite](airboss-ref:regs/cfr-14/61/57?at=2026) -- all four |
-| 3    | CFI privileges and limits -- friend-flight-review, ppl-applies-for-ir, gear-up-night-ifr |
-| 4    | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026), [@cite](airboss-ref:regs/cfr-14/91/13?at=2026), [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), [@cite](airboss-ref:regs/cfr-14/91/167?at=2026), [@cite](airboss-ref:regs/cfr-14/91/169?at=2026) -- night-ifr-passenger, gear-up-night-ifr |
+| Week | Contributes to                                                                                                                                                                                                                                                                                |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | The structural framing all four scenarios route through                                                                                                                                                                                                                                       |
+| 2    | Currency, recency, [@cite](airboss-ref:regs/cfr-14/61/57?at=2026) -- all four                                                                                                                                                                                                                 |
+| 3    | CFI privileges and limits -- friend-flight-review, ppl-applies-for-ir, gear-up-night-ifr                                                                                                                                                                                                      |
+| 4    | [@cite](airboss-ref:regs/cfr-14/91/3?at=2026), [@cite](airboss-ref:regs/cfr-14/91/13?at=2026), [@cite](airboss-ref:regs/cfr-14/91/103?at=2026), [@cite](airboss-ref:regs/cfr-14/91/167?at=2026), [@cite](airboss-ref:regs/cfr-14/91/169?at=2026) -- night-ifr-passenger, gear-up-night-ifr    |
 | 5    | [@cite](airboss-ref:regs/cfr-14/91/205?at=2026), [@cite](airboss-ref:regs/cfr-14/91/213?at=2026), [@cite](airboss-ref:regs/cfr-14/91/409?at=2026), [@cite](airboss-ref:regs/cfr-14/91/411?at=2026), [@cite](airboss-ref:regs/cfr-14/91/413?at=2026) -- night-ifr-passenger, gear-up-night-ifr |
-| 6    | Special ops -- not heavily exercised in capstones, but durable |
-| 7    | Parts 141 / 135 -- ppl-applies-for-ir variant prompts          |
-| 8    | AC, AIM, Chief Counsel letters -- all four                    |
-| 9    | Enforcement, NTSB Part 830, PBR2 -- gear-up-night-ifr         |
+| 6    | Special ops -- not heavily exercised in capstones, but durable                                                                                                                                                                                                                                |
+| 7    | Parts 141 / 135 -- ppl-applies-for-ir variant prompts                                                                                                                                                                                                                                         |
+| 8    | AC, AIM, Chief Counsel letters -- all four                                                                                                                                                                                                                                                    |
+| 9    | Enforcement, NTSB Part 830, PBR2 -- gear-up-night-ifr                                                                                                                                                                                                                                         |
 
 The week's lessons make this graph explicit so the learner sees the cross-week connective tissue and can use it during partner exams.
 

@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Backend is in solid shape overall. Study app handlers are textbook: thin route adapters that call typed BC functions, validate with Zod, surface typed BC error subclasses with appropriate `fail()` / `error()` / `redirect()` codes, and route every request through `requireAuth`. The BC layer in `libs/bc/study/` uses transactions + row locks where it matters (reviews, plans, sessions, skip orchestration, card create/state) and has visible attention to idempotency and concurrency.

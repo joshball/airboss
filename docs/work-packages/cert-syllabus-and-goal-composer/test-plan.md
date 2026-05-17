@@ -126,18 +126,18 @@ This scenario tested a `study.citation` table that this WP no longer creates. Ci
 
 For each `kind`, run the resolver against a citation of that kind. Expected URLs:
 
-| Kind     | Citation                  | Expected URL fragment                                                     |
-| -------- | ------------------------- | ------------------------------------------------------------------------- |
-| handbook | PHAK Ch 12 §3             | `/handbooks/phak/12/3` (handbook URL via WP #1 resolver)                  |
-| cfr      | 14 CFR 61.103             | eCFR URL with title 14, part 61, section 103                              |
-| acs      | PPL ACS Area V Task A     | FAA test-standards URL keyed off the syllabus edition; or, when `airboss_ref` present, delegated to `@ab/sources` `getLiveUrl()` |
-| pts      | CFI PTS Area II Task A    | FAA test-standards URL keyed off the PTS edition                          |
-| ac       | AC 61-67C ¶3              | FAA AC index URL                                                          |
-| aim      | AIM 5-1-7                 | FAA AIM URL                                                               |
-| pcg      | PCG "VFR"                 | FAA PCG URL by term                                                       |
-| ntsb     | freeform                  | `null`                                                                    |
-| poh      | freeform                  | `null`                                                                    |
-| other    | freeform                  | `null`                                                                    |
+| Kind     | Citation               | Expected URL fragment                                                                                                            |
+| -------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| handbook | PHAK Ch 12 §3          | `/handbooks/phak/12/3` (handbook URL via WP #1 resolver)                                                                         |
+| cfr      | 14 CFR 61.103          | eCFR URL with title 14, part 61, section 103                                                                                     |
+| acs      | PPL ACS Area V Task A  | FAA test-standards URL keyed off the syllabus edition; or, when `airboss_ref` present, delegated to `@ab/sources` `getLiveUrl()` |
+| pts      | CFI PTS Area II Task A | FAA test-standards URL keyed off the PTS edition                                                                                 |
+| ac       | AC 61-67C ¶3           | FAA AC index URL                                                                                                                 |
+| aim      | AIM 5-1-7              | FAA AIM URL                                                                                                                      |
+| pcg      | PCG "VFR"              | FAA PCG URL by term                                                                                                              |
+| ntsb     | freeform               | `null`                                                                                                                           |
+| poh      | freeform               | `null`                                                                                                                           |
+| other    | freeform               | `null`                                                                                                                           |
 
 For `null` results, the UI is expected to render the citation note as freeform text.
 

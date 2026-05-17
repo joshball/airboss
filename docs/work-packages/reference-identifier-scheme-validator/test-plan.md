@@ -22,76 +22,76 @@ review_status: pending
 
 ### Parser tests (`libs/sources/src/parser.test.ts`)
 
-| ID    | Scenario                                                                           | Expected                                                                                                                       |
-| ----- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| P-01  | `airboss-ref:regs/cfr-14/91/103?at=2026`                                           | `{ corpus: 'regs', locator: 'cfr-14/91/103', pin: '2026' }`                                                                    |
-| P-02  | `airboss-ref:regs/cfr-14/91/103/b/1/i?at=2026`                                     | Multi-segment locator parsed; pin populated.                                                                                   |
-| P-03  | `airboss-ref:ac/61-65/j` (slug-encoded edition, no `?at=`)                         | `{ corpus: 'ac', locator: '61-65/j', pin: null }` -- parser doesn't enforce pinning; that's row 1.                             |
-| P-04  | `airboss-ref:/regs/cfr-14/91/103?at=2026` (path-absolute)                          | `ParseError` with message naming "path-absolute form is not canonical".                                                        |
-| P-05  | `airboss-ref://regs/cfr-14/91/103?at=2026` (authority-based)                       | `ParseError` with message naming "authority-based form is not canonical".                                                      |
-| P-06  | `  airboss-ref:regs/cfr-14/91/103?at=2026  ` (whitespace-padded)                   | Whitespace trimmed; parses cleanly.                                                                                            |
-| P-07  | `airboss-ref:unknown/cost-sharing-letter`                                          | `{ corpus: 'unknown', locator: 'cost-sharing-letter', pin: null }`.                                                            |
-| P-08  | `airboss-ref:` (no corpus, no locator)                                             | `ParseError`.                                                                                                                  |
-| P-09  | `airboss-ref:regs/` (corpus only, empty locator)                                   | `ParseError`.                                                                                                                  |
-| P-10  | `airboss-ref:regs/cfr-14/91/103?at=unpinned`                                       | `{ corpus: 'regs', locator: 'cfr-14/91/103', pin: 'unpinned' }`.                                                                |
-| P-11  | `https://www.ecfr.gov/...` (non-airboss-ref URL)                                   | `ParseError` (or "not an identifier" return value -- caller distinguishes).                                                    |
+| ID   | Scenario                                                         | Expected                                                                                           |
+| ---- | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| P-01 | `airboss-ref:regs/cfr-14/91/103?at=2026`                         | `{ corpus: 'regs', locator: 'cfr-14/91/103', pin: '2026' }`                                        |
+| P-02 | `airboss-ref:regs/cfr-14/91/103/b/1/i?at=2026`                   | Multi-segment locator parsed; pin populated.                                                       |
+| P-03 | `airboss-ref:ac/61-65/j` (slug-encoded edition, no `?at=`)       | `{ corpus: 'ac', locator: '61-65/j', pin: null }` -- parser doesn't enforce pinning; that's row 1. |
+| P-04 | `airboss-ref:/regs/cfr-14/91/103?at=2026` (path-absolute)        | `ParseError` with message naming "path-absolute form is not canonical".                            |
+| P-05 | `airboss-ref://regs/cfr-14/91/103?at=2026` (authority-based)     | `ParseError` with message naming "authority-based form is not canonical".                          |
+| P-06 | `  airboss-ref:regs/cfr-14/91/103?at=2026  ` (whitespace-padded) | Whitespace trimmed; parses cleanly.                                                                |
+| P-07 | `airboss-ref:unknown/cost-sharing-letter`                        | `{ corpus: 'unknown', locator: 'cost-sharing-letter', pin: null }`.                                |
+| P-08 | `airboss-ref:` (no corpus, no locator)                           | `ParseError`.                                                                                      |
+| P-09 | `airboss-ref:regs/` (corpus only, empty locator)                 | `ParseError`.                                                                                      |
+| P-10 | `airboss-ref:regs/cfr-14/91/103?at=unpinned`                     | `{ corpus: 'regs', locator: 'cfr-14/91/103', pin: 'unpinned' }`.                                   |
+| P-11 | `https://www.ecfr.gov/...` (non-airboss-ref URL)                 | `ParseError` (or "not an identifier" return value -- caller distinguishes).                        |
 
 ### Validator tests (`libs/sources/src/validator.test.ts`)
 
-| ID    | Scenario                                                                                              | Expected                                                                                                                                       |
-| ----- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| V-00  | `airboss-ref:unknown/foo` -- row 0                                                                    | ERROR row 0 with the "transitional reference" message; row 1 NOT also fired.                                                                   |
-| V-01  | Path-absolute string passed to validator                                                              | ERROR row 1 (parse failed).                                                                                                                    |
-| V-02  | Identifier resolves to `accepted` entry (fixture registry)                                            | No row-2 finding.                                                                                                                              |
-| V-02b | Identifier doesn't resolve (no registry entry)                                                        | ERROR row 2.                                                                                                                                   |
-| V-03  | Pinned edition doesn't exist (registry has entry, no edition matching pin)                            | ERROR row 3.                                                                                                                                   |
-| V-04  | Identifier resolves to `pending` entry                                                                | ERROR row 4 with message naming "pending review".                                                                                              |
-| V-04b | Identifier resolves to `retired` entry                                                                | ERROR row 4 with message naming "retired".                                                                                                     |
-| V-05  | `?at=unpinned`                                                                                        | WARNING row 5.                                                                                                                                 |
-| V-06  | Pin > 1 edition older than current `accepted`                                                         | WARNING row 6.                                                                                                                                 |
-| V-07  | Empty link text after stripping                                                                       | ERROR row 7.                                                                                                                                   |
-| V-08  | Bare `airboss-ref:` in prose                                                                          | NOTICE row 8.                                                                                                                                  |
-| V-09  | Lazy link text (e.g. `[91.103](airboss-ref:regs/cfr-14/91/103?at=2026)`)                              | NOTICE row 9.                                                                                                                                  |
-| V-10  | Renumbering alias, content unchanged                                                                  | No finding (silent).                                                                                                                           |
-| V-11  | Renumbering alias, content changed (`AliasEntry.kind === 'content-change'`)                            | WARNING row 11.                                                                                                                                |
-| V-12  | Cross-section alias                                                                                   | ERROR row 12; resolver does NOT walk past the alias.                                                                                          |
-| V-13  | Reference to superseded entry, no ack                                                                 | WARNING row 13.                                                                                                                                |
-| V-14  | Ack reason slug 49+ chars                                                                             | NOTICE row 14.                                                                                                                                 |
-| V-EX  | Identifier matches BOTH row 2 and row 5 (unresolved AND `?at=unpinned`)                               | One ERROR (row 2) + one WARNING (row 5). Two findings, exactly one ERROR.                                                                      |
-| V-EX2 | Identifier matches row 2 and row 4 (unresolved -- but if it resolved would be `pending`)              | Only row 2 fires (it comes first).                                                                                                              |
-| V-EDGE-1 | Future-pin                                                                                         | ERROR row 3.                                                                                                                                  |
-| V-EDGE-2 | Reserved section entry                                                                              | Resolves; no special finding.                                                                                                                  |
-| V-EDGE-3 | Newly-created section                                                                               | Resolves; no special finding.                                                                                                                  |
-| V-EDGE-4 | Redacted section                                                                                    | Resolves; no row-13-style finding for redaction (Phase 4 handles render-time `[redacted]`).                                                    |
-| V-EDGE-5 | Stale-branch CI rerun (pin > 1 edition stale)                                                        | WARNING row 6; does not block.                                                                                                                  |
+| ID       | Scenario                                                                                 | Expected                                                                                    |
+| -------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| V-00     | `airboss-ref:unknown/foo` -- row 0                                                       | ERROR row 0 with the "transitional reference" message; row 1 NOT also fired.                |
+| V-01     | Path-absolute string passed to validator                                                 | ERROR row 1 (parse failed).                                                                 |
+| V-02     | Identifier resolves to `accepted` entry (fixture registry)                               | No row-2 finding.                                                                           |
+| V-02b    | Identifier doesn't resolve (no registry entry)                                           | ERROR row 2.                                                                                |
+| V-03     | Pinned edition doesn't exist (registry has entry, no edition matching pin)               | ERROR row 3.                                                                                |
+| V-04     | Identifier resolves to `pending` entry                                                   | ERROR row 4 with message naming "pending review".                                           |
+| V-04b    | Identifier resolves to `retired` entry                                                   | ERROR row 4 with message naming "retired".                                                  |
+| V-05     | `?at=unpinned`                                                                           | WARNING row 5.                                                                              |
+| V-06     | Pin > 1 edition older than current `accepted`                                            | WARNING row 6.                                                                              |
+| V-07     | Empty link text after stripping                                                          | ERROR row 7.                                                                                |
+| V-08     | Bare `airboss-ref:` in prose                                                             | NOTICE row 8.                                                                               |
+| V-09     | Lazy link text (e.g. `[91.103](airboss-ref:regs/cfr-14/91/103?at=2026)`)                 | NOTICE row 9.                                                                               |
+| V-10     | Renumbering alias, content unchanged                                                     | No finding (silent).                                                                        |
+| V-11     | Renumbering alias, content changed (`AliasEntry.kind === 'content-change'`)              | WARNING row 11.                                                                             |
+| V-12     | Cross-section alias                                                                      | ERROR row 12; resolver does NOT walk past the alias.                                        |
+| V-13     | Reference to superseded entry, no ack                                                    | WARNING row 13.                                                                             |
+| V-14     | Ack reason slug 49+ chars                                                                | NOTICE row 14.                                                                              |
+| V-EX     | Identifier matches BOTH row 2 and row 5 (unresolved AND `?at=unpinned`)                  | One ERROR (row 2) + one WARNING (row 5). Two findings, exactly one ERROR.                   |
+| V-EX2    | Identifier matches row 2 and row 4 (unresolved -- but if it resolved would be `pending`) | Only row 2 fires (it comes first).                                                          |
+| V-EDGE-1 | Future-pin                                                                               | ERROR row 3.                                                                                |
+| V-EDGE-2 | Reserved section entry                                                                   | Resolves; no special finding.                                                               |
+| V-EDGE-3 | Newly-created section                                                                    | Resolves; no special finding.                                                               |
+| V-EDGE-4 | Redacted section                                                                         | Resolves; no row-13-style finding for redaction (Phase 4 handles render-time `[redacted]`). |
+| V-EDGE-5 | Stale-branch CI rerun (pin > 1 edition stale)                                            | WARNING row 6; does not block.                                                              |
 
 ### Lesson parser tests (`libs/sources/src/lesson-parser.test.ts`)
 
-| ID    | Scenario                                                                                              | Expected                                                                                                                                       |
-| ----- | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| L-01  | Lesson with valid frontmatter `acknowledgments`                                                       | Acks parsed; no findings.                                                                                                                       |
-| L-02  | Frontmatter YAML malformed                                                                            | ERROR with YAML parser's message + file location.                                                                                              |
-| L-03  | Inline link `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)`                                          | Identifier extracted; link text `@cite` carried into context for downstream rules.                                                             |
-| L-04  | Reference-style link with `[label]` and matching `[label]: airboss-ref:...`                            | Identifier extracted; label bound to ack with matching `id`.                                                                                   |
-| L-05  | Reference-style link with undefined label                                                             | ERROR ("undefined reference label `<label>`").                                                                                                 |
-| L-06  | Bare `airboss-ref:` URL in prose (no `[...](...)` wrapping)                                           | NOTICE row 8.                                                                                                                                   |
-| L-07  | Identifier inside fenced code block                                                                   | Skipped; no finding.                                                                                                                           |
-| L-08  | Identifier inside inline code span                                                                    | Skipped; no finding.                                                                                                                           |
-| L-09  | Empty link text `[](airboss-ref:...)`                                                                 | ERROR row 7.                                                                                                                                    |
-| L-10  | Link text emphasised: `[*foo*](airboss-ref:...)` -- not empty after strip                              | No row-7 finding.                                                                                                                               |
-| L-11  | Lazy link text matching canonical short pattern                                                       | NOTICE row 9.                                                                                                                                   |
-| L-12  | Orphan acknowledgment (target not in body)                                                            | WARNING.                                                                                                                                       |
-| L-13  | Two acks same target, body links lack `id` labels                                                     | ERROR per §3.4 ("when one lesson has multiple acks for the same target, every binding link must have an explicit reference label").             |
-| L-14  | Lesson with no `airboss-ref:` URLs anywhere (current state of every `course/regulations/` lesson)     | Zero findings, zero identifiers; clean parse.                                                                                                  |
+| ID   | Scenario                                                                                          | Expected                                                                                                                            |
+| ---- | ------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| L-01 | Lesson with valid frontmatter `acknowledgments`                                                   | Acks parsed; no findings.                                                                                                           |
+| L-02 | Frontmatter YAML malformed                                                                        | ERROR with YAML parser's message + file location.                                                                                   |
+| L-03 | Inline link `[@cite](airboss-ref:regs/cfr-14/91/103?at=2026)`                                     | Identifier extracted; link text `@cite` carried into context for downstream rules.                                                  |
+| L-04 | Reference-style link with `[label]` and matching `[label]: airboss-ref:...`                       | Identifier extracted; label bound to ack with matching `id`.                                                                        |
+| L-05 | Reference-style link with undefined label                                                         | ERROR ("undefined reference label `<label>`").                                                                                      |
+| L-06 | Bare `airboss-ref:` URL in prose (no `[...](...)` wrapping)                                       | NOTICE row 8.                                                                                                                       |
+| L-07 | Identifier inside fenced code block                                                               | Skipped; no finding.                                                                                                                |
+| L-08 | Identifier inside inline code span                                                                | Skipped; no finding.                                                                                                                |
+| L-09 | Empty link text `[](airboss-ref:...)`                                                             | ERROR row 7.                                                                                                                        |
+| L-10 | Link text emphasised: `[*foo*](airboss-ref:...)` -- not empty after strip                         | No row-7 finding.                                                                                                                   |
+| L-11 | Lazy link text matching canonical short pattern                                                   | NOTICE row 9.                                                                                                                       |
+| L-12 | Orphan acknowledgment (target not in body)                                                        | WARNING.                                                                                                                            |
+| L-13 | Two acks same target, body links lack `id` labels                                                 | ERROR per §3.4 ("when one lesson has multiple acks for the same target, every binding link must have an explicit reference label"). |
+| L-14 | Lesson with no `airboss-ref:` URLs anywhere (current state of every `course/regulations/` lesson) | Zero findings, zero identifiers; clean parse.                                                                                       |
 
 ### Integration tests (`libs/sources/src/check.test.ts`)
 
-| ID    | Scenario                                                       | Expected                                                                              |
-| ----- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| C-01  | Run validator over an empty fixture lesson                     | 0 findings.                                                                          |
-| C-02  | Run validator over a lesson with one ERROR                     | Returns 1 error, validateReferences exits non-zero (in CLI mode).                     |
-| C-03  | Run validator over a lesson with WARNING + NOTICE (no ERROR)   | 0 errors; CLI exits 0; findings printed to stdout.                                    |
-| C-04  | Run validator over current `course/regulations/**`             | 0 errors, 0 warnings, 0 notices, 0 identifiers (sanity check on shipped state).      |
+| ID   | Scenario                                                     | Expected                                                                        |
+| ---- | ------------------------------------------------------------ | ------------------------------------------------------------------------------- |
+| C-01 | Run validator over an empty fixture lesson                   | 0 findings.                                                                     |
+| C-02 | Run validator over a lesson with one ERROR                   | Returns 1 error, validateReferences exits non-zero (in CLI mode).               |
+| C-03 | Run validator over a lesson with WARNING + NOTICE (no ERROR) | 0 errors; CLI exits 0; findings printed to stdout.                              |
+| C-04 | Run validator over current `course/regulations/**`           | 0 errors, 0 warnings, 0 notices, 0 identifiers (sanity check on shipped state). |
 
 ---
 

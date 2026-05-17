@@ -34,7 +34,6 @@ The 2026-05 six-chunk review program (`docs/work/reviews/2026-05-01-*` +
 fixes; that program's `review_status` is the live source of truth. Closing this file in
 bulk; do not re-open without a fresh review against current main.
 
-
 ## Summary
 
 Strong overall compliance with CLAUDE.md house rules. The Svelte 4 surface is fully retired (no `export let`, `<slot>`, `$:`, `$app/stores`, `createEventDispatcher`), `ulidx` is correctly centralized in `libs/utils/src/ids.ts`, `ROUTES` carries every server redirect, Drizzle's `sql\`` template is used for typed fragments (no raw `db.execute('...')` strings), and the engine scoring file is free of inline numeric literals. The `as any` escape hatch is confined to test files, and PDFs/source binaries are correctly gitignored.

@@ -83,6 +83,7 @@ The Phase 4 renderer serves five personas: lesson authors who want their `airbos
 ### Acceptance criteria
 
 - My lesson frontmatter includes:
+
     ```yaml
     acknowledgments:
       - target: airboss-ref:interp/walker-2017
@@ -90,6 +91,7 @@ The Phase 4 renderer serves five personas: lesson authors who want their `airbos
         reason: original-intact
         note: "Smith narrows but does not overturn the active-investigation standard cited here."
     ```
+
 - My body references `[Walker (2017)](airboss-ref:interp/walker-2017)` (or by reference label).
 - The renderer detects the ack covers the target, walks the supersession chain from `superseder`, and annotates the rendered output with `(acknowledged §<smith-2030 short> supersession; original-intact)`.
 - In web mode the annotation is a `<span class="ab-ref-annotation ab-ref-covered">...</span>` after the anchor.

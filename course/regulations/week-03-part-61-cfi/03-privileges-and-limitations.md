@@ -197,14 +197,14 @@ The 61.193 / 61.195 layer activates only when you are *giving instruction*. The 
 
 ### What "compensation" looks like in each lane
 
-| Activity                                                  | Governing reg                          | What's allowed |
-| --------------------------------------------------------- | -------------------------------------- | -------------- |
-| You give a primary student a 1.0 lesson                   | 61.193(a)(2) + 61.195                  | You may charge for the instruction. |
-| You sign a flight review for a private pilot              | 61.193(a)(7) + 61.195                  | You may charge for the review. |
-| You ferry a friend's airplane home for them, no instruction given | 61.113 (you are exercising private privileges) | No compensation; cost-sharing under 61.113(c) only with pro-rata + common purpose. |
-| You take a commercial rated friend's airplane to dinner, friend pays gas, you fly | 61.113 (private privileges, because no instruction is being given) | Cost-sharing under 61.113(c). The CFI rating gives you no extra compensation right. |
-| You "give some pointers" to your friend during the flight | Probably 61.193(a) (instruction is being given) | The compensation question shifts: if you're being paid as a CFI, the CFI lane applies. But "I'll teach you a thing or two" is not a CFI relationship; the FAA looks at the substance of the agreement, not the labels. |
-| You hold commercial and CFI; you're paid to fly your friend's airplane somewhere with no instruction | 61.133 (commercial privileges -- pilot for hire) | The CFI rating is irrelevant. Commercial pilot rules govern. |
+| Activity                                                                                             | Governing reg                                                      | What's allowed                                                                                                                                                                                                         |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| You give a primary student a 1.0 lesson                                                              | 61.193(a)(2) + 61.195                                              | You may charge for the instruction.                                                                                                                                                                                    |
+| You sign a flight review for a private pilot                                                         | 61.193(a)(7) + 61.195                                              | You may charge for the review.                                                                                                                                                                                         |
+| You ferry a friend's airplane home for them, no instruction given                                    | 61.113 (you are exercising private privileges)                     | No compensation; cost-sharing under 61.113(c) only with pro-rata + common purpose.                                                                                                                                     |
+| You take a commercial rated friend's airplane to dinner, friend pays gas, you fly                    | 61.113 (private privileges, because no instruction is being given) | Cost-sharing under 61.113(c). The CFI rating gives you no extra compensation right.                                                                                                                                    |
+| You "give some pointers" to your friend during the flight                                            | Probably 61.193(a) (instruction is being given)                    | The compensation question shifts: if you're being paid as a CFI, the CFI lane applies. But "I'll teach you a thing or two" is not a CFI relationship; the FAA looks at the substance of the agreement, not the labels. |
+| You hold commercial and CFI; you're paid to fly your friend's airplane somewhere with no instruction | 61.133 (commercial privileges -- pilot for hire)                   | The CFI rating is irrelevant. Commercial pilot rules govern.                                                                                                                                                           |
 
 ### The Mangiamele framing
 
@@ -273,17 +273,17 @@ The defensive posture: if you are flying recreationally with another pilot and y
 
 ### Locate the privilege or limitation
 
-| Question                                                                | Section                |
-| ----------------------------------------------------------------------- | ---------------------- |
-| Where is the CFI's authority to sign a flight review?                   | 61.193(a)(7)           |
-| Where is the 8-hours-of-flight-training-per-24-hours limit?             | 61.195(a)              |
-| Where is the requirement that a CFI hold the rating they teach in?     | 61.195(b)              |
-| Where is the CFII requirement for instrument instruction?               | 61.195(c)              |
-| Where is the 5-hour-make-and-model PIC requirement?                     | 61.195(e), (f)         |
-| Where is the dual-controls requirement for the training aircraft?       | 91.109 + 61.195(g)     |
-| Where does the compensation boundary for a private-rated flight live?  | 61.113                 |
-| Where does CFI authority to sign 61.31 endorsements come from?          | 61.193(a)(7)           |
-| Where is the recommended language for the flight-review endorsement?    | AC 61-65 paragraph A.1 |
+| Question                                                              | Section                |
+| --------------------------------------------------------------------- | ---------------------- |
+| Where is the CFI's authority to sign a flight review?                 | 61.193(a)(7)           |
+| Where is the 8-hours-of-flight-training-per-24-hours limit?           | 61.195(a)              |
+| Where is the requirement that a CFI hold the rating they teach in?    | 61.195(b)              |
+| Where is the CFII requirement for instrument instruction?             | 61.195(c)              |
+| Where is the 5-hour-make-and-model PIC requirement?                   | 61.195(e), (f)         |
+| Where is the dual-controls requirement for the training aircraft?     | 91.109 + 61.195(g)     |
+| Where does the compensation boundary for a private-rated flight live? | 61.113                 |
+| Where does CFI authority to sign 61.31 endorsements come from?        | 61.193(a)(7)           |
+| Where is the recommended language for the flight-review endorsement?  | AC 61-65 paragraph A.1 |
 
 ### Apply the rules
 
@@ -309,15 +309,15 @@ Answer: Now there's an instructional component. 61.193(a)(2) covers the training
 
 ### Trap detector
 
-| Statement                                                              | Trap and correction |
-| ---------------------------------------------------------------------- | ------------------- |
-| "61.193 says I can sign anything as a CFI."                            | Wrong. 61.193 lists categories; 61.195(b) constrains them to the category/class/type rating you hold on the CFI cert. |
-| "I'm a commercial pilot, so I can teach commercial students."          | Wrong. Commercial pilot is a *pilot* rating. Teaching requires a CFI cert with appropriate CFI rating per 61.195(b), and CFII for the instrument portions per 61.195(c). |
-| "I can teach in any aircraft I have a complex endorsement for."        | Wrong. 61.31 endorsements are operational privileges for *your* flying. Teaching requires 61.195(b) match: CFI cert with appropriate cat/class/type. The 61.31 endorsement is independent. |
-| "Once I'm a CFI, I can fly any flight with any compensation arrangement." | Wrong. The CFI rating layer activates only for instruction. 61.113 (private) or 61.133 (commercial) governs your non-instructional flying. |
-| "61.195(a)'s 8-hour cap is on total time in the aircraft."             | Wrong. The cap is on flight *training*. Ferry flights, personal flying, and other non-instructional time are not counted against the 8-hour limit. |
-| "If I have the CFII, I can teach instrument in a multiengine."         | Wrong without further details. 61.195(b) requires the CFI multiengine rating *and* CFII for instrument instruction in a multiengine. CFII alone is not enough. |
-| "AC 61-65 grants me the authority to sign endorsements."               | Wrong. AC 61-65 publishes recommended language. Authority to sign comes from 61.193; limitations from 61.195. |
+| Statement                                                                 | Trap and correction                                                                                                                                                                        |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "61.193 says I can sign anything as a CFI."                               | Wrong. 61.193 lists categories; 61.195(b) constrains them to the category/class/type rating you hold on the CFI cert.                                                                      |
+| "I'm a commercial pilot, so I can teach commercial students."             | Wrong. Commercial pilot is a *pilot* rating. Teaching requires a CFI cert with appropriate CFI rating per 61.195(b), and CFII for the instrument portions per 61.195(c).                   |
+| "I can teach in any aircraft I have a complex endorsement for."           | Wrong. 61.31 endorsements are operational privileges for *your* flying. Teaching requires 61.195(b) match: CFI cert with appropriate cat/class/type. The 61.31 endorsement is independent. |
+| "Once I'm a CFI, I can fly any flight with any compensation arrangement." | Wrong. The CFI rating layer activates only for instruction. 61.113 (private) or 61.133 (commercial) governs your non-instructional flying.                                                 |
+| "61.195(a)'s 8-hour cap is on total time in the aircraft."                | Wrong. The cap is on flight *training*. Ferry flights, personal flying, and other non-instructional time are not counted against the 8-hour limit.                                         |
+| "If I have the CFII, I can teach instrument in a multiengine."            | Wrong without further details. 61.195(b) requires the CFI multiengine rating *and* CFII for instrument instruction in a multiengine. CFII alone is not enough.                             |
+| "AC 61-65 grants me the authority to sign endorsements."                  | Wrong. AC 61-65 publishes recommended language. Authority to sign comes from 61.193; limitations from 61.195.                                                                              |
 
 ## Where this lesson sits
 

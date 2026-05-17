@@ -89,17 +89,17 @@ Sidebar nav gets a third top-level entry: **Platform** alongside Docs and Review
 
 Each pane is a Svelte component with a single prop (the typed data shape). The `/platform` page composes them.
 
-| Component               | Lib path                            | Notes                                              |
-| ----------------------- | ----------------------------------- | -------------------------------------------------- |
-| `NowBar.svelte`         | `libs/ui/src/platform/`             | In-flight + just-shipped lists                     |
-| `DriftPane.svelte`      | `libs/ui/src/platform/`             | List of drift items + fix/triage actions           |
-| `DocHealthPane.svelte`  | `libs/ui/src/platform/`             | List of size violators + split suggestions         |
-| `WpStatusBoard.svelte`  | `libs/ui/src/platform/`             | Sortable, filterable table                         |
-| `RoadmapPanes.svelte`   | `libs/ui/src/platform/`             | Per-app columns + timeline toggle stub             |
-| `AdrIndex.svelte`       | `libs/ui/src/platform/`             | Sortable table                                     |
-| `IdeasFunnel.svelte`    | `libs/ui/src/platform/`             | Section list + counts + freshness                  |
-| `CoverageGaps.svelte`   | `libs/ui/src/platform/`             | Button + results region                            |
-| `RecentActivity.svelte` | `libs/ui/src/platform/`             | Commit list                                        |
+| Component               | Lib path                | Notes                                      |
+| ----------------------- | ----------------------- | ------------------------------------------ |
+| `NowBar.svelte`         | `libs/ui/src/platform/` | In-flight + just-shipped lists             |
+| `DriftPane.svelte`      | `libs/ui/src/platform/` | List of drift items + fix/triage actions   |
+| `DocHealthPane.svelte`  | `libs/ui/src/platform/` | List of size violators + split suggestions |
+| `WpStatusBoard.svelte`  | `libs/ui/src/platform/` | Sortable, filterable table                 |
+| `RoadmapPanes.svelte`   | `libs/ui/src/platform/` | Per-app columns + timeline toggle stub     |
+| `AdrIndex.svelte`       | `libs/ui/src/platform/` | Sortable table                             |
+| `IdeasFunnel.svelte`    | `libs/ui/src/platform/` | Section list + counts + freshness          |
+| `CoverageGaps.svelte`   | `libs/ui/src/platform/` | Button + results region                    |
+| `RecentActivity.svelte` | `libs/ui/src/platform/` | Commit list                                |
 
 Each component imports only from `@ab/types` for its prop shape and `@ab/themes` for tokens. No direct DB imports.
 
@@ -220,14 +220,14 @@ PLATFORM_DRIFT: '/platform/drift',
 
 ### Validators (one per source)
 
-| Validator           | Checks                                                                                       |
-| ------------------- | -------------------------------------------------------------------------------------------- |
-| `validateWpFrontmatter` | spec.md has `status`, `review_status`; status value is in known set                      |
-| `validateNowMdSync`     | every WP `status: shipped` appears in `just_shipped` (within 60 days); every `in_flight:` entry has a real WP folder; no in_flight item is also in just_shipped; no in_flight item has `status: shipped` in its WP frontmatter |
-| `validateRoadmapSync`   | every roadmap item with `wp:` and `status: shipped` has matching WP `status: shipped`; every shipped item has `shipped_at`; no `wp:` referencing a missing folder |
-| `validateAdrFrontmatter` | has `adr`, `title`, `status`; status in known set; if `superseded` then `superseded_by` is set |
-| `validateIdeasFreshness` | section `last_reviewed` exists; flag if older than 30 days                              |
-| `validateDocSize`       | file lines <= 500; warn at 400                                                            |
+| Validator                | Checks                                                                                                                                                                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `validateWpFrontmatter`  | spec.md has `status`, `review_status`; status value is in known set                                                                                                                                                            |
+| `validateNowMdSync`      | every WP `status: shipped` appears in `just_shipped` (within 60 days); every `in_flight:` entry has a real WP folder; no in_flight item is also in just_shipped; no in_flight item has `status: shipped` in its WP frontmatter |
+| `validateRoadmapSync`    | every roadmap item with `wp:` and `status: shipped` has matching WP `status: shipped`; every shipped item has `shipped_at`; no `wp:` referencing a missing folder                                                              |
+| `validateAdrFrontmatter` | has `adr`, `title`, `status`; status in known set; if `superseded` then `superseded_by` is set                                                                                                                                 |
+| `validateIdeasFreshness` | section `last_reviewed` exists; flag if older than 30 days                                                                                                                                                                     |
+| `validateDocSize`        | file lines <= 500; warn at 400                                                                                                                                                                                                 |
 
 Each validator returns `{ ok: true } | { ok: false, issue: string, autoFixable: boolean }`.
 

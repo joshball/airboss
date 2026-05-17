@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     6.5
 Title:           Final Checkride Scenario
 Module:          6
@@ -19,19 +19,19 @@ Pattern:         Integrated Capstone
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_11, FAA_TOPIC.A_5, FAA_TOPIC.A_4, FAA_TOPIC.A_6, FAA_TOPIC.A_10, FAA_TOPIC.A_1, FAA_TOPIC.A_9]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['CJ-1', 'CJ-2', 'CJ-3', 'AC-1', 'AC-2', 'RM-1', 'RM-2', 'RM-3', 'AV-1', 'PS-1', 'PS-2', 'ES-1', 'OD-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Composite (multiple archetypes)
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1 -- Pre-Flight Risk Assessment
 
-```
+```text
 id:           tick_1
 scene:        Morning preflight briefing with a new student. The student is a 50-year-old professional returning to flying after a 10-year break. Weather is VFR but winds are 12 gusting 20. The student seems eager but you notice their hand shakes slightly when they hold the checklist. Their medical was just renewed.
 studentSpeech:I'm excited to get started again. I used to fly a lot -- Cessna 182, some twin time. I know I'll be rusty but I'm sure it'll come back fast. Let's get up there!
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2 -- In-Flight Automation Decision
 
-```
+```text
 id:           tick_2
 scene:        Airborne, 3,000 feet. Student is flying a G1000 Cessna 172. You asked for a turn to a nearby practice area. Student immediately reaches for the autopilot heading bug instead of hand-flying. You notice the student's last aircraft was a steam-gauge 182 -- they're reaching for automation they've never used.
 studentSpeech:Let me just set the heading bug here... how does this thing work again? My old 182 didn't have any of this.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3 -- LOC Recognition
 
-```
+```text
 id:           tick_3
 scene:        Practicing slow flight. Student is managing well, but on the recovery, they add power without lowering the nose first. The airplane pitches up further, airspeed drops. The student tightens their grip on the yoke and pulls back slightly -- instinctive but wrong.
 studentSpeech:Power is in... why is the nose going up? I'm pulling back to keep the nose up but the airspeed is going down...
@@ -114,7 +114,7 @@ criticalWindow:[coach]
 
 ### Tick 4 -- Ethical Pressure + Evaluation
 
-```
+```text
 id:           tick_4
 scene:        Post-flight. Student is drained but happy. They ask when they can solo. The student's wife is in the lobby -- she booked a trip for their anniversary in 6 weeks and assumes the student will be able to fly them there. The student has 3 hours in the airplane and barely recovered from a developing stall an hour ago.
 studentSpeech:My wife has us booked for a fly-in to the coast for our anniversary. That's six weeks from now. I should be able to do that by then, right? She's really excited about it.
@@ -135,7 +135,7 @@ criticalWindow:[prompt, direct]
 
 ### Tick 5 -- Debrief and Forward Plan
 
-```
+```text
 id:           tick_5
 scene:        Student absorbs the honest assessment. Initial disappointment shifts to understanding. They ask for a realistic plan. The wife is in earshot.
 studentSpeech:OK. I appreciate your honesty. What's a realistic plan? And can you explain it so my wife understands too? She's going to be disappointed about the anniversary trip.
@@ -156,7 +156,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> tick_5 -> terminal_safe
                          \-> terminal_safe (direct/take_controls)
 ```

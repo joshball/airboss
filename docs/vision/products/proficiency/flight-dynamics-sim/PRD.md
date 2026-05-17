@@ -84,18 +84,18 @@ Key screens:
 
 ## Core scenarios (MVP set)
 
-| Scenario | Phase | Teaches |
-| --------------------------------------- | ------- | --------------------------------------------------------- |
-| Departure stall, short field            | Takeoff | Stall recognition at high AoA + low altitude |
-| Engine failure after takeoff            | Takeoff | EFATO decision, best-glide, landing-spot commit |
-| Aft-CG slow flight                      | Cruise  | W&B consequences; aft-stick stall behavior |
-| Unusual attitude recovery (nose-high)   | Cruise  | Stall-first recovery sequence |
-| Unusual attitude recovery (nose-low)    | Cruise  | Spiral-first recovery sequence |
-| Vacuum failure on instruments           | Cruise  | Lying AI/HSI; cross-check against T/B and compass |
-| Pitot blockage in climb                 | Climb   | ASI reads high; pitch-and-power backup |
-| Static blockage in descent              | Descent | Alt frozen, VSI zero, ASI reversed |
-| VMC into IMC                            | Cruise  | 180-degree turn discipline; scan transition |
-| Partial-panel ILS                       | Approach| Scan on T/B, compass, ASI, altimeter |
+| Scenario                              | Phase    | Teaches                                           |
+| ------------------------------------- | -------- | ------------------------------------------------- |
+| Departure stall, short field          | Takeoff  | Stall recognition at high AoA + low altitude      |
+| Engine failure after takeoff          | Takeoff  | EFATO decision, best-glide, landing-spot commit   |
+| Aft-CG slow flight                    | Cruise   | W&B consequences; aft-stick stall behavior        |
+| Unusual attitude recovery (nose-high) | Cruise   | Stall-first recovery sequence                     |
+| Unusual attitude recovery (nose-low)  | Cruise   | Spiral-first recovery sequence                    |
+| Vacuum failure on instruments         | Cruise   | Lying AI/HSI; cross-check against T/B and compass |
+| Pitot blockage in climb               | Climb    | ASI reads high; pitch-and-power backup            |
+| Static blockage in descent            | Descent  | Alt frozen, VSI zero, ASI reversed                |
+| VMC into IMC                          | Cruise   | 180-degree turn discipline; scan transition       |
+| Partial-panel ILS                     | Approach | Scan on T/B, compass, ASI, altimeter              |
 
 MVP ships with 3-5 of these; remainder follow.
 

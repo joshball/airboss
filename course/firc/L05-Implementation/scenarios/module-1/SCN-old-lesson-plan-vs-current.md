@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.7
 Title:           Observing a Colleague's Ground Lesson
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Pressure Decision
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_8, FAA_TOPIC.A_12]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['RC-4', 'ES-3']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   new -- Veteran CFI (peer)
 Parameters:
   skillLevel:         0.7
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Classroom. The senior CFI is teaching weight and balance using an outdated method. The student is engaged and writing everything down. The lesson plan binder on the desk is clearly old -- tabs are worn, pages yellowed.
 studentSpeech:(Senior CFI speaking) And for the checkride, the examiner will use PTS standards, so make sure you can perform each maneuver to these tolerances...
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        The senior CFI pauses, a bit defensive. Checks the lesson plan. The student looks between you and the senior CFI, sensing tension.
 studentSpeech:(Senior CFI) I've been using this plan for five years and my students pass their checkrides. What's the issue? PTS, ACS -- same thing, different name.
@@ -93,7 +93,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        After the lesson (or during a break). Senior CFI pulls you aside. Tone is less defensive now, more curious. The student has left the room.
 studentSpeech:(Senior CFI) OK, what were you getting at in there? I know PTS and ACS are different documents, but the maneuvers are basically the same, right?
@@ -114,7 +114,7 @@ criticalWindow:[prompt, direct]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

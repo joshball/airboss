@@ -18,38 +18,38 @@ This plan: enumerate every sub-state, assign a consistent URL schema, extend `RO
 
 ### Pages with sub-state today
 
-| Page | Sub-state lives in | Current URL handling | Needs URL? |
-| ---- | ------------------ | -------------------- | ---------- |
-| `/knowledge/[slug]/learn` | `stepIndex` ($state) over 7 phases | none | yes — primary case |
-| `/sessions/[id]` | `phase` ($state) over read/confidence/answer per item; item index | none; item tracked server-side | yes — refresh-resilience |
-| `/reps/session` | same shape as above | `?s=<sessionId>` (seed only) | yes |
-| `/memory/review` | card-flow phase (front/back/rated) + card index in queue | none | probably no — queue is ephemeral; revisit |
-| `/memory/[id]` | `editing` ($state) | none | yes — `?edit=1` |
-| `/plans/[id]` | `editToastVisible` + one-shot banner via `?created=1` | partial (`?created=1` only) | yes — sections / edit mode |
-| `/calibration` | single view, no sub-state | n/a | no |
-| `/dashboard` | grid, no sub-state | n/a | no |
+| Page                      | Sub-state lives in                                                | Current URL handling           | Needs URL?                                |
+| ------------------------- | ----------------------------------------------------------------- | ------------------------------ | ----------------------------------------- |
+| `/knowledge/[slug]/learn` | `stepIndex` ($state) over 7 phases                                | none                           | yes — primary case                        |
+| `/sessions/[id]`          | `phase` ($state) over read/confidence/answer per item; item index | none; item tracked server-side | yes — refresh-resilience                  |
+| `/reps/session`           | same shape as above                                               | `?s=<sessionId>` (seed only)   | yes                                       |
+| `/memory/review`          | card-flow phase (front/back/rated) + card index in queue          | none                           | probably no — queue is ephemeral; revisit |
+| `/memory/[id]`            | `editing` ($state)                                                | none                           | yes — `?edit=1`                           |
+| `/plans/[id]`             | `editToastVisible` + one-shot banner via `?created=1`             | partial (`?created=1` only)    | yes — sections / edit mode                |
+| `/calibration`            | single view, no sub-state                                         | n/a                            | no                                        |
+| `/dashboard`              | grid, no sub-state                                                | n/a                            | no                                        |
 
 ### Pages with existing URL filters (normalize)
 
-| Page | Params today | Inconsistencies |
-| ---- | ------------ | --------------- |
-| `/knowledge` | `domain`, `cert`, `priority`, `lifecycle` | — |
-| `/memory/browse` | `domain`, `type`, `source`, `status`, `q`, `page`, `created` | `type` = card type |
-| `/reps/browse` | `domain`, `difficulty`, `phase`, `source`, `status`, `page`, `created` | `phase` = phase-of-flight |
-| `/plans/new` + `/plans/[id]` | `?created=1` one-shot banner | one-shot pattern, keep |
+| Page                         | Params today                                                           | Inconsistencies           |
+| ---------------------------- | ---------------------------------------------------------------------- | ------------------------- |
+| `/knowledge`                 | `domain`, `cert`, `priority`, `lifecycle`                              | —                         |
+| `/memory/browse`             | `domain`, `type`, `source`, `status`, `q`, `page`, `created`           | `type` = card type        |
+| `/reps/browse`               | `domain`, `difficulty`, `phase`, `source`, `status`, `page`, `created` | `phase` = phase-of-flight |
+| `/plans/new` + `/plans/[id]` | `?created=1` one-shot banner                                           | one-shot pattern, keep    |
 
 **Collision:** `phase` means phase-of-flight on `/reps/browse` but would mean content-phase on `/knowledge/[slug]/learn`. Rename one.
 
 ## Taxonomy: 5 types of sub-state
 
-| Type | Shape | Example | Proposed URL form |
-| ---- | ----- | ------- | ----------------- |
-| **Stepper** | 1..N ordered stages, fixed names | KG learn phases, session-item flow | `?step=<slug>` (named, not index — survives reordering) |
-| **Item index** | 0-based position in a queue | Session item N of M, review card K of Q | `?item=<n>` (index; ok because queue is frozen per-session) |
-| **Tab** | 1-of-N view, each is a full section | Maybe plan detail sections | `?tab=<slug>` |
-| **Filter** | Multiple independent orthogonal narrowings | Browse filters | keyed individually: `?domain=&cert=&status=` |
-| **Mode flag** | Boolean sub-mode | Card edit mode | `?edit=1` (or `?mode=edit` for >2 states) |
-| **One-shot banner** | Post-action feedback, dropped on navigation | "Plan created" | `?created=1` (keep current; document) |
+| Type                | Shape                                       | Example                                 | Proposed URL form                                           |
+| ------------------- | ------------------------------------------- | --------------------------------------- | ----------------------------------------------------------- |
+| **Stepper**         | 1..N ordered stages, fixed names            | KG learn phases, session-item flow      | `?step=<slug>` (named, not index — survives reordering)     |
+| **Item index**      | 0-based position in a queue                 | Session item N of M, review card K of Q | `?item=<n>` (index; ok because queue is frozen per-session) |
+| **Tab**             | 1-of-N view, each is a full section         | Maybe plan detail sections              | `?tab=<slug>`                                               |
+| **Filter**          | Multiple independent orthogonal narrowings  | Browse filters                          | keyed individually: `?domain=&cert=&status=`                |
+| **Mode flag**       | Boolean sub-mode                            | Card edit mode                          | `?edit=1` (or `?mode=edit` for >2 states)                   |
+| **One-shot banner** | Post-action feedback, dropped on navigation | "Plan created"                          | `?created=1` (keep current; document)                       |
 
 ## Naming rules
 
@@ -173,16 +173,16 @@ For item-index (session): identical shape with `QUERY_PARAMS.ITEM` and a number.
 
 ## Per-page implementation
 
-| Page | Changes |
-| ---- | ------- |
+| Page                      | Changes                                                                                                                                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `/knowledge/[slug]/learn` | replace `stepIndex` ($state number) with `currentPhase` ($state KnowledgePhase). Server load narrows `?step=` against KNOWLEDGE_PHASE_VALUES. Svelte syncs via $effect + replaceState. Add `ROUTES.KNOWLEDGE_LEARN_AT(slug, phase)`. |
-| `/sessions/[id]` | add `?item=<n>` (0-based index) + `?step=<slug>` (read/confidence/answer). Server narrows + clamps to 0..length-1. Add `ROUTES.SESSION_AT(id, item)`. |
-| `/reps/session` | mirror of sessions/[id] pattern. Keep existing `?s=<sessionId>` (session seed). Add `?item=` + `?step=`. |
-| `/memory/review` | skip for now. Queue is ephemeral and refreshing to a specific card in a queue that may have changed is a footgun. Revisit after user uses it. |
-| `/memory/[id]` | add `?edit=1` mode flag. `ROUTES.MEMORY_CARD_EDIT(id)`. |
-| `/plans/[id]` | keep `?created=1` one-shot. Skip section/tab URL unless user identifies need. |
-| `/reps/browse` | rename `?phase=` → `?flight-phase=` (backwards-compat shim: read both, prefer new) |
-| All browse pages | introduce `QUERY_PARAMS.*` constants; delete inline string literals |
+| `/sessions/[id]`          | add `?item=<n>` (0-based index) + `?step=<slug>` (read/confidence/answer). Server narrows + clamps to 0..length-1. Add `ROUTES.SESSION_AT(id, item)`.                                                                                |
+| `/reps/session`           | mirror of sessions/[id] pattern. Keep existing `?s=<sessionId>` (session seed). Add `?item=` + `?step=`.                                                                                                                             |
+| `/memory/review`          | skip for now. Queue is ephemeral and refreshing to a specific card in a queue that may have changed is a footgun. Revisit after user uses it.                                                                                        |
+| `/memory/[id]`            | add `?edit=1` mode flag. `ROUTES.MEMORY_CARD_EDIT(id)`.                                                                                                                                                                              |
+| `/plans/[id]`             | keep `?created=1` one-shot. Skip section/tab URL unless user identifies need.                                                                                                                                                        |
+| `/reps/browse`            | rename `?phase=` → `?flight-phase=` (backwards-compat shim: read both, prefer new)                                                                                                                                                   |
+| All browse pages          | introduce `QUERY_PARAMS.*` constants; delete inline string literals                                                                                                                                                                  |
 
 ## Rollout
 

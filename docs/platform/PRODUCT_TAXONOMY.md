@@ -14,11 +14,11 @@ related:
 
 ## TL;DR
 
-| Term | Definition | Example |
-| ---- | ---------- | ------- |
-| **Product** | A full user-facing system with its own mode of engagement and conceptual model. The thing a pilot says they're "using." | Ground school, Sim, Avionics |
-| **Feature** | A piece of a product. Has UI, has a route, but isn't standalone -- depends on the product's data and context. | Lens, goals, cert dashboard, handbook reader, spaced rep |
-| **Surface app** | A code-organization unit in `apps/`. Groups features by *how they render*, not by what they teach. May host one product or be shared across products. | `apps/study/`, `apps/sim/`, `apps/avionics/` |
+| Term            | Definition                                                                                                                                            | Example                                                  |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Product**     | A full user-facing system with its own mode of engagement and conceptual model. The thing a pilot says they're "using."                               | Ground school, Sim, Avionics                             |
+| **Feature**     | A piece of a product. Has UI, has a route, but isn't standalone -- depends on the product's data and context.                                         | Lens, goals, cert dashboard, handbook reader, spaced rep |
+| **Surface app** | A code-organization unit in `apps/`. Groups features by *how they render*, not by what they teach. May host one product or be shared across products. | `apps/study/`, `apps/sim/`, `apps/avionics/`             |
 
 A pilot **opens a product**. A pilot **uses a feature within a product**. A pilot **never sees a surface app** -- that's an internal directory name.
 
@@ -30,16 +30,16 @@ Working hypothesis: **~3 real products.** Not committed yet. Could collapse to 1
 
 The core asynchronous-study product. A pilot uses it to learn aviation knowledge -- regulations, aerodynamics, weather, systems, procedures -- and to be tested on what they've learned. One product, many features.
 
-| Feature | Internal name | What the user sees | Relationship |
-| ------- | ------------- | ------------------- | ------------ |
-| Knowledge graph | `knowledge` | (invisible -- data model) | The substrate every feature reads from |
-| Handbook reader | `handbooks/...` | "the handbook," "PHAK ch. 4" | Entry point: read the source |
-| Spaced rep / quiz | `study/...` | "my reps," "the cards" | Active recall over the graph |
-| Weakness lens | `lens/weakness` | "what to study next" | Filtered view by performance |
-| Handbook lens | `lens/handbook` | "what to study from this chapter" | Filtered view by source |
-| Goal composer | `goals/...` | "my checkride goals" | Cert/syllabus-driven targets |
-| Cert dashboard | `credentials/...` | "my CFI progress" | Progress against ACS/PTS |
-| Reference resolver | `references/...` | (invisible -- citation rendering) | Substrate for cross-doc links |
+| Feature            | Internal name     | What the user sees                | Relationship                           |
+| ------------------ | ----------------- | --------------------------------- | -------------------------------------- |
+| Knowledge graph    | `knowledge`       | (invisible -- data model)         | The substrate every feature reads from |
+| Handbook reader    | `handbooks/...`   | "the handbook," "PHAK ch. 4"      | Entry point: read the source           |
+| Spaced rep / quiz  | `study/...`       | "my reps," "the cards"            | Active recall over the graph           |
+| Weakness lens      | `lens/weakness`   | "what to study next"              | Filtered view by performance           |
+| Handbook lens      | `lens/handbook`   | "what to study from this chapter" | Filtered view by source                |
+| Goal composer      | `goals/...`       | "my checkride goals"              | Cert/syllabus-driven targets           |
+| Cert dashboard     | `credentials/...` | "my CFI progress"                 | Progress against ACS/PTS               |
+| Reference resolver | `references/...`  | (invisible -- citation rendering) | Substrate for cross-doc links          |
 
 **One product, seven features.** A pilot navigates between them in a single session and doesn't think of them as separate things.
 
@@ -61,18 +61,18 @@ Lives on `apps/avionics/` (the surface app).
 
 These all exist in the codebase or in vision docs and were sometimes called "products." They are not.
 
-| Thing | What it actually is |
-| ----- | ------------------- |
-| Lens | Feature of ground school |
-| Goals | Feature of ground school |
-| Cert dashboard | Feature of ground school |
-| Spaced Memory Items | Feature of ground school (the spaced rep system) |
-| Decision Reps | Feature of sim (or ground school -- depends how it's built) |
-| Calibration Tracker | Feature, cuts across ground school and sim |
-| Route Walkthrough | Feature, would create a `spatial/` surface |
-| Ten-Minute Ticker | Feature pattern (10-min daily session) |
-| NTSB Story | Feature, narrated audio mode |
-| ATC Comms Drill | Feature, audio mode |
+| Thing               | What it actually is                                         |
+| ------------------- | ----------------------------------------------------------- |
+| Lens                | Feature of ground school                                    |
+| Goals               | Feature of ground school                                    |
+| Cert dashboard      | Feature of ground school                                    |
+| Spaced Memory Items | Feature of ground school (the spaced rep system)            |
+| Decision Reps       | Feature of sim (or ground school -- depends how it's built) |
+| Calibration Tracker | Feature, cuts across ground school and sim                  |
+| Route Walkthrough   | Feature, would create a `spatial/` surface                  |
+| Ten-Minute Ticker   | Feature pattern (10-min daily session)                      |
+| NTSB Story          | Feature, narrated audio mode                                |
+| ATC Comms Drill     | Feature, audio mode                                         |
 
 **The 53 entries in [vision/INDEX.md](../vision/INDEX.md)** are mostly features (or feature *patterns*) of one of the three products above. The INDEX is still useful as an idea bank -- *what could we build* -- but the term "product" in there is overloaded with what we'd now call "features." Reclassification of the INDEX is deferred (low priority, no public face yet).
 

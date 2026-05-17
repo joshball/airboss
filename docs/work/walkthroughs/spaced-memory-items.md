@@ -226,17 +226,17 @@ sessions, cookies, and deep-linking work the same locally as deployed.
 `study.airboss.test` must resolve to `127.0.0.1` (step 1 of setup below
 verifies this; OrbStack's `*.test` wildcard handles it on macOS).
 
-| Area            | URL                                                          |
-| --------------- | ------------------------------------------------------------ |
-| Login           | `http://study.airboss.test:9600/login`                       |
-| Dashboard       | `http://study.airboss.test:9600/memory`                      |
-| Browse          | `http://study.airboss.test:9600/memory/browse`               |
-| New card        | `http://study.airboss.test:9600/memory/new`                  |
-| Card detail     | `http://study.airboss.test:9600/memory/{id}`                 |
-| Review session  | `http://study.airboss.test:9600/memory/review`               |
-| Logout (POST)   | `http://study.airboss.test:9600/logout`                      |
-| Auth API        | `http://study.airboss.test:9600/api/auth/*`                  |
-| DB Studio       | `http://localhost:4983/` (drizzle-kit studio)                |
+| Area           | URL                                            |
+| -------------- | ---------------------------------------------- |
+| Login          | `http://study.airboss.test:9600/login`         |
+| Dashboard      | `http://study.airboss.test:9600/memory`        |
+| Browse         | `http://study.airboss.test:9600/memory/browse` |
+| New card       | `http://study.airboss.test:9600/memory/new`    |
+| Card detail    | `http://study.airboss.test:9600/memory/{id}`   |
+| Review session | `http://study.airboss.test:9600/memory/review` |
+| Logout (POST)  | `http://study.airboss.test:9600/logout`        |
+| Auth API       | `http://study.airboss.test:9600/api/auth/*`    |
+| DB Studio      | `http://localhost:4983/` (drizzle-kit studio)  |
 
 Future surface apps claim `hangar.airboss.test`, `spatial.airboss.test`,
 etc. on the same cookie domain so one sign-in unlocks the whole suite.
@@ -301,14 +301,14 @@ without risk of wiping a staging DB.
 
 ### Config env vars
 
-| Var                  | Required?       | Notes                                                                 |
-| -------------------- | --------------- | --------------------------------------------------------------------- |
-| `DATABASE_URL`       | yes             | Postgres connection string. `setup` writes the local dev default.     |
-| `BETTER_AUTH_SECRET` | yes             | Session signing. `setup` generates one via `openssl rand -base64 32`. |
-| `BETTER_AUTH_URL`    | prod only       | Base URL. Drives trustedOrigins (CSRF) + email links.                 |
-| `RESEND_API_KEY`     | optional        | Transactional email. Absent -> email bodies log to console.           |
-| `LOG_LEVEL`          | optional        | `debug` / `info` / `warn` / `error`. Default `info`.                  |
-| `DB_POOL_SIZE`       | optional        | Postgres pool. Default 10.                                            |
+| Var                  | Required? | Notes                                                                 |
+| -------------------- | --------- | --------------------------------------------------------------------- |
+| `DATABASE_URL`       | yes       | Postgres connection string. `setup` writes the local dev default.     |
+| `BETTER_AUTH_SECRET` | yes       | Session signing. `setup` generates one via `openssl rand -base64 32`. |
+| `BETTER_AUTH_URL`    | prod only | Base URL. Drives trustedOrigins (CSRF) + email links.                 |
+| `RESEND_API_KEY`     | optional  | Transactional email. Absent -> email bodies log to console.           |
+| `LOG_LEVEL`          | optional  | `debug` / `info` / `warn` / `error`. Default `info`.                  |
+| `DB_POOL_SIZE`       | optional  | Postgres pool. Default 10.                                            |
 
 ### Troubleshooting
 

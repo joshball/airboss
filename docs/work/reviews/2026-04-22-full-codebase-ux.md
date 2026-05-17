@@ -39,7 +39,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 The 2026-04-22 app-wide review landed the headline fixes: identity/logout in nav, `?created=` banners + edit-success toasts, filter chips on both browse pages, the `/session/start` preset gallery, the calibration interpretation line + per-bucket/per-domain CTAs, the structured "Suggested next" actions on session summary, and the deprecation of `/reps/session`. The `/sessions/[id]` flow stays server-derived and resumes on refresh. What's still open is narrower and more about polish than systemic debt: three confirmed-open items from the user's own list (native `confirm()` for Archive, no undo window in review, no per-phase completion on `/learn`), a still-unconfirmed `Skip permanently` with no guard, and a grab-bag of inconsistent empty-state headings, pagination counts, stat-tile linkability, and sim-app prototype gaps. No new critical issues.
@@ -204,12 +203,12 @@ The 2026-04-22 app-wide review landed the headline fixes: identity/logout in nav
 
 ## Status of user's open items
 
-| Item                                                            | Status      | Notes                                                                                                                      |
-| --------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------- |
-| Knowledge /learn phase completion tracking still not persisted  | Confirmed   | Stepper shows `active` + `authored`, no visited/complete state at all (session or server).                                 |
-| Native `confirm()` still used for destructive actions           | Confirmed   | One surviving site: memory/[id] Archive. ConfirmAction primitive exists in libs/ui but unused anywhere in apps/.           |
-| Review rating undo window                                       | Confirmed   | Instant submit-and-advance; no undo, no hold-to-confirm, no history stack.                                                 |
-| Skip permanently without confirmation (session runner)          | Confirmed   | Same pattern as Archive -- same primitive can solve it. Prior review also flagged this.                                    |
+| Item                                                           | Status    | Notes                                                                                                            |
+| -------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------- |
+| Knowledge /learn phase completion tracking still not persisted | Confirmed | Stepper shows `active` + `authored`, no visited/complete state at all (session or server).                       |
+| Native `confirm()` still used for destructive actions          | Confirmed | One surviving site: memory/[id] Archive. ConfirmAction primitive exists in libs/ui but unused anywhere in apps/. |
+| Review rating undo window                                      | Confirmed | Instant submit-and-advance; no undo, no hold-to-confirm, no history stack.                                       |
+| Skip permanently without confirmation (session runner)         | Confirmed | Same pattern as Archive -- same primitive can solve it. Prior review also flagged this.                          |
 
 All four open items are still live. The ConfirmAction primitive is the blocking dependency for two of them (Archive, Skip permanently); review undo and `/learn` completion tracking are independent pieces of work.
 
@@ -217,34 +216,34 @@ All four open items are still live. The ConfirmAction primitive is the blocking 
 
 ## Status of prior-review closeouts
 
-| Prior issue                                                                          | Closed? | Evidence                                                                                                                                                    |
-| ------------------------------------------------------------------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CRITICAL: Legacy /reps/session loses progress on refresh                             | Yes     | /reps/session removed; REPS_SESSION retired in routes.ts; dashboard CTA now routes to /session/start.                                                       |
-| MAJOR: libs/themes empty, libs/ui one component                                      | Yes     | libs/ui has 11 components (Banner, Button, Badge, Card, ConfidenceSlider, ConfirmAction, KbdHint, PanelShell, Select, StatTile, TextField); themes landed.  |
-| MAJOR: No logout control in nav                                                      | Yes     | Identity details/summary menu + sign-out form action live in +layout.svelte.                                                                                |
-| MAJOR: Create-then-redirect gives no success confirmation                            | Yes     | `?created=<id>` pattern live on reps/browse + memory/browse; `?created=1` on /plans/[id] detail.                                                            |
-| MAJOR: Review rating mistakes have no undo                                           | No      | See open item above.                                                                                                                                        |
-| MAJOR: Native confirm() is the only confirmation pattern                             | No      | See open item above. Primitive exists; migration not done.                                                                                                  |
-| MAJOR: Calibration filled-state is diagnosis with no treatment                       | Yes     | Per-bucket and per-domain CTAs live; interpretation card surfaces narrative.                                                                                |
-| MAJOR: Calibration doesn't explain what it is once data exists                       | Yes     | `interpretation` derived string renders above buckets with worst-bucket callout.                                                                            |
-| MAJOR: Browse filter state not visible at a glance                                   | Yes     | Filter chips with `×` removal + Clear-all live on both memory/browse and reps/browse.                                                                       |
-| MAJOR: Memory domain links inconsistent                                              | Partial | Memory dashboard + knowledge domain headings link; browse-card domain badges still aren't clickable. Low-priority but still inconsistent.                   |
-| MAJOR: /plans/new redirects silently                                                 | Yes     | `?created=1` banner with optional Start-a-session action.                                                                                                   |
-| MAJOR: Session summary "Suggested next" is read-only prose                           | Yes     | `summary.suggestedNext` renders as an action-button list with variants.                                                                                     |
-| MAJOR: /knowledge/[slug]/learn has no per-phase completion                           | No      | See open item above.                                                                                                                                        |
-| MAJOR: Skip permanently in sessions/[id] has no confirm                              | No      | See open item above.                                                                                                                                        |
-| MINOR: Stat tiles not clickable                                                      | No      | Memory + reps dashboards still have static tiles.                                                                                                           |
-| MINOR: Pagination shows page number but not total                                    | No      | Both browse pages still show bare "Page N."                                                                                                                 |
-| MINOR: Confidence slider skip is same weight as ratings                              | Partial | Slider is in libs/ui now (design-system migration took priority); visual tweak still pending.                                                               |
-| MINOR: Empty vs complete heading in /memory/review                                   | No      | Still "All caught up." for both.                                                                                                                            |
-| MINOR: Cmd+Enter shortcut on memory/new undocumented                                 | No      | Code still implements it; no kbd hint near Save.                                                                                                            |
-| MINOR: Cancel on New card has no dirty-form guard                                    | No      | Still direct navigation, no beforeunload.                                                                                                                   |
-| MINOR: Dashboard h1 vs nav name mismatch                                             | No      | Still "Learning Dashboard" vs "Dashboard".                                                                                                                  |
-| MINOR: Tags field no validation/preview                                              | No      | Still plain text input with hint.                                                                                                                           |
-| MINOR: Error messages low-information ("Please try again")                           | No      | Still generic; no reference id surfaced.                                                                                                                    |
-| MINOR: Color-only encoding on calibration buckets                                    | Partial | Text labels ("Overconfident by X%") carry semantic weight; color is the scan cue but not the only encoding. Icons still not added.                          |
-| MINOR: Login dev-accounts visible in dev, no prod affordance                         | No      | Still no invite-only / request-access copy below the form.                                                                                                  |
-| MINOR: Reps session confidence prompt invisible when not shown                       | N/A     | /reps/session retired; new /sessions/[id] prompts explicitly via the ConfidenceSlider phase. Issue moot.                                                    |
+| Prior issue                                                    | Closed? | Evidence                                                                                                                                                   |
+| -------------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CRITICAL: Legacy /reps/session loses progress on refresh       | Yes     | /reps/session removed; REPS_SESSION retired in routes.ts; dashboard CTA now routes to /session/start.                                                      |
+| MAJOR: libs/themes empty, libs/ui one component                | Yes     | libs/ui has 11 components (Banner, Button, Badge, Card, ConfidenceSlider, ConfirmAction, KbdHint, PanelShell, Select, StatTile, TextField); themes landed. |
+| MAJOR: No logout control in nav                                | Yes     | Identity details/summary menu + sign-out form action live in +layout.svelte.                                                                               |
+| MAJOR: Create-then-redirect gives no success confirmation      | Yes     | `?created=<id>` pattern live on reps/browse + memory/browse; `?created=1` on /plans/[id] detail.                                                           |
+| MAJOR: Review rating mistakes have no undo                     | No      | See open item above.                                                                                                                                       |
+| MAJOR: Native confirm() is the only confirmation pattern       | No      | See open item above. Primitive exists; migration not done.                                                                                                 |
+| MAJOR: Calibration filled-state is diagnosis with no treatment | Yes     | Per-bucket and per-domain CTAs live; interpretation card surfaces narrative.                                                                               |
+| MAJOR: Calibration doesn't explain what it is once data exists | Yes     | `interpretation` derived string renders above buckets with worst-bucket callout.                                                                           |
+| MAJOR: Browse filter state not visible at a glance             | Yes     | Filter chips with `×` removal + Clear-all live on both memory/browse and reps/browse.                                                                      |
+| MAJOR: Memory domain links inconsistent                        | Partial | Memory dashboard + knowledge domain headings link; browse-card domain badges still aren't clickable. Low-priority but still inconsistent.                  |
+| MAJOR: /plans/new redirects silently                           | Yes     | `?created=1` banner with optional Start-a-session action.                                                                                                  |
+| MAJOR: Session summary "Suggested next" is read-only prose     | Yes     | `summary.suggestedNext` renders as an action-button list with variants.                                                                                    |
+| MAJOR: /knowledge/[slug]/learn has no per-phase completion     | No      | See open item above.                                                                                                                                       |
+| MAJOR: Skip permanently in sessions/[id] has no confirm        | No      | See open item above.                                                                                                                                       |
+| MINOR: Stat tiles not clickable                                | No      | Memory + reps dashboards still have static tiles.                                                                                                          |
+| MINOR: Pagination shows page number but not total              | No      | Both browse pages still show bare "Page N."                                                                                                                |
+| MINOR: Confidence slider skip is same weight as ratings        | Partial | Slider is in libs/ui now (design-system migration took priority); visual tweak still pending.                                                              |
+| MINOR: Empty vs complete heading in /memory/review             | No      | Still "All caught up." for both.                                                                                                                           |
+| MINOR: Cmd+Enter shortcut on memory/new undocumented           | No      | Code still implements it; no kbd hint near Save.                                                                                                           |
+| MINOR: Cancel on New card has no dirty-form guard              | No      | Still direct navigation, no beforeunload.                                                                                                                  |
+| MINOR: Dashboard h1 vs nav name mismatch                       | No      | Still "Learning Dashboard" vs "Dashboard".                                                                                                                 |
+| MINOR: Tags field no validation/preview                        | No      | Still plain text input with hint.                                                                                                                          |
+| MINOR: Error messages low-information ("Please try again")     | No      | Still generic; no reference id surfaced.                                                                                                                   |
+| MINOR: Color-only encoding on calibration buckets              | Partial | Text labels ("Overconfident by X%") carry semantic weight; color is the scan cue but not the only encoding. Icons still not added.                         |
+| MINOR: Login dev-accounts visible in dev, no prod affordance   | No      | Still no invite-only / request-access copy below the form.                                                                                                 |
+| MINOR: Reps session confidence prompt invisible when not shown | N/A     | /reps/session retired; new /sessions/[id] prompts explicitly via the ConfidenceSlider phase. Issue moot.                                                   |
 
 ---
 

@@ -143,21 +143,21 @@ The findings below are mostly correctness gaps in error categorization, audit-tr
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MAJOR: actor chip resolution by name not id | CLOSED | PR #438 -- `getActorById` BC helper + isLikelyAuthId routing in `audit-queries.ts:351-377` |
-| MAJOR: temp upload dir leak ordering | CLOSED | PR #463 -- `enqueued = true` set immediately after `await enqueueJob` (load-bearing comment at `upload/+page.server.ts:91-97`) |
-| MAJOR: revoke-session helper doesn't audit failure | CLOSED | PR #463 -- failure-audit + rethrow on `revokeUserSession` and `revokeAllUserSessions` |
-| MAJOR: source-jobs subprocess output unbounded | CLOSED | PR #467 wave -- per-line + result + error caps via `SOURCE_ACTION_LIMITS` constants |
-| MINOR: terminal-state writes outside transaction | CLOSED | PR #436 -- terminal writes in `db.transaction` |
-| MINOR: enqueueJob audit non-transactional | CLOSED | PR #436 -- `db.transaction` over insert + audit (`enqueue.ts:38`) |
-| MINOR: source delete with dependent references | CLOSED | PR #467 wave -- 409 with citation-count helper |
-| MINOR: source-jobs shells `bun` from node | CLOSED | PR #467 wave -- preflight probe + warning log on missing bun |
-| MINOR: applySecurityHeaders swallows errors | CLOSED | PR #467 wave -- typed-error narrowing + debug logging |
-| MINOR: appearance endpoint no Content-Type / Origin | CLOSED | PR #467 -- locals.user gate + Origin check |
-| MINOR: getUser left-join missing index hint | CLOSED | Chunk-3 PR #426 -- index added on `bauth_session(user_id, ...)` |
-| NIT: appendJobLog MAX(seq)+1 TOCTOU | CLOSED | PR #448 -- atomic seq allocator |
-| NIT: softDeleteReference no audit on idempotent | CLOSED | PR #467 wave -- `metadata.idempotent: true` audit row |
-| NIT: getActiveJobForTarget pre-check race | CLOSED | Documented MVP trade-off; FOR UPDATE upgrade deferred |
+| Finding                                             | Verdict | Closure                                                                                                                        |
+| --------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| MAJOR: actor chip resolution by name not id         | CLOSED  | PR #438 -- `getActorById` BC helper + isLikelyAuthId routing in `audit-queries.ts:351-377`                                     |
+| MAJOR: temp upload dir leak ordering                | CLOSED  | PR #463 -- `enqueued = true` set immediately after `await enqueueJob` (load-bearing comment at `upload/+page.server.ts:91-97`) |
+| MAJOR: revoke-session helper doesn't audit failure  | CLOSED  | PR #463 -- failure-audit + rethrow on `revokeUserSession` and `revokeAllUserSessions`                                          |
+| MAJOR: source-jobs subprocess output unbounded      | CLOSED  | PR #467 wave -- per-line + result + error caps via `SOURCE_ACTION_LIMITS` constants                                            |
+| MINOR: terminal-state writes outside transaction    | CLOSED  | PR #436 -- terminal writes in `db.transaction`                                                                                 |
+| MINOR: enqueueJob audit non-transactional           | CLOSED  | PR #436 -- `db.transaction` over insert + audit (`enqueue.ts:38`)                                                              |
+| MINOR: source delete with dependent references      | CLOSED  | PR #467 wave -- 409 with citation-count helper                                                                                 |
+| MINOR: source-jobs shells `bun` from node           | CLOSED  | PR #467 wave -- preflight probe + warning log on missing bun                                                                   |
+| MINOR: applySecurityHeaders swallows errors         | CLOSED  | PR #467 wave -- typed-error narrowing + debug logging                                                                          |
+| MINOR: appearance endpoint no Content-Type / Origin | CLOSED  | PR #467 -- locals.user gate + Origin check                                                                                     |
+| MINOR: getUser left-join missing index hint         | CLOSED  | Chunk-3 PR #426 -- index added on `bauth_session(user_id, ...)`                                                                |
+| NIT: appendJobLog MAX(seq)+1 TOCTOU                 | CLOSED  | PR #448 -- atomic seq allocator                                                                                                |
+| NIT: softDeleteReference no audit on idempotent     | CLOSED  | PR #467 wave -- `metadata.idempotent: true` audit row                                                                          |
+| NIT: getActiveJobForTarget pre-check race           | CLOSED  | Documented MVP trade-off; FOR UPDATE upgrade deferred                                                                          |
 
 Total: 14 closed / 0 open. `review_status` was already `done` -- preserved.

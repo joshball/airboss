@@ -4,6 +4,7 @@ with a part / section drill-down. The repo is shared with many concurrent
 agents — you MUST work in your own git worktree, never on the parent main.
 
 ## Repo
+
 /Users/joshua/src/_me/aviation/airboss
 
 ## Setup (do this first)

@@ -15,11 +15,11 @@ review_status: done
 ## Status as of 2026-05-04
 
 | Severity | Count | Closed | Open |
-| -------- | ----: | -----: | ---: |
-| critical |     0 |      0 |    0 |
-| major    |     2 |      2 |    0 |
-| minor    |     5 |      1 |    4 |
-| nit      |     3 |      1 |    2 |
+| -------- | ----- | ------ | ---- |
+| critical | 0     | 0      | 0    |
+| major    | 2     | 2      | 0    |
+| minor    | 5     | 1      | 4    |
+| nit      | 3     | 1      | 2    |
 
 ### MAJOR: Knowledge-graph + credential write paths exposed without auth gate -- CLOSED
 

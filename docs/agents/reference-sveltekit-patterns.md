@@ -7,7 +7,7 @@ Originally extracted from legion-overwatch (2026-03-24). Adapted for airboss-fir
 
 ## 1. Monorepo Structure
 
-```
+```text
 libs/
   auth/          better-auth config
   constants/     enums, routes, config
@@ -318,7 +318,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 ## 7. Layout Hierarchy
 
-```
+```text
 routes/
   (public)/              -- login, public pages (no auth)
     +layout.server.ts
@@ -336,7 +336,7 @@ routes/
 
 **For airboss-firc sim app:**
 
-```
+```text
 routes/
   (public)/         -- marketing, login
   (course)/         -- enrolled learner routes
@@ -666,7 +666,7 @@ const config = {
 
 ## 16. Key Differences: legion-overwatch vs airboss-firc
 
-| Aspect        | Legion-Overwatch                    | airboss-firc                                                   |
+| Aspect        | Legion-Overwatch                    | airboss-firc                                                |
 | ------------- | ----------------------------------- | ----------------------------------------------------------- |
 | Database      | SQLite (single file, no migrations) | PostgreSQL (migrations)                                     |
 | Apps          | 1 (`overwatch-app`)                 | 4 (sim, hangar, ops, runway)                                |

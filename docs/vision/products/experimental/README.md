@@ -6,10 +6,10 @@ These live here until they either graduate to a real category or quietly stay as
 
 ## Products
 
-| ID | Name                 | Priority | Status |
-| -- | -------------------- | -------- | ------ |
-| prd:exp:smartwatch-ritual | Smartwatch Ritual    | 5        | idea   |
-| prd:exp:augmented-checklist | Augmented Checklist  | 5        | idea   |
-| prd:exp:replay-your-flight | Replay Your Flight   | 5        | idea   |
-| prd:exp:ghost-flight | Ghost Flight         | 5        | idea   |
+| ID                           | Name                 | Priority | Status |
+| ---------------------------- | -------------------- | -------- | ------ |
+| prd:exp:smartwatch-ritual    | Smartwatch Ritual    | 5        | idea   |
+| prd:exp:augmented-checklist  | Augmented Checklist  | 5        | idea   |
+| prd:exp:replay-your-flight   | Replay Your Flight   | 5        | idea   |
+| prd:exp:ghost-flight         | Ghost Flight         | 5        | idea   |
 | prd:exp:anti-startle-trainer | Anti-Startle Trainer | 5        | idea   |

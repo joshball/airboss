@@ -106,14 +106,14 @@ The structure to internalize:
 
 The §61.23(d) duration table is the single most-asked piece of medical regulation. The math:
 
-| Class                      | Privilege exercised                                     | Duration                                                   |
-| -------------------------- | ------------------------------------------------------- | ---------------------------------------------------------- |
-| First                      | ATP privileges                                          | 12 calendar months from month of exam (under age 40); 6 calendar months (age 40+) |
-| First                      | Privileges below ATP (private/commercial)               | Drops to second-class duration                             |
-| First                      | Privileges below first / second                         | Drops to third-class duration                              |
-| Second                     | Commercial privileges                                   | 12 calendar months from month of exam, regardless of age   |
-| Second                     | Below commercial (private)                              | Drops to third-class duration                              |
-| Third                      | Private, recreational, student, CFI privileges          | 60 calendar months from month of exam (under age 40); 24 calendar months from month of exam (age 40+) |
+| Class  | Privilege exercised                            | Duration                                                                                              |
+| ------ | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| First  | ATP privileges                                 | 12 calendar months from month of exam (under age 40); 6 calendar months (age 40+)                     |
+| First  | Privileges below ATP (private/commercial)      | Drops to second-class duration                                                                        |
+| First  | Privileges below first / second                | Drops to third-class duration                                                                         |
+| Second | Commercial privileges                          | 12 calendar months from month of exam, regardless of age                                              |
+| Second | Below commercial (private)                     | Drops to third-class duration                                                                         |
+| Third  | Private, recreational, student, CFI privileges | 60 calendar months from month of exam (under age 40); 24 calendar months from month of exam (age 40+) |
 
 The calendar-month math: a third-class medical for an over-40 pilot, exam dated March 15, 2024, is good through March 31, 2026. The pilot gets the back-end month for free.
 
@@ -349,20 +349,20 @@ The "knew or should have known" standard applies. A pilot who has been told by t
 
 ### Locate the section
 
-| Question                                                                        | Section / source         |
-| ------------------------------------------------------------------------------- | ------------------------ |
-| Where is the medical class requirement?                                          | §61.23                  |
-| Where is the BasicMed alternative for private privileges?                        | §61.23(c)               |
-| Where is the medical class duration table?                                       | §61.23(d)               |
-| Where is the always-on medical-deficiency rule?                                  | §61.53                  |
-| Where are the third-class medical standards?                                     | Part 67 subpart D       |
-| Where is the medical fraud rule?                                                 | §67.403                 |
-| Where is the BasicMed statutory authority?                                       | 49 USC 44703(j)         |
-| Where is the BasicMed aircraft limit?                                            | 49 USC 44703(j); Part 68 |
-| Where does the BasicMed online course live?                                      | faasafety.gov           |
-| Where does the BasicMed physician form live?                                     | FAA Form 8700-2 (or AC 68-1 attachment) |
-| Where does AC 68-1 live (BasicMed guidance)?                                     | faa.gov advisory circulars |
-| Where does the AME pilot exam form live?                                         | FAA Form 8500-8 (via MedXPress) |
+| Question                                                  | Section / source                        |
+| --------------------------------------------------------- | --------------------------------------- |
+| Where is the medical class requirement?                   | §61.23                                  |
+| Where is the BasicMed alternative for private privileges? | §61.23(c)                               |
+| Where is the medical class duration table?                | §61.23(d)                               |
+| Where is the always-on medical-deficiency rule?           | §61.53                                  |
+| Where are the third-class medical standards?              | Part 67 subpart D                       |
+| Where is the medical fraud rule?                          | §67.403                                 |
+| Where is the BasicMed statutory authority?                | 49 USC 44703(j)                         |
+| Where is the BasicMed aircraft limit?                     | 49 USC 44703(j); Part 68                |
+| Where does the BasicMed online course live?               | faasafety.gov                           |
+| Where does the BasicMed physician form live?              | FAA Form 8700-2 (or AC 68-1 attachment) |
+| Where does AC 68-1 live (BasicMed guidance)?              | faa.gov advisory circulars              |
+| Where does the AME pilot exam form live?                  | FAA Form 8500-8 (via MedXPress)         |
 
 ### Apply the rules
 

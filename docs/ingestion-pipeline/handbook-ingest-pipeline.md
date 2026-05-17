@@ -13,13 +13,13 @@ content in the airboss repo. Read this first when you need to understand
 To stay correct as the cache layout evolves, paths are written as
 patterns. Substitute mentally:
 
-| Token                  | Meaning                                                                          |
-| ---------------------- | -------------------------------------------------------------------------------- |
-| `$HANDBOOK_CACHE_ROOT` | `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`)    |
-| `$REPO_ROOT`           | The repo root on your machine (e.g. `/Users/joshua/src/_me/aviation/airboss/`)   |
-| `<doc>`                | Document slug (e.g. `phak`, `afh`, `avwx`)                                       |
-| `<edition>`            | Edition tag (e.g. `FAA-H-8083-25C`)                                              |
-| `<NN>`                 | Two-digit chapter ordinal (`01`..`17`)                                           |
+| Token                  | Meaning                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------ |
+| `$HANDBOOK_CACHE_ROOT` | `~/Documents/airboss-handbook-cache/` (override via `AIRBOSS_HANDBOOK_CACHE`)  |
+| `$REPO_ROOT`           | The repo root on your machine (e.g. `/Users/joshua/src/_me/aviation/airboss/`) |
+| `<doc>`                | Document slug (e.g. `phak`, `afh`, `avwx`)                                     |
+| `<edition>`            | Edition tag (e.g. `FAA-H-8083-25C`)                                            |
+| `<NN>`                 | Two-digit chapter ordinal (`01`..`17`)                                         |
 
 Cache layout is governed by [ADR 021](../decisions/021-source-cache-flat-naming/decision.md).
 Storage policy is governed by [ADR 018](../decisions/018-source-artifact-storage-policy/decision.md).
@@ -54,16 +54,16 @@ That's a `bun` shim around the Python CLI at
 The Python is invoked through a venv at `tools/handbook-ingest/.venv/`.
 Options:
 
-| Flag                     | Effect                                                                                                       |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `--edition <e>`          | Override edition tag (defaults to the YAML's `edition`).                                                     |
-| `--chapter <code>`       | Restrict to one chapter (e.g. `12`).                                                                         |
-| `--strategy <s>`         | `toc` \| `prompt` \| `compare`. Defaults to YAML `section_strategy`.                                         |
-| `--dry-run`              | Validate only; no writes. Not allowed with `--strategy prompt`.                                              |
-| `--force`                | Re-extract even when source SHAs match.                                                                      |
-| `--no-archive`           | Skip writing `prompts-out/<doc>/<edition>/archive/<run-id>/` (default is to archive).                        |
-| `--apply-errata <id>`    | Apply one errata document (post-extraction patch step). Skips the full pipeline.                             |
-| `--reapply-errata`       | Re-apply every errata in YAML order. Idempotent without `--force`.                                           |
+| Flag                  | Effect                                                                                |            |                                                 |
+| --------------------- | ------------------------------------------------------------------------------------- | ---------- | ----------------------------------------------- |
+| `--edition <e>`       | Override edition tag (defaults to the YAML's `edition`).                              |            |                                                 |
+| `--chapter <code>`    | Restrict to one chapter (e.g. `12`).                                                  |            |                                                 |
+| `--strategy <s>`      | `toc` \                                                                               | `prompt` \ | `compare`. Defaults to YAML `section_strategy`. |
+| `--dry-run`           | Validate only; no writes. Not allowed with `--strategy prompt`.                       |            |                                                 |
+| `--force`             | Re-extract even when source SHAs match.                                               |            |                                                 |
+| `--no-archive`        | Skip writing `prompts-out/<doc>/<edition>/archive/<run-id>/` (default is to archive). |            |                                                 |
+| `--apply-errata <id>` | Apply one errata document (post-extraction patch step). Skips the full pipeline.      |            |                                                 |
+| `--reapply-errata`    | Re-apply every errata in YAML order. Idempotent without `--force`.                    |            |                                                 |
 
 ## Per-handbook config
 
@@ -141,11 +141,11 @@ Sub-phases:
 
 Failure modes:
 
-| Phase                  | Failure                                              | Resolution                                                            |
-| ---------------------- | ---------------------------------------------------- | --------------------------------------------------------------------- |
-| `extract_sections`     | Empty body for any section                           | Hard fail with chapter codes listed; check `page_offset` in YAML.     |
-| `extract_figures`      | Mis-numbered figure                                  | Warning in manifest; check `figure_prefix_pattern` in YAML.           |
-| `sections_via_toc`     | TOC line can't fingerprint to a body heading         | Warning; non-fatal. See [section-extraction-strategies.md](section-extraction-strategies.md). |
+| Phase              | Failure                                      | Resolution                                                                                    |
+| ------------------ | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `extract_sections` | Empty body for any section                   | Hard fail with chapter codes listed; check `page_offset` in YAML.                             |
+| `extract_figures`  | Mis-numbered figure                          | Warning in manifest; check `figure_prefix_pattern` in YAML.                                   |
+| `sections_via_toc` | TOC line can't fingerprint to a body heading | Warning; non-fatal. See [section-extraction-strategies.md](section-extraction-strategies.md). |
 
 ## Strategy: `prompt` (LLM input emit)
 
@@ -205,12 +205,12 @@ Sub-phases:
 
 Failure modes:
 
-| Phase                       | Failure                              | Resolution                                                       |
-| --------------------------- | ------------------------------------ | ---------------------------------------------------------------- |
-| Verify SHA                  | PDF bytes changed since prompt run   | Re-run `--strategy prompt` first.                                |
-| `load_chapter_sidecars`     | Missing `_llm_section_tree.json`     | Re-paste `out/_run.md` into a fresh CC session.                  |
-| `load_chapter_sidecars`     | Malformed JSON                       | Re-paste that chapter's prompt manually.                         |
-| `compare_strategies`        | Never fails; always renders          | Read the report.                                                 |
+| Phase                   | Failure                            | Resolution                                      |
+| ----------------------- | ---------------------------------- | ----------------------------------------------- |
+| Verify SHA              | PDF bytes changed since prompt run | Re-run `--strategy prompt` first.               |
+| `load_chapter_sidecars` | Missing `_llm_section_tree.json`   | Re-paste `out/_run.md` into a fresh CC session. |
+| `load_chapter_sidecars` | Malformed JSON                     | Re-paste that chapter's prompt manually.        |
+| `compare_strategies`    | Never fails; always renders        | Read the report.                                |
 
 ## Errata path (`--apply-errata` / `--reapply-errata`)
 

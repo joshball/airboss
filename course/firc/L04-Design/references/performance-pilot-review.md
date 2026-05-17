@@ -15,22 +15,22 @@ A mental-performance book for pilots that imports deliberate-practice, visualiza
 
 ## What the book covers
 
-| Chapter                         | Core idea                                                                                     |
-| ------------------------------- | --------------------------------------------------------------------------------------------- |
-| 1. How the Pilot's Mind Works   | "Performance Model" -- sensory input -> mental programming (software) -> output (behavior)    |
-| 2. Brain Integration            | Whole-brain/cross-lateral exercises (cross-crawl, lazy-8s) before flight                      |
-| 3. Sensory Input                | Deliberately train visual, kinesthetic, auditory awareness; peripheral vision; sensory drills |
-| 4. Mental Programming           | Neural pathways, conscious -> subconscious, "perfect practice makes perfect"                  |
-| 5. Mental Imagery               | Visualization as a substitute and supplement for stick time; case studies from sport          |
-| 6. Learning                     | 4 stages of competence + a proposed 5th ("unconscious competence with conscious awareness")   |
-| 7. Self-Coaching                | Post-flight debrief, journaling, 1-10 self-rating, questions as targets                       |
-| 8. Preparation and Practice     | Deliberate practice, drills vs. full "games," preparation as the separator                    |
-| 9. Performance State of Mind    | Trigger routines; recall past success; control inner state before flight                      |
-| 10. Belief System               | Bannister effect -- self-belief as a performance variable you can train                       |
-| 11. The Inner Game of Flying    | Comfort zones, flow, thinking ahead, "think further, not faster"                              |
-| 12. Pilot as Athlete            | Physical fitness as cognitive infrastructure                                                  |
-| 13. Cockpit Comfort             | Seating/position as sensory-feedback channel                                                  |
-| 14. The Peak Performance Pilot  | Synthesis -- the best pilots did these things, usually by accident                            |
+| Chapter                        | Core idea                                                                                     |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| 1. How the Pilot's Mind Works  | "Performance Model" -- sensory input -> mental programming (software) -> output (behavior)    |
+| 2. Brain Integration           | Whole-brain/cross-lateral exercises (cross-crawl, lazy-8s) before flight                      |
+| 3. Sensory Input               | Deliberately train visual, kinesthetic, auditory awareness; peripheral vision; sensory drills |
+| 4. Mental Programming          | Neural pathways, conscious -> subconscious, "perfect practice makes perfect"                  |
+| 5. Mental Imagery              | Visualization as a substitute and supplement for stick time; case studies from sport          |
+| 6. Learning                    | 4 stages of competence + a proposed 5th ("unconscious competence with conscious awareness")   |
+| 7. Self-Coaching               | Post-flight debrief, journaling, 1-10 self-rating, questions as targets                       |
+| 8. Preparation and Practice    | Deliberate practice, drills vs. full "games," preparation as the separator                    |
+| 9. Performance State of Mind   | Trigger routines; recall past success; control inner state before flight                      |
+| 10. Belief System              | Bannister effect -- self-belief as a performance variable you can train                       |
+| 11. The Inner Game of Flying   | Comfort zones, flow, thinking ahead, "think further, not faster"                              |
+| 12. Pilot as Athlete           | Physical fitness as cognitive infrastructure                                                  |
+| 13. Cockpit Comfort            | Seating/position as sensory-feedback channel                                                  |
+| 14. The Peak Performance Pilot | Synthesis -- the best pilots did these things, usually by accident                            |
 
 ## What's strong
 

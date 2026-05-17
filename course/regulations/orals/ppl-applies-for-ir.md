@@ -85,13 +85,13 @@ A defensible answer has eight stages. Order matters: eligibility before training
 
 **Plain reading -- five sub-requirements:**
 
-| Requirement                                                          | Number              | Source                |
-| -------------------------------------------------------------------- | ------------------- | --------------------- |
-| Cross-country PIC time                                                | 50 hours total, 10 in an airplane | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(1) |
-| Total actual or simulated instrument time                            | 40 hours            | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2) |
-| Of which, instrument time received from an authorized CFII           | 15 hours            | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2) |
-| Of which, instrument flight training in an airplane with a CFII within 2 calendar months before the practical | 3 hours | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(i) |
-| The long IFR cross-country with a CFII                                | 1 flight, 250 nm, 3 approaches at 3 airports, 3 different navigation systems | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(ii) |
+| Requirement                                                                                                   | Number                                                                       | Source                                                   |
+| ------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------- |
+| Cross-country PIC time                                                                                        | 50 hours total, 10 in an airplane                                            | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(1)     |
+| Total actual or simulated instrument time                                                                     | 40 hours                                                                     | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)     |
+| Of which, instrument time received from an authorized CFII                                                    | 15 hours                                                                     | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)     |
+| Of which, instrument flight training in an airplane with a CFII within 2 calendar months before the practical | 3 hours                                                                      | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(i)  |
+| The long IFR cross-country with a CFII                                                                        | 1 flight, 250 nm, 3 approaches at 3 airports, 3 different navigation systems | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(ii) |
 
 These are five separate boxes that all have to be checked. They overlap (training given for the long XC counts toward the 15 hours of CFII-given time, which counts toward the 40 total instrument hours) but they don't substitute for each other.
 
@@ -145,12 +145,12 @@ The candidate has 12 hours of "simulator time" from a previous flight school. Yo
 
 [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) has different substitution rules for different device classes:
 
-| Device class                          | What it can substitute for                                       | Per [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) |
-| ------------------------------------- | ---------------------------------------------------------------- | -------------------------------------------------- |
-| Full Flight Simulator (FFS)           | Up to 30 hours of the 40 hours total instrument time, with a CFII | (g) and (h) |
-| Flight Training Device (FTD)          | Up to 20 hours, with a CFII                                       | (g) and (h) |
-| Advanced Aviation Training Device (AATD) | Up to 20 hours, with a CFII; also written test endorsement after specific use | (h) and (i) |
-| Basic Aviation Training Device (BATD) | Up to 10 hours, with a CFII                                       | (h) and (i) |
+| Device class                             | What it can substitute for                                                    | Per [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) |
+| ---------------------------------------- | ----------------------------------------------------------------------------- | -------------------------------------------------- |
+| Full Flight Simulator (FFS)              | Up to 30 hours of the 40 hours total instrument time, with a CFII             | (g) and (h)                                        |
+| Flight Training Device (FTD)             | Up to 20 hours, with a CFII                                                   | (g) and (h)                                        |
+| Advanced Aviation Training Device (AATD) | Up to 20 hours, with a CFII; also written test endorsement after specific use | (h) and (i)                                        |
+| Basic Aviation Training Device (BATD)    | Up to 10 hours, with a CFII                                                   | (h) and (i)                                        |
 
 **Important:** All substitution requires a CFII to be present and the device has to have an FAA letter of authorization. Solo time in any of these devices, no matter how realistic, does not count toward [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d). And the device class must match the FAA letter -- a manufacturer who labels their device an "AATD" but holds only a BATD letter of authorization is letter-class BATD for [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) purposes.
 
@@ -166,12 +166,12 @@ The candidate proposes: "Let's combine the long XC with my [@cite](airboss-ref:r
 
 This is well-intentioned and almost works. Walk it carefully:
 
-| Requirement                                  | Met by night long XC? |
-| -------------------------------------------- | --------------------- |
-| [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(ii)(A): 250 nm flight, IFR plan, with CFII | Yes if 250 nm |
-| (B): instrument approach at each airport     | Yes if approaches are flown |
-| (C): three different kinds of approaches     | Yes if three different navigation systems are used |
-| [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(b): three full-stop landings to a night landing | Yes only if all three are *full-stop* and during the period 1 hour after sunset to 1 hour before sunrise |
+| Requirement                                                                                     | Met by night long XC?                                                                                    |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(2)(ii)(A): 250 nm flight, IFR plan, with CFII | Yes if 250 nm                                                                                            |
+| (B): instrument approach at each airport                                                        | Yes if approaches are flown                                                                              |
+| (C): three different kinds of approaches                                                        | Yes if three different navigation systems are used                                                       |
+| [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(b): three full-stop landings to a night landing  | Yes only if all three are *full-stop* and during the period 1 hour after sunset to 1 hour before sunrise |
 
 But there are operational concerns layered on top: a 250 nm long XC at night with a non-instrument-rated candidate (because the candidate is the *student*, not a rated pilot) is a different risk profile than the same flight in daylight. AC 61-98 doesn't speak directly to this, but most working CFIIs sequence it: long XC in daylight, night currency restored separately, because the long XC is also a *teaching event* and night reduces the visual cues the candidate uses to anchor IFR-task performance.
 
@@ -225,30 +225,30 @@ The IPC has its own AC 61-98 content (parallel to the flight review's AC 61-98 c
 
 ## What goes wrong (failure modes)
 
-| Failure mode                                                       | Diagnosis |
-| ------------------------------------------------------------------ | --------- |
-| Recites total numbers (40, 50, 15) without the nesting             | The buckets are nested. 3 hr of recent-with-CFII counts toward 15 hr CFII-given counts toward 40 hr total. Reverse direction does not work. |
-| Counts touch-and-go XC toward the [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(1) 50 hours | [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) instrument-XC definition requires a landing more than 50 nm from departure |
-| Discounts pre-PPL instrument time as illegitimate                 | [@cite](airboss-ref:regs/cfr-14/61/51?at=2026)(g)(1) permits sole-manipulator-under-instruments logging regardless of cert level held |
-| Lets the candidate self-classify FFS / FTD / AATD / BATD           | The FAA letter of authorization fixes the class; manufacturer marketing terms are not authoritative |
-| Counts solo simulator time toward [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d) | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(h) substitution requires a CFII present |
-| Stacks the long XC with night currency without separating teaching from operations | Regulatorily compatible, pedagogically conflicting; the CFII sets the syllabus |
-| Writes A.32 because the calendar is running out                    | The endorsement certifies readiness, not a date target |
-| Treats long-lapsed IR holder as initial-IR candidate                | They need [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(d) IPC and AC 61-65 A.4, not [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) initial training |
-| Forgets the 2-calendar-month freshness on the 3 hours              | The 3-hr-with-CFII-in-the-airplane window is rolling; if the candidate is not ready when the prior 3-hr session ages out, redo |
-| Misses [@cite](airboss-ref:regs/cfr-14/61/189?at=2026) instructor record retention | 5-year retention on the CFII side; missing record is a separate violation |
+| Failure mode                                                                                    | Diagnosis                                                                                                                                             |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Recites total numbers (40, 50, 15) without the nesting                                          | The buckets are nested. 3 hr of recent-with-CFII counts toward 15 hr CFII-given counts toward 40 hr total. Reverse direction does not work.           |
+| Counts touch-and-go XC toward the [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)(1) 50 hours | [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) instrument-XC definition requires a landing more than 50 nm from departure                              |
+| Discounts pre-PPL instrument time as illegitimate                                               | [@cite](airboss-ref:regs/cfr-14/61/51?at=2026)(g)(1) permits sole-manipulator-under-instruments logging regardless of cert level held                 |
+| Lets the candidate self-classify FFS / FTD / AATD / BATD                                        | The FAA letter of authorization fixes the class; manufacturer marketing terms are not authoritative                                                   |
+| Counts solo simulator time toward [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(d)             | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(h) substitution requires a CFII present                                                                |
+| Stacks the long XC with night currency without separating teaching from operations              | Regulatorily compatible, pedagogically conflicting; the CFII sets the syllabus                                                                        |
+| Writes A.32 because the calendar is running out                                                 | The endorsement certifies readiness, not a date target                                                                                                |
+| Treats long-lapsed IR holder as initial-IR candidate                                            | They need [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(d) IPC and AC 61-65 A.4, not [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) initial training |
+| Forgets the 2-calendar-month freshness on the 3 hours                                           | The 3-hr-with-CFII-in-the-airplane window is rolling; if the candidate is not ready when the prior 3-hr session ages out, redo                        |
+| Misses [@cite](airboss-ref:regs/cfr-14/61/189?at=2026) instructor record retention              | 5-year retention on the CFII side; missing record is a separate violation                                                                             |
 
 ## Variant prompts
 
-| Variant                                                                              | What changes |
-| ------------------------------------------------------------------------------------ | ------------ |
-| "Same candidate, but Part 141 school instead of Part 61."                            | Part 141 instrument syllabus is in Appendix C; total flight hours can be lower (35 vs. 40) under an approved syllabus, but the long XC, the [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) XC definition, and the same Areas of Operation apply. The school's TCO is the source of truth for the syllabus. |
-| "Same candidate, but they want a helicopter IR add-on after their airplane IR."       | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(e) governs helicopter IR; (f) governs the powered-lift IR. Different aero-experience numbers. Same eight-step (a) framework. |
-| "Same candidate, but they hold a foreign instrument rating from a country with an FAA bilateral." | [@cite](airboss-ref:regs/cfr-14/61/75?at=2026) and the bilateral-specific TSA / FAA conversion rules govern. Most foreign IRs do not directly convert to a US IR; the candidate often needs a US IR via [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) or a [@cite](airboss-ref:regs/cfr-14/61/75?at=2026) special issuance. |
-| "Same candidate, but their PPL was issued under sport-pilot rules, not standard PPL." | Sport pilots cannot pursue an IR -- [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(a)(1) requires a private pilot certificate or concurrent application. Sport pilot must upgrade to PPL first under [@cite](airboss-ref:regs/cfr-14/61/103?at=2026), [@cite](airboss-ref:regs/cfr-14/61/109?at=2026). |
+| Variant                                                                                                                                                                   | What changes                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Same candidate, but Part 141 school instead of Part 61."                                                                                                                 | Part 141 instrument syllabus is in Appendix C; total flight hours can be lower (35 vs. 40) under an approved syllabus, but the long XC, the [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) XC definition, and the same Areas of Operation apply. The school's TCO is the source of truth for the syllabus.                                                                                                                                                                  |
+| "Same candidate, but they want a helicopter IR add-on after their airplane IR."                                                                                           | [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(e) governs helicopter IR; (f) governs the powered-lift IR. Different aero-experience numbers. Same eight-step (a) framework.                                                                                                                                                                                                                                                                                                |
+| "Same candidate, but they hold a foreign instrument rating from a country with an FAA bilateral."                                                                         | [@cite](airboss-ref:regs/cfr-14/61/75?at=2026) and the bilateral-specific TSA / FAA conversion rules govern. Most foreign IRs do not directly convert to a US IR; the candidate often needs a US IR via [@cite](airboss-ref:regs/cfr-14/61/65?at=2026) or a [@cite](airboss-ref:regs/cfr-14/61/75?at=2026) special issuance.                                                                                                                                               |
+| "Same candidate, but their PPL was issued under sport-pilot rules, not standard PPL."                                                                                     | Sport pilots cannot pursue an IR -- [@cite](airboss-ref:regs/cfr-14/61/65?at=2026)(a)(1) requires a private pilot certificate or concurrent application. Sport pilot must upgrade to PPL first under [@cite](airboss-ref:regs/cfr-14/61/103?at=2026), [@cite](airboss-ref:regs/cfr-14/61/109?at=2026).                                                                                                                                                                     |
 | "Same candidate, but they have 49 PIC XC hours and want to count a flight where they were sole manipulator under the hood with another rated PPL as 'cross-country PIC.'" | [@cite](airboss-ref:regs/cfr-14/61/51?at=2026)(e)(1)(i) -- sole manipulator logs PIC. The flight is XC if the [@cite](airboss-ref:regs/cfr-14/61/1?at=2026) XC definition is met. So yes, that flight counts toward the 50 PIC XC. The sole-manipulator-under-the-hood arrangement is conceptually fine but requires the safety pilot to be acting PIC under (e)(1)(iii) for the under-the-hood portion -- the candidate logs PIC for the time they were sole manipulator. |
-| "Same candidate, but mid-training the candidate's medical lapses."                   | Training continues. Hicks letter -- the CFII is acting as PIC during instruction, the candidate doesn't need a current medical to receive instruction. The candidate cannot solo or take the practical without a current medical. Renew before the practical. |
-| "Same candidate, but you (the CFII) are not current on the [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(c) IFR currency yourself." | [@cite](airboss-ref:regs/cfr-14/61/195?at=2026) doesn't directly require the CFII to be IFR-current to give instrument instruction, but [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(c) governs *acting as PIC under IFR*. If you're acting as PIC during the long XC, you must be IFR-current. Restore your own currency before the long XC. |
+| "Same candidate, but mid-training the candidate's medical lapses."                                                                                                        | Training continues. Hicks letter -- the CFII is acting as PIC during instruction, the candidate doesn't need a current medical to receive instruction. The candidate cannot solo or take the practical without a current medical. Renew before the practical.                                                                                                                                                                                                              |
+| "Same candidate, but you (the CFII) are not current on the [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(c) IFR currency yourself."                                      | [@cite](airboss-ref:regs/cfr-14/61/195?at=2026) doesn't directly require the CFII to be IFR-current to give instrument instruction, but [@cite](airboss-ref:regs/cfr-14/61/57?at=2026)(c) governs *acting as PIC under IFR*. If you're acting as PIC during the long XC, you must be IFR-current. Restore your own currency before the long XC.                                                                                                                            |
 
 ## Related material
 

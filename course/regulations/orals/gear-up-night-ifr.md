@@ -99,6 +99,7 @@ The definitions matter. Per **49 CFR § 830.2**:
 - **Substantial damage** = "damage or failure which adversely affects the structural strength, performance, or flight characteristics of the aircraft, and which would normally require major repair or replacement of the affected component."
 
 A gear-up landing typically involves:
+
 - Prop strike (engine teardown required)
 - Fuselage skin damage
 - Possibly bent firewall
@@ -166,27 +167,27 @@ That answer cites 5 CFR sections plus 4 NTSB sections plus 2 FAA Orders plus the
 
 ## What goes wrong (failure modes)
 
-| Failure mode                                              | Diagnosis |
-| --------------------------------------------------------- | --------- |
-| Tries to taxi the airplane after the slide stops           | 91.7 violation; prop strike means engine cannot be operated until torn down |
-| Reports to FAA but forgets NTSB                            | Mistakes the agency. 49 CFR 830 is NTSB; separate from FAA enforcement |
-| Doesn't preserve wreckage                                  | 49 CFR 830.10 violation -- moving the airplane to "see what happened" destroys evidence |
-| Calls the FSDO immediately to explain what happened        | Self-incrimination; bypass of PBR2 protections; destroys compliance-program leverage |
-| Assumes an ASRS filing provides total immunity            | ASRS waiver eligibility excludes accidents; file it for confidentiality, but don't rely on it |
-| Forgets to document the event in the airplane logs        | 91.417 record-keeping miss; complicates A&P sign-off |
-| Treats this as PIC-only event, ignores CFI cert in scope  | Per Hicks, the CFI manipulating controls is PIC; CFI cert is in scope regardless |
-| Mistakes "accident" for a colloquial term                  | 49 CFR 830.2 has a precise definition. Read it; don't guess |
+| Failure mode                                             | Diagnosis                                                                                     |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Tries to taxi the airplane after the slide stops         | 91.7 violation; prop strike means engine cannot be operated until torn down                   |
+| Reports to FAA but forgets NTSB                          | Mistakes the agency. 49 CFR 830 is NTSB; separate from FAA enforcement                        |
+| Doesn't preserve wreckage                                | 49 CFR 830.10 violation -- moving the airplane to "see what happened" destroys evidence       |
+| Calls the FSDO immediately to explain what happened      | Self-incrimination; bypass of PBR2 protections; destroys compliance-program leverage          |
+| Assumes an ASRS filing provides total immunity           | ASRS waiver eligibility excludes accidents; file it for confidentiality, but don't rely on it |
+| Forgets to document the event in the airplane logs       | 91.417 record-keeping miss; complicates A&P sign-off                                          |
+| Treats this as PIC-only event, ignores CFI cert in scope | Per Hicks, the CFI manipulating controls is PIC; CFI cert is in scope regardless              |
+| Mistakes "accident" for a colloquial term                | 49 CFR 830.2 has a precise definition. Read it; don't guess                                   |
 
 ## Variant prompts
 
-| Variant                                                                    | What changes |
-| -------------------------------------------------------------------------- | ------------ |
-| "Same scenario, but no prop strike -- bellied in on a grass strip without damage." | Likely *not* an accident under 830.2 (no substantial damage). Could still be an incident under 830.5(a)(1)-(11) if it triggers any specific incident category. Check the list. NTSB notification not automatic; FAA notification still customary. |
-| "Same scenario, but the student was solo."                                  | You're not on board. CFI cert still in scope because the FAA will look at your endorsement under 61.87 / 61.93 (whether the solo XC was authorized for these conditions). Your logbook entries for this student are evidence. |
-| "Same scenario, but the airplane was a club rental and you're the renter."   | Now you're owner-equivalent under 91.405, *and* PIC. Compounds responsibility. |
-| "Same scenario at a towered airport, ATC asks you to taxi clear before the firetrucks arrive." | 91.123(c) deviation in response to ATC. Document; explain. |
-| "Same scenario, but the student is your friend's family member, not your formal student." | If you weren't logged as instructor giving instruction, this becomes a 91.3 PIC question only -- your CFI cert isn't directly in scope, but your private/commercial cert is. |
-| "Same scenario, but you smell alcohol on the student's breath." | Adds 91.17 (8-hour, 0.04, no-influence). Adds 67.107 / 67.207 / 67.307 medical disqualification questions. Reporting obligations expand. |
+| Variant                                                                                        | What changes                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Same scenario, but no prop strike -- bellied in on a grass strip without damage."             | Likely *not* an accident under 830.2 (no substantial damage). Could still be an incident under 830.5(a)(1)-(11) if it triggers any specific incident category. Check the list. NTSB notification not automatic; FAA notification still customary. |
+| "Same scenario, but the student was solo."                                                     | You're not on board. CFI cert still in scope because the FAA will look at your endorsement under 61.87 / 61.93 (whether the solo XC was authorized for these conditions). Your logbook entries for this student are evidence.                     |
+| "Same scenario, but the airplane was a club rental and you're the renter."                     | Now you're owner-equivalent under 91.405, *and* PIC. Compounds responsibility.                                                                                                                                                                    |
+| "Same scenario at a towered airport, ATC asks you to taxi clear before the firetrucks arrive." | 91.123(c) deviation in response to ATC. Document; explain.                                                                                                                                                                                        |
+| "Same scenario, but the student is your friend's family member, not your formal student."      | If you weren't logged as instructor giving instruction, this becomes a 91.3 PIC question only -- your CFI cert isn't directly in scope, but your private/commercial cert is.                                                                      |
+| "Same scenario, but you smell alcohol on the student's breath."                                | Adds 91.17 (8-hour, 0.04, no-influence). Adds 67.107 / 67.207 / 67.307 medical disqualification questions. Reporting obligations expand.                                                                                                          |
 
 ## Related material
 

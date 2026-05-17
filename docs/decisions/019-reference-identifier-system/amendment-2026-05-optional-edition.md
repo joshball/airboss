@@ -62,14 +62,14 @@ Validator behavior:
 
 This means citation precision implicitly determines whether edition is required:
 
-| Precision               | Edition required? | Resolves to                                             |
-| ----------------------- | ----------------- | ------------------------------------------------------- |
-| Doc-only                | No                | Current edition's reader                                |
-| Doc + chapter           | No                | Current edition's chapter (verified by drift sentinel)  |
-| Doc + chapter + section | No                | Current edition's section (verified by drift sentinel)  |
-| Doc + page              | Yes               | Pinned edition's page                                   |
-| Doc + paragraph         | Yes (for regs)    | Pinned year's paragraph numbering                       |
-| Doc + quote             | Yes               | Pinned edition's text                                   |
+| Precision               | Edition required? | Resolves to                                            |
+| ----------------------- | ----------------- | ------------------------------------------------------ |
+| Doc-only                | No                | Current edition's reader                               |
+| Doc + chapter           | No                | Current edition's chapter (verified by drift sentinel) |
+| Doc + chapter + section | No                | Current edition's section (verified by drift sentinel) |
+| Doc + page              | Yes               | Pinned edition's page                                  |
+| Doc + paragraph         | Yes (for regs)    | Pinned year's paragraph numbering                      |
+| Doc + quote             | Yes               | Pinned edition's text                                  |
 
 ### 2. Drift sentinels
 
@@ -93,11 +93,11 @@ Drift sentinels turn ADR 019 §5's "annual diff job" from "rewrite every citatio
 
 Sentinel field names are flat in node frontmatter (one line of YAML per sentinel, no nesting under `expect:`) and drawn from a fixed canonical vocabulary committed in this amendment. Per-corpus resolvers must use these names; new corpora propose additions in their corpus WP, not ad hoc. The validator rejects unknown sentinel field names with ERROR (typo defense).
 
-| Sentinel field   | Used by                                  | Compared against                                       |
-| ---------------- | ---------------------------------------- | ------------------------------------------------------ |
-| `chapter_title`  | handbooks, AIM, ACs (where chaptered)    | Chapter title in resolved edition                      |
-| `section_title`  | regs, ACs, AIM sub-sections              | Section title in resolved edition                      |
-| `paragraph_text` | regs paragraphs, AIM paragraphs          | Verbatim paragraph text (when sentinel is the prose)   |
+| Sentinel field   | Used by                                    | Compared against                                     |
+| ---------------- | ------------------------------------------ | ---------------------------------------------------- |
+| `chapter_title`  | handbooks, AIM, ACs (where chaptered)      | Chapter title in resolved edition                    |
+| `section_title`  | regs, ACs, AIM sub-sections                | Section title in resolved edition                    |
+| `paragraph_text` | regs paragraphs, AIM paragraphs            | Verbatim paragraph text (when sentinel is the prose) |
 | `page_heading`   | page-pinned citations with stable headings | Page-heading in resolved edition's page index        |
 
 Implementation lands handbook sentinels (`chapter_title`) first; regs / AIM / ACs / sectionals / ACS land per their corpus WPs. The vocabulary is settled here so the next corpus's WP does not relitigate naming.
@@ -106,8 +106,8 @@ Implementation lands handbook sentinels (`chapter_title`) first; regs / AIM / AC
 
 Sentinels capture *present-state matching*: "I expected this title; emit NOTICE if the current edition disagrees." A second category of structured-citation field is purely *provenance / history*: it records what was true when an override happened, so a later reader can see why a citation now points where it does. These fields are not matched against the resolved edition by the validator -- it preserves them, surfaces them in the renderer, and otherwise leaves them alone. They live in the same flat-frontmatter slot as sentinels (one line of YAML, no nesting) but participate in a separate, also-closed vocabulary so the typo-defence rule works the same way. The validator's gatekeeper accepts a key when it is either a sentinel field or a well-known field, and rejects any other name.
 
-| Well-known field  | Records                                           | Validator behavior                                                  |
-| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------- |
+| Well-known field  | Records                                            | Validator behavior                                                   |
+| ----------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
 | `redirected_from` | The original `airboss-ref:` URI before an override | Parses the value; ERROR on un-parseable URI; never looks up registry |
 
 `redirected_from` captures the case where a human review (typically the D2 migration queue) decided that a legacy citation's original target -- a different edition, a different chapter, or a different book entirely -- should be rewritten to point somewhere else. The new citation records the old URI as `redirected_from` so the trail isn't lost. The value is a single `airboss-ref:` URI string today; future amendments may extend it to a list when a citation has been redirected more than once, but ship as single-value-only for now. The validator parses the URI through `parseIdentifier` and fails the build if the value is not a parseable airboss-ref. It does not look up the URI in the registry: the original target may be a deprecated edition that has been retired since the override happened, and that's exactly the case `redirected_from` exists to record.
@@ -133,15 +133,15 @@ A YAML stub row that exists only so an unpinned citation resolves can go away on
 
 This isn't an AFH thing. It's the right model for every corpus on the project's roadmap.
 
-| Corpus                | Edition cadence                | Most citations       | Edition-sensitive citations               |
-| --------------------- | ------------------------------ | -------------------- | ----------------------------------------- |
-| CFR (regs)            | Annual                         | Section-level        | Paragraph numbering after renumbering     |
-| AIM                   | ~Quarterly publication cycle   | Chapter-section-para | Specific text passages, deprecated entries |
-| Advisory Circulars    | Per-AC revision letter         | Section-level        | Specific guidance language                |
-| Handbooks (PHAK/AFH)  | Multi-year edition revisions   | Chapter-level        | Page numbers, quoted procedures           |
-| POHs                  | Per-aircraft, per-date         | Section-level        | Performance numbers (revision-specific)   |
-| Sectionals / plates   | 28-day or 56-day cycles        | Whole-chart          | Specific obstacles, frequencies, NOTAMs   |
-| ACS / PTS             | Per publication ID             | Task-element         | Specific element wording                  |
+| Corpus               | Edition cadence              | Most citations       | Edition-sensitive citations                |
+| -------------------- | ---------------------------- | -------------------- | ------------------------------------------ |
+| CFR (regs)           | Annual                       | Section-level        | Paragraph numbering after renumbering      |
+| AIM                  | ~Quarterly publication cycle | Chapter-section-para | Specific text passages, deprecated entries |
+| Advisory Circulars   | Per-AC revision letter       | Section-level        | Specific guidance language                 |
+| Handbooks (PHAK/AFH) | Multi-year edition revisions | Chapter-level        | Page numbers, quoted procedures            |
+| POHs                 | Per-aircraft, per-date       | Section-level        | Performance numbers (revision-specific)    |
+| Sectionals / plates  | 28-day or 56-day cycles      | Whole-chart          | Specific obstacles, frequencies, NOTAMs    |
+| ACS / PTS            | Per publication ID           | Task-element         | Specific element wording                   |
 
 In every row, the same pattern applies: most citations don't care about edition (they describe a thing that's stable across editions), a small minority do (they pin to specific text, numbers, or layout). Optional pinning + drift sentinels handles all of them with one mechanism.
 

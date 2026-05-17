@@ -32,7 +32,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Final Backend Review -- spaced-memory-items
 
 Scope: `git diff docs/initial-migration..HEAD`, server side only. Files covered:
@@ -63,17 +62,17 @@ Headline: the previously-critical FSRS `lastReview: null` bug is fixed (`libs/bc
 
 ## Feature-level checklist against the spec
 
-| Spec item                                                             | Status                                                             |
-| --------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| Card creation inside a tx with `study.card` + `study.card_state` seed | Done (`cards.ts:89-127`)                                           |
-| Review flow: FSRS run + review insert + card_state upsert in one tx   | Done (`reviews.ts:62-144`)                                         |
-| 5-second idempotency window for duplicate submits                     | Done, row lock first then dedupe query (`reviews.ts:65-84`)        |
-| `CardNotFoundError` is a typed class callers can catch                | Done (`reviews.ts:48-56`, caught at `review/+page.server.ts:102`)  |
-| Deterministic ~50 percent confidence sample                           | Done (`review/+page.server.ts:22-34`), djb2 on `cardId + dayKey`   |
-| Dashboard read fan-out + streak computation                           | Done (`stats.ts:97-146`), UTC-day-keyed streak walk                |
-| Cross-product read interfaces (mastery, domain breakdown, review)     | Exported (`index.ts:12-19`)                                        |
-| Mastery threshold via constant                                        | Done (`MASTERY_STABILITY_DAYS` = 30 days)                          |
-| Read interfaces scoped to user                                        | Done (every BC function takes `userId` and filters on it)          |
+| Spec item                                                             | Status                                                            |
+| --------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Card creation inside a tx with `study.card` + `study.card_state` seed | Done (`cards.ts:89-127`)                                          |
+| Review flow: FSRS run + review insert + card_state upsert in one tx   | Done (`reviews.ts:62-144`)                                        |
+| 5-second idempotency window for duplicate submits                     | Done, row lock first then dedupe query (`reviews.ts:65-84`)       |
+| `CardNotFoundError` is a typed class callers can catch                | Done (`reviews.ts:48-56`, caught at `review/+page.server.ts:102`) |
+| Deterministic ~50 percent confidence sample                           | Done (`review/+page.server.ts:22-34`), djb2 on `cardId + dayKey`  |
+| Dashboard read fan-out + streak computation                           | Done (`stats.ts:97-146`), UTC-day-keyed streak walk               |
+| Cross-product read interfaces (mastery, domain breakdown, review)     | Exported (`index.ts:12-19`)                                       |
+| Mastery threshold via constant                                        | Done (`MASTERY_STABILITY_DAYS` = 30 days)                         |
+| Read interfaces scoped to user                                        | Done (every BC function takes `userId` and filters on it)         |
 
 ## Findings
 
@@ -293,19 +292,19 @@ One tidy-up: `event.locals.user?.id` in `handleError` can still be `null` (the t
 
 ## Summary of spec conformance
 
-| Area                    | Conformance                                                                                               |
-| ----------------------- | --------------------------------------------------------------------------------------------------------- |
-| Card creation tx        | Yes -- `cards.ts:89`                                                                                      |
-| Card editing gate       | Yes -- `isEditable` check at `cards.ts:150`                                                               |
-| Browse filters          | Yes -- `browse/+page.server.ts` narrows all filter params against constant value sets                     |
-| Review batch (20 cards) | Yes -- `REVIEW_BATCH_SIZE` used in `getDueCards`                                                          |
-| FSRS state transitions  | Yes -- `CARD_STATES` mapped to ts-fsrs `State`, round-trip preserved                                      |
-| 5s idempotency          | Yes -- `REVIEW_DEDUPE_WINDOW_MS = 5_000`, row-locked                                                      |
-| Confidence sampling     | Yes -- deterministic, 50 percent, day-keyed                                                               |
-| Dashboard stats         | Yes -- dueNow, reviewedToday, streakDays, stateCounts, domains                                            |
-| Read interfaces         | Yes -- `getCardMastery`, `getReviewStats`, `getDomainBreakdown`                                           |
-| Edge: card deleted mid-review | Yes -- `CardNotFoundError` caught in `review/+page.server.ts`, `skipped: true` returned                   |
-| Edge: confidence declined     | Yes -- nullable in schema and validation                                                                   |
-| Edge: new card (no reviews)   | Yes -- `fsrsInitialState` seeds `card_state`                                                              |
+| Area                          | Conformance                                                                             |
+| ----------------------------- | --------------------------------------------------------------------------------------- |
+| Card creation tx              | Yes -- `cards.ts:89`                                                                    |
+| Card editing gate             | Yes -- `isEditable` check at `cards.ts:150`                                             |
+| Browse filters                | Yes -- `browse/+page.server.ts` narrows all filter params against constant value sets   |
+| Review batch (20 cards)       | Yes -- `REVIEW_BATCH_SIZE` used in `getDueCards`                                        |
+| FSRS state transitions        | Yes -- `CARD_STATES` mapped to ts-fsrs `State`, round-trip preserved                    |
+| 5s idempotency                | Yes -- `REVIEW_DEDUPE_WINDOW_MS = 5_000`, row-locked                                    |
+| Confidence sampling           | Yes -- deterministic, 50 percent, day-keyed                                             |
+| Dashboard stats               | Yes -- dueNow, reviewedToday, streakDays, stateCounts, domains                          |
+| Read interfaces               | Yes -- `getCardMastery`, `getReviewStats`, `getDomainBreakdown`                         |
+| Edge: card deleted mid-review | Yes -- `CardNotFoundError` caught in `review/+page.server.ts`, `skipped: true` returned |
+| Edge: confidence declined     | Yes -- nullable in schema and validation                                                |
+| Edge: new card (no reviews)   | Yes -- `fsrsInitialState` seeds `card_state`                                            |
 
 Backend is in solid shape. No critical issues. Address the two Majors around unauth handling and typed errors before the next review pass; the rest can ride as follow-up tickets.

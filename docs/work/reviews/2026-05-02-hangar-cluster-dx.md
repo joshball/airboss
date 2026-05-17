@@ -226,22 +226,22 @@ Fix: Write a `hangar.worker_state` row (or a `hangar.sync_log` "boot-failed" ent
 
 ## Status as of 2026-05-04
 
-| Finding | Verdict | Closure |
-| ------- | ------- | ------- |
-| MAJOR: failed binary-visual fetch leaves only job-log trail | CLOSED | PR #442 -- try/catch with audit emission on every terminal state including failure (closes per-source audit gap) |
-| MAJOR: worker.ts swallows handler crash detail | CLOSED | PR #436 -- terminal writes in `db.transaction`; per-write try/catch with `console.error` fallback |
-| MAJOR: setInterval(cancelPoll) swallows errors | CLOSED | PR #436 -- try/catch + log.error on `isCancelled` failure |
-| MAJOR: no worker liveness signal | CLOSED | PR #436 -- `lastHeartbeatAt` column on `hangar.job` updated by `heartbeat()` (`worker.ts:369-380`) |
-| MINOR: generic error messages drop offending value | CLOSED | PR #467 wave -- log.warn lines now carry sourceId/jobId/path context |
-| MINOR: formatPrBody uses raw actorId | CLOSED | PR #467 wave -- actorEmail + commitSha + syncLog.id added to PR body |
-| MINOR: recoverOrphanedRunning count not queryable | CLOSED | PR #436 -- audit row per orphan + boot-summary log entry; recovery-event constants under JOB_AUDIT_REASONS |
-| MINOR: ProcessError.message truncates stderr | CLOSED | PR #467 wave -- stdout fallback + cap on combined output |
-| MINOR: defaultReadArchive errors lack source/job context | CLOSED | PR #467 wave -- inline throws now include `[job=... source=...]` prefix |
-| MINOR: appendJobLog MAX(seq) per-call cost | CLOSED | PR #448 -- atomic seq allocator via `nextLogSeq` column + UNIQUE(job_id, seq) constraint |
-| MINOR: rev-conflict messages don't name the actor | CLOSED | PR #467 wave -- conflict message includes `last updated by ...` |
-| NIT: `void log; void basename; void dirname;` smell | CLOSED | PR #467 wave -- unused imports removed |
-| NIT: makeContext seq counter race | CLOSED | PR #448 -- DB-side atomic seq allocator (UNIQUE constraint enforces) |
-| NIT: formatSummary inline plural rules | CLOSED | PR #467 wave -- `pluralize(n, sing, plural)` helper in `@ab/utils` |
-| NIT: bootWorker swallows boot failure | CLOSED | PR #436 -- exponential-backoff retry + `worker_state` heartbeat surfacing on /jobs |
+| Finding                                                     | Verdict | Closure                                                                                                          |
+| ----------------------------------------------------------- | ------- | ---------------------------------------------------------------------------------------------------------------- |
+| MAJOR: failed binary-visual fetch leaves only job-log trail | CLOSED  | PR #442 -- try/catch with audit emission on every terminal state including failure (closes per-source audit gap) |
+| MAJOR: worker.ts swallows handler crash detail              | CLOSED  | PR #436 -- terminal writes in `db.transaction`; per-write try/catch with `console.error` fallback                |
+| MAJOR: setInterval(cancelPoll) swallows errors              | CLOSED  | PR #436 -- try/catch + log.error on `isCancelled` failure                                                        |
+| MAJOR: no worker liveness signal                            | CLOSED  | PR #436 -- `lastHeartbeatAt` column on `hangar.job` updated by `heartbeat()` (`worker.ts:369-380`)               |
+| MINOR: generic error messages drop offending value          | CLOSED  | PR #467 wave -- log.warn lines now carry sourceId/jobId/path context                                             |
+| MINOR: formatPrBody uses raw actorId                        | CLOSED  | PR #467 wave -- actorEmail + commitSha + syncLog.id added to PR body                                             |
+| MINOR: recoverOrphanedRunning count not queryable           | CLOSED  | PR #436 -- audit row per orphan + boot-summary log entry; recovery-event constants under JOB_AUDIT_REASONS       |
+| MINOR: ProcessError.message truncates stderr                | CLOSED  | PR #467 wave -- stdout fallback + cap on combined output                                                         |
+| MINOR: defaultReadArchive errors lack source/job context    | CLOSED  | PR #467 wave -- inline throws now include `[job=... source=...]` prefix                                          |
+| MINOR: appendJobLog MAX(seq) per-call cost                  | CLOSED  | PR #448 -- atomic seq allocator via `nextLogSeq` column + UNIQUE(job_id, seq) constraint                         |
+| MINOR: rev-conflict messages don't name the actor           | CLOSED  | PR #467 wave -- conflict message includes `last updated by ...`                                                  |
+| NIT: `void log; void basename; void dirname;` smell         | CLOSED  | PR #467 wave -- unused imports removed                                                                           |
+| NIT: makeContext seq counter race                           | CLOSED  | PR #448 -- DB-side atomic seq allocator (UNIQUE constraint enforces)                                             |
+| NIT: formatSummary inline plural rules                      | CLOSED  | PR #467 wave -- `pluralize(n, sing, plural)` helper in `@ab/utils`                                               |
+| NIT: bootWorker swallows boot failure                       | CLOSED  | PR #436 -- exponential-backoff retry + `worker_state` heartbeat surfacing on /jobs                               |
 
 Total: 15 closed / 0 open. `review_status` was already `done` -- preserved.

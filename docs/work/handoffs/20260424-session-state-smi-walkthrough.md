@@ -35,48 +35,48 @@ All branches and worktrees from these PRs cleaned up.
 
 From the SMI walkthrough and follow-up Q+A:
 
-| Topic                                                | Decision                                                                                              |
-| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Item #4 (review-this-card button on detail)          | **Drop it.** Replaced by separate card-detail vs card-page surfaces (see Cluster E).                  |
-| Cluster F scope (optional reg ref on cards)          | **Broad.** Polymorphic `content_citations` across cards / reps / scenarios / nodes. One schema.       |
-| Item #9 rating button copy                           | `Wrong / Hard / Right / Easy` as defaults, **as constants** in `libs/constants/src/study.ts`.         |
-| Item #10 "Remove entirely" semantics                 | **Soft-remove from user's deck, reversible from Browse.** Capture why on every snooze / remove.       |
-| `remove` reason comment                              | **Required**, not optional.                                                                           |
-| Bad-question author-review loop                      | **Explicit re-entry banner**: "this was updated, does it look better now?"                            |
-| Snooze duration UI                                   | **Three labeled levels, as constants.** No slider.                                                    |
-| Snooze / remove mid-session replacement              | **Shrink on snooze, replace on remove.** Matches user intent per reason code.                         |
-| Card-detail vs card-page split (new from user)       | Two surfaces: `/memory/<id>` owner-only detail, new public `/cards/<id>` shareable card page.         |
-| Card cross-references (new from user)                | On card detail, show which sessions / plans / scenarios / reps cite this card.                        |
+| Topic                                          | Decision                                                                                        |
+| ---------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Item #4 (review-this-card button on detail)    | **Drop it.** Replaced by separate card-detail vs card-page surfaces (see Cluster E).            |
+| Cluster F scope (optional reg ref on cards)    | **Broad.** Polymorphic `content_citations` across cards / reps / scenarios / nodes. One schema. |
+| Item #9 rating button copy                     | `Wrong / Hard / Right / Easy` as defaults, **as constants** in `libs/constants/src/study.ts`.   |
+| Item #10 "Remove entirely" semantics           | **Soft-remove from user's deck, reversible from Browse.** Capture why on every snooze / remove. |
+| `remove` reason comment                        | **Required**, not optional.                                                                     |
+| Bad-question author-review loop                | **Explicit re-entry banner**: "this was updated, does it look better now?"                      |
+| Snooze duration UI                             | **Three labeled levels, as constants.** No slider.                                              |
+| Snooze / remove mid-session replacement        | **Shrink on snooze, replace on remove.** Matches user intent per reason code.                   |
+| Card-detail vs card-page split (new from user) | Two surfaces: `/memory/<id>` owner-only detail, new public `/cards/<id>` shareable card page.   |
+| Card cross-references (new from user)          | On card detail, show which sessions / plans / scenarios / reps cite this card.                  |
 
 ## The 24 SMI walkthrough items, clustered
 
 Full verbatim capture: `docs/work/.archive/todos/20260424-02-smi-walkthrough-feedback.md`.
 
-| Cluster | Items                        | Handling                                                             |
-| ------- | ---------------------------- | -------------------------------------------------------------------- |
+| Cluster                      | Items                        | Handling                                                                                |
+| ---------------------------- | ---------------------------- | --------------------------------------------------------------------------------------- |
 | A: Help / tooltip coverage   | 3, 5, 13, 14, 20, 21, 22, 24 | Covered by [20260424-help-system-fix-pass.md](20260424-help-system-fix-pass.md) Wave 2. |
-| B: Review-flow UX            | 7, 8, 9, 12, 13, 16          | Work package `review-flow-v2` -- not yet spec'd.                     |
-| C: Snooze + question-quality | 10, 11                       | Work package `snooze-and-flag` -- not yet spec'd.                    |
-| D: URL + state for sessions  | 15, 18                       | Work package `review-sessions-url` -- not yet spec'd.                |
-| E: Card-page + cross-refs    | 4 reframed + new ask         | Work package `card-page-and-cross-references` -- not yet spec'd.     |
-| F: Content citations         | 1                            | Work package `content-citations` -- not yet spec'd.                  |
-| G: Small fixes               | 2, 6, 17, 23                 | One small PR -- not yet launched. No work package needed.            |
+| B: Review-flow UX            | 7, 8, 9, 12, 13, 16          | Work package `review-flow-v2` -- not yet spec'd.                                        |
+| C: Snooze + question-quality | 10, 11                       | Work package `snooze-and-flag` -- not yet spec'd.                                       |
+| D: URL + state for sessions  | 15, 18                       | Work package `review-sessions-url` -- not yet spec'd.                                   |
+| E: Card-page + cross-refs    | 4 reframed + new ask         | Work package `card-page-and-cross-references` -- not yet spec'd.                        |
+| F: Content citations         | 1                            | Work package `content-citations` -- not yet spec'd.                                     |
+| G: Small fixes               | 2, 6, 17, 23                 | One small PR -- not yet launched. No work package needed.                               |
 
 ## Build order (user-approved sequencing)
 
 Sequential where marked depends-on, parallel otherwise. All work uses `/ball-worktree`.
 
-| # | Work                                              | Type         | Depends on                  | Scope |
-| - | ------------------------------------------------- | ------------ | --------------------------- | ----- |
-| 1 | **Help-system Wave 1** (PageHelp tokens + polish) | Small PR     | none                        | Small |
-| 2 | **Help-system Wave 2** (memory coverage pass)     | Medium PR    | Wave 1 merged               | Med   |
-| 3 | **Small-fixes PR** (items 2, 6, 17, 23)           | Small PR     | none; can run parallel to 1/2 | Small |
-| 4 | **Magic-strings fix PR** (from audit findings)    | Small/Med PR | audit report                | Depends on audit |
-| 5 | `review-flow-v2` work package                     | Work package | help system in place        | Med   |
-| 6 | `snooze-and-flag` work package                    | Work package | 5 (shares review chrome)    | Med   |
-| 7 | `review-sessions-url` work package                | Work package | 5 (shares review chrome)    | Med   |
-| 8 | `card-page-and-cross-references` work package     | Work package | none                        | Med   |
-| 9 | `content-citations` work package                  | Work package | none                        | Large |
+| #   | Work                                              | Type         | Depends on                    | Scope            |
+| --- | ------------------------------------------------- | ------------ | ----------------------------- | ---------------- |
+| 1   | **Help-system Wave 1** (PageHelp tokens + polish) | Small PR     | none                          | Small            |
+| 2   | **Help-system Wave 2** (memory coverage pass)     | Medium PR    | Wave 1 merged                 | Med              |
+| 3   | **Small-fixes PR** (items 2, 6, 17, 23)           | Small PR     | none; can run parallel to 1/2 | Small            |
+| 4   | **Magic-strings fix PR** (from audit findings)    | Small/Med PR | audit report                  | Depends on audit |
+| 5   | `review-flow-v2` work package                     | Work package | help system in place          | Med              |
+| 6   | `snooze-and-flag` work package                    | Work package | 5 (shares review chrome)      | Med              |
+| 7   | `review-sessions-url` work package                | Work package | 5 (shares review chrome)      | Med              |
+| 8   | `card-page-and-cross-references` work package     | Work package | none                          | Med              |
+| 9   | `content-citations` work package                  | Work package | none                          | Large            |
 
 Items 5+6 may bundle into one PR since they both touch the review screen. Items 8+9 can run fully parallel with 5-7.
 
@@ -140,13 +140,13 @@ Item 1, broad scope. Polymorphic citation across content surfaces:
 
 ## What's pending at time of writing
 
-| Item                                                  | State                                |
-| ----------------------------------------------------- | ------------------------------------ |
-| Magic-strings / magic-numbers audit                   | Background agent running; no report yet |
-| Help-system fix pass (Wave 1 + Wave 2)                | Handoff shipped (#100 / #101); awaiting fresh-session execution |
-| 5 work-package specs (items 5-9 above)                | Not authored yet; awaiting user go   |
-| Small-fixes PR                                        | Not launched yet                     |
-| Manual test walkthroughs for the other 5 features     | Deferred until SMI feedback is resolved |
+| Item                                              | State                                                           |
+| ------------------------------------------------- | --------------------------------------------------------------- |
+| Magic-strings / magic-numbers audit               | Background agent running; no report yet                         |
+| Help-system fix pass (Wave 1 + Wave 2)            | Handoff shipped (#100 / #101); awaiting fresh-session execution |
+| 5 work-package specs (items 5-9 above)            | Not authored yet; awaiting user go                              |
+| Small-fixes PR                                    | Not launched yet                                                |
+| Manual test walkthroughs for the other 5 features | Deferred until SMI feedback is resolved                         |
 
 ## Other work the user flagged as out of scope for me
 

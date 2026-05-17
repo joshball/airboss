@@ -117,14 +117,14 @@ The student's logbook is *not* the official record at a 141 school. The school's
 
 The most-asked question for a new 141 instructor: who can sign which endorsement?
 
-| Endorsement                                                | Who signs                                                                                |
-| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Solo endorsement ([@cite](airboss-ref:regs/cfr-14/61/87?at=2026)) | Any CFI -- this is a Part 61 endorsement, not a 141 endorsement                  |
-| Solo cross-country endorsement ([@cite](airboss-ref:regs/cfr-14/61/93?at=2026)) | Any CFI -- still Part 61                                            |
-| Stage check sign-off                                       | Check instructor or chief, never the student's primary CFI ([@cite](airboss-ref:regs/cfr-14/141/63?at=2026)) |
-| End-of-course test sign-off                                | Check instructor or chief ([@cite](airboss-ref:regs/cfr-14/141/65?at=2026))              |
-| Graduation certificate                                     | Chief instructor only ([@cite](airboss-ref:regs/cfr-14/141/95?at=2026))                  |
-| Practical-test endorsement ([@cite](airboss-ref:regs/cfr-14/61/39?at=2026)) | Any CFI -- still Part 61, but at a 141 school the chief usually writes it |
+| Endorsement                                                                     | Who signs                                                                                                    |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Solo endorsement ([@cite](airboss-ref:regs/cfr-14/61/87?at=2026))               | Any CFI -- this is a Part 61 endorsement, not a 141 endorsement                                              |
+| Solo cross-country endorsement ([@cite](airboss-ref:regs/cfr-14/61/93?at=2026)) | Any CFI -- still Part 61                                                                                     |
+| Stage check sign-off                                                            | Check instructor or chief, never the student's primary CFI ([@cite](airboss-ref:regs/cfr-14/141/63?at=2026)) |
+| End-of-course test sign-off                                                     | Check instructor or chief ([@cite](airboss-ref:regs/cfr-14/141/65?at=2026))                                  |
+| Graduation certificate                                                          | Chief instructor only ([@cite](airboss-ref:regs/cfr-14/141/95?at=2026))                                      |
+| Practical-test endorsement ([@cite](airboss-ref:regs/cfr-14/61/39?at=2026))     | Any CFI -- still Part 61, but at a 141 school the chief usually writes it                                    |
 
 The pattern: Part 61 endorsements are signed by line CFIs as usual. Part 141 sign-offs (stage check, end-of-course, graduation certificate) escalate up the chief structure.
 
@@ -132,16 +132,16 @@ The pattern: Part 61 endorsements are signed by line CFIs as usual. Part 141 sig
 
 A side-by-side for a CFI considering a move:
 
-| Area                | Part 61 school                              | Part 141 school                                                                |
-| ------------------- | ------------------------------------------- | ------------------------------------------------------------------------------ |
-| Curriculum          | CFI's choice; AC 61-65 endorsement language | Approved TCO; line CFI follows the syllabus                                    |
-| Lesson order        | Flexible; instructor's call                 | Stage-bound; the syllabus dictates                                             |
-| Stage checks        | None                                        | Required at end of each stage (typically 3); given by check instructor or chief |
-| Hour minimum        | [@cite](airboss-ref:regs/cfr-14/61/109?at=2026) etc. (40 private) | Appendix B etc. (35 private)                            |
-| Logbook entry style | Free-form                                   | Must reference syllabus lesson and stage                                       |
-| Records             | Mostly student's logbook                    | School's training file, retained per [@cite](airboss-ref:regs/cfr-14/141/95?at=2026) |
-| Graduation          | None (student presents endorsements + hours)| Graduation certificate from chief                                              |
-| FAA visibility      | Low (school not certificated)               | Higher (school is certificated, FSDO oversight)                                |
+| Area                | Part 61 school                                                    | Part 141 school                                                                      |
+| ------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Curriculum          | CFI's choice; AC 61-65 endorsement language                       | Approved TCO; line CFI follows the syllabus                                          |
+| Lesson order        | Flexible; instructor's call                                       | Stage-bound; the syllabus dictates                                                   |
+| Stage checks        | None                                                              | Required at end of each stage (typically 3); given by check instructor or chief      |
+| Hour minimum        | [@cite](airboss-ref:regs/cfr-14/61/109?at=2026) etc. (40 private) | Appendix B etc. (35 private)                                                         |
+| Logbook entry style | Free-form                                                         | Must reference syllabus lesson and stage                                             |
+| Records             | Mostly student's logbook                                          | School's training file, retained per [@cite](airboss-ref:regs/cfr-14/141/95?at=2026) |
+| Graduation          | None (student presents endorsements + hours)                      | Graduation certificate from chief                                                    |
+| FAA visibility      | Low (school not certificated)                                     | Higher (school is certificated, FSDO oversight)                                      |
 
 ## A line CFI's typical week at a 141 school
 

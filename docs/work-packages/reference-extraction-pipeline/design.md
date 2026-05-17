@@ -91,12 +91,12 @@ Cost: GFM tables do not support merged cells; a handful of CFR tables use column
 
 Per architecture decision #2, storage is resolved at the end of phase 6 with the size report. The matrix:
 
-| Size           | Recommendation             | Why                                                                       |
-| -------------- | -------------------------- | ------------------------------------------------------------------------- |
-| < 5 MB         | Commit to the repo         | Small enough to live with; fresh clones work immediately.                 |
-| 5-100 MB       | Git LFS                    | Keeps the repo history small; LFS handles it transparently.               |
-| > 100 MB       | External storage (S3 etc.) | Too big for LFS comfort; fetched on demand via a download script.         |
-| Re-downloadable|                            | Meta.json always committed so any machine can re-fetch with checksum.     |
+| Size            | Recommendation             | Why                                                                   |
+| --------------- | -------------------------- | --------------------------------------------------------------------- |
+| < 5 MB          | Commit to the repo         | Small enough to live with; fresh clones work immediately.             |
+| 5-100 MB        | Git LFS                    | Keeps the repo history small; LFS handles it transparently.           |
+| > 100 MB        | External storage (S3 etc.) | Too big for LFS comfort; fetched on demand via a download script.     |
+| Re-downloadable |                            | Meta.json always committed so any machine can re-fetch with checksum. |
 
 The 14 CFR 2026 XML is approximately 12 MB per spot check, which puts it in LFS territory. Confirmed by the actual size-report run at end of phase 6. The decision is captured as an ADR if it affects more than one source type.
 

@@ -31,7 +31,6 @@ that no longer exists in its reviewed shape. Closing in bulk rather than re-walk
 heading-by-heading; the 2026-05 program is the live source of truth for the same
 surfaces.
 
-
 # Phase 3 A11y Review
 
 Scope: Phase 3 memory UI routes (`new/+page.svelte`, `browse/+page.svelte`, `[id]/+page.svelte`), the `(app)` group layout, and supporting files (`app.html`, `login/+page.svelte`). Read-only review.

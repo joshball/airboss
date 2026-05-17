@@ -27,9 +27,11 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: `userId: text('user_id').notNull().references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' })`. Deleting (or even soft-deactivating + GDPR-purging) a `bauth_user` row also deletes every `review_session` row they ever opened, which then cascades to `review_step`. Every other user-FK in this BC (`hangarReference.updatedBy`, `hangarSource.updatedBy`, `hangarSyncLog.actorId`, `hangarBoardTask.assigneeId`, `hangarBoardTask.createdBy`, all four invitation FKs) uses `onDelete: 'set null'` precisely to preserve the audit trail.
 - **Why it matters**: Project rule (CLAUDE.md): "Never lose information." A reviewer's session + step outcomes are the only durable record of which test plans were walked, what failed, and what was blocked. A user delete should not vaporize that history. This is a single-user app today, but the spec calls out multi-user as a v1 deferral, not a permanent shape; getting this right now is much cheaper than trying to recover deleted sessions later.
 - **Fix**: Change to `onDelete: 'set null'` (and make `userId` nullable):
+
   ```ts
   userId: text('user_id').references(() => bauthUser.id, { onDelete: 'set null', onUpdate: 'cascade' }),
   ```
+
   Adjust `getOpenSession` / `startSession` callers to handle a nullable `userId` (an orphaned session is read-only). Alternatively, keep NOT NULL + use `onDelete: 'restrict'` and require admin tooling to reassign or hard-delete sessions before purging the user; either resolution is fine, but the current cascade is wrong.
 
 ### Major
@@ -40,9 +42,11 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: The two indexes on `review_session` are `(itemId, userId, startedAt)` and the unique partial `(itemId, userId) WHERE finishedAt IS NULL`. `listSessions(itemId)` (review.ts:526-534) does `WHERE itemId = ? ORDER BY startedAt DESC LIMIT 20` -- the planner can use `sessionItemUserIdx`'s leading column on a small board, but the index leads with `(itemId, userId)` together; for a board where the `itemId`-only `ORDER BY startedAt DESC` is the hot path (the WP-spec right-rail history), the planner ends up scanning + sorting rather than walking an ordered index.
 - **Why it matters**: The right-rail "Sessions: 1 open / 2 done" panel hits this on every WP-spec page render. Today's data is small; a year of reviewing 89 WPs at ~3 sessions per WP turns into a measurable jump. The hard cap of 20 doesn't help index selection -- it bounds output, not scan.
 - **Fix**: Add a per-item index on `(itemId, startedAt desc)`:
+
   ```ts
   sessionItemStartedIdx: index('hangar_review_session_item_started_idx').on(t.itemId, desc(t.startedAt)),
   ```
+
   Or restructure `sessionItemUserIdx` to lead with `itemId` alone and add a second composite for the `(itemId, userId)` walker lookup. The fact that `getOpenSession` (item + user) is also a hot path means both shapes are wanted; declare both.
 
 #### M2. `review_bucket.kindId` FK has no supporting index
@@ -51,6 +55,7 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: `kindId text NOT NULL REFERENCES review_kind(id) ON DELETE RESTRICT` -- no index. Postgres FK enforcement on a `RESTRICT` parent delete must scan child rows for a match; with only 5 kinds + ~10 buckets the cost is invisible, but adding a kind via `seedReviewKinds` issues an FK-check on every insert.
 - **Why it matters**: More relevantly: the bucket-admin "buckets for kind X" query (Phase 7) and the loader's "all buckets pointing at this kind" walk both need this index. Postgres docs also note that FK columns generally want indexes to support cascading updates / deletes efficiently.
 - **Fix**:
+
   ```ts
   bucketKindIdx: index('hangar_review_bucket_kind_idx').on(t.kindId),
   ```
@@ -61,6 +66,7 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: `pinnedColumnId` references `board_column.id` with `onDelete: 'set null'`. There is no index on this column. When a column is deleted, Postgres has to scan the entire `review_item` table to find rows to NULL.
 - **Why it matters**: Column delete is rare today (default 4 columns are seeded), but Phase 7's bucket / column admin will introduce reorders and renames; cascade-on-update is `cascade` so even renames take the lock. With ~190 items today and growth aimed at 1000+ (`REVIEW_LIST_HARD_CAP`), a sequential scan during an admin operation is observable. The board's "items pinned to column X" query (a natural drag-drop refresh after column rename) also needs this index.
 - **Fix**:
+
   ```ts
   itemPinnedColumnIdx: index('hangar_review_item_pinned_column_idx').on(t.pinnedColumnId).where(sql`${t.pinnedColumnId} IS NOT NULL`),
   ```
@@ -71,10 +77,12 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: Three nullable FKs to `board_column` / `bauthUser` with no indexes. The board's "tasks in column X" filter, the per-user "my tasks" filter, and the admin "tasks created by me" view all become sequential scans. `onDelete: 'set null'` on all three forces a full-table scan when any referenced parent row is deleted.
 - **Why it matters**: Same shape as M3 -- works fine at dev volumes, painful as soon as multi-user lands. Default sort `(boardId, sortOrder)` is indexed via `taskBoardIdx`, but column / assignee / creator filters fall through to a scan.
 - **Fix**:
+
   ```ts
   taskColumnIdx: index('hangar_board_task_column_idx').on(t.columnId).where(sql`${t.columnId} IS NOT NULL`),
   taskAssigneeIdx: index('hangar_board_task_assignee_idx').on(t.assigneeId).where(sql`${t.assigneeId} IS NOT NULL`),
   ```
+
   Skip the `createdBy` index unless an admin "tasks I created" view actually ships; partial-on-not-null keeps the indexes small.
 
 ### Minor
@@ -122,9 +130,11 @@ Phases 1-2 land 9 new tables in `hangar.*` plus a docs FTS index. The schema is 
 - **Problem**: The comment at line 550-552 claims the `(boardId, kindId, ref) WHERE deletedAt IS NULL` partial unique index covers `WHERE boardId = ?` queries via leading column. That works for `boardId =` lookups when the planner picks it, but the partial-on-deletedAt restricts visibility to live rows -- which is normally what we want, but `softDeleteItem` -> later `pinItemToColumn(itemId, ...)` flows touch deleted rows, and the loader's "all rows for board including deleted, to compute the prune set" path scans without index help.
 - **Why it matters**: The loader's diff-vs-live walk runs on every refresh. Without a non-partial `boardId` index, that walk is a sequential scan once item count climbs.
 - **Fix**: Add a non-partial index, or accept the scan + document why. Recommended:
+
   ```ts
   itemBoardIdx: index('hangar_review_item_board_idx').on(t.boardId, t.deletedAt),
   ```
+
   The `(boardId, deletedAt)` shape lets both "live items for board" and "all items for board including deleted" plans land on the same index.
 
 ### Nit

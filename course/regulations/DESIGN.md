@@ -108,12 +108,12 @@ Two flavors of drill in this course:
 
 Given a question, point at the part / subpart / section. Timed. The drill is *not* answering the question -- it's locating the regulation. Examples:
 
-| Prompt                                                           | Answer                          | Time |
-| ---------------------------------------------------------------- | ------------------------------- | ---- |
-| Where is the rule about supplemental oxygen for crew?            | 91.211                          | 60s  |
-| Where is the rule about flight review currency?                  | 61.56                           | 60s  |
-| Where is the rule about ELT battery replacement intervals?       | 91.207                          | 60s  |
-| Where do you find the syllabus for a Part 141 private pilot course? | Part 141 Appendix B           | 60s  |
+| Prompt                                                              | Answer              | Time |
+| ------------------------------------------------------------------- | ------------------- | ---- |
+| Where is the rule about supplemental oxygen for crew?               | 91.211              | 60s  |
+| Where is the rule about flight review currency?                     | 61.56               | 60s  |
+| Where is the rule about ELT battery replacement intervals?          | 91.207              | 60s  |
+| Where do you find the syllabus for a Part 141 private pilot course? | Part 141 Appendix B | 60s  |
 
 These translate directly to flash cards in `apps/study/`. The card type is "navigation prompt" -- you're not asked to recall the rule's content, just its location.
 

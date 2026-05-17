@@ -16,12 +16,12 @@ Companion to [spec.md](./spec.md). Notes the route shape, page composition, node
 
 ## Route shape
 
-| Route                | Purpose                                                      | Loader inputs       |
-| -------------------- | ------------------------------------------------------------ | ------------------- |
-| `/goals`             | Index of all goals grouped by status; primary pinned         | `userId`            |
-| `/goals/new`         | Create form (title, notes, target date, primary toggle)     | `userId`            |
-| `/goals/[id]`        | Detail read mode (header, notes, syllabus list, node list)  | `userId`, `id`      |
-| `/goals/[id]?edit=1` | Detail edit mode (same page, edit form active, pickers open) | `userId`, `id`      |
+| Route                | Purpose                                                      | Loader inputs  |
+| -------------------- | ------------------------------------------------------------ | -------------- |
+| `/goals`             | Index of all goals grouped by status; primary pinned         | `userId`       |
+| `/goals/new`         | Create form (title, notes, target date, primary toggle)      | `userId`       |
+| `/goals/[id]`        | Detail read mode (header, notes, syllabus list, node list)   | `userId`, `id` |
+| `/goals/[id]?edit=1` | Detail edit mode (same page, edit form active, pickers open) | `userId`, `id` |
 
 Edit mode is a query toggle, not a separate route. This mirrors the memory-card edit pattern (`/memory/[id]?edit=1`) and keeps deep links to a goal stable.
 
@@ -105,24 +105,24 @@ The single new interaction in this WP. Default proposed shape: **modal**. See [s
 
 ### Interaction rules
 
-| Behaviour                          | Detail                                                                                              |
-| ---------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Open                               | "Add node" button in detail edit mode                                                              |
-| Close                              | x button, Escape, click backdrop                                                                    |
-| Filter chips                       | Multi-select within each row; intersection across rows                                              |
-| Search                             | Debounced 200 ms; queries `listNodesWithFacets` on the server via fetch                            |
-| Already-attached rows              | Greyed out, "Add" disabled, tooltip "Already on this goal"                                          |
-| Add                                | Form action `addGoalNode`; on success row flips to disabled, parent goal's node list updates       |
-| Empty state                        | "No nodes match these filters" + "Clear filters" link                                              |
-| Keyboard                           | Tab order: chips -> search -> first result; Enter on a result triggers Add; Escape closes          |
-| Screen reader                      | aria-modal, focus trap, list rows announced with title + cert + lifecycle                          |
+| Behaviour             | Detail                                                                                       |
+| --------------------- | -------------------------------------------------------------------------------------------- |
+| Open                  | "Add node" button in detail edit mode                                                        |
+| Close                 | x button, Escape, click backdrop                                                             |
+| Filter chips          | Multi-select within each row; intersection across rows                                       |
+| Search                | Debounced 200 ms; queries `listNodesWithFacets` on the server via fetch                      |
+| Already-attached rows | Greyed out, "Add" disabled, tooltip "Already on this goal"                                   |
+| Add                   | Form action `addGoalNode`; on success row flips to disabled, parent goal's node list updates |
+| Empty state           | "No nodes match these filters" + "Clear filters" link                                        |
+| Keyboard              | Tab order: chips -> search -> first result; Enter on a result triggers Add; Escape closes    |
+| Screen reader         | aria-modal, focus trap, list rows announced with title + cert + lifecycle                    |
 
 ### Why modal over alternatives
 
-| Alternative                                | Why not                                                                                          |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| (b) Inline collapsible groups by domain    | Pulls hundreds of rows into the goal page; overwhelms the read-mode density we want for the goal |
-| (c) Dedicated subpage `/goals/[id]/nodes`  | Pulls the user away from goal context; back button friction; harder to compare to current list   |
+| Alternative                               | Why not                                                                                          |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| (b) Inline collapsible groups by domain   | Pulls hundreds of rows into the goal page; overwhelms the read-mode density we want for the goal |
+| (c) Dedicated subpage `/goals/[id]/nodes` | Pulls the user away from goal context; back button friction; harder to compare to current list   |
 
 The modal idiom matches the citation picker already in the app (consistency), keeps the goal page dense (readable), and scales to hundreds of nodes (search + filters).
 
@@ -151,33 +151,33 @@ No filters, no search; the list is short enough. Already-attached syllabi greyed
      +--> abandoned     (terminal, hidden by default in index)
 ```
 
-| Action     | From          | To           | BC call                                  |
-| ---------- | ------------- | ------------ | ---------------------------------------- |
-| Pause      | active        | paused       | `updateGoal({ status: 'paused' })`       |
-| Resume     | paused        | active       | `updateGoal({ status: 'active' })`       |
-| Complete   | active        | completed    | `updateGoal({ status: 'completed' })`    |
-| Abandon    | active/paused | abandoned    | `archiveGoal` (sets abandoned + clears primary) |
+| Action   | From          | To        | BC call                                         |
+| -------- | ------------- | --------- | ----------------------------------------------- |
+| Pause    | active        | paused    | `updateGoal({ status: 'paused' })`              |
+| Resume   | paused        | active    | `updateGoal({ status: 'active' })`              |
+| Complete | active        | completed | `updateGoal({ status: 'completed' })`           |
+| Abandon  | active/paused | abandoned | `archiveGoal` (sets abandoned + clears primary) |
 
 `archiveGoal` is the BC's chosen path for "abandon"; it both sets status and unflags `is_primary` atomically.
 
 ## Boundary against sibling WPs
 
-| Concern                          | Owned by                                       | Why                                                                                                |
-| -------------------------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `/goals/...`                     | this WP                                         | Goal CRUD is the surface ADR 016 phase 9 names                                                     |
-| `/credentials/...`               | [cert-dashboard](../cert-dashboard/spec.md)    | Per-credential dashboard reads `getPrimaryGoal` for default-filter; never writes goals             |
-| `/lens/...`                      | [lens-ui](../lens-ui/spec.md)                  | Cross-lens browse (handbook lens, weakness lens); never writes goals                               |
-| Goal data model + BC             | shipped on main                                | This WP consumes existing reads + writes; never adds BC functions or schema                        |
-| Engine cutover to goal filter    | follow-on WP                                   | The engine still drives off `study_plan`; routing it through `getGoalNodeUnion` is its own WP      |
+| Concern                       | Owned by                                    | Why                                                                                           |
+| ----------------------------- | ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `/goals/...`                  | this WP                                     | Goal CRUD is the surface ADR 016 phase 9 names                                                |
+| `/credentials/...`            | [cert-dashboard](../cert-dashboard/spec.md) | Per-credential dashboard reads `getPrimaryGoal` for default-filter; never writes goals        |
+| `/lens/...`                   | [lens-ui](../lens-ui/spec.md)               | Cross-lens browse (handbook lens, weakness lens); never writes goals                          |
+| Goal data model + BC          | shipped on main                             | This WP consumes existing reads + writes; never adds BC functions or schema                   |
+| Engine cutover to goal filter | follow-on WP                                | The engine still drives off `study_plan`; routing it through `getGoalNodeUnion` is its own WP |
 
 ## Design principles applied
 
-| Principle                                  | Application                                                                                              |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
-| Goal vs course (Learning #4)               | A goal is the learner's union; the page never imposes a course shape                                     |
-| Cert as constraint set (Learning #2)       | Goals reference syllabi by id; the cert dashboard renders the constraint set, the goal renders the union |
-| Debrief Culture                            | Lifecycle includes "paused" + "abandoned"; pausing a goal is not failure, it's a transition              |
-| Discoverability                            | Node picker leads with filters + search, not a flat dump; the learner finds nodes by intent              |
+| Principle                            | Application                                                                                              |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Goal vs course (Learning #4)         | A goal is the learner's union; the page never imposes a course shape                                     |
+| Cert as constraint set (Learning #2) | Goals reference syllabi by id; the cert dashboard renders the constraint set, the goal renders the union |
+| Debrief Culture                      | Lifecycle includes "paused" + "abandoned"; pausing a goal is not failure, it's a transition              |
+| Discoverability                      | Node picker leads with filters + search, not a flat dump; the learner finds nodes by intent              |
 
 ## Performance
 
@@ -187,9 +187,9 @@ No filters, no search; the list is short enough. Already-attached syllabi greyed
 
 ## Risks
 
-| Risk                                                                                       | Mitigation                                                                                |
-| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| Risk                                                                                         | Mitigation                                                                                      |
+| -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Picker filter combinations return empty results often (returning CFI's mental model differs) | Empty-state copy explicit + "Clear filters" link; default search returns recent + popular nodes |
-| Weight semantics (0..10) confuse users -- "what does 7 mean?"                              | InfoTip on the slider header explains relative weighting; weights are advisory, not absolute |
-| Concurrent primary toggles produce surprising star moves                                   | `setPrimaryGoal` is atomic in the BC; UI reads the fresh primary after each click          |
-| Status transitions feel buried (four buttons + Archive)                                    | Group transitions in a single "Lifecycle" row; show only the legal next-state buttons      |
+| Weight semantics (0..10) confuse users -- "what does 7 mean?"                                | InfoTip on the slider header explains relative weighting; weights are advisory, not absolute    |
+| Concurrent primary toggles produce surprising star moves                                     | `setPrimaryGoal` is atomic in the BC; UI reads the fresh primary after each click               |
+| Status transitions feel buried (four buttons + Archive)                                      | Group transitions in a single "Lifecycle" row; show only the legal next-state buttons           |

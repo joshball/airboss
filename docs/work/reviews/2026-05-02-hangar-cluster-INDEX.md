@@ -18,54 +18,64 @@ review_status: done
 
 ## Summary table
 
-| Category     | Critical | Major | Minor | Nit | Total | File |
-|--------------|---------:|------:|------:|----:|------:|------|
-| correctness  |        2 |     6 |     7 |   3 |    18 | [link](2026-05-02-hangar-cluster-correctness.md) |
-| security     |        0 |     2 |     6 |   4 |    12 | [link](2026-05-02-hangar-cluster-security.md) |
-| perf         |        0 |     5 |     7 |   4 |    16 | [link](2026-05-02-hangar-cluster-perf.md) |
-| architecture |        1 |     4 |     4 |   3 |    12 | [link](2026-05-02-hangar-cluster-architecture.md) |
-| a11y         |        2 |     8 |     9 |   6 |    25 | [link](2026-05-02-hangar-cluster-a11y.md) |
-| patterns     |        0 |     0 |     6 |   4 |    10 | [link](2026-05-02-hangar-cluster-patterns.md) |
-| testing      |        1 |     9 |     9 |   4 |    23 | [link](2026-05-02-hangar-cluster-testing.md) |
-| dx           |        0 |     4 |     7 |   4 |    15 | [link](2026-05-02-hangar-cluster-dx.md) |
-| schema       |        1 |     4 |     5 |   3 |    13 | [link](2026-05-02-hangar-cluster-schema.md) |
-| backend      |        0 |     4 |     6 |   3 |    13 | [link](2026-05-02-hangar-cluster-backend.md) |
-| svelte       |        0 |     5 |     9 |   6 |    20 | [link](2026-05-02-hangar-cluster-svelte.md) |
-| ux           |        2 |     9 |    11 |   6 |    28 | [link](2026-05-02-hangar-cluster-ux.md) |
-| **TOTAL**    |    **9** |**60** |**86** |**50**|**205**| |
+| Category     | Critical | Major  | Minor  | Nit    | Total   | File                                              |
+| ------------ | -------- | ------ | ------ | ------ | ------- | ------------------------------------------------- |
+| correctness  | 2        | 6      | 7      | 3      | 18      | [link](2026-05-02-hangar-cluster-correctness.md)  |
+| security     | 0        | 2      | 6      | 4      | 12      | [link](2026-05-02-hangar-cluster-security.md)     |
+| perf         | 0        | 5      | 7      | 4      | 16      | [link](2026-05-02-hangar-cluster-perf.md)         |
+| architecture | 1        | 4      | 4      | 3      | 12      | [link](2026-05-02-hangar-cluster-architecture.md) |
+| a11y         | 2        | 8      | 9      | 6      | 25      | [link](2026-05-02-hangar-cluster-a11y.md)         |
+| patterns     | 0        | 0      | 6      | 4      | 10      | [link](2026-05-02-hangar-cluster-patterns.md)     |
+| testing      | 1        | 9      | 9      | 4      | 23      | [link](2026-05-02-hangar-cluster-testing.md)      |
+| dx           | 0        | 4      | 7      | 4      | 15      | [link](2026-05-02-hangar-cluster-dx.md)           |
+| schema       | 1        | 4      | 5      | 3      | 13      | [link](2026-05-02-hangar-cluster-schema.md)       |
+| backend      | 0        | 4      | 6      | 3      | 13      | [link](2026-05-02-hangar-cluster-backend.md)      |
+| svelte       | 0        | 5      | 9      | 6      | 20      | [link](2026-05-02-hangar-cluster-svelte.md)       |
+| ux           | 2        | 9      | 11     | 6      | 28      | [link](2026-05-02-hangar-cluster-ux.md)           |
+| **TOTAL**    | **9**    | **60** | **86** | **50** | **205** |                                                   |
 
 ## CRITICAL findings (9)
 
 ### 1. (correctness) Worker silently overwrites `cancelled` -> `complete`/`failed`
+
 Worker's terminal-status update is unconditional. When a handler finishes after `cancelJob` ran, it overwrites the cancellation. The user's cancel is silently lost. **Fix**: gate terminal-status updates on `where status = running`.
 
 ### 2. (correctness) Same-version upload data loss
+
 Upload handler's same-version overwrite path silently clobbers prior binaries with no archive. Different-checksum re-upload with same version = unrecoverable data loss.
 
 ### 3. (architecture) Three-way package.json cycle
+
 `@ab/bc-hangar`, `@ab/hangar-jobs`, `@ab/hangar-sync` form a circular dependency graph. Workspace path aliases hide it from TypeScript but the dependency graph is unambiguously circular. **Fix**: move job tables out of `bc-hangar/schema.ts` into `hangar-jobs` (it owns those writes); relocate handler-map registration from `bc-hangar/jobs.ts` to the hangar app.
 
 ### 4. (schema) `hangar.job_log (job_id, seq)` has no unique constraint and `appendJobLog()` computes seq non-atomically
+
 `coalesce(max(seq), -1) + 1` racing with the worker's separate in-memory counter. Concurrent paths (orphan recovery + draining worker) collide; the polling cursor `seq > sinceSeq` tolerates duplicates badly. **Fix**: unique `(job_id, seq)` + atomic seq allocation (sequence column or UPSERT).
 
 ### 5. (a11y) Audit-page actor combobox is incomplete
+
 No `aria-activedescendant`, no keyboard navigation between option buttons, listbox children are buttons not options, no result-count announcement. **Keyboard-only users cannot select an actor.**
 
 ### 6. (a11y) Job-detail "tablist" declares ARIA tabs pattern but ships none of the contract
+
 No roving tabindex, no arrow keys, no `tabpanel`. Should be downgraded to a toggle group with `aria-pressed`, or fully implemented.
 
 ### 7. (testing) `audit-queries.test.ts` post-filters by inserted IDs
+
 Integration block post-filters every result by `insertedAuditIds.includes(r.id)` before asserting filter shape. A broken WHERE clause that returns extra rows still passes. Tests look thorough but don't actually verify the filters they claim to.
 
 ### 8. (ux) Archive Delete on `sources/[id]/files` is one-click with no confirmation
+
 Destructive, no `ConfirmDialog`. The same product gates user-management hazards behind email-typed `ConfirmDialog`; the asymmetry is the largest UX bug in the cluster.
 
 ### 9. (ux) Soft-delete on `glossary/[id]` and `glossary/sources/[id]` is one-click with no confirmation
+
 Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass that wires every destructive form-action through `ConfirmDialog`.
 
 ## Convergent / root-cause findings
 
 ### Job worker fragility (4 reviewers)
+
 - **correctness (critical)**: silent cancel overwrite (above)
 - **correctness (major)**: `recoverOrphanedRunning` writes a job-log line but no audit row (state-transition contract broken)
 - **correctness (major)**: worker `claimNext` race -- `runningTargets.delete` in handler's `finally` runs before post-handler audit/status writes commit, so a queued same-target job can start before the prior fully terminates
@@ -77,6 +87,7 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **Root cause**: rewrite worker terminal-state path as a single transaction (status-update + audit-write atomic), gate the update on `where status = running`, add try/catch to cancel poll, add worker heartbeat, then add tests for the claim race and orphan recovery.
 
 ### Source ingest data integrity (3 reviewers)
+
 - **correctness (critical)**: same-version upload silently clobbers binaries (above)
 - **correctness (major)**: upload archive + rename pair non-atomic; crash mid-flow leaves source row pointing at missing file
 - **dx (major)**: `auditWrite` in `source-fetch.ts` only fires on success -- per-source audit queries miss every failure
@@ -85,6 +96,7 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **Root cause**: rewrite the upload + fetch pipeline to: (1) archive-before-write with rollback, (2) emit audit on every terminal state regardless of outcome, (3) cap subprocess output bytes (constant in `@ab/constants`).
 
 ### Sync drift/conflict detection brittleness (1 reviewer, multiple findings)
+
 - **correctness (major)**: `detectDrift` does string-compare on TOML output (brittle to codec/whitespace drift); should compare semantic decoded objects
 - **correctness (major)**: `detectConflict` only walks current revs, never baseline keys -- deletes between syncs vanish silently
 - **correctness (minor)**: registry rev-conflict refresh races a third writer
@@ -92,20 +104,24 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **Root cause**: rebuild diff/conflict detection on decoded objects (not text), include baseline-key walking, add Zod validation on `rev_snapshot` writes.
 
 ### Audit explorer / queries (4 reviewers)
+
 - **correctness (major)**: audit cursor `decodeAuditCursor` uses `indexOf` instead of `lastIndexOf`; stale/crafted cursors silently match nothing instead of resetting to page 1
 - **backend (major)**: `searchActorIds(decoded.actorId, 1)` resolves deep-linked actor chip via name/email ILIKE, but better-auth IDs never match -- chip silently empty for every URL with `?actor=<id>`. Needs `getActorById`.
 - **perf (major)**: audit log has no standalone timestamp index (chunk-3 finding); 24h-window query degrades linearly. (Closes via chunk-3 [PR #426](https://github.com/joshball/airboss/pull/426).)
 - **testing (critical)**: post-filter by inserted IDs (above)
 
 ### Status-pill convergent a11y (1 reviewer, 7 hangar sites)
+
 - **a11y (major)**: status pills/badges everywhere (dirty/clean/pending/downloaded/extracted/banned/active job state) carry meaning by color + text label only; need a glyph cue. Convergent fix at the `@ab/ui` pill component clears 7 hangar sites.
 
 ### Heavy visual CSS in route files (convergent with chunk 1)
+
 - **svelte (major)**: `.table-wrap`/table, `.badge`, `.role-pill`, `.status-chip`, `.btn-like`, `.crumbs`, `.filter-bar` skins duplicated 4-9x across routes. One `libs/ui` extraction pass, not 12 inline edits.
 - **architecture (minor)**: 5 copies of "enqueue + redirect" boilerplate across routes
 - **Root cause**: same as chunk 1 -- routes treated as pages instead of assembly. UI primitives belong in `libs/ui/`.
 
 ### Destructive-action confirmation gaps (ux convergent)
+
 - **ux (critical x2)**: above (#8, #9)
 - **ux (major)**: "Commit this diff" is destructive but unconfirmed
 - **ux (major)**: Job Cancel is destructive but unconfirmed
@@ -113,20 +129,24 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **Root cause**: wire every destructive form-action through `ConfirmDialog`. The component exists.
 
 ### Fire-and-forget submits with no feedback (ux convergent)
+
 - **ux (major)**: `sources/[id]` action row (Fetch / Extract / Diff / Validate), `sources/+page.svelte` Rescan/Revalidate/Build, diff page Run/Commit -- operator clicks and sees nothing happen.
 - **a11y (major)**: job log lines stream into a non-live region while a misleading static `aria-live` span sits next to it; body needs `role="log" aria-live="polite"`.
 - **Root cause**: standardize the "enqueued -> link to job" pattern + `aria-live` on log streams.
 
 ### `hangar-jobs` not actually generic (architecture)
+
 - **architecture (major)**: `hangar-jobs` markets itself as generic infra but imports `@ab/bc-hangar/schema` -- pick one
 - **Root cause**: closes when critical #3 (3-way cycle) is fixed.
 
 ### Outbound-fetch SSRF (security)
+
 - **security (major)**: `bv_index_url` and source `url` accept any `^https?://` URL -- any AUTHOR can point fetcher at cloud metadata / localhost / internal hosts; response body lands in job log
 - **security (major)**: `bv_index_url` skips even the http(s) regex used by the main url field
 - **Root cause**: add host/IP allowlist (or denylist for RFC1918 + link-local + metadata) + Zod schema for BV fields.
 
 ### Test coverage gaps (testing major)
+
 - worker.ts + enqueue.ts: no tests
 - upload form action: no tests (path-traversal, 413, 409, tmpdir-cleanup all unproven)
 - BetterAuthApiError wrap path tested only for `setUserRole`; ban/unban/revoke don't cover api-throws
@@ -134,10 +154,12 @@ Same as above -- destructive, unconfirmed. Pair with #8 on a single fix pass tha
 - **No Playwright e2e for hangar at all** (confirmed empty)
 
 ### Missing index for terminal-state job lookups (schema major)
+
 - `hangar.job_status_idx (status, created_at)` should be partial `WHERE status = 'queued'` -- table dominated by terminal-state rows
 - `getLatestCompleteJobByKind` / `getLatestCompleteJobForTarget` have no covering index for `kind + status='complete' + ORDER BY finished_at DESC`
 
 ### Performance hot spots
+
 - **perf (major)**: `/sources` re-reads `libs/aviation/src/references/aviation.ts` (~160 KB, 4095 lines) and runs 2 regex sweeps on every load just to render 2 integer tiles
 - **perf (major)**: `listRunningJobs` returns `SELECT *` with no LIMIT
 - **perf (major)**: job-detail log buffer grows unbounded on client; `pollLog` appends up to 500 lines/sec, no cap, no virtualization
@@ -188,21 +210,21 @@ Walked every per-category file heading-by-heading; re-grepped current main for e
 
 ### Per-category tally
 
-| Category     | Closed | Deferred (with trigger) | Open | Total | Status |
-|--------------|-------:|------------------------:|-----:|------:|--------|
-| correctness  |     18 |                       0 |    0 |    18 | done   |
-| security     |     12 |                       0 |    0 |    12 | done   |
-| perf         |     16 |                       0 |    0 |    16 | done   |
-| architecture |     11 |                       1 |    0 |    12 | done   |
-| a11y         |     25 |                       0 |    0 |    25 | done   |
-| patterns     |     10 |                       0 |    0 |    10 | done   |
-| testing      |     23 |                       0 |    0 |    23 | done   |
-| dx           |     15 |                       0 |    0 |    15 | done   |
-| schema       |      4 |                       9 |    0 |    13 | done   |
-| backend      |     14 |                       0 |    0 |    14 | done   |
-| svelte       |     20 |                       0 |    0 |    20 | done   |
-| ux           |     28 |                       0 |    0 |    28 | done   |
-| **TOTAL**    | **196**|                   **10**|**0** |**206**|        |
+| Category     | Closed  | Deferred (with trigger) | Open  | Total   | Status |
+| ------------ | ------- | ----------------------- | ----- | ------- | ------ |
+| correctness  | 18      | 0                       | 0     | 18      | done   |
+| security     | 12      | 0                       | 0     | 12      | done   |
+| perf         | 16      | 0                       | 0     | 16      | done   |
+| architecture | 11      | 1                       | 0     | 12      | done   |
+| a11y         | 25      | 0                       | 0     | 25      | done   |
+| patterns     | 10      | 0                       | 0     | 10      | done   |
+| testing      | 23      | 0                       | 0     | 23      | done   |
+| dx           | 15      | 0                       | 0     | 15      | done   |
+| schema       | 4       | 9                       | 0     | 13      | done   |
+| backend      | 14      | 0                       | 0     | 14      | done   |
+| svelte       | 20      | 0                       | 0     | 20      | done   |
+| ux           | 28      | 0                       | 0     | 28      | done   |
+| **TOTAL**    | **196** | **10**                  | **0** | **206** |        |
 
 The original INDEX summary table records 205-213 issues across two row totals (the table shows 205 in the row total, 213 in the frontmatter `total_issues`); the per-category file counts sum to 206 here. The 10 deferred items are 1 architecture (REPO_ROOT consolidation) + 9 schema (partial-index migrations, free-text check constraints, sentinel-string column types, anticipatory indexes, sync_log timestamps); each has a stated trigger and is captured in its category file's status table.
 

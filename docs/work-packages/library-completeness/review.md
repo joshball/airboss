@@ -27,15 +27,15 @@ The short answer: the spec's catalog (§2), URL audit (§4), and sequence (§6) 
 
 The agent (working without seeing this review) recommended Option C plus the staged rollout. Pulling those apart:
 
-| Part of their recommendation                                    | Verdict           | Why                                                                                                                              |
-| --------------------------------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Visibility gap: Option C (`library_entry` projection)           | **Disagree**      | Treats the symptom (loader probe is handbook-only) instead of the cause (the only structured-content table is misnamed handbook). See "Why Option C is the wrong fix" below.                  |
-| Option A rejected (pollutes handbook schema)                    | **Agree**         | Right rejection, but the real lesson is "the schema shouldn't be handbook-shaped at all," not "stop putting non-handbooks in it." |
-| Option B rejected (per-corpus tables, N-way coupling)           | **Agree**         | Adds a table per corpus and a UNION per probe. Linear coupling, exactly as they describe.                                        |
-| Catalog of ~10 invisible cohorts (§2)                           | **Agree**         | Matches the survey. Counts and gaps are right.                                                                                   |
-| 8 new-corpora WPs (§4.A-G plus §5 Safety Briefing)              | **Agree**         | Scope is right. Sequencing in §6 also right.                                                                                     |
-| URL audit (404 on SAFO/InFO; DRS as Order 8900.1 mirror; 200s)  | **Agree**         | Verified independently. The SAFO/InFO ratification flags should stay.                                                            |
-| Staged rollout (handbooks first, then per-corpus)               | **Agree (kept)**  | The staging is correct regardless of which mechanism wins. Rename + per-corpus seeder lands the same way: substrate first, corpora opportunistically.                                  |
+| Part of their recommendation                                   | Verdict          | Why                                                                                                                                                                          |
+| -------------------------------------------------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Visibility gap: Option C (`library_entry` projection)          | **Disagree**     | Treats the symptom (loader probe is handbook-only) instead of the cause (the only structured-content table is misnamed handbook). See "Why Option C is the wrong fix" below. |
+| Option A rejected (pollutes handbook schema)                   | **Agree**        | Right rejection, but the real lesson is "the schema shouldn't be handbook-shaped at all," not "stop putting non-handbooks in it."                                            |
+| Option B rejected (per-corpus tables, N-way coupling)          | **Agree**        | Adds a table per corpus and a UNION per probe. Linear coupling, exactly as they describe.                                                                                    |
+| Catalog of ~10 invisible cohorts (§2)                          | **Agree**        | Matches the survey. Counts and gaps are right.                                                                                                                               |
+| 8 new-corpora WPs (§4.A-G plus §5 Safety Briefing)             | **Agree**        | Scope is right. Sequencing in §6 also right.                                                                                                                                 |
+| URL audit (404 on SAFO/InFO; DRS as Order 8900.1 mirror; 200s) | **Agree**        | Verified independently. The SAFO/InFO ratification flags should stay.                                                                                                        |
+| Staged rollout (handbooks first, then per-corpus)              | **Agree (kept)** | The staging is correct regardless of which mechanism wins. Rename + per-corpus seeder lands the same way: substrate first, corpora opportunistically.                        |
 
 So: keep ~85% of the spec, replace §1's mechanism.
 
@@ -81,15 +81,15 @@ That is a generic content-tree row. Every corpus needs exactly this shape:
 
 The only things actually handbook-specific are:
 
-| Constraint                                    | Where                                            | Problem                                                            |
-| --------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------ |
-| `level IN ('chapter','section','subsection')` | [schema.ts:1341](../../../libs/bc/study/src/schema.ts#L1341) | CFR has 5-6 levels; AIM has 4; ACS has task/element. Doesn't fit. |
-| `code ~ '^[0-9]+(\.[0-9]+){0,2}$'`            | [schema.ts:1343](../../../libs/bc/study/src/schema.ts#L1343) | Rejects `91.103(b)(1)(i)` and any AC paragraph code outright.     |
-| Table named `handbook_section`                | schema.ts                                        | The name lies. It's a reference-content node table.               |
-| `handbook_figure`, `handbook_section_errata`  | schema.ts                                        | FK into `handbook_section`. Trivially renamed with the parent.    |
-| `getReadableReferenceIds()` queries it        | [handbooks.ts:501](../../../libs/bc/study/src/handbooks.ts#L501) | Probe is `level <> 'chapter'` -- handbook-shape leaking.          |
+| Constraint                                    | Where                                                             | Problem                                                           |
+| --------------------------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `level IN ('chapter','section','subsection')` | [schema.ts:1341](../../../libs/bc/study/src/schema.ts#L1341)      | CFR has 5-6 levels; AIM has 4; ACS has task/element. Doesn't fit. |
+| `code ~ '^[0-9]+(\.[0-9]+){0,2}$'`            | [schema.ts:1343](../../../libs/bc/study/src/schema.ts#L1343)      | Rejects `91.103(b)(1)(i)` and any AC paragraph code outright.     |
+| Table named `handbook_section`                | schema.ts                                                         | The name lies. It's a reference-content node table.               |
+| `handbook_figure`, `handbook_section_errata`  | schema.ts                                                         | FK into `handbook_section`. Trivially renamed with the parent.    |
+| `getReadableReferenceIds()` queries it        | [handbooks.ts:501](../../../libs/bc/study/src/handbooks.ts#L501)  | Probe is `level <> 'chapter'` -- handbook-shape leaking.          |
 | `seed-handbooks.ts` walks `handbooks/` only   | [seed-handbooks.ts:79](../../../scripts/db/seed-handbooks.ts#L79) | Hard-coded to one source tree.                                    |
-| `LIBRARY_STATES.in-app` derived from above    | [study.ts:1539](../../../libs/constants/src/study.ts#L1539) | UI label says "in-app"; implementation says "has handbook rows."  |
+| `LIBRARY_STATES.in-app` derived from above    | [study.ts:1539](../../../libs/constants/src/study.ts#L1539)       | UI label says "in-app"; implementation says "has handbook rows."  |
 
 Fix the seven rows above and the visibility gap closes for free, with no projection table, no sync layer, no Option B/C decision to revisit.
 
@@ -144,38 +144,38 @@ Two tables, plus the figure/errata children:
 
 #### `reference` (one row per document)
 
-| Column                 | Type        | Notes                                                                          |
-| ---------------------- | ----------- | ------------------------------------------------------------------------------ |
-| id                     | text PK     | `ref_ULID`                                                                     |
-| kind                   | text        | TS const-array union; Zod-validated at ingest. **No DB CHECK.** See below.     |
-| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04`                                  |
-| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele`                       |
-| title                  | text        | Display title                                                                  |
-| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... Free text; display metadata only.                   |
-| subjects               | text[]      | Aviation topics (existing)                                                     |
-| section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary.  |
-| superseded_by_id       | text FK     | Self-ref for edition chains (existing)                                         |
-| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them.                   |
-| created_at, updated_at | timestamptz | (existing)                                                                     |
+| Column                 | Type        | Notes                                                                         |
+| ---------------------- | ----------- | ----------------------------------------------------------------------------- |
+| id                     | text PK     | `ref_ULID`                                                                    |
+| kind                   | text        | TS const-array union; Zod-validated at ingest. **No DB CHECK.** See below.    |
+| document_slug          | text        | `phak`, `14cfr91`, `ac-91-79b`, `aim-2026-04`                                 |
+| edition                | text        | `FAA-H-8083-25C`, `2026-04-22`, `2024-letter-mangiamele`                      |
+| title                  | text        | Display title                                                                 |
+| publisher              | text        | `FAA`, `NTSB`, `AOPA`, ... Free text; display metadata only.                  |
+| subjects               | text[]      | Aviation topics (existing)                                                    |
+| section_schema         | jsonb       | `{ levels: string[], strict_sequence?: boolean }`. Per-kind level vocabulary. |
+| superseded_by_id       | text FK     | Self-ref for edition chains (existing)                                        |
+| metadata               | jsonb       | Per-kind-typed extras. Empty for kinds that don't need them.                  |
+| created_at, updated_at | timestamptz | (existing)                                                                    |
 
 `kind` values: `handbook`, `cfr`, `ac`, `acs`, `aim`, `pcg`, `ntsb`, `interp`, `safo`, `info`, `order`, `pamphlet`, `poh`, `other`. Adding a corpus shouldn't need a migration -- hence the union lives in TS, not in a DB CHECK.
 
 #### `reference_section` (hierarchical content)
 
-| Column                 | Type        | Notes                                                                          |
-| ---------------------- | ----------- | ------------------------------------------------------------------------------ |
-| id                     | text PK     | `refsec_ULID`                                                                  |
-| reference_id           | text FK     | -> `reference.id` ON DELETE CASCADE                                            |
-| parent_id              | text FK     | -> `reference_section.id` (null for top-level)                                 |
-| ordinal                | int         | Position among siblings                                                        |
-| depth                  | int         | 0 for top-level, ++ per nesting. Positional, not semantic.                     |
-| level                  | text        | This row's level label. Validated at ingest. **No DB CHECK.** See below.       |
-| code                   | text        | Citation locator. Validated at ingest by per-kind regex. **No DB regex.**      |
-| title                  | text        | Section heading                                                                |
-| content_md             | text NULL   | Markdown body. NULL/empty for pure container rows.                             |
-| content_hash           | text        | For idempotent re-seeding (existing pattern)                                   |
-| metadata               | jsonb       | Per-kind-typed per-section extras. Empty for kinds that don't need them.       |
-| created_at, updated_at | timestamptz |                                                                                |
+| Column                 | Type        | Notes                                                                     |
+| ---------------------- | ----------- | ------------------------------------------------------------------------- |
+| id                     | text PK     | `refsec_ULID`                                                             |
+| reference_id           | text FK     | -> `reference.id` ON DELETE CASCADE                                       |
+| parent_id              | text FK     | -> `reference_section.id` (null for top-level)                            |
+| ordinal                | int         | Position among siblings                                                   |
+| depth                  | int         | 0 for top-level, ++ per nesting. Positional, not semantic.                |
+| level                  | text        | This row's level label. Validated at ingest. **No DB CHECK.** See below.  |
+| code                   | text        | Citation locator. Validated at ingest by per-kind regex. **No DB regex.** |
+| title                  | text        | Section heading                                                           |
+| content_md             | text NULL   | Markdown body. NULL/empty for pure container rows.                        |
+| content_hash           | text        | For idempotent re-seeding (existing pattern)                              |
+| metadata               | jsonb       | Per-kind-typed per-section extras. Empty for kinds that don't need them.  |
+| created_at, updated_at | timestamptz |                                                                           |
 
 `level` examples: `chapter`, `section`, `subsection` (handbook); `subpart`, `section`, `paragraph`, `subparagraph`, `clause` (CFR); `chapter`, `section`, `paragraph` (AIM); `task`, `element` (ACS). Validated against `reference.section_schema.levels` at ingest.
 
@@ -228,22 +228,22 @@ Three of the four gates are at write time. The DB never trusts what it's storing
 
 ### Then the spec's §6 sequence applies, lightly edited
 
-| Original spec WP | Status under this plan                                                                                                                                                  |
-| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WP-V (this WP)   | **Replaced** by the substrate WP above. Same role: foundation that unblocks the rest.                                                                                   |
-| WP-VS            | **Folded** into the substrate WP -- it was a refactor on top of Option C; now it's just the substrate landing.                                                          |
-| WP-EX-Verify     | **Keep.** Confirm post-#384 handbooks-extras seeding actually produces nodes.                                                                                           |
-| WP-MTN           | **Keep.** Mountain Flying pamphlet, single-PDF AC-style pipeline. Smallest possible win.                                                                                |
-| WP-AIM           | **Keep, simpler.** AIM seed via the generalized seeder. No new table, no projection update.                                                                             |
-| WP-CFR-V         | **Keep.** Same simplification. The §3 UI question (CFR card grain) is unchanged and still needs ratification.                                                           |
-| WP-AC-V          | **Keep.** Seed already-extracted ACs into `reference_node`. Resolve gaps 3+4 first.                                                                                     |
-| WP-ACS-V         | **Keep.** Same. Resolve gap 2 first.                                                                                                                                    |
-| WP-CC            | **Keep.** Chief Counsel letters. Highest pedagogical leverage of the new corpora; agent and I agree.                                                                    |
-| WP-NTSB-ALJ      | **Keep.**                                                                                                                                                               |
-| WP-SAFO + WP-INFO | **Keep**, contingent on the URL ratification flags the agent surfaced.                                                                                                 |
-| WP-AC-FULL       | **Keep.** Curated ~50 ACs > completionist 200. Agent's recommendation is right.                                                                                         |
-| WP-O8900-V5      | **Keep.** Vol 5 carve-out only.                                                                                                                                         |
-| WP-SAFETY-BRIEF  | **Keep** if §5 ratifies yes.                                                                                                                                            |
+| Original spec WP  | Status under this plan                                                                                         |
+| ----------------- | -------------------------------------------------------------------------------------------------------------- |
+| WP-V (this WP)    | **Replaced** by the substrate WP above. Same role: foundation that unblocks the rest.                          |
+| WP-VS             | **Folded** into the substrate WP -- it was a refactor on top of Option C; now it's just the substrate landing. |
+| WP-EX-Verify      | **Keep.** Confirm post-#384 handbooks-extras seeding actually produces nodes.                                  |
+| WP-MTN            | **Keep.** Mountain Flying pamphlet, single-PDF AC-style pipeline. Smallest possible win.                       |
+| WP-AIM            | **Keep, simpler.** AIM seed via the generalized seeder. No new table, no projection update.                    |
+| WP-CFR-V          | **Keep.** Same simplification. The §3 UI question (CFR card grain) is unchanged and still needs ratification.  |
+| WP-AC-V           | **Keep.** Seed already-extracted ACs into `reference_node`. Resolve gaps 3+4 first.                            |
+| WP-ACS-V          | **Keep.** Same. Resolve gap 2 first.                                                                           |
+| WP-CC             | **Keep.** Chief Counsel letters. Highest pedagogical leverage of the new corpora; agent and I agree.           |
+| WP-NTSB-ALJ       | **Keep.**                                                                                                      |
+| WP-SAFO + WP-INFO | **Keep**, contingent on the URL ratification flags the agent surfaced.                                         |
+| WP-AC-FULL        | **Keep.** Curated ~50 ACs > completionist 200. Agent's recommendation is right.                                |
+| WP-O8900-V5       | **Keep.** Vol 5 carve-out only.                                                                                |
+| WP-SAFETY-BRIEF   | **Keep** if §5 ratifies yes.                                                                                   |
 
 ## Other smells worth fixing along the way
 

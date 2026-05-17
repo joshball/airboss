@@ -58,11 +58,11 @@ tools/
 
 Three options considered:
 
-| Option                                        | Pro                                                    | Con                                                                         |
-| --------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------------------------------- |
-| A) Depend on `0x62/jsbsim-wasm` npm package   | Zero build effort                                      | Supply chain: 2-star single-author repo executes sim logic. Unauditable.    |
-| B) Port JSBSim ourselves in `tools/jsbsim-port/` | Every line auditable; pinned upstream commit             | 2-5 days of Emscripten work; binding layer we own                           |
-| C) Keep the hand-rolled TS FDM                | No port work                                           | Low realism ceiling; aft-CG, ground effect, post-stall all custom problems  |
+| Option                                           | Pro                                          | Con                                                                        |
+| ------------------------------------------------ | -------------------------------------------- | -------------------------------------------------------------------------- |
+| A) Depend on `0x62/jsbsim-wasm` npm package      | Zero build effort                            | Supply chain: 2-star single-author repo executes sim logic. Unauditable.   |
+| B) Port JSBSim ourselves in `tools/jsbsim-port/` | Every line auditable; pinned upstream commit | 2-5 days of Emscripten work; binding layer we own                          |
+| C) Keep the hand-rolled TS FDM                   | No port work                                 | Low realism ceiling; aft-CG, ground effect, post-stall all custom problems |
 
 **Chosen: B.** Per the Prime Directive, a stub is a known issue. Option A is a supply-chain hole. Option C ships a known-approximation FDM forever. The port is scoped as a one-time Phase-2 deliverable; after it lands the sim runs on JSBSim for every aircraft it ever adds.
 
@@ -253,12 +253,12 @@ await createScenarioAttempt(db, userId, {
 
 **Grade -> rating mapping** (handled inside `createScenarioAttempt` or a thin shim):
 
-| Grade         | FSRS rating |
-| ------------- | ----------- |
-| >= 0.90       | Easy        |
-| 0.75 .. 0.90  | Good        |
-| 0.50 .. 0.75  | Hard        |
-| < 0.50        | Again       |
+| Grade        | FSRS rating |
+| ------------ | ----------- |
+| >= 0.90      | Easy        |
+| 0.75 .. 0.90 | Good        |
+| 0.50 .. 0.75 | Hard        |
+| < 0.50       | Again       |
 
 Scenarios with `hardFailures` trigger auto-Again when the failure condition is true regardless of numeric grade.
 
@@ -557,20 +557,20 @@ tools/
 
 ## Scenario catalogue at end of MVP
 
-| Scenario                  | Phase | Domain            | Faults           | Steps? | Grading                                                  |
-| ------------------------- | ----- | ----------------- | ---------------- | ------ | -------------------------------------------------------- |
-| Playground                | 0.5   | free              | none             | no     | endless                                                  |
-| First Flight              | 0.5   | tutorial          | none             | yes    | step progression                                         |
-| Departure Stall           | 0.5   | stalls            | none             | no     | altitude hold, stall margin, recovery latency            |
-| EFATO                     | 4     | efato             | engine_cut*      | no     | decision latency, best-glide speed, landing-spot commit  |
-| Vacuum Failure            | 4     | instruments       | vacuum_failure   | no     | heading hold, transition-to-T/B latency                  |
-| Aft-CG Slow Flight        | 6     | wb                | none             | yes    | airspeed hold within tolerance; stall-break recognition  |
-| Unusual Attitude Nose-Hi  | 6     | unusual_attitudes | none             | no     | recovery time, g-margin                                  |
-| Unusual Attitude Nose-Lo  | 6     | unusual_attitudes | none             | no     | recovery time, g-margin, airspeed recovery order         |
-| Partial Panel             | 6     | partial_panel    | vacuum_failure + alternator | yes  | heading hold on T/B + compass, altitude hold           |
-| VMC into IMC              | 6     | vmc_imc           | none (visual only; Phase 7 adds the scene collapse) | no | 180-turn accuracy, scan discipline |
-| Pitot Blockage (climb)    | 6     | instruments       | pitot_block      | no     | airspeed recognition latency, pitch-and-power control    |
-| Static Blockage (descent) | 6     | instruments       | static_block     | no     | altitude recognition latency, alternate static handling  |
+| Scenario                  | Phase | Domain            | Faults                                              | Steps? | Grading                                                 |
+| ------------------------- | ----- | ----------------- | --------------------------------------------------- | ------ | ------------------------------------------------------- |
+| Playground                | 0.5   | free              | none                                                | no     | endless                                                 |
+| First Flight              | 0.5   | tutorial          | none                                                | yes    | step progression                                        |
+| Departure Stall           | 0.5   | stalls            | none                                                | no     | altitude hold, stall margin, recovery latency           |
+| EFATO                     | 4     | efato             | engine_cut*                                         | no     | decision latency, best-glide speed, landing-spot commit |
+| Vacuum Failure            | 4     | instruments       | vacuum_failure                                      | no     | heading hold, transition-to-T/B latency                 |
+| Aft-CG Slow Flight        | 6     | wb                | none                                                | yes    | airspeed hold within tolerance; stall-break recognition |
+| Unusual Attitude Nose-Hi  | 6     | unusual_attitudes | none                                                | no     | recovery time, g-margin                                 |
+| Unusual Attitude Nose-Lo  | 6     | unusual_attitudes | none                                                | no     | recovery time, g-margin, airspeed recovery order        |
+| Partial Panel             | 6     | partial_panel     | vacuum_failure + alternator                         | yes    | heading hold on T/B + compass, altitude hold            |
+| VMC into IMC              | 6     | vmc_imc           | none (visual only; Phase 7 adds the scene collapse) | no     | 180-turn accuracy, scan discipline                      |
+| Pitot Blockage (climb)    | 6     | instruments       | pitot_block                                         | no     | airspeed recognition latency, pitch-and-power control   |
+| Static Blockage (descent) | 6     | instruments       | static_block                                        | no     | altitude recognition latency, alternate static handling |
 
 `*` engine_cut is a throttle override (throttle = 0, engine off) rather than a fault-kind. Implemented via scripted input.
 
@@ -578,30 +578,30 @@ Total: 12 scenarios across the MVP set. Within the 8-10 target if we drop the tw
 
 ## Risks
 
-| Risk                                                                                      | Mitigation                                                                                                                                                         |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| JSBSim port takes longer than 2-5 days.                                                   | Hand-rolled TS FDM ships as fallback; work in parallel. If port misses, MVP ships on TS FDM and ports land in a Phase-2 follow-up.                                 |
-| Determinism breaks somewhere between WASM + worker + snapshotting.                        | Phase 2 ships a determinism test: record input stream, replay, compare frames. Fails early.                                                                        |
-| Replay tape size blows past 5 MB compressed.                                              | Cap total at 5 MB. Drop intermediate frames when over. Document the fact in tape metadata.                                                                         |
-| Fault-kind enum expands and breaks existing tapes.                                        | Tapes hash scenario def + embed active faults explicitly. Adding a fault kind doesn't invalidate old tapes; removing or renaming does. Migration plan per-removal. |
-| Instrument gallery drifts from reality as FaultKinds evolve.                              | Gallery is a route test target: Playwright visual diff per instrument x fault matrix. Runs in CI.                                                                 |
-| Scheduler integration surfaces scenarios that aren't ready.                                | `RepMetadata` is optional; scenarios without it don't get scheduled. Pre-flight step on every scenario confirms metadata before registry export.                  |
-| Horizon scene causes jank at 60 Hz on low-end laptops.                                    | Code-split; load only when toggled. Profiled in Phase 7. If needed, cap at 30 fps with reduced-motion.                                                            |
-| PA28 aerodynamics differ meaningfully from C172 in ways scenarios assume C172 behavior.   | Each scenario pins its aircraft. PA28 scenarios only land after PA28 config is validated against JSBSim desktop reference.                                        |
-| Audio adds jank during the 120 Hz tick.                                                    | Audio is on the main thread; the worker has no audio work. Main-thread audio updates run at 30 Hz from snapshots. Already shown viable in Phase 0.6.              |
-| LGPL boundary question with JSBSim WASM.                                                  | WASM is loaded as a blob + JS ABI. No static linking. `tools/jsbsim-port/README.md` documents the compliance posture. Keep blob swappable; do not minify.         |
-| CI environment cannot build JSBSim from source repeatably.                                | WASM + hash committed. CI verifies hash only. Rebuild is a manual, Docker-backed dev task. Gate the submodule update behind explicit intent.                      |
+| Risk                                                                                    | Mitigation                                                                                                                                                         |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| JSBSim port takes longer than 2-5 days.                                                 | Hand-rolled TS FDM ships as fallback; work in parallel. If port misses, MVP ships on TS FDM and ports land in a Phase-2 follow-up.                                 |
+| Determinism breaks somewhere between WASM + worker + snapshotting.                      | Phase 2 ships a determinism test: record input stream, replay, compare frames. Fails early.                                                                        |
+| Replay tape size blows past 5 MB compressed.                                            | Cap total at 5 MB. Drop intermediate frames when over. Document the fact in tape metadata.                                                                         |
+| Fault-kind enum expands and breaks existing tapes.                                      | Tapes hash scenario def + embed active faults explicitly. Adding a fault kind doesn't invalidate old tapes; removing or renaming does. Migration plan per-removal. |
+| Instrument gallery drifts from reality as FaultKinds evolve.                            | Gallery is a route test target: Playwright visual diff per instrument x fault matrix. Runs in CI.                                                                  |
+| Scheduler integration surfaces scenarios that aren't ready.                             | `RepMetadata` is optional; scenarios without it don't get scheduled. Pre-flight step on every scenario confirms metadata before registry export.                   |
+| Horizon scene causes jank at 60 Hz on low-end laptops.                                  | Code-split; load only when toggled. Profiled in Phase 7. If needed, cap at 30 fps with reduced-motion.                                                             |
+| PA28 aerodynamics differ meaningfully from C172 in ways scenarios assume C172 behavior. | Each scenario pins its aircraft. PA28 scenarios only land after PA28 config is validated against JSBSim desktop reference.                                         |
+| Audio adds jank during the 120 Hz tick.                                                 | Audio is on the main thread; the worker has no audio work. Main-thread audio updates run at 30 Hz from snapshots. Already shown viable in Phase 0.6.               |
+| LGPL boundary question with JSBSim WASM.                                                | WASM is loaded as a blob + JS ABI. No static linking. `tools/jsbsim-port/README.md` documents the compliance posture. Keep blob swappable; do not minify.          |
+| CI environment cannot build JSBSim from source repeatably.                              | WASM + hash committed. CI verifies hash only. Rebuild is a manual, Docker-backed dev task. Gate the submodule update behind explicit intent.                       |
 
 ## Key decisions recap
 
-| # | Decision                                                      | Why                                                                        |
-| - | ------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 1 | FDM in WASM, built in-tree, pinned upstream                   | Supply chain posture; auditability; fidelity ceiling                       |
-| 2 | Worker host in `libs/engine/`                                 | Shared with future FIRC migration; not BC domain logic                     |
-| 3 | Fault model as pure transform                                 | Testable; deterministic; orthogonal to FDM                                 |
-| 4 | Scenario format stays TS-native                               | Type safety, IDE support, refactor ease; JSON subset later if hangar needs |
-| 5 | Replay tape: ring buffer + on-end persist                     | Bounded memory; graceful degradation; deterministic                        |
-| 6 | Study spaced-rep scheduler owns sim attempts                  | One scheduler across the platform; weak sim scenarios appear in /session/start |
-| 7 | Sound on main thread                                          | Phase 0.6 proved viable; AudioWorklet adds cross-origin-isolation pain     |
-| 8 | Instruments stay SVG + Svelte                                 | Accessible, scalable, themeable; shipped pattern works                     |
-| 9 | Horizon is Three.js, code-split, optional                     | Needed for VFR; acceptable dep because no sim logic                        |
+| #   | Decision                                     | Why                                                                            |
+| --- | -------------------------------------------- | ------------------------------------------------------------------------------ |
+| 1   | FDM in WASM, built in-tree, pinned upstream  | Supply chain posture; auditability; fidelity ceiling                           |
+| 2   | Worker host in `libs/engine/`                | Shared with future FIRC migration; not BC domain logic                         |
+| 3   | Fault model as pure transform                | Testable; deterministic; orthogonal to FDM                                     |
+| 4   | Scenario format stays TS-native              | Type safety, IDE support, refactor ease; JSON subset later if hangar needs     |
+| 5   | Replay tape: ring buffer + on-end persist    | Bounded memory; graceful degradation; deterministic                            |
+| 6   | Study spaced-rep scheduler owns sim attempts | One scheduler across the platform; weak sim scenarios appear in /session/start |
+| 7   | Sound on main thread                         | Phase 0.6 proved viable; AudioWorklet adds cross-origin-isolation pain         |
+| 8   | Instruments stay SVG + Svelte                | Accessible, scalable, themeable; shipped pattern works                         |
+| 9   | Horizon is Three.js, code-split, optional    | Needed for VFR; acceptable dep because no sim logic                            |

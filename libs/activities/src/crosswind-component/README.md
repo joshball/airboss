@@ -19,11 +19,11 @@ This activity is designed to bridge **Discover** and **Reveal** in the seven-pha
 
 ## Parameters (props)
 
-| Prop                   | Type     | Default | Meaning                                                                                                                 |
-| ---------------------- | -------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `runwayHeading`        | `number` | `10`    | Runway heading in magnetic degrees (0-359). Drawn as a dark runway strip across the compass rose.                       |
-| `initialWindDirection` | `number` | `30`    | Starting wind direction in magnetic degrees (0-359). The wind is reported FROM this direction.                          |
-| `initialWindSpeed`     | `number` | `15`    | Starting wind speed in knots. Slider range 0-50 kt.                                                                      |
+| Prop                   | Type     | Default | Meaning                                                                                                                                  |
+| ---------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `runwayHeading`        | `number` | `10`    | Runway heading in magnetic degrees (0-359). Drawn as a dark runway strip across the compass rose.                                        |
+| `initialWindDirection` | `number` | `30`    | Starting wind direction in magnetic degrees (0-359). The wind is reported FROM this direction.                                           |
+| `initialWindSpeed`     | `number` | `15`    | Starting wind speed in knots. Slider range 0-50 kt.                                                                                      |
 | `maxDemoCrosswind`     | `number` | -       | Optional. If supplied, a toggle appears that turns the crosswind vector red and shows "OVER DEMO" when crosswind exceeds this threshold. |
 
 All props are read-only. Internal state (current wind direction, current wind speed, threshold toggle) is component-local and resets on remount.

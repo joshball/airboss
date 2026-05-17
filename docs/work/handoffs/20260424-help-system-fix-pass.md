@@ -33,19 +33,19 @@ Standalone PR. Fixes the visible presentation bug so Wave 2 lands on a working f
 
 1. **Fix PageHelp token references** (`libs/help/src/ui/PageHelp.svelte:42-71`). Replace every `--ab-*` custom property with the semantic equivalent that InfoTip already uses. Exact mapping:
 
-   | Old (non-existent)           | New (semantic)           |
-   | ---------------------------- | ------------------------ |
-   | `--ab-color-border`          | `--edge-default`         |
-   | `--ab-color-surface`         | `--surface-sunken`       |
-   | `--ab-color-fg-subtle`       | `--ink-subtle`           |
-   | `--ab-color-primary`         | `--action-default-fg`    |
-   | `--ab-color-primary-subtle`  | `--action-default-bg`    |
-   | `--ab-font-size-sm`          | `--font-size-sm`         |
-   | `--ab-font-weight-semibold`  | `--font-weight-semibold` |
-   | `--ab-transition-fast`       | `--motion-fast`          |
-   | `--ab-focus-ring`            | `--focus-ring`           |
-   | `--ab-focus-ring-width`      | `--focus-ring-width`     |
-   | `--ab-focus-ring-offset`     | `--focus-ring-offset`    |
+| Old (non-existent)          | New (semantic)           |
+| --------------------------- | ------------------------ |
+| `--ab-color-border`         | `--edge-default`         |
+| `--ab-color-surface`        | `--surface-sunken`       |
+| `--ab-color-fg-subtle`      | `--ink-subtle`           |
+| `--ab-color-primary`        | `--action-default-fg`    |
+| `--ab-color-primary-subtle` | `--action-default-bg`    |
+| `--ab-font-size-sm`         | `--font-size-sm`         |
+| `--ab-font-weight-semibold` | `--font-weight-semibold` |
+| `--ab-transition-fast`      | `--motion-fast`          |
+| `--ab-focus-ring`           | `--focus-ring`           |
+| `--ab-focus-ring-width`     | `--focus-ring-width`     |
+| `--ab-focus-ring-offset`    | `--focus-ring-offset`    |
 
    Verify each target exists in `libs/themes/generated/tokens.css` before using it. Mirror InfoTip's style block organization for consistency.
 
@@ -79,17 +79,20 @@ Standalone PR. Fixes the visible presentation bug so Wave 2 lands on a working f
 6. **Z-index sanity check.** InfoTip popover is `z-index: 50`. Grep every `z-index` in `libs/ui/src/**` and `libs/help/src/**`. If any modal / dialog / banner / toast uses `>= 50`, either raise InfoTip to sit above them all or document the intentional layering. Report findings in the PR body.
 
 **Out of scope for Wave 1:**
+
 - No new authored help pages
 - No new InfoTip / PageHelp applications on memory surfaces
 - No HelpTrigger unification (the idea of a single primitive both InfoTip and PageHelp wrap — it's a follow-up)
 
 **Verification:**
+
 - `bun run check` passes clean
 - `bun scripts/validate-help-ids.ts` still passes
 - Load `/memory/review` in the dev server and confirm the `?` chicklet next to "Card N of M" now presents as a visible `[? Help]` affordance, not a bare floating glyph
 - Hover the chicklet: InfoTip-style visual treatment; click navigates to `/help/memory-review`
 
 **Finish criteria:**
+
 - One squash-merged PR titled something like `fix(help): PageHelp token migration + visible label + InfoTip parity polish`
 - Branch and worktree cleaned up after merge
 
@@ -100,6 +103,7 @@ Standalone PR. Fixes the visible presentation bug so Wave 2 lands on a working f
 Ships after Wave 1 merges. Single medium PR, no work package (spec is the punch list below; work-package process adds no value).
 
 **Scope summary:**
+
 - 4 new authored help pages: `memory-dashboard`, `memory-new`, `memory-browse`, `memory-card`
 - 2 new sections in the existing `concept-fsrs` page: `#states` and `#stability-and-mastery`
 - 21 InfoTip / PageHelp placements across 5 memory routes
@@ -109,6 +113,7 @@ Ships after Wave 1 merges. Single medium PR, no work package (spec is the punch 
 #### `memory-dashboard.ts`
 
 Covers `/memory`. Sections:
+
 - What this page shows (top-level orientation)
 - Stat tiles (Due now, Reviewed today, Streak, Active cards) — one sentence each, link to `concept-fsrs` for the scheduling definitions
 - State groupings (New / Learning / Review / Relearning) — link to `concept-fsrs#states`
@@ -117,6 +122,7 @@ Covers `/memory`. Sections:
 #### `memory-new.ts`
 
 Covers `/memory/new`. Sections:
+
 - Minimum-information principle (one fact per card)
 - Front / Back authoring guidance
 - Domain classification (why it matters for filtering and session mix)
@@ -127,6 +133,7 @@ Covers `/memory/new`. Sections:
 #### `memory-browse.ts`
 
 Covers `/memory/browse`. Sections:
+
 - What browse shows vs review
 - Filter semantics (Domain / Type / Source / Status)
 - Status lifecycle (Active / Suspended / Archived — what each does to scheduling)
@@ -135,6 +142,7 @@ Covers `/memory/browse`. Sections:
 #### `memory-card.ts`
 
 Covers `/memory/[id]`. Sections:
+
 - `#domain` — what the domain badge means
 - `#type` — what the type badge means (link to memory-new)
 - `#lifecycle` — Active / Suspended / Archived and how Suspend / Archive / Reactivate buttons move between states
@@ -142,6 +150,7 @@ Covers `/memory/[id]`. Sections:
 - Schedule stats (State / Due / Stability / Difficulty / Reviews / Lapses) — link to concept-fsrs sections
 
 **New sections in existing `concept-fsrs.ts`:**
+
 - `#states` — definitions of New / Learning / Review / Relearning and how cards transition
 - `#stability-and-mastery` — stability in days; the `MASTERY_STABILITY_DAYS` threshold; what "mastered" means operationally
 
@@ -149,36 +158,38 @@ Covers `/memory/[id]`. Sections:
 
 All recommendations use `InfoTip` unless noted. Where a helpId like `memory-card#source` is given, the InfoTip's "Learn more" link targets that anchor.
 
-| # | Route               | Element                                          | File:line                              | Primitive   | helpId                                         |
-| - | ------------------- | ------------------------------------------------ | -------------------------------------- | ----------- | ---------------------------------------------- |
-| 1 | `/memory`           | Page header                                      | `memory/+page.svelte:27-37`            | `PageHelp`  | `memory-dashboard`                             |
-| 2 | `/memory`           | "Due now" stat tile                              | `memory/+page.svelte:40-47`            | `InfoTip`   | `memory-review#how-scheduling-works`           |
-| 3 | `/memory`           | "Reviewed today" stat tile                       | `memory/+page.svelte:48-54`            | `InfoTip`   | `memory-dashboard`                             |
-| 4 | `/memory`           | "Streak" stat tile                               | `memory/+page.svelte:55-61`            | `InfoTip`   | `memory-dashboard`                             |
-| 5 | `/memory`           | "Active cards" stat tile                         | `memory/+page.svelte:62-67`            | `InfoTip`   | `memory-dashboard`                             |
-| 6 | `/memory`           | State pills (4x: New / Learning / Review / Relearning) | `memory/+page.svelte:73-88`      | `InfoTip` per pill | `concept-fsrs#states`                   |
-| 7 | `/memory`           | Domain row (total / due / % mastered)            | `memory/+page.svelte:97-114`           | `InfoTip` on header | `concept-fsrs#stability-and-mastery`  |
-| 8 | `/memory/new`       | Page header                                      | `memory/new/+page.svelte:74-81`        | `PageHelp`  | `memory-new`                                   |
-| 9 | `/memory/new`       | Domain / Type / Tags fields (3x)                 | `memory/new/+page.svelte:141-174`      | `InfoTip` per field | section anchors in `memory-new`        |
-| 10 | `/memory/browse`   | Page header                                      | `memory/browse/+page.svelte:131-138`   | `PageHelp`  | `memory-browse`                                |
-| 11 | `/memory/browse`   | Filter labels + Status lifecycle                 | `memory/browse/+page.svelte:159-192`   | `InfoTip` per filter | section anchors in `memory-browse`    |
-| 12 | `/memory/review`   | Domain badge on question                         | `memory/review/+page.svelte:296`       | `InfoTip`   | `memory-card#domain`                           |
-| 13 | `/memory/review`   | Rating buttons (4x)                              | `memory/review/+page.svelte:351-365`   | `InfoTip` per button | `memory-review#the-four-ratings`      |
-| 14 | `/memory/review`   | "Show answer" button                             | `memory/review/+page.svelte:317-320`   | `InfoTip`   | `concept-active-recall`                        |
-| 15 | `/memory/[id]`     | Page header                                      | `memory/[id]/+page.svelte:141-156`     | `PageHelp`  | `memory-card`                                  |
-| 16 | `/memory/[id]`     | Domain badge                                     | `memory/[id]/+page.svelte:147`         | `InfoTip`   | `memory-card#domain`                           |
-| 17 | `/memory/[id]`     | Type badge                                       | `memory/[id]/+page.svelte:148`         | `InfoTip`   | `memory-card#type`                             |
-| 18 | `/memory/[id]`     | Status badge                                     | `memory/[id]/+page.svelte:149-151`     | `InfoTip`   | `memory-card#lifecycle`                        |
-| 19 | `/memory/[id]`     | Source badge                                     | `memory/[id]/+page.svelte:152-154`     | `InfoTip`   | `memory-card#source`                           |
-| 20 | `/memory/[id]`     | Suspend / Archive / Reactivate buttons           | `memory/[id]/+page.svelte:265-316`     | `InfoTip` adjacent to each | `memory-card#lifecycle`         |
-| 21 | `/memory/[id]`     | Schedule stats dl (State/Due/Stability/Difficulty/Reviews/Lapses) | `memory/[id]/+page.svelte:326-333` | `InfoTip` per `<dt>` | `concept-fsrs` appropriate sections |
+| #   | Route            | Element                                                           | File:line                            | Primitive                  | helpId                               |
+| --- | ---------------- | ----------------------------------------------------------------- | ------------------------------------ | -------------------------- | ------------------------------------ |
+| 1   | `/memory`        | Page header                                                       | `memory/+page.svelte:27-37`          | `PageHelp`                 | `memory-dashboard`                   |
+| 2   | `/memory`        | "Due now" stat tile                                               | `memory/+page.svelte:40-47`          | `InfoTip`                  | `memory-review#how-scheduling-works` |
+| 3   | `/memory`        | "Reviewed today" stat tile                                        | `memory/+page.svelte:48-54`          | `InfoTip`                  | `memory-dashboard`                   |
+| 4   | `/memory`        | "Streak" stat tile                                                | `memory/+page.svelte:55-61`          | `InfoTip`                  | `memory-dashboard`                   |
+| 5   | `/memory`        | "Active cards" stat tile                                          | `memory/+page.svelte:62-67`          | `InfoTip`                  | `memory-dashboard`                   |
+| 6   | `/memory`        | State pills (4x: New / Learning / Review / Relearning)            | `memory/+page.svelte:73-88`          | `InfoTip` per pill         | `concept-fsrs#states`                |
+| 7   | `/memory`        | Domain row (total / due / % mastered)                             | `memory/+page.svelte:97-114`         | `InfoTip` on header        | `concept-fsrs#stability-and-mastery` |
+| 8   | `/memory/new`    | Page header                                                       | `memory/new/+page.svelte:74-81`      | `PageHelp`                 | `memory-new`                         |
+| 9   | `/memory/new`    | Domain / Type / Tags fields (3x)                                  | `memory/new/+page.svelte:141-174`    | `InfoTip` per field        | section anchors in `memory-new`      |
+| 10  | `/memory/browse` | Page header                                                       | `memory/browse/+page.svelte:131-138` | `PageHelp`                 | `memory-browse`                      |
+| 11  | `/memory/browse` | Filter labels + Status lifecycle                                  | `memory/browse/+page.svelte:159-192` | `InfoTip` per filter       | section anchors in `memory-browse`   |
+| 12  | `/memory/review` | Domain badge on question                                          | `memory/review/+page.svelte:296`     | `InfoTip`                  | `memory-card#domain`                 |
+| 13  | `/memory/review` | Rating buttons (4x)                                               | `memory/review/+page.svelte:351-365` | `InfoTip` per button       | `memory-review#the-four-ratings`     |
+| 14  | `/memory/review` | "Show answer" button                                              | `memory/review/+page.svelte:317-320` | `InfoTip`                  | `concept-active-recall`              |
+| 15  | `/memory/[id]`   | Page header                                                       | `memory/[id]/+page.svelte:141-156`   | `PageHelp`                 | `memory-card`                        |
+| 16  | `/memory/[id]`   | Domain badge                                                      | `memory/[id]/+page.svelte:147`       | `InfoTip`                  | `memory-card#domain`                 |
+| 17  | `/memory/[id]`   | Type badge                                                        | `memory/[id]/+page.svelte:148`       | `InfoTip`                  | `memory-card#type`                   |
+| 18  | `/memory/[id]`   | Status badge                                                      | `memory/[id]/+page.svelte:149-151`   | `InfoTip`                  | `memory-card#lifecycle`              |
+| 19  | `/memory/[id]`   | Source badge                                                      | `memory/[id]/+page.svelte:152-154`   | `InfoTip`                  | `memory-card#source`                 |
+| 20  | `/memory/[id]`   | Suspend / Archive / Reactivate buttons                            | `memory/[id]/+page.svelte:265-316`   | `InfoTip` adjacent to each | `memory-card#lifecycle`              |
+| 21  | `/memory/[id]`   | Schedule stats dl (State/Due/Stability/Difficulty/Reviews/Lapses) | `memory/[id]/+page.svelte:326-333`   | `InfoTip` per `<dt>`       | `concept-fsrs` appropriate sections  |
 
 **Verification:**
+
 - `bun run check` passes (validator picks up new ids as registered)
 - Walk each of the 5 memory routes in the dev server and confirm every flagged element has a working help affordance
 - No layout regressions — InfoTip triggers should sit inline without jitter
 
 **Finish criteria:**
+
 - One squash-merged PR titled `feat(help): memory-surface coverage pass`
 - 4 new help pages + 2 new concept-fsrs sections registered and linked
 - All 21 placements applied
@@ -189,6 +200,7 @@ All recommendations use `InfoTip` unless noted. Where a helpId like `memory-card
 ## Rules the agent must follow
 
 Non-negotiable:
+
 - Read `CLAUDE.md` at repo root first. Bun only. Svelte 5 runes only. `@ab/*` imports across libs. Biome tabs / single quotes / 120 / trailing commas / semicolons.
 - **NO AI attribution** in commits or PR bodies. No "Generated by Claude". No Co-Authored-By.
 - **Never use the word "honest"** as an agent qualifier.
@@ -206,7 +218,7 @@ Non-negotiable:
 
 Paste this into a fresh session:
 
-```
+```text
 You are picking up a help-system fix pass in airboss. Everything you need is in docs/work/handoffs/20260424-help-system-fix-pass.md. Read it in full before doing anything else.
 
 Execute Wave 1 and Wave 2 sequentially. Use `/ball-worktree` for every change, never edit from the main repo root. Merge Wave 1 before starting Wave 2.

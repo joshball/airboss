@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.5
 Title:           Cross-Country Planning with Cockpit Weather
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Diagnostic Puzzle
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-3', 'RM-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        On the ground, preflight planning. Student points to the cockpit weather display showing the clear corridor between cells.
 studentSpeech:Look, there's a gap right here between the cells. The display shows it's clear. If we depart in the next 10 minutes, we can shoot through that gap before the storms move east. Easy.
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student checks the timestamp -- image is 18 minutes old. You pull up the current NEXRAD on your phone. The "gap" has closed significantly. Cells are merging. Student looks surprised.
 studentSpeech:Wait, that's 18 minutes old? But it's always worked for me before. How much can weather change in 18 minutes?
@@ -93,7 +93,7 @@ criticalWindow:[ask, prompt]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student is processing the information. Looking between the cockpit display and your phone's current radar. The difference is stark. Student's confidence in the display is shaken.
 studentSpeech:So I can't trust this thing at all? Then what's the point of having it?
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> terminal_safe
 ```
 

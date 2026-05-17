@@ -30,15 +30,15 @@ Manual-only. The scaffold has no product features to exercise; the point is to p
 
 ## Auth paths
 
-| Scenario                                 | Expected                                                                             |
-| ---------------------------------------- | ------------------------------------------------------------------------------------ |
-| Visit `/` while signed out               | 302 to `/login?redirectTo=%2F`                                                       |
-| Sign in from `/login?redirectTo=%2F`     | 303 back to `/`                                                                      |
-| Sign in with bad password                | Stay on `/login`, red banner "Invalid email or password", form preserves email       |
-| Sign in as the `learner@` dev account    | Login succeeds; `/` returns 403 "Forbidden" (role gate rejects LEARNER)              |
-| POST to `/logout`                        | Session cleared; 303 to `/login`                                                     |
-| GET to `/logout` while signed in         | 302 to `/login`                                                                      |
-| GET `/login` while signed in             | 302 to `/`                                                                           |
+| Scenario                              | Expected                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| Visit `/` while signed out            | 302 to `/login?redirectTo=%2F`                                                 |
+| Sign in from `/login?redirectTo=%2F`  | 303 back to `/`                                                                |
+| Sign in with bad password             | Stay on `/login`, red banner "Invalid email or password", form preserves email |
+| Sign in as the `learner@` dev account | Login succeeds; `/` returns 403 "Forbidden" (role gate rejects LEARNER)        |
+| POST to `/logout`                     | Session cleared; 303 to `/login`                                               |
+| GET to `/logout` while signed in      | 302 to `/login`                                                                |
+| GET `/login` while signed in          | 302 to `/`                                                                     |
 
 ## Multi-spawn smoke
 
@@ -49,11 +49,11 @@ Manual-only. The scaffold has no product features to exercise; the point is to p
 
 ## Non-happy paths
 
-| Scenario                                                | Expected                                                 |
-| ------------------------------------------------------- | -------------------------------------------------------- |
-| Stop the DB container, reload `/`                       | `load` fails; handleError logs it; error page renders   |
-| Tamper with the `redirectTo` query (`//evil.com`)        | Login ignores it and lands on `/` instead                |
-| Submit form with an empty email                         | 400 "Email and password are required", form re-renders   |
+| Scenario                                          | Expected                                               |
+| ------------------------------------------------- | ------------------------------------------------------ |
+| Stop the DB container, reload `/`                 | `load` fails; handleError logs it; error page renders  |
+| Tamper with the `redirectTo` query (`//evil.com`) | Login ignores it and lands on `/` instead              |
+| Submit form with an empty email                   | 400 "Email and password are required", form re-renders |
 
 ## Automated checks
 

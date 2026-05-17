@@ -37,7 +37,6 @@ apps/study/memory, `#94a3b8` hint colour, missing `@ab/bc-sim` alias, missing
 `libs/activities` package.json) are all closed. Closing in bulk; the 2026-05 chunk
 reviews are the live source of truth for these surfaces.
 
-
 ## Summary
 
 Reviewed the study BC (`libs/bc/study/src/*`), the unified session runner (`apps/study/src/routes/(app)/sessions/[id]/`), the preset gallery (`apps/study/src/routes/(app)/session/start/`), supporting auth/constants/utils libs, and the sim app's worker protocol. Overall the ADR 012 substrate unification is clean and consistent -- rep outcomes are sourced from `session_item_result` throughout (calibration, dashboard, scenarios, knowledge). Two critical issues stand out: (1) the preset gallery's headline preset "Quick reps" (and "Safety procedures") will crash when the user picks them because `createPlanSchema` requires `certGoals.min(1)` while these presets pass `certGoals: []`, (2) the session runner's `topic` and `permanent` skip kinds don't actually mutate the plan or suspend the underlying card/scenario, so they behave identically to `today` despite ADR-documented semantics. Several major issues below affect rep-slot correctness defence-in-depth, streak computation with midnight boundaries, and redistribute comment accuracy.

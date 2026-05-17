@@ -8,7 +8,7 @@ type: scenario-script
 
 ## Metadata
 
-```
+```text
 Scenario ID:     1.3
 Title:           Vectors for the GPS Approach at Minimums
 Module:          1
@@ -19,19 +19,19 @@ Pattern:         Escalating Crisis
 
 ## FAA Topic Tags
 
-```
+```text
 faaTopics: [FAA_TOPIC.A_1]
 ```
 
 ## Competency Links
 
-```
+```text
 competencies: ['AV-3', 'AV-1']
 ```
 
 ## Student Model
 
-```
+```text
 Student Model:   Automation-Dependent
 Parameters:
   skillLevel:         0.5
@@ -51,7 +51,7 @@ Parameters:
 
 ### Tick 1
 
-```
+```text
 id:           tick_1
 scene:        Being vectored to the IAF, 5 miles out. GPS shows "RAIM NOT AVAILABLE" in amber. CDI flag appears. Student hasn't noticed -- looking at the approach plate.
 studentSpeech:Almost at the fix. Ready for the approach. Should I start configuring for descent?
@@ -72,7 +72,7 @@ criticalWindow:[]
 
 ### Tick 2
 
-```
+```text
 id:           tick_2
 scene:        Student sees the RAIM alert. CDI flag is displayed. Student looks confused and starts tapping the GPS, trying to make the alert go away.
 studentSpeech:RAIM not available? What does that mean? The approach is still loaded. Can we just fly it anyway? It was working a minute ago.
@@ -93,7 +93,7 @@ criticalWindow:[ask]
 
 ### Tick 3
 
-```
+```text
 id:           tick_3
 scene:        Student acknowledges the RAIM issue but hesitates. Trying to decide whether to request the ILS or ask ATC if the GPS approach is "still OK." ATC calls: "Turn right heading 360, vectors for the RNAV approach."
 studentSpeech:Maybe ATC can tell us if the GPS is working? Should I ask them? Or do I need to switch approaches? I don't remember the ILS frequency...
@@ -114,7 +114,7 @@ criticalWindow:[prompt]
 
 ### Tick 4
 
-```
+```text
 id:           tick_4
 scene:        Student has not communicated with ATC. Still on vectors for the RNAV. Approaching the IAF. ATC: "[Callsign], 2 miles from the fix, cleared RNAV 24 approach." Student looks at you, frozen.
 studentSpeech:They cleared us for the RNAV. Do I fly it? The GPS CDI is flagged but the course is still showing...
@@ -135,7 +135,7 @@ criticalWindow:[]
 
 ## Tick Graph
 
-```
+```text
 tick_1 -> tick_2 -> tick_3 -> tick_4 -> terminal_unsafe (ask/prompt/coach)
                         \         \-> terminal_safe (direct/take_controls)
                          \-> terminal_safe (coach/direct)

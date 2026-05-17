@@ -19,14 +19,14 @@ This week is the navigation map itself. Skip it and the rest of the course colla
 
 ## Lesson structure
 
-| File | Topic |
-| --- | --- |
-| 01-title-14-shape.md | The structural map -- title -> chapter -> subchapter -> part -> subpart -> section -> paragraph |
-| 02-how-to-read-a-citation.md | Citation parsing and the levels of granularity |
-| 03-companion-documents.md | AIM, AC, Chief Counsel, NTSB Part 830, FAA Orders |
-| 04-the-pilot-the-flight-the-operation.md | The framing that organizes the whole course |
-| drills.md | Timed location drills |
-| oral.md | "Walk me through Title 14 like you're showing it to a student" |
+| File                                     | Topic                                                                                           |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| 01-title-14-shape.md                     | The structural map -- title -> chapter -> subchapter -> part -> subpart -> section -> paragraph |
+| 02-how-to-read-a-citation.md             | Citation parsing and the levels of granularity                                                  |
+| 03-companion-documents.md                | AIM, AC, Chief Counsel, NTSB Part 830, FAA Orders                                               |
+| 04-the-pilot-the-flight-the-operation.md | The framing that organizes the whole course                                                     |
+| drills.md                                | Timed location drills                                                                           |
+| oral.md                                  | "Walk me through Title 14 like you're showing it to a student"                                  |
 
 ## Authoring status
 
