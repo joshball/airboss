@@ -34,9 +34,13 @@ test.describe('content census overview', () => {
 
 	test('intro prose explains the three census layers', async ({ page }) => {
 		await page.goto(ROUTES.CONTENT_CENSUS);
-		await expect(page.getByText(/Derived state/)).toBeVisible();
-		await expect(page.getByText(/Authored intent/)).toBeVisible();
-		await expect(page.getByText(/Explanation/)).toBeVisible();
+		// The three layers are listed inside the "How to read this census"
+		// section; scope to it so the assertion does not collide with the
+		// "Derived state" table column header.
+		const intro = page.locator('section[aria-label="How to read this census"]');
+		await expect(intro.getByText(/Derived state/)).toBeVisible();
+		await expect(intro.getByText(/Authored intent/)).toBeVisible();
+		await expect(intro.getByText(/Explanation/)).toBeVisible();
 	});
 
 	test('cross-links to the roadmap dashboard', async ({ page }) => {
