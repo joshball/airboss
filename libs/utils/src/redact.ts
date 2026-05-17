@@ -30,12 +30,17 @@ export function isSensitiveKey(key: string): boolean {
  * element-by-element; primitives pass through untouched. The implementation
  * guards against cycles by tracking visited objects -- audit payloads are
  * always JSON, but defense-in-depth costs us one Set lookup per node.
+ *
+ * On a cycle hit the placeholder is emitted, NOT the original object: this
+ * function's contract is a structural copy that never aliases caller state,
+ * and a cyclic subtree returned verbatim would (a) skip redaction inside it
+ * and (b) leak a live reference into the "redacted" result.
  */
 export function redactSensitive<T>(value: T): T {
 	const seen = new WeakSet<object>();
 	function walk(v: unknown): unknown {
 		if (v === null || typeof v !== 'object') return v;
-		if (seen.has(v as object)) return v; // cycle short-circuit
+		if (seen.has(v as object)) return REDACTED_PLACEHOLDER; // cycle short-circuit
 		seen.add(v as object);
 		if (Array.isArray(v)) return v.map(walk);
 		const out: Record<string, unknown> = {};

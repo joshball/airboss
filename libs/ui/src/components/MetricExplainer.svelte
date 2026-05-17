@@ -44,7 +44,11 @@ const { label, value, short, formula, glossaryHref, body, testidPrefix = 'metric
 
 let open = $state(false);
 let triggerEl = $state<HTMLButtonElement | null>(null);
-const popoverId = $derived(`metric-explainer-${label.replace(/\s+/g, '-').toLowerCase()}`);
+// Per-instance id: `$props.id()` guarantees uniqueness even when the same
+// metric label renders twice on a page (a per-row tile and a summary tile). A
+// label-derived id produced a duplicate `role="dialog"` `id`, so the trigger's
+// `aria-controls` was ambiguous. Matches Select / TextField.
+const popoverId = `metric-explainer-${$props.id()}`;
 
 function handleToggle() {
 	open = !open;
