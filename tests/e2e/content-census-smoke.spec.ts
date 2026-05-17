@@ -11,6 +11,9 @@
  *   - `/content` renders 14 corpus rows, each with a count + drill-down link.
  *   - `/content/wx-catalog` renders the inventory, the gap view, and visible
  *     what/why explanation text.
+ *   - `/content/knowledge-nodes` is a Phase-3 full drill-down -- a real gap
+ *     view (skeleton / cardless / dangling-edge gaps) and a value-ranked
+ *     next-list, every gap carrying the what/why/do triad.
  *   - A Phase-2 `census`-mode corpus shows a real inventory + metrics and an
  *     honest, labelled Layer-2 (Phase-3) placeholder for its gap view.
  *   - A stub corpus page shows the honest "pending" placeholder, not fakes.
@@ -82,17 +85,44 @@ test.describe('wx-catalog reference drill-down', () => {
 	});
 });
 
-test.describe('census-mode corpus drill-down', () => {
-	test('a Phase-2 corpus shows a real inventory, metrics, and a Layer-2 placeholder', async ({ page }) => {
+test.describe('knowledge-nodes full drill-down', () => {
+	test('renders a real gap view and a value-ranked next-list', async ({ page }) => {
 		await page.goto(ROUTES.CONTENT_CENSUS_CORPUS('knowledge-nodes'));
 		await expect(page.getByRole('heading', { level: 1, name: /^Knowledge nodes$/ })).toBeVisible();
+
+		// The "Full census" mode tag -- knowledge-nodes graduated past census mode.
+		await expect(page.getByText(/^Full census$/)).toBeVisible();
+
+		// Real inventory: one row per knowledge node.
+		const inventoryRows = page.locator('section[aria-label="Inventory"] tbody tr');
+		await expect(inventoryRows.first()).toBeVisible();
+
+		// Real metrics carry the explanatory triad.
+		await expect(page.getByRole('heading', { level: 2, name: /^Metrics$/ })).toBeVisible();
+		await expect(page.getByText('What it measures.').first()).toBeVisible();
+
+		// A real gap view -- not a Phase-3 placeholder. The skeleton-node gap
+		// is structural and always present while the graph has skeletons.
+		await expect(page.getByRole('heading', { level: 2, name: /^Gap view$/ })).toBeVisible();
+		await expect(page.getByText(/skeleton/i).first()).toBeVisible();
+		await expect(page.getByText(/deferred to Phase 3/i)).toHaveCount(0);
+
+		// The value-ranked next-list is rendered.
+		await expect(page.locator('section[aria-label="What to do next"] ol.next-list li').first()).toBeVisible();
+	});
+});
+
+test.describe('census-mode corpus drill-down', () => {
+	test('a Phase-2 corpus shows a real inventory, metrics, and a Layer-2 placeholder', async ({ page }) => {
+		await page.goto(ROUTES.CONTENT_CENSUS_CORPUS('cards'));
+		await expect(page.getByRole('heading', { level: 1, name: /^Cards \(spaced-rep\)$/ })).toBeVisible();
 
 		// The "Layer 1 census" mode tag, not a "pending" tag.
 		await expect(page.getByText(/^Layer 1 census$/)).toBeVisible();
 
-		// Real inventory: one row per knowledge node. The graph grows over
-		// time, so assert a floor (well above zero) rather than pinning an
-		// exact count that drifts with every new node.
+		// Real inventory: one row per node deck (every knowledge node is a
+		// deck, full or empty). The graph grows over time, so assert a floor
+		// well above zero rather than pinning an exact count that drifts.
 		const inventoryRows = page.locator('section[aria-label="Inventory"] tbody tr');
 		await expect(inventoryRows.first()).toBeVisible();
 		expect(await inventoryRows.count()).toBeGreaterThan(50);
