@@ -38,6 +38,7 @@ export interface AcSeedMappingEntry {
 
 const BUILT_IN_AC_SEED_MAPPINGS: readonly AcSeedMappingEntry[] = [
 	{ docSlug: '00-6', revision: 'b', documentSlug: 'ac-00-6', edition: 'AC 00-6B' },
+	{ docSlug: '00-45', revision: 'h', documentSlug: 'ac-00-45', edition: 'AC 00-45H' },
 	{ docSlug: '25-7', revision: 'd', documentSlug: 'ac-25-7', edition: 'AC 25-7D' },
 	{ docSlug: '61-65', revision: 'j', documentSlug: 'ac-61-65', edition: 'AC 61-65J' },
 	{ docSlug: '61-83', revision: 'j', documentSlug: 'ac-61-83', edition: 'AC 61-83J' },

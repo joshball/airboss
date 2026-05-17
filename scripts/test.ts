@@ -41,6 +41,7 @@ Subcommands:
   e2e:ui            Run Playwright in interactive UI mode
   e2e:install       Install Playwright browsers (one-time)
   integration       Run flightbag coverage sweep (Playwright HTTP-only, 32 workers)
+  all               Run every suite in sequence: unit, then e2e, then integration
   help              Show this help
 
 Any trailing arguments are passed through to the underlying runner.
@@ -54,7 +55,8 @@ Examples:
   bun run test e2e auth                Run e2e specs matching "auth"
   bun run test e2e:ui                  Open Playwright UI mode
   bun run test e2e:install             Install Playwright browsers
-  bun run test integration             Run flightbag coverage sweep`);
+  bun run test integration             Run flightbag coverage sweep
+  bun run test all                     Run unit + e2e + integration in sequence`);
 }
 
 if (first && helpFlags.has(first)) {
@@ -83,7 +85,20 @@ async function runWithLog(label: string, cmd: readonly string[]): Promise<void> 
 	if (code !== 0) process.exit(code);
 }
 
-if (first === 'watch') {
+if (first === 'all') {
+	// Run every suite in sequence. Each leg fails fast: `runWithLog` calls
+	// `process.exit` on a non-zero exit, so a unit failure never wastes the
+	// (slow) e2e + integration legs. Trailing args are ignored -- `all`
+	// always runs the complete matrix.
+	if (rest.length > 0) {
+		console.error(`test all: trailing arguments are not supported (got: ${rest.join(' ')})`);
+		process.exit(2);
+	}
+	await ensureSvelteKitSync();
+	await runWithLog('unit', ['bunx', 'vitest', 'run']);
+	await runWithLog('e2e', ['bunx', 'playwright', 'test']);
+	await runWithLog('integration', ['bunx', 'playwright', 'test', '--project=flightbag-coverage']);
+} else if (first === 'watch') {
 	await ensureSvelteKitSync();
 	await run(['bunx', 'vitest', ...rest]);
 } else if (first === 'coverage') {
