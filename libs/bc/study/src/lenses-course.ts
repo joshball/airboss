@@ -42,6 +42,7 @@ import { getCourseGaps, getCourseStepsByCourse } from './courses';
 import {
 	type CertGap,
 	computeMasteryRollup,
+	emptyMasteryRollup,
 	type Lens,
 	type LensLeaf,
 	type LensLeafMastery,
@@ -98,7 +99,7 @@ export interface CourseLensFilters {
 export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => {
 	const courseId = input.filters?.courseId;
 	if (courseId === undefined || courseId === '') {
-		return { tree: [], rollup: emptyRollup(), leaves: [] };
+		return { tree: [], rollup: emptyMasteryRollup(), leaves: [] };
 	}
 
 	// Goal weight resolution. When the goal is null (anonymous browse) the
@@ -119,7 +120,7 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 			.limit(1);
 		const link = linkRows[0];
 		if (link === undefined) {
-			return { tree: [], rollup: emptyRollup(), leaves: [] };
+			return { tree: [], rollup: emptyMasteryRollup(), leaves: [] };
 		}
 		goalWeight = link.weight;
 	}
@@ -131,7 +132,7 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 	const courseRows = await db.select().from(course).where(eq(course.id, courseId)).limit(1);
 	const courseRow = courseRows[0];
 	if (courseRow === undefined) {
-		return { tree: [], rollup: emptyRollup(), leaves: [] };
+		return { tree: [], rollup: emptyMasteryRollup(), leaves: [] };
 	}
 	const steps = await getCourseStepsByCourse(courseId, db);
 	if (steps.length === 0) {
@@ -142,10 +143,10 @@ export const courseLens: Lens<CourseLensFilters> = async (db, userId, input) => 
 			id: courseRow.id,
 			level: 'course',
 			title: courseRow.title,
-			rollup: emptyRollup(),
+			rollup: emptyMasteryRollup(),
 			children: [],
 		};
-		return { tree: [root], rollup: emptyRollup(), leaves: [] };
+		return { tree: [root], rollup: emptyMasteryRollup(), leaves: [] };
 	}
 
 	// Group every row by parent_id once; the recursion below reads from this
@@ -246,7 +247,7 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 	const courseId = input.filters?.courseId;
 	const syllabusId = input.filters?.syllabusId;
 	if (courseId === undefined || courseId === '' || syllabusId === undefined || syllabusId === '') {
-		return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+		return { tree: [], rollup: emptyMasteryRollup(), leaves: [], certGaps: [] };
 	}
 
 	// Goal weight resolution mirrors `courseLens`: anonymous browse falls
@@ -262,7 +263,7 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 			.limit(1);
 		const link = linkRows[0];
 		if (link === undefined) {
-			return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+			return { tree: [], rollup: emptyMasteryRollup(), leaves: [], certGaps: [] };
 		}
 		goalWeight = link.weight;
 	}
@@ -273,21 +274,21 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 	const courseRows = await db.select().from(course).where(eq(course.id, courseId)).limit(1);
 	const courseRow = courseRows[0];
 	if (courseRow === undefined) {
-		return { tree: [], rollup: emptyRollup(), leaves: [], certGaps: [] };
+		return { tree: [], rollup: emptyMasteryRollup(), leaves: [], certGaps: [] };
 	}
 	const steps = await getCourseStepsByCourse(courseId, db);
 	if (steps.length === 0) {
 		// Empty course -- still compute the gap list so consumers can render
 		// the cert side ("course is empty; PPL ACS still requires N leaves").
-		const gaps = await getCourseGaps(input.goal?.id ?? '', courseId, syllabusId, db);
+		const gaps = await getCourseGaps(courseId, syllabusId, db);
 		const root: LensTreeNode = {
 			id: courseRow.id,
 			level: 'course',
 			title: courseRow.title,
-			rollup: emptyRollup(),
+			rollup: emptyMasteryRollup(),
 			children: [],
 		};
-		return { tree: [root], rollup: emptyRollup(), leaves: [], certGaps: gaps };
+		return { tree: [root], rollup: emptyMasteryRollup(), leaves: [], certGaps: gaps };
 	}
 
 	// Group every row by parent once; the recursive walk reads from this map.
@@ -382,7 +383,7 @@ export const courseWithCertOverlayLens: Lens<CourseOverlayLensFilters> = async (
 		children: topLevelSubtrees,
 	};
 
-	const certGaps: CertGap[] = await getCourseGaps(input.goal?.id ?? '', courseId, syllabusId, db);
+	const certGaps: CertGap[] = await getCourseGaps(courseId, syllabusId, db);
 
 	return {
 		tree: [root],
@@ -536,17 +537,6 @@ export { aggregateCertCoverage, flattenLeavesDepthFirst } from './lens-tree-walk
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function emptyRollup(): MasteryRollup {
-	return {
-		totalLeaves: 0,
-		coveredLeaves: 0,
-		masteredLeaves: 0,
-		masteryFraction: 0,
-		coverageFraction: 0,
-		byEvidenceKind: {},
-	};
-}
 
 function emptyLeafMastery(): LensLeafMastery {
 	return {

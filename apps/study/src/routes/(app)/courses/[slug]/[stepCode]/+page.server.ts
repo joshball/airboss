@@ -9,51 +9,43 @@
  *
  *   - Leaf row (`is_leaf=true`, `level='step'`): renders the step framing
  *     + knowledge-node phases + (optional) encoded-text tab strip + cert
- *     overlay chip / gap list -- the legacy 7-phase reader, unchanged.
+ *     overlay chip / gap list.
  *   - Non-leaf row (`level='section'` or `'lesson'`): renders a landing
- *     page composed of the row's `body_md` framing + a list of children
- *     (title + level badge + truncated body + link).
+ *     page composed of the row's `body_md` framing + a list of children.
  *
- * Prev/next computed from the course's depth-first leaf flatten
- * (`flattenLeavesDepthFirst`). For a leaf row, prev/next are the adjacent
- * leaves. For a non-leaf row, "next" is the first-leaf-descendant of the
- * subtree; "prev" is the leaf immediately preceding that first descendant
- * in the flat list.
+ * Prev/next computed from the course's depth-first leaf flatten. When no
+ * overlay is active the loader skips the lens entirely and derives the
+ * leaf list directly from the already-fetched step rows -- the lens pass
+ * is reserved for the overlay path that genuinely needs `certGaps`.
  *
  * 404 conditions:
  *   - Course slug not found
- *   - Course `status === 'draft'`
+ *   - Course `status === 'draft'` (centralised in getReaderVisibleCourseBySlug)
  *   - Step code not found in this course
  *
- * Encoded-text family detection: when the linked node's slug appears in
- * `WX_DECODE_PRODUCT_SLUGS`, the loader sets `isEncodedText: true` so the
- * page renders the Decode/Understand/Triage tab strip above the body.
- *
- * Transition detection: when the linked node's `kind === 'transition'`,
- * the loader sets `isTransition: true` so the page renders the bridge-
- * styled body instead of the 7-phase scaffold.
+ * `renderMode` is a single discriminant the page reads instead of two
+ * independent booleans -- encoded-text and transition rendering are
+ * mutually exclusive treatments; transition wins when both apply.
  */
 
 import { requireAuth } from '@ab/auth';
-import { computePrevNextLeaves, flattenLeavesDepthFirst } from '@ab/bc-study';
+import { buildAncestorChain, computePrevNextLeaves, flattenLeafRowsDepthFirst, flattenLeavesDepthFirst } from '@ab/bc-study';
 import {
 	type CourseRow,
 	type CourseStepRow,
-	courseLens,
 	courseWithCertOverlayLens,
-	getCourseBySlug,
 	getCourseStepByCode,
 	getCourseStepsByCourse,
 	getNodesByIds,
 	getPrimaryGoal,
+	getReaderVisibleCourseBySlug,
 	type KnowledgeNodeRow,
-	type LensLeaf,
 	type LensResult,
+	type PrevNextLeaf,
 	pickOverlaySyllabus,
 	splitContentPhases,
 } from '@ab/bc-study/server';
 import {
-	COURSE_STATUSES,
 	type CourseStepLevel,
 	KNOWLEDGE_NODE_KINDS,
 	KNOWLEDGE_PHASE_ORDER,
@@ -61,6 +53,7 @@ import {
 	WX_DECODE_PRODUCT_SLUGS,
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
+import { stripMarkdown, truncatePlainText } from '@ab/utils';
 import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
@@ -80,7 +73,7 @@ export interface LandingChild {
 	code: string;
 	title: string;
 	level: CourseStepLevel;
-	/** body_md truncated to ~200 chars (whole-word boundary). */
+	/** body_md truncated to ~200 plain-text chars (whole-word boundary). */
 	bodyPreview: string;
 }
 
@@ -89,6 +82,12 @@ export interface PrevNextLink {
 	code: string;
 	title: string;
 }
+
+/**
+ * How the leaf body should render. Exclusive: a node that is both a
+ * transition and an encoded-text slug renders the transition bridge only.
+ */
+export type StepRenderMode = 'transition' | 'encoded-text' | 'phases';
 
 export interface CourseStepReaderData {
 	course: CourseRow;
@@ -118,85 +117,32 @@ export interface CourseStepReaderData {
 	/** Cert leaves under the overlay's syllabus that no step in this course
 	 *  covers. Empty when no overlay or no gaps. */
 	certGaps: LensResult['certGaps'];
-	/** True when a syllabus is overlaid for this learner's goal. Drives the
-	 *  cert chip + gaps panel rendering. */
+	/** True when a syllabus is overlaid for this learner's goal. */
 	overlayActive: boolean;
-	/** True when the linked node's slug matches `WX_DECODE_PRODUCT_SLUGS`. */
-	isEncodedText: boolean;
-	/** True when the linked node's `kind === 'transition'`. */
-	isTransition: boolean;
+	/** Single discriminant for how the leaf body renders. */
+	renderMode: StepRenderMode;
 }
 
 const BODY_PREVIEW_MAX = 200;
 
 /**
- * Truncate a body_md preview to ~200 chars, breaking at a word boundary
- * when the cut falls inside a word. Strips leading whitespace. Returns
- * the original string when it's already <= the cap.
+ * Build a plain-text body preview: strip Markdown first (so the cut never
+ * lands inside a `[link]` / `**bold**` token), then truncate on a code-point
+ * boundary at a word break.
  */
 function previewBody(body: string): string {
-	const trimmed = body.trim();
-	if (trimmed.length <= BODY_PREVIEW_MAX) return trimmed;
-	const slice = trimmed.slice(0, BODY_PREVIEW_MAX);
-	const lastSpace = slice.lastIndexOf(' ');
-	const head = lastSpace > BODY_PREVIEW_MAX / 2 ? slice.slice(0, lastSpace) : slice;
-	return `${head.trimEnd()}...`;
-}
-
-/**
- * Walk the parent chain from `row` upward and return an ordered list of
- * ancestors (root-first, NOT including `row` itself). Cap iterations at
- * the row count as a defensive cycle guard.
- */
-function buildBreadcrumbs(row: CourseStepRow, rowById: Map<string, CourseStepRow>): BreadcrumbCrumb[] {
-	const chain: BreadcrumbCrumb[] = [];
-	let parentId = row.parentId;
-	const safety = rowById.size;
-	for (let i = 0; i < safety && parentId !== null; i += 1) {
-		const ancestor = rowById.get(parentId);
-		if (ancestor === undefined) break;
-		chain.push({ code: ancestor.code, title: ancestor.title, level: ancestor.level as CourseStepLevel });
-		parentId = ancestor.parentId;
-	}
-	chain.reverse();
-	return chain;
-}
-
-/**
- * Compute prev/next leaf links for the current row, mapping the lens-pure
- * `computePrevNextLeaves` result back onto course-step `code` URLs.
- *
- * Returns `{ prev: null, next: null }` when the leaf list is empty or the
- * current row is unknown to the tree.
- */
-function computePrevNext(
-	current: CourseStepRow,
-	rowById: Map<string, CourseStepRow>,
-	leaves: ReadonlyArray<LensLeaf>,
-): { prev: PrevNextLink | null; next: PrevNextLink | null } {
-	const rows = Array.from(rowById.values()).map((row) => ({ id: row.id, parentId: row.parentId }));
-	const result = computePrevNextLeaves(current.id, rows, leaves);
-	const toLink = (leaf: { id: string; title: string } | null): PrevNextLink | null => {
-		if (leaf === null) return null;
-		const row = rowById.get(leaf.id);
-		if (row === undefined) return null;
-		return { code: row.code, title: leaf.title };
-	};
-	return { prev: toLink(result.prev), next: toLink(result.next) };
+	return truncatePlainText(stripMarkdown(body), BODY_PREVIEW_MAX);
 }
 
 export const load: PageServerLoad = async (event) => {
 	const user = requireAuth(event);
-	const course = await getCourseBySlug(event.params.slug);
+	const course = await getReaderVisibleCourseBySlug(event.params.slug);
 	if (course === null) throw error(404, 'Course not found.');
-	if (course.status === COURSE_STATUSES.DRAFT) throw error(404, 'Course not found.');
 
 	const step = await getCourseStepByCode(course.id, event.params.stepCode);
 	if (step === null) throw error(404, 'Step not found.');
-	// Read `is_leaf` directly from the row (course-tree-arbitrary-depth WP,
-	// Phase E -- canonical "this is a study-able row" filter, generalises
-	// across N-level trees). `level === 'step'` is a subset and stays valid
-	// for 2-level content; the column form expresses the intent more clearly.
+	// Read `is_leaf` directly from the row -- the canonical "study-able row"
+	// filter that generalises across N-level trees.
 	const isLeaf = step.isLeaf;
 
 	const [primaryGoal, nodeRows, allSteps] = await Promise.all([
@@ -207,43 +153,50 @@ export const load: PageServerLoad = async (event) => {
 	const node = isLeaf ? (nodeRows[0] ?? null) : null;
 
 	const overlaySyllabusId = await pickOverlaySyllabus(primaryGoal);
-	const overlayActive = overlaySyllabusId !== null && primaryGoal !== null;
+	// `pickOverlaySyllabus` returns null whenever `primaryGoal` is null, so a
+	// non-null `overlaySyllabusId` already implies a non-null goal.
+	const overlayActive = overlaySyllabusId !== null;
 
 	let certGaps: LensResult['certGaps'] = [];
 	let certChip: { code: string } | null = null;
-	// Run a lens pass to get the flattened leaf list for prev/next. Use the
-	// overlay lens when an overlay is active (it also yields certChip /
-	// certGaps in the same call); otherwise the cheaper plain course lens.
-	const lensResult: LensResult =
-		overlayActive && overlaySyllabusId !== null && primaryGoal !== null
-			? await courseWithCertOverlayLens(db, user.id, {
-					goal: primaryGoal,
-					filters: { courseId: course.id, syllabusId: overlaySyllabusId },
-				})
-			: await courseLens(db, user.id, {
-					goal: primaryGoal,
-					filters: { courseId: course.id },
-				});
+	let leafList: PrevNextLeaf[];
 
-	if (overlayActive) {
+	if (overlayActive && overlaySyllabusId !== null && primaryGoal !== null) {
+		// Overlay path: the lens yields certChip / certGaps AND the leaf list
+		// for prev/next in one pass.
+		const lensResult = await courseWithCertOverlayLens(db, user.id, {
+			goal: primaryGoal,
+			filters: { courseId: course.id, syllabusId: overlaySyllabusId },
+		});
 		certGaps = lensResult.certGaps ?? [];
-		const matchingLeaf = lensResult.leaves.find((leaf: LensLeaf) => leaf.id === step.id);
+		const matchingLeaf = lensResult.leaves.find((leaf) => leaf.id === step.id);
 		if (matchingLeaf?.sources?.inCert === true && matchingLeaf.sources.certCode !== undefined) {
 			certChip = { code: matchingLeaf.sources.certCode };
 		}
+		leafList = flattenLeavesDepthFirst(lensResult.tree);
+	} else {
+		// No overlay: prev/next is pure tree topology. Derive the leaf list
+		// from the already-fetched rows -- no second course-tree query, no
+		// gap calculation the page would discard.
+		leafList = flattenLeafRowsDepthFirst(
+			allSteps.map((row) => ({
+				id: row.id,
+				parentId: row.parentId,
+				ordinal: row.ordinal,
+				title: row.title,
+				isLeaf: row.isLeaf,
+			})),
+		);
 	}
 
+	// Hoist the split: `splitContentPhases` parses the whole node body once,
+	// then the map reads from the cached result rather than re-parsing per
+	// phase.
+	const phaseSplit = node !== null ? splitContentPhases(node.contentMd ?? '') : null;
 	const phases =
-		node !== null
-			? KNOWLEDGE_PHASE_ORDER.map((phase) => ({
-					phase,
-					body: splitContentPhases(node.contentMd ?? '')[phase] ?? null,
-				}))
+		phaseSplit !== null
+			? KNOWLEDGE_PHASE_ORDER.map((phase) => ({ phase, body: phaseSplit[phase] ?? null }))
 			: [];
-
-	// Build helpers off the full step list.
-	const rowById = new Map<string, CourseStepRow>();
-	for (const row of allSteps) rowById.set(row.id, row);
 
 	// Direct children of the current row (sorted by ordinal). Only populated
 	// for non-leaf rows; leaves have no children at the schema level.
@@ -261,15 +214,41 @@ export const load: PageServerLoad = async (event) => {
 		}
 	}
 
-	const breadcrumbs = buildBreadcrumbs(step, rowById);
-	const leafList = flattenLeavesDepthFirst(lensResult.tree);
-	const { prev, next } = computePrevNext(step, rowById, leafList);
+	// Breadcrumbs via the shared BC tree-walk helper.
+	const ancestorChain = buildAncestorChain(
+		step.id,
+		allSteps.map((row) => ({ id: row.id, parentId: row.parentId, code: row.code, title: row.title, level: row.level })),
+	);
+	const breadcrumbs: BreadcrumbCrumb[] = ancestorChain.map((c) => ({
+		code: c.code,
+		title: c.title,
+		level: c.level as CourseStepLevel,
+	}));
 
-	// `knowledge_node.id` is the kebab-case slug (the table's primary key
-	// is the author-assigned slug per schema.ts). Compare against the
-	// constant array directly.
+	// Prev/next: map the lens-pure result back onto course-step codes.
+	const codeById = new Map<string, string>();
+	for (const row of allSteps) codeById.set(row.id, row.code);
+	const prevNext = computePrevNextLeaves(
+		step.id,
+		allSteps.map((row) => ({ id: row.id, parentId: row.parentId })),
+		leafList,
+	);
+	const toLink = (leaf: { id: string; title: string } | null): PrevNextLink | null => {
+		if (leaf === null) return null;
+		const code = codeById.get(leaf.id);
+		if (code === undefined) return null;
+		return { code, title: leaf.title };
+	};
+	const prev = toLink(prevNext.prev);
+	const next = toLink(prevNext.next);
+
+	// `knowledge_node.id` is the kebab-case slug (the table's primary key is
+	// the author-assigned slug). Compare against the constant array directly.
 	const isEncodedText = node !== null && (WX_DECODE_PRODUCT_SLUGS as readonly string[]).includes(node.id);
 	const isTransition = node !== null && node.kind === KNOWLEDGE_NODE_KINDS.TRANSITION;
+	// Exclusive: a node that is both a transition and an encoded-text slug
+	// renders the transition bridge only -- the two are incoherent together.
+	const renderMode: StepRenderMode = isTransition ? 'transition' : isEncodedText ? 'encoded-text' : 'phases';
 
 	return {
 		course,
@@ -284,7 +263,6 @@ export const load: PageServerLoad = async (event) => {
 		certChip,
 		certGaps,
 		overlayActive,
-		isEncodedText,
-		isTransition,
+		renderMode,
 	} satisfies CourseStepReaderData;
 };

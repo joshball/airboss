@@ -14,25 +14,27 @@ an author can see which chart a step is asking for. In prod the caption is
 hidden and only the chart itself renders.
 -->
 <script lang="ts">
+import { ROUTES } from '@ab/constants';
+
 interface Props {
 	slug: string;
 }
 
 let { slug }: Props = $props();
 
-// Vite's `import.meta.env.DEV` is true in dev + test; false in prod.
-// Avoids `$app/environment` so the component is testable in isolation
-// (Svelte's `$app/*` aliases require SvelteKit's vite plugin loaded).
-const isDev = import.meta.env.DEV ?? false;
+// Vite's `import.meta.env.DEV` is always a boolean (true in dev + test,
+// false in prod). Avoids `$app/environment` so the component is testable
+// in isolation (Svelte's `$app/*` aliases require SvelteKit's vite plugin).
+const isDev = import.meta.env.DEV;
 
 // The slug is path-shaped (`wx-scenarios/<id>/<kind>`). The server route's
-// `[...slug]` catch-all consumes the slashes transparently; no encoding
-// needed at this layer.
-const chartUrl = $derived(`/api/charts/${slug}/chart.svg`);
+// `[...slug]` catch-all consumes the slashes transparently; `ROUTES.API_CHART`
+// passes the slug verbatim for that reason.
+const chartUrl = $derived(ROUTES.API_CHART(slug));
 </script>
 
-<figure class="chart" aria-label={`Chart: ${slug}`}>
-	<img class="chart-image" src={chartUrl} alt={`Chart ${slug}`} loading="lazy" />
+<figure class="chart">
+	<img class="chart-image" src={chartUrl} alt="Weather chart" loading="lazy" />
 	{#if isDev}
 		<figcaption class="caption">
 			<code>{slug}</code>

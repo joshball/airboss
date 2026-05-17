@@ -9,12 +9,16 @@
  *   - addSection:     create sections/<file>.yaml, re-run seed
  *   - deleteSection:  remove sections/<file>.yaml, re-run seed (orphans
  *                     surface for cleanup)
- *   - reorderSections: re-emit each section file with new ordinal, re-run
  *   - deleteCourse:   remove the entire course/courses/<slug>/ dir, re-run
  *   - cleanupOrphans: DELETE the orphan rows the seed reported
  *
  * Every save backs up the YAML before writing; on seed failure the backup
  * is restored and the form returns a `seed failed: <message>` error.
+ *
+ * Path-traversal hardening: the `[slug]` route param + the `filename` /
+ * `code` form fields are validated against `course-path-safety.ts` guards
+ * before any path construction -- an authoring-role account is privilege
+ * containment, not input validation.
  */
 
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from 'node:fs';
@@ -24,6 +28,7 @@ import { requireRole } from '@ab/auth';
 import {
 	type CourseRow,
 	type CourseStepRow,
+	countGoalsReferencingCourse,
 	courseManifestSchema,
 	courseSectionSchema,
 	deleteCourseRow,
@@ -35,12 +40,15 @@ import {
 	COURSE_STATUS_VALUES,
 	COURSE_STATUSES,
 	COURSE_STEP_LEVELS,
+	COURSE_TITLE_MAX_LENGTH,
 	type CourseStatus,
 	ROLES,
 	ROUTES,
 } from '@ab/constants';
+import { db } from '@ab/db/connection';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { parse } from 'yaml';
+import { assertResolvedUnder, assertSafeSlug, isSafeCode, isSafeSectionFilename } from '$lib/server/course-path-safety';
 import { COURSES_DIR, CourseSeedError, runCourseSeed } from '$lib/server/course-seed';
 import { emitManifest, emitSection } from '$lib/server/course-yaml-emit';
 import type { Actions, PageServerLoad } from './$types';
@@ -73,43 +81,105 @@ function manifestPath(slug: string): string {
 	return resolve(COURSES_DIR, slug, 'manifest.yaml');
 }
 
-function loadSectionsFromDisk(slug: string): SectionListEntry[] {
+/**
+ * Parsed on-disk section, including the inline step list. The orphan
+ * detection needs the full step set; the editor section list only needs
+ * the summary fields.
+ */
+interface ParsedDiskSection {
+	entry: SectionListEntry;
+	stepCodes: string[];
+}
+
+/**
+ * Read + parse every `sections/*.yaml` for a slug. Returns one entry per
+ * valid file with the section summary AND the set of inline step codes
+ * (recursively, lessons + steps). Malformed files are skipped (they
+ * surface as seed errors). The slug is assumed already validated by
+ * `assertSafeSlug`.
+ */
+function loadDiskSections(slug: string): ParsedDiskSection[] {
 	const dir = sectionsDir(slug);
 	if (!existsSync(dir)) return [];
 	const filenames = readdirSync(dir)
 		.filter((f) => f.endsWith('.yaml'))
 		.sort();
-	const entries: SectionListEntry[] = [];
+	const result: ParsedDiskSection[] = [];
 	for (const filename of filenames) {
 		const raw = readFileSync(resolve(dir, filename), 'utf8');
 		const parsed = courseSectionSchema.safeParse(parse(raw));
 		if (!parsed.success) continue; // malformed section file -- skip; surfaces in seed errors
-		entries.push({
-			filename,
-			code: parsed.data.code,
-			title: parsed.data.title,
-			ordinal: parsed.data.ordinal,
-			stepCount: parsed.data.steps.length,
+		const stepCodes: string[] = [];
+		const collect = (nodes: ReadonlyArray<{ code: string; level?: string; steps?: unknown }>): void => {
+			for (const node of nodes) {
+				stepCodes.push(node.code);
+				if (node.level === COURSE_STEP_LEVELS.LESSON && Array.isArray(node.steps)) {
+					collect(node.steps as Array<{ code: string; level?: string; steps?: unknown }>);
+				}
+			}
+		};
+		collect(parsed.data.steps);
+		result.push({
+			entry: {
+				filename,
+				code: parsed.data.code,
+				title: parsed.data.title,
+				ordinal: parsed.data.ordinal,
+				stepCount: parsed.data.steps.length,
+			},
+			stepCodes,
 		});
 	}
-	entries.sort((a, b) => a.ordinal - b.ordinal);
-	return entries;
+	result.sort((a, b) => a.entry.ordinal - b.entry.ordinal);
+	return result;
+}
+
+function loadSectionsFromDisk(slug: string): SectionListEntry[] {
+	return loadDiskSections(slug).map((s) => s.entry);
+}
+
+/**
+ * Detect orphan `course_step` rows: DB rows whose code is present in
+ * neither the section files NOR their inline steps/lessons. Shared by the
+ * loader (which surfaces the orphan panel) and `cleanupOrphans` (which
+ * deletes them) so the two cannot drift -- before this, the loader only
+ * looked at section codes and silently hid orphan step rows.
+ */
+function detectOrphans(slug: string, dbSteps: ReadonlyArray<CourseStepRow>): OrphanEntry[] {
+	const sections = loadDiskSections(slug);
+	const codesOnDisk = new Set<string>();
+	for (const section of sections) {
+		codesOnDisk.add(section.entry.code);
+		for (const code of section.stepCodes) codesOnDisk.add(code);
+	}
+	return dbSteps
+		.filter((row) => !codesOnDisk.has(row.code))
+		.map((row) => ({ id: row.id, code: row.code, title: row.title }));
+}
+
+/**
+ * Map an unexpected (non-`CourseSeedError`) failure to a generic
+ * client-facing message and log the detail server-side. Raw DB / driver
+ * error text must never reach the browser.
+ */
+function genericFailure(intent: string, err: unknown) {
+	console.error(`[hangar/courses] ${intent} unexpected failure:`, err);
+	return fail(400, { intent, error: 'Action failed unexpectedly. Check server logs.' });
 }
 
 export const load: PageServerLoad = async (event) => {
 	requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 	const slug = event.params.slug;
+	assertSafeSlug(slug);
 	const course = await getCourseBySlug(slug);
 	if (course === null) throw error(404, 'Course not found.');
 
 	const sections = loadSectionsFromDisk(slug);
-	// Detect orphan course_step rows: rows present in DB but no matching
-	// section file on disk. The hangar UI surfaces them for cleanup.
+	// Detect orphan course_step rows: rows present in DB but absent from the
+	// on-disk section files (sections + inline lessons/steps). The hangar
+	// UI surfaces them for cleanup.
 	const dbSteps = await getCourseStepsByCourse(course.id);
-	const sectionCodesOnDisk = new Set(sections.map((s) => s.code));
-	const orphans: OrphanEntry[] = dbSteps
-		.filter((row) => row.level === COURSE_STEP_LEVELS.SECTION && !sectionCodesOnDisk.has(row.code))
-		.map((row: CourseStepRow) => ({ id: row.id, code: row.code, title: row.title }));
+	const orphans = detectOrphans(slug, dbSteps);
 
 	return { course, sections, orphans } satisfies CourseEditorData;
 };
@@ -129,7 +199,8 @@ interface RunSavePayload {
 /**
  * Apply a batch of YAML writes/deletes, run the seed, return the form
  * outcome. On seed failure: restore every backup and return a
- * `seed failed: <msg>` form error.
+ * `seed failed: <msg>` form error. Revert failures are collected and
+ * surfaced so the user knows the disk is in a partially-mutated state.
  */
 async function runSave(payload: RunSavePayload) {
 	const backups = new Map<string, string | null>();
@@ -153,19 +224,31 @@ async function runSave(payload: RunSavePayload) {
 		await runCourseSeed(payload.slug);
 		return { intent: payload.intent, success: true } as const;
 	} catch (err) {
-		// Revert every mutation. Skip ops whose backup says "did not exist
-		// before" if the file was created during the failed run.
+		// Revert every mutation. Collect any revert failure so the user is
+		// told the disk is in a partially-mutated state.
+		const revertFailures: string[] = [];
 		for (const [path, content] of backups) {
-			if (content === null) {
-				if (existsSync(path)) {
-					await unlink(path).catch(() => {});
+			try {
+				if (content === null) {
+					if (existsSync(path)) await unlink(path);
+				} else {
+					await writeFile(path, content, 'utf8');
 				}
-			} else {
-				await writeFile(path, content, 'utf8').catch(() => {});
+			} catch (revertErr) {
+				console.error(`[hangar/courses] revert failed for ${path}:`, revertErr);
+				revertFailures.push(path);
 			}
 		}
-		const message = err instanceof CourseSeedError ? err.message : err instanceof Error ? err.message : String(err);
-		return fail(400, { intent: payload.intent, error: `seed failed: ${message}` });
+		const isSeedError = err instanceof CourseSeedError;
+		if (!isSeedError) {
+			console.error(`[hangar/courses] ${payload.intent} unexpected failure:`, err);
+		}
+		const detail = isSeedError ? err.message : 'unexpected error (see server logs)';
+		let message = `seed failed: ${detail}`;
+		if (revertFailures.length > 0) {
+			message += `; WARNING: ${revertFailures.length} file(s) could not be reverted -- run 'git checkout course/courses/${payload.slug}' to restore`;
+		}
+		return fail(400, { intent: payload.intent, error: message });
 	}
 }
 
@@ -173,17 +256,25 @@ export const actions: Actions = {
 	updateManifest: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const form = await event.request.formData();
 		const title = String(form.get('title') ?? '').trim();
 		const description = String(form.get('description') ?? '');
 		const statusRaw = String(form.get('status') ?? COURSE_STATUSES.ACTIVE);
 		if (title === '') return fail(400, { intent: 'updateManifest', error: 'Title is required.' });
+		if (title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, {
+				intent: 'updateManifest',
+				error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.`,
+			});
+		}
 		if (!(COURSE_STATUS_VALUES as readonly string[]).includes(statusRaw)) {
 			return fail(400, { intent: 'updateManifest', error: 'Invalid status.' });
 		}
 		const status = statusRaw as CourseStatus;
 
 		const path = manifestPath(slug);
+		assertResolvedUnder(COURSES_DIR, path);
 		if (!existsSync(path)) return fail(404, { intent: 'updateManifest', error: 'Manifest file missing.' });
 
 		// Re-parse the existing manifest to preserve fields the form doesn't
@@ -213,6 +304,7 @@ export const actions: Actions = {
 	addSection: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const form = await event.request.formData();
 		const code = String(form.get('code') ?? '').trim();
 		const title = String(form.get('title') ?? '').trim();
@@ -220,9 +312,23 @@ export const actions: Actions = {
 		const bodyMd = String(form.get('body_md') ?? '');
 
 		if (code === '') return fail(400, { intent: 'addSection', error: 'Code is required.' });
+		if (!isSafeCode(code)) {
+			return fail(400, { intent: 'addSection', error: 'Code must be lowercase alphanumeric with dots or hyphens.' });
+		}
 		if (title === '') return fail(400, { intent: 'addSection', error: 'Title is required.' });
+		if (title.length > COURSE_TITLE_MAX_LENGTH) {
+			return fail(400, { intent: 'addSection', error: `Title must be ${COURSE_TITLE_MAX_LENGTH} characters or fewer.` });
+		}
 		if (!Number.isFinite(ordinalRaw) || ordinalRaw < 0) {
 			return fail(400, { intent: 'addSection', error: 'Ordinal must be a non-negative integer.' });
+		}
+
+		// Pre-validate ordinal uniqueness against the existing sections so the
+		// user gets a friendly field-level message rather than a raw seed error
+		// after a write-then-revert.
+		const existingSections = loadSectionsFromDisk(slug);
+		if (existingSections.some((s) => s.ordinal === ordinalRaw)) {
+			return fail(400, { intent: 'addSection', error: 'Ordinal already used by another section.' });
 		}
 
 		const dir = sectionsDir(slug);
@@ -231,7 +337,10 @@ export const actions: Actions = {
 			.toLowerCase()
 			.replace(/[^a-z0-9]+/g, '-')
 			.replace(/^-|-$/g, '')}.yaml`;
+		// `code` is allowlisted and `title` is regex-scrubbed, so the filename
+		// is a bare basename -- assert the resolved path to be belt-and-braces.
 		const path = resolve(dir, filename);
+		assertResolvedUnder(dir, path);
 		if (existsSync(path)) {
 			return fail(400, { intent: 'addSection', error: `Section file ${filename} already exists.` });
 		}
@@ -252,14 +361,23 @@ export const actions: Actions = {
 	deleteSection: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const form = await event.request.formData();
 		const filename = String(form.get('filename') ?? '').trim();
 		if (filename === '') return fail(400, { intent: 'deleteSection', error: 'Missing filename.' });
-
-		const path = resolve(sectionsDir(slug), filename);
-		if (!existsSync(path)) {
+		if (!isSafeSectionFilename(filename)) {
+			return fail(400, { intent: 'deleteSection', error: 'Invalid section filename.' });
+		}
+		// Allowlist: the filename must be one of the section files actually on
+		// disk. The UI only ever offers real filenames; a crafted request that
+		// names something else is rejected.
+		const onDisk = new Set(loadSectionsFromDisk(slug).map((s) => s.filename));
+		if (!onDisk.has(filename)) {
 			return fail(404, { intent: 'deleteSection', error: 'Section file not found.' });
 		}
+
+		const path = resolve(sectionsDir(slug), filename);
+		assertResolvedUnder(sectionsDir(slug), path);
 		return runSave({
 			slug,
 			intent: 'deleteSection',
@@ -270,29 +388,33 @@ export const actions: Actions = {
 	deleteCourse: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const course = await getCourseBySlug(slug);
 		if (course === null) return fail(404, { intent: 'deleteCourse', error: 'Course not found.' });
 
-		// Remove the YAML directory first; then drop the DB row directly
-		// (the seed pipeline does not auto-delete orphans). The
-		// `goal_course.course_id` FK is RESTRICT, so a course in any
-		// goal rejects this with a Postgres error -- caught below.
-		const dir = resolve(COURSES_DIR, slug);
-		if (existsSync(dir)) {
-			rmSync(dir, { recursive: true, force: true });
+		// Check for blocking `goal_course` references BEFORE destroying the
+		// YAML directory. The `goal_course.course_id` FK is RESTRICT; deleting
+		// the directory first and discovering the FK block second left disk
+		// and DB inconsistent. Detect the block up front and bail with the
+		// directory intact.
+		const referencingGoals = await countGoalsReferencingCourse(course.id);
+		if (referencingGoals > 0) {
+			return fail(400, {
+				intent: 'deleteCourse',
+				error: `Course is referenced by ${referencingGoals} goal(s); remove it from those goals first.`,
+			});
 		}
+
+		const dir = resolve(COURSES_DIR, slug);
+		assertResolvedUnder(COURSES_DIR, dir);
 		try {
 			await deleteCourseRow(course.id);
 		} catch (err) {
-			// Restore-by-recreating-files isn't realistic at this point (we
-			// already nuked the dir); surface the FK violation so the user
-			// can clean up the goal_course rows first. The git-tracked YAML
-			// can be `git checkout`-ed back.
-			const message = err instanceof Error ? err.message : String(err);
-			return fail(400, {
-				intent: 'deleteCourse',
-				error: `delete blocked: ${message}. Restore the YAML directory with git if you cancel.`,
-			});
+			return genericFailure('deleteCourse', err);
+		}
+		// Remove the YAML directory only after the DB row delete succeeded.
+		if (existsSync(dir)) {
+			rmSync(dir, { recursive: true, force: true });
 		}
 		throw redirect(303, ROUTES.HANGAR_COURSES);
 	},
@@ -300,27 +422,23 @@ export const actions: Actions = {
 	cleanupOrphans: async (event) => {
 		requireRole(event, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN);
 		const slug = event.params.slug;
+		assertSafeSlug(slug);
 		const course = await getCourseBySlug(slug);
 		if (course === null) return fail(404, { intent: 'cleanupOrphans', error: 'Course not found.' });
 
-		// Re-detect orphans (POST might race a competing edit) and delete
-		// any course_step row whose code is not present in the on-disk
-		// section files.
-		const sections = loadSectionsFromDisk(slug);
-		const codesOnDisk = new Set(sections.map((s) => s.code));
-		// Add inline step codes too -- a section file's steps belong on disk.
-		for (const section of sections) {
-			const path = resolve(sectionsDir(slug), section.filename);
-			const raw = readFileSync(path, 'utf8');
-			const parsed = courseSectionSchema.safeParse(parse(raw));
-			if (parsed.success) {
-				for (const step of parsed.data.steps) codesOnDisk.add(step.code);
-			}
-		}
+		// Re-detect orphans (POST might race a competing edit) using the same
+		// shared detection the loader's panel uses, then delete every orphan
+		// row inside one transaction so cleanup is all-or-nothing.
 		const dbSteps = await getCourseStepsByCourse(course.id);
-		const orphanRows = dbSteps.filter((r) => !codesOnDisk.has(r.code));
-		for (const row of orphanRows) {
-			await deleteCourseStep(row.id);
+		const orphanRows = detectOrphans(slug, dbSteps);
+		try {
+			await db.transaction(async (tx) => {
+				for (const row of orphanRows) {
+					await deleteCourseStep(row.id, tx);
+				}
+			});
+		} catch (err) {
+			return genericFailure('cleanupOrphans', err);
 		}
 		return { intent: 'cleanupOrphans', success: true, removed: orphanRows.length };
 	},

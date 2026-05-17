@@ -13,7 +13,7 @@ import { ENCODED_TEXT_LADDER_TAB_LABELS, ENCODED_TEXT_LADDER_TABS } from '@ab/co
 <aside class="ladder" aria-label="Skill ladder">
 	<span class="ladder-eyebrow">Skill ladder</span>
 	<ul class="tabs" role="list">
-		{#each ENCODED_TEXT_LADDER_TABS as tab (tab)}
+		{#each ENCODED_TEXT_LADDER_TABS as tab, i (i)}
 			<li class="tab">{ENCODED_TEXT_LADDER_TAB_LABELS[tab]}</li>
 		{/each}
 	</ul>

@@ -1,9 +1,10 @@
 /**
  * Unit tests for the recursive course-tree validator in
- * `scripts/db/seed-courses.ts`. Phase B (course-tree-arbitrary-depth WP)
- * replaced the 2-level partition with a depth-first walk; these cases
- * cover every rejection introduced by the generalisation plus the
- * pre-existing rejections that still fire from the new walker.
+ * `libs/bc/study/src/seed-courses-validator.ts`. Phase B
+ * (course-tree-arbitrary-depth WP) replaced the 2-level partition with a
+ * depth-first walk; these cases cover every rejection introduced by the
+ * generalisation plus the pre-existing rejections that still fire from the
+ * new walker.
  *
  * The validator is pure: no DB, no filesystem reads, no async. We synthesise
  * `CourseManifest` + `ParsedSection[]` literals and call `validateCourseTree`
@@ -12,9 +13,8 @@
  * 3-level fixture; those land in the seed-smoke playwright suite.
  */
 
-import type { CourseManifest, CourseSection, CourseTreeNode } from '@ab/bc-study';
+import { CourseSeedError, type CourseManifest, type CourseSection, type CourseTreeNode, type ParsedSection, validateCourseTree } from '@ab/bc-study';
 import { describe, expect, it } from 'vitest';
-import { CourseSeedError, type ParsedSection, validateCourseTree } from './seed-courses-validator';
 
 // ---------------------------------------------------------------------------
 // Synthetic-tree builders -- keep tests readable

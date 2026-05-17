@@ -26,7 +26,14 @@
  */
 
 import { bauthUser } from '@ab/auth/schema';
-import { COURSE_KINDS, COURSE_STATUSES, COURSE_STEP_LEVELS, SYLLABUS_STATUSES } from '@ab/constants';
+import {
+	COURSE_KINDS,
+	COURSE_STATUSES,
+	COURSE_STEP_LEVELS,
+	GOAL_SYLLABUS_WEIGHT_MAX,
+	GOAL_SYLLABUS_WEIGHT_MIN,
+	SYLLABUS_STATUSES,
+} from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { generateAuthId, generateSyllabusId, generateSyllabusNodeId, generateSyllabusNodeLinkId } from '@ab/utils';
 import { and, eq } from 'drizzle-orm';
@@ -45,7 +52,21 @@ import {
 	upsertCourse,
 	upsertCourseStep,
 } from '../courses';
-import { addGoalNode, addGoalSyllabus, createGoal, getGoalNodeUnion } from '../goals';
+import {
+	CourseAlreadyInGoalError,
+	CourseNotActiveError,
+	CourseNotFoundError,
+	CourseNotInGoalError,
+	GoalNotOwnedError,
+	addGoalCourse,
+	addGoalNode,
+	addGoalSyllabus,
+	createGoal,
+	getGoalCourseLinks,
+	getGoalNodeUnion,
+	removeGoalCourse,
+	setGoalCourseWeight,
+} from '../goals';
 import {
 	course,
 	courseStep,
@@ -871,5 +892,113 @@ describe('pickOverlaySyllabus', () => {
 			.where(and(eq(goalSyllabus.goalId, g.id), eq(goalSyllabus.syllabusId, heavierSylId)));
 		const winner = await pickOverlaySyllabus(row);
 		expect(winner).toBe(heavierSylId);
+	});
+});
+
+// Goal-course BC helpers (course-reader-and-editor WP review fixes). These
+// own the goal-ownership check, the course-exists/active validation, the
+// in-goal check, and the idempotent conflict handling that the goal
+// composer's `addCourse` / `removeCourse` / `setCourseWeight` actions
+// previously inlined as raw Drizzle. Real Postgres: the `goal_course`
+// composite PK and the `goal_course_weight_check` CHECK are DB-enforced, so
+// the conflict + range behaviour cannot be verified against a stub.
+describe('addGoalCourse / removeGoalCourse / setGoalCourseWeight / getGoalCourseLinks', () => {
+	async function makeActiveCourse(label: string) {
+		return upsertCourse({
+			slug: slug(label),
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: `Goal-course test ${label}`,
+			status: COURSE_STATUSES.ACTIVE,
+			seedOrigin: SUITE_TAG,
+		});
+	}
+
+	it('addGoalCourse links a course and getGoalCourseLinks returns it with its weight', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-add', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-add');
+		const row = await addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: 0.7 });
+		expect(row.courseId).toBe(c.id);
+		expect(row.weight).toBeCloseTo(0.7);
+
+		const links = await getGoalCourseLinks(g.id);
+		expect(links).toHaveLength(1);
+		expect(links[0]?.courseId).toBe(c.id);
+		expect(links[0]?.weight).toBeCloseTo(0.7);
+	});
+
+	it('addGoalCourse rejects a course that is not active', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-archived', notesMd: '', isPrimary: false });
+		const archived = await upsertCourse({
+			slug: slug('gc-archived'),
+			kind: COURSE_KINDS.INSTRUCTOR,
+			title: 'Archived course',
+			status: COURSE_STATUSES.ARCHIVED,
+			seedOrigin: SUITE_TAG,
+		});
+		await expect(addGoalCourse(g.id, TEST_USER_ID, { courseId: archived.id })).rejects.toBeInstanceOf(
+			CourseNotActiveError,
+		);
+	});
+
+	it('addGoalCourse rejects a courseId that matches no course row', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-missing', notesMd: '', isPrimary: false });
+		await expect(addGoalCourse(g.id, TEST_USER_ID, { courseId: 'crs_does_not_exist' })).rejects.toBeInstanceOf(
+			CourseNotFoundError,
+		);
+	});
+
+	it('addGoalCourse rejects a course already linked to the goal (idempotent conflict)', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-dup', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-dup');
+		await addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: 1.0 });
+		await expect(addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: 1.0 })).rejects.toBeInstanceOf(
+			CourseAlreadyInGoalError,
+		);
+		// The duplicate attempt left exactly one link row.
+		const links = await getGoalCourseLinks(g.id);
+		expect(links).toHaveLength(1);
+	});
+
+	it('addGoalCourse rejects a goal owned by a different user', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-owner', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-owner');
+		await expect(addGoalCourse(g.id, generateAuthId(), { courseId: c.id })).rejects.toBeInstanceOf(GoalNotOwnedError);
+	});
+
+	it('addGoalCourse rejects an out-of-range weight before any DB write', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-range', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-range');
+		await expect(
+			addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: GOAL_SYLLABUS_WEIGHT_MAX + 1 }),
+		).rejects.toThrow();
+		await expect(
+			addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: GOAL_SYLLABUS_WEIGHT_MIN - 1 }),
+		).rejects.toThrow();
+		// No partial link was written.
+		expect(await getGoalCourseLinks(g.id)).toHaveLength(0);
+	});
+
+	it('removeGoalCourse deletes the link; a second remove throws CourseNotInGoalError', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-remove', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-remove');
+		await addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: 1.0 });
+		await removeGoalCourse(g.id, TEST_USER_ID, c.id);
+		expect(await getGoalCourseLinks(g.id)).toHaveLength(0);
+		// Removing a course that is no longer in the goal must not report success.
+		await expect(removeGoalCourse(g.id, TEST_USER_ID, c.id)).rejects.toBeInstanceOf(CourseNotInGoalError);
+	});
+
+	it('setGoalCourseWeight updates the weight; rejects a course not in the goal', async () => {
+		const g = await createGoal({ userId: TEST_USER_ID, title: 'gc-weight', notesMd: '', isPrimary: false });
+		const c = await makeActiveCourse('gc-weight');
+		await addGoalCourse(g.id, TEST_USER_ID, { courseId: c.id, weight: 1.0 });
+		await setGoalCourseWeight(g.id, TEST_USER_ID, c.id, 0.25);
+		const links = await getGoalCourseLinks(g.id);
+		expect(links[0]?.weight).toBeCloseTo(0.25);
+
+		const other = await makeActiveCourse('gc-weight-other');
+		await expect(setGoalCourseWeight(g.id, TEST_USER_ID, other.id, 0.5)).rejects.toBeInstanceOf(
+			CourseNotInGoalError,
+		);
 	});
 });

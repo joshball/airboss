@@ -142,7 +142,14 @@ export {
 	type TargetTypeTally,
 } from './citations';
 export type { ListCoursesForReaderOpts, UpsertCourseInput, UpsertCourseStepInput } from './courses';
+// Course seed pipeline -- DB-touching, server-only. The pure validator
+// (`validateCourseTree`, `CourseSeedError`) is re-exported here via
+// `export * from './index'` below; named here too for discoverability.
+export type { SeedCoursesOptions, SeedCoursesSummary } from './seed-courses.server';
+export { DEFAULT_COURSES_DIR, seedCourses } from './seed-courses.server';
 export {
+	countGoalsReferencingCourse,
+	countSectionsByCourse,
 	deleteCourseRow,
 	deleteCourseStep,
 	getCourseById,
@@ -151,6 +158,7 @@ export {
 	getCourseStepByCode,
 	getCourseStepsByCourse,
 	getCoursesByGoal,
+	getReaderVisibleCourseBySlug,
 	listAllCourses,
 	listCoursesForReader,
 	pickOverlaySyllabus,
@@ -209,10 +217,15 @@ export type { SubmitFeedbackInput } from './feedback';
 export { FeedbackCommentRequiredError, getLatestFeedback, submitFeedback } from './feedback';
 export type { ApplyCertGoalsResult, CreateGoalParams, ListGoalsOptions as ListGoalsOpts } from './goals';
 export {
+	addGoalCourse,
 	addGoalNode,
 	addGoalSyllabus,
 	applyCertGoalsToPrimaryGoal,
 	archiveGoal,
+	CourseAlreadyInGoalError,
+	CourseNotActiveError,
+	CourseNotFoundError,
+	CourseNotInGoalError,
 	createGoal,
 	GoalAlreadyPrimaryError,
 	GoalNotFoundError,
@@ -220,6 +233,7 @@ export {
 	getActiveGoals,
 	getDerivedCertGoals,
 	getGoalById,
+	getGoalCourseLinks,
 	getGoalFocusDomains,
 	getGoalNodes,
 	getGoalNodeUnion,
@@ -229,8 +243,10 @@ export {
 	getOwnedGoal,
 	getPrimaryGoal,
 	listGoals,
+	removeGoalCourse,
 	removeGoalNode,
 	removeGoalSyllabus,
+	setGoalCourseWeight,
 	setGoalFocusDomains,
 	setGoalNodeWeight,
 	setGoalSkipDomains,
@@ -290,7 +306,7 @@ export {
 // Lens value implementations -- server-only because their module-level
 // `import { ... } from './mastery'` reaches `@ab/db/connection`. Types
 // for these live in the runtime barrel via `./index`.
-export { acsLens, computeMasteryRollup, domainLens, LensError } from './lenses';
+export { acsLens, computeMasteryRollup, domainLens, emptyMasteryRollup, LensError } from './lenses';
 // Course-aware lenses (course-primitive WP, Phases 4 + 5). Server-only
 // because the implementation imports `./mastery` (postgres driver). The
 // `CourseLensFilters` / `CourseOverlayLensFilters` types are re-exported

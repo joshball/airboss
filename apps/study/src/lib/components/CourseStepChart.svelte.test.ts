@@ -18,12 +18,13 @@ describe('CourseStepChart', () => {
 	it('renders a figure containing an <img> pointing at the /api/charts route', () => {
 		const slug = 'wx-scenarios/frontal-xc-march/surface-analysis';
 		render(CourseStepChart, { props: { slug } });
-		const figure = screen.getByLabelText(`Chart: ${slug}`);
-		expect(figure).toBeInTheDocument();
-		expect(figure.tagName.toLowerCase()).toBe('figure');
 
-		const img = screen.getByAltText(`Chart ${slug}`);
+		// The a11y review dropped the redundant figure `aria-label` and made
+		// the img `alt` human-readable ("Weather chart"). The image is the
+		// non-text content; the dev caption carries the slug separately.
+		const img = screen.getByAltText('Weather chart');
 		expect(img.tagName.toLowerCase()).toBe('img');
+		expect(img.closest('figure')).not.toBeNull();
 		expect(img.getAttribute('src')).toBe(`/api/charts/${slug}/chart.svg`);
 		expect(img.getAttribute('loading')).toBe('lazy');
 	});
@@ -40,7 +41,7 @@ describe('CourseStepChart', () => {
 		// transparently on the server side. Verify we don't pre-encode.
 		const slug = 'reference-fixtures/wx-surface-analysis-2024-12-23-12z';
 		render(CourseStepChart, { props: { slug } });
-		const img = screen.getByAltText(`Chart ${slug}`);
+		const img = screen.getByAltText('Weather chart');
 		expect(img.getAttribute('src')).toBe(`/api/charts/${slug}/chart.svg`);
 	});
 });

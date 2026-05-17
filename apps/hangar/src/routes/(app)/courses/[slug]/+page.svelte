@@ -1,6 +1,7 @@
 <script lang="ts">
-import { COURSE_STATUS_LABELS, COURSE_STATUSES, type CourseStatus, ROUTES } from '@ab/constants';
+import { COURSE_STATUS_LABELS, COURSE_STATUSES, COURSE_TITLE_MAX_LENGTH, type CourseStatus, ROUTES } from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
+import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import PageHeader from '@ab/ui/components/PageHeader.svelte';
 import type { ActionData, PageData } from './$types';
@@ -11,12 +12,33 @@ const course = $derived(data.course);
 const sections = $derived(data.sections);
 const orphans = $derived(data.orphans);
 
-let confirmingDelete = $state(false);
 let showAddSection = $state(false);
+let addSectionCodeInput = $state<HTMLInputElement | null>(null);
+
+// Move focus into the add-section form when it is revealed.
+$effect(() => {
+	if (showAddSection) addSectionCodeInput?.focus();
+});
 
 function statusLabel(status: string): string {
 	return COURSE_STATUS_LABELS[status as CourseStatus] ?? status;
 }
+
+// Per-action success message -- the action returns a discriminating
+// `intent`, so the banner names what happened rather than a generic "Saved."
+const SUCCESS_MESSAGES: Record<string, string> = {
+	updateManifest: 'Manifest updated.',
+	addSection: 'Section added.',
+	deleteSection: 'Section deleted.',
+};
+const successMessage = $derived.by(() => {
+	if (form?.success !== true) return null;
+	if (form.intent === 'cleanupOrphans') {
+		const removed = typeof form.removed === 'number' ? form.removed : 0;
+		return removed === 0 ? 'No orphan rows to remove.' : `Removed ${removed} orphan row${removed === 1 ? '' : 's'}.`;
+	}
+	return SUCCESS_MESSAGES[form.intent ?? ''] ?? 'Saved.';
+});
 
 const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 	{ value: COURSE_STATUSES.DRAFT, label: 'Draft' },
@@ -39,18 +61,23 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 
 	<PageHeader title={course.title} subtitle={`Slug: ${course.slug}`} />
 
-	{#if form?.error}
-		<p class="banner banner-error" role="alert">{form.error}</p>
-	{:else if form?.success === true}
-		<p class="banner banner-ok" role="status">Saved.</p>
-	{/if}
+	<div class="banner-live" aria-live="assertive">
+		{#if form?.error}
+			<p class="banner banner-error" role="alert">{form.error}</p>
+		{/if}
+	</div>
+	<div class="banner-live" aria-live="polite">
+		{#if successMessage !== null}
+			<p class="banner banner-ok" role="status">{successMessage}</p>
+		{/if}
+	</div>
 
 	<section class="block" aria-labelledby="manifest-h">
 		<h2 id="manifest-h">Manifest</h2>
-		<form method="POST" action="?/updateManifest" class="form">
+		<form method="POST" action={ROUTES.HANGAR_COURSE_UPDATE_MANIFEST_ACTION} class="form">
 			<label class="field">
-				<span class="label">Title</span>
-				<input type="text" name="title" required maxlength="200" value={course.title} />
+				<span class="label">Title <span class="req">required</span></span>
+				<input type="text" name="title" required aria-required="true" maxlength={COURSE_TITLE_MAX_LENGTH} value={course.title} />
 			</label>
 			<label class="field">
 				<span class="label">Description (markdown)</span>
@@ -80,19 +107,19 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 		</header>
 
 		{#if showAddSection}
-			<form method="POST" action="?/addSection" class="form add-section-form">
+			<form method="POST" action={ROUTES.HANGAR_COURSE_ADD_SECTION_ACTION} class="form add-section-form">
 				<div class="row-fields">
 					<label class="field">
-						<span class="label">Code</span>
-						<input type="text" name="code" required placeholder="s1" />
+						<span class="label">Code <span class="req">required</span></span>
+						<input type="text" name="code" required aria-required="true" placeholder="s1" bind:this={addSectionCodeInput} />
 					</label>
 					<label class="field">
-						<span class="label">Ordinal</span>
-						<input type="number" name="ordinal" required min="0" value={sections.length + 1} />
+						<span class="label">Ordinal <span class="req">required</span></span>
+						<input type="number" name="ordinal" required aria-required="true" min="0" value={sections.length + 1} />
 					</label>
 					<label class="field grow">
-						<span class="label">Title</span>
-						<input type="text" name="title" required placeholder="Section title" />
+						<span class="label">Title <span class="req">required</span></span>
+						<input type="text" name="title" required aria-required="true" maxlength={COURSE_TITLE_MAX_LENGTH} placeholder="Section title" />
 					</label>
 				</div>
 				<label class="field">
@@ -133,18 +160,12 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 							</td>
 							<td class="num">{section.stepCount}</td>
 							<td class="actions">
-								<form method="POST" action="?/deleteSection" class="inline">
-									<input type="hidden" name="filename" value={section.filename} />
-									<Button
-										type="submit"
-										variant="ghost"
-										onclick={(e) => {
-											if (!confirm(`Delete section "${section.title}"? Linked DB rows become orphans.`)) e.preventDefault();
-										}}
-									>
-										Delete
-									</Button>
-								</form>
+								<ConfirmAction
+									label="Delete"
+									confirmLabel="Delete section"
+									formAction={ROUTES.HANGAR_COURSE_DELETE_SECTION_ACTION}
+									hiddenFields={{ filename: section.filename }}
+								/>
 							</td>
 						</tr>
 					{/each}
@@ -167,7 +188,7 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 					<li><code>{orphan.code}</code> -- {orphan.title}</li>
 				{/each}
 			</ul>
-			<form method="POST" action="?/cleanupOrphans">
+			<form method="POST" action={ROUTES.HANGAR_COURSE_CLEANUP_ORPHANS_ACTION}>
 				<Button type="submit" variant="danger">Remove orphans</Button>
 			</form>
 		</section>
@@ -175,18 +196,15 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 
 	<section class="block danger-zone" aria-labelledby="danger-h">
 		<h2 id="danger-h">Danger zone</h2>
-		{#if !confirmingDelete}
-			<Button onclick={() => (confirmingDelete = true)} variant="danger">Delete course</Button>
-		{:else}
-			<p class="danger-text">
-				This removes the course directory and the course row. Steps cascade. Goals that hold this course
-				block the delete (FK RESTRICT) -- remove from goals first.
-			</p>
-			<form method="POST" action="?/deleteCourse" class="danger-form">
-				<Button onclick={() => (confirmingDelete = false)} variant="ghost">Cancel</Button>
-				<Button type="submit" variant="danger">Delete permanently</Button>
-			</form>
-		{/if}
+		<p class="danger-text">
+			Deleting removes the course directory and the course row. Steps cascade. A course referenced by any
+			goal blocks the delete -- remove it from those goals first.
+		</p>
+		<ConfirmAction
+			label="Delete course"
+			confirmLabel="Delete permanently"
+			formAction={ROUTES.HANGAR_COURSE_DELETE_ACTION}
+		/>
 	</section>
 </section>
 
@@ -226,6 +244,10 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 		text-decoration: underline;
 	}
 
+	.banner-live:empty {
+		display: none;
+	}
+
 	.banner {
 		margin: 0;
 		padding: var(--space-md);
@@ -243,6 +265,14 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 		background: var(--signal-success-wash);
 		color: var(--ink-body);
 		border-color: var(--signal-success-edge);
+	}
+
+	.req {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 400;
+		color: var(--ink-faint);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.block {
@@ -357,10 +387,6 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 		text-decoration: underline;
 	}
 
-	.inline {
-		display: inline-block;
-	}
-
 	.orphan-block {
 		border-color: var(--signal-warning-edge);
 		background: var(--signal-warning-wash);
@@ -388,11 +414,5 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 		margin: 0;
 		color: var(--ink-body);
 		font-size: var(--type-definition-body-size);
-	}
-
-	.danger-form {
-		display: flex;
-		gap: var(--space-md);
-		justify-content: flex-end;
 	}
 </style>

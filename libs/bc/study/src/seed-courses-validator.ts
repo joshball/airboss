@@ -1,9 +1,9 @@
 /**
  * Pure course-tree validator for the seed pipeline. Lives in a sibling
- * file (rather than inside `seed-courses.ts`) so the unit-test suite at
- * `scripts/db/seed-courses.test.ts` can import the validator without
- * dragging the server-only DB barrel (`@ab/bc-study/server`) into the
- * test runtime.
+ * file (rather than inside `seed-courses.ts`) so the unit-test suite can
+ * import the validator without dragging the server-only DB barrel
+ * (`@ab/bc-study/server`) into the test runtime. Browser-safe -- pure
+ * synchronous checks over the parsed YAML shape; no `node:*`, no DB.
  *
  * Every check here is synchronous and operates on the parsed YAML shape
  * alone -- no DB, no filesystem, no async. The `validateKnowledgeNodeRefs`
@@ -28,8 +28,8 @@
  * stable across PRs.
  */
 
-import type { CourseLesson, CourseManifest, CourseSection, CourseStep, CourseTreeNode } from '@ab/bc-study';
 import { COURSE_STEP_LEVELS, COURSE_TREE_MAX_DEPTH } from '@ab/constants';
+import type { CourseLesson, CourseManifest, CourseSection, CourseStep, CourseTreeNode } from './course-yaml-schemas';
 
 export class CourseSeedError extends Error {
 	constructor(message: string) {

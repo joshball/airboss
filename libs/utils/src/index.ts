@@ -71,7 +71,7 @@ export {
 	validateOutboundUrl,
 } from './outbound-url';
 export { isSensitiveKey, REDACTED_PLACEHOLDER, redactSensitive } from './redact';
-export { humanize } from './strings';
+export { humanize, stripMarkdown, truncatePlainText } from './strings';
 export { captureAnchor, reanchor, type TextAnchor, type TextRange } from './text-anchors';
 export { type DiffOp, wordDiff } from './text-diff';
 export { MS_PER_DAY, MS_PER_HOUR, MS_PER_MINUTE, MS_PER_SECOND, userStartOfDay } from './time';

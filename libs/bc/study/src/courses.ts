@@ -29,6 +29,7 @@
 import {
 	type BloomLevel,
 	COURSE_STATUSES,
+	COURSE_STEP_LEVELS,
 	type CourseKind,
 	type CourseStatus,
 	type CourseStepLevel,
@@ -192,7 +193,7 @@ export interface UpsertCourseStepInput {
  * upstream that catches the same thing with a friendlier message.
  */
 export async function upsertCourseStep(input: UpsertCourseStepInput, db: Db = defaultDb): Promise<CourseStepRow> {
-	const isLeaf = input.level === 'step';
+	const isLeaf = input.level === COURSE_STEP_LEVELS.STEP;
 	const seedOrigin = input.seedOrigin ?? null;
 	const [row] = await db
 		.insert(courseStep)
@@ -250,12 +251,11 @@ export async function upsertCourseStep(input: UpsertCourseStepInput, db: Db = de
  *      authored links count as gaps too -- the course can't possibly cover
  *      a leaf that lists no knowledge nodes.
  *
- * The `goalId` parameter is reserved for future per-goal weighting; the
- * current calculation is goal-agnostic (a gap is a gap regardless of which
- * goal the learner holds, and the overlay lens accepts a syllabus id that the
- * goal does not reference). Kept on the signature so the lens / non-tree
- * consumers that call `getCourseGaps` stay shape-stable when goal-aware
- * weighting lands.
+ * The calculation is goal-agnostic: a gap is a gap regardless of which goal
+ * the learner holds, and the overlay lens accepts a syllabus id the goal
+ * does not reference. There is no goal parameter -- if goal-aware weighting
+ * lands later it is a fresh signature change anyway (its shape is unknown
+ * today), so carrying a placeholder bought nothing.
  *
  * Output is stable-sorted by syllabus_node `(level, ordinal, code)` so the
  * UI renders gaps in cert-traversal order regardless of insert order. When
@@ -263,12 +263,7 @@ export async function upsertCourseStep(input: UpsertCourseStepInput, db: Db = de
  *
  * Pure read; no writes. Safe to call from a route loader on every render.
  */
-export async function getCourseGaps(
-	_goalId: string,
-	courseId: string,
-	syllabusId: string,
-	db: Db = defaultDb,
-): Promise<CertGap[]> {
+export async function getCourseGaps(courseId: string, syllabusId: string, db: Db = defaultDb): Promise<CertGap[]> {
 	// Step 1: every cert leaf rooted under the syllabus.
 	const leafRows = await db
 		.select({
@@ -480,4 +475,55 @@ export async function pickOverlaySyllabus(goal: GoalRow | null, db: Db = default
 		.limit(1);
 	const row = rows[0];
 	return row ? row.syllabusId : null;
+}
+
+/**
+ * Resolve a course by slug for a study-app *reader* surface. Returns `null`
+ * for both "no such course" AND "course is in `status='draft'`" -- drafts
+ * are hidden from learners (spec.md content-authorization rule). Centralising
+ * the draft gate here means every reader loader (`/courses/[slug]`,
+ * `/courses/[slug]/[stepCode]`) shares one call and the rule cannot drift
+ * via per-loader copy discipline.
+ */
+export async function getReaderVisibleCourseBySlug(slug: string, db: Db = defaultDb): Promise<CourseRow | null> {
+	const row = await getCourseBySlug(slug, db);
+	if (row === null) return null;
+	if (row.status === COURSE_STATUSES.DRAFT) return null;
+	return row;
+}
+
+/**
+ * Count how many goals reference a course via `goal_course`. Used by the
+ * hangar course-delete action to detect the `ON DELETE RESTRICT` block
+ * *before* destroying the YAML directory, so a delete that would fail the
+ * FK leaves disk and DB consistent. Backed by `goal_course_by_course_idx`.
+ */
+export async function countGoalsReferencingCourse(courseId: string, db: Db = defaultDb): Promise<number> {
+	const rows = await db
+		.select({ count: sql<number>`count(*)::int` })
+		.from(goalCourse)
+		.where(eq(goalCourse.courseId, courseId));
+	return rows[0]?.count ?? 0;
+}
+
+/**
+ * Section counts for a set of courses in one grouped query. Replaces the
+ * hangar index's N+1 (`getCourseStepsByCourse` per course just to count
+ * top-level rows). A section is a `course_step` with `parent_id IS NULL`.
+ * Returns a map of `courseId -> count`; courses with zero sections are
+ * absent from the map (callers default to 0).
+ */
+export async function countSectionsByCourse(
+	courseIds: readonly string[],
+	db: Db = defaultDb,
+): Promise<Map<string, number>> {
+	if (courseIds.length === 0) return new Map();
+	const rows = await db
+		.select({ courseId: courseStep.courseId, count: sql<number>`count(*)::int` })
+		.from(courseStep)
+		.where(and(inArray(courseStep.courseId, courseIds as string[]), sql`${courseStep.parentId} IS NULL`))
+		.groupBy(courseStep.courseId);
+	const result = new Map<string, number>();
+	for (const row of rows) result.set(row.courseId, row.count);
+	return result;
 }

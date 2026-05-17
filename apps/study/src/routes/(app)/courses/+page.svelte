@@ -16,7 +16,10 @@ function statusLabel(status: string): string {
 
 function pct(num: number, den: number): number {
 	if (den === 0) return 0;
-	return Math.round((num / den) * 100);
+	// Clamp to [0, 100] -- an orphan-inflated rollup could push num past
+	// den, which would otherwise overflow the bar and produce an
+	// incoherent aria-valuenow/aria-valuemax pair.
+	return Math.min(100, Math.max(0, Math.round((num / den) * 100)));
 }
 </script>
 
@@ -49,45 +52,44 @@ function pct(num: number, den: number): number {
 		<ul class="grid">
 			{#each rows as row (row.course.id)}
 				<li class="card" class:in-goal={row.inGoal}>
-					<a class="card-link" href={ROUTES.COURSE(row.course.slug)}>
-						<header class="card-header">
-							<span class="status status-{row.course.status}">{statusLabel(row.course.status)}</span>
-							{#if row.inGoal}
-								<span class="badge in-goal-badge">In goal</span>
-							{/if}
-						</header>
-						<h2 class="title">{row.course.title}</h2>
-						{#if row.course.description !== ''}
-							<p class="description">{row.course.description}</p>
+					<header class="card-header">
+						<span class="status status-{row.course.status}">{statusLabel(row.course.status)}</span>
+						{#if row.inGoal}
+							<span class="badge in-goal-badge">In goal</span>
 						{/if}
-						{#if row.inGoal && row.rollup.totalLeaves > 0}
-							<dl class="stats">
-								<div>
-									<dt>Mastered</dt>
-									<dd data-testid="course-mastery">
-										{row.rollup.masteredLeaves} / {row.rollup.totalLeaves}
-									</dd>
-								</div>
-								<div>
-									<dt>Coverage</dt>
-									<dd>{pct(row.rollup.coveredLeaves, row.rollup.totalLeaves)}%</dd>
-								</div>
-							</dl>
-							<div
-								class="mastery-bar"
-								role="progressbar"
-								aria-label="Course mastery"
-								aria-valuemin="0"
-								aria-valuemax={row.rollup.totalLeaves}
-								aria-valuenow={row.rollup.masteredLeaves}
-							>
-								<span
-									class="mastery-fill"
-									style:width="{pct(row.rollup.masteredLeaves, row.rollup.totalLeaves)}%"
-								></span>
+					</header>
+					<h2 class="title"><a class="title-link" href={ROUTES.COURSE(row.course.slug)}>{row.course.title}</a></h2>
+					{#if row.course.description !== ''}
+						<p class="description">{row.course.description}</p>
+					{/if}
+					{#if row.inGoal && row.rollup.totalLeaves > 0}
+						<dl class="stats">
+							<div>
+								<dt>Mastered</dt>
+								<dd data-testid="course-mastery">
+									{row.rollup.masteredLeaves} / {row.rollup.totalLeaves}
+								</dd>
 							</div>
-						{/if}
-					</a>
+							<div>
+								<dt>Coverage</dt>
+								<dd>{pct(row.rollup.coveredLeaves, row.rollup.totalLeaves)}%</dd>
+							</div>
+						</dl>
+						<div
+							class="mastery-bar"
+							role="progressbar"
+							aria-label="Course mastery"
+							aria-valuemin="0"
+							aria-valuemax={row.rollup.totalLeaves}
+							aria-valuenow={row.rollup.masteredLeaves}
+							aria-valuetext="{row.rollup.masteredLeaves} of {row.rollup.totalLeaves} leaves mastered"
+						>
+							<span
+								class="mastery-fill"
+								style:width="{pct(row.rollup.masteredLeaves, row.rollup.totalLeaves)}%"
+							></span>
+						</div>
+					{/if}
 				</li>
 			{/each}
 		</ul>
@@ -138,29 +140,32 @@ function pct(num: number, den: number): number {
 	}
 
 	.card {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+		padding: var(--space-lg);
 		background: var(--ink-inverse);
 		border: 1px solid var(--edge-default);
 		border-radius: var(--radius-lg);
+		height: 100%;
 		transition: border-color var(--motion-fast) ease;
+	}
+
+	.card:hover {
+		border-color: var(--action-default-edge);
 	}
 
 	.card.in-goal {
 		border-color: var(--action-default-edge);
 	}
 
-	.card-link {
-		display: flex;
-		flex-direction: column;
-		gap: var(--space-sm);
-		padding: var(--space-lg);
+	.title-link {
 		color: var(--ink-body);
 		text-decoration: none;
-		height: 100%;
 	}
 
-	.card-link:hover {
-		background: var(--surface-muted);
-		border-radius: var(--radius-lg);
+	.title-link:hover {
+		text-decoration: underline;
 	}
 
 	.card-header {
@@ -256,7 +261,7 @@ function pct(num: number, den: number): number {
 
 	.mastery-bar {
 		width: 100%;
-		height: 6px;
+		height: var(--space-2xs);
 		background: var(--edge-default);
 		border-radius: var(--radius-pill);
 		overflow: hidden;
@@ -267,5 +272,11 @@ function pct(num: number, den: number): number {
 		display: block;
 		height: 100%;
 		background: var(--action-default);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card {
+			transition: none;
+		}
 	}
 </style>

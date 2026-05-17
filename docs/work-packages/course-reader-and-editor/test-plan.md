@@ -204,15 +204,25 @@ Prefix: `CRE` (Course Reader and Editor).
 
 ---
 
-## CRE-40: Chart stub -- placeholder renders in dev
+## CRE-40: CourseStepChart renders a real chart (component test)
 
-1. Setup: append `?chart=test-slug-1` to the URL of any step reader page (e.g., `/courses/seed-smoke/s1.1?chart=test-slug-1`).
-2. **Expected:** A bordered placeholder box appears below the linked node body. In dev mode, the slug `test-slug-1` is visible inside the box.
+Reconciliation note (2026-05-17): the `<CourseStepChart>` component shipped as a real
+SVG renderer, not the originally-scoped placeholder stub, and is not mounted by any
+content render path yet (the `:::chart` directive parser is deferred -- see
+OUT-OF-SCOPE.md). There is no `?chart=` query param. The component is exercised by its
+own unit test.
 
-## CRE-41: Chart stub -- placeholder is empty in prod
+1. Run the component test: `bun test apps/study/src/lib/components/CourseStepChart.svelte.test.ts`.
+2. **Expected:** The test passes. The component renders an `<img>` whose `src` is
+   `ROUTES.API_CHART(slug)` (`/api/charts/<slug>/chart.svg`) and a `<figcaption>` showing
+   the slug in development mode only.
 
-1. Same URL as CRE-40 but on a production-mode build.
-2. **Expected:** The bordered box appears but the slug text is not rendered (the placeholder is intentionally minimal in prod).
+## CRE-41: Chart endpoint serves SVG bytes
+
+1. With the study app running, request `/api/charts/<a-real-chart-slug>/chart.svg`
+   directly (a slug for which `data/charts/wx/<slug>/...` exists on disk).
+2. **Expected:** The endpoint returns the SVG bytes with an `image/svg+xml` content type.
+   A slug with no chart on disk returns a 404.
 
 ---
 

@@ -1,8 +1,10 @@
 <script lang="ts">
 import {
 	COURSE_KIND_LABELS,
+	COURSE_SLUG_REGEX_SOURCE,
 	COURSE_STATUS_LABELS,
 	COURSE_STATUSES,
+	COURSE_TITLE_MAX_LENGTH,
 	type CourseKind,
 	type CourseStatus,
 	QUERY_PARAMS,
@@ -40,6 +42,13 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 ];
 
 let showCreateForm = $state(false);
+let slugInput = $state<HTMLInputElement | null>(null);
+
+// Move focus into the create form when it is revealed so a keyboard user
+// is not stranded on the toggle button.
+$effect(() => {
+	if (showCreateForm) slugInput?.focus();
+});
 </script>
 
 <svelte:head>
@@ -55,25 +64,29 @@ let showCreateForm = $state(false);
 		{/snippet}
 	</PageHeader>
 
-	{#if form?.error}
-		<p class="banner banner-error" role="alert">{form.error}</p>
-	{/if}
+	<div class="banner-live" aria-live="assertive">
+		{#if form?.error}
+			<p class="banner banner-error" role="alert">{form.error}</p>
+		{/if}
+	</div>
 
 	{#if showCreateForm}
-		<form method="POST" action="?/createCourse" class="create-form">
+		<form method="POST" action={ROUTES.HANGAR_COURSE_CREATE_ACTION} class="create-form">
 			<label class="field">
-				<span class="label">Slug (kebab-case)</span>
+				<span class="label">Slug (kebab-case) <span class="req">required</span></span>
 				<input
 					type="text"
 					name="slug"
 					required
-					pattern={'^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$'}
+					aria-required="true"
+					pattern={COURSE_SLUG_REGEX_SOURCE}
 					placeholder="weather-comprehensive"
+					bind:this={slugInput}
 				/>
 			</label>
 			<label class="field">
-				<span class="label">Title</span>
-				<input type="text" name="title" required maxlength="200" placeholder="Weather Comprehensive" />
+				<span class="label">Title <span class="req">required</span></span>
+				<input type="text" name="title" required aria-required="true" maxlength={COURSE_TITLE_MAX_LENGTH} placeholder="Weather Comprehensive" />
 			</label>
 			<label class="field">
 				<span class="label">Description (optional)</span>
@@ -84,6 +97,7 @@ let showCreateForm = $state(false);
 				<select name="status">
 					<option value={COURSE_STATUSES.DRAFT}>Draft</option>
 					<option value={COURSE_STATUSES.ACTIVE} selected>Active</option>
+					<option value={COURSE_STATUSES.ARCHIVED}>Archived</option>
 				</select>
 			</label>
 			<div class="form-actions">
@@ -95,12 +109,7 @@ let showCreateForm = $state(false);
 	<form method="GET" class="filter-bar">
 		<label class="field-inline">
 			<span class="label">Status</span>
-			<select
-				name={QUERY_PARAMS.STATUS}
-				onchange={(e) => {
-					(e.currentTarget.form as HTMLFormElement).submit();
-				}}
-			>
+			<select name={QUERY_PARAMS.STATUS}>
 				{#each STATUS_OPTIONS as opt (opt.value)}
 					<option value={opt.value} selected={statusFilter === opt.value || (statusFilter === null && opt.value === '')}>
 						{opt.label}
@@ -108,6 +117,7 @@ let showCreateForm = $state(false);
 				{/each}
 			</select>
 		</label>
+		<Button type="submit" variant="secondary">Apply</Button>
 	</form>
 
 	{#if isEmpty}
@@ -158,6 +168,10 @@ let showCreateForm = $state(false);
 		width: 100%;
 	}
 
+	.banner-live:empty {
+		display: none;
+	}
+
 	.banner {
 		margin: 0;
 		padding: var(--space-md);
@@ -171,10 +185,12 @@ let showCreateForm = $state(false);
 		border-color: var(--signal-danger-edge);
 	}
 
-	.banner-ok {
-		background: var(--signal-success-wash);
-		color: var(--ink-body);
-		border-color: var(--signal-success-edge);
+	.req {
+		font-size: var(--type-ui-caption-size);
+		font-weight: 400;
+		color: var(--ink-faint);
+		text-transform: uppercase;
+		letter-spacing: var(--letter-spacing-caps);
 	}
 
 	.create-form {

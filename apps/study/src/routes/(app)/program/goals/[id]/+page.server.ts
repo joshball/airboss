@@ -1,18 +1,23 @@
 import { requireAuth } from '@ab/auth';
-import { goalCourse, type NoteRow } from '@ab/bc-study';
+import type { NoteRow } from '@ab/bc-study';
 import {
+	addGoalCourse,
 	addGoalNode,
 	addGoalSyllabus,
 	archiveGoal,
+	CourseAlreadyInGoalError,
+	CourseNotActiveError,
+	CourseNotFoundError,
+	CourseNotInGoalError,
 	type CourseRow,
 	type GoalNodeRow,
 	GoalNotFoundError,
 	GoalNotOwnedError,
 	type GoalRow,
 	type GoalSyllabusRow,
-	getCourseById,
 	getCoursesByGoal,
 	getCredentialSyllabi,
+	getGoalCourseLinks,
 	getGoalNodes,
 	getGoalSyllabi,
 	getOwnedGoal,
@@ -20,12 +25,14 @@ import {
 	listCredentials,
 	listNodesWithFacets,
 	listNotesForGoal,
+	removeGoalCourse,
 	removeGoalNode,
 	removeGoalSyllabus,
-	type SyllabusRow,
+	setGoalCourseWeight,
 	setGoalNodeWeight,
 	setGoalSyllabusWeight,
 	setPrimaryGoal,
+	type SyllabusRow,
 	updateGoal,
 } from '@ab/bc-study/server';
 import {
@@ -42,7 +49,6 @@ import {
 } from '@ab/constants';
 import { db } from '@ab/db/connection';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { and, eq } from 'drizzle-orm';
 import type { Actions, PageServerLoad } from './$types';
 
 export interface SyllabusOption {
@@ -137,11 +143,11 @@ export const load: PageServerLoad = async (event) => {
 	// Course tab data (course-reader-and-editor WP, Phase 5).
 	// Goal-held courses + the per-link weight, plus a picker of every
 	// active course not currently in the goal.
-	const [goalCoursesRows, allActiveCourses] = await Promise.all([
+	const [goalCoursesRows, allActiveCourses, goalCourseLinkRows] = await Promise.all([
 		getCoursesByGoal(goal.id),
 		listCoursesForReader(db, { statusIn: [COURSE_STATUSES.ACTIVE] }),
+		getGoalCourseLinks(goal.id),
 	]);
-	const goalCourseLinkRows = await db.select().from(goalCourse).where(eq(goalCourse.goalId, goal.id));
 	const weightByCourseId = new Map(goalCourseLinkRows.map((row) => [row.courseId, row.weight]));
 	const courses: CourseWithLink[] = goalCoursesRows.map((row) => ({
 		course: row,
@@ -168,6 +174,26 @@ function clampWeight(raw: string): number {
 	if (!Number.isFinite(value)) return 1.0;
 	return Math.max(GOAL_SYLLABUS_WEIGHT_MIN, Math.min(GOAL_SYLLABUS_WEIGHT_MAX, value));
 }
+
+/**
+ * Parse a `weight` form value, validating (not clamping) the range. An
+ * out-of-range value is a user error to surface, not a value to silently
+ * coerce -- the learner typed it and must be told it was rejected. An
+ * absent / blank field falls back to the default 1.0.
+ *
+ * Returns `{ ok: true, weight }` or `{ ok: false }`.
+ */
+function parseWeight(raw: string): { ok: true; weight: number } | { ok: false } {
+	const trimmed = raw.trim();
+	if (trimmed === '') return { ok: true, weight: 1.0 };
+	const value = Number.parseFloat(trimmed);
+	if (!Number.isFinite(value) || value < GOAL_SYLLABUS_WEIGHT_MIN || value > GOAL_SYLLABUS_WEIGHT_MAX) {
+		return { ok: false };
+	}
+	return { ok: true, weight: value };
+}
+
+const WEIGHT_RANGE_ERROR = `Weight must be between ${GOAL_SYLLABUS_WEIGHT_MIN} and ${GOAL_SYLLABUS_WEIGHT_MAX}.`;
 
 export const actions: Actions = {
 	update: async (event) => {
@@ -353,38 +379,35 @@ export const actions: Actions = {
 		return { intent: 'setNodeWeight', success: true };
 	},
 
-	// course-reader-and-editor WP, Phase 5: course tab actions.
+	// course-reader-and-editor WP, Phase 5: course tab actions. Each routes
+	// through a `@ab/bc-study` goal-course BC helper -- the BC owns the
+	// ownership check, the course-exists/active validation, the in-goal
+	// check, and the idempotent conflict handling.
 	addCourse: async (event) => {
 		const user = requireAuth(event);
 		const form = await event.request.formData();
 		const courseId = String(form.get('courseId') ?? '').trim();
-		const weight = clampWeight(String(form.get('weight') ?? '1'));
 		if (courseId === '') return fail(400, { intent: 'addCourse', error: 'Pick a course.' });
+		const parsedWeight = parseWeight(String(form.get('weight') ?? ''));
+		if (!parsedWeight.ok) return fail(400, { intent: 'addCourse', error: WEIGHT_RANGE_ERROR });
 
-		// Verify the goal is owned + reachable BEFORE inserting (matches the
-		// addSyllabus / addNode pattern -- ownership check first, write second).
 		try {
-			await getOwnedGoal(event.params.id, user.id);
+			await addGoalCourse(event.params.id, user.id, { courseId, weight: parsedWeight.weight });
 		} catch (err) {
 			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
 				throw error(404, 'Goal not found.');
 			}
+			if (err instanceof CourseNotFoundError) {
+				return fail(400, { intent: 'addCourse', error: 'Course not found.' });
+			}
+			if (err instanceof CourseNotActiveError) {
+				return fail(400, { intent: 'addCourse', error: 'Course is not active.' });
+			}
+			if (err instanceof CourseAlreadyInGoalError) {
+				return fail(400, { intent: 'addCourse', error: 'Course already in goal.' });
+			}
 			throw err;
 		}
-		const course = await getCourseById(courseId);
-		if (course === null) return fail(400, { intent: 'addCourse', error: 'Course not found.' });
-		if (course.status !== COURSE_STATUSES.ACTIVE) {
-			return fail(400, { intent: 'addCourse', error: 'Course is not active.' });
-		}
-		const existing = await db
-			.select()
-			.from(goalCourse)
-			.where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)))
-			.limit(1);
-		if (existing[0] !== undefined) {
-			return fail(400, { intent: 'addCourse', error: 'Course already in goal.' });
-		}
-		await db.insert(goalCourse).values({ goalId: event.params.id, courseId, weight });
 		return { intent: 'addCourse', success: true };
 	},
 
@@ -394,14 +417,16 @@ export const actions: Actions = {
 		const courseId = String(form.get('courseId') ?? '').trim();
 		if (courseId === '') return fail(400, { intent: 'removeCourse', error: 'Missing courseId.' });
 		try {
-			await getOwnedGoal(event.params.id, user.id);
+			await removeGoalCourse(event.params.id, user.id, courseId);
 		} catch (err) {
 			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
 				throw error(404, 'Goal not found.');
 			}
+			if (err instanceof CourseNotInGoalError) {
+				return fail(400, { intent: 'removeCourse', error: 'Course not in goal.' });
+			}
 			throw err;
 		}
-		await db.delete(goalCourse).where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)));
 		return { intent: 'removeCourse', success: true };
 	},
 
@@ -409,23 +434,19 @@ export const actions: Actions = {
 		const user = requireAuth(event);
 		const form = await event.request.formData();
 		const courseId = String(form.get('courseId') ?? '').trim();
-		const weight = clampWeight(String(form.get('weight') ?? '1'));
 		if (courseId === '') return fail(400, { intent: 'setCourseWeight', error: 'Missing courseId.' });
+		const parsedWeight = parseWeight(String(form.get('weight') ?? ''));
+		if (!parsedWeight.ok) return fail(400, { intent: 'setCourseWeight', error: WEIGHT_RANGE_ERROR });
 		try {
-			await getOwnedGoal(event.params.id, user.id);
+			await setGoalCourseWeight(event.params.id, user.id, courseId, parsedWeight.weight);
 		} catch (err) {
 			if (err instanceof GoalNotFoundError || err instanceof GoalNotOwnedError) {
 				throw error(404, 'Goal not found.');
 			}
+			if (err instanceof CourseNotInGoalError) {
+				return fail(400, { intent: 'setCourseWeight', error: 'Course not in goal.' });
+			}
 			throw err;
-		}
-		const result = await db
-			.update(goalCourse)
-			.set({ weight })
-			.where(and(eq(goalCourse.goalId, event.params.id), eq(goalCourse.courseId, courseId)))
-			.returning();
-		if (result.length === 0) {
-			return fail(400, { intent: 'setCourseWeight', error: 'Course not in goal.' });
 		}
 		return { intent: 'setCourseWeight', success: true };
 	},

@@ -1,5 +1,6 @@
 <script lang="ts">
 import { COURSE_STEP_LEVEL_LABELS, type CourseStepLevel, ROUTES } from '@ab/constants';
+import EmptyState from '@ab/ui/components/EmptyState.svelte';
 import { renderMarkdown } from '@ab/utils';
 import CourseStepMarkdown from '$lib/components/CourseStepMarkdown.svelte';
 import EncodedTextLadderTabs from '$lib/components/EncodedTextLadderTabs.svelte';
@@ -22,8 +23,7 @@ const prev = $derived(data.prev);
 const next = $derived(data.next);
 const certChip = $derived(data.certChip);
 const overlayActive = $derived(data.overlayActive);
-const isEncodedText = $derived(data.isEncodedText);
-const isTransition = $derived(data.isTransition);
+const renderMode = $derived(data.renderMode);
 
 const hasStepFraming = $derived(step.bodyMd !== '');
 const hasNodeBody = $derived(node !== null && (node.contentMd ?? '').trim() !== '');
@@ -58,23 +58,26 @@ const isNodeSkeleton = $derived(isLeaf && node !== null && !hasNodeBody);
 	{/if}
 
 	{#if isLeaf}
-		{#if isEncodedText}
-			<EncodedTextLadderTabs />
-		{/if}
-
 		{#if node === null}
-			<section class="missing-node" aria-label="Linked node">
-				<p>This step has no knowledge node linked. Authoring is in progress.</p>
-			</section>
+			<EmptyState
+				title="No knowledge node linked"
+				body="This step has no knowledge node linked. Authoring is in progress."
+			/>
 		{:else if isNodeSkeleton}
-			<section class="missing-node" aria-label="Linked node">
-				<h2>{node.title}</h2>
-				<p>Content authoring in progress for this node.</p>
+			<EmptyState title={node.title} body="Content authoring in progress for this node." />
+		{:else if renderMode === 'transition'}
+			<section class="node-body" aria-label="Step content">
+				<h2 class="body-h">Content</h2>
+				<TransitionStepBody bodyMd={node.contentMd ?? ''} />
 			</section>
-		{:else if isTransition}
-			<TransitionStepBody bodyMd={node.contentMd ?? ''} />
 		{:else}
-			<KnowledgeNodeBody {phases} ariaLabel="Step content" />
+			<section class="node-body" aria-label="Step content">
+				<h2 class="body-h">Content</h2>
+				{#if renderMode === 'encoded-text'}
+					<EncodedTextLadderTabs />
+				{/if}
+				<KnowledgeNodeBody {phases} ariaLabel="Step content" />
+			</section>
 		{/if}
 	{:else}
 		<section class="children" aria-label="Children">
@@ -123,7 +126,7 @@ const isNodeSkeleton = $derived(isLeaf && node !== null && !hasNodeBody);
 	.hd h1 {
 		margin: 0;
 		font-size: var(--type-heading-1-size);
-		letter-spacing: -0.02em;
+		letter-spacing: var(--letter-spacing-tight);
 		color: var(--ink-body);
 	}
 
@@ -154,22 +157,16 @@ const isNodeSkeleton = $derived(isLeaf && node !== null && !hasNodeBody);
 		padding: var(--space-lg);
 	}
 
-	.missing-node {
-		background: var(--surface-muted);
-		border: 1px dashed var(--edge-strong);
-		border-radius: var(--radius-md);
-		padding: var(--space-lg);
-		text-align: center;
-		color: var(--ink-muted);
+	.node-body {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-md);
 	}
 
-	.missing-node h2 {
-		margin: 0 0 var(--space-sm);
-		color: var(--ink-body);
-	}
-
-	.missing-node p {
+	.body-h {
 		margin: 0;
+		font-size: var(--type-heading-3-size);
+		color: var(--ink-body);
 	}
 
 	.children {
@@ -218,6 +215,12 @@ const isNodeSkeleton = $derived(isLeaf && node !== null && !hasNodeBody);
 	.child-card:hover {
 		border-color: var(--action-default-edge);
 		background: var(--surface-muted);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.child-link {
+			transition: none;
+		}
 	}
 
 	.child-head {
