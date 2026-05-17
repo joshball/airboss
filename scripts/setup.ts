@@ -110,11 +110,29 @@ async function checkThumbnailTool(): Promise<void> {
 	);
 }
 
+/**
+ * Install version-controlled git hooks into `.git/hooks/`. Hooks themselves
+ * are not tracked by git, so the tracked source lives in `scripts/hooks/` and
+ * is copied in here. Idempotent: re-running overwrites with the current
+ * source. Worktrees share the parent repo's hooks, so this also protects
+ * sub-agent worktrees.
+ */
+async function installGitHooks(): Promise<void> {
+	const hookNames = ['pre-commit'];
+	for (const name of hookNames) {
+		const src = `scripts/hooks/${name}`;
+		const dest = `.git/hooks/${name}`;
+		if (!existsSync(src)) continue;
+		writeFileSync(dest, readFileSync(src, 'utf-8'), { mode: 0o755 });
+	}
+}
+
 async function main(): Promise<void> {
 	console.log('airboss setup\n-----');
 
 	await step('verify /etc/hosts', checkHostsEntries);
 	await step('check thumbnail tool (gdal / sips)', checkThumbnailTool);
+	await step('install git hooks', installGitHooks);
 
 	await step('install deps', async () => {
 		await $`bun install`.quiet();
