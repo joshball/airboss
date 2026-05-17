@@ -3,9 +3,11 @@
  *
  * The `libs/content-census/` corpus adapters classify every content item
  * into a derived state (Layer 1 of the census -- see
- * `docs/work-packages/hangar-content-census/design.md`). Every numeric
- * threshold those rules depend on lives here so the rule is one named
- * constant, not a magic number buried in an adapter.
+ * `docs/work-packages/hangar-content-census/design.md` "Layer 1
+ * derived-state rules"). Every numeric threshold and reference value those
+ * rules depend on lives here so the rule is one named constant, not a magic
+ * number buried in an adapter -- a rule change is one edit, and the rule
+ * itself stays greppable.
  *
  * Pure data -- no `node:*`, browser-safe. The adapters themselves are
  * server-only; these constants are not.
@@ -59,3 +61,51 @@ export const COURSE_FILE_AUTHORED_BODY_MIN_LINES = 12;
  */
 export const VISION_FLESHED_OUT_DEPTHS = ['full', 'vision'] as const;
 export const VISION_OUTLINE_DEPTHS = ['light'] as const;
+
+/**
+ * Known-latest publication date per ACS document slug.
+ *
+ * An ACS document is `current` when its manifest `publication_date` is on
+ * or after the known-latest edition date the FAA has published; `stale`
+ * when a newer change has since superseded it. The values mirror the FAA
+ * ACS change history as of the 2026-05-17 census survey -- when the FAA
+ * publishes a new change, bump the entry here and the adapter reclassifies
+ * that document without any adapter-code change.
+ */
+export const ACS_KNOWN_LATEST_PUBLICATION: Record<string, string> = {
+	'atp-airplane-acs-11a': '2023-11-01',
+	'cfi-airplane-acs-25': '2023-11-01',
+	'cpl-airplane-acs-7b': '2023-11-01',
+	'ir-airplane-acs-8c': '2023-11-01',
+	'ppl-airplane-acs-6c': '2023-11-01',
+};
+
+/**
+ * The `extraction_status` values a handbook section can carry that mean the
+ * section was reached by the extractor but yielded no usable body content.
+ * A handbook with any such section is `partial`, not `ingested`.
+ */
+export const HANDBOOK_EMPTY_EXTRACTION_STATUSES: readonly string[] = ['no-body-content'];
+
+/**
+ * Sim-scenario difficulty banding for the census state distribution.
+ *
+ * `ScenarioDefinition.difficulty` is a 1..5 hint. The census buckets it so
+ * the overview distribution bar reads as a spread of authoring ambition,
+ * not 5 indistinguishable numbers.
+ */
+export const SIM_DIFFICULTY_BANDS = {
+	/** difficulty 1..2 -- introductory, low-workload scenarios. */
+	FOUNDATIONAL: 'foundational',
+	/** difficulty 3 -- standard proficiency scenarios. */
+	STANDARD: 'standard',
+	/** difficulty 4..5 -- demanding emergency / edge-case scenarios. */
+	DEMANDING: 'demanding',
+} as const;
+
+export type SimDifficultyBand = (typeof SIM_DIFFICULTY_BANDS)[keyof typeof SIM_DIFFICULTY_BANDS];
+
+/** Upper bound (inclusive) of the foundational difficulty band. */
+export const SIM_DIFFICULTY_FOUNDATIONAL_MAX = 2;
+/** Upper bound (inclusive) of the standard difficulty band. */
+export const SIM_DIFFICULTY_STANDARD_MAX = 3;
