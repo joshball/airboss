@@ -13,6 +13,7 @@
  * corpus id absent from `CENSUS_ADAPTERS` falls through to the honest stub.
  */
 
+import { stubCensus } from './adapters/_stub.server';
 import { acsCensus } from './adapters/acs.server';
 import { adrsCensus } from './adapters/adrs.server';
 import { cardsCensus } from './adapters/cards.server';
@@ -22,7 +23,6 @@ import { knowledgeNodesCensus } from './adapters/knowledge-nodes.server';
 import { regulationsCensus } from './adapters/regulations.server';
 import { simContentCensus } from './adapters/sim-content.server';
 import { sourcesCensus } from './adapters/sources.server';
-import { stubCensus } from './adapters/_stub.server';
 import { visionCensus } from './adapters/vision.server';
 import { workPackagesCensus } from './adapters/work-packages.server';
 import { wxCatalogCensus } from './adapters/wx-catalog.server';
@@ -31,6 +31,7 @@ import { wxScenariosCensus } from './adapters/wx-scenarios.server';
 import { CORPUS_REGISTRY, type CorpusDescriptor, type CorpusId } from './registry';
 import type { CorpusCensus } from './types';
 
+export { stubCensus } from './adapters/_stub.server';
 export { acsCensus } from './adapters/acs.server';
 export { adrsCensus } from './adapters/adrs.server';
 export { cardsCensus } from './adapters/cards.server';
@@ -41,7 +42,6 @@ export { regulationsCensus } from './adapters/regulations.server';
 export { repoRoot } from './adapters/repo-root.server';
 export { simContentCensus } from './adapters/sim-content.server';
 export { sourcesCensus } from './adapters/sources.server';
-export { stubCensus } from './adapters/_stub.server';
 export { visionCensus } from './adapters/vision.server';
 export { workPackagesCensus } from './adapters/work-packages.server';
 export { wxCatalogCensus } from './adapters/wx-catalog.server';
