@@ -333,11 +333,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1412Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1412Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1412Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1412Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1412Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1412Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -668,11 +678,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1413Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1413Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1413Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1413Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1413Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1413Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -1003,11 +1023,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1414Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1414Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1414Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1414Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1414Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1414Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -1367,11 +1397,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1415Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1415Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1415Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1415Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1415Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1415Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -1731,11 +1771,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1416Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1416Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1416Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1416Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1416Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1416Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -2095,11 +2145,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1417Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1417Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1417Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1417Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1417Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1417Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -2459,11 +2519,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1418Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1418Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1418Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1418Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1418Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1418Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -2823,11 +2893,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1419Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1419Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1419Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1419Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1419Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1419Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     },
@@ -3187,11 +3267,21 @@
       "charts": [
         {
           "kind": "surface-analysis",
-          "file": "charts/1420Z/surface-analysis.svg"
+          "chartType": "surface-analysis",
+          "specFile": "charts/1420Z/surface-analysis.spec.yaml",
+          "sourcesDir": "charts/1420Z/surface-analysis.sources",
+          "sources": [
+            "surface-analysis.json"
+          ]
         },
         {
           "kind": "metar-plot",
-          "file": "charts/1420Z/metar-plot.svg"
+          "chartType": "metar-plot-grid",
+          "specFile": "charts/1420Z/metar-plot.spec.yaml",
+          "sourcesDir": "charts/1420Z/metar-plot.sources",
+          "sources": [
+            "metar-plot.json"
+          ]
         }
       ]
     }

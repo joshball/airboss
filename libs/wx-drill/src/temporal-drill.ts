@@ -18,6 +18,7 @@
  * See `docs/work/plans/2026-05-14-truth-model-v2-temporal.md`.
  */
 
+import { WX_TEMPORAL_FRONT_POSITION_DISTRACTOR_CAP } from '@ab/constants';
 import { type ParsedMetar, parseMetar } from '@ab/wx-charts';
 import { mulberry32 } from './prng';
 import type {
@@ -350,7 +351,7 @@ function buildFrontPositionExercises(
 
 	const correctStation = behind[0];
 	if (correctStation === undefined) return exercises;
-	const distractors = ahead.slice(0, 3);
+	const distractors = ahead.slice(0, WX_TEMPORAL_FRONT_POSITION_DISTRACTOR_CAP);
 
 	const options = shuffleOptions(rand, [
 		{ text: `${correctStation.icao} (${correctStation.name})`, correct: true },

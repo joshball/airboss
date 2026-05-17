@@ -137,7 +137,7 @@ export type WxScenarioSubcommand = (typeof WX_SCENARIO_SUBCOMMAND_VALUES)[number
  * "Scenario packages".
  */
 export const WX_TIMELINE_BUNDLE = {
-	/** Every hourly v1 snapshot, pre-rendered. */
+	/** Every hourly v1 snapshot + per-hour chart-spec references. */
 	TIMELINE: 'timeline.json',
 	/** Sequence-product subdirectory. */
 	PRODUCTS_DIR: 'products',
@@ -149,15 +149,29 @@ export const WX_TIMELINE_BUNDLE = {
 	PIREP_EVENTS: 'pirep-events.json',
 	/** Advisory issue/extend/cancel events. */
 	AIRMET_TIMELINE: 'airmet-timeline.json',
-	/** Per-hour SVG chart subdirectory. */
+	/** Per-hour chart-spec subdirectory. */
 	CHARTS_DIR: 'charts',
+	/**
+	 * Per-hour chart-spec filename suffix. Charts are stored as small specs
+	 * (`<kind>.spec.yaml`), NOT as rendered SVG -- rendered SVGs are generated
+	 * artifacts and stay out of the repo per ADR 018. The replay surface
+	 * renders the spec to SVG on demand server-side.
+	 */
+	CHART_SPEC_SUFFIX: '.spec.yaml',
+	/**
+	 * Per-hour chart-source subdirectory suffix. A chart `<kind>` keeps its
+	 * source-byte JSON files under `<kind>.sources/<name>.json` -- the
+	 * `cache://` URIs the spec references resolve to these bytes when the
+	 * spec is rendered on demand.
+	 */
+	CHART_SOURCES_SUFFIX: '.sources',
 } as const;
 
 /**
- * Per-hour chart kinds the timeline bundle renders to SVG. `surface-analysis`
+ * Per-hour chart kinds the timeline bundle stores as specs. `surface-analysis`
  * carries the evolving front + pressure positions; `metar-plot` carries the
  * per-station observation overlay. Both re-derive from each hourly v1
- * snapshot.
+ * snapshot; the replay surface renders the spec to SVG on demand.
  */
 export const WX_TIMELINE_CHART_KINDS = ['surface-analysis', 'metar-plot'] as const;
 
@@ -168,6 +182,14 @@ export type WxTimelineChartKind = (typeof WX_TIMELINE_CHART_KINDS)[number];
  * `bun run wx-scenario build <slug> --timeline`.
  */
 export const WX_SCENARIO_BUILD_TIMELINE_FLAG = '--timeline';
+
+/**
+ * Maximum number of wrong-answer distractors in a temporal "front-position"
+ * exercise. The exercise picks one correct (post-frontal) station and up to
+ * this many pre-frontal stations as distractors, keeping the option set to
+ * a four-choice question.
+ */
+export const WX_TEMPORAL_FRONT_POSITION_DISTRACTOR_CAP = 3;
 
 /**
  * Closed enum of encoded-text wx product slugs the drill / practice surface

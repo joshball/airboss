@@ -17,7 +17,7 @@ import {
 	type WxScenario,
 } from '@ab/constants';
 import { sampleTruthAt } from '@ab/wx-engine';
-import { deriveMetarSequence, deriveTafSequence, loadScenario } from '@ab/wx-engine/server';
+import { deriveMetarSequence, deriveTafSequence, loadScenario, zuluHourLabel } from '@ab/wx-engine/server';
 import type { TemporalDrillBundle, TemporalMetar, TemporalSnapshot, TemporalTaf } from './temporal-types';
 
 /** Milliseconds per minute. */
@@ -25,15 +25,6 @@ const MS_PER_MINUTE = 60_000;
 
 /** Standard synoptic TAF issue hours (UTC). */
 const SYNOPTIC_HOURS = [0, 6, 12, 18];
-
-/** Compress an ISO timestamp to a `DDHHZ` zulu label. */
-function zulu(iso: string): string {
-	const d = new Date(iso);
-	const day = String(d.getUTCDate()).padStart(2, '0');
-	const hour = String(d.getUTCHours()).padStart(2, '0');
-	const min = d.getUTCMinutes();
-	return `${day}${hour}${min === 0 ? '' : String(min).padStart(2, '0')}Z`;
-}
 
 /** Enumerate the snapshot timestamps of an evolution window. */
 function enumerateTimestamps(startIso: string, endIso: string, stepMinutes: number): string[] {
@@ -87,7 +78,7 @@ export function buildTemporalDrillBundle(slug: WxScenario): TemporalDrillBundle 
 		seq.forEach((metar, idx) => {
 			const at = timestamps[idx];
 			if (at === undefined) return;
-			metars.push({ at, zulu: zulu(at), station, raw: metar.raw });
+			metars.push({ at, zulu: zuluHourLabel(at), station, raw: metar.raw });
 		});
 	}
 
@@ -99,7 +90,7 @@ export function buildTemporalDrillBundle(slug: WxScenario): TemporalDrillBundle 
 		seq.forEach((taf, idx) => {
 			const issuedAt = issueTimes[idx];
 			if (issuedAt === undefined) return;
-			tafs.push({ issuedAt, issuedZulu: zulu(issuedAt), station, raw: taf.raw });
+			tafs.push({ issuedAt, issuedZulu: zuluHourLabel(issuedAt), station, raw: taf.raw });
 		});
 	}
 
@@ -108,7 +99,7 @@ export function buildTemporalDrillBundle(slug: WxScenario): TemporalDrillBundle 
 		const sampled = sampleTruthAt(truth, at);
 		return {
 			at,
-			zulu: zulu(at),
+			zulu: zuluHourLabel(at),
 			fronts: sampled.synoptic.fronts.map((f) => ({
 				id: f.id,
 				kind: f.kind,

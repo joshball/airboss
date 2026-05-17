@@ -11,17 +11,23 @@
  *   - `tafSequence`     one TAF per station per standard issue time
  *   - `pirepEvents`     time-stamped PIREP reports across the window
  *   - `airmetTimeline`  advisory issue/extend/cancel events
- *   - `charts`          per-hour SVG charts (surface-analysis + metar-plot)
+ *   - `charts`          per-hour chart SPECS (surface-analysis + metar-plot)
  *
- * Server-only: the assembler renders charts to SVG via `@ab/wx-charts/server`
- * and wraps the server-only `deriveX` derivations. The CLI (`scripts/
- * wx-scenario/build.ts`) calls `buildTimelineBundle` then `writeTimelineBundle`.
+ * Charts are stored as small specs, NOT as rendered SVGs. Rendered SVGs are
+ * generated artifacts and stay out of the repo per ADR 018 -- the v1 bundle
+ * pattern proves it (v1 commits `spec.yaml`, never rendered SVGs). The
+ * `/practice/wx/replay` surface renders each spec to SVG on demand
+ * server-side, exactly the way the test-page derive endpoint does.
+ *
+ * Server-only: the assembler wraps the server-only `deriveX` derivations and
+ * the writer touches the filesystem. The CLI (`scripts/wx-scenario/build.ts`)
+ * calls `buildTimelineBundle` then `writeTimelineBundle`.
  *
  * Round-trip parser validation is inherited: every METAR / TAF emitted comes
  * straight from `deriveMetar` / `deriveTaf`, which re-parse their own output
  * through `@ab/wx-charts` with zero warnings.
  *
- * See `docs/work/plans/2026-05-14-truth-model-v2-temporal.md`.
+ * See `docs/work/plans/2026-05-14-truth-model-v2-temporal.md` and ADR 018.
  */
 
 import {
@@ -33,7 +39,7 @@ import {
 	WX_TIMELINE_CHART_KINDS,
 	type WxTimelineChartKind,
 } from '@ab/constants';
-import { CHART_RENDERERS } from '@ab/wx-charts/server';
+import { stringify as yamlStringify } from 'yaml';
 import { deriveMetarPlotChart } from '../charts/metar-plot';
 import { deriveSurfaceAnalysisChart } from '../charts/surface-analysis';
 import type { ChartArtifact } from '../charts/types';
@@ -131,13 +137,28 @@ export interface TimelinePirepEvent {
 	lat: number;
 }
 
-/** One per-hour rendered chart. */
+/** One source-byte file backing a timeline chart spec. */
+export interface TimelineChartSource {
+	/** Source-file basename (e.g. `metar-plot.json`). */
+	filename: string;
+	/** JSON-stringified payload (UTF-8). */
+	bytes: string;
+}
+
+/**
+ * One per-hour chart, stored as a renderer SPEC (not a rendered SVG). The
+ * replay surface renders the spec to SVG on demand server-side.
+ */
 export interface TimelineChart {
 	at: string;
 	zulu: string;
 	kind: WxTimelineChartKind;
-	/** The rendered SVG document. */
-	svg: string;
+	/** The wx-charts renderer chart-type the spec validates against. */
+	chartType: ChartType;
+	/** The wx-charts per-chart-type spec object (no inlined basemap). */
+	spec: unknown;
+	/** Source-byte JSON files the spec's `cache://` URIs reference. */
+	sources: TimelineChartSource[];
 }
 
 /** The full assembled timeline bundle. */
@@ -152,20 +173,15 @@ export interface TimelineBundle {
 	charts: TimelineChart[];
 }
 
-/** Options for `buildTimelineBundle`. */
+/**
+ * Options for `buildTimelineBundle`. The assembler stores chart specs, not
+ * rendered SVGs, so it needs no basemap paths -- rendering happens later in
+ * the replay surface, which supplies its own basemap.
+ */
 export interface BuildTimelineBundleOptions {
 	/** Override the native step size (minutes). Defaults to the scenario's. */
 	stepMinutes?: number;
-	/** Filesystem path to the substrate basemap (`us-states-10m.json`). */
-	basemapPath: string;
-	/** Filesystem path to the North-America context basemap (optional). */
-	contextBasemapPath?: string;
-	/** Stamped into chart provenance. */
-	libraryVersion?: string;
 }
-
-/** Default `libraryVersion` stamp for timeline-bundle charts. */
-const TIMELINE_LIBRARY_VERSION = 'wx-engine-timeline';
 
 // ----------------------------------------------------------------
 // Standard TAF issue times
@@ -204,51 +220,20 @@ function standardTafIssueTimes(startIso: string, endIso: string): string[] {
 }
 
 // ----------------------------------------------------------------
-// Chart rendering
+// Chart spec extraction
 // ----------------------------------------------------------------
 
 /**
- * Map a chart artifact's `sources[]` onto the renderer's source map. The
- * renderer keys its `sources` input by the spec's `sources` object keys;
- * each spec source URI (`cache://scenarios/<id>/<name>.json`) is matched to
- * the artifact source whose `path` shares the same basename.
+ * Pull the per-hour chart's source-byte files off its `ChartArtifact`. The
+ * stored filename is the artifact source `path` basename -- the same key the
+ * spec's `cache://...` URIs resolve against by basename, so the replay
+ * renderer can rebuild the renderer source map from these files alone.
  */
-function sourceMapFromArtifact(artifact: ChartArtifact): Record<string, string> {
-	const spec = artifact.spec as { sources?: Record<string, string> };
-	const specSources = spec.sources ?? {};
-	const byBasename = new Map<string, string>();
-	for (const src of artifact.sources) {
-		const base = src.path.split('/').at(-1) ?? src.path;
-		byBasename.set(base, src.bytes);
-	}
-	const map: Record<string, string> = {};
-	for (const [key, uri] of Object.entries(specSources)) {
-		const base = uri.split('/').at(-1) ?? uri;
-		const bytes = byBasename.get(base);
-		if (bytes === undefined) {
-			throw new Error(`timeline-bundle: chart source '${key}' (${uri}) has no matching artifact source`);
-		}
-		map[key] = bytes;
-	}
-	return map;
-}
-
-/** Render a single chart artifact to an SVG document. */
-async function renderArtifact(
-	artifact: ChartArtifact,
-	chartType: ChartType,
-	options: BuildTimelineBundleOptions,
-): Promise<string> {
-	const renderer = CHART_RENDERERS[chartType];
-	const spec = renderer.schema.parse(artifact.spec);
-	const rendered = await renderer.render({
-		spec: spec as never,
-		sources: sourceMapFromArtifact(artifact),
-		basemapPath: options.basemapPath,
-		contextBasemapPath: options.contextBasemapPath,
-		libraryVersion: options.libraryVersion ?? TIMELINE_LIBRARY_VERSION,
-	});
-	return rendered.svg;
+function chartSourcesFromArtifact(artifact: ChartArtifact): TimelineChartSource[] {
+	return artifact.sources.map((src) => ({
+		filename: src.path.split('/').at(-1) ?? src.path,
+		bytes: src.bytes,
+	}));
 }
 
 // ----------------------------------------------------------------
@@ -265,7 +250,7 @@ async function renderArtifact(
  */
 export async function buildTimelineBundle(
 	truth: TruthModel,
-	options: BuildTimelineBundleOptions,
+	options: BuildTimelineBundleOptions = {},
 ): Promise<TimelineBundle> {
 	const evolution = requireEvolution(truth);
 	const stepMinutes = options.stepMinutes ?? evolution.stepMinutes ?? WX_TEMPORAL_DEFAULT_STEP_MINUTES;
@@ -317,14 +302,22 @@ export async function buildTimelineBundle(
 	// --- AIRMET timeline: advisory issue/extend/cancel events. ---
 	const airmetTimeline = deriveAirmetTimeline(truth, { stepMinutes });
 
-	// --- Per-hour charts: surface-analysis + metar-plot for each snapshot. ---
+	// --- Per-hour charts: surface-analysis + metar-plot specs per snapshot. ---
+	// Charts are stored as specs, never as rendered SVGs (ADR 018) -- the
+	// replay surface renders each spec to SVG on demand server-side.
 	const charts: TimelineChart[] = [];
 	for (const snap of snapshots) {
 		const metars = snap.truth.fbStations.map((station) => deriveMetar(snap.truth, station, snap.at));
 		for (const kind of WX_TIMELINE_CHART_KINDS) {
 			const { artifact, chartType } = deriveTimelineChart(kind, snap.truth, metars);
-			const svg = await renderArtifact(artifact, chartType, options);
-			charts.push({ at: snap.at, zulu: snap.zulu, kind, svg });
+			charts.push({
+				at: snap.at,
+				zulu: snap.zulu,
+				kind,
+				chartType,
+				spec: artifact.spec,
+				sources: chartSourcesFromArtifact(artifact),
+			});
 		}
 	}
 
@@ -390,7 +383,12 @@ function loadBuiltin<T>(spec: string): T {
  *   products/taf-sequence.json
  *   products/pirep-events.json
  *   products/airmet-timeline.json
- *   charts/<ZULU>/<kind>.svg
+ *   charts/<ZULU>/<kind>.spec.yaml
+ *   charts/<ZULU>/<kind>.sources/<name>.json
+ *
+ * Charts are stored as specs + source bytes, NOT rendered SVGs -- rendered
+ * SVGs are generated artifacts and stay out of the repo per ADR 018. The
+ * replay surface renders the spec to SVG on demand server-side.
  *
  * Additive to the v1 bundle the engine's `writeScenarioBundle` already wrote:
  * the v1 `truth.json` / `products/*` / `commentary.*` are left untouched.
@@ -421,14 +419,21 @@ export function writeTimelineBundle(bundle: TimelineBundle, bundleDir: string): 
 
 	const chartsDir = path.resolve(bundleDir, WX_TIMELINE_BUNDLE.CHARTS_DIR);
 	for (const chart of bundle.charts) {
-		write(path.resolve(chartsDir, chart.zulu, `${chart.kind}.svg`), chart.svg);
+		const hourDir = path.resolve(chartsDir, chart.zulu);
+		write(path.resolve(hourDir, `${chart.kind}${WX_TIMELINE_BUNDLE.CHART_SPEC_SUFFIX}`), yamlStringify(chart.spec));
+		const sourcesDir = path.resolve(hourDir, `${chart.kind}${WX_TIMELINE_BUNDLE.CHART_SOURCES_SUFFIX}`);
+		for (const src of chart.sources) {
+			write(path.resolve(sourcesDir, src.filename), src.bytes);
+		}
 	}
 }
 
 /**
  * The serialized `timeline.json` shape. The full truth snapshot is included
  * per timestamp so any `deriveX` consumer can re-derive without re-running
- * the engine; the SVG charts live as files under `charts/<ZULU>/`.
+ * the engine. Each chart references its spec file + sources directory (both
+ * relative to the bundle dir); the replay surface reads the spec and renders
+ * it to SVG on demand.
  */
 function timelineJson(bundle: TimelineBundle): unknown {
 	return {
@@ -442,7 +447,13 @@ function timelineJson(bundle: TimelineBundle): unknown {
 			metars: bundle.metarSequence.filter((m) => m.at === s.at).map((m) => ({ station: m.station, raw: m.raw })),
 			charts: bundle.charts
 				.filter((c) => c.at === s.at)
-				.map((c) => ({ kind: c.kind, file: `${WX_TIMELINE_BUNDLE.CHARTS_DIR}/${s.zulu}/${c.kind}.svg` })),
+				.map((c) => ({
+					kind: c.kind,
+					chartType: c.chartType,
+					specFile: `${WX_TIMELINE_BUNDLE.CHARTS_DIR}/${s.zulu}/${c.kind}${WX_TIMELINE_BUNDLE.CHART_SPEC_SUFFIX}`,
+					sourcesDir: `${WX_TIMELINE_BUNDLE.CHARTS_DIR}/${s.zulu}/${c.kind}${WX_TIMELINE_BUNDLE.CHART_SOURCES_SUFFIX}`,
+					sources: c.sources.map((src) => src.filename),
+				})),
 		})),
 	};
 }

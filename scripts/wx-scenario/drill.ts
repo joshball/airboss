@@ -39,6 +39,8 @@ type DrillCoverage = 'balanced' | 'random' | 'gap-filling';
 
 interface DrillArgs {
 	count: number;
+	/** Whether `--count` was passed explicitly (vs. taking the default). */
+	countExplicit: boolean;
 	products: WxProduct[];
 	layout: DrillLayout;
 	seed: number;
@@ -79,6 +81,7 @@ function parseScenarios(raw: string): 'all' | WxScenario[] {
 
 function parseArgs(argv: readonly string[]): DrillArgs {
 	let count = 10;
+	let countExplicit = false;
 	let products: WxProduct[] = ['metar', 'taf'];
 	let layout: DrillLayout = 'interleaved';
 	let seed = 1;
@@ -96,6 +99,7 @@ function parseArgs(argv: readonly string[]): DrillArgs {
 					console.error('drill: --count must be a positive integer.');
 					process.exit(2);
 				}
+				countExplicit = true;
 				i += 1;
 				break;
 			case '--products':
@@ -140,7 +144,7 @@ function parseArgs(argv: readonly string[]): DrillArgs {
 		}
 	}
 
-	return { count, products, layout, seed, fromScenarios, coverage, output };
+	return { count, countExplicit, products, layout, seed, fromScenarios, coverage, output };
 }
 
 export async function runDrill(args: readonly string[]): Promise<void> {
@@ -196,9 +200,11 @@ export async function runDrill(args: readonly string[]): Promise<void> {
  *
  * Builds a temporal-drill bundle for each v2 scenario in `--from-scenarios`,
  * runs the three exercise generators (sequence-change, taf-vs-actuals,
- * front-position), and writes a `.json` + `.md` pack. Reuses `--count`,
- * `--seed`, `--from-scenarios`, `--output`; the `--products` / `--layout` /
- * `--coverage` knobs are token-fluency concerns and do not apply here.
+ * front-position), and writes a `.json` + `.md` pack. Reuses `--seed`,
+ * `--from-scenarios`, `--output`; `--count` trims the pack only when passed
+ * explicitly (no `--count` emits every generated exercise). The
+ * `--products` / `--layout` / `--coverage` knobs are token-fluency concerns
+ * and do not apply here.
  *
  * Only v2 scenarios (those with an `evolution` block) support `--temporal`;
  * a v1 slug surfaces a clear error.
@@ -222,7 +228,15 @@ async function runTemporalDrill(args: readonly string[]): Promise<void> {
 		process.exit(1);
 	}
 
-	const pack = buildTemporalPack({ bundles, seed: parsed.seed, count: parsed.count });
+	// `--count` trims the temporal pack only when the caller passed it
+	// explicitly. The shared `parseArgs` defaults `count` to 10 (the token
+	// drill's default), but a temporal drill with no `--count` should emit
+	// every generated exercise, not silently cap at 10.
+	const pack = buildTemporalPack({
+		bundles,
+		seed: parsed.seed,
+		count: parsed.countExplicit ? parsed.count : undefined,
+	});
 
 	if (pack.exercises.length === 0) {
 		console.error('drill --temporal: no exercises generated -- the scenario(s) produced no usable sequences.');

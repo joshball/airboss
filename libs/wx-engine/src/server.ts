@@ -84,10 +84,10 @@ export {
 	type TimelineSnapshot,
 } from './products/temporal';
 // ----------------------------------------------------------------------
-// v2 timeline-bundle assembler + writer. Server-only -- renders charts to
-// SVG via `@ab/wx-charts/server` and touches the filesystem. Powers the
-// `wx-scenario build --timeline` CLI flag and the `/practice/wx/replay`
-// study-app surface.
+// v2 timeline-bundle assembler + writer. Server-only -- the writer touches
+// the filesystem. Stores per-hour chart specs (not rendered SVGs, per ADR
+// 018); the `/practice/wx/replay` surface renders the specs on demand.
+// Powers the `wx-scenario build --timeline` CLI flag.
 // ----------------------------------------------------------------------
 export {
 	type BuildTimelineBundleOptions,
@@ -95,6 +95,7 @@ export {
 	type TimelineBundle,
 	type TimelineBundleSnapshot,
 	type TimelineChart,
+	type TimelineChartSource,
 	type TimelineMetarSample,
 	type TimelinePirepEvent,
 	type TimelineTafSample,

@@ -1,0 +1,27 @@
+slug: wx-scenarios/frontal-pressure-march/metar-plot
+type: metar-plot-grid
+title: METAR Plot (truth-derived)
+subtitle: 2026-03-14T12:00:00.000Z -- 6 truth-derived stations
+projection:
+  kind: lambert
+  parallels:
+    - 33
+    - 45
+  rotate:
+    - -96
+    - 0
+extent:
+  lon_min: -100
+  lat_min: 32
+  lon_max: -80
+  lat_max: 47
+sources:
+  observations: cache://scenarios/frontal-pressure-march/metar-plot.json
+options:
+  collision_min_distance_px: 36
+  collision_max_iterations: 40
+  show_category_ring: true
+  show_station_model_legend: true
+  show_category_legend: true
+  temp_unit: F
+  source_attribution: wx-engine -- truth-derived synthetic

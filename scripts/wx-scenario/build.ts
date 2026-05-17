@@ -34,11 +34,6 @@ import {
 } from '@ab/wx-engine/server';
 import { formatHumanDurationMs, REPO_ROOT, resolveScenarioSlug } from './lib';
 
-/** Substrate basemap for per-hour timeline charts. */
-const BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'us-states-10m.json');
-/** North-America context basemap (fills the Lambert cone). */
-const CONTEXT_BASEMAP_PATH = resolve(REPO_ROOT, 'data', 'references', 'basemaps', 'north-america-context-50m.json');
-
 const SCENARIO_MATCHES_PATH = resolve(REPO_ROOT, 'course/knowledge/weather/encoded-text-catalog/scenario-matches.json');
 
 interface ScenarioMatchesFile {
@@ -138,7 +133,8 @@ async function buildOne(slug: WxScenario, timeline: boolean): Promise<BuildResul
 
 		// `--timeline`: additively emit the full v2 evolution bundle. The v1
 		// artifacts above are untouched; the timeline bundle adds timeline.json,
-		// the product sequences, and per-hour SVG charts.
+		// the product sequences, and per-hour chart specs (NOT rendered SVGs --
+		// the replay surface renders the spec on demand, per ADR 018).
 		if (timeline) {
 			const truth = loadScenario(slug);
 			if (truth.evolution === undefined) {
@@ -149,15 +145,12 @@ async function buildOne(slug: WxScenario, timeline: boolean): Promise<BuildResul
 					durationMs: performance.now() - start,
 				};
 			}
-			const timelineBundle = await buildTimelineBundle(truth, {
-				basemapPath: BASEMAP_PATH,
-				contextBasemapPath: CONTEXT_BASEMAP_PATH,
-			});
+			const timelineBundle = await buildTimelineBundle(truth);
 			writeTimelineBundle(timelineBundle, bundleDir);
 			message +=
 				` | timeline: ${timelineBundle.snapshots.length} snapshots, ` +
 				`${timelineBundle.metarSequence.length} METAR samples, ${timelineBundle.tafSequence.length} TAF samples, ` +
-				`${timelineBundle.pirepEvents.length} PIREP events, ${timelineBundle.charts.length} hourly charts`;
+				`${timelineBundle.pirepEvents.length} PIREP events, ${timelineBundle.charts.length} hourly chart specs`;
 		}
 
 		return {
