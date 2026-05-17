@@ -23,6 +23,7 @@
 import { card, review } from '@ab/bc-study/schema';
 import {
 	getFirstTouchDate,
+	getKnowledgeNodeTitles,
 	getNodeEvidenceState,
 	getWeakAreas,
 	type NodeEvidenceState,
@@ -156,10 +157,8 @@ async function pickFocusNode(userId: string, domain: string, db: Db): Promise<Fo
 							accuracy: 0,
 						};
 		if (chosen === null) return null;
-		const titleRows = await db.execute(sql`SELECT title FROM study.knowledge_node WHERE id = ${chosen.nodeId} LIMIT 1`);
-		type Row = { title: string };
-		const titleList = titleRows as unknown as Row[];
-		const title = titleList[0]?.title ?? chosen.nodeId;
+		const titles = await getKnowledgeNodeTitles([chosen.nodeId], db);
+		const title = titles.get(chosen.nodeId) ?? chosen.nodeId;
 		return {
 			nodeId: chosen.nodeId,
 			nodeTitle: title,

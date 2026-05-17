@@ -23,8 +23,11 @@ import {
 } from '@ab/bc-study/server';
 import { ROUTES } from '@ab/constants';
 import { type SourceId, urlForReference } from '@ab/sources';
+import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+
+const log = createLogger('study:card-drafts');
 
 export interface DraftListRow {
 	id: string;
@@ -86,15 +89,24 @@ export const actions: Actions = {
 		const form = await event.request.formData();
 		const draftId = String(form.get('draftId') ?? '');
 		if (draftId.length === 0) return fail(400, { error: 'Missing draft id.' });
+		let cardId: string;
 		try {
-			const { cardId } = await promoteDraftToCard(draftId, user.id);
-			redirect(303, ROUTES.MEMORY_CARD(cardId));
+			({ cardId } = await promoteDraftToCard(draftId, user.id));
 		} catch (err) {
 			if (err instanceof CardDraftNotFoundError) return fail(404, { error: 'Draft not found.' });
 			if (err instanceof CardDraftAlreadyPromotedError) return fail(409, { error: 'Already promoted.' });
-			if (err instanceof Error) return fail(400, { error: err.message });
-			throw err;
+			// A draft missing required fields (domain / front / back) cannot be
+			// promoted as-is; the UI disables the button via `canPromoteAsIs`, so
+			// this path is reached only by a stale form. Any other Error is an
+			// unexpected server fault -- log the raw text, never surface it.
+			log.error(
+				'promote draft failed',
+				{ requestId: event.locals.requestId, userId: user.id, metadata: { draftId } },
+				err instanceof Error ? err : undefined,
+			);
+			return fail(400, { error: 'This draft is missing required fields. Edit it before promoting.' });
 		}
+		throw redirect(303, ROUTES.MEMORY_CARD(cardId));
 	},
 	discard: async (event) => {
 		const user = requireAuth(event);
