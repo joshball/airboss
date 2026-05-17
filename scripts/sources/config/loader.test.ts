@@ -16,10 +16,17 @@ import {
 } from './loader';
 
 describe('loadAcConfig', () => {
-	it('loads 12 AC entries (matches the pre-WP AC_TARGETS array)', () => {
+	it('loads 13 AC entries', () => {
 		const ac = loadAcConfig();
-		expect(ac.entries).toHaveLength(12);
+		expect(ac.entries).toHaveLength(13);
 		expect(ac.base_url).toBe('https://www.faa.gov/documentLibrary/media/Advisory_Circular');
+	});
+	it('includes AC 00-45H (Aviation Weather Services)', () => {
+		const ac = loadAcConfig();
+		const e = ac.entries.find((entry) => entry.doc_id === 'ac-00-45-h');
+		expect(e?.edition).toBe('H');
+		expect(e?.url).toBe('https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-45H.pdf');
+		expect(e?.filename).toBe('AC_00-45H.pdf');
 	});
 	it('preserves the AC 91-21-1D dot-in-filename oddity', () => {
 		const ac = loadAcConfig();

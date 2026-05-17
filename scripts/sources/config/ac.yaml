@@ -24,6 +24,10 @@ entries:
     edition: B
     url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-6B.pdf
     filename: AC_00-6B.pdf
+  - doc_id: ac-00-45-h
+    edition: H
+    url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_00-45H.pdf
+    filename: AC_00-45H.pdf
   - doc_id: ac-60-22
     edition: null
     url: https://www.faa.gov/documentLibrary/media/Advisory_Circular/AC_60-22.pdf
