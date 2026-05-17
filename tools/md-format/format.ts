@@ -55,10 +55,36 @@ function parseFence(line: string): FenceInfo | null {
 	return { marker, indent, lang };
 }
 
+/**
+ * True when `line` is a GFM table separator row -- the second line of a real
+ * pipe table (`| --- | :--: |`). The cell content between bookend pipes must
+ * be only dashes, colons, and spaces, and every cell must contain at least
+ * one dash. Anything else (stray `|` lines from PDF extraction, an all-empty
+ * `|  |` block) is not a table.
+ */
+function isGfmSeparatorRow(line: string | undefined): boolean {
+	if (line === undefined) return false;
+	const stripped = line.trim();
+	if (!stripped.startsWith('|')) return false;
+	const cells = stripped.split('|').slice(1, -1);
+	if (cells.length === 0) return false;
+	return cells.every((cell) => {
+		const c = cell.trim();
+		return c.length > 0 && /^:?-+:?$/.test(c);
+	});
+}
+
 /** Pipe-table alignment, ported from md-align-table.py. Operates on a
- * contiguous block of table rows (non-empty lines starting with `|`). */
+ * contiguous block of table rows (non-empty lines starting with `|`).
+ *
+ * A block is only aligned when its second line is a valid GFM separator row.
+ * Blocks that aren't real tables -- stray `|` lines in ingested FAA content,
+ * degenerate all-empty `|  |` runs -- are returned verbatim. This keeps the
+ * formatter idempotent (a non-table block has no canonical "aligned" form to
+ * converge on) and stops it reflowing machine-extracted source documents. */
 function alignTableBlock(block: readonly string[]): string[] {
 	if (block.length < 2) return [...block];
+	if (!isGfmSeparatorRow(block[1])) return [...block];
 	const rows: string[][] = [];
 	for (const line of block) {
 		const stripped = line.trim();
