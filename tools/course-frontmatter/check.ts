@@ -45,12 +45,19 @@ interface CheckError {
 	message: string;
 }
 
+// Subtrees under course/regulations/ that hold artifacts other than lessons.
+// `references/` holds the document-family reference pages (page.md per family):
+// standalone, citable encyclopedic entries, not lessons, so they carry no
+// `cites:` block. They are validated by their own _template.md shape, not here.
+const SKIP_DIRS = new Set(['references']);
+
 async function walk(dir: string, files: string[]): Promise<void> {
 	const entries = await readdir(dir);
 	for (const entry of entries) {
 		const full = join(dir, entry);
 		const stats = await stat(full);
 		if (stats.isDirectory()) {
+			if (SKIP_DIRS.has(entry)) continue;
 			await walk(full, files);
 			continue;
 		}
