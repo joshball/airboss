@@ -3,10 +3,10 @@ id: bug-flightbag-ac-appendix-chapter-404
 title: Flightbag AC appendix chapters 404 (hyphenated chapter code rejected)
 product: flightbag
 severity: major
-status: open
+status: fixed
 discovered_pr: null
 discovered_date: 2026-05-15
-fix_pr: null
+fix_pr: 1005
 fix_wp: null
 tags: [flightbag, reader, references, ac, integration-coverage]
 ---
