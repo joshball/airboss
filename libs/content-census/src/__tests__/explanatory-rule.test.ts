@@ -31,10 +31,24 @@ describe('explanatory-rule guard', () => {
 		expect(full[0].id).toBe('wx-catalog');
 	});
 
-	it('ships the six Phase-2 markdown corpora as real Layer-1 censuses', () => {
+	it('ships every Phase-2 corpus as a real Layer-1 census', () => {
 		const censusMode = ALL_CENSUS.filter((c) => c.mode === 'census');
 		const ids = censusMode.map((c) => c.id).sort();
-		expect(ids).toEqual(['adrs', 'cards', 'knowledge-nodes', 'regulations', 'vision', 'work-packages']);
+		expect(ids).toEqual([
+			'acs',
+			'adrs',
+			'cards',
+			'glossary',
+			'handbooks',
+			'knowledge-nodes',
+			'regulations',
+			'sim-content',
+			'sources',
+			'vision',
+			'work-packages',
+			'wx-charts',
+			'wx-scenarios',
+		]);
 	});
 
 	it('gives every census-mode corpus a real inventory and a Layer-2 placeholder', () => {
