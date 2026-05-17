@@ -1,7 +1,15 @@
 {
   "schema_version": 1,
-  "fetched_at": "2026-04-27T21:20:46.766Z",
+  "fetched_at": "2026-05-17T13:59:53.816Z",
   "entries": [
+    {
+      "doc_slug": "00-45",
+      "doc_number": "00-45",
+      "revision": "h",
+      "title": "AC 00-45H - Aviation Weather Services",
+      "publication_date": "2016-11-14",
+      "manifest_path": "ac/00-45/h/manifest.json"
+    },
     {
       "doc_slug": "00-6",
       "doc_number": "00-6",
