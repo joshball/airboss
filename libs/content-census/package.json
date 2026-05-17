@@ -1,0 +1,21 @@
+{
+	"name": "@ab/content-census",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		}
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*"
+	},
+	"devDependencies": {
+		"vitest": "catalog:"
+	}
+}

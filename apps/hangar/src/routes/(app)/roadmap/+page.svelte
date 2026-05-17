@@ -150,7 +150,9 @@ const anyFilterActive = $derived(
 				<code>bun run wp set</code>; see the
 				<a href={ROUTES.HANGAR_DOCS_PATH('docs/decisions/025-wp-frontmatter-contract/decision.md')}>
 					ADR 025 contract
-				</a>.
+				</a>. This dashboard tracks <em>process</em> -- where work packages stand. For <em>content</em> --
+				what learning material exists and what is missing -- see the
+				<a href={ROUTES.CONTENT_CENSUS}>Content census</a>.
 			</p>
 		</div>
 		<div class="counts" aria-label="Counts">

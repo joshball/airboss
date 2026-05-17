@@ -91,6 +91,9 @@ const aliases = {
 	// Hangar `/roadmap` Phase 8 imports the read-only WP loader through
 	// this alias. Mirrors the SvelteKit alias in `apps/hangar/svelte.config.js`.
 	'@ab/wp-loader': resolve('./scripts/lib/wp-loader.ts'),
+	// hangar-content-census WP Phase 1: the `/content` census dashboard lib.
+	'@ab/content-census/server': resolve('./libs/content-census/src/server.ts'),
+	'@ab/content-census': resolve('./libs/content-census/src/index.ts'),
 };
 
 // `$app/state` is a SvelteKit runtime module. The standalone DOM project

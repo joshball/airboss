@@ -72,6 +72,14 @@ const config = {
 			'@ab/help/*': '../../libs/help/src/*',
 			'@ab/sources': '../../libs/sources/src/index.ts',
 			'@ab/sources/*': '../../libs/sources/src/*',
+			// hangar-content-census WP Phase 1: the `/content` census dashboard
+			// imports the corpus-adapter registry + types from the runtime
+			// barrel and the adapters from the `/server` barrel (the adapters
+			// read `node:fs`; the `/server` import is confined to
+			// `+page.server.ts`).
+			'@ab/content-census': '../../libs/content-census/src/index.ts',
+			'@ab/content-census/server': '../../libs/content-census/src/server.ts',
+			'@ab/content-census/*': '../../libs/content-census/src/*',
 			// Hangar `/roadmap` Phase 8 imports the read-only WP loader from
 			// `scripts/lib/wp-loader.ts` (server-only; uses node:fs). The
 			// loader's top-of-file comment anticipates this exact callsite

@@ -76,7 +76,10 @@
 			"@ab/wx-drill/*": ["libs/wx-drill/src/*"],
 			"@ab/bc-wx-practice": ["libs/bc/wx-practice/src/index.ts"],
 			"@ab/bc-wx-practice/server": ["libs/bc/wx-practice/src/server.ts"],
-			"@ab/bc-wx-practice/*": ["libs/bc/wx-practice/src/*"]
+			"@ab/bc-wx-practice/*": ["libs/bc/wx-practice/src/*"],
+			"@ab/content-census": ["libs/content-census/src/index.ts"],
+			"@ab/content-census/server": ["libs/content-census/src/server.ts"],
+			"@ab/content-census/*": ["libs/content-census/src/*"]
 		}
 	},
 	"include": ["libs/*/src/**/*.ts", "libs/bc/*/src/**/*.ts", "libs/themes/**/*.ts", "apps/*/src/**/*.ts", "scripts/**/*.ts"],
