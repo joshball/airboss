@@ -143,6 +143,11 @@ function toggleCollapse(): void {
 		background: var(--edge-default);
 	}
 
+	.toggle:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
 	.chevron {
 		font-family: var(--font-family-mono);
 		font-size: var(--font-size-xs);
