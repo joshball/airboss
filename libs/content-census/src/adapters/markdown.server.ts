@@ -58,6 +58,19 @@ export function frontmatterString(frontmatter: Record<string, unknown> | null, k
 	return typeof value === 'string' ? value.trim() : null;
 }
 
+/**
+ * Read a frontmatter value as a list of trimmed strings. A missing key, a
+ * non-array value, or non-string entries all collapse to an empty list --
+ * the caller never has to guard the YAML shape. Used by adapters that walk
+ * the knowledge-graph edge keys (`requires`, `deepens`, `related`, ...).
+ */
+export function frontmatterStringArray(frontmatter: Record<string, unknown> | null, key: string): string[] {
+	if (frontmatter === null) return [];
+	const value = frontmatter[key];
+	if (!Array.isArray(value)) return [];
+	return value.filter((entry): entry is string => typeof entry === 'string').map((entry) => entry.trim());
+}
+
 /** Count the non-blank lines in a body -- the "is this authored?" signal. */
 export function nonBlankLineCount(body: string): number {
 	return body.split('\n').filter((line) => line.trim().length > 0).length;
@@ -83,6 +96,32 @@ export function authoredPhases(body: string): string[] {
 		match = phaseOpener.exec(body);
 	}
 	return authored;
+}
+
+/**
+ * Count the `- front:` card entries inside every `:::cards` block of a
+ * markdown body. Cards are top-level YAML list items between a `:::cards`
+ * opener and the next bare `:::` closer. Shared by the cards census (the
+ * card count IS the corpus) and the knowledge-nodes census (a node's card
+ * count drives the cardless-node gap).
+ */
+export function countCardBlocks(body: string): number {
+	let count = 0;
+	let inBlock = false;
+	for (const line of body.split('\n')) {
+		const trimmed = line.trim();
+		if (!inBlock) {
+			if (trimmed.startsWith(':::cards')) inBlock = true;
+			continue;
+		}
+		if (trimmed === ':::') {
+			inBlock = false;
+			continue;
+		}
+		// A card starts at a list item whose first key is `front:`.
+		if (/^-\s+front:/.test(trimmed)) count += 1;
+	}
+	return count;
 }
 
 /** List immediate subdirectory names of a repo-relative directory, sorted. */

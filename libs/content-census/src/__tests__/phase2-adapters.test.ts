@@ -144,16 +144,23 @@ describe('sourcesCensus', () => {
 		expectValidCensusMode(census, 'sources');
 	});
 
-	it('inventories all 19 AC / InFO / SAFO source documents', () => {
-		expect(census.items.length).toBe(19);
+	it('inventories every AC / InFO / SAFO source document with a known derived state', () => {
+		// Counts are derived from the on-disk registries (ac/, info/, safo/),
+		// which grow as new FAA documents are registered -- assert the shape,
+		// not a frozen total, so the test does not drift on registry growth.
+		expect(census.items.length).toBeGreaterThan(0);
 		for (const item of census.items) {
 			expect(['linked', 'orphan']).toContain(item.derivedState);
 		}
 	});
 
-	it('reports the registry breakdown as 9 AC / 4 InFO / 6 SAFO', () => {
+	it('reports a registry breakdown consistent with the inventory total', () => {
 		const metric = census.metrics.find((m) => m.key === 'registry-breakdown');
-		expect(metric?.value).toBe('9 AC / 4 InFO / 6 SAFO');
+		expect(metric?.value).toMatch(/^\d+ AC \/ \d+ InFO \/ \d+ SAFO$/);
+		// The three registry counts in the breakdown must sum to the inventory.
+		const counts = String(metric?.value).match(/\d+/g)?.map(Number);
+		expect(counts).toHaveLength(3);
+		expect((counts ?? []).reduce((a, b) => a + b, 0)).toBe(census.items.length);
 	});
 });
 

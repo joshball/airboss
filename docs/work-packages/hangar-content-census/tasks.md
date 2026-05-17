@@ -77,7 +77,8 @@ ship alongside in the parallel Phase-2 PR.
 Each corpus, one at a time. Per corpus: author its content-intent frontmatter,
 build its real gap view + next-list. Order by value:
 
-- [ ] Knowledge nodes -- intent frontmatter + gap view + next
+- [~] Knowledge nodes -- gap view + next-list shipped (`full` mode); Layer-2
+      intent frontmatter blocked on ADR 028 approval
 - [ ] Cards -- intent + gap + next
 - [ ] Encoded-text catalog -- close the catalog's own intent (already has the richest gap view from Phase 1)
 - [ ] wx scenarios -- intent + the AIRMET-emitter + temporal-scenario gaps as real next-items
@@ -87,6 +88,14 @@ build its real gap view + next-list. Order by value:
 
 Phase 3 sub-phases are individually shippable. New WPs may be split off when a
 corpus's depth work is large enough to earn its own.
+
+The knowledge-nodes gap view + next-list (Layer-1 analysis) shipped ahead of
+its Layer-2 intent block: the gap view derives entirely from node content on
+disk (skeleton / cardless / draft / dangling-edge / orphan analysis), so it
+has no ADR-028 dependency. Layer-2 content-intent frontmatter on node files is
+deferred until ADR 028 moves from `proposed` to `accepted`; the next-list
+ranking proxies value from the `study_priority` frontmatter already on each
+node until then.
 
 ## Known follow-ups surfaced by this WP (tracked, not lost)
 

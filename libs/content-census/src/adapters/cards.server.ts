@@ -20,7 +20,7 @@
 import { NODE_CARD_RICH_MIN, ROUTES } from '@ab/constants';
 import type { CensusItem, CensusMetric, CorpusCensus, DocLink } from '../types';
 import { layerTwoPending } from './layer-two.server';
-import { frontmatterString, parseMarkdownFile, walkMarkdown } from './markdown.server';
+import { countCardBlocks, frontmatterString, parseMarkdownFile, walkMarkdown } from './markdown.server';
 
 const KNOWLEDGE_DIR = 'course/knowledge';
 
@@ -46,30 +46,6 @@ const CARDS_DOCS: DocLink[] = [
 	},
 ];
 
-/**
- * Count the `- front:` card entries inside every `:::cards` block of a node
- * body. Cards are top-level YAML list items between a `:::cards` opener and
- * the next bare `:::` closer.
- */
-function countCards(body: string): number {
-	let count = 0;
-	let inBlock = false;
-	for (const line of body.split('\n')) {
-		const trimmed = line.trim();
-		if (!inBlock) {
-			if (trimmed.startsWith(':::cards')) inBlock = true;
-			continue;
-		}
-		if (trimmed === ':::') {
-			inBlock = false;
-			continue;
-		}
-		// A card starts at a list item whose first key is `front:`.
-		if (/^-\s+front:/.test(trimmed)) count += 1;
-	}
-	return count;
-}
-
 /** Classify a node by its card count. */
 function deriveState(cardCount: number): string {
 	if (cardCount === 0) return STATE_NONE;
@@ -91,7 +67,7 @@ export function cardsCensus(): CorpusCensus {
 		const { frontmatter, body } = parseMarkdownFile(path);
 		const id = frontmatterString(frontmatter, 'id') ?? path;
 		const title = frontmatterString(frontmatter, 'title') ?? id;
-		const cardCount = countCards(body);
+		const cardCount = countCardBlocks(body);
 		totalCards += cardCount;
 		items.push({
 			id,
