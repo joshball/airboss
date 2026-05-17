@@ -6,9 +6,10 @@
  * and returns its `CorpusCensus`. ONE generic `+page.svelte` renders every
  * corpus -- the heterogeneity is absorbed by the adapter, not the UI.
  *
- * wx-catalog gets the full Phase-1 reference adapter; the other 13 corpora
- * get the honest stub adapter (a labelled "pending" state, never fabricated
- * data). An unknown `[corpus]` id 404s.
+ * As of content-census Phase 2 every corpus in `CORPUS_REGISTRY` ships a
+ * real Layer-1 adapter; the `stubCensus` fallback is retained only as a
+ * defensive default for a corpus registered before its adapter lands. An
+ * unknown `[corpus]` id 404s.
  *
  * The adapters read the filesystem; this file is server-only by SvelteKit
  * convention so the `/server` import is safe.

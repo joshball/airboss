@@ -67,10 +67,17 @@ const rootEnv = loadRootEnv();
 // output with stack traces. No e2e spec depends on the in-process worker
 // (specs that touch the queue insert + inspect rows directly), so leaving
 // it off in this context is loss-free.
+// `AUTH_RATE_LIMIT_ENABLED=0` disables better-auth's database-backed rate
+// limiter for the e2e suite. Every parallel worker signs in from the same
+// `127.0.0.1`, so the shared rate-limit key both throttles the run and races
+// better-auth's SELECT-then-INSERT on `bauth_rate_limit` (a unique-constraint
+// violation under concurrency). Rate-limit behaviour is covered by
+// `libs/auth/src/rate-limit.test.ts`, which builds its own enabled instance.
 const e2eEnv = {
 	...rootEnv,
 	[ENV_VARS.DATABASE_URL]: DEV_DB_URL_E2E,
 	[ENV_VARS.HANGAR_JOBS_WORKER]: 'off',
+	[ENV_VARS.AUTH_RATE_LIMIT_ENABLED]: '0',
 };
 
 // The integration sweep targets `airboss_integration` on its own port. Same

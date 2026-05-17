@@ -41,11 +41,15 @@ test.describe('practice / wx mastery', () => {
 		await expect(heatmapCells.first()).toBeVisible();
 		expect(await heatmapCells.count()).toBeGreaterThan(10);
 
-		// Legend renders all four states (active / passive / demoted / never seen).
-		await expect(page.getByText('Active', { exact: true })).toBeVisible();
-		await expect(page.getByText('Passive', { exact: true })).toBeVisible();
-		await expect(page.getByText('Demoted', { exact: true })).toBeVisible();
-		await expect(page.getByText('Never seen', { exact: true }).first()).toBeVisible();
+		// Legend renders all four states (active / passive / demoted / never
+		// seen). Scope to the "State counts" <dl> -- the bare label text also
+		// appears on the state-filter chips, so an unscoped getByText is
+		// ambiguous in strict mode.
+		const legend = page.getByLabel('State counts');
+		await expect(legend.getByText('Active', { exact: true })).toBeVisible();
+		await expect(legend.getByText('Passive', { exact: true })).toBeVisible();
+		await expect(legend.getByText('Demoted', { exact: true })).toBeVisible();
+		await expect(legend.getByText('Never seen', { exact: true })).toBeVisible();
 	});
 
 	test('switching product reloads the page and tabs follow', async ({ page }) => {
