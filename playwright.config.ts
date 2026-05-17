@@ -100,13 +100,26 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
-	// The custom `tests/integration/reporter.ts` filters by project name, so
-	// it's a no-op for the e2e projects and only writes its markdown report
-	// when the `flightbag-coverage` project runs. Layering it next to the
-	// existing list/github reporters keeps both suites visible.
-	reporter: process.env.CI
-		? [['github'], ['list'], ['./tests/integration/reporter.ts']]
-		: [['list'], ['./tests/integration/reporter.ts']],
+	// Worker count is a TOP-LEVEL setting -- Playwright ignores a `workers`
+	// field placed inside a `projects[]` entry. So we resolve it here: when
+	// the integration sweep is the only project requested, `integrationWorkers()`
+	// (default 100) applies; otherwise `undefined` lets Playwright pick its
+	// default (~CPUs/2) for the browser-driven e2e suites, where 100 chromium
+	// instances would thrash the box. Override the sweep with the
+	// `TEST_INTEGRATION_WORKERS` env var or Playwright's own `--workers=N`.
+	workers: workersFor(),
+	// Reporter selection is suite-aware. The integration sweep
+	// (`flightbag-coverage`) parameterises several thousand URLs into
+	// individual tests; the stock `list` reporter would print one line per
+	// test -- thousands of lines that bury the signal. For that run we use
+	// the compact `dot` reporter (one char per test, live progress) plus the
+	// custom `tests/integration/reporter.ts`, which stays silent during the
+	// run and prints a single grouped, actionable summary at the end.
+	//
+	// For the e2e suites `list` is the right call -- a few hundred tests with
+	// readable names. The custom reporter is a no-op there (it filters by
+	// project name) but stays layered so a mixed run still gets the summary.
+	reporter: reportersFor(),
 	timeout: 30_000,
 	expect: { timeout: 5_000 },
 	use: {
@@ -212,11 +225,17 @@ export default defineConfig({
 		},
 		{
 			// Flightbag coverage sweep -- HTTP-only request fixture (no browser
-			// context), 32 workers, no auth, no storage state. Iterates every
-			// reader URL derived from `notSupersededInRegistry()` references
-			// and asserts each one responds with a non-error status and a
-			// non-empty body. The integration spec lives outside `tests/e2e/`
-			// so the e2e project filters never sweep it up.
+			// context), highly parallel, no auth, no storage state. Iterates
+			// every reader URL derived from `notSupersededInRegistry()`
+			// references and asserts each one responds with a non-error status
+			// and a non-empty body. The integration spec lives outside
+			// `tests/e2e/` so the e2e project filters never sweep it up.
+			//
+			// Worker count: each test is a single GET against the in-process
+			// vite SSR -- no browser, negligible per-worker memory -- so the
+			// sweep runs far more workers than CPU cores. The count is set at
+			// the top-level `workers:` field (`workersFor()`); a `workers` field
+			// on this project object would be silently ignored by Playwright.
 			//
 			// Pointed at the dedicated `flightbag-integration` webServer below
 			// so the e2e flightbag project (also on its own webServer) can
@@ -224,7 +243,8 @@ export default defineConfig({
 			name: 'flightbag-coverage',
 			testDir: './tests/integration',
 			testMatch: /flightbag-coverage\.spec\.ts/,
-			workers: 32,
+			// Worker count is resolved at the TOP LEVEL (`workers: workersFor()`)
+			// -- a `workers` field here would be silently ignored by Playwright.
 			fullyParallel: true,
 			use: {
 				baseURL: flightbagIntegrationBaseURL,
@@ -250,6 +270,45 @@ export default defineConfig({
 	// applies the same parse to its CLI args.
 	webServer: chooseWebServers(),
 });
+
+/**
+ * Pick the reporter stack. When the integration sweep is the only project
+ * requested (`--project=flightbag-coverage`), use the compact `dot` reporter
+ * so progress stays visible without thousands of per-test lines; the custom
+ * reporter then prints the grouped summary. Every other run keeps `list`.
+ */
+function reportersFor(): NonNullable<Parameters<typeof defineConfig>[0]['reporter']> {
+	const requested = projectArgs();
+	const integrationOnly = requested.length > 0 && requested.every((p) => p === 'flightbag-coverage');
+	const base: Array<[string] | [string, Record<string, unknown>]> = integrationOnly ? [['dot']] : [['list']];
+	if (process.env.CI) base.unshift(['github']);
+	base.push(['./tests/integration/reporter.ts']);
+	return base;
+}
+
+/**
+ * Top-level worker count. Playwright reads `workers` ONLY from the top-level
+ * config -- a `workers` field inside a `projects[]` entry is silently ignored.
+ *
+ * When the integration sweep (`flightbag-coverage`) is the only project
+ * requested, return a high count: every test is a single HTTP GET against the
+ * in-process vite SSR -- no browser, negligible per-worker memory -- so
+ * concurrency far above CPU-core count is safe and is the lever for wall-clock
+ * time. Default 100, override via `TEST_INTEGRATION_WORKERS` (clamped 1..512).
+ *
+ * For every other run, return `undefined` so Playwright picks its default
+ * (~CPUs/2). The e2e suites drive real chromium instances; 100 of those would
+ * thrash the box. `--workers=N` on the CLI still overrides either path.
+ */
+function workersFor(): number | undefined {
+	const requested = projectArgs();
+	const integrationOnly = requested.length > 0 && requested.every((p) => p === 'flightbag-coverage');
+	if (!integrationOnly) return undefined;
+	const raw = process.env.TEST_INTEGRATION_WORKERS;
+	const parsed = raw ? Number.parseInt(raw, 10) : NaN;
+	if (Number.isFinite(parsed) && parsed > 0) return Math.min(parsed, 512);
+	return 100;
+}
 
 function projectArgs(): readonly string[] {
 	const args = process.argv;

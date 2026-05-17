@@ -26,13 +26,16 @@
  * (deduped). Rows whose result is `no-route` are recorded in the run
  * report's skipped section but not asserted on.
  *
- * Runtime: 32 workers, request fixture only (no browser). The vite SSR is
- * the bottleneck; the request fixture lets every worker pipeline GETs
+ * Runtime: highly parallel (default 100 workers, see `playwright.config.ts`
+ * -> `integrationWorkers()`), request fixture only (no browser). The vite SSR
+ * is the bottleneck; the request fixture lets every worker pipeline GETs
  * without paying for chromium per worker.
  *
- * After the run, `tests/integration/reporter.ts` writes
- * `tests/integration/.out/coverage-report.md` aggregating per-tier counts
- * + every failure URL + the skip reasons.
+ * After the run, `tests/integration/reporter.ts` prints a grouped terminal
+ * summary (per-tier counts + timings, per-book breakdown, failures grouped by
+ * book with a per-book retest command) and writes the artefacts under
+ * `tests/integration/.out/` -- `coverage-report.md`, `coverage-failures.txt`,
+ * `coverage-summary.json`.
  */
 
 import { asc, eq } from 'drizzle-orm';
@@ -358,6 +361,60 @@ writeFileSync(
 		2,
 	),
 );
+
+// Build a per-book manifest: every book (`kind/documentSlug`) with its URL
+// count per tier. The reporter reads this in `onBegin` to print the full plan
+// up front -- exactly what is going to be checked -- and uses the per-book
+// totals to drive live progress as each book completes.
+{
+	interface BookManifestEntry {
+		kind: string;
+		documentSlug: string;
+		sanity: number;
+		structural: number;
+		content: number;
+		total: number;
+	}
+	const manifest = new Map<string, BookManifestEntry>();
+	const bump = (t: CoverageTarget, tier: 'sanity' | 'structural' | 'content'): void => {
+		const key = `${t.kind}/${t.documentSlug}`;
+		const entry = manifest.get(key) ?? {
+			kind: t.kind,
+			documentSlug: t.documentSlug,
+			sanity: 0,
+			structural: 0,
+			content: 0,
+			total: 0,
+		};
+		entry[tier] += 1;
+		entry.total += 1;
+		manifest.set(key, entry);
+	};
+	for (const t of targets.sanity) bump(t, 'sanity');
+	for (const t of targets.structural) bump(t, 'structural');
+	for (const t of targets.content) bump(t, 'content');
+	const books = [...manifest.entries()]
+		.map(([key, e]) => ({ book: key, ...e }))
+		.sort((a, b) => b.total - a.total || a.book.localeCompare(b.book));
+	writeFileSync(
+		resolvePath(REPORT_DIR, 'manifest.json'),
+		JSON.stringify(
+			{
+				generatedAt: new Date().toISOString(),
+				totals: {
+					sanity: targets.sanity.length,
+					structural: targets.structural.length,
+					content: targets.content.length,
+					total: targets.sanity.length + targets.structural.length + targets.content.length,
+					books: books.length,
+				},
+				books,
+			},
+			null,
+			2,
+		),
+	);
+}
 
 test.describe('flightbag coverage', () => {
 	test('sample size is non-trivial -- catches a fully-empty registry', () => {
