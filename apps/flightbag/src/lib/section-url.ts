@@ -14,9 +14,9 @@
  *
  * Decisions encoded here mirror what each route's loader actually accepts:
  *
- *   handbook   chapter '0' -> URL (we hit it deliberately to surface the
- *              front-matter bug); chapter.section -> URL; deeper -> parent
- *              section URL.
+ *   handbook   front-matter rows (`level='front-matter'`, code `0.N`) -> the
+ *              dedicated front-matter leaf URL; chapter -> chapter URL;
+ *              chapter.section -> section URL; deeper -> parent chapter URL.
  *   AIM        chapter / chapter-section / chapter-section-paragraph -> URL;
  *              `appendix-*` / `pcg/*` / `glossary/*` -> no-route.
  *   CFR        `<part>` -> Part landing URL; `<part>.<digits>` -> section URL;
@@ -103,7 +103,7 @@ export function sectionUrlFor(args: SectionUrlInput): SectionUrlResult {
 
 	switch (kind) {
 		case REFERENCE_KINDS.HANDBOOK:
-			return handbookUrl(documentSlug, edition, code);
+			return handbookUrl(documentSlug, edition, code, level);
 		case REFERENCE_KINDS.AIM:
 			return aimUrl(code, level);
 		case REFERENCE_KINDS.CFR:
@@ -128,8 +128,24 @@ export function sectionUrlFor(args: SectionUrlInput): SectionUrlResult {
 	}
 }
 
-function handbookUrl(documentSlug: string, edition: string, code: string): SectionUrlResult {
+function handbookUrl(
+	documentSlug: string,
+	edition: string,
+	code: string,
+	level: ReferenceSectionLevel | null,
+): SectionUrlResult {
 	const shortEdition = shortHandbookEdition(edition);
+
+	// Front-matter rows (Cover, Preface, ...) are depth-0 peers of the
+	// chapters with code `0.N` and `level='front-matter'`. They render at the
+	// dedicated front-matter leaf route, keyed by the full row code.
+	if (level === REFERENCE_SECTION_LEVELS.FRONT_MATTER) {
+		return {
+			kind: 'url',
+			url: ROUTES.FLIGHTBAG_HANDBOOK_FRONT_MATTER(documentSlug, shortEdition, code),
+		};
+	}
+
 	const segments = code.split('.');
 	const chapter = segments[0];
 	const section = segments[1];
@@ -148,9 +164,7 @@ function handbookUrl(documentSlug: string, edition: string, code: string): Secti
 	}
 
 	if (segments.length === 2 && section) {
-		// Chapter.section -- handbook section URL. Chapter '0' (front-matter)
-		// is INCLUDED here intentionally: the reader 404s these today, and
-		// the integration sweep is here to surface that bug.
+		// Chapter.section -- handbook section URL.
 		return {
 			kind: 'url',
 			url: ROUTES.FLIGHTBAG_HANDBOOK_SECTION(documentSlug, shortEdition, chapter, section),

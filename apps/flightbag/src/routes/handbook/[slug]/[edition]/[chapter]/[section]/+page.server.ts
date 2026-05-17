@@ -18,6 +18,7 @@ import {
 import { type ReferenceKind, ROUTES, readingMinutesForWords } from '@ab/constants';
 import { isParseError, parseHandbooksLocator, parseIdentifier } from '@ab/sources';
 import { error } from '@sveltejs/kit';
+import { handbookHrefFor } from '../../../../../../lib/handbook-href';
 import { loadReadSetForReference } from '../../../../../../lib/read-state';
 import { computeSiblingNav } from '../../../../../../lib/section-nav';
 import { loadSectionAnnotationContext } from '../../../../../../lib/server/section-annotations';
@@ -63,35 +64,20 @@ export const load: PageServerLoad = async (event) => {
 
 	// Reading-order nav: pull every section under the reference so prev/next
 	// can wrap across chapter boundaries (last-of-§1 -> first-of-§2 etc.).
+	// Front-matter rows route to their leaf; chapter rows to the chapter
+	// overview; section rows to the section reader. Sub-section rows (deeper
+	// than `chapter.section`) have no dedicated reader route and are skipped.
 	const allSections = await listAllSectionsForReference(ref.id);
-	const nav = computeSiblingNav(allSections, view.section.id, (row) => {
-		// Chapter rows route to the chapter overview; section rows to the section
-		// reader. Sub-section rows (deeper than `chapter.section`) don't have a
-		// dedicated reader route in handbooks today, so they're skipped from
-		// the prev/next walk.
-		if (row.parentId === null) {
-			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, row.code);
-		}
-		const parts = row.code.split('.');
-		if (parts.length !== 2) return null;
-		const [ch, sec] = parts;
-		if (!ch || !sec) return null;
-		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
-	});
+	const nav = computeSiblingNav(allSections, view.section.id, (row) =>
+		handbookHrefFor(ref.documentSlug, shortEdition, row),
+	);
 
 	// Whole-doc TOC -- powers the persistent left-rail drawer. Each entry maps
 	// to its reader URL via the same dispatch as the prev/next walk.
 	const readingOrder = computeReadingOrder(allSections);
-	const tocEntries = buildTOCEntries(readingOrder, view.section.id, (entry) => {
-		if (entry.parentId === null) {
-			return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(ref.documentSlug, shortEdition, entry.code);
-		}
-		const parts = entry.code.split('.');
-		if (parts.length !== 2) return null;
-		const [ch, sec] = parts;
-		if (!ch || !sec) return null;
-		return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(ref.documentSlug, shortEdition, ch, sec);
-	});
+	const tocEntries = buildTOCEntries(readingOrder, view.section.id, (entry) =>
+		handbookHrefFor(ref.documentSlug, shortEdition, entry),
+	);
 	const tocTotalMinutes = totalReadingMinutes(readingOrder);
 
 	const sectionEntry = readingOrder.find((e) => e.sectionId === view.section.id);

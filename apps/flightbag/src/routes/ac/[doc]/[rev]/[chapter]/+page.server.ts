@@ -24,7 +24,9 @@ import type { PageServerLoad } from './$types';
 
 const DOC_SHAPE = /^[a-z0-9.-]+$/i;
 const REV_SHAPE = /^[a-z]$/i;
-const CHAPTER_SHAPE = /^[a-z0-9]+$/i;
+// Lower-kebab: numbered chapters (`1`, `12`) plus hyphenated appendix codes
+// (`appendix-a`). No leading/trailing/double hyphen.
+const CHAPTER_SHAPE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/i;
 
 export const load: PageServerLoad = async ({ params }) => {
 	if (!DOC_SHAPE.test(params.doc)) throw error(404, 'Invalid AC doc number.');

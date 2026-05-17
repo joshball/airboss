@@ -587,6 +587,36 @@ export async function getHandbookChapter(
 	return row;
 }
 
+/**
+ * Resolve a handbook front-matter row by code. Front-matter rows (Cover,
+ * Preface, Acknowledgments, ...) are depth-0 peers of the real chapters with
+ * code `0.N` and `level='front-matter'` -- there is no chapter `0` row, so
+ * the chapter/section reader can't reach them. Filters by `level=front-matter`
+ * so a section row whose code happens to match (`0.2`) is NOT returned.
+ *
+ * Throws `HandbookSectionNotFoundError` when no front-matter row matches.
+ */
+export async function getHandbookFrontMatter(
+	referenceId: string,
+	code: string,
+	db: Db = defaultDb,
+): Promise<ReferenceSectionRow> {
+	const rows = await db
+		.select()
+		.from(referenceSection)
+		.where(
+			and(
+				eq(referenceSection.referenceId, referenceId),
+				eq(referenceSection.code, code),
+				eq(referenceSection.level, REFERENCE_SECTION_LEVELS.FRONT_MATTER),
+			),
+		)
+		.limit(1);
+	const row = rows[0];
+	if (!row) throw new HandbookSectionNotFoundError({ referenceId, code });
+	return row;
+}
+
 /** Figures bound to any reference_section row, ordered. */
 export async function listFiguresForSection(sectionId: string, db: Db = defaultDb): Promise<ReferenceFigureRow[]> {
 	return db

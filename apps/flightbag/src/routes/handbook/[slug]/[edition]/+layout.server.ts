@@ -63,6 +63,7 @@ export const load: LayoutServerLoad = async (event) => {
 			code: entry.code,
 			title: entry.title,
 			depth: entry.depth,
+			level: entry.level,
 			wordCount: entry.wordCount,
 		})),
 		readSectionIds: [...readSet],

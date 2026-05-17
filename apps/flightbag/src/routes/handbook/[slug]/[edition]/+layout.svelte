@@ -10,6 +10,7 @@ import { withViewTransition } from '@ab/utils';
 import type { Snippet } from 'svelte';
 import { goto, onNavigate } from '$app/navigation';
 import { page } from '$app/state';
+import { handbookHrefFor } from '../../../../lib/handbook-href';
 import RichReaderComposerPanel from '../../../../lib/RichReaderComposerPanel.svelte';
 import type { LayoutData } from './$types';
 
@@ -20,12 +21,15 @@ const sectionContext = useSectionContext();
 const composerOpen = $derived(Boolean((composerState && composerState.kind !== null) || sectionContext?.section));
 
 // Resolve the active section id from the URL. The route segments
-// `[chapter]` and `[section]` map onto the reading-order codes.
+// `[chapter]`/`[section]` map onto the reading-order codes; the
+// front-matter route carries the full `0.N` code in `[code]`.
 const activeSectionId = $derived.by<string | null>(() => {
 	const chapter = page.params.chapter;
 	const section = page.params.section;
-	if (!chapter && !section) return null;
+	const frontMatterCode = page.params.code;
+	if (!chapter && !section && !frontMatterCode) return null;
 	for (const entry of data.readingOrder) {
+		if (frontMatterCode && entry.code === frontMatterCode) return entry.sectionId;
 		if (section && entry.code === `${chapter}.${section}`) return entry.sectionId;
 		if (!section && chapter && entry.code === chapter) return entry.sectionId;
 	}
@@ -41,19 +45,10 @@ const readSet = $derived(new Set(data.readSectionIds));
 const tocEntries = $derived.by<TOCRenderEntry[]>(() => {
 	const entries: TOCRenderEntry[] = [];
 	for (const entry of data.readingOrder) {
-		// Only top-level chapter rows + their `chapter.section`-coded direct
-		// children are clickable; deeper subsection rows are skipped from the
-		// rail (they don't have dedicated reader routes today).
-		const href = (() => {
-			if (entry.parentId === null) {
-				return ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER(data.handbook.documentSlug, data.handbook.shortEdition, entry.code);
-			}
-			const parts = entry.code.split('.');
-			if (parts.length !== 2) return null;
-			const [ch, sec] = parts;
-			if (!ch || !sec) return null;
-			return ROUTES.FLIGHTBAG_HANDBOOK_SECTION(data.handbook.documentSlug, data.handbook.shortEdition, ch, sec);
-		})();
+		// Front-matter rows route to the front-matter leaf; top-level chapter
+		// rows + their `chapter.section`-coded direct children are clickable;
+		// deeper subsection rows are skipped from the rail (no reader route).
+		const href = handbookHrefFor(data.handbook.documentSlug, data.handbook.shortEdition, entry);
 		entries.push({
 			sectionId: entry.sectionId,
 			code: entry.code,

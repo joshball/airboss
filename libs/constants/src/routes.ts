@@ -824,6 +824,14 @@ export const ROUTES = {
 	/** Handbook section reader (leaf). */
 	FLIGHTBAG_HANDBOOK_SECTION: (slug: string, edition: string, chapter: string, section: string) =>
 		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/${encodeURIComponent(chapter)}/${encodeURIComponent(section)}` as const,
+	/**
+	 * Handbook front-matter reader (leaf). Front-matter rows (Cover, Preface,
+	 * Acknowledgments, ...) are depth-0 peers of the chapters with code `0.N`;
+	 * `code` carries the full row code (`0.2`). No chapter `0` row exists, so
+	 * these get their own leaf route rather than the chapter/section reader.
+	 */
+	FLIGHTBAG_HANDBOOK_FRONT_MATTER: (slug: string, edition: string, code: string) =>
+		`/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(edition)}/front-matter/${encodeURIComponent(code)}` as const,
 	/** Handbook asset stream (figures, tables). Mirror of `HANDBOOK_ASSET` for flightbag. */
 	FLIGHTBAG_HANDBOOK_ASSET: (path: string) => `/handbook-asset/${path}` as const,
 	/**

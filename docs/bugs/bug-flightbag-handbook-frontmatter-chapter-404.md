@@ -3,10 +3,10 @@ id: bug-flightbag-handbook-frontmatter-chapter-404
 title: Flightbag handbook front-matter sections 404 (chapter 0 reader)
 product: flightbag
 severity: major
-status: open
+status: fixed
 discovered_pr: null
 discovered_date: 2026-05-15
-fix_pr: null
+fix_pr: 1005
 fix_wp: null
 tags: [flightbag, reader, references, handbook, integration-coverage]
 ---
