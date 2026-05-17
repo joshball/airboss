@@ -116,7 +116,18 @@ function acsCacheFilename(slug: string): string {
 }
 
 type NodeFs = { existsSync: (p: string) => boolean };
-type NodePath = { join: (...parts: string[]) => string; resolve: (...parts: string[]) => string };
+type NodePath = { join: (...parts: string[]) => string; resolve: (...parts: string[]) => string; sep: string };
+
+/**
+ * True when `abs` is `root` itself or sits strictly inside it. Compares
+ * against `root` plus the platform separator so a sibling directory whose
+ * name merely starts with the cache-root string (`<root>-evil/...`) cannot
+ * pass the containment guard. Mirrors the streamer route's
+ * `startsWith(${HANDBOOKS_DIR}/)` check.
+ */
+function isInside(abs: string, root: string, sep: string): boolean {
+	return abs === root || abs.startsWith(root.endsWith(sep) ? root : `${root}${sep}`);
+}
 
 let cachedFs: NodeFs | null = null;
 let cachedPath: NodePath | null = null;
@@ -161,7 +172,7 @@ export function cachedSourcePdfExists(cacheRelPath: string): boolean {
 		const root = resolveCacheRoot({ ensureExists: false });
 		const abs = path.resolve(root, cacheRelPath);
 		// Defense in depth: refuse anything outside the cache root.
-		if (!abs.startsWith(root)) return false;
+		if (!isInside(abs, root, path.sep)) return false;
 		return nodeFs().existsSync(abs);
 	} catch {
 		return false;
@@ -180,7 +191,7 @@ export function resolveCachedSourcePdfPath(cacheRelPath: string): string | null 
 		const path = nodePath();
 		const root = resolveCacheRoot({ ensureExists: false });
 		const abs = path.resolve(root, cacheRelPath);
-		if (!abs.startsWith(root)) return null;
+		if (!isInside(abs, root, path.sep)) return null;
 		return abs;
 	} catch {
 		return null;
