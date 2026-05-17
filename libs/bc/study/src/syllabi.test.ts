@@ -21,6 +21,7 @@ import {
 	getSyllabusBySlug,
 	getSyllabusLeaves,
 	getSyllabusLeavesForKnowledgeNode,
+	getSyllabusNodesByCodes,
 	getSyllabusTree,
 	levelIsLeafEligible,
 	listSyllabi,
@@ -844,5 +845,23 @@ describe('syllabus_node.classes column (Phase 14 schema delta)', () => {
 				updatedAt: now,
 			}),
 		).rejects.toThrow();
+	});
+});
+
+describe('getSyllabusNodesByCodes', () => {
+	it('looks up syllabus nodes by code', async () => {
+		const rows = await getSyllabusNodesByCodes([`${SUITE_TOKEN}-V`, `${SUITE_TOKEN}-V.A.K1`]);
+		const byCode = new Map(rows.map((r) => [r.code, r]));
+		expect(byCode.get(`${SUITE_TOKEN}-V`)?.id).toBe(AREA_ID);
+		expect(byCode.get(`${SUITE_TOKEN}-V.A.K1`)?.id).toBe(K1_ID);
+	});
+
+	it('omits codes with no matching row', async () => {
+		const rows = await getSyllabusNodesByCodes([`${SUITE_TOKEN}-V`, `${SUITE_TOKEN}-NOPE`]);
+		expect(rows.map((r) => r.code)).toEqual([`${SUITE_TOKEN}-V`]);
+	});
+
+	it('short-circuits on empty input', async () => {
+		expect(await getSyllabusNodesByCodes([])).toEqual([]);
 	});
 });
