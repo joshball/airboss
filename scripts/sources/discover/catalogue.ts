@@ -1,7 +1,7 @@
 /**
  * Catalogue of FAA aviation handbooks scanned by `bun run sources discover-errata`.
  *
- * Covers the 15 pilot-relevant FAA aviation handbooks, even though airboss only
+ * Covers the 14 pilot-relevant FAA aviation handbooks, even though airboss only
  * ingests a subset (PHAK, AFH, AvWX). The discovery scan is cheap (one HTML
  * GET per parent page on a weekly trigger) and the cost of missing a handbook
  * onboarding signal is far higher than the cost of one extra HTTP request.
@@ -69,7 +69,7 @@ export interface HandbookCatalogueEntry {
 export const COMMON_ERRATA_TOKENS: readonly string[] = ['addendum', 'errata', 'change', 'summary_of_changes'];
 
 /**
- * The 15 pilot-relevant FAA aviation handbooks. Order is alphabetical by slug;
+ * The 14 pilot-relevant FAA aviation handbooks. Order is alphabetical by slug;
  * insertion order is preserved when the discovery scan iterates the catalogue.
  */
 export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
@@ -189,32 +189,19 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 		filenameTokens: ['powered_parachute', 'ppc_hb', 'ppc-hb', '8083-29'],
 	},
 	{
-		slug: 'rfh',
-		title: 'Rotorcraft Flying Handbook',
-		docId: 'FAA-H-8083-21',
-		currentEdition: 'FAA-H-8083-21A',
-		// The standalone Rotorcraft Flying Handbook is superseded -- the FAA
-		// folded it into the Helicopter Flying Handbook (FAA-H-8083-21B, the
-		// `hfh` entry below). Only the legacy `faa-h-8083-21.pdf` survives, and
-		// it is linked from the aviation index page; no dedicated landing page
-		// exists. The legacy edition will not receive further errata.
+		slug: 'wsc',
+		title: 'Weight-Shift Control Aircraft Flying Handbook',
+		docId: 'FAA-H-8083-5',
+		currentEdition: 'FAA-H-8083-5',
+		// FAA retired the per-handbook landing page; the WSC handbook and its
+		// addendum (`wsc_hb_addendum.pdf`) are listed only on the aviation
+		// index page. This entry replaced a phantom `sport-pilot` entry that
+		// cited FAA-H-8083-22 -- a document the FAA does not publish. WSC trike
+		// aircraft are flown under sport-pilot rules, so the catalogue still
+		// covers that audience, now via a real handbook.
 		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
 		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
-		filenameTokens: ['rotorcraft', 'rfh'],
-	},
-	{
-		slug: 'sport-pilot',
-		title: 'Light Sport Pilot Handbook',
-		docId: 'FAA-H-8083-22',
-		currentEdition: 'FAA-H-8083-22',
-		// The FAA does not publish a handbook numbered FAA-H-8083-22; the
-		// closest current publication is the Weight-Shift-Control Flying
-		// Handbook (FAA-H-8083-5), whose addendum is listed on the aviation
-		// index page. Pointed at the index as the best available FAA page --
-		// the docId/title here are flagged for a human catalogue-data review.
-		parentPageUrl: 'https://www.faa.gov/regulations_policies/handbooks_manuals/aviation',
-		tier: DISCOVERY_TIERS.SIGNAL_ONLY,
-		filenameTokens: ['sport_pilot', '8083-22'],
+		filenameTokens: ['weight_shift', 'weight-shift', 'wsc_hb', 'wsc-hb', '8083-5'],
 	},
 	{
 		slug: 'wbh',
@@ -229,9 +216,9 @@ export const HANDBOOK_CATALOGUE: readonly HandbookCatalogueEntry[] = [
 	},
 ];
 
-if (HANDBOOK_CATALOGUE.length !== 15) {
+if (HANDBOOK_CATALOGUE.length !== 14) {
 	throw new Error(
-		`HANDBOOK_CATALOGUE must contain exactly 15 entries (one per pilot-relevant FAA aviation ` +
+		`HANDBOOK_CATALOGUE must contain exactly 14 entries (one per pilot-relevant FAA aviation ` +
 			`handbook); got ${HANDBOOK_CATALOGUE.length}. Update the catalogue, then update the ` +
 			`spec / PR description to match.`,
 	);
