@@ -119,7 +119,7 @@ export function workPackagesCensus(): CorpusCensus {
 			whatItMeasures:
 				'How many work packages are at status `in-flight` -- actively being built right now, not merely planned.',
 			whyItMatters:
-				'In-flight count is the platform\'s real concurrency. A high number means attention is split across many efforts; a low one against a large backlog means most planned work is stalled.',
+				"In-flight count is the platform's real concurrency. A high number means attention is split across many efforts; a low one against a large backlog means most planned work is stalled.",
 			whatToDo: {
 				text: 'Review in-flight work and its blockers on the roadmap.',
 				href: ROUTES.HANGAR_ROADMAP,

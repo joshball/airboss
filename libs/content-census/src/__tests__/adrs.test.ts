@@ -60,8 +60,7 @@ describe('adrsCensus', () => {
 	});
 
 	it('reports live ADRs as accepted + partially-superseded', () => {
-		const countOf = (state: string): number =>
-			census.items.filter((item) => item.derivedState === state).length;
+		const countOf = (state: string): number => census.items.filter((item) => item.derivedState === state).length;
 		const live = countOf('accepted') + countOf('partially-superseded');
 		const metric = census.metrics.find((m) => m.key === 'live');
 		expect(metric?.value).toBe(`${live} / ${census.items.length}`);

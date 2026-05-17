@@ -11,6 +11,8 @@
  *   - `/content` renders 14 corpus rows, each with a count + drill-down link.
  *   - `/content/wx-catalog` renders the inventory, the gap view, and visible
  *     what/why explanation text.
+ *   - A Phase-2 `census`-mode corpus shows a real inventory + metrics and an
+ *     honest, labelled Layer-2 (Phase-3) placeholder for its gap view.
  *   - A stub corpus page shows the honest "pending" placeholder, not fakes.
  *   - The /content <-> /roadmap cross-link is present.
  */
@@ -80,10 +82,32 @@ test.describe('wx-catalog reference drill-down', () => {
 	});
 });
 
-test.describe('stub corpus placeholder honesty', () => {
-	test('a Phase-2 corpus shows the honest pending placeholder, not fake data', async ({ page }) => {
+test.describe('census-mode corpus drill-down', () => {
+	test('a Phase-2 corpus shows a real inventory, metrics, and a Layer-2 placeholder', async ({ page }) => {
 		await page.goto(ROUTES.CONTENT_CENSUS_CORPUS('knowledge-nodes'));
 		await expect(page.getByRole('heading', { level: 1, name: /^Knowledge nodes$/ })).toBeVisible();
+
+		// The "Layer 1 census" mode tag, not a "pending" tag.
+		await expect(page.getByText(/^Layer 1 census$/)).toBeVisible();
+
+		// Real inventory: one row per knowledge node.
+		const inventoryRows = page.locator('section[aria-label="Inventory"] tbody tr');
+		await expect(inventoryRows).toHaveCount(79);
+
+		// Real metrics carry the explanatory triad.
+		await expect(page.getByRole('heading', { level: 2, name: /^Metrics$/ })).toBeVisible();
+		await expect(page.getByText('What it measures.').first()).toBeVisible();
+
+		// The gap view is an honest, labelled Phase-3 placeholder -- not fabricated gaps.
+		await expect(page.getByRole('heading', { level: 2, name: /^Gap view$/ })).toBeVisible();
+		await expect(page.getByText(/deferred to Phase 3/i)).toBeVisible();
+	});
+});
+
+test.describe('stub corpus placeholder honesty', () => {
+	test('a not-yet-built corpus shows the honest pending placeholder, not fake data', async ({ page }) => {
+		await page.goto(ROUTES.CONTENT_CENSUS_CORPUS('handbooks'));
+		await expect(page.getByRole('heading', { level: 1, name: /^Handbooks$/ })).toBeVisible();
 		await expect(page.getByRole('heading', { level: 2, name: /^Drill-down pending$/ })).toBeVisible();
 		await expect(page.getByText(/pending \(Phase 2\)/i)).toBeVisible();
 		// No inventory table is rendered for a stub corpus.

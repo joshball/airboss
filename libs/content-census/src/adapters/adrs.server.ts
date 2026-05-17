@@ -180,7 +180,7 @@ export function adrsCensus(): CorpusCensus {
 			whatItMeasures:
 				'The number of numbered architecture decision records under docs/decisions/, counting both single-file and directory-form ADRs.',
 			whyItMatters:
-				'ADRs are the platform\'s decision memory. The count is the body of recorded architectural reasoning a new contributor or a future agent can rely on instead of re-deriving it.',
+				"ADRs are the platform's decision memory. The count is the body of recorded architectural reasoning a new contributor or a future agent can rely on instead of re-deriving it.",
 			whatToDo: {
 				text: 'Author a new ADR when a decision is non-obvious and worth remembering; see the decisions README.',
 				href: ROUTES.HANGAR_DOCS_PATH('docs/decisions/README.md'),
@@ -259,7 +259,7 @@ export function adrsCensus(): CorpusCensus {
 		whatItIs:
 			'Architecture decision records -- numbered, dated decisions under docs/decisions/, in single-file or directory form. Process metadata also surfaced on the roadmap dashboard.',
 		whyItExists:
-			'An ADR records why an architectural choice was made so it does not have to be re-litigated. The decision record is the platform\'s long memory; this census reports how much of it exists and how much is still current.',
+			"An ADR records why an architectural choice was made so it does not have to be re-litigated. The decision record is the platform's long memory; this census reports how much of it exists and how much is still current.",
 		location: `${DECISIONS_DIR}/`,
 		mode: 'census',
 		stateRule:

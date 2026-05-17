@@ -117,7 +117,7 @@ export function cardsCensus(): CorpusCensus {
 			whyItMatters:
 				'Cards are the retrieval-practice substrate. Every card is one item the review queue can schedule; the total is the size of the drillable pool a learner can be tested against.',
 			whatToDo: {
-				text: 'Author cards inside a node\'s :::cards block; the build-time seeder picks them up automatically.',
+				text: "Author cards inside a node's :::cards block; the build-time seeder picks them up automatically.",
 				href: ROUTES.HANGAR_DOCS_PATH('libs/constants/src/markdown-directives.ts'),
 			},
 		},
@@ -150,8 +150,7 @@ export function cardsCensus(): CorpusCensus {
 			key: 'no-deck',
 			label: 'Nodes with no deck',
 			value: none,
-			whatItMeasures:
-				'How many nodes carry no `:::cards` block at all -- the deckless tail of the knowledge graph.',
+			whatItMeasures: 'How many nodes carry no `:::cards` block at all -- the deckless tail of the knowledge graph.',
 			whyItMatters:
 				'These nodes are entirely outside the spaced-repetition system. A learner can study them but the platform will never resurface them for review, so whatever they learned there decays unmeasured.',
 			whatToDo: {

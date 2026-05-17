@@ -36,8 +36,7 @@ describe('knowledgeNodesCensus', () => {
 	});
 
 	it('classifies the complete / draft / skeleton distribution from real bodies', () => {
-		const counts = (state: string): number =>
-			census.items.filter((item) => item.derivedState === state).length;
+		const counts = (state: string): number => census.items.filter((item) => item.derivedState === state).length;
 		// Every node lands in exactly one bucket.
 		expect(counts('complete') + counts('draft') + counts('skeleton')).toBe(census.items.length);
 		// The corpus has authored nodes and unauthored skeletons -- both buckets non-empty.

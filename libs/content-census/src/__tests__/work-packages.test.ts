@@ -39,8 +39,7 @@ describe('workPackagesCensus', () => {
 	});
 
 	it('reports open as the sum of draft + signed-off + in-flight', () => {
-		const countOf = (state: string): number =>
-			census.items.filter((item) => item.derivedState === state).length;
+		const countOf = (state: string): number => census.items.filter((item) => item.derivedState === state).length;
 		const open = countOf('draft') + countOf('signed-off') + countOf('in-flight');
 		const metric = census.metrics.find((m) => m.key === 'open');
 		expect(metric?.value).toBe(`${open} / ${census.items.length}`);

@@ -37,8 +37,7 @@ describe('visionCensus', () => {
 	});
 
 	it('classifies the depth distribution -- every doc in exactly one bucket', () => {
-		const counts = (state: string): number =>
-			census.items.filter((item) => item.derivedState === state).length;
+		const counts = (state: string): number => census.items.filter((item) => item.derivedState === state).length;
 		expect(counts('fleshed-out') + counts('outline') + counts('stub')).toBe(census.items.length);
 		// The vision corpus is mostly light outlines with a worked-up minority.
 		expect(counts('outline')).toBeGreaterThan(0);

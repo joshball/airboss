@@ -25,11 +25,11 @@ import { CORPUS_REGISTRY, type CorpusDescriptor, type CorpusId } from './registr
 import type { CorpusCensus } from './types';
 
 export { stubCensus } from './adapters/_stub.server';
-export { repoRoot } from './adapters/repo-root.server';
 export { adrsCensus } from './adapters/adrs.server';
 export { cardsCensus } from './adapters/cards.server';
 export { knowledgeNodesCensus } from './adapters/knowledge-nodes.server';
 export { regulationsCensus } from './adapters/regulations.server';
+export { repoRoot } from './adapters/repo-root.server';
 export { visionCensus } from './adapters/vision.server';
 export { workPackagesCensus } from './adapters/work-packages.server';
 export { wxCatalogCensus } from './adapters/wx-catalog.server';

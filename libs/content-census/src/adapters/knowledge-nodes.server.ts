@@ -120,7 +120,7 @@ export function knowledgeNodesCensus(): CorpusCensus {
 			whyItMatters:
 				'A skeleton node exists in the graph and can be linked and counted, but it teaches nothing. A learner who routes to it hits an empty page; it is a placeholder masquerading as content until its phases are written.',
 			whatToDo: {
-				text: 'Prioritise skeleton nodes for authoring -- they are the graph\'s emptiest cells. Start with the Discover and Reveal phases.',
+				text: "Prioritise skeleton nodes for authoring -- they are the graph's emptiest cells. Start with the Discover and Reveal phases.",
 				href: ROUTES.HANGAR_DOCS_PATH('course/knowledge/'),
 			},
 		},
@@ -145,7 +145,7 @@ export function knowledgeNodesCensus(): CorpusCensus {
 		whatItIs:
 			'Atomic ADR-011 learning nodes -- the discovery-first knowledge graph, one self-contained topic per node.md, grouped by domain.',
 		whyItExists:
-			'The knowledge graph is the platform\'s teaching substrate. Cards, scenarios, and the regulations course all cite nodes; a node is where a topic is explained in the discovery-first arc before any drill exercises it.',
+			"The knowledge graph is the platform's teaching substrate. Cards, scenarios, and the regulations course all cite nodes; a node is where a topic is explained in the discovery-first arc before any drill exercises it.",
 		location: `${KNOWLEDGE_DIR}/**/node.md`,
 		mode: 'census',
 		stateRule:

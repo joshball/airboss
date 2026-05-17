@@ -47,7 +47,7 @@ const REGULATIONS_DOCS: DocLink[] = [
 	{
 		label: 'FAR navigation course -- syllabus',
 		href: ROUTES.HANGAR_DOCS_PATH('course/regulations/SYLLABUS.md'),
-		role: 'The week-by-week plan -- the authoring target each week\'s completeness is measured against.',
+		role: "The week-by-week plan -- the authoring target each week's completeness is measured against.",
 	},
 	{
 		label: 'ADR 028 -- Content-intent frontmatter',
@@ -128,7 +128,7 @@ export function regulationsCensus(): CorpusCensus {
 			whatItMeasures:
 				'The number of weekly modules in the FAR navigation course -- each `week-NN-*` directory is one week of structured regulatory study.',
 			whyItMatters:
-				'The weeks are the course\'s spine. They sequence a learner from the shape of Title 14 through to an integrated capstone oral; a missing or empty week breaks the progression.',
+				"The weeks are the course's spine. They sequence a learner from the shape of Title 14 through to an integrated capstone oral; a missing or empty week breaks the progression.",
 			whatToDo: {
 				text: 'The week plan is fixed in the syllabus; author content into the existing week directories.',
 				href: ROUTES.HANGAR_DOCS_PATH('course/regulations/SYLLABUS.md'),
@@ -138,8 +138,7 @@ export function regulationsCensus(): CorpusCensus {
 			key: 'full-weeks',
 			label: 'Full weeks',
 			value: `${full} / ${totalWeeks}`,
-			whatItMeasures:
-				`How many weeks carry all three modalities -- ${REGULATIONS_WEEK_REQUIRED_MODALITIES.join(', ')} -- with every numbered lesson file authored past the skeleton threshold.`,
+			whatItMeasures: `How many weeks carry all three modalities -- ${REGULATIONS_WEEK_REQUIRED_MODALITIES.join(', ')} -- with every numbered lesson file authored past the skeleton threshold.`,
 			whyItMatters:
 				'A full week gives the learner the complete loop: read the lessons, drill the rules, rehearse the oral. A partial week leaves the loop open -- lessons with no drills are untested, drills with no oral are unintegrated.',
 			whatToDo: {
@@ -156,7 +155,7 @@ export function regulationsCensus(): CorpusCensus {
 			whyItMatters:
 				'A partial week looks present on the syllabus but under-delivers. A learner reaching it gets an incomplete experience -- the week appears authored but a piece of the read / drill / oral loop is absent.',
 			whatToDo: {
-				text: 'Inspect each partial week\'s detail column to see which modality or lesson is missing, and author it.',
+				text: "Inspect each partial week's detail column to see which modality or lesson is missing, and author it.",
 				href: ROUTES.HANGAR_DOCS_PATH('course/regulations/README.md'),
 			},
 		},
@@ -197,8 +196,7 @@ export function regulationsCensus(): CorpusCensus {
 			'Pilots need to find and apply regulations under pressure. The course teaches Title 14 as a system to live inside, pairing lessons with drills and oral rehearsal so the knowledge transfers to a checkride and the cockpit.',
 		location: `${REGULATIONS_DIR}/week-*`,
 		mode: 'census',
-		stateRule:
-			`A week is "full" when it carries an overview, a drills file, and an oral file, AND every numbered lesson file clears the ${COURSE_FILE_AUTHORED_BODY_MIN_LINES}-non-blank-line authored threshold; otherwise "partial".`,
+		stateRule: `A week is "full" when it carries an overview, a drills file, and an oral file, AND every numbered lesson file clears the ${COURSE_FILE_AUTHORED_BODY_MIN_LINES}-non-blank-line authored threshold; otherwise "partial".`,
 		docs: REGULATIONS_DOCS,
 		items,
 		metrics,

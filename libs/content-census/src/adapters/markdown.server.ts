@@ -11,7 +11,7 @@
  * Server-only: reads `node:fs`. Imported by `*.server.ts` adapters only.
  */
 
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import { repoRoot } from './repo-root.server';
