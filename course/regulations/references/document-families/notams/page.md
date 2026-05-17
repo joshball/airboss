@@ -66,10 +66,15 @@ and it follows a structured, abbreviated format. A NOTAM number looks like:
 !BOS 09/123
 | |  |  |
 | |  |  +-- sequence number 123
-| |  +----- month 09 (the month it was issued)
+| |  +----- series / issue-cycle number 09
 | +-------- accountability location identifier BOS
 +---------- "!" -- domestic NOTAM marker in the legacy text format
 ```
+
+The `09/123` group is a series-and-sequence identifier, not a date. The
+`09` is the series or issue-cycle number; the `123` is the sequence
+number within it. The number does not encode the month the NOTAM was
+issued - the effective time window in the body carries the timing.
 
 The body uses standard NOTAM contractions and a fixed order: the affected facility or
 airspace, the condition, and the effective time window in UTC, often with `WIE` (with

@@ -67,7 +67,12 @@ body_md: |
   2. **AC 00-45H** ("Aviation Weather Services") shows an acceptable
      means: it explains the weather products, how they are issued,
      and how to read them. It is the worked example for satisfying
-     91.103's weather requirement.
+     91.103's weather requirement. One honest note: the
+     weather-services content of AC 00-45 has since been consolidated
+     into the Aviation Weather Handbook (FAA-H-8083-28), so a pilot
+     today would go to that handbook for this material. AC 00-45H
+     still stands here as the AC tier of the chain - the point of the
+     walk is the tiers, not this one document's currency.
   3. **AIM Chapter 7** ("Safety of Flight") gives the operational
      how-to: how to obtain a briefing, how the weather services fit
      into flight planning.
@@ -81,6 +86,14 @@ body_md: |
   One question; five families; each one a different slice. That walk
   is triangulation, and it is the habit this whole course was built
   to install.
+
+  This is not bookkeeping. A pilot who walks all five families on the
+  weather question launches genuinely prepared for the conditions
+  ahead. A pilot who reads 14 CFR 91.103 alone and stops has met the
+  letter of the rule and is still not ready for the weather - the
+  rule says you must become familiar, never how, never what the
+  weather means. Triangulation is the difference between satisfying
+  the regulation and being ready to fly.
 
   This section hands off to the cross-reference triangulation
   knowledge node - the capstone node - which runs the 14 CFR 91.103
