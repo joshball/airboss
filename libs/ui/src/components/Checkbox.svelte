@@ -33,7 +33,12 @@ let {
 } = $props();
 
 let inputEl = $state<HTMLInputElement | null>(null);
-const autoId = $derived(id ?? (name ? `cb-${name}` : `cb-${label.replace(/\s+/g, '-').toLowerCase()}`));
+// Per-instance id fallback: `$props.id()` guarantees uniqueness even when two
+// checkboxes on the same page share a label (e.g. an "Include archived" filter
+// rendered twice). A label-derived id collided silently, so clicking one
+// `<label>` toggled the wrong control. Matches Select / TextField.
+const instanceId = $props.id();
+const autoId = $derived(id ?? (name ? `cb-${name}` : `cb-${instanceId}`));
 
 $effect(() => {
 	if (inputEl) inputEl.indeterminate = indeterminate;

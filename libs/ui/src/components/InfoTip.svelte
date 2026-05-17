@@ -61,8 +61,13 @@ let flipX = $state(false);
 // allocation. Built when the popover mounts; nulled on close.
 let trap: FocusTrap | null = null;
 
-const popoverId = $derived(`infotip-${term.replace(/\s+/g, '-').toLowerCase()}`);
-const titleId = $derived(`${popoverId}-title`);
+// Per-instance id: `$props.id()` guarantees uniqueness even when the same
+// glossary term is used twice on a page. A term-derived id produced duplicate
+// `id` attributes -- a WCAG 4.1.1 violation, and the trigger's `aria-controls`
+// would resolve to the first popover. Matches Select / TextField.
+const instanceId = $props.id();
+const popoverId = `infotip-${instanceId}`;
+const titleId = `${popoverId}-title`;
 
 const learnMoreHref = $derived.by<string | null>(() => {
 	if (!helpId) return null;

@@ -48,8 +48,22 @@ describe('PanelShell -- variant + a11y', () => {
 		render(PanelShellHarness, { title: 'Plan' });
 		const root = screen.getByTestId('panelshell-root');
 		const labelledBy = root.getAttribute('aria-labelledby');
-		expect(labelledBy).toBe('panel-plan');
+		expect(labelledBy).toMatch(/^panel-/);
 		expect(document.getElementById(labelledBy ?? '')).toBe(screen.getByTestId('panelshell-title'));
+	});
+
+	it('two panels with the same title get distinct heading ids', () => {
+		// The heading id derives from a per-instance `$props.id()`, not the
+		// title text, so two panels titled the same never collide -- a
+		// duplicate id would make `aria-labelledby` ambiguous (WCAG 4.1.1).
+		render(PanelShellHarness, { title: 'Recent activity' });
+		render(PanelShellHarness, { title: 'Recent activity' });
+		const [first, second] = screen.getAllByTestId('panelshell-root');
+		const firstId = first.getAttribute('aria-labelledby');
+		const secondId = second.getAttribute('aria-labelledby');
+		expect(firstId).not.toBe(secondId);
+		expect(document.getElementById(firstId ?? '')).not.toBeNull();
+		expect(document.getElementById(secondId ?? '')).not.toBeNull();
 	});
 });
 

@@ -34,7 +34,13 @@ let {
 	control: Snippet<[{ id: string; describedBy: string | undefined; invalid: boolean }]>;
 } = $props();
 
-const idBase = $derived(forId ?? `ff-${label.replace(/\s+/g, '-').toLowerCase()}`);
+// Per-instance id fallback: `$props.id()` guarantees uniqueness even when two
+// FormFields on the same page share a label. A label-derived id collided
+// silently, breaking the `<label for>` association and -- worse -- letting one
+// field's `aria-describedby` point at the other field's error. Matches
+// Select / TextField. An explicit `for` prop still wins.
+const instanceId = $props.id();
+const idBase = $derived(forId ?? `ff-${instanceId}`);
 const helpId = $derived(help ? `${idBase}-help` : undefined);
 const errorId = $derived(error ? `${idBase}-error` : undefined);
 const describedBy = $derived([helpId, errorId].filter(Boolean).join(' ') || undefined);
