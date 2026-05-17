@@ -358,6 +358,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/validate-help-ids.ts`. Runs full because the registry is global.',
 		links: ['scripts/validate-help-ids.ts', 'libs/help/'],
 	},
+	'wx-citations': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Gate done-status weather-product pages on citation verification',
+		what: 'Reads every `course/weather/references/products/*/page.md`, parses the frontmatter, and for any page with `status: done` fails if any `authoritative_sources` entry carries `verified: false` or is missing the `verified` boolean.',
+		why: 'The product reference pages were authored by agents that could not open the source PDFs, so many `section:` numbers are inferred. The `verified:` field marks which are corroborated. A guessed citation must not reach a `done` page indistinguishable from a verified one.',
+		how: '`bun scripts/validate-wx-citations.ts`. Draft pages may carry unverified citations; the gate fires only on promotion to `done`.',
+		links: ['scripts/validate-wx-citations.ts', 'course/weather/references/products/'],
+	},
 	'browser-globals': {
 		tier: 'fast',
 		scopable: false,
@@ -1296,6 +1305,19 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		// helpId props live in .svelte files; the registry lives in libs/help/.
 		relevantWhen: (d) => anyMatch(d, (f) => f.endsWith('.svelte') || f.startsWith('libs/help/')),
 		fn: () => shellRun('bun', ['scripts/validate-help-ids.ts']),
+	});
+
+	defs.push({
+		name: 'wx-citations',
+		tier: 'fast',
+		// Trigger on any product reference page change (the validation target)
+		// AND on a change to the validator itself so a regression is caught.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) => f.startsWith('course/weather/references/products/') || f === 'scripts/validate-wx-citations.ts',
+			),
+		fn: () => shellRun('bun', ['scripts/validate-wx-citations.ts']),
 	});
 
 	defs.push({

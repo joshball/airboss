@@ -9,15 +9,19 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Surface Analysis Chart section'
     note: 'Authoritative symbol set, isobar interval, frontal glyphs, station model layout, and 3-hourly issue cadence.'
+    verified: true
   - source: AIM
     section: '7-1 -- National Weather Service Aviation Products'
     note: 'Operational role of the surface analysis in the preflight briefing flow.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)'
     note: 'Modern pilot-pitch treatment of chart production at the Weather Prediction Center and the Unified Surface Analysis.'
+    verified: false
   - source: AC 00-6B
     section: 'Aviation Weather, Surface Analysis section'
     note: 'Underlying meteorology -- pressure systems, frontal mechanics, wind around highs and lows.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-surface-analysis-and-cva
   - wx-chart-type-surface-analysis
@@ -51,34 +55,34 @@ The chart is dense by design. Reading it well is a matter of walking the four cl
 
 ### Symbology
 
-| Element              | What it looks like                                          | What it tells you                                                              |
-| -------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Isobar               | Thin black line, contour of equal sea-level pressure        | Drawn every 4 mb. Shape shows where pressure is changing; spacing shows speed. |
-| Isobar emphasis      | Every other isobar drawn heavier (every 8 mb)               | Quick visual scan of the major contour lines.                                  |
-| Tight isobar packing | Lines crammed close together                                | Strong pressure gradient = strong surface wind (25 kt+ when crammed).          |
-| Loose isobar packing | Lines spread far apart                                      | Weak gradient = light and variable surface wind.                               |
-| H marker             | Capital H at the center of closed isobars                   | High pressure center. Northern-hemisphere flow clockwise, outward, subsiding.  |
-| L marker             | Capital L at the center of closed isobars                   | Low pressure center. Northern-hemisphere flow counterclockwise, inward, rising. |
-| Cold front           | Blue line with triangles pointing direction of motion       | Cold air pushing under warm air. Sharp boundary, narrow band of intense wx.   |
-| Warm front           | Red line with half-circles pointing direction of motion     | Warm air overrunning cold air. Shallow slope, broad stratiform overrun ahead. |
+| Element              | What it looks like                                          | What it tells you                                                                 |
+| -------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Isobar               | Thin black line, contour of equal sea-level pressure        | Drawn every 4 mb. Shape shows where pressure is changing; spacing shows speed.    |
+| Isobar emphasis      | Every other isobar drawn heavier (every 8 mb)               | Quick visual scan of the major contour lines.                                     |
+| Tight isobar packing | Lines crammed close together                                | Strong pressure gradient = strong surface wind (25 kt+ when crammed).             |
+| Loose isobar packing | Lines spread far apart                                      | Weak gradient = light and variable surface wind.                                  |
+| H marker             | Capital H at the center of closed isobars                   | High pressure center. Northern-hemisphere flow clockwise, outward, subsiding.     |
+| L marker             | Capital L at the center of closed isobars                   | Low pressure center. Northern-hemisphere flow counterclockwise, inward, rising.   |
+| Cold front           | Blue line with triangles pointing direction of motion       | Cold air pushing under warm air. Sharp boundary, narrow band of intense wx.       |
+| Warm front           | Red line with half-circles pointing direction of motion     | Warm air overrunning cold air. Shallow slope, broad stratiform overrun ahead.     |
 | Stationary front     | Alternating red half-circles and blue triangles, opposed    | Airmasses balanced. Weather on both sides, slow to clear. Watch for cyclogenesis. |
-| Occluded front       | Purple line with alternating triangles and half-circles     | Cold front caught up with warm front. Often the least intense active front.   |
-| Trough / dryline     | Dashed line                                                 | Pressure trough without a full frontal character; can still focus weather.    |
-| Station model        | Small circle with wind barb and surrounding numeric / glyph | Miniature METAR at one reporting station -- wind, T, Td, P, sky, weather.     |
+| Occluded front       | Purple line with alternating triangles and half-circles     | Cold front caught up with warm front. Often the least intense active front.       |
+| Trough / dryline     | Dashed line                                                 | Pressure trough without a full frontal character; can still focus weather.        |
+| Station model        | Small circle with wind barb and surrounding numeric / glyph | Miniature METAR at one reporting station -- wind, T, Td, P, sky, weather.         |
 
 ### Station model layout
 
 The station model is a compressed METAR drawn around a small circle. Once you know the convention, a learner who can read a METAR can read a station model with about ten minutes of practice.
 
-| Position around the circle | Field                  | Notes                                                            |
-| -------------------------- | ---------------------- | ---------------------------------------------------------------- |
-| Long shaft into circle     | Wind direction         | The shaft points the direction the wind is coming from.          |
-| Barbs on the shaft         | Wind speed             | Half barb = 5 kt, full barb = 10 kt, pennant = 50 kt.            |
-| Top-left of circle         | Temperature            | Degrees F on US charts, degrees C on international charts.       |
-| Bottom-left of circle      | Dew point              | Same units as temperature.                                       |
-| Top-right of circle        | Sea-level pressure     | Last three digits in tenths of mb (e.g. 134 = 1013.4 mb).        |
-| Inside the circle          | Sky cover              | Fill amount encodes coverage (clear / few / scattered / etc.).   |
-| Left of the circle         | Current weather symbol | Standard WMO glyphs for rain, snow, fog, thunderstorm, etc.      |
+| Position around the circle | Field                  | Notes                                                          |
+| -------------------------- | ---------------------- | -------------------------------------------------------------- |
+| Long shaft into circle     | Wind direction         | The shaft points the direction the wind is coming from.        |
+| Barbs on the shaft         | Wind speed             | Half barb = 5 kt, full barb = 10 kt, pennant = 50 kt.          |
+| Top-left of circle         | Temperature            | Degrees F on US charts, degrees C on international charts.     |
+| Bottom-left of circle      | Dew point              | Same units as temperature.                                     |
+| Top-right of circle        | Sea-level pressure     | Last three digits in tenths of mb (e.g. 134 = 1013.4 mb).      |
+| Inside the circle          | Sky cover              | Fill amount encodes coverage (clear / few / scattered / etc.). |
+| Left of the circle         | Current weather symbol | Standard WMO glyphs for rain, snow, fog, thunderstorm, etc.    |
 
 ### Reading order
 

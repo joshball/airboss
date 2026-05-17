@@ -1020,3 +1020,11 @@ export {
 	wxScenarioChartDir,
 	wxScenarioChartSlug,
 } from './wx-engine-paths';
+export {
+	WX_REFERENCE_PAGE_BASENAME,
+	WX_REFERENCE_PRODUCTS_DIR_SEGMENTS,
+	WX_REFERENCE_STATUS_DONE,
+	WX_REFERENCE_STATUS_DRAFT,
+	WX_REFERENCE_STATUS_VALUES,
+	type WxReferenceStatus,
+} from './wx-references';

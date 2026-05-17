@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Graphical Forecasts for Aviation section'
     note: 'Format spec for the GFA tool layers. Verify exact chapter/section in current revision.'
+    verified: true
   - source: AIM
     section: '7-1-5, 7-1-6'
     note: 'Preflight briefing (7-1-5) and in-flight weather advisories (7-1-6). The GFA is the spatial integration of the in-flight advisory products.'
+    verified: false
   - source: FAA-H-8083-28
     section: 'Chapter 28 -- Aviation Weather Tools, §28.2 (Graphical Forecasts for Aviation (GFA) Tool)'
     note: 'GFA is the post-Area-Forecast replacement for CONUS. Legacy textual FA still covered in Ch 27 §27.5 for non-CONUS regions.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-gfa
 related_products:
@@ -48,24 +51,24 @@ The interface is the product. There is no encoded text form to decode field-by-f
 
 ### Tabs
 
-| Tab          | Time window               | What it shows                                                                |
-| ------------ | ------------------------- | ---------------------------------------------------------------------------- |
-| Observations | -14 hr to current         | METAR-derived cig/vis, radar, satellite, PIREPs plotted on the map           |
-| Forecasts    | current to +15 hr (+more) | Model-driven forecast layers (clouds, weather, icing, turbulence, winds)     |
-| Warnings     | active                    | AIRMET / SIGMET / Convective SIGMET / CWA polygons overlaid on the base map  |
+| Tab          | Time window               | What it shows                                                               |
+| ------------ | ------------------------- | --------------------------------------------------------------------------- |
+| Observations | -14 hr to current         | METAR-derived cig/vis, radar, satellite, PIREPs plotted on the map          |
+| Forecasts    | current to +15 hr (+more) | Model-driven forecast layers (clouds, weather, icing, turbulence, winds)    |
+| Warnings     | active                    | AIRMET / SIGMET / Convective SIGMET / CWA polygons overlaid on the base map |
 
 ### Standard layers
 
-| Layer                | Sub-options                            | What it answers                                          |
-| -------------------- | -------------------------------------- | -------------------------------------------------------- |
-| Clouds               | Ceiling, tops, sky cover by altitude   | Where are the layers and how thick are they?             |
-| Precipitation/Weather | Type, intensity                       | Where is it raining/snowing and how hard?                |
-| Thunderstorms        | Probability, coverage                  | Where is convection forecast?                            |
-| Ceiling and Visibility | Categorical (VFR/MVFR/IFR/LIFR)      | Is the route legal/comfortable for VFR?                  |
-| Turbulence           | Severity, altitude band                | Where will it be rough, and at what altitudes?           |
-| Icing                | Severity, altitude band, SLD potential | Where is structural icing forecast, and what flavor?     |
-| Surface Pressure/Winds | Isobars, surface wind barbs          | Where is the front, and how strong is the surface wind?  |
-| Winds Aloft          | Selectable flight level                | Headwind/tailwind picture by altitude                    |
+| Layer                  | Sub-options                            | What it answers                                         |
+| ---------------------- | -------------------------------------- | ------------------------------------------------------- |
+| Clouds                 | Ceiling, tops, sky cover by altitude   | Where are the layers and how thick are they?            |
+| Precipitation/Weather  | Type, intensity                        | Where is it raining/snowing and how hard?               |
+| Thunderstorms          | Probability, coverage                  | Where is convection forecast?                           |
+| Ceiling and Visibility | Categorical (VFR/MVFR/IFR/LIFR)        | Is the route legal/comfortable for VFR?                 |
+| Turbulence             | Severity, altitude band                | Where will it be rough, and at what altitudes?          |
+| Icing                  | Severity, altitude band, SLD potential | Where is structural icing forecast, and what flavor?    |
+| Surface Pressure/Winds | Isobars, surface wind barbs            | Where is the front, and how strong is the surface wind? |
+| Winds Aloft            | Selectable flight level                | Headwind/tailwind picture by altitude                   |
 
 ### Time-slider mechanics
 

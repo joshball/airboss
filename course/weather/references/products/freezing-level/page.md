@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: Freezing Level chart section (often grouped with icing products)
     note: Format spec for the freezing-level analysis and forecast charts -- contour interval, MSL altitude convention, multi-level inversion handling.
+    verified: true
   - source: AIM
     section: 7-1-21
     note: Icing -- operational use of the freezing level as part of the icing decision; the chart is the spatial picture of the 0 deg C isotherm.
+    verified: true
   - source: FAA-H-8083-28
     section: Chapters 25 (Analysis) and 27 (Forecasts), Freezing Level sections
     note: Aviation Weather Handbook -- freezing-level analysis and forecast graphics, paired with CIP / FIP icing products in the same chapters.
+    verified: false
 related_knowledge_nodes:
   - wx-freezing-level
   - wx-icing-types-and-avoidance
@@ -56,12 +59,12 @@ What it decides:
 
 The product is a chart. The symbology is sparse on purpose; almost all of the information is in the contour labels and the inversion annotation.
 
-| Layer / element            | What it shows                                              | How to read it                                                                                              |
-| -------------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| Lowest freezing contour    | Altitude of the lowest 0 deg C surface, MSL                | Contour label is in hundreds of feet MSL. `80` = 8,000 ft MSL. Typical contour interval is 4,000 ft.        |
-| Highest freezing contour   | Where an inversion exists, altitude of the upper 0 deg C   | Drawn as a second, distinct line style. Label is again hundreds of feet MSL. Present only where applicable. |
-| Surface freezing area      | Region where the freezing level is at or below the surface | Shaded or labeled `SFC` / `0`. Inside this region the entire air column is sub-freezing.                    |
-| Forecast valid time        | Analysis time or +3 / +6 / +12 hour forecast               | Picked from a tab or selector on the AWC page. The chart frame changes; the symbology does not.             |
+| Layer / element          | What it shows                                              | How to read it                                                                                              |
+| ------------------------ | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Lowest freezing contour  | Altitude of the lowest 0 deg C surface, MSL                | Contour label is in hundreds of feet MSL. `80` = 8,000 ft MSL. Typical contour interval is 4,000 ft.        |
+| Highest freezing contour | Where an inversion exists, altitude of the upper 0 deg C   | Drawn as a second, distinct line style. Label is again hundreds of feet MSL. Present only where applicable. |
+| Surface freezing area    | Region where the freezing level is at or below the surface | Shaded or labeled `SFC` / `0`. Inside this region the entire air column is sub-freezing.                    |
+| Forecast valid time      | Analysis time or +3 / +6 / +12 hour forecast               | Picked from a tab or selector on the AWC page. The chart frame changes; the symbology does not.             |
 
 You read the chart by:
 

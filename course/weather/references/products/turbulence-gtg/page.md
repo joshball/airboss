@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: Turbulence Forecast / Graphical Turbulence Guidance
     note: Format, valid times, severity scale, and component-layer definitions for the GTG product.
+    verified: true
   - source: AIM
     section: 7-1-23
     note: Turbulence -- operational classification, intensity definitions, PIREP weighting that GTG severity is calibrated against.
+    verified: true
   - source: FAA-H-8083-28
     section: Chapter 19 -- Turbulence
     note: Aviation Weather Handbook turbulence chapter; CAT, mountain-wave, and convective turbulence sources that the GTG component layers map to.
+    verified: false
 related_knowledge_nodes:
   - wx-turbulence-types
 related_products:
@@ -60,12 +63,12 @@ What it replaces or supplements: GTG is the model's quantitative best-guess of w
 
 GTG is a chart product. The interface (aviationweather.gov/gtg, or the same data rendered inside EFBs and FIS-B receivers) has three primary controls:
 
-| Control            | Range / options                                          | What it answers                                                                              |
-| ------------------ | -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| Flight-level slider| 1,000 ft to FL450 in 1,000 ft steps                      | At my cruise altitude, what does the forecast look like over my route corridor?              |
-| Component toggle   | Total / CAT / Mountain Wave / CIT                        | What is causing the turbulence -- is it shear, wave, or convection?                          |
-| Valid-time stepper | T+0, T+3, T+6, T+9, T+12, T+15, T+18 (3-hour steps)      | Where will the turbulence be when I'm there, not where it is right now?                      |
-| Severity legend    | Green (smooth) / Yellow (light) / Orange (mod) / Red (severe) | How bad, in medium-jet terms? Mentally bump one level worse for a light GA aircraft. |
+| Control             | Range / options                                               | What it answers                                                                      |
+| ------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| Flight-level slider | 1,000 ft to FL450 in 1,000 ft steps                           | At my cruise altitude, what does the forecast look like over my route corridor?      |
+| Component toggle    | Total / CAT / Mountain Wave / CIT                             | What is causing the turbulence -- is it shear, wave, or convection?                  |
+| Valid-time stepper  | T+0, T+3, T+6, T+9, T+12, T+15, T+18 (3-hour steps)           | Where will the turbulence be when I'm there, not where it is right now?              |
+| Severity legend     | Green (smooth) / Yellow (light) / Orange (mod) / Red (severe) | How bad, in medium-jet terms? Mentally bump one level worse for a light GA aircraft. |
 
 The workflow is: pick your altitude, pick your valid time (the forecast step that brackets your ETA), look at Total first to see the picture, then toggle to CAT / Mountain Wave / CIT to identify the cause. Cause drives the avoidance option: shear-driven CAT escapes with a small altitude change; mountain wave needs lateral re-routing or a much larger altitude change; CIT escapes by deviating around the convection itself.
 

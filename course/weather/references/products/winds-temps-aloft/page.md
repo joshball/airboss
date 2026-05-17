@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Wind and Temperature Aloft Forecast section'
     note: 'Canonical decode spec including the >100 KT (direction+50/speed-100) convention and the implicit-negative temperature convention at and above 24,000 ft.'
+    verified: true
   - source: AIM
     section: '7-1 -- National Weather Service Aviation Products'
     note: 'Where the FB lives in the briefing flow and how it pairs with the GFA, AIRMET Tango, and turbulence products.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Chapter 27 -- Forecasts, §27.2 (Winds and Temperatures Aloft) and §27.2.1 (FB Wind and Temperature Aloft Forecast)'
     note: 'Pilot-pitch treatment of FB generation, regional altitude coverage, and the operational reasoning for cruise-altitude selection.'
+    verified: false
 related_knowledge_nodes:
   - wx-product-winds-aloft
 related_products:
@@ -53,34 +56,34 @@ Wind direction is **true**, not magnetic. Speeds are in knots. Temperatures are 
 
 Each altitude is encoded as a 4-character group (low altitude, no temperature), a 6-character group (mid altitude with explicit-sign temperature), or a 6-character group (high altitude with implicit-negative temperature). Reading left to right:
 
-| Field        | Width  | Example  | Meaning                                                                                     |
-| ------------ | ------ | -------- | ------------------------------------------------------------------------------------------- |
-| Direction    | 2 char | `27`     | Tens of degrees true. `27` = 270°. Range 01--36 in the standard encoding.                   |
-| Speed        | 2 char | `27`     | Wind speed in knots. `27` = 27 KT.                                                          |
-| Temperature  | 2--3 char | `-15` / `15` | °C. Below 24,000 ft the sign is explicit (`+15` or `-15`). At/above 24,000 ft, implicit negative -- `15` decodes to -15°C. |
+| Field       | Width     | Example      | Meaning                                                                                                                    |
+| ----------- | --------- | ------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Direction   | 2 char    | `27`         | Tens of degrees true. `27` = 270°. Range 01--36 in the standard encoding.                                                  |
+| Speed       | 2 char    | `27`         | Wind speed in knots. `27` = 27 KT.                                                                                         |
+| Temperature | 2--3 char | `-15` / `15` | °C. Below 24,000 ft the sign is explicit (`+15` or `-15`). At/above 24,000 ft, implicit negative -- `15` decodes to -15°C. |
 
 Special encodings to recognize on sight:
 
-| Raw       | Meaning                                                                                              |
-| --------- | ---------------------------------------------------------------------------------------------------- |
-| `9900`    | Light and variable. Wind below the threshold where direction can be reliably forecast.               |
+| Raw       | Meaning                                                                                                                             |
+| --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `9900`    | Light and variable. Wind below the threshold where direction can be reliably forecast.                                              |
 | `7299`    | Speed > 99 KT trigger. Direction code 51+ signals: subtract 50 from direction, add 100 to speed. `72` -> 220° true; `99` -> 199 KT. |
-| `731960`  | Combined high-altitude entry. `73` -> 230° true; `19` + 100 = 119 KT; `60` -> -60°C (above 24K).     |
-| (omitted) | No forecast issued -- within 1,500 ft AGL of station elevation, or below the lowest published level. |
+| `731960`  | Combined high-altitude entry. `73` -> 230° true; `19` + 100 = 119 KT; `60` -> -60°C (above 24K).                                    |
+| (omitted) | No forecast issued -- within 1,500 ft AGL of station elevation, or below the lowest published level.                                |
 
 Standard CONUS altitudes (MSL):
 
-| Altitude (MSL) | Temperature?           | Notes                                                                          |
-| -------------- | ---------------------- | ------------------------------------------------------------------------------ |
-| 3,000          | No                     | Lowest published level. Wind only.                                             |
-| 6,000          | Yes (explicit sign)    | Skipped if station elevation is above 4,500 ft (1,500 AGL rule).               |
-| 9,000          | Yes (explicit sign)    |                                                                                |
-| 12,000         | Yes (explicit sign)    |                                                                                |
-| 18,000         | Yes (explicit sign)    | At/above 18,000 the altitudes are effectively flight levels (FL180 = 18,000).  |
-| 24,000         | Yes (explicit sign)    | Boundary level -- typically still rendered with explicit sign.                  |
-| 30,000         | Yes (implicit negative) | Drop the sign; assume negative.                                                |
-| 34,000         | Yes (implicit negative) |                                                                                |
-| 39,000         | Yes (implicit negative) |                                                                                |
+| Altitude (MSL) | Temperature?            | Notes                                                                         |
+| -------------- | ----------------------- | ----------------------------------------------------------------------------- |
+| 3,000          | No                      | Lowest published level. Wind only.                                            |
+| 6,000          | Yes (explicit sign)     | Skipped if station elevation is above 4,500 ft (1,500 AGL rule).              |
+| 9,000          | Yes (explicit sign)     |                                                                               |
+| 12,000         | Yes (explicit sign)     |                                                                               |
+| 18,000         | Yes (explicit sign)     | At/above 18,000 the altitudes are effectively flight levels (FL180 = 18,000). |
+| 24,000         | Yes (explicit sign)     | Boundary level -- typically still rendered with explicit sign.                |
+| 30,000         | Yes (implicit negative) | Drop the sign; assume negative.                                               |
+| 34,000         | Yes (implicit negative) |                                                                               |
+| 39,000         | Yes (implicit negative) |                                                                               |
 
 The >99 KT convention deserves a second look because it's the field-trip trap: a direction code in the range 51--86 is impossible as a true direction (max true direction is 36, i.e. 360°), so the encoder uses the unused range as a flag. When you see a direction `>= 51`, subtract 50 and add 100 KT to the speed. Speed > 199 KT is encoded as direction + 99 (i.e. capped).
 

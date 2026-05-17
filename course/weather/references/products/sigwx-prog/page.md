@@ -9,15 +9,19 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Significant Weather Prognostic Charts (High and Mid Level) section'
     note: 'Format, symbology, valid-time cadence, and altitude band for the SIGWX high-level prog issued by the World Area Forecast Centers.'
+    verified: true
   - source: AIM
     section: '7-1 -- National Weather Service Aviation Products'
     note: 'Operational role of the SIGWX prog in international and high-altitude flight planning.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, High-Altitude Charts area (Significant Weather Prognostic Charts subsection)'
     note: 'Modern consolidated treatment of WAFC SIGWX outputs and how to read them.'
+    verified: true
   - source: ICAO Annex 3
     section: 'Meteorological Service for International Air Navigation, WAFS appendix'
     note: 'International specification for World Area Forecast System products that underlies the SIGWX chart format.'
+    verified: true
 related_knowledge_nodes:
   - wx-product-sigmets
 related_products:
@@ -73,28 +77,28 @@ The SIGWX is a chart product, not encoded text. Reading it is a matter of walkin
 
 ### Symbology key
 
-| Symbol                                             | Meaning                                                                                                                              |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Heavy arrow (single hash on tail)                  | Jet stream with core speed greater than 80 KT but less than 120 KT. Hash marks indicate speed band; arrow points downwind.           |
-| Heavy arrow (double hash on tail)                  | Jet stream with core speed greater than 120 KT. The strongest jet streams; the highest CAT risk along their flanks.                  |
-| `FL360` (along jet arrow)                          | Flight level of the jet core at that point on the arrow. The jet altitude varies along its length; multiple FL labels are common.    |
-| `380 KT` or similar (along jet arrow)              | Wind speed at the jet core, in knots.                                                                                                |
-| Boxed number (e.g. `390`)                          | Tropopause height in hundreds of feet at that point on the chart. `390` reads as FL390. Heights are interpolated between data points. |
-| Scallop-edged polygon                              | Area of cumulonimbus (CB) activity. The polygon encloses where CB is forecast, not where individual cells will be.                  |
-| `ISOL` (in CB polygon)                             | Isolated CBs -- less than 50% area coverage, individual cells separated.                                                             |
-| `OCNL` (in CB polygon)                             | Occasional CBs -- 50% to 75% coverage, well-separated clusters or lines.                                                             |
-| `FRQ` (in CB polygon)                              | Frequent CBs -- greater than 75% coverage, little separation. Often a line or solid area of convection.                              |
-| `EMBD` (in CB polygon)                             | Embedded CBs -- buried in cloud, not visible from the cockpit until on top.                                                          |
-| `XXX/YYY` (CB polygon altitude)                    | CB tops / bases as FLs. `XXX` = top, `YYY` = base. A polygon reading `450/200` means tops to FL450, bases at FL200.                  |
-| Zigzag-edged polygon (or zigzag boundary line)     | Area of turbulence at the labeled severity and altitude band.                                                                        |
-| `MOD` (in turbulence polygon)                      | Moderate turbulence forecast in the area.                                                                                            |
-| `SEV` (in turbulence polygon)                      | Severe turbulence forecast in the area. SEV CAT polygons get the most attention -- they are route-altering.                          |
-| `FL340/FL400` (in turbulence polygon)              | Altitude band of the forecast turbulence: base FL / top FL.                                                                          |
-| Inverted-triangle polygon                          | Area of icing at altitude. Less common on high-level SIGWX than on mid-level charts.                                                 |
-| `MOD ICE` / `SEV ICE` (in icing polygon)           | Severity of icing forecast within the polygon.                                                                                       |
-| Volcano symbol (stylized erupting volcano)         | Active volcano producing an ash plume at altitude. Tagged with the plume's forecast altitude and extent.                             |
-| Tropical cyclone symbol (open spiral with center)  | Forecast position of a tropical cyclone (hurricane, typhoon, cyclone), with the storm name and pressure / wind intensity.            |
-| Sandstorm symbol                                   | Dust or sand reaching FL250+. Tagged with altitude band.                                                                             |
+| Symbol                                            | Meaning                                                                                                                               |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Heavy arrow (single hash on tail)                 | Jet stream with core speed greater than 80 KT but less than 120 KT. Hash marks indicate speed band; arrow points downwind.            |
+| Heavy arrow (double hash on tail)                 | Jet stream with core speed greater than 120 KT. The strongest jet streams; the highest CAT risk along their flanks.                   |
+| `FL360` (along jet arrow)                         | Flight level of the jet core at that point on the arrow. The jet altitude varies along its length; multiple FL labels are common.     |
+| `380 KT` or similar (along jet arrow)             | Wind speed at the jet core, in knots.                                                                                                 |
+| Boxed number (e.g. `390`)                         | Tropopause height in hundreds of feet at that point on the chart. `390` reads as FL390. Heights are interpolated between data points. |
+| Scallop-edged polygon                             | Area of cumulonimbus (CB) activity. The polygon encloses where CB is forecast, not where individual cells will be.                    |
+| `ISOL` (in CB polygon)                            | Isolated CBs -- less than 50% area coverage, individual cells separated.                                                              |
+| `OCNL` (in CB polygon)                            | Occasional CBs -- 50% to 75% coverage, well-separated clusters or lines.                                                              |
+| `FRQ` (in CB polygon)                             | Frequent CBs -- greater than 75% coverage, little separation. Often a line or solid area of convection.                               |
+| `EMBD` (in CB polygon)                            | Embedded CBs -- buried in cloud, not visible from the cockpit until on top.                                                           |
+| `XXX/YYY` (CB polygon altitude)                   | CB tops / bases as FLs. `XXX` = top, `YYY` = base. A polygon reading `450/200` means tops to FL450, bases at FL200.                   |
+| Zigzag-edged polygon (or zigzag boundary line)    | Area of turbulence at the labeled severity and altitude band.                                                                         |
+| `MOD` (in turbulence polygon)                     | Moderate turbulence forecast in the area.                                                                                             |
+| `SEV` (in turbulence polygon)                     | Severe turbulence forecast in the area. SEV CAT polygons get the most attention -- they are route-altering.                           |
+| `FL340/FL400` (in turbulence polygon)             | Altitude band of the forecast turbulence: base FL / top FL.                                                                           |
+| Inverted-triangle polygon                         | Area of icing at altitude. Less common on high-level SIGWX than on mid-level charts.                                                  |
+| `MOD ICE` / `SEV ICE` (in icing polygon)          | Severity of icing forecast within the polygon.                                                                                        |
+| Volcano symbol (stylized erupting volcano)        | Active volcano producing an ash plume at altitude. Tagged with the plume's forecast altitude and extent.                              |
+| Tropical cyclone symbol (open spiral with center) | Forecast position of a tropical cyclone (hurricane, typhoon, cyclone), with the storm name and pressure / wind intensity.             |
+| Sandstorm symbol                                  | Dust or sand reaching FL250+. Tagged with altitude band.                                                                              |
 
 ### Reading order
 

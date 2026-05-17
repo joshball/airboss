@@ -9,12 +9,15 @@ authoritative_sources:
   - source: AC 00-45H
     section: 'Aviation Weather Services, Satellite Imagery chapter'
     note: 'Authoritative channel definitions (visible, infrared, water vapor), enhancement curves, and product cadence.'
+    verified: true
   - source: AIM
     section: '7-1 -- National Weather Service Aviation Products'
     note: 'Operational role of satellite imagery in the preflight briefing flow.'
+    verified: true
   - source: FAA-H-8083-28
     section: 'Aviation Weather Handbook, Satellite chapter'
     note: 'Modern pilot-pitch treatment of GOES channels, cloud-top temperature interpretation, and synoptic pattern recognition.'
+    verified: true
 related_knowledge_nodes:
   - wx-clouds-and-precipitation
 related_products:
