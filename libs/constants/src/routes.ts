@@ -403,6 +403,15 @@ export const ROUTES = {
 	PRACTICE_WX_MASTERY: '/practice/wx/mastery',
 
 	/**
+	 * Temporal-scenario replay -- step a temporal weather scenario hour by
+	 * hour. At each step the student sees the METAR/TAF + chart for that
+	 * hour and records a go/no-go decision; a summary shows at the end.
+	 * Consumes the `timeline.json` bundle from `wx-scenario build --timeline`.
+	 * Step 7 of `docs/work/plans/2026-05-14-truth-model-v2-temporal.md`.
+	 */
+	PRACTICE_WX_REPLAY: '/practice/wx/replay',
+
+	/**
 	 * Truth-model authoring sandbox -- admin-only. Sliders drive a
 	 * single-station `TruthModel`; the page re-derives a METAR + TAF and
 	 * re-renders the wx-charts METAR plot live as the levers move, and can
@@ -1010,6 +1019,7 @@ export const NAV_LABELS = {
 	REFERENCE_GLOSSARY: 'Glossary',
 	REFERENCE_WX_PRODUCTS: 'Weather products',
 	PRACTICE_WX_DRILL: 'Weather drill',
+	PRACTICE_WX_REPLAY: 'Weather replay',
 	/** Placeholder for the flight-logging surface (WP 2). */
 	FLIGHT: 'Flight',
 	/**
