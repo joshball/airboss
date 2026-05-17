@@ -38,9 +38,24 @@ describe('InfoTip -- closed (default)', () => {
 		expect(screen.queryByTestId('infotip-popover')).toBeNull();
 	});
 
-	it('aria-controls on the trigger points at a stable popover id derived from the term', () => {
+	it('aria-controls on the trigger resolves to the popover id once open', async () => {
+		const user = userEvent.setup();
 		render(InfoTip, { term: 'Slice', definition: 'A bucket.' });
-		expect(screen.getByTestId('infotip-trigger').getAttribute('aria-controls')).toBe('infotip-slice');
+		const trigger = screen.getByTestId('infotip-trigger');
+		const controls = trigger.getAttribute('aria-controls');
+		expect(controls).toMatch(/^infotip-/);
+		await user.click(trigger);
+		expect(screen.getByTestId('infotip-popover').getAttribute('id')).toBe(controls);
+	});
+
+	it('two InfoTips for the same term get distinct popover ids', () => {
+		// The popover id derives from a per-instance `$props.id()`, not the
+		// term text, so the same term used twice on a page never collides --
+		// a duplicate id would make `aria-controls` ambiguous (WCAG 4.1.1).
+		render(InfoTip, { term: 'Goal', definition: 'A.' });
+		render(InfoTip, { term: 'Goal', definition: 'B.' });
+		const [first, second] = screen.getAllByTestId('infotip-trigger');
+		expect(first.getAttribute('aria-controls')).not.toBe(second.getAttribute('aria-controls'));
 	});
 });
 

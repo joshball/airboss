@@ -48,7 +48,8 @@ let triggerEl = $state<HTMLButtonElement | null>(null);
 // metric label renders twice on a page (a per-row tile and a summary tile). A
 // label-derived id produced a duplicate `role="dialog"` `id`, so the trigger's
 // `aria-controls` was ambiguous. Matches Select / TextField.
-const popoverId = `metric-explainer-${$props.id()}`;
+const instanceId = $props.id();
+const popoverId = `metric-explainer-${instanceId}`;
 
 function handleToggle() {
 	open = !open;
