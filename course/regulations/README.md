@@ -20,16 +20,16 @@ Authoring. The structure (this README, the [SYLLABUS](SYLLABUS.md), the [DESIGN]
 
 A 10-week course (mappable to longer or shorter) that walks 14 CFR end-to-end with focus calibrated to importance:
 
-| Part            | Treatment      | Why                                                                                  |
-| --------------- | -------------- | ------------------------------------------------------------------------------------ |
-| Title 14 architecture | Foundation     | You can't navigate a system you don't understand the shape of. Week 1 is non-negotiable. |
-| Part 1          | Brisk overview | Definitions. You'll come back to it constantly; learn how to use it.                 |
-| Part 61         | Deep           | The pilot. Certificates, ratings, currency, endorsements, CFI rules. Heaviest single block after 91. |
-| Part 91         | Very deep      | The flight. Where pilots live. Subpart-by-subpart with checkride-style integration orals. |
-| Part 141        | Cursory + literacy | "When does this affect me as a CFI?" + know your way around it.                  |
-| Part 135        | Cursory + literacy | Same. Your future commercial students will go there.                              |
-| AIM, ACs, Chief Counsel | Companion-document literacy | Where the real interpretation happens.                                  |
-| Enforcement system | One week       | Compliance program, certificate action, NTSB Part 830, Pilot's Bill of Rights.    |
+| Part                    | Treatment                   | Why                                                                                                  |
+| ----------------------- | --------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Title 14 architecture   | Foundation                  | You can't navigate a system you don't understand the shape of. Week 1 is non-negotiable.             |
+| Part 1                  | Brisk overview              | Definitions. You'll come back to it constantly; learn how to use it.                                 |
+| Part 61                 | Deep                        | The pilot. Certificates, ratings, currency, endorsements, CFI rules. Heaviest single block after 91. |
+| Part 91                 | Very deep                   | The flight. Where pilots live. Subpart-by-subpart with checkride-style integration orals.            |
+| Part 141                | Cursory + literacy          | "When does this affect me as a CFI?" + know your way around it.                                      |
+| Part 135                | Cursory + literacy          | Same. Your future commercial students will go there.                                                 |
+| AIM, ACs, Chief Counsel | Companion-document literacy | Where the real interpretation happens.                                                               |
+| Enforcement system      | One week                    | Compliance program, certificate action, NTSB Part 830, Pilot's Bill of Rights.                       |
 
 ## The three pedagogical pillars
 
@@ -75,10 +75,10 @@ The orals build week over week. By Week 10 a learner can answer a complex multi-
 
 This framing is the spine. Once you see it, everything fits:
 
-| Phase  | Subject       | Where it lives                              |
-| ------ | ------------- | ------------------------------------------- |
-| **1. The pilot** | Who is allowed to fly and how they stay allowed | **Part 61** -- certificates, ratings, currency, endorsements, instructor authority |
-| **2. The flight** | What rules apply to any individual flight   | **Part 91** -- the operating rules, the equipment rules, the maintenance rules, the airspace rules |
+| Phase                | Subject                                                        | Where it lives                                                                                                               |
+| -------------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **1. The pilot**     | Who is allowed to fly and how they stay allowed                | **Part 61** -- certificates, ratings, currency, endorsements, instructor authority                                           |
+| **2. The flight**    | What rules apply to any individual flight                      | **Part 91** -- the operating rules, the equipment rules, the maintenance rules, the airspace rules                           |
 | **3. The operation** | What rules apply to organized commercial / training operations | **Part 141** (training schools), **Part 135** (on-demand commercial), **Part 121** (airline), **Part 145** (repair stations) |
 
 Week 1 establishes this framing. Every subsequent week refers back to it. The architecture week is the load-bearing piece -- skip it and the rest decays into memorization.
@@ -110,7 +110,12 @@ regulations/
   orals/               full bank of oral questions, indexed by topic and week
   drills/              timed navigation drills, indexed by skill
   references/          links to authoritative sources, AIM, ACs, NTSB cases, Chief Counsel letters
+    document-families/   one citable page per FAA document family (the browsable map of the ecosystem)
 ```
+
+## Relationship to the documentation-navigation course
+
+The standalone [Navigating FAA Documentation](../courses/faa-documentation-navigation/manifest.yaml) course is the orientation a returning pilot should take first. It teaches the *map* of the FAA documentation ecosystem: what the document families are, how they are numbered, how they supersede each other, and how to triangulate a question across them. This FAR Navigation Course goes deep on 14 CFR itself; the orientation course teaches how the whole ecosystem fits together before a learner dives into any one part. The per-family reference pages under [references/document-families/](references/document-families/) are that course's durable artifact and serve this course equally well.
 
 ## Relationship to course/knowledge/
 
