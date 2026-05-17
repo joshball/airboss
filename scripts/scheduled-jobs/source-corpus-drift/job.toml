@@ -1,0 +1,20 @@
+# Scheduled job: source-corpus-drift
+#
+# Run `bun run sources report --strict` once a month and write a markdown
+# drift report to docs/work/reviews/ when an upstream FAA / eCFR document
+# has a newer revision than the local cache. No PR; the operator reviews the
+# report and decides whether to re-run `sources download` + re-verify the
+# citations the new edition may have renumbered.
+
+name = "source-corpus-drift"
+description = "Monthly drift check: catalogued FAA / eCFR documents with a newer revision upstream"
+enabled = true
+
+# Monthly, 09:00 local time on the 1st.
+schedule = "0 9 1 * *"
+
+[behaviour]
+on_diff = "log-only"            # corpus drift wants human review, never an auto-download
+branch_prefix = "scheduled/"
+pr_labels = ["scheduled-job", "drift", "sources"]
+working_dir = "."

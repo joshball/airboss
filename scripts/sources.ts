@@ -140,6 +140,25 @@ after a suspected FAA URL rotation.`,
 			'docs/decisions/022-chapter-source-ingestion/decision.md',
 		],
 	},
+	report: {
+		summary: 'Drift report -- HEAD-check every catalogued document against the live publisher (no downloads)',
+		what: `Walks every catalogued document the downloader knows about (AC, ACS, AIM, handbooks, CFR -- the same plan set \`download\` builds) and runs the existing freshness check (\`scripts/sources/download/freshness.ts\`, HEAD only -- no body fetch) against each. Prints a per-document verdict table: \`fresh\` / \`newer revision available\` / \`not cached\` / \`HEAD failed\`.
+
+  bun run sources report                       # print the table, exit 0
+  bun run sources report --strict              # exit non-zero when any document is non-fresh
+  bun run sources report --no-color            # disable ANSI color
+
+NOT in CI -- network dependent. The monthly \`source-corpus-drift\` scheduled
+job runs \`report --strict\`.`,
+		why: 'The downloader is idempotent -- it skips files whose bytes have not changed -- but nothing tells the developer when an upstream document has a newer revision. The report is the at-a-glance answer to "is anything out of date?". Detecting drift and deciding to update are separate by design: a new FAA edition can renumber sections, so an update is a reviewed change, never silent.',
+		how: 'Reuses `buildPlans` (the same catalogue the downloader reads) and `evaluateFreshness` (the freshness decision tree). Exit 0 by default (it is a report); `--strict` makes it an exit-code gate (0 = all fresh, 1 = drift) for the scheduled job.',
+		links: [
+			'scripts/sources/report.ts',
+			'scripts/sources/download/freshness.ts',
+			'scripts/scheduled-jobs/source-corpus-drift/',
+			'docs/work/plans/2026-05-17-source-corpus-drift-check.md',
+		],
+	},
 	inventory: {
 		summary: 'Regenerate docs/ingestion-pipeline/inventory.md from YAML config + cache manifests',
 		what: `Walks every YAML config + every cache manifest and emits a per-corpus markdown report. The output is idempotent: same input bytes = same output bytes. One timestamp at the top; no timestamps inside section bodies. Per-corpus tables show doc name, source URL, cache filename, SHA-256 (12-char prefix), and last-fetched date.
@@ -216,7 +235,7 @@ interface CommandGroup {
 const COMMAND_GROUPS: readonly CommandGroup[] = [
 	{ label: 'Source bytes', commands: ['download', 'verify-urls', 'inventory'] },
 	{ label: 'Derivative ingestion', commands: ['register', 'extract'] },
-	{ label: 'Discovery', commands: ['discover-errata'] },
+	{ label: 'Discovery', commands: ['discover-errata', 'report'] },
 	{ label: 'Cross-link', commands: ['audit-citations'] },
 	{ label: 'Utility', commands: ['help'] },
 ];
@@ -309,6 +328,14 @@ export async function runSourcesDispatcher(argv: readonly string[]): Promise<num
 			}
 			const { runVerifyUrls } = await import('./sources/verify-urls');
 			return await runVerifyUrls();
+		}
+		case 'report': {
+			if (rest.includes('--help') || rest.includes('-h')) {
+				printCommandHelp('report');
+				return 0;
+			}
+			const { runSourcesReport } = await import('./sources/report');
+			return await runSourcesReport(rest);
 		}
 		case 'inventory': {
 			if (rest.includes('--help') || rest.includes('-h')) {
