@@ -57,7 +57,7 @@ PR title: `feat(xc-viewer): Phase A -- scaffold + types + Memphis sectional inge
 - [ ] Create `libs/constants/src/xc-viewer.ts` with `XC_REGIONS`, `XC_REGION_VALUES`, `XcRegion`, `XC_REGION_LABELS`, `XC_AIRCRAFT`, `XC_AIRCRAFT_VALUES`, `XcAircraft`, `XC_ROUTES`, `XC_ROUTE_VALUES`, `XcRoute`, `XC_SCENARIOS`, `XC_SCENARIO_VALUES`, `XcScenario`, `XC_SCENARIO_LABELS` per spec.md "Constants" section. v1 enum values: regions = `['memphis']`, aircraft = `['c172n-skyhawk']`, routes = `['kmem-kmkl-kolv']`, scenarios = `['kmem-kmkl-kolv-frontal-march']`.
 - [ ] Re-export from `libs/constants/src/index.ts`.
 - [ ] Add `ROUTES.SPATIAL_XC_INDEX = '/spatial/xc'` and `ROUTES.SPATIAL_XC_SCENARIO = (slug: XcScenario) => \`/spatial/xc/${slug}\`` to `libs/constants/src/routes.ts`.
-- [ ] Add `PORTS.SPATIAL = 9610` (or the next free port after study=9600, sim=9620, flightbag=9630) to `libs/constants/src/ports.ts`. Verify no collision with existing port allocations.
+- [x] `PORTS.SPATIAL = 9650` (+ `SPATIAL_E2E = 9653`) added to `libs/constants/src/ports.ts`. Resolves the prior `9610` collision with `SIM`; follows the dev-port +10 grid and the E2E +3 offset.
 - [ ] Run `bun run check` -- 0 errors. Commit (`feat(constants): xc-viewer scenario/region/aircraft/route constants + spatial routes + port`).
 
 #### A.2 Library scaffolds

@@ -370,7 +370,7 @@ Same pattern as the wx-engine `:::scenario` directive. Phase F.3 documents the c
 
 ## Open design questions resolved in this WP
 
-1. **Where does `apps/spatial/` live, and what's the port?** Resolved: new SvelteKit app under `apps/spatial/`. Port: `PORTS.SPATIAL` in `libs/constants/src/ports.ts` (number assigned during Phase F per the existing pattern -- study=9600, sim=9620, flightbag=9630 -> spatial=9610 or next available). Apps doc updated in `docs/products/spatial/INDEX.md` (created in Phase F).
+1. **Where does `apps/spatial/` live, and what's the port?** Resolved: new SvelteKit app under `apps/spatial/`. Port: `PORTS.SPATIAL = 9650` in `libs/constants/src/ports.ts` (dev-port +10 grid: study 9600, sim 9610, hangar 9620, avionics 9630, flightbag 9640, spatial 9650; E2E port `SPATIAL_E2E = 9653` per the +3 offset). The earlier draft proposed `9610`, which collided with `SIM` -- corrected. Apps doc updated in `docs/products/spatial/INDEX.md` (created in Phase F).
 2. **What shape is the aircraft spec for v1?** Resolved: hand-authored TS literal under `libs/spatial-engine/src/flight/aircraft/c172n-skyhawk.ts` plus a citation map under `course/aircraft/c172n-skyhawk/CITATION.md`. POH PDF ingest is a follow-on WP (see OUT-OF-SCOPE).
 3. **Vector vs raster sectional?** Resolved: vector. See "Why vector sectional for v1" above. Raster ingest is a follow-on WP.
 4. **How does wx flow into the viewer?** Resolved: by slug reference. `ScenarioSpec.wxScenarioSlug` points at a `WxScenario`; `loadWeatherForScenario` reads the wx-engine output at `data/wx-scenarios/<slug>/` and projects to waypoint queries. No cross-lib code coupling.

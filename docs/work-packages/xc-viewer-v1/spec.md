@@ -437,7 +437,7 @@ SPATIAL_XC_SCENARIO: (slug: XcScenario): string => `/spatial/xc/${slug}`,
 ### Ports (in `libs/constants/src/ports.ts`)
 
 ```typescript
-SPATIAL: 9610, // study is 9600; sim is 9620; flightbag is 9630
+SPATIAL: 9650, // dev-port grid: study 9600, sim 9610, hangar 9620, avionics 9630, flightbag 9640, spatial 9650
 ```
 
 The exact port number is set during Phase F per the existing port-allocation pattern. The constant is the contract.
