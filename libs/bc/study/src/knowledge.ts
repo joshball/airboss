@@ -399,10 +399,7 @@ export async function getNodesByIds(ids: readonly string[], db: Db = defaultDb):
  * `getNodesByIds` when only the title is needed (e.g. the Today briefing's
  * focus-node label). Ids with no node are absent from the map.
  */
-export async function getKnowledgeNodeTitles(
-	ids: readonly string[],
-	db: Db = defaultDb,
-): Promise<Map<string, string>> {
+export async function getKnowledgeNodeTitles(ids: readonly string[], db: Db = defaultDb): Promise<Map<string, string>> {
 	const out = new Map<string, string>();
 	if (ids.length === 0) return out;
 	const rows = await db

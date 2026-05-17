@@ -44,9 +44,9 @@ import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import {
 	type AddGoalCourseInput,
-	addGoalCourseInputSchema,
 	type AddGoalNodeInput,
 	type AddGoalSyllabusInput,
+	addGoalCourseInputSchema,
 	addGoalNodeInputSchema,
 	addGoalSyllabusInputSchema,
 	applyCertGoalsInputSchema,
