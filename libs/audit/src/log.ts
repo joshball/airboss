@@ -1,4 +1,4 @@
-import { AUDIT_TARGET_VALUES } from '@ab/constants';
+import { AUDIT_LIST_HARD_CAP, AUDIT_TARGET_VALUES } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
 import { generateAuditLogId } from '@ab/utils';
 import { and, count, desc, eq, gte } from 'drizzle-orm';
@@ -63,6 +63,9 @@ export async function auditWrite(
 	return row;
 }
 
+/** Default page size for `auditRecent` when no `limit` is supplied. */
+const AUDIT_RECENT_DEFAULT_LIMIT = 10;
+
 /**
  * Read the most recent audit rows for a given `targetType`. Used by admin
  * surfaces (hangar) to show the last N actions on a resource. Optional
@@ -74,12 +77,21 @@ export async function auditWrite(
  * types (a 'study.card' and a 'hangar.source' can share the same ULID-ish
  * prefix), so the unfiltered query could return rows from a different
  * resource family.
+ *
+ * `limit` is clamped to `[1, AUDIT_LIST_HARD_CAP]`. A caller passing an
+ * unbounded, negative, or non-finite value would otherwise feed it straight
+ * into the SQL `LIMIT` clause -- a negative/NaN value errors at the driver,
+ * a huge value is an unbounded scan. The clamp keeps the helper safe under
+ * any caller input without each call site repeating the guard.
  */
 export async function auditRecent(
 	input: { targetType: string; targetId?: string | null; limit?: number },
 	db: Db = defaultDb,
 ): Promise<AuditLogRow[]> {
-	const limit = input.limit ?? 10;
+	const requested = input.limit ?? AUDIT_RECENT_DEFAULT_LIMIT;
+	const limit = Number.isFinite(requested)
+		? Math.min(Math.max(Math.floor(requested), 1), AUDIT_LIST_HARD_CAP)
+		: AUDIT_RECENT_DEFAULT_LIMIT;
 	const where =
 		input.targetId != null
 			? and(eq(auditLog.targetType, input.targetType), eq(auditLog.targetId, input.targetId))
