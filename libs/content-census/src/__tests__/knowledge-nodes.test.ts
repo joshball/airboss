@@ -26,8 +26,8 @@ describe('knowledgeNodesCensus', () => {
 	});
 
 	it('inventories every node.md with a valid derived state', () => {
-		// The knowledge graph carries 79 node.md files on disk.
-		expect(census.items.length).toBe(79);
+		// The knowledge graph carries 83 node.md files on disk.
+		expect(census.items.length).toBe(83);
 		for (const item of census.items) {
 			expect(VALID_STATES, `${item.id} state`).toContain(item.derivedState);
 			expect(item.id.length).toBeGreaterThan(0);
