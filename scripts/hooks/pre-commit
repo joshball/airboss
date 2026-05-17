@@ -1,0 +1,32 @@
+#!/bin/sh
+# Refuse commits on protected branches. airboss policy: never commit directly
+# to main -- always work on a feature branch (see CLAUDE.md "Git").
+#
+# This catches the failure mode where an agent or a human lands a commit on
+# main with no PR and no review. Worktrees created by `git worktree add` share
+# the parent repo's core.hooksPath, so this guard fires for sub-agent worktrees
+# too -- which is where the mistake usually happens.
+#
+# Escape hatch (rare, intentional): AIRBOSS_ALLOW_MAIN_COMMIT=1 git commit ...
+#
+# Source of truth: scripts/hooks/pre-commit (this file, version-controlled).
+# Installed into .git/hooks/pre-commit by `bun scripts/setup.ts`. If you edit
+# this file, re-run setup to re-install.
+
+branch=$(git symbolic-ref --short HEAD 2>/dev/null)
+
+case "$branch" in
+	main | master)
+		if [ "${AIRBOSS_ALLOW_MAIN_COMMIT:-}" = "1" ]; then
+			printf >&2 "\n%s\n\n" "pre-commit: AIRBOSS_ALLOW_MAIN_COMMIT=1 set -- allowing commit on '$branch'."
+			exit 0
+		fi
+		printf >&2 "\n%s\n%s\n%s\n\n" \
+			"pre-commit: refusing to commit directly to '$branch'." \
+			"  Branch first:  git checkout -b feat/your-change" \
+			"  Override once: AIRBOSS_ALLOW_MAIN_COMMIT=1 git commit ..."
+		exit 1
+		;;
+esac
+
+exit 0

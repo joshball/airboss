@@ -13,6 +13,7 @@
  * Run via `bun scripts/generate-faa-doc-registry.ts`.
  */
 
+import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 
@@ -579,6 +580,18 @@ function main(): void {
 	const fs = process.getBuiltinModule('node:fs') as typeof import('node:fs');
 	fs.writeFileSync(OUTPUT_PATH, emit(sortedFaa, FAA_DOCS_HEADER, 'FAA_DOC_REFERENCES'), 'utf-8');
 	fs.writeFileSync(AIM_OUTPUT_PATH, emit(sortedAim, AIM_DOCS_HEADER, 'AIM_REFERENCES'), 'utf-8');
+
+	// Normalise to project formatting (single quotes, array wrapping) so a
+	// re-run never produces a spurious diff. The emitter writes raw TS; Biome
+	// is the source of truth for layout. Without this, the committed file and
+	// the generator's raw output drift, and `bun run check` flags the drift.
+	const fmt = spawnSync('bunx', ['biome', 'format', '--write', OUTPUT_PATH, AIM_OUTPUT_PATH], {
+		cwd: REPO_ROOT,
+		stdio: 'inherit',
+	});
+	if (fmt.status !== 0) {
+		throw new Error('biome format failed on generated output');
+	}
 
 	console.log(`Wrote ${sortedFaa.length} FAA doc references to ${OUTPUT_PATH}`);
 	console.log(`  handbooks: ${sortedFaa.filter((r) => /^doc-faah/.test(r.id)).length}`);
