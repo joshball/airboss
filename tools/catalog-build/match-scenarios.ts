@@ -34,10 +34,15 @@
  */
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { WX_SCENARIO_VALUES, type WxScenario, wxScenarioBundleDir } from '@ab/constants';
 
-const REPO_ROOT = resolve(import.meta.dir, '..', '..');
+// `import.meta.dir` is a Bun-only field -- undefined when this module is
+// imported under Vitest (Node ESM). `fileURLToPath(import.meta.url)` resolves
+// the same directory in both runtimes, so `match-scenarios.test.ts` can import
+// `normalizeRaw` without the path constants crashing at module load.
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const CATALOG_DIR = resolve(REPO_ROOT, 'course/knowledge/weather/encoded-text-catalog');
 const CATALOG_PATH = resolve(CATALOG_DIR, 'catalog.json');
 const SCENARIO_MATCHES_PATH = resolve(CATALOG_DIR, 'scenario-matches.json');

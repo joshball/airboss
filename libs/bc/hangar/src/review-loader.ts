@@ -255,6 +255,10 @@ async function rebuildDocsSearchIndex(
 						title: sql`excluded.title`,
 						body: sql`excluded.body`,
 						frontmatter: sql`excluded.frontmatter`,
+						// $onUpdate on updatedAt does not fire for the conflict-update
+						// path of an insert().onConflictDoUpdate() -- set it explicitly
+						// so a re-indexed doc reflects its latest index time.
+						updatedAt: sql`now()`,
 					},
 				});
 		}
