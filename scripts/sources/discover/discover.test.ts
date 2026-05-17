@@ -2,7 +2,7 @@
  * Unit tests for the `bun run sources discover-errata` modules.
  *
  * Covers:
- *   - Catalogue invariants (15 handbooks, every entry has the required fields)
+ *   - Catalogue invariants (14 handbooks, every entry has the required fields)
  *   - Argument parser
  *   - HTML scrape fixture (the FAA's actual AFH and PHAK markup, frozen at
  *     2026-04-28 -- see fixtures dir)
@@ -55,9 +55,9 @@ import {
 // ---------------------------------------------------------------------------
 
 describe('HANDBOOK_CATALOGUE', () => {
-	it('contains exactly 15 entries', () => {
-		expect(HANDBOOK_CATALOGUE.length).toBe(15);
-		expect(ALL_HANDBOOK_SLUGS.length).toBe(15);
+	it('contains exactly 14 entries', () => {
+		expect(HANDBOOK_CATALOGUE.length).toBe(14);
+		expect(ALL_HANDBOOK_SLUGS.length).toBe(14);
 	});
 
 	it('every entry has a unique slug', () => {
