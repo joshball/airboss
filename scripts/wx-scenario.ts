@@ -41,8 +41,10 @@ const COMMAND_HELP: Record<string, CommandHelp> = {
 		example: 'bun run wx-scenario list',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.BUILD]: {
-		summary: 'Generate + write a scenario bundle (truth + products + charts + commentary)',
-		example: 'bun run wx-scenario build frontal-xc-march  |  bun run wx-scenario build --all',
+		summary:
+			'Generate + write a scenario bundle (truth + products + charts + commentary). Add --timeline for the v2 evolution bundle (v2 scenarios only).',
+		example:
+			'bun run wx-scenario build frontal-xc-march  |  bun run wx-scenario build frontal-pressure-march --timeline',
 	},
 	[WX_SCENARIO_SUBCOMMANDS.VALIDATE]: {
 		summary: 'Run round-trip + consistency + knowledge-node resolution (no writes)',

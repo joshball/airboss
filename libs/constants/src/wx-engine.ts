@@ -130,6 +130,46 @@ export const WX_SCENARIO_SUBCOMMAND_VALUES = Object.values(WX_SCENARIO_SUBCOMMAN
 export type WxScenarioSubcommand = (typeof WX_SCENARIO_SUBCOMMAND_VALUES)[number];
 
 /**
+ * v2 timeline-bundle layout. `bun run wx-scenario build <slug> --timeline`
+ * writes the full evolution bundle under `data/wx-scenarios/<slug>/`; these
+ * constants name the files + subdirectories so no path string is inlined in
+ * the bundle writer. See `docs/work/plans/2026-05-14-truth-model-v2-temporal.md`
+ * "Scenario packages".
+ */
+export const WX_TIMELINE_BUNDLE = {
+	/** Every hourly v1 snapshot, pre-rendered. */
+	TIMELINE: 'timeline.json',
+	/** Sequence-product subdirectory. */
+	PRODUCTS_DIR: 'products',
+	/** All stations x all hours. */
+	METAR_SEQUENCE: 'metar-sequence.json',
+	/** All stations x all issue times. */
+	TAF_SEQUENCE: 'taf-sequence.json',
+	/** Time-stamped PIREP reports. */
+	PIREP_EVENTS: 'pirep-events.json',
+	/** Advisory issue/extend/cancel events. */
+	AIRMET_TIMELINE: 'airmet-timeline.json',
+	/** Per-hour SVG chart subdirectory. */
+	CHARTS_DIR: 'charts',
+} as const;
+
+/**
+ * Per-hour chart kinds the timeline bundle renders to SVG. `surface-analysis`
+ * carries the evolving front + pressure positions; `metar-plot` carries the
+ * per-station observation overlay. Both re-derive from each hourly v1
+ * snapshot.
+ */
+export const WX_TIMELINE_CHART_KINDS = ['surface-analysis', 'metar-plot'] as const;
+
+export type WxTimelineChartKind = (typeof WX_TIMELINE_CHART_KINDS)[number];
+
+/**
+ * Build-subcommand flag that triggers the full v2 timeline-bundle emit.
+ * `bun run wx-scenario build <slug> --timeline`.
+ */
+export const WX_SCENARIO_BUILD_TIMELINE_FLAG = '--timeline';
+
+/**
  * Closed enum of encoded-text wx product slugs the drill / practice surface
  * understands. Used by `@ab/wx-drill`, `@ab/bc-wx-practice`, and the study
  * app's /practice/wx/drill route to constrain product selection.

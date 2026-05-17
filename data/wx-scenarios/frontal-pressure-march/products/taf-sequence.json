@@ -1,0 +1,62 @@
+[
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KDDC",
+    "raw": "TAF KDDC 141200Z 1412/1420 32020G30KT 6SM BKN030"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KDDC",
+    "raw": "TAF KDDC 141800Z 1418/1502 32020G30KT 6SM BKN030"
+  },
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KICT",
+    "raw": "TAF KICT 141200Z 1412/1420 19013KT 6SM SCT050"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KICT",
+    "raw": "TAF KICT 141800Z 1418/1502 19013KT 6SM SCT050 FM142300 32020G30KT 6SM BKN030"
+  },
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KFOE",
+    "raw": "TAF KFOE 141200Z 1412/1420 19013KT 6SM SCT050"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KFOE",
+    "raw": "TAF KFOE 141800Z 1418/1502 19013KT 6SM SCT050 PROB30 1421/1423 4SM -TSRA BKN045CB"
+  },
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KMHK",
+    "raw": "TAF KMHK 141200Z 1412/1420 19013KT 6SM SCT050"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KMHK",
+    "raw": "TAF KMHK 141800Z 1418/1502 19013KT 6SM SCT050 PROB30 1418/1420 4SM -TSRA BKN045CB"
+  },
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KTOP",
+    "raw": "TAF KTOP 141200Z 1412/1420 19013KT 6SM SCT050"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KTOP",
+    "raw": "TAF KTOP 141800Z 1418/1502 19013KT 6SM SCT050 PROB30 1421/1422 4SM -TSRA BKN045CB"
+  },
+  {
+    "issuedAt": "2026-03-14T12:00:00.000Z",
+    "station": "KJLN",
+    "raw": "TAF KJLN 141200Z 1412/1420 19013KT 6SM SCT050"
+  },
+  {
+    "issuedAt": "2026-03-14T18:00:00.000Z",
+    "station": "KJLN",
+    "raw": "TAF KJLN 141800Z 1418/1502 19013KT 6SM SCT050 PROB30 1423/1502 4SM -TSRA BKN045CB"
+  }
+]

@@ -1,0 +1,3199 @@
+{
+  "scenarioId": "frontal-pressure-march",
+  "window": {
+    "start": "2026-03-14T12:00:00Z",
+    "end": "2026-03-14T20:00:00Z",
+    "stepMinutes": 60
+  },
+  "snapshots": [
+    {
+      "at": "2026-03-14T12:00:00.000Z",
+      "zulu": "1412Z",
+      "hoursSinceStart": 0,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T12:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -100.4,
+                  40
+                ],
+                [
+                  -100,
+                  38.5
+                ],
+                [
+                  -99.6,
+                  37
+                ],
+                [
+                  -99.2,
+                  35.5
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "moderate"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -99.2,
+                35.5
+              ],
+              [
+                -99.6,
+                37
+              ],
+              [
+                -100,
+                38.5
+              ],
+              [
+                -100.4,
+                40
+              ],
+              [
+                -92,
+                40.5
+              ],
+              [
+                -92,
+                34.5
+              ],
+              [
+                -99.2,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -99.2,
+                35.5
+              ],
+              [
+                -99.6,
+                37
+              ],
+              [
+                -100,
+                38.5
+              ],
+              [
+                -100.4,
+                40
+              ],
+              [
+                -106,
+                40.5
+              ],
+              [
+                -106,
+                34.5
+              ],
+              [
+                -99.2,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141253Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141253Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1412Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1412Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T13:00:00.000Z",
+      "zulu": "1413Z",
+      "hoursSinceStart": 1,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T13:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -100.09299806520686,
+                  39.91440252629201
+                ],
+                [
+                  -99.69949568744475,
+                  38.41440252629201
+                ],
+                [
+                  -99.30552633433349,
+                  36.91440252629201
+                ],
+                [
+                  -98.91112560702702,
+                  35.41440252629201
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "moderate"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -99.03604602237903,
+                35.5
+              ],
+              [
+                -99.4328680908897,
+                37
+              ],
+              [
+                -99.82944532802429,
+                38.5
+              ],
+              [
+                -100.22575752793922,
+                40
+              ],
+              [
+                -91.82446550459116,
+                40.5
+              ],
+              [
+                -91.8380375732257,
+                34.5
+              ],
+              [
+                -99.03604602237903,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -98.85335072843242,
+                35.39728303155041
+              ],
+              [
+                -99.24663160120018,
+                36.89728303155041
+              ],
+              [
+                -99.6393948249337,
+                38.39728303155041
+              ],
+              [
+                -100.03159767824822,
+                39.89728303155041
+              ],
+              [
+                -105.62886594243459,
+                40.39728303155041
+              ],
+              [
+                -105.65756148111012,
+                34.39728303155041
+              ],
+              [
+                -98.85335072843242,
+                35.39728303155041
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141353Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141353Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1413Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1413Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T14:00:00.000Z",
+      "zulu": "1414Z",
+      "hoursSinceStart": 2,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T14:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -99.78599613041371,
+                  39.828805052584016
+                ],
+                [
+                  -99.39899137488949,
+                  38.328805052584016
+                ],
+                [
+                  -99.01105266866698,
+                  36.828805052584016
+                ],
+                [
+                  -98.62225121405403,
+                  35.328805052584016
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "moderate"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.87209204475806,
+                35.5
+              ],
+              [
+                -99.2657361817794,
+                37
+              ],
+              [
+                -99.65889065604858,
+                38.5
+              ],
+              [
+                -100.05151505587844,
+                40
+              ],
+              [
+                -91.6489310091823,
+                40.5
+              ],
+              [
+                -91.6760751464514,
+                34.5
+              ],
+              [
+                -98.87209204475806,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -98.50670145686485,
+                35.29456606310082
+              ],
+              [
+                -98.89326320240038,
+                36.79456606310082
+              ],
+              [
+                -99.27878964986739,
+                38.29456606310082
+              ],
+              [
+                -99.66319535649644,
+                39.79456606310082
+              ],
+              [
+                -105.25773188486919,
+                40.29456606310082
+              ],
+              [
+                -105.31512296222024,
+                34.29456606310082
+              ],
+              [
+                -98.50670145686485,
+                35.29456606310082
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141453Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141453Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1414Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1414Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T15:00:00.000Z",
+      "zulu": "1415Z",
+      "hoursSinceStart": 3,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T15:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -99.47899419562056,
+                  39.743207578876024
+                ],
+                [
+                  -99.09848706233424,
+                  38.243207578876024
+                ],
+                [
+                  -98.71657900300048,
+                  36.743207578876024
+                ],
+                [
+                  -98.33337682108105,
+                  35.243207578876024
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "moderate"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.70813806713709,
+                35.5
+              ],
+              [
+                -99.0986042726691,
+                37
+              ],
+              [
+                -99.48833598407288,
+                38.5
+              ],
+              [
+                -99.87727258381766,
+                40
+              ],
+              [
+                -91.47339651377347,
+                40.5
+              ],
+              [
+                -91.5141127196771,
+                34.5
+              ],
+              [
+                -98.70813806713709,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -98.16005218529726,
+                35.19184909465123
+              ],
+              [
+                -98.53989480360056,
+                36.69184909465123
+              ],
+              [
+                -98.9181844748011,
+                38.19184909465123
+              ],
+              [
+                -99.29479303474466,
+                39.69184909465123
+              ],
+              [
+                -104.88659782730377,
+                40.19184909465123
+              ],
+              [
+                -104.97268444333037,
+                34.19184909465123
+              ],
+              [
+                -98.16005218529726,
+                35.19184909465123
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -98.25557511240325,
+              "lat": 39.40081768404406,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -97.900727831135,
+              "lat": 37.90081768404406,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -97.54263732930369,
+              "lat": 36.40081768404406,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -97.18154993124605,
+              "lat": 34.90081768404406,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141553Z 32020G29KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141553Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1415Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1415Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T16:00:00.000Z",
+      "zulu": "1416Z",
+      "hoursSinceStart": 4,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T16:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -99.03040719844088,
+                  39.61766461743764
+                ],
+                [
+                  -98.65930867756119,
+                  38.11766461743764
+                ],
+                [
+                  -98.28613372264499,
+                  36.61766461743764
+                ],
+                [
+                  -97.91104029480822,
+                  35.11766461743764
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "strong"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.54418408951612,
+                35.5
+              ],
+              [
+                -98.93147236355881,
+                37
+              ],
+              [
+                -99.31778131209717,
+                38.5
+              ],
+              [
+                -99.70303011175687,
+                40
+              ],
+              [
+                -91.29786201836461,
+                40.5
+              ],
+              [
+                -91.35215029290279,
+                34.5
+              ],
+              [
+                -98.54418408951612,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -97.81340291372967,
+                35.08913212620164
+              ],
+              [
+                -98.18652640480076,
+                36.58913212620164
+              ],
+              [
+                -98.55757929973478,
+                38.08913212620164
+              ],
+              [
+                -98.92639071299288,
+                39.58913212620164
+              ],
+              [
+                -104.51546376973837,
+                40.08913212620164
+              ],
+              [
+                -104.6302459244405,
+                34.08913212620164
+              ],
+              [
+                -97.81340291372967,
+                35.08913212620164
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -97.80921009418498,
+              "lat": 39.27527472260567,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -97.46361146311226,
+              "lat": 37.77527472260567,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -97.11410643123732,
+              "lat": 36.27527472260567,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -96.76099109583286,
+              "lat": 34.77527472260567,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141653Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141653Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141653Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1416Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1416Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T17:00:00.000Z",
+      "zulu": "1417Z",
+      "hoursSinceStart": 5,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T17:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -98.5818202012612,
+                  39.49212165599925
+                ],
+                [
+                  -98.22013029278813,
+                  37.99212165599925
+                ],
+                [
+                  -97.85568844228949,
+                  36.49212165599925
+                ],
+                [
+                  -97.48870376853539,
+                  34.99212165599925
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "strong"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.38023011189514,
+                35.5
+              ],
+              [
+                -98.76434045444853,
+                37
+              ],
+              [
+                -99.14722664012146,
+                38.5
+              ],
+              [
+                -99.52878763969609,
+                40
+              ],
+              [
+                -91.12232752295577,
+                40.5
+              ],
+              [
+                -91.1901878661285,
+                34.5
+              ],
+              [
+                -98.38023011189514,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -97.4667536421621,
+                34.98641515775205
+              ],
+              [
+                -97.83315800600094,
+                36.48641515775205
+              ],
+              [
+                -98.19697412466849,
+                37.98641515775205
+              ],
+              [
+                -98.5579883912411,
+                39.48641515775205
+              ],
+              [
+                -104.14432971217296,
+                39.98641515775205
+              ],
+              [
+                -104.28780740555062,
+                33.98641515775205
+              ],
+              [
+                -97.4667536421621,
+                34.98641515775205
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -97.36283117760499,
+              "lat": 39.14973176116728,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -97.02648228655666,
+              "lat": 37.64973176116728,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -96.68556369093275,
+              "lat": 36.14973176116728,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -96.3404212771138,
+              "lat": 34.64973176116728,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141753Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141753Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1417Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1417Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T18:00:00.000Z",
+      "zulu": "1418Z",
+      "hoursSinceStart": 6,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T18:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -98.13323320408152,
+                  39.366578694560864
+                ],
+                [
+                  -97.78095190801507,
+                  37.866578694560864
+                ],
+                [
+                  -97.425243161934,
+                  36.366578694560864
+                ],
+                [
+                  -97.06636724226256,
+                  34.866578694560864
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "strong"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.21627613427417,
+                35.5
+              ],
+              [
+                -98.59720854533823,
+                37
+              ],
+              [
+                -98.97667196814575,
+                38.5
+              ],
+              [
+                -99.3545451676353,
+                40
+              ],
+              [
+                -90.94679302754693,
+                40.5
+              ],
+              [
+                -91.02822543935419,
+                34.5
+              ],
+              [
+                -98.21627613427417,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -97.12010437059452,
+                34.88369818930246
+              ],
+              [
+                -97.47978960720113,
+                36.38369818930246
+              ],
+              [
+                -97.83636894960217,
+                37.88369818930246
+              ],
+              [
+                -98.18958606948932,
+                39.38369818930246
+              ],
+              [
+                -103.77319565460755,
+                39.88369818930246
+              ],
+              [
+                -103.94536888666075,
+                33.88369818930246
+              ],
+              [
+                -97.12010437059452,
+                34.88369818930246
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -96.91643845906258,
+              "lat": 39.0241887997289,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -96.58934038683668,
+              "lat": 37.5241887997289,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -96.2570091841911,
+              "lat": 36.0241887997289,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -95.9198405425544,
+              "lat": 34.5241887997289,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141853Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141853Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141853Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1418Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1418Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T19:00:00.000Z",
+      "zulu": "1419Z",
+      "hoursSinceStart": 7,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T19:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -97.56539565640601,
+                  39.20679674363928
+                ],
+                [
+                  -97.22486653146515,
+                  37.70679674363928
+                ],
+                [
+                  -96.88006730565398,
+                  36.20679674363928
+                ],
+                [
+                  -96.53132144906542,
+                  34.70679674363928
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "strong"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -98.0523221566532,
+                35.5
+              ],
+              [
+                -98.43007663622794,
+                37
+              ],
+              [
+                -98.80611729617004,
+                38.5
+              ],
+              [
+                -99.18030269557451,
+                40
+              ],
+              [
+                -90.77125853213808,
+                40.5
+              ],
+              [
+                -90.86626301257989,
+                34.5
+              ],
+              [
+                -98.0523221566532,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -96.77345509902693,
+                34.78098122085287
+              ],
+              [
+                -97.12642120840133,
+                36.28098122085287
+              ],
+              [
+                -97.47576377453588,
+                37.78098122085287
+              ],
+              [
+                -97.82118374773754,
+                39.28098122085287
+              ],
+              [
+                -103.40206159704215,
+                39.78098122085287
+              ],
+              [
+                -103.60293036777087,
+                33.78098122085287
+              ],
+              [
+                -96.77345509902693,
+                34.78098122085287
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -96.35137381857133,
+              "lat": 38.86440684880731,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -96.03582863233737,
+              "lat": 37.36440684880731,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -95.71422286782786,
+              "lat": 35.86440684880731,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -95.3870137113367,
+              "lat": 34.36440684880731,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 141953Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 141953Z 19013G23KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 141953Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1419Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1419Z/metar-plot.svg"
+        }
+      ]
+    },
+    {
+      "at": "2026-03-14T20:00:00.000Z",
+      "zulu": "1420Z",
+      "hoursSinceStart": 8,
+      "truth": {
+        "scenarioId": "frontal-pressure-march",
+        "validAt": "2026-03-14T20:00:00.000Z",
+        "primaryTimeZone": "America/Chicago",
+        "narrative": "Accelerating cold front under pilot time pressure, central Kansas. A March cold front sweeps ESE across the route; it starts at 15 kt, accelerates to 22 then 28 kt, and intensifies from moderate to strong by 1600Z. Pre-frontal convection appears 60 nm ahead of the boundary at 1500Z. The TAF issued before the window forecasts the front at its slower initial speed, so the actual METARs show the front arriving earlier than predicted.",
+        "stations": {
+          "KICT": {
+            "icao": "KICT",
+            "lon": -97.43,
+            "lat": 37.65,
+            "elevationFt": 1333,
+            "name": "Wichita Dwight D. Eisenhower"
+          },
+          "KMHK": {
+            "icao": "KMHK",
+            "lon": -96.67,
+            "lat": 39.14,
+            "elevationFt": 1057,
+            "name": "Manhattan Regional"
+          },
+          "KTOP": {
+            "icao": "KTOP",
+            "lon": -95.62,
+            "lat": 39.07,
+            "elevationFt": 881,
+            "name": "Topeka Philip Billard"
+          },
+          "KJLN": {
+            "icao": "KJLN",
+            "lon": -94.5,
+            "lat": 37.15,
+            "elevationFt": 981,
+            "name": "Joplin Regional"
+          },
+          "KFOE": {
+            "icao": "KFOE",
+            "lon": -95.66,
+            "lat": 38.95,
+            "elevationFt": 1078,
+            "name": "Topeka Forbes Field"
+          },
+          "KDDC": {
+            "icao": "KDDC",
+            "lon": -99.97,
+            "lat": 37.76,
+            "elevationFt": 2594,
+            "name": "Dodge City Regional"
+          }
+        },
+        "synoptic": {
+          "pressureSystems": [
+            {
+              "id": "L-nebraska",
+              "kind": "L",
+              "lon": -100.5,
+              "lat": 42,
+              "centralPressureMb": 998,
+              "motionDegTrue": 80,
+              "motionKt": 22
+            },
+            {
+              "id": "H-southeast",
+              "kind": "H",
+              "lon": -86,
+              "lat": 33,
+              "centralPressureMb": 1024,
+              "motionDegTrue": 70,
+              "motionKt": 12
+            }
+          ],
+          "fronts": [
+            {
+              "id": "cf-1",
+              "kind": "cold",
+              "points": [
+                [
+                  -96.9975581087305,
+                  39.0470147927177
+                ],
+                [
+                  -96.66878115491525,
+                  37.5470147927177
+                ],
+                [
+                  -96.33489144937397,
+                  36.0470147927177
+                ],
+                [
+                  -95.99627565586827,
+                  34.5470147927177
+                ]
+              ],
+              "pipSide": "E",
+              "motionDegTrue": 110,
+              "motionKt": 15,
+              "intensity": "strong"
+            }
+          ]
+        },
+        "airMasses": [
+          {
+            "id": "warm",
+            "classification": "mT",
+            "polygon": [
+              [
+                -97.88836817903223,
+                35.5
+              ],
+              [
+                -98.26294472711764,
+                37
+              ],
+              [
+                -98.63556262419434,
+                38.5
+              ],
+              [
+                -99.00606022351373,
+                40
+              ],
+              [
+                -90.59572403672924,
+                40.5
+              ],
+              [
+                -90.70430058580558,
+                34.5
+              ],
+              [
+                -97.88836817903223,
+                35.5
+              ]
+            ],
+            "surfaceTempC": 16,
+            "surfaceDewpointC": 12,
+            "stability": "conditionally-unstable",
+            "surfaceWindDirDeg": 190,
+            "surfaceWindKt": 13,
+            "meanCloudCover": "SCT",
+            "meanCloudBaseFtAgl": 5000,
+            "meanCloudTopFtAgl": 14000
+          },
+          {
+            "id": "cold",
+            "classification": "cP",
+            "polygon": [
+              [
+                -96.42680582745936,
+                34.67826425240328
+              ],
+              [
+                -96.77305280960151,
+                36.17826425240328
+              ],
+              [
+                -97.11515859946958,
+                37.67826425240328
+              ],
+              [
+                -97.45278142598576,
+                39.17826425240328
+              ],
+              [
+                -103.03092753947674,
+                39.67826425240328
+              ],
+              [
+                -103.26049184888099,
+                33.67826425240328
+              ],
+              [
+                -96.42680582745936,
+                34.67826425240328
+              ]
+            ],
+            "surfaceTempC": 5,
+            "surfaceDewpointC": -3,
+            "stability": "stable",
+            "surfaceWindDirDeg": 320,
+            "surfaceWindKt": 20,
+            "meanCloudCover": "BKN",
+            "meanCloudBaseFtAgl": 3000,
+            "meanCloudTopFtAgl": 8000
+          }
+        ],
+        "upperLevel": {
+          "jetAxis": [
+            [
+              -108,
+              35
+            ],
+            [
+              -100,
+              39
+            ],
+            [
+              -92,
+              43
+            ]
+          ],
+          "jetMaxKt": 100,
+          "windByAltitude": [
+            {
+              "altitudeFt": 3000,
+              "meanDirDeg": 210,
+              "meanSpeedKt": 25,
+              "meanTempC": 6
+            },
+            {
+              "altitudeFt": 6000,
+              "meanDirDeg": 230,
+              "meanSpeedKt": 33,
+              "meanTempC": 1
+            },
+            {
+              "altitudeFt": 9000,
+              "meanDirDeg": 250,
+              "meanSpeedKt": 40,
+              "meanTempC": -5
+            },
+            {
+              "altitudeFt": 12000,
+              "meanDirDeg": 260,
+              "meanSpeedKt": 48,
+              "meanTempC": -12
+            },
+            {
+              "altitudeFt": 18000,
+              "meanDirDeg": 270,
+              "meanSpeedKt": 62,
+              "meanTempC": -24
+            },
+            {
+              "altitudeFt": 24000,
+              "meanDirDeg": 280,
+              "meanSpeedKt": 80,
+              "meanTempC": -37
+            },
+            {
+              "altitudeFt": 30000,
+              "meanDirDeg": 285,
+              "meanSpeedKt": 92,
+              "meanTempC": -51
+            },
+            {
+              "altitudeFt": 34000,
+              "meanDirDeg": 290,
+              "meanSpeedKt": 100,
+              "meanTempC": -56
+            },
+            {
+              "altitudeFt": 39000,
+              "meanDirDeg": 295,
+              "meanSpeedKt": 90,
+              "meanTempC": -58
+            }
+          ]
+        },
+        "convection": {
+          "cells": [
+            {
+              "id": "cf-1-prefront-0",
+              "lon": -95.78628717008198,
+              "lat": 38.70462489788573,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-1",
+              "lon": -95.48229657750947,
+              "lat": 37.20462489788573,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-2",
+              "lon": -95.17141776632988,
+              "lat": 35.70462489788573,
+              "radiusKm": 12,
+              "peakDbz": 50
+            },
+            {
+              "id": "cf-1-prefront-3",
+              "lon": -94.85416944269394,
+              "lat": 34.20462489788573,
+              "radiusKm": 12,
+              "peakDbz": 50
+            }
+          ],
+          "frontalBand": null,
+          "capeJperKgByStation": {
+            "KICT": 700,
+            "KMHK": 650,
+            "KTOP": 600,
+            "KJLN": 750,
+            "KFOE": 600,
+            "KDDC": 100
+          }
+        },
+        "diurnal": {
+          "solarNoonUtcHour": 18,
+          "mixingHeightFtMsl": 6500,
+          "nocturnalInversion": false
+        },
+        "hazardZones": [],
+        "terrain": {
+          "ridges": []
+        },
+        "routeStations": [
+          "KDDC",
+          "KICT",
+          "KFOE"
+        ],
+        "fbStations": [
+          "KDDC",
+          "KICT",
+          "KFOE",
+          "KMHK",
+          "KTOP",
+          "KJLN"
+        ],
+        "tafValidHours": 8
+      },
+      "metars": [
+        {
+          "station": "KDDC",
+          "raw": "KDDC 142053Z 32020G33KT 10SM BKN030 OVC080 05/M03 A2961"
+        },
+        {
+          "station": "KICT",
+          "raw": "KICT 142053Z 19013G23KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KFOE",
+          "raw": "KFOE 142053Z 19013KT 3SM +TSRA SCT050 BKN015 OVC060 16/12 A2967"
+        },
+        {
+          "station": "KMHK",
+          "raw": "KMHK 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2963"
+        },
+        {
+          "station": "KTOP",
+          "raw": "KTOP 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2966"
+        },
+        {
+          "station": "KJLN",
+          "raw": "KJLN 142053Z 19013KT 10SM SCT050 OVC140 16/12 A2978"
+        }
+      ],
+      "charts": [
+        {
+          "kind": "surface-analysis",
+          "file": "charts/1420Z/surface-analysis.svg"
+        },
+        {
+          "kind": "metar-plot",
+          "file": "charts/1420Z/metar-plot.svg"
+        }
+      ]
+    }
+  ]
+}

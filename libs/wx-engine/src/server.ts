@@ -83,6 +83,24 @@ export {
 	deriveTafSequence,
 	type TimelineSnapshot,
 } from './products/temporal';
+// ----------------------------------------------------------------------
+// v2 timeline-bundle assembler + writer. Server-only -- renders charts to
+// SVG via `@ab/wx-charts/server` and touches the filesystem. Powers the
+// `wx-scenario build --timeline` CLI flag and the `/practice/wx/replay`
+// study-app surface.
+// ----------------------------------------------------------------------
+export {
+	type BuildTimelineBundleOptions,
+	buildTimelineBundle,
+	type TimelineBundle,
+	type TimelineBundleSnapshot,
+	type TimelineChart,
+	type TimelineMetarSample,
+	type TimelinePirepEvent,
+	type TimelineTafSample,
+	writeTimelineBundle,
+	zuluHourLabel,
+} from './products/timeline-bundle';
 export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
 export { deriveFbGrid } from './products/winds-aloft';
 // ----------------------------------------------------------------------

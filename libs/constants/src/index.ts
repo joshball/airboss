@@ -991,6 +991,7 @@ export {
 	WX_PRODUCT_LABELS,
 	WX_PRODUCT_VALUES,
 	WX_PRODUCTS,
+	WX_SCENARIO_BUILD_TIMELINE_FLAG,
 	WX_SCENARIO_LABELS,
 	WX_SCENARIO_SUBCOMMAND_VALUES,
 	WX_SCENARIO_SUBCOMMANDS,
@@ -1005,6 +1006,8 @@ export {
 	WX_TEMPORAL_RADIUS_GROW_SHRINK,
 	WX_TEMPORAL_REFERENCE_CELL_PEAK_DBZ,
 	WX_TEMPORAL_REFERENCE_CELL_RADIUS_KM,
+	WX_TIMELINE_BUNDLE,
+	WX_TIMELINE_CHART_KINDS,
 	type WxPracticeItemCount,
 	type WxPracticeMasteryState,
 	type WxPracticeQuestionForm,
@@ -1012,6 +1015,7 @@ export {
 	type WxScenario,
 	type WxScenarioSubcommand,
 	type WxTemporalCellIntensityCurve,
+	type WxTimelineChartKind,
 } from './wx-engine';
 export {
 	WX_CHART_ARTIFACT_VALUES,
