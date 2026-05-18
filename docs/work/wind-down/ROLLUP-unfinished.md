@@ -1,7 +1,7 @@
 ---
 type: unfinished-rollup
 sessions: 24
-items: 26
+items: 23
 first_rolled: 2026-05-17T21:02:21Z
 last_rolled: 2026-05-18T03:10:00Z
 consumed:
@@ -113,7 +113,7 @@ None.
 - **Severity**: high
 - **Sessions**: cd16e567
 
-## Medium (11)
+## Medium (8)
 
 ### `bun run check branch` not run on the zod-4 merged end-state
 
@@ -132,33 +132,6 @@ None.
 - **Next action**: walk the 17 rows, tick safe ones, run with `--apply`.
 - **Severity**: medium
 - **Sessions**: 20260515-180643-56167
-
-### Implement personal-minimums-as-typed-contract WP
-
-- **What**: WP #962 authored `status: draft`, 7 docs, 4 phases (schema -> hangar UI -> consumer function -> minimums lens). Build not started.
-- **Where**: `docs/work-packages/personal-minimums-as-typed-contract/`.
-- **Why deferred**: session was scoped to WP authoring, not building; also gated on sign-off.
-- **Next action**: sign off, then `/ball-wp-build` Phase A.
-- **Severity**: medium
-- **Sessions**: 20260515-180643-56167, cd16e567
-
-### Implement flightbag-citation-url-migration WP
-
-- **What**: WP #979 authored `status: draft`, 7 docs. Retires the 6 live `LIBRARY_*` constants via `urlForReference()` adoption across 18 call sites; Phase C includes the POH umbrella card chrome-only fix. (Note: a duplicate spec branch `wp-flightbag-citation-url-migration-spec` was triaged as stale and deleted on 2026-05-17 -- the spec is already on main via #979.)
-- **Where**: `docs/work-packages/flightbag-citation-url-migration/`.
-- **Why deferred**: architectural decisions captured; implementation is a separate effort.
-- **Next action**: `/ball-wp-build`.
-- **Severity**: medium
-- **Sessions**: 20260515-180643-56167
-
-### Implement xc-viewer-v1 WP
-
-- **What**: WP authored (PR #829), 6 phases A-F. Spec is review-clean; port-collision blocker fixed (PR #1017). None implemented.
-- **Where**: `docs/work-packages/xc-viewer-v1/`.
-- **Why deferred**: `human_review_status: pending` gates `/ball-wp-build`.
-- **Next action**: sign off, then dispatch Phase A (libs/spatial-engine scaffold + Memphis sectional ingest).
-- **Severity**: medium
-- **Sessions**: cd16e567, 20260517-163554-26560
 
 ### Build faa-documentation-navigation course from its WP
 
@@ -297,6 +270,14 @@ Resolved 2026-05-18 (parallel worktree-agent batch):
 - **Parallel-worker DB connection terminations (57P01)** -- was medium. **PR #1080** -- root cause was NOT vitest worker pool-sharing (the rollup's guess); it was two overlapping `bun run test` runs, the second `pg_terminate_backend`-ing the first's live connections. Fixed with a machine-wide cross-process file lock around DB provisioning.
 - **`/ball-wp-drift`** -- was medium. **PR #1074** ran the spec-vs-code drift check across 113 WPs; report at `docs/work/reviews/20260518-wp-drift.md` with a 5-item human-decision punch list (see new high item below).
 - **`ball-worktree/guard.sh` syntax error** -- was medium. The line-331 `;&` syntax error was fixed out-of-band; `bash -n guard.sh` parses clean.
+
+Resolved 2026-05-18 (work-package build batch -- 3 WPs built end-to-end in parallel worktrees):
+
+- **flightbag-citation-url-migration WP** -- was medium. Built all 5 phases (A-E), **PR #1087**. `urlForReferenceRow()` helper, BC/projection + help-loader migration, handbook tree builder, POH chrome-only, 6 dead `LIBRARY_*` route constants deleted. Also fixed a latent handbook-edition-designation normalization bug. `status: in-flight`.
+- **personal-minimums-as-typed-contract WP** -- was medium. Built all 5 phases (A-E), **PRs #1081, #1082, #1084, #1088, #1090**. Constants + Zod schema + types, `study.personal_minimums` Drizzle table + BC + `projectAgainstPersonalMinimums` lens, `/personal-minimums` editor + history pages, implications subpanel + course nudge. 21 unit + 9 e2e tests. `status: in-flight`.
+- **xc-viewer-v1 WP** -- was medium. Built all 6 phases (A-F) + close, **PRs #1083, #1085, #1086, #1089, #1091, #1092, #1093**. New `libs/spatial-engine/`, `libs/spatial-ui/`, `apps/spatial/`; Memphis sectional ingest, four-layer renderer (geography/flight/weather/aircraft-performance), `/spatial/xc` viewer, `bun run xc-scenario` + `bun run sectionals` CLIs. 131 unit + 3 e2e tests. `status: in-flight`.
+
+All three WPs have `status: in-flight`; `human_review_status` stays `pending` -- the user owns the manual test-plan walk-throughs (FCUM / PMIN / XC scenario IDs).
 
 ### New items surfaced by the 2026-05-18 batch
 
