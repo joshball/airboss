@@ -463,11 +463,21 @@ export default class CoverageReporter implements Reporter {
 		)) {
 			out.push(line);
 		}
+		// One-line legend so the tier names are self-describing.
+		out.push(
+			paint(
+				SGR.dim,
+				`  ${paint(TIER_COLORS.sanity, 'sanity')} page responds  ` +
+					`${paint(TIER_COLORS.structural, 'structural')} page renders real content  ` +
+					`${paint(TIER_COLORS.content, 'content')} the expected section rendered`,
+			),
+		);
 		out.push('');
 
-		// Per-book breakdown, bordered table.
-		for (const line of renderBookBreakdown(this.books)) out.push(line);
-		out.push('');
+		// No per-book breakdown table here -- the live dashboard above already
+		// ended in the final per-book state (every bar + pass/fail count). A
+		// third copy of the same 46 rows is just scroll. The full per-book
+		// record lives in `coverage-report.md`.
 
 		// Failures grouped by book, each with a retest command.
 		if (this.failures.length === 0) {
@@ -667,10 +677,15 @@ const BOX = {
 	teeR: '┤',
 } as const;
 
+/** Remove every ANSI SGR escape sequence from a string. */
+function stripAnsi(text: string): string {
+	// biome-ignore lint/suspicious/noControlCharactersInRegex: matching ANSI SGR.
+	return text.replace(/\x1b\[[0-9;]*m/g, '');
+}
+
 /** Visible width of a string, ignoring ANSI SGR escape sequences. */
 function visibleWidth(text: string): number {
-	// biome-ignore lint/suspicious/noControlCharactersInRegex: matching ANSI SGR.
-	return text.replace(/\x1b\[[0-9;]*m/g, '').length;
+	return stripAnsi(text).length;
 }
 
 /** Pad `text` to `width` visible columns (ANSI-aware). `align` defaults left. */
@@ -800,13 +815,23 @@ function renderPlanTree(manifest: Manifest | null): string[] {
 	});
 
 	const lines = renderTable(columns, rows, 'Flightbag coverage plan');
-	// One line under the table: what THIS invocation runs vs the full plan.
+	// Legend: the three tier columns are meaningless without it.
+	lines.push(
+		paint(
+			SGR.dim,
+			`  every reader URL is checked at one tier:  ` +
+				`${paint(TIER_COLORS.sanity, 'SANITY')} page responds  ` +
+				`${paint(TIER_COLORS.structural, 'STRUCT')} renders real content  ` +
+				`${paint(TIER_COLORS.content, 'CONTENT')} the expected section rendered`,
+		),
+	);
+	// What THIS invocation runs vs the full plan.
 	const willRun = manifest.totals.total;
 	const note =
 		manifest.mode === 'full'
-			? `This run: full sweep -- all ${willRun} URLs.`
-			: `This run: ${manifest.mode} sweep -- ${willRun} of ${t.total} URLs` +
-				`${manifest.sampledPerBook ? ` (${manifest.sampledPerBook}/book)` : ''}.`;
+			? `  this run: full sweep -- all ${willRun} URLs`
+			: `  this run: ${manifest.mode} sweep -- ${willRun} of ${t.total} URLs` +
+				`${manifest.sampledPerBook ? `, ${manifest.sampledPerBook} sampled per document` : ''}`;
 	lines.push(paint(SGR.dim, note));
 	return lines;
 }
@@ -848,17 +873,21 @@ function renderBookBreakdown(books: Map<string, BookProgress>): string[] {
 }
 
 /**
- * Render the live dashboard as a bordered table -- one progress bar per book,
- * percentage, and pass/fail counts. Repainted in place during the sweep.
+ * Render the live dashboard as a bordered table, repainted in place during
+ * the sweep. Three columns, each carrying distinct information:
+ *
+ *   DOCUMENT   the reference document (PHAK, 14 CFR Part 91, ...)
+ *   PROGRESS   a bar + `checked/total` URL count -- the bar IS the percent,
+ *              so no separate % column
+ *   RESULT     `✓` once every URL passed, `N failed` in red otherwise,
+ *              `running` while still in flight
  */
 function renderDashboard(books: Map<string, BookProgress>): string[] {
 	if (books.size === 0) return [paint(SGR.dim, '(no books in manifest)')];
 	const columns: readonly TableColumn[] = [
 		{ header: 'DOCUMENT', align: 'left' },
 		{ header: 'PROGRESS', align: 'left' },
-		{ header: '%', align: 'right' },
-		{ header: 'PASS', align: 'right' },
-		{ header: 'FAIL', align: 'right' },
+		{ header: 'RESULT', align: 'left' },
 	];
 	const rows = bookTableRows(
 		books,
@@ -866,17 +895,21 @@ function renderDashboard(books: Map<string, BookProgress>): string[] {
 			const expected = b.expected > 0 ? b.expected : Math.max(b.done, 1);
 			const frac = Math.min(1, b.done / expected);
 			const filled = Math.round(frac * BAR_WIDTH);
-			const done = frac >= 1 && b.failed === 0;
-			const barColor = b.failed > 0 ? SGR.yellow : done ? SGR.green : SGR.cyan;
+			const finished = frac >= 1;
+			const barColor = b.failed > 0 ? SGR.yellow : finished ? SGR.green : SGR.cyan;
 			const bar = paint(barColor, BAR_FILLED.repeat(filled)) + paint(SGR.dim, BAR_EMPTY.repeat(BAR_WIDTH - filled));
-			const fail = b.failed > 0 ? paint(SGR.yellow, String(b.failed)) : paint(SGR.dim, '0');
-			return [
-				`  ${b.documentSlug}`,
-				bar,
-				`${Math.round(frac * 100)}%`,
-				b.done > 0 ? paint(SGR.green, String(b.passed)) : paint(SGR.dim, '-'),
-				b.done > 0 ? fail : paint(SGR.dim, '-'),
-			];
+			const count = `${b.done}/${expected}`;
+			let result: string;
+			if (b.failed > 0) {
+				result = paint(SGR.yellow, `${b.failed} failed`);
+			} else if (finished) {
+				result = paint(SGR.green, '✓');
+			} else if (b.done > 0) {
+				result = paint(SGR.dim, 'running');
+			} else {
+				result = paint(SGR.dim, '-');
+			}
+			return [`  ${b.documentSlug}`, `${bar} ${count}`, result];
 		},
 		columns.length,
 	);
@@ -953,7 +986,9 @@ function renderReport(
 	lines.push('## Per-book breakdown');
 	lines.push('');
 	lines.push('```text');
-	for (const line of renderBookBreakdown(books)) lines.push(line);
+	// Strip ANSI: this table goes into a markdown file, not a terminal --
+	// raw colour codes would render as literal escape junk.
+	for (const line of renderBookBreakdown(books)) lines.push(stripAnsi(line));
 	lines.push('```');
 	lines.push('');
 
