@@ -35,8 +35,9 @@ references:
   - source: AIM
     detail: 7-1-19 -- Pilot Weather Reports
     note: When to file a PIREP; reporting urgent (UUA) conditions.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 24 -- Observations, Section 24.5.1 (Pilot Weather Reports (PIREP))
+  - ref: airboss-ref:handbooks/avwx/24
+    chapter_title: Observations
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/24
     note: Modern pilot-facing reference for PIREP shape and use.
 
 assessable: true

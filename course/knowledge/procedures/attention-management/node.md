@@ -47,26 +47,18 @@ review_time_minutes: 6
 
 # === References ===
 references:
-  - source: FAA-H-8083-2
-    detail: Risk Management Handbook -- Single-Pilot Resource Management
+  - ref: airboss-ref:handbooks/risk-management
+    redirected_from: airboss-ref:handbooks/risk-management/FAA-H-8083-2
     note: >-
-      The SRM model (situational awareness, automation management, task
-      management, aeronautical decision-making, controlled flight into
-      terrain awareness, risk management). Task management is the chapter
-      most directly relevant to division-of-attention failures during
-      maneuvering.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aeronautical Decision-Making
+      The SRM model (situational awareness, automation management, task management, aeronautical decision-making, controlled flight into terrain awareness, risk management). Task management is the chapter most directly relevant to division-of-attention failures during maneuvering.
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Defines SA as the accurate perception of the operational and
-      environmental factors that affect the aircraft, the pilot, and
-      passengers during a specified period of time.
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers and Ground Reference Maneuvers
+      Defines SA as the accurate perception of the operational and environmental factors that affect the aircraft, the pilot, and passengers during a specified period of time.
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Practical: the AFH chapters on steep turns and ground reference
-      maneuvers explicitly call out division of attention as the
-      checkride-grading concept the maneuver is designed to test.
+      Practical: the AFH chapters on steep turns and ground reference maneuvers explicitly call out division of attention as the checkride-grading concept the maneuver is designed to test.
   - source: AC 60-22
     detail: Aeronautical Decision Making
     note: >-

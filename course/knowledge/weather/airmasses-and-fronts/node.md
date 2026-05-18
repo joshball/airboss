@@ -30,12 +30,15 @@ references:
   - source: AC 00-6B
     detail: Aviation Weather, Air Masses and Fronts chapter
     note: Foundational treatment of source regions, frontal structure, and lift mechanisms.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 11 -- Air Masses, Fronts, and the Wave Cyclone Model
+  - ref: airboss-ref:handbooks/avwx/11
+    chapter_title: Air Masses, Fronts, and the Wave Cyclone Model
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/11
     note: Modern consolidated reference.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-    note: Pilot-pitch introduction including weather typically associated with each front type.
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25/12
+    note: >-
+      Pilot-pitch introduction including weather typically associated with each front type.
 
 assessable: true
 assessment_methods: [recall, scenario]

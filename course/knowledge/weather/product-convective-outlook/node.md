@@ -29,8 +29,9 @@ references:
   - source: AC 00-45H
     detail: Aviation Weather Services, Convective Outlook section
     note: Format spec for the SPC Day 1 / 2 / 3-8 outlooks.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 27 -- Forecasts, Section 27.16.1 (Convective Outlook (AC))
+  - ref: airboss-ref:handbooks/avwx/27
+    chapter_title: Forecasts
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/27
     note: Convective outlook context within the broader forecast suite.
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products

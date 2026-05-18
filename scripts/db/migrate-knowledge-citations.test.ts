@@ -41,8 +41,11 @@ describe('parseLegacySource', () => {
 		});
 	});
 
-	it('returns null when no edition tag is present', () => {
-		expect(parseLegacySource('AFH')).toBeNull();
+	it('matches the slug with an empty edition when no document-number tag is present', () => {
+		// Per ADR 019 amendment 2026-05 §1 (optional edition), a citation that
+		// names the handbook by acronym alone still migrates -- to an
+		// editionless `ref:` URI with no `redirected_from` provenance tag.
+		expect(parseLegacySource('AFH')).toEqual({ slug: 'afh', edition: '' });
 	});
 
 	it('returns null for unrecognised handbook strings', () => {
@@ -51,6 +54,21 @@ describe('parseLegacySource', () => {
 
 	it('extracts PHAK slug + edition', () => {
 		expect(parseLegacySource('PHAK (FAA-H-8083-25C)')).toEqual({ slug: 'phak', edition: 'FAA-H-8083-25C' });
+	});
+
+	it('recognises a bare document number on the source line', () => {
+		// The knowledge corpus writes `source: FAA-H-8083-25` as freely as
+		// `source: PHAK`. The pattern lifts the slug and the edition tag.
+		expect(parseLegacySource('FAA-H-8083-25')).toEqual({ slug: 'phak', edition: 'FAA-H-8083-25' });
+		expect(parseLegacySource('FAA-H-8083-3')).toEqual({ slug: 'afh', edition: 'FAA-H-8083-3' });
+		expect(parseLegacySource('FAA-H-8083-15')).toEqual({ slug: 'ifh', edition: 'FAA-H-8083-15' });
+		expect(parseLegacySource('FAA-H-8083-2A')).toEqual({ slug: 'risk-management', edition: 'FAA-H-8083-2A' });
+	});
+
+	it('does not let the AFH `-3` pattern swallow a longer document number', () => {
+		// `FAA-H-8083-3` must not prefix-match `FAA-H-8083-25` / `-28`.
+		expect(parseLegacySource('FAA-H-8083-25')).toEqual({ slug: 'phak', edition: 'FAA-H-8083-25' });
+		expect(parseLegacySource('FAA-H-8083-28')).toEqual({ slug: 'avwx', edition: 'FAA-H-8083-28' });
 	});
 });
 

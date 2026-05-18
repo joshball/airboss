@@ -30,12 +30,19 @@ references:
   - source: AC 00-6B
     detail: Aviation Weather, chapters on moisture, clouds, and precipitation
     note: Foundational treatment of dew point spread, cloud classification, precipitation formation.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 12 -- Vertical Motion and Clouds; Chapter 14 -- Precipitation
+  - ref: airboss-ref:handbooks/avwx/12
+    chapter_title: Vertical Motion and Clouds
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/12
     note: Modern consolidated reference.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-    note: Pilot-pitch introduction to cloud classification and precipitation forms.
+  - ref: airboss-ref:handbooks/avwx/14
+    chapter_title: Precipitation
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/14
+    note: Modern consolidated reference.
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25/12
+    note: >-
+      Pilot-pitch introduction to cloud classification and precipitation forms.
 
 assessable: true
 assessment_methods: [recall, scenario]

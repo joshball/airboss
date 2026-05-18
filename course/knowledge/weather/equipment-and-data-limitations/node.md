@@ -35,9 +35,11 @@ references:
   - source: AC 00-45H
     detail: Aviation Weather Services
     note: Forecast confidence and the difference between observation, analysis, and forecast.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 27 -- Limitations of Weather Forecasts
-    note: Modern consolidated treatment of forecast skill, model resolution, and reporting gaps. Verify chapter -- the verified FAA-H-8083-28B ToC lists Chapter 27 as "Forecasts" with no standalone "Limitations" chapter; forecast-limitation discussion is folded into Chapter 3 (Overview of Aviation Weather Information, §3.2 Use of Aviation Weather Information) and into individual product subsections within Chapter 27.
+  - ref: airboss-ref:handbooks/avwx/27
+    chapter_title: Forecasts
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/27
+    note: >-
+      Modern consolidated treatment of forecast skill, model resolution, and reporting gaps. Verify chapter -- the verified FAA-H-8083-28B ToC lists Chapter 27 as "Forecasts" with no standalone "Limitations" chapter; forecast-limitation discussion is folded into Chapter 3 (Overview of Aviation Weather Information, §3.2 Use of Aviation Weather Information) and into individual product subsections within Chapter 27.
 
 assessable: true
 assessment_methods: [recall, scenario]

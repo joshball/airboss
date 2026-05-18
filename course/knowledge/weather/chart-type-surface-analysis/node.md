@@ -29,9 +29,11 @@ references:
   - source: AC 00-45H
     detail: Aviation Weather Services, Surface Analysis Chart section
     note: Authoritative symbol set, isobar interval, frontal glyphs, station model layout, and 3-hourly update cadence.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 25 -- Analysis (Surface Analysis Chart subsection)
-    note: Modern consolidated treatment of surface analysis production, the WPC role, and the Unified Surface Analysis.
+  - ref: airboss-ref:handbooks/avwx/25
+    chapter_title: Analysis
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/25
+    note: >-
+      Modern consolidated treatment of surface analysis production, the WPC role, and the Unified Surface Analysis.
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products
     note: Operational use of the surface analysis in preflight briefing and the products that ship alongside it.

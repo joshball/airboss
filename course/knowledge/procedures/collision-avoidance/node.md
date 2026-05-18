@@ -65,11 +65,10 @@ references:
       Operational guidance on scan technique, off-center vision at night,
       target detection limits, and the responsibility to see and avoid
       regardless of ATC services.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aeromedical Factors
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Foveal-vision physiology, peripheral motion detection, and the
-      effects of fatigue and hypoxia on scanning effectiveness.
+      Foveal-vision physiology, peripheral motion detection, and the effects of fatigue and hypoxia on scanning effectiveness.
 
 # === Assessment ===
 assessable: true

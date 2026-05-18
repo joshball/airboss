@@ -85,31 +85,52 @@ interface HandbookPattern {
 	edition: RegExp;
 }
 
+/**
+ * One handbook recognizer per corpus. Every pattern matches BOTH the prose
+ * forms (acronym + spelled-out title) AND the bare FAA document number
+ * (`source: FAA-H-8083-25`), because the knowledge corpus uses the bare
+ * number as freely as it uses the prose form on the legacy `source:` line.
+ * The `source` regex and the `edition` regex therefore share the document-
+ * number alternative; the `edition` regex additionally lifts the optional
+ * revision letter so the `redirected_from` provenance URI keeps the
+ * authored edition tag when one was written.
+ */
 const HANDBOOK_PATTERNS: readonly HandbookPattern[] = [
 	{
-		source: /\b(?:AFH|Airplane Flying Handbook)\b/i,
+		// AFH document number is FAA-H-8083-3[rev]. The chapter-3 substring of
+		// `8083-3` would also prefix-match `8083-25`/`8083-28` if anchored
+		// loosely; the `(?![0-9])` lookahead keeps `-3` from swallowing the
+		// leading digit of a longer number.
+		source: /\b(?:AFH|Airplane Flying Handbook|FAA-H-8083-3[A-Z]?(?![0-9]))\b/i,
 		slug: 'afh',
-		edition: /\bFAA-H-8083-3[A-Z]?\b/i,
+		edition: /\bFAA-H-8083-3[A-Z]?(?![0-9])\b/i,
 	},
 	{
-		source: /\b(?:PHAK|Pilot's Handbook of Aeronautical Knowledge)\b/i,
+		source: /\b(?:PHAK|Pilot's Handbook of Aeronautical Knowledge|FAA-H-8083-25[A-Z]?)\b/i,
 		slug: 'phak',
 		edition: /\bFAA-H-8083-25[A-Z]?\b/i,
 	},
 	{
-		source: /\b(?:AIH|Aviation Instructor's Handbook)\b/i,
+		source: /\b(?:AIH|Aviation Instructor's Handbook|FAA-H-8083-9[A-Z]?)\b/i,
 		slug: 'aviation-instructor',
 		edition: /\bFAA-H-8083-9[A-Z]?\b/i,
 	},
 	{
-		source: /\b(?:IPH|Instrument Procedures Handbook)\b/i,
+		source: /\b(?:IPH|Instrument Procedures Handbook|FAA-H-8083-16[A-Z]?)\b/i,
 		slug: 'iph',
 		edition: /\bFAA-H-8083-16[A-Z]?\b/i,
 	},
 	{
-		source: /\b(?:Instrument Flying Handbook|IFH)\b/i,
+		source: /\b(?:Instrument Flying Handbook|IFH|FAA-H-8083-15[A-Z]?)\b/i,
 		slug: 'ifh',
 		edition: /\bFAA-H-8083-15[A-Z]?\b/i,
+	},
+	{
+		// Risk Management Handbook -- FAA-H-8083-2[rev]. The `(?![0-9])`
+		// lookahead keeps `-2` from matching the leading digit of `-25`/`-28`.
+		source: /\b(?:RMH|Risk Management Handbook|FAA-H-8083-2[A-Z]?(?![0-9]))\b/i,
+		slug: 'risk-management',
+		edition: /\bFAA-H-8083-2[A-Z]?(?![0-9])\b/i,
 	},
 	{
 		// AvWx legacy citations frequently use the bare document number
@@ -146,6 +167,14 @@ export interface LegacyCitationBlock {
 /** Outcome of parsing a legacy `source` string against the handbook patterns. */
 export interface ParsedLegacySource {
 	slug: string;
+	/**
+	 * Edition tag lifted from the source string (e.g. `FAA-H-8083-3B`), or the
+	 * empty string when the legacy citation named the handbook by acronym /
+	 * prose only (`source: AFH`) with no document-number suffix. Per ADR 019
+	 * amendment 2026-05 §1 (optional edition), an empty edition is valid: the
+	 * proposed `ref:` URI is editionless and carries no `redirected_from`
+	 * provenance tag.
+	 */
 	edition: string;
 }
 
@@ -403,13 +432,17 @@ export function parseLegacySource(source: string): ParsedLegacySource | null {
 	for (const pattern of HANDBOOK_PATTERNS) {
 		if (!pattern.source.test(source)) continue;
 		const editionMatch = source.match(pattern.edition);
-		if (editionMatch === null) {
-			// Pattern matches but no explicit edition tag; can't pin sentinel
-			// comparison. Migration leaves these for human review with no
-			// proposed rewrite.
-			return null;
-		}
-		return { slug: pattern.slug, edition: editionMatch[0].toUpperCase() };
+		// Pattern matched. If the source string also carries an explicit
+		// document-number edition tag, lift it for the `redirected_from`
+		// provenance URI; otherwise (the legacy citation named the handbook
+		// by acronym / prose only, e.g. `source: AFH`) record an empty
+		// edition. Per ADR 019 amendment 2026-05 §1 the proposed `ref:` URI
+		// is editionless either way, so a missing edition tag no longer
+		// blocks migration -- it only drops the optional `redirected_from`.
+		return {
+			slug: pattern.slug,
+			edition: editionMatch === null ? '' : editionMatch[0].toUpperCase(),
+		};
 	}
 	return null;
 }
@@ -463,12 +496,27 @@ export function parseLegacyDetail(detail: string): ParsedLegacyDetail {
 		// Text immediately after `Chapter N`. Strip a leading separator if it's
 		// a dash variant (`--`, `-`, em-dash) or colon.
 		const tail = detail.slice(hit.afterNumber, nextHitIndex);
-		const sep = tail.match(/^\s*(?:--|—|:|-)\s*/);
-		if (sep === null) {
+		// Two separator shapes:
+		//  - dash / colon (`Chapter 3 -- Basic Flight Maneuvers`)
+		//  - opening paren (`Chapter 8 (Approaches and Landings)`), the form
+		//    the AFH/PHAK crosswind nodes use. When the separator is a paren,
+		//    the title runs to the matching `)`.
+		const dashSep = tail.match(/^\s*(?:--|—|:|-)\s*/);
+		const parenSep = dashSep === null ? tail.match(/^\s*\(\s*/) : null;
+		if (dashSep === null && parenSep === null) {
 			// No title separator: bare `Chapter N` reference.
 			parses.push({ chapter: hit.chapter, chapterTitle: null });
 			continue;
 		}
+		if (parenSep !== null) {
+			// Parenthetical title: take everything up to the first `)`.
+			const region = tail.slice(parenSep[0].length);
+			const closeIdx = region.indexOf(')');
+			const title = (closeIdx === -1 ? region : region.slice(0, closeIdx)).trim();
+			parses.push({ chapter: hit.chapter, chapterTitle: title.length > 0 ? title : null });
+			continue;
+		}
+		const sep = dashSep as RegExpMatchArray;
 		const titleRegion = tail.slice(sep[0].length);
 		// Title terminators: `;` (multi-chapter) or `,` followed by `Section`/
 		// `Sections`/`§` (section qualifier). Take everything up to the first
@@ -661,6 +709,11 @@ export function buildOriginalAirbossRef(
 	chapter: number | null,
 ): string | null {
 	if (parsedSource === null) return null;
+	// No edition tag was authored on the legacy `source:` line -- there is no
+	// provenance edition to record, so emit no `redirected_from` at all
+	// (returning null drops the field per `buildProposedYaml`). An editionless
+	// `redirected_from` would just duplicate the new editionless `ref:`.
+	if (parsedSource.edition.length === 0) return null;
 	const editionPath = `/${parsedSource.edition}`;
 	const chapterPath = chapter === null ? '' : `/${chapter}`;
 	return `airboss-ref:handbooks/${parsedSource.slug}${editionPath}${chapterPath}`;

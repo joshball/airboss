@@ -32,9 +32,11 @@ references:
   - source: AIM
     detail: 7-1-23 -- Turbulence; 7-3-1 to 7-3-9 -- Wake Turbulence
     note: Operational classification, intensity definitions, wake-turbulence avoidance.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 19 -- Turbulence
-    note: Modern consolidated reference for the full turbulence taxonomy (convective §19.2.1, mechanical §19.2.2, wind shear §19.2.3-4).
+  - ref: airboss-ref:handbooks/avwx/19
+    chapter_title: Turbulence
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/19
+    note: >-
+      Modern consolidated reference for the full turbulence taxonomy (convective §19.2.1, mechanical §19.2.2, wind shear §19.2.3-4).
 
 assessable: true
 assessment_methods: [recall, scenario]

@@ -39,8 +39,8 @@ references:
   - source: AOPA Air Safety Institute
     detail: Weather-related safety resources
     note: Case studies and decision-making tools.
-  - source: FAA-H-8083-2A
-    detail: Risk Management Handbook
+  - ref: airboss-ref:handbooks/risk-management
+    redirected_from: airboss-ref:handbooks/risk-management/FAA-H-8083-2A
     note: Formal treatment of the risk-management matrix applied to weather.
 
 assessable: true

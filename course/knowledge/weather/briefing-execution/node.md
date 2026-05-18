@@ -34,8 +34,9 @@ references:
   - source: AIM
     detail: 7-1-3 -- Use of Aviation Weather Products
     note: Operational guidance on weather brief composition.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 13 -- Aviation Weather Services
+  - ref: airboss-ref:handbooks/phak/13
+    chapter_title: Aviation Weather Services
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25/13
     note: Pilot-pitch reference on briefing types and use.
   - source: 14 CFR 91.103
     detail: Preflight Action

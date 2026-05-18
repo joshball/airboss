@@ -41,9 +41,9 @@ references:
   - source: AIM
     detail: Chapter 7 (Safety of Flight) -- weather services and hazards
     note: Operational how-to for using weather services in flight planning and en route. The procedural layer between the rule and the textbook.
-  - source: Aviation Weather Handbook
-    detail: FAA-H-8083-28 -- the consolidated FAA weather handbook
-    note: Training-depth treatment of weather theory and products. Where a pilot goes to actually understand the material the AC and AIM assume.
+  - ref: airboss-ref:handbooks/avwx
+    note: >-
+      Training-depth treatment of weather theory and products. Where a pilot goes to actually understand the material the AC and AIM assume.
   - source: Airman Certification Standards
     detail: Private Pilot ACS -- the weather information and preflight-planning tasks
     note: Defines what a checkride examiner tests on weather and preflight planning. The endpoint of the triangulation, the standard "knowing this" is graded against.
