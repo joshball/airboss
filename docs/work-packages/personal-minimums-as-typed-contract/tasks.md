@@ -196,31 +196,31 @@ PR title: `feat(personal-minimums): Phase D -- implications subpanel + course nu
 
 #### D.1 Implications subpanel
 
-- [ ] Create `apps/study/src/routes/(app)/personal-minimums/_lib/implications.ts` (server-only helper for `+page.server.ts`):
-  - Loads every registered wx-engine scenario via `WX_SCENARIO_VALUES`. For each, reads `data/wx-scenarios/<slug>/truth.json` lazily.
+- [x] Create `apps/study/src/routes/(app)/personal-minimums/_lib/implications.server.ts` (server-only helper for `+page.server.ts`; the `.server.ts` suffix is the `check-browser-globals.ts` opt-out for a route-collocated file that statically imports `node:fs`):
+  - Loads every registered wx-engine scenario via `WX_SCENARIO_VALUES`. For each, reads `data/wx-scenarios/<slug>/products/metars.json` lazily (the parsed-METAR product carries per-station ceiling / visibility / wind, the fidelity the lens observation needs; `truth.airMasses` carries only air-mass-level cloud bases).
   - For each scenario's `truth.airMasses[*]` (and the chained station registry), builds a synthetic `PersonalMinimumsObservation` (ceiling, visibility, wind, crosswind, isNight derived from `validAt`).
   - Calls `projectAgainstPersonalMinimums(activeMinimums, observation)` for each station x scenario pair.
   - Returns `{ scenario: string; station: string; result: ConformanceResult }[]` flattened, filtered to `pass: 'below'` entries.
-- [ ] Wire the helper into `+page.server.ts:load` -- only call it when `activeMinimums !== null`.
-- [ ] Update `+page.svelte` to render the subpanel below the active record. If `activeMinimums === null`, render a placeholder ("set your minimums to see implications"). If `activeMinimums` is set, render the list of violations grouped by scenario.
-- [ ] Add a "night currency could not be verified -- once logbook ingestion ships this will say something" placeholder block. The placeholder is intentional -- it pre-wires the UX seam for the future logbook consumer.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): implications subpanel against wx-engine scenarios`).
+- [x] Wire the helper into `+page.server.ts:load` -- only call it when `activeMinimums !== null`.
+- [x] Update `+page.svelte` to render the subpanel below the active record. If `activeMinimums === null`, render a placeholder ("set your minimums to see implications"). If `activeMinimums` is set, render the list of violations grouped by scenario.
+- [x] Add a "night currency could not be verified -- once logbook ingestion ships this will say something" placeholder block. The placeholder is intentional -- it pre-wires the UX seam for the future logbook consumer.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): implications subpanel against wx-engine scenarios`).
 
 #### D.2 Course-step nudge
 
-- [ ] Identify the existing course-step in `course/courses/` that teaches the `wx-personal-minimums` node (search `applied_by` references and existing study-plan sections; the weather-comprehensive course likely already has a step that cites this node).
-- [ ] Add a one-paragraph trailing nudge to that course step pointing at `/personal-minimums` ("Now that you understand why -- record yours here"). Use the existing markdown directives the course-step renderer supports.
-- [ ] If no such course step exists, add a short note to `course/knowledge/weather/personal-minimums/node.md` "Practice" section pointing at the route (do NOT rewrite the node's pedagogy).
-- [ ] Run `bun run check` -- 0 errors. Commit (`docs(course): nudge from wx-personal-minimums node to /personal-minimums route`).
+- [x] Identify the existing course-step in `course/courses/` that teaches the `wx-personal-minimums` node (search `applied_by` references and existing study-plan sections; the weather-comprehensive course likely already has a step that cites this node).
+- [x] Add a one-paragraph trailing nudge to that course step pointing at `/personal-minimums` ("Now that you understand why -- record yours here"). Use the existing markdown directives the course-step renderer supports.
+- [x] If no such course step exists, add a short note to `course/knowledge/weather/personal-minimums/node.md` "Practice" section pointing at the route (do NOT rewrite the node's pedagogy).
+- [x] Run `bun run check` -- 0 errors. Commit (`docs(course): nudge from wx-personal-minimums node to /personal-minimums route`).
 
 #### D.3 Phase D close
 
-- [ ] Extend the Playwright spec from C.3 to cover the implications subpanel:
+- [x] Extend the Playwright spec from C.3 to cover the implications subpanel:
   - With an active record whose ceiling is high (5000 ft) and visibility is high (10 SM), the subpanel renders the "no violations" empty state.
   - With an active record whose ceiling is low (500 ft), the subpanel surfaces at least one wx-engine scenario as a violation.
   - The night-currency placeholder is always visible (informational, not behind a query).
-- [ ] Run `bun test:e2e tests/e2e/personal-minimums.spec.ts` -- all green. Run `bun run check` -- 0 errors.
-- [ ] Open PR `feat(personal-minimums): Phase D -- implications subpanel + course nudge`. Body summarizes the implication checks + the nudge.
+- [x] Run `bun test:e2e tests/e2e/personal-minimums.spec.ts` -- all green. Run `bun run check` -- 0 errors.
+- [x] Open PR `feat(personal-minimums): Phase D -- implications subpanel + course nudge`. Body summarizes the implication checks + the nudge.
 
 ### Phase E: review + close
 

@@ -79,4 +79,44 @@ test.describe('personal minimums editor', () => {
 		// Newest-first: the active 2500 ft revision leads.
 		await expect(rows.first()).toContainText('Active');
 	});
+
+	test('implications subpanel surfaces a wx-scenario violation for a tight floor', async ({ page, freshUser }) => {
+		expect(freshUser.id).toBeDefined();
+		await page.goto(ROUTES.STUDY_PERSONAL_MINIMUMS);
+		// Save the FAA-baseline defaults (ceiling 1500, visibility 5 SM). The
+		// wx-engine scenarios carry stations below a 5 SM visibility floor, so
+		// at least one violation surfaces.
+		await page.getByTestId('pmin-form').getByRole('button', { name: 'Save' }).click();
+		await expect(page.getByTestId('pmin-record')).toBeVisible();
+
+		const panel = page.getByTestId('pmin-implications');
+		await expect(panel).toBeVisible();
+		await expect(panel.getByTestId('pmin-violation').first()).toBeVisible();
+		// The night-currency placeholder is always present and informational.
+		await expect(page.getByTestId('pmin-night-currency')).toContainText(/logbook ingestion/i);
+	});
+
+	test('implications subpanel shows the empty state for a very permissive floor', async ({ page, freshUser }) => {
+		expect(freshUser.id).toBeDefined();
+		await page.goto(ROUTES.STUDY_PERSONAL_MINIMUMS);
+
+		// A floor so permissive no scenario station violates it.
+		await page.getByTestId('pmin-input-ceilingFt').fill('100');
+		await page.getByTestId('pmin-input-visibilitySm').fill('0');
+		await page.getByTestId('pmin-input-windTotalKt').fill('99');
+		await page.getByTestId('pmin-input-crosswindTotalKt').fill('99');
+		await page.getByTestId('pmin-form').getByRole('button', { name: 'Save' }).click();
+		await expect(page.getByTestId('pmin-record')).toBeVisible();
+
+		await expect(page.getByTestId('pmin-implications-none')).toBeVisible();
+		await expect(page.getByTestId('pmin-night-currency')).toBeVisible();
+	});
+
+	test('implications subpanel shows a placeholder when no minimums are set', async ({ page, freshUser }) => {
+		expect(freshUser.id).toBeDefined();
+		await page.goto(ROUTES.STUDY_PERSONAL_MINIMUMS);
+		// Fresh user, no record: the subpanel renders the "set your minimums"
+		// placeholder rather than comparing against unsaved defaults.
+		await expect(page.getByTestId('pmin-implications-placeholder')).toBeVisible();
+	});
 });

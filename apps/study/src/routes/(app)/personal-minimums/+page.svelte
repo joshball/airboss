@@ -39,6 +39,26 @@ const hasFieldErrors = $derived(Object.keys(fieldErrors).length > 0);
 const editing = $derived(data.editing || hasFieldErrors);
 const editHref = $derived(`${ROUTES.STUDY_PERSONAL_MINIMUMS}?edit=1`);
 
+/**
+ * The implications violations grouped by scenario, preserving the
+ * scenario order from the computation. Each group lists its below-floor
+ * stations. Empty when there are no violations (or no active record).
+ */
+const violationsByScenario = $derived.by(() => {
+	const implications = data.implications;
+	if (implications === null) return [];
+	const groups: { scenario: string; scenarioLabel: string; violations: typeof implications.violations }[] = [];
+	for (const v of implications.violations) {
+		let group = groups.find((g) => g.scenario === v.scenario);
+		if (group === undefined) {
+			group = { scenario: v.scenario, scenarioLabel: v.scenarioLabel, violations: [] };
+			groups.push(group);
+		}
+		group.violations.push(v);
+	}
+	return groups;
+});
+
 const saved = $derived(page.url.searchParams.get('saved') === '1');
 const deactivated = $derived(page.url.searchParams.get('deactivated') === '1');
 
@@ -197,6 +217,45 @@ function effectiveSince(value: Date | string): string {
 		</form>
 	{/if}
 
+	<!-- Implications subpanel: what the active minimums imply against the
+	     wx-engine scenarios. Suppressed (placeholder only) when no record. -->
+	<section class="implications" aria-label="Implications" data-testid="pmin-implications">
+		<h2>What these minimums imply</h2>
+		{#if data.implications === null}
+			<p class="implications-empty" data-testid="pmin-implications-placeholder">
+				Set your minimums to see which weather scenarios they would have meant a no-go for.
+			</p>
+		{:else}
+			{#if violationsByScenario.length === 0}
+				<p class="implications-empty" data-testid="pmin-implications-none">
+					No registered weather scenario violates your stated floor.
+				</p>
+			{:else}
+				<p class="implications-lead">
+					Stations where these floors would have meant a no-go, across the platform's weather scenarios:
+				</p>
+				{#each violationsByScenario as group (group.scenario)}
+					<div class="scenario-group">
+						<h3>{group.scenarioLabel}</h3>
+						<ul>
+							{#each group.violations as v (v.station)}
+								<li data-testid="pmin-violation">
+									<strong>{v.station}</strong>
+									<span class="violation-notes">{v.result.notes.join('; ')}</span>
+								</li>
+							{/each}
+						</ul>
+					</div>
+				{/each}
+			{/if}
+
+			<div class="night-currency" data-testid="pmin-night-currency">
+				<h3>Night currency</h3>
+				<p>{data.implications.nightCurrencyPlaceholder}</p>
+			</div>
+		{/if}
+	</section>
+
 	{#if data.history.length > 0}
 		<section class="history-preview" aria-label="Recent revisions">
 			<h2>Recent revisions</h2>
@@ -240,11 +299,47 @@ function effectiveSince(value: Date | string): string {
 
 .record,
 .editor,
-.history-preview {
+.history-preview,
+.implications {
 	border: 1px solid var(--edge-default);
 	border-radius: var(--radius-md);
 	padding: var(--space-lg);
 	background: var(--surface-raised);
+}
+
+.implications-empty,
+.implications-lead {
+	color: var(--ink-muted);
+}
+
+.scenario-group {
+	margin-top: var(--space-md);
+}
+
+.scenario-group ul {
+	list-style: none;
+	margin: var(--space-2xs) 0 0;
+	padding: 0;
+	display: grid;
+	gap: var(--space-3xs);
+}
+
+.scenario-group li {
+	display: flex;
+	gap: var(--space-xs);
+	flex-wrap: wrap;
+	font-size: var(--font-size-sm);
+}
+
+.violation-notes {
+	color: var(--signal-warning-ink);
+}
+
+.night-currency {
+	margin-top: var(--space-md);
+	padding-top: var(--space-md);
+	border-top: 1px solid var(--edge-subtle);
+	color: var(--ink-muted);
 }
 
 .fields {
