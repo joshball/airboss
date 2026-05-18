@@ -4,7 +4,7 @@ title: 'User Stories: Flightbag citation URL migration'
 product: study
 category: platform
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-14
 owner: agent
