@@ -3,7 +3,7 @@ type: unfinished-rollup
 sessions: 24
 items: 44
 first_rolled: 2026-05-17T21:02:21Z
-last_rolled: 2026-05-18T03:10:00Z
+last_rolled: 2026-05-18T04:30:00Z
 consumed:
   - 0160f787-1218-43bd-8d38-56fb67570489
   - 20260515-180643-56167
@@ -44,9 +44,9 @@ None.
 
 ### `integration --full` never verified green on merged main
 
-- **What**: `bun run test integration --full` (~3484-URL prod-build sweep -- the original crash repro) has never had a clean uninterrupted pass. Attempts were interrupted by a port conflict from orphan webServer processes, then a background run killed (SIGTERM to the DB pool; `last-run.json` showed `wallMs: 15`, `total: 0`, `status: failed`). The default 209-URL sample sweep passes cleanly, proving the prod server + zod-4 fix work under load -- but the full run is the explicit gate.
+- **What**: `bun run test integration --full` (~5530-URL prod-build sweep -- the original crash repro) has never had a clean uninterrupted pass. The 480-URL sample sweep passes cleanly (verified 2026-05-18, all 46 books 100%, 0 failures), proving the prod server + zod-4 fix work under load -- but the full run is the explicit gate.
 - **Where**: `bun run test integration --full`; artefacts at `tests/integration/.out/last-run.json` + `coverage-summary.json`.
-- **Why deferred**: sessions ended before a clean run; the parent tree was being thrashed by concurrent agents.
+- **Why deferred**: sessions ended before a clean full run. The *tooling* that previously obscured this -- unreadable output, no TTY for the progress dashboard, a stale-DB seed crash dumping raw SQL -- was fixed 2026-05-18 (PRs #1072, #1076, #1077); the sweep output is now legible and the sample run is demonstrably green. What remains is running the full 5530-URL sweep to completion.
 - **Next action**: `pkill -f 'build/index.js'; pkill -f playwright`, confirm port 9647 free, then run `bun run test integration --full` to completion from a clean worktree off `main`; confirm it survives without the server OOM-crashing.
 - **Severity**: high
 - **Sessions**: 20260517-212403-79769, 20260517-222752-41597, 5756488e-807a-478e-91ad-f15964f9d39e
@@ -365,33 +365,34 @@ None.
 - **`fix/contrast-skips-deep-ink` branch** -- was a medium item ("unmerged, needs rebase"). Resolved 2026-05-17: the branch was rebased onto current main, the theme-palette conflict resolved, `bun run check branch` ran clean (contrast-matrix 119 passed / 0 skipped), and it merged as **PR #1067**. The branch is deleted.
 - **zod 3->4 / better-auth prod-build boot crash** -- the adapter-node servers crashed at boot (`z.coerce.boolean().meta is not a function`). Resolved via **PR #1064** (catalog zod -> 4, migration fixes). Both flightbag + study build and boot clean.
 - **`integration list` wrong exit code** -- resolved via **PR #1065** (`--pass-with-no-tests`).
+- **Integration sweep output unreadable + slow** -- the `bun run test integration` output was a wall of vite build spam, repeating `drizzle-kit push` ticks, interleaved seed streams, and a raw multi-screen SQL dump on a stale DB. Resolved 2026-05-18 across three PRs: **#1072** (list mode skips DB provisioning, one-line seed diagnosis instead of a raw stack, bordered colour tables, full-coverage manifest, list exits 0 via a sentinel test; also cleared a zod-4 `ZodLazy` type error in `credentials.validation.ts` and 13 svelte warnings), **#1076** (integration sweep runs Playwright with inherited stdio so the reporter's progress bars + colour actually render -- they were gated on `isTTY`, which the old `runTee` pipe always made false; vite build captured to a log), **#1077** (dropped the redundant third per-book table, dashboard is `DOCUMENT / PROGRESS / RESULT`, added tier legends). The 480-URL sample sweep is verified green.
 
 ## Per-session contributions
 
-| Session | Date | Branch | Items contributed |
-|----------------------------------------|------------|--------|-------------------|
-| 0160f787                               | 2026-05-15 | -      | 0                 |
-| 20260515-180643-56167                  | 2026-05-15 | -      | 6                 |
-| 20260515-180930-60283                  | 2026-05-15 | -      | 1                 |
-| 20260515-181752-71057                  | 2026-05-15 | -      | 2                 |
-| 20260515-181801-71712                  | 2026-05-15 | -      | 3                 |
-| 20260515-223922-1639                   | 2026-05-15 | -      | 0                 |
-| 80d9ef12                               | 2026-05-15 | -      | 2                 |
-| 9d89e07b                               | 2026-05-15 | -      | 2                 |
-| afc4eeb6                               | 2026-05-15 | -      | 1                 |
-| ba6a23ad                               | 2026-05-15 | -      | 1                 |
-| cd16e567-tests-validator               | 2026-05-15 | -      | 2                 |
-| cd16e567                               | 2026-05-15 | -      | 6                 |
-| d83e4218                               | 2026-05-15 | -      | 0                 |
-| 17883a4e                               | 2026-05-17 | main   | 2                 |
-| 20260517-145336-25547                  | 2026-05-17 | main   | 0                 |
-| 20260517-155020-81423                  | 2026-05-17 | main   | 2                 |
-| 20260517-160100-94636                  | 2026-05-17 | main   | 4                 |
-| 20260517-163554-26560                  | 2026-05-17 | main   | 3                 |
-| 9b64fd7c                               | 2026-05-17 | main   | 0                 |
-| e76c9f78                               | 2026-05-17 | main   | 5                 |
-| 20260517-212403-79769                  | 2026-05-17 | main   | 3                 |
-| 20260517-212610-82094                  | 2026-05-17 | main   | 1                 |
-| 20260517-215641-9754                   | 2026-05-17 | main   | 1                 |
-| 20260517-222752-41597                  | 2026-05-17 | main   | 5                 |
-| 5756488e-807a-478e-91ad-f15964f9d39e   | 2026-05-17 | main   | 4                 |
+| Session                              | Date       | Branch | Items contributed |
+| ------------------------------------ | ---------- | ------ | ----------------- |
+| 0160f787                             | 2026-05-15 | -      | 0                 |
+| 20260515-180643-56167                | 2026-05-15 | -      | 6                 |
+| 20260515-180930-60283                | 2026-05-15 | -      | 1                 |
+| 20260515-181752-71057                | 2026-05-15 | -      | 2                 |
+| 20260515-181801-71712                | 2026-05-15 | -      | 3                 |
+| 20260515-223922-1639                 | 2026-05-15 | -      | 0                 |
+| 80d9ef12                             | 2026-05-15 | -      | 2                 |
+| 9d89e07b                             | 2026-05-15 | -      | 2                 |
+| afc4eeb6                             | 2026-05-15 | -      | 1                 |
+| ba6a23ad                             | 2026-05-15 | -      | 1                 |
+| cd16e567-tests-validator             | 2026-05-15 | -      | 2                 |
+| cd16e567                             | 2026-05-15 | -      | 6                 |
+| d83e4218                             | 2026-05-15 | -      | 0                 |
+| 17883a4e                             | 2026-05-17 | main   | 2                 |
+| 20260517-145336-25547                | 2026-05-17 | main   | 0                 |
+| 20260517-155020-81423                | 2026-05-17 | main   | 2                 |
+| 20260517-160100-94636                | 2026-05-17 | main   | 4                 |
+| 20260517-163554-26560                | 2026-05-17 | main   | 3                 |
+| 9b64fd7c                             | 2026-05-17 | main   | 0                 |
+| e76c9f78                             | 2026-05-17 | main   | 5                 |
+| 20260517-212403-79769                | 2026-05-17 | main   | 3                 |
+| 20260517-212610-82094                | 2026-05-17 | main   | 1                 |
+| 20260517-215641-9754                 | 2026-05-17 | main   | 1                 |
+| 20260517-222752-41597                | 2026-05-17 | main   | 5                 |
+| 5756488e-807a-478e-91ad-f15964f9d39e | 2026-05-17 | main   | 4                 |
