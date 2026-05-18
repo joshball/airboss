@@ -3,7 +3,7 @@ id: personal-minimums-as-typed-contract
 title: 'Spec: Personal Minimums as a Typed Contract'
 product: study
 category: feature
-status: draft
+status: in-flight
 agent_review_status: pending
 human_review_status: pending
 created: 2026-05-13

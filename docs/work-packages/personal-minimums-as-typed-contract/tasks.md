@@ -34,19 +34,19 @@ Depends on: none (pure additive). The new table is independent of every existing
 
 ## Pre-flight
 
-- [ ] Read [spec.md](./spec.md), [design.md](./design.md), [test-plan.md](./test-plan.md), [user-stories.md](./user-stories.md), [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md), [CONSUMER-CONTRACT.md](./CONSUMER-CONTRACT.md) end-to-end.
-- [ ] Read [course/knowledge/weather/personal-minimums/node.md](../../../course/knowledge/weather/personal-minimums/node.md) -- the pedagogy this primitive persists.
-- [ ] Read [docs/decisions/011-knowledge-graph-learning-system/decision.md](../../decisions/011-knowledge-graph-learning-system/decision.md) -- the prose/mechanism split.
-- [ ] Read [docs/decisions/016-cert-syllabus-goal-model/decision.md](../../decisions/016-cert-syllabus-goal-model/decision.md) -- sibling lens shapes.
-- [ ] Read [docs/decisions/025-wp-frontmatter-contract/decision.md](../../decisions/025-wp-frontmatter-contract/decision.md) -- WP frontmatter contract.
-- [ ] Read `libs/bc/study/src/schema.ts` carefully -- the `card`, `review`, `cardState` tables are the shape reference; the existing partial-index + composite-FK patterns model the active-record discipline.
-- [ ] Read `libs/utils/src/ids.ts` -- prefix-ULID convention.
-- [ ] Read `libs/bc/study/src/lenses.ts` -- existing lens shapes; `projectAgainstPersonalMinimums` should feel like a peer.
-- [ ] Read `libs/bc/study/src/index.ts` and `libs/bc/study/src/server.ts` -- the runtime / server barrel split. The lens lives in the runtime barrel (pure function); the BC API lives in `/server`.
-- [ ] Read `libs/types/src/work-package.ts` (if it exists) and similar existing Zod schema files for the project Zod style.
-- [ ] Read `docs/agents/best-practices.md` and `docs/agents/common-pitfalls.md`.
-- [ ] Verify the dev DB is reachable: `bun run db status`.
-- [ ] Run `bun run check` -- 0 errors before starting.
+- [x] Read [spec.md](./spec.md), [design.md](./design.md), [test-plan.md](./test-plan.md), [user-stories.md](./user-stories.md), [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md), [CONSUMER-CONTRACT.md](./CONSUMER-CONTRACT.md) end-to-end.
+- [x] Read [course/knowledge/weather/personal-minimums/node.md](../../../course/knowledge/weather/personal-minimums/node.md) -- the pedagogy this primitive persists.
+- [x] Read [docs/decisions/011-knowledge-graph-learning-system/decision.md](../../decisions/011-knowledge-graph-learning-system/decision.md) -- the prose/mechanism split.
+- [x] Read [docs/decisions/016-cert-syllabus-goal-model/decision.md](../../decisions/016-cert-syllabus-goal-model/decision.md) -- sibling lens shapes.
+- [x] Read [docs/decisions/025-wp-frontmatter-contract/decision.md](../../decisions/025-wp-frontmatter-contract/decision.md) -- WP frontmatter contract.
+- [x] Read `libs/bc/study/src/schema.ts` carefully -- the `card`, `review`, `cardState` tables are the shape reference; the existing partial-index + composite-FK patterns model the active-record discipline.
+- [x] Read `libs/utils/src/ids.ts` -- prefix-ULID convention.
+- [x] Read `libs/bc/study/src/lenses.ts` -- existing lens shapes; `projectAgainstPersonalMinimums` should feel like a peer.
+- [x] Read `libs/bc/study/src/index.ts` and `libs/bc/study/src/server.ts` -- the runtime / server barrel split. The lens lives in the runtime barrel (pure function); the BC API lives in `/server`.
+- [x] Read `libs/types/src/work-package.ts` (if it exists) and similar existing Zod schema files for the project Zod style.
+- [x] Read `docs/agents/best-practices.md` and `docs/agents/common-pitfalls.md`.
+- [x] Verify the dev DB is reachable: `bun run db status`.
+- [x] Run `bun run check` -- 0 errors before starting.
 
 ## Implementation
 
@@ -58,38 +58,38 @@ PR title: `feat(personal-minimums): Phase A -- constants + types + ID + Zod sche
 
 #### A.1 Constants
 
-- [ ] Create `libs/constants/src/personal-minimums.ts` with `PERSONAL_MINIMUMS_DEFAULTS` and `PERSONAL_MINIMUMS_CONSTRAINTS` per spec.md "Constants" section. The `_DEFAULTS` values match the FAA P-8740-25 Solo / VFR column; the `_CONSTRAINTS` table carries the min/max bounds.
-- [ ] Re-export from `libs/constants/src/index.ts`.
-- [ ] Add the two new route constants `STUDY_PERSONAL_MINIMUMS` and `STUDY_PERSONAL_MINIMUMS_HISTORY` to `libs/constants/src/routes.ts` (under the existing study-app route grouping).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(constants): personal-minimums defaults + constraints + routes`).
+- [x] Create `libs/constants/src/personal-minimums.ts` with `PERSONAL_MINIMUMS_DEFAULTS` and `PERSONAL_MINIMUMS_CONSTRAINTS` per spec.md "Constants" section. The `_DEFAULTS` values match the FAA P-8740-25 Solo / VFR column; the `_CONSTRAINTS` table carries the min/max bounds.
+- [x] Re-export from `libs/constants/src/index.ts`.
+- [x] Add the two new route constants `STUDY_PERSONAL_MINIMUMS` and `STUDY_PERSONAL_MINIMUMS_HISTORY` to `libs/constants/src/routes.ts` (under the existing study-app route grouping).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(constants): personal-minimums defaults + constraints + routes`).
 
 #### A.2 ID generator
 
-- [ ] Add `generatePersonalMinimumsId = (): string => createId('pmin')` to `libs/utils/src/ids.ts`. Place it under the Study BC section (the table lives in the study schema).
-- [ ] Add a one-line doc comment naming the table the prefix maps to.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(utils): generatePersonalMinimumsId() -> pmin_<ULID>`).
+- [x] Add `generatePersonalMinimumsId = (): string => createId('pmin')` to `libs/utils/src/ids.ts`. Place it under the Study BC section (the table lives in the study schema).
+- [x] Add a one-line doc comment naming the table the prefix maps to.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(utils): generatePersonalMinimumsId() -> pmin_<ULID>`).
 
 #### A.3 Zod input schema + lens types
 
-- [ ] Create `libs/types/src/personal-minimums.ts` exporting:
+- [x] Create `libs/types/src/personal-minimums.ts` exporting:
   - `personalMinimumsInputSchema` (Zod) per spec.md "Zod schema" section, with the `crosswindTotalKt <= windTotalKt` refinement.
   - `PersonalMinimumsInput = z.infer<typeof personalMinimumsInputSchema>`.
   - `PersonalMinimumsObservation` interface (the lens input shape).
   - `ConformanceResult` interface (the lens output shape).
-- [ ] Re-export from `libs/types/src/index.ts`.
-- [ ] Add a JSDoc on each exported symbol citing this WP and the knowledge-node id (`wx-personal-minimums`).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(types): personal-minimums input schema + lens types`).
+- [x] Re-export from `libs/types/src/index.ts`.
+- [x] Add a JSDoc on each exported symbol citing this WP and the knowledge-node id (`wx-personal-minimums`).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(types): personal-minimums input schema + lens types`).
 
 #### A.4 Phase A close
 
-- [ ] Add unit tests at `libs/types/src/__tests__/personal-minimums.test.ts`:
+- [x] Add unit tests at `libs/types/src/__tests__/personal-minimums.test.ts`:
   - Schema accepts the `PERSONAL_MINIMUMS_DEFAULTS` shape directly.
   - Schema rejects `ceilingFt: -1` with a path of `['ceilingFt']`.
   - Schema rejects `crosswindTotalKt: 25, windTotalKt: 20` with a path of `['crosswindTotalKt']`.
   - Schema rejects `visibilitySm: 150` (over max) with a path of `['visibilitySm']`.
   - Schema rejects `notes: <4001 char string>` with a path of `['notes']`.
-- [ ] Run `bun test libs/types` -- all green. Run `bun run check` -- 0 errors.
-- [ ] Open PR `feat(personal-minimums): Phase A -- constants + types + ID + Zod schema`. Body summarizes the constants + the Zod refinement + the lens-type contract.
+- [x] Run `bun test libs/types` -- all green. Run `bun run check` -- 0 errors.
+- [x] Open PR `feat(personal-minimums): Phase A -- constants + types + ID + Zod schema`. Body summarizes the constants + the Zod refinement + the lens-type contract.
 
 ### Phase B: DB schema + BC API + lens projection
 

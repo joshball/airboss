@@ -359,6 +359,12 @@ export {
 	TOP_HITS_MAX,
 	TYPE_TIER,
 } from './palette';
+export {
+	PERSONAL_MINIMUMS_CONSTRAINTS,
+	PERSONAL_MINIMUMS_DEFAULTS,
+	PERSONAL_MINIMUMS_ID_PREFIX,
+	PERSONAL_MINIMUMS_NOTES_MAX_LENGTH,
+} from './personal-minimums';
 export { PORTS } from './ports';
 export {
 	CUSTOM_TILE,

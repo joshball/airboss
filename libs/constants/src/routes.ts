@@ -333,6 +333,13 @@ export const ROUTES = {
 	NOTES_FILTER: (view: 'all' | 'follow-ups' | 'archived' | 'by-context' | 'highlights') =>
 		`/notes?${QUERY_PARAMS.VIEW}=${view}` as const,
 
+	// Study -- Personal minimums (personal-minimums-as-typed-contract WP).
+	// A pilot's self-imposed go/no-go floors as a typed primitive with a
+	// revision history. `STUDY_PERSONAL_MINIMUMS` is the reader + editor
+	// surface; `_HISTORY` is the chronological read-only revision view.
+	STUDY_PERSONAL_MINIMUMS: '/personal-minimums',
+	STUDY_PERSONAL_MINIMUMS_HISTORY: '/personal-minimums/history',
+
 	// Study -- Reps
 	// `REPS_SESSION` retired by ADR 012 phase 3; the `/reps/session` route
 	// was deleted in phase 6. The remaining `/reps` surfaces survive ADR

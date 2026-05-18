@@ -16,6 +16,13 @@ export {
 	type StructuredCitation,
 	type StructuredCitationCommon,
 } from './citation';
+export {
+	type ConformanceField,
+	type ConformanceResult,
+	type PersonalMinimumsInput,
+	type PersonalMinimumsObservation,
+	personalMinimumsInputSchema,
+} from './personal-minimums';
 export type { RelevanceEntry } from './relevance';
 export {
 	type WorkPackage,

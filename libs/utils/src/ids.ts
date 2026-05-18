@@ -21,6 +21,7 @@ import {
 	HANGAR_SYNC_LOG_ID_PREFIX,
 	KNOWLEDGE_NODE_PROGRESS_ID_PREFIX,
 	NOTE_ID_PREFIX,
+	PERSONAL_MINIMUMS_ID_PREFIX,
 	PLAN_ITEM_ID_PREFIX,
 	REFERENCE_FIGURE_ID_PREFIX,
 	REFERENCE_ID_PREFIX,
@@ -146,6 +147,11 @@ export const generateGoalId = (): string => createId(GOAL_ID_PREFIX);
 // Notes BC (wp-notes-primitive). One row per note; the markdown body
 // + context FKs + tags live on `study.note`.
 export const generateNoteId = (): string => createId(NOTE_ID_PREFIX);
+
+// Personal-minimums (personal-minimums-as-typed-contract WP). One row per
+// revision of a pilot's stated go/no-go floors; the active record + the
+// append-only revision history live on `study.personal_minimums`.
+export const generatePersonalMinimumsId = (): string => createId(PERSONAL_MINIMUMS_ID_PREFIX);
 
 // Rich-reader annotations + card-drafts (wp-flightbag-rich-reader).
 // Annotation rows tie a passage anchor to a kind (highlight / note_anchor /
