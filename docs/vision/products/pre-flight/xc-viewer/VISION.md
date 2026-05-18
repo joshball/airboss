@@ -223,7 +223,7 @@ We stop short of "indistinguishable from operational" for v1 -- no real terrain 
 Move from vision to greenlit work package when:
 
 - The first-slice WP at [xc-viewer-v1/](../../../../work-packages/xc-viewer-v1/) has been walked end-to-end by user-zero and signed off
-- A second consumer (beyond the weather-course step) is committed -- e.g. a personal-minimums lesson or a postflight reflection drill
+- A second consumer (beyond the weather-course step) is committed -- e.g. a personal-minimums lesson or a postflight reflection drill. The personal-minimums typed primitive + lens has shipped ([personal-minimums-as-typed-contract](../../../../work-packages/personal-minimums-as-typed-contract/)); the `xc-viewer-personal-minimums-overlay` follow-on WP binds to its [CONSUMER-CONTRACT.md](../../../../work-packages/personal-minimums-as-typed-contract/CONSUMER-CONTRACT.md) (`getActivePersonalMinimums` + `projectAgainstPersonalMinimums`) -- no re-design needed, just the overlay surface.
 - The wx-engine ([VISION.md](../weather-scenario-engine/VISION.md)) has shipped at least 2 production scenarios so the viewer can mount more than one wx state
 - A clear authoring path is documented for the next sectional region (Northeast, Pacific, etc.) so the substrate is not stuck on Memphis
 

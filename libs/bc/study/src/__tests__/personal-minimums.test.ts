@@ -20,6 +20,7 @@ import {
 	deactivatePersonalMinimums,
 	getActivePersonalMinimums,
 	getPersonalMinimumsHistory,
+	PersonalMinimumsConflictError,
 } from '../personal-minimums';
 import { personalMinimums } from '../schema';
 
@@ -136,6 +137,30 @@ describe('personal-minimums BC', () => {
 					isActive: true,
 				}),
 			).rejects.toThrow();
+		});
+	});
+
+	it('runs concurrent revisions for one user without leaving two active rows', async () => {
+		await withFreshUser(async (userId) => {
+			await createPersonalMinimumsRevision(userId, defaultsInput);
+			// Fire two revision writes concurrently. The partial unique index
+			// serialises them: both may succeed (the loser retries cleanly) or
+			// one rejects with PersonalMinimumsConflictError -- either way the
+			// invariant "exactly one active row" must hold afterwards.
+			const results = await Promise.allSettled([
+				createPersonalMinimumsRevision(userId, { ...defaultsInput, ceilingFt: 2000 }),
+				createPersonalMinimumsRevision(userId, { ...defaultsInput, ceilingFt: 2500 }),
+			]);
+			for (const r of results) {
+				if (r.status === 'rejected') {
+					expect(r.reason).toBeInstanceOf(PersonalMinimumsConflictError);
+				}
+			}
+			const activeRows = await db
+				.select()
+				.from(personalMinimums)
+				.where(and(eq(personalMinimums.userId, userId), eq(personalMinimums.isActive, true)));
+			expect(activeRows).toHaveLength(1);
 		});
 	});
 

@@ -1,7 +1,7 @@
 ---
 title: 'personal-minimums -- consumer contract for the personal-minimums lens'
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-13
 owner: agent
@@ -26,6 +26,7 @@ The lens never reaches into the DB, never touches the filesystem, never imports 
 import {
   getActivePersonalMinimums,
   getPersonalMinimumsHistory,
+  type PersonalMinimums,
 } from '@ab/bc-study/server';
 
 // Browser-safe (the consumer's .svelte component or pure helper):
@@ -33,7 +34,8 @@ import { projectAgainstPersonalMinimums } from '@ab/bc-study';
 
 // Type-only (anywhere):
 import type {
-  PersonalMinimumsRow,
+  PersonalMinimums,
+  PersonalMinimumsFloors,
   PersonalMinimumsObservation,
   ConformanceResult,
 } from '@ab/bc-study';
@@ -43,16 +45,16 @@ The runtime barrel `@ab/bc-study` re-exports the lens (value) and every relevant
 
 ## Data shapes
 
-### `PersonalMinimumsRow`
+### `PersonalMinimums`
 
-The row shape the BC returns. Mirrors the Drizzle `$inferSelect` of `study.personal_minimums`:
+The record shape the BC returns. The BC normalises the Drizzle `$inferSelect` of `study.personal_minimums` -- in particular `visibilitySm` (a `numeric(4,1)` column Drizzle hands back as a `string`) is parsed to a `number`, so every consumer reads a uniform shape:
 
 ```typescript
-interface PersonalMinimumsRow {
+interface PersonalMinimums {
   id: string;                          // `pmin_<lowercase ulid>`
   userId: string;
   ceilingFt: number;                   // AGL
-  visibilitySm: number;                // statute miles (parsed from numeric(4,1))
+  visibilitySm: number;                // statute miles (numeric(4,1), parsed)
   windTotalKt: number;
   crosswindTotalKt: number;
   nightRequiredRecencyLandings: number;
@@ -70,6 +72,19 @@ interface PersonalMinimumsRow {
 ```
 
 Consumers usually only read `ceilingFt`, `visibilitySm`, `windTotalKt`, `crosswindTotalKt` (for the lens projection) plus `effectiveFrom` / `effectiveUntil` (for history binding). The rest is informational metadata.
+
+### `PersonalMinimumsFloors`
+
+The minimal floor set the lens actually reads. A full `PersonalMinimums` record satisfies this shape structurally, so a consumer normally just passes the BC's record straight to the lens -- the narrower interface exists so pure unit tests can pass a lightweight literal:
+
+```typescript
+interface PersonalMinimumsFloors {
+  ceilingFt: number;
+  visibilitySm: number;
+  windTotalKt: number;
+  crosswindTotalKt: number;
+}
+```
 
 ### `PersonalMinimumsObservation`
 
@@ -127,7 +142,7 @@ Per-field `{ observed, floor, withinFloor }` -- the observed value, the pilot's 
 ### `getActivePersonalMinimums(userId)` (server-only)
 
 ```typescript
-function getActivePersonalMinimums(userId: string): Promise<PersonalMinimumsRow | null>;
+function getActivePersonalMinimums(userId: string): Promise<PersonalMinimums | null>;
 ```
 
 Returns the user's currently-active record, or null if the user has never set personal minimums (or has just deactivated). The BC enforces "at most one active row per user" via a partial unique index, so the result is unambiguous.
@@ -148,16 +163,16 @@ If `minimums` is null, the consumer should render its own page neutrally -- do n
 ### `getPersonalMinimumsHistory(userId)` (server-only)
 
 ```typescript
-function getPersonalMinimumsHistory(userId: string): Promise<PersonalMinimumsRow[]>;
+function getPersonalMinimumsHistory(userId: string): Promise<PersonalMinimums[]>;
 ```
 
 Returns every revision for the user, ordered by `effective_from DESC`. The first row is the most recent (and is the active row, if any). Use this when binding to a flight date or a debrief moment -- pick the revision whose effective window contains the date in question:
 
 ```typescript
 function pickRevisionAt(
-  history: PersonalMinimumsRow[],
+  history: PersonalMinimums[],
   at: Date,
-): PersonalMinimumsRow | null {
+): PersonalMinimums | null {
   return (
     history.find(
       (rev) =>
@@ -173,7 +188,7 @@ The decision-debrief-replay consumer uses this pattern to find "what your minimu
 
 ```typescript
 function projectAgainstPersonalMinimums(
-  minimums: PersonalMinimumsRow,
+  minimums: PersonalMinimums,
   observation: PersonalMinimumsObservation,
 ): ConformanceResult;
 ```
@@ -186,9 +201,9 @@ Recommended consumer pattern:
 <!-- A .svelte component in the xc-viewer overlay: -->
 <script lang="ts">
   import { projectAgainstPersonalMinimums } from '@ab/bc-study';
-  import type { PersonalMinimumsRow, PersonalMinimumsObservation } from '@ab/bc-study';
+  import type { PersonalMinimums, PersonalMinimumsObservation } from '@ab/bc-study';
 
-  let { minimums, observation }: { minimums: PersonalMinimumsRow; observation: PersonalMinimumsObservation } = $props();
+  let { minimums, observation }: { minimums: PersonalMinimums; observation: PersonalMinimumsObservation } = $props();
 
   const conformance = $derived(projectAgainstPersonalMinimums(minimums, observation));
 </script>
