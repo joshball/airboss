@@ -111,7 +111,7 @@ export const citationUrlSchema = z
 export const citationSchema = z.object({
 	sourceId: z.string().trim().min(1).max(128),
 	locator: z
-		.record(z.union([z.string().trim().min(1).max(200), z.number().int()]))
+		.record(z.string(), z.union([z.string().trim().min(1).max(200), z.number().int()]))
 		.refine((o) => Object.keys(o).length > 0, 'Locator must not be empty'),
 	url: citationUrlSchema.optional(),
 });
