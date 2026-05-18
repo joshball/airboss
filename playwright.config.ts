@@ -26,6 +26,7 @@ const INTEGRATION_WORKERS_MAX = 512;
 const studyPort = PORTS.STUDY_E2E;
 const hangarPort = PORTS.HANGAR_E2E;
 const flightbagPort = PORTS.FLIGHTBAG_E2E;
+const spatialPort = PORTS.SPATIAL_E2E;
 // Integration ports = dev ports + 7. The flightbag integration sweep runs
 // against its own vite process, against `airboss_integration`, on a port
 // disjoint from both `bun run dev` (9640) and the e2e flightbag project
@@ -35,6 +36,7 @@ const flightbagIntegrationPort = PORTS.FLIGHTBAG_INTEGRATION;
 const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${studyPort}`;
 const flightbagBaseURL = process.env.PLAYWRIGHT_FLIGHTBAG_BASE_URL ?? `http://127.0.0.1:${flightbagPort}`;
 const hangarBaseURL = process.env.PLAYWRIGHT_HANGAR_BASE_URL ?? `http://127.0.0.1:${hangarPort}`;
+const spatialBaseURL = process.env.PLAYWRIGHT_SPATIAL_BASE_URL ?? `http://127.0.0.1:${spatialPort}`;
 const flightbagIntegrationBaseURL =
 	process.env.FLIGHTBAG_INTEGRATION_BASE_URL ?? `http://127.0.0.1:${flightbagIntegrationPort}`;
 
@@ -170,7 +172,8 @@ export default defineConfig({
 			// `content-census-smoke` is a hangar-app spec -- it runs in the
 			// `hangar-review-queue` project (hangar webServer + admin auth),
 			// so it is excluded from the study `chromium` project here.
-			testIgnore: /unauthed\/.*|flightbag\/.*|hangar-review-queue\/.*|content-census-smoke\.spec\.ts/,
+			testIgnore:
+				/unauthed\/.*|flightbag\/.*|hangar-review-queue\/.*|content-census-smoke\.spec\.ts|xc-viewer-page\.spec\.ts/,
 		},
 		{
 			// Study `unauthed/` -- specs in `tests/e2e/unauthed/`. The
@@ -193,6 +196,18 @@ export default defineConfig({
 				baseURL: flightbagBaseURL,
 			},
 			testMatch: /flightbag\/.*\.spec\.ts/,
+		},
+		{
+			// Spatial is the XC viewer surface -- auth-optional, served from
+			// its own host on its own port. The webServer entry below boots
+			// `apps/spatial` independently so this project can drive real
+			// navigation against the rendered viewer.
+			name: 'spatial',
+			use: {
+				...devices['Desktop Chrome'],
+				baseURL: spatialBaseURL,
+			},
+			testMatch: /xc-viewer-page\.spec\.ts/,
 		},
 		{
 			// Hangar review-queue setup -- authenticate the admin reviewer once
@@ -351,6 +366,17 @@ function chooseWebServers() {
 			reuseExistingServer: false,
 			timeout: 120_000,
 			env: { ...e2eEnv, PORT: String(hangarPort) },
+		},
+		{
+			// Spatial -- the XC viewer surface. Auth-optional; a dedicated
+			// vite process on PORTS.SPATIAL_E2E (9653) for the
+			// `xc-viewer-page.spec.ts` smoke.
+			command: 'bun run dev',
+			cwd: 'apps/spatial',
+			url: spatialBaseURL,
+			reuseExistingServer: false,
+			timeout: 120_000,
+			env: { ...e2eEnv, PORT: String(spatialPort) },
 		},
 		{
 			// Flightbag integration -- dedicated vite process pointed at

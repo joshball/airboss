@@ -1,0 +1,59 @@
+{
+  "legs": [
+    {
+      "from": "wp-kmem",
+      "to": "wp-kmem-dep-fix",
+      "distanceNm": 4.7683348772850005,
+      "trueCourse": 46.149009335566205,
+      "magneticHeading": 48.64938828490809,
+      "altitudeFtMsl": 1500,
+      "groundSpeedKt": 111.84257073022023,
+      "eteMin": 2.5580607703234315,
+      "fuelGal": 0.35812850784528044,
+      "windFromDeg": 220,
+      "windKt": 22
+    },
+    {
+      "from": "wp-kmem-dep-fix",
+      "to": "wp-kmkl",
+      "distanceNm": 57.14831465277563,
+      "trueCourse": 57.848603189598784,
+      "magneticHeading": 60.69825249509112,
+      "altitudeFtMsl": 4500,
+      "groundSpeedKt": 135.69912761306784,
+      "eteMin": 25.268392947548577,
+      "fuelGal": 3.4322900420420144,
+      "windFromDeg": 230,
+      "windKt": 26
+    },
+    {
+      "from": "wp-kmkl",
+      "to": "wp-kolv-arr-fix",
+      "distanceNm": 59.70047399346612,
+      "trueCourse": 225.94147579947608,
+      "magneticHeading": 227.90000603914706,
+      "altitudeFtMsl": 4500,
+      "groundSpeedKt": 84.04980793035583,
+      "eteMin": 42.617925344648704,
+      "fuelGal": 5.788934859314781,
+      "windFromDeg": 230,
+      "windKt": 26
+    },
+    {
+      "from": "wp-kolv-arr-fix",
+      "to": "wp-kolv",
+      "distanceNm": 4.400965771701148,
+      "trueCourse": 0,
+      "magneticHeading": 351.95988995780084,
+      "altitudeFtMsl": 2500,
+      "groundSpeedKt": 105.73505051357613,
+      "eteMin": 2.497354898110768,
+      "fuelGal": 0.34754855665374856,
+      "windFromDeg": 220,
+      "windKt": 22
+    }
+  ],
+  "totalFuelGal": 9.926901965855825,
+  "totalEteMin": 72.94173396063148,
+  "reserveGal": 30.073098034144174
+}

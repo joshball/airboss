@@ -27,6 +27,8 @@
 		"references": "bun scripts/references.ts",
 		"charts": "bun scripts/charts.ts",
 		"wx-scenario": "bun scripts/wx-scenario.ts",
+		"xc-scenario": "bun scripts/xc-scenario.ts",
+		"sectionals": "bun scripts/sectionals.ts",
 		"airboss-ref": "bun scripts/airboss-ref.ts",
 		"wp": "bun scripts/wp.ts",
 		"bug": "bun scripts/bug.ts",
