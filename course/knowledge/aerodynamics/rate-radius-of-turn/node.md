@@ -50,22 +50,18 @@ review_time_minutes: 6
 
 # === References ===
 references:
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aerodynamics of Flight
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Authoritative on the bank-radius-rate relationships, with worked
-      tables and the standard-rate-turn definition (3 degrees per second,
-      requiring approximately 17 degrees of bank at 100 KIAS).
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers and Ground Reference Maneuvers
+      Authoritative on the bank-radius-rate relationships, with worked tables and the standard-rate-turn definition (3 degrees per second, requiring approximately 17 degrees of bank at 100 KIAS).
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Practical application: how the bank-vs-groundspeed relationship
-      drives the continuous bank variation in turns around a point.
-  - source: FAA-H-8083-15
-    detail: Instrument Flying Handbook -- Standard Rate Turns
+      Practical application: how the bank-vs-groundspeed relationship drives the continuous bank variation in turns around a point.
+  - ref: airboss-ref:handbooks/ifh
+    redirected_from: airboss-ref:handbooks/ifh/FAA-H-8083-15
     note: >-
-      The standard-rate-turn convention used in IFR procedures (holding
-      patterns, course reversals, climbs / descents in turn).
+      The standard-rate-turn convention used in IFR procedures (holding patterns, course reversals, climbs / descents in turn).
 
 # === Assessment ===
 assessable: true

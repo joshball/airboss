@@ -29,12 +29,16 @@ references:
   - source: AC 00-6B
     detail: Aviation Weather, Stability chapter -- temperature inversions and subsidence
     note: Foundational treatment of inversions, including the subsidence inversion aloft.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 13 -- Atmospheric Stability
-    note: Modern consolidated reference for inversion types and their effect on the boundary layer.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-    note: Pilot-pitch introduction to stable air, inversions, and stratiform cloud.
+  - ref: airboss-ref:handbooks/avwx/13
+    chapter_title: Atmospheric Stability
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/13
+    note: >-
+      Modern consolidated reference for inversion types and their effect on the boundary layer.
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25/12
+    note: >-
+      Pilot-pitch introduction to stable air, inversions, and stratiform cloud.
 
 assessable: true
 assessment_methods: [recall, scenario]

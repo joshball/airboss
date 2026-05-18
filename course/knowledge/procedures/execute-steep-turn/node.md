@@ -52,12 +52,10 @@ review_time_minutes: 6
 
 # === References ===
 references:
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers (Steep Turns)
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      The canonical chapter on steep-turn execution -- entry, control
-      inputs, scan technique, common errors, and recovery from exceeding
-      tolerances.
+      The canonical chapter on steep-turn execution -- entry, control inputs, scan technique, common errors, and recovery from exceeding tolerances.
   - source: ACS PPL-A
     detail: Area V Task A -- Steep Turns
     note: >-
@@ -70,11 +68,10 @@ references:
       Airplane-specific maneuver entry airspeed and any bank-angle
       restrictions (some airplanes have a published "do not exceed"
       bank in normal category).
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aerodynamics of Flight
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Background on load factor, stall speed in banked turns, and
-      coordinated-turn physics that determine the steep-turn technique.
+      Background on load factor, stall speed in banked turns, and coordinated-turn physics that determine the steep-turn technique.
 
 # === Assessment ===
 assessable: true

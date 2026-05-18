@@ -26,8 +26,9 @@ estimated_time_minutes: 25
 review_time_minutes: 5
 
 references:
-  - source: FAA-H-8083-2
-    detail: Risk Management Handbook, Chapter 6 -- Single Pilot Resource Management
+  - ref: airboss-ref:handbooks/risk-management/6
+    chapter_title: Threat and Error Management
+    redirected_from: airboss-ref:handbooks/risk-management/FAA-H-8083-2/6
     note: Personal minimums framework, the IMSAFE / PAVE / 5P checklists.
   - source: FAA Pamphlet P-8740-25
     detail: Personal Minimums Checklist

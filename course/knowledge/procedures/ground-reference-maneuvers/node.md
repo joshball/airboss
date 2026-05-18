@@ -51,19 +51,14 @@ review_time_minutes: 8
 
 # === References ===
 references:
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Ground Reference Maneuvers
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      The canonical chapter on rectangular course, S-turns, turns around
-      a point, and turns around two pylons. Includes entry geometry,
-      altitude band (600-1,000 AGL), wind-correction logic, and the
-      explicit purpose statement that ground reference teaches division
-      of attention between the airplane, the ground, and traffic.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aerodynamics of Flight
+      The canonical chapter on rectangular course, S-turns, turns around a point, and turns around two pylons. Includes entry geometry, altitude band (600-1,000 AGL), wind-correction logic, and the explicit purpose statement that ground reference teaches division of attention between the airplane, the ground, and traffic.
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Background on the relationship between bank angle, groundspeed, and
-      turn radius that the maneuvers exercise.
+      Background on the relationship between bank angle, groundspeed, and turn radius that the maneuvers exercise.
   - source: ACS PPL-A
     detail: Area V Task B -- Ground Reference Maneuvers (V.B.K1-V.B.S7)
     note: >-

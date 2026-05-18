@@ -28,9 +28,11 @@ references:
   - source: AC 00-6B
     detail: Aviation Weather, Fog and Restrictions to Visibility chapter
     note: Foundational treatment of fog formation types and visibility-reducing phenomena.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 18 -- Weather and Obstructions to Visibility
-    note: Modern consolidated reference for fog types (§18.1.1) and other visibility obstructions (mist, haze, smoke, precipitation, blowing snow, dust storm, sandstorm, volcanic ash).
+  - ref: airboss-ref:handbooks/avwx/18
+    chapter_title: Weather and Obstructions to Visibility
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/18
+    note: >-
+      Modern consolidated reference for fog types (§18.1.1) and other visibility obstructions (mist, haze, smoke, precipitation, blowing snow, dust storm, sandstorm, volcanic ash).
   - source: AIM
     detail: 7-5-1 -- Frost; 7-5-7 -- Volcanic Ash
     note: Operational guidance on frost removal and volcanic ash avoidance.

@@ -46,12 +46,10 @@ review_time_minutes: 4
 
 # === References ===
 references:
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Calls out clearing turns and the requirement to clear the airspace
-      before commencing any maneuver that involves changes in altitude,
-      attitude, or heading.
+      Calls out clearing turns and the requirement to clear the airspace before commencing any maneuver that involves changes in altitude, attitude, or heading.
   - source: AC 90-48
     detail: Pilots' Role in Collision Avoidance
     note: >-

@@ -32,8 +32,8 @@ references:
     chapter_title: Aeronautical Decision-Making
     redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/2
     note: The five hazardous attitudes and their antidotes.
-  - source: FAA-H-8083-2A
-    detail: Risk Management Handbook
+  - ref: airboss-ref:handbooks/risk-management
+    redirected_from: airboss-ref:handbooks/risk-management/FAA-H-8083-2A
     note: PAVE, IMSAFE, DECIDE frameworks.
   - source: AC 60-22
     detail: Aeronautical Decision-Making

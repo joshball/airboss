@@ -32,9 +32,11 @@ references:
   - source: AC 00-54
     detail: Pilot Windshear Guide
     note: FAA reference on low-level windshear recognition and recovery.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 10 -- Wind
-    note: Modern consolidated reference for wind systems and shear (forces in §10.3, local winds §10.6, adverse winds §10.7 including wind shear §10.7.5); mountain-wave detail in Chapter 16 (Mountain Weather).
+  - ref: airboss-ref:handbooks/avwx/10
+    chapter_title: Wind
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/10
+    note: >-
+      Modern consolidated reference for wind systems and shear (forces in §10.3, local winds §10.6, adverse winds §10.7 including wind shear §10.7.5); mountain-wave detail in Chapter 16 (Mountain Weather).
   - source: AIM
     detail: 7-1-19 -- Microbursts; 7-5-2 -- Mountain Flying
     note: Operational guidance on the tactical wind hazards.

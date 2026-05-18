@@ -60,16 +60,14 @@ references:
     note: >-
       The certification basis for airspeed limitations and the load-factor
       structural limits the V-speeds protect.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aerodynamics of Flight
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      The V-G diagram and the meaning of each V-speed in plain language.
-      Va explanation including weight scaling.
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers
+      The V-G diagram and the meaning of each V-speed in plain language. Va explanation including weight scaling.
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Practical guidance: when no manufacturer's recommended airspeed
-      exists for a maneuver, do not exceed Va.
+      Practical guidance: when no manufacturer's recommended airspeed exists for a maneuver, do not exceed Va.
 
 # === Assessment ===
 assessable: true

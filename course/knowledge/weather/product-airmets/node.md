@@ -36,9 +36,11 @@ references:
   - source: AIM
     detail: 7-1-6 -- Inflight Aviation Weather Advisories
     note: Operational use, valid times, the SIERRA / TANGO / ZULU AIRMET letter taxonomy.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 26 -- Advisories (Section 26.3, AIRMET)
-    note: Modern consolidated reference for AIRMET use, including G-AIRMET (Graphical AIRMET).
+  - ref: airboss-ref:handbooks/avwx/26
+    chapter_title: Advisories
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/26
+    note: >-
+      Modern consolidated reference for AIRMET use, including G-AIRMET (Graphical AIRMET).
 
 assessable: true
 assessment_methods: [recall, scenario]

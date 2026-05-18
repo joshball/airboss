@@ -39,9 +39,10 @@ review_time_minutes: 5
 
 # === References ===
 references:
-  - source: PHAK
-    detail: Chapter 14 (Airport Operations), crosswind discussion
-    note: Foundational explanation of crosswind, runway alignment, and pattern considerations.
+  - ref: airboss-ref:handbooks/phak/14
+    chapter_title: Airport Operations
+    note: >-
+      Foundational explanation of crosswind, runway alignment, and pattern considerations.
   - source: AFH
     detail: Chapter 8 (Approaches and Landings), crosswind approach and landing
     note: Technique reference -- crab, sideslip, and the transition. Correct place to send a pilot who understands the math but needs the skill.

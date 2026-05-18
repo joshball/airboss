@@ -29,9 +29,11 @@ references:
   - source: AC 00-45H
     detail: Aviation Weather Services, Surface Analysis Chart and CVA sections
     note: Format spec for symbols, contour intervals, and update cycle.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Chapter 25 -- Analysis
-    note: Reading the synoptic picture from a surface analysis (Surface Analysis Chart §25.2.3, Unified Surface Analysis §25.2.4).
+  - ref: airboss-ref:handbooks/avwx/25
+    chapter_title: Analysis
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28/25
+    note: >-
+      Reading the synoptic picture from a surface analysis (Surface Analysis Chart §25.2.3, Unified Surface Analysis §25.2.4).
   - source: AIM
     detail: 7-1 -- National Weather Service Aviation Products
     note: Where the products live and update cadence.

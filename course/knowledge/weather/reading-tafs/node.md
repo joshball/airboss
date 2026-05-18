@@ -38,9 +38,10 @@ references:
   - source: AIM
     detail: 7-1-29 -- Key to Aerodrome Forecast (TAF) and Aviation Routine Weather Report (METAR)
     note: Decode key with worked examples; the reference pilots open at the FBO.
-  - source: FAA-H-8083-28
-    detail: Aviation Weather Handbook, Forecasts chapter (TAF)
-    note: Pilot-pitch treatment with sample TAFs and the operational reasoning behind change groups.
+  - ref: airboss-ref:handbooks/avwx
+    redirected_from: airboss-ref:handbooks/avwx/FAA-H-8083-28
+    note: >-
+      Pilot-pitch treatment with sample TAFs and the operational reasoning behind change groups.
   - ref: airboss-ref:handbooks/phak/13
     chapter_title: Aviation Weather Services
     redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25C/13

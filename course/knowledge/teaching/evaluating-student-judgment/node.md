@@ -47,8 +47,8 @@ references:
   - source: AC 60-22
     detail: Aeronautical Decision-Making
     note: Framework for evaluating ADM in training environments.
-  - source: FAA-H-8083-2A
-    detail: Risk Management Handbook
+  - ref: airboss-ref:handbooks/risk-management
+    redirected_from: airboss-ref:handbooks/risk-management/FAA-H-8083-2A
     note: Risk assessment frameworks a CFI teaches and evaluates against.
 
 assessable: true

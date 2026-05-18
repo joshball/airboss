@@ -55,12 +55,10 @@ references:
       Authoritative source for the numerical tolerances on each maneuver.
       Tolerances vary by maneuver and may differ between PPL, IR, CPL, and
       ATP standards.
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Performance Maneuvers
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Practical guidance on how to fly within tolerances -- scan tempo,
-      trim use, anticipation, and the perceptual cues that warn of
-      drift before the gauge confirms it.
+      Practical guidance on how to fly within tolerances -- scan tempo, trim use, anticipation, and the perceptual cues that warn of drift before the gauge confirms it.
   - source: FAA-S-8081-14
     detail: Airman Certification Standards / Practical Test Standards (legacy)
     note: >-

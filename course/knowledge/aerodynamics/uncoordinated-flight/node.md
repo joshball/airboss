@@ -51,17 +51,14 @@ review_time_minutes: 5
 
 # === References ===
 references:
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge -- Aerodynamics of Flight
+  - ref: airboss-ref:handbooks/phak
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25
     note: >-
-      Authoritative on coordinated vs. uncoordinated turns, the inclinometer
-      ball physics, and the difference between slip and skid.
-  - source: FAA-H-8083-3
-    detail: Airplane Flying Handbook -- Maintaining Aircraft Control
+      Authoritative on coordinated vs. uncoordinated turns, the inclinometer ball physics, and the difference between slip and skid.
+  - ref: airboss-ref:handbooks/afh
+    redirected_from: airboss-ref:handbooks/afh/FAA-H-8083-3
     note: >-
-      Practical: how the airplane feels uncoordinated, how to recover, and
-      the canonical accelerated-stall geometry that develops from a skid
-      at low altitude.
+      Practical: how the airplane feels uncoordinated, how to recover, and the canonical accelerated-stall geometry that develops from a skid at low altitude.
   - source: AC 61-67C
     detail: Stall and Spin Awareness Training
     note: >-

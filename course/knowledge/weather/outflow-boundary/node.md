@@ -33,9 +33,11 @@ references:
   - source: FAA-H-8083-28
     detail: Aviation Weather Handbook, Chapter 20 -- Thunderstorms
     note: Modern consolidated reference for the gust front / outflow boundary and microburst.
-  - source: FAA-H-8083-25
-    detail: Pilot's Handbook of Aeronautical Knowledge, Chapter 12 -- Weather Theory
-    note: Pilot-pitch introduction to thunderstorm structure including the downdraft and gust front.
+  - ref: airboss-ref:handbooks/phak/12
+    chapter_title: Weather Theory
+    redirected_from: airboss-ref:handbooks/phak/FAA-H-8083-25/12
+    note: >-
+      Pilot-pitch introduction to thunderstorm structure including the downdraft and gust front.
   - source: AC 00-54
     detail: Pilot Windshear Guide
     note: Operational treatment of the gust-front windshear hazard near convection.
