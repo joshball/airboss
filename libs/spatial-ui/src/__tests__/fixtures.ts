@@ -5,7 +5,14 @@
  * drive a renderer test without loading the real Memphis geometry.
  */
 
-import type { AirportRecord, AirspacePolygon, Geography, NavaidRecord, ScenarioBundle } from '@ab/spatial-engine';
+import type {
+	AirportRecord,
+	AirspacePolygon,
+	Geography,
+	NavaidRecord,
+	ScenarioBundle,
+	WxBundleView,
+} from '@ab/spatial-engine';
 
 /** A synthetic three-polygon airspace set: one B, one D, one MOA. */
 export const fixtureAirspace: AirspacePolygon[] = [
@@ -232,4 +239,106 @@ export const fixtureBundle: ScenarioBundle = {
 	},
 	events: [],
 	performance: { legs: [], totalFuelGal: 0, totalEteMin: 0, reserveGal: 0 },
+};
+
+/** A synthetic AIRMET set: one Sierra, one Tango, one Zulu. */
+export const fixtureAirmets: WxBundleView['airmets'] = [
+	{
+		id: 'airmet-sierra-test',
+		family: 'airmet-sierra',
+		label: 'AIRMET SIERRA\nIFR Conditions',
+		rings: [
+			[
+				[-90.5, 34.5],
+				[-89.0, 34.5],
+				[-89.0, 36.0],
+				[-90.5, 36.0],
+				[-90.5, 34.5],
+			],
+		],
+		validFrom: '2026-03-19T19:00:00Z',
+		validTo: '2026-03-20T01:00:00Z',
+	},
+	{
+		id: 'airmet-tango-test',
+		family: 'airmet-tango',
+		label: 'AIRMET TANGO\nModerate Turbulence',
+		rings: [
+			[
+				[-91.0, 35.5],
+				[-88.5, 35.5],
+				[-88.5, 36.5],
+				[-91.0, 36.5],
+				[-91.0, 35.5],
+			],
+		],
+		validFrom: '2026-03-19T19:00:00Z',
+		validTo: '2026-03-20T01:00:00Z',
+	},
+	{
+		id: 'airmet-zulu-test',
+		family: 'airmet-zulu',
+		label: 'AIRMET ZULU\nIcing',
+		rings: [
+			[
+				[-91.0, 33.7],
+				[-89.5, 33.7],
+				[-89.5, 34.7],
+				[-91.0, 34.7],
+				[-91.0, 33.7],
+			],
+		],
+		validFrom: '2026-03-19T19:00:00Z',
+		validTo: '2026-03-20T01:00:00Z',
+	},
+];
+
+/** A weather-populated `ScenarioBundle` -- chips at each waypoint + AIRMETs. */
+export const fixtureBundleWithWeather: ScenarioBundle = {
+	...fixtureBundle,
+	weather: {
+		wxScenarioSlug: 'frontal-xc-march',
+		truthValidAt: '2026-03-19T19:00:00Z',
+		byWaypoint: {
+			'wp-a': {
+				waypointId: 'wp-a',
+				metar: {
+					station: 'KCPS',
+					raw: 'KCPS 191953Z 20014KT 10SM BKN045 17/13 A2970',
+					flightCategory: 'VFR',
+					stationDistanceNm: 210,
+				},
+				taf: {
+					station: 'KCPS',
+					raw: 'FM192000 32020G30KT 5SM VCSH OVC025',
+					arrivalFlightCategory: 'MVFR',
+					stationDistanceNm: 210,
+				},
+				windsAloft: [
+					{ altitudeFtMsl: 3000, directionDeg: 220, speedKt: 22, temperatureC: null },
+					{ altitudeFtMsl: 6000, directionDeg: 240, speedKt: 30, temperatureC: 0 },
+				],
+				airmetIds: ['airmet-sierra-test', 'airmet-tango-test'],
+			},
+			'wp-b': {
+				waypointId: 'wp-b',
+				metar: {
+					station: 'KCPS',
+					raw: 'KCPS 191953Z 20014KT 3SM BR OVC015 04/M03 A2963',
+					flightCategory: 'IFR',
+					stationDistanceNm: 230,
+				},
+				taf: {
+					station: 'KCPS',
+					raw: 'FM192000 32020G30KT 3SM OVC015',
+					arrivalFlightCategory: 'IFR',
+					stationDistanceNm: 230,
+				},
+				windsAloft: [{ altitudeFtMsl: 3000, directionDeg: 320, speedKt: 20, temperatureC: 4 }],
+				airmetIds: ['airmet-sierra-test'],
+			},
+		},
+		airmets: fixtureAirmets,
+		charts: [],
+	},
 };

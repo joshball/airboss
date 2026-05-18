@@ -17,6 +17,10 @@
  */
 
 // ----------------------------------------------------------------------
+// Layer-3 weather overlay (Phase D).
+// ----------------------------------------------------------------------
+export { default as AirmetPolygon } from './AirmetPolygon.svelte';
+// ----------------------------------------------------------------------
 // Layer-1 sectional renderer (Phase B).
 // ----------------------------------------------------------------------
 export { default as AirportLayer } from './AirportLayer.svelte';
@@ -26,6 +30,7 @@ export type { CanvasTransform } from './controls/types';
 export { default as ZoomPanControls } from './controls/ZoomPanControls.svelte';
 export { default as LegLabel } from './LegLabel.svelte';
 export { default as NavaidLayer } from './NavaidLayer.svelte';
+export { default as PlateStub } from './PlateStub.svelte';
 // ----------------------------------------------------------------------
 // Layer-2 route renderer (Phase C).
 // ----------------------------------------------------------------------
@@ -36,6 +41,8 @@ export { default as SectionalCanvas } from './SectionalCanvas.svelte';
 // ----------------------------------------------------------------------
 export { SPATIAL_LAYER_KEYS, SPATIAL_LAYER_LABELS, type SpatialLayerKey } from './styles/tokens';
 export type { LegLabelData } from './types';
+export { default as WaypointDetailDrawer } from './WaypointDetailDrawer.svelte';
+export { default as WaypointWxChip } from './WaypointWxChip.svelte';
 // ----------------------------------------------------------------------
 // Top-level composition.
 // ----------------------------------------------------------------------

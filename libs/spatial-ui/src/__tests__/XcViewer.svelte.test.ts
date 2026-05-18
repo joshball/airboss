@@ -11,7 +11,7 @@
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import XcViewer from '../XcViewer.svelte';
-import { fixtureBundle } from './fixtures';
+import { fixtureBundle, fixtureBundleWithWeather } from './fixtures';
 
 afterEach(cleanup);
 
@@ -67,5 +67,46 @@ describe('<XcViewer> (Phase C route overlay)', () => {
 		const { container } = render(XcViewer, { bundle: fixtureBundle });
 		const expectedLegs = fixtureBundle.flight.route.waypoints.length - 1;
 		expect(container.querySelectorAll('[data-testid="leg-label"]').length).toBe(expectedLegs);
+	});
+});
+
+describe('<XcViewer> (Phase D weather overlay)', () => {
+	it('renders a wx chip for every waypoint with a weather view', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithWeather });
+		// The weather fixture populates wp-a + wp-b.
+		expect(container.querySelectorAll('[data-testid="wx-chip"]').length).toBe(2);
+	});
+
+	it('renders an AIRMET polygon for every AIRMET in the bundle', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithWeather });
+		expect(container.querySelectorAll('[data-testid="airmet-polygon"]').length).toBe(
+			fixtureBundleWithWeather.weather.airmets.length,
+		);
+	});
+
+	it('colors each wx chip by its METAR flight category', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithWeather });
+		const chips = container.querySelectorAll('[data-testid="wx-chip"]');
+		const categories = Array.from(chips).map((c) => c.getAttribute('data-flight-category'));
+		expect(categories).toContain('VFR');
+		expect(categories).toContain('IFR');
+	});
+
+	it('opens the waypoint detail drawer when a waypoint is clicked', async () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithWeather });
+		expect(container.querySelector('[data-testid="waypoint-drawer"]')).toBeNull();
+		const wp = container.querySelector('[data-waypoint-id="wp-a"]');
+		expect(wp).not.toBeNull();
+		if (wp) await fireEvent.click(wp);
+		expect(container.querySelector('[data-testid="waypoint-drawer"]')).not.toBeNull();
+	});
+
+	it('closes the drawer on Escape', async () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithWeather });
+		const wp = container.querySelector('[data-waypoint-id="wp-a"]');
+		if (wp) await fireEvent.click(wp);
+		expect(container.querySelector('[data-testid="waypoint-drawer"]')).not.toBeNull();
+		await fireEvent.keyDown(window, { key: 'Escape' });
+		expect(container.querySelector('[data-testid="waypoint-drawer"]')).toBeNull();
 	});
 });
