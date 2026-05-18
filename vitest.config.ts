@@ -20,6 +20,7 @@ const aliases = {
 	'@ab/audit/server': resolve('./libs/audit/src/server.ts'),
 	'@ab/audit': resolve('./libs/audit/src/index.ts'),
 	'@ab/themes/palette-tokens.css': resolve('./libs/themes/palette-tokens.css'),
+	'@ab/themes/spatial-tokens.css': resolve('./libs/themes/spatial-tokens.css'),
 	'@ab/themes': resolve('./libs/themes/index.ts'),
 	// Deep `@ab/ui/components/<Name>.svelte` imports mirror the SvelteKit
 	// app aliases. The wildcard at the bottom (`@ab/ui/*`) handles every
@@ -94,6 +95,10 @@ const aliases = {
 	// hangar-content-census WP Phase 1: the `/content` census dashboard lib.
 	'@ab/content-census/server': resolve('./libs/content-census/src/server.ts'),
 	'@ab/content-census': resolve('./libs/content-census/src/index.ts'),
+	// xc-viewer-v1 WP: the spatial composition engine + renderer.
+	'@ab/spatial-engine/server': resolve('./libs/spatial-engine/src/server.ts'),
+	'@ab/spatial-engine': resolve('./libs/spatial-engine/src/index.ts'),
+	'@ab/spatial-ui': resolve('./libs/spatial-ui/src/index.ts'),
 };
 
 // `$app/state` is a SvelteKit runtime module. The standalone DOM project

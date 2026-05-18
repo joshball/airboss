@@ -96,6 +96,10 @@ const KNOWN_PREFIXES: ReadonlyArray<RegExp> = [
 	/^--underline-offset-[a-z0-9]+$/,
 	/^--sim-[a-z0-9-]+$/,
 	/^--avionics-[a-z0-9-]+$/,
+	// Spatial-renderer tokens (xc-viewer-v1 WP). Theme-independent scoped
+	// tokens declared in `libs/themes/spatial-tokens.css`; the same
+	// precedent as the palette tokens. Consumed by `@ab/spatial-ui`.
+	/^--color-spatial-[a-z0-9-]+$/,
 	// Shiki emits per-token CSS variables on inline spans (`--shiki-light`,
 	// `--shiki-dark`, `--shiki-light-bg`, `--shiki-dark-bg`). Consumed by
 	// `MarkdownBody` to drive dual-theme code highlighting.

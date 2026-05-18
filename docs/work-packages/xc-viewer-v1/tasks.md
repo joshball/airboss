@@ -161,44 +161,44 @@ PR title: `feat(xc-viewer): Phase B -- sectional renderer (vector basemap + airs
 
 #### B.1 SectionalCanvas component
 
-- [ ] Create `libs/spatial-ui/src/SectionalCanvas.svelte`. Props: `{ geography: Geography; projection: GeoProjection; activeLayers?: LayerToggle[] }`. Renders an SVG group containing the basemap features (state outlines, water, roads, cities) via `d3-geo` path emit.
-- [ ] Theme tokens for each feature: water = `var(--color-spatial-water)`, state outline stroke = `var(--color-spatial-state-outline)`, road = `var(--color-spatial-road)`, city = `var(--color-spatial-city)`. Wire the tokens through `libs/themes/` -- add a `spatial` theme slot mirroring the `wx` slot pattern in wx-charts.
-- [ ] Use Svelte 5 runes (`$props`, `$derived`) per CLAUDE.md.
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-sectional-render.spec.ts` that loads a synthetic geography and asserts the SVG contains the expected basemap classes + zero hydration errors. Mirror the existing `tests/e2e/browser-hydration-smoke.spec.ts` shape.
+- [x] Create `libs/spatial-ui/src/SectionalCanvas.svelte`. Props: `{ geography: Geography; projection: GeoProjection; activeLayers?: LayerToggle[] }`. Renders an SVG group containing the basemap features (state outlines, water, roads, cities) via `d3-geo` path emit.
+- [x] Theme tokens for each feature: water = `var(--color-spatial-water)`, state outline stroke = `var(--color-spatial-state-outline)`, road = `var(--color-spatial-road)`, city = `var(--color-spatial-city)`. Wire the tokens through `libs/themes/` -- add a `spatial` theme slot mirroring the `wx` slot pattern in wx-charts.
+- [x] Use Svelte 5 runes (`$props`, `$derived`) per CLAUDE.md.
+- [~] (deferred to Phase F) Playwright smoke at `tests/e2e/xc-viewer-sectional-render.spec.ts` that loads a synthetic geography and asserts the SVG contains the expected basemap classes + zero hydration errors. Mirror the existing `tests/e2e/browser-hydration-smoke.spec.ts` shape.
 
 #### B.2 Airspace layer
 
-- [ ] Create `libs/spatial-ui/src/AirspaceLayer.svelte`. Props: `{ airspace: AirspacePolygon[]; activeClasses?: AirspaceClass[] }`. Renders one SVG group per airspace class (B/C/D/E/SUA) with per-class stroke + dasharray + fill per FAA convention.
-- [ ] Per-class tokens (drive via the spatial theme slot):
+- [x] Create `libs/spatial-ui/src/AirspaceLayer.svelte`. Props: `{ airspace: AirspacePolygon[]; activeClasses?: AirspaceClass[] }`. Renders one SVG group per airspace class (B/C/D/E/SUA) with per-class stroke + dasharray + fill per FAA convention.
+- [x] Per-class tokens (drive via the spatial theme slot):
   - Class B: blue solid stroke, faint fill
   - Class C: magenta solid stroke, no fill
   - Class D: blue dashed stroke, no fill
   - Class E: dashed magenta (above 1200 ft AGL), faint magenta (above 700 ft AGL)
   - MOA / Restricted: hatched per FAA pattern
-- [ ] Add unit tests asserting the rendered SVG has the expected per-class group structure for a synthetic 3-polygon input (one each of B, D, MOA).
+- [x] Add unit tests asserting the rendered SVG has the expected per-class group structure for a synthetic 3-polygon input (one each of B, D, MOA).
 
 #### B.3 Airport + navaid layers
 
-- [ ] Create `libs/spatial-ui/src/AirportLayer.svelte`. Props: `{ airports: AirportRecord[]; projection }`. Renders open / filled circles per FAA convention (hard-surface filled, soft-surface open, attended / unattended via the airport metadata).
-- [ ] Create `libs/spatial-ui/src/NavaidLayer.svelte`. Props: `{ navaids: NavaidRecord[]; projection }`. Renders VOR (star), NDB (dotted circle), fix (triangle) per FAA convention.
-- [ ] Add unit tests with synthetic airport / navaid lists asserting the rendered SVG has the expected symbol count + class names per symbol type.
+- [x] Create `libs/spatial-ui/src/AirportLayer.svelte`. Props: `{ airports: AirportRecord[]; projection }`. Renders open / filled circles per FAA convention (hard-surface filled, soft-surface open, attended / unattended via the airport metadata).
+- [x] Create `libs/spatial-ui/src/NavaidLayer.svelte`. Props: `{ navaids: NavaidRecord[]; projection }`. Renders VOR (star), NDB (dotted circle), fix (triangle) per FAA convention.
+- [x] Add unit tests with synthetic airport / navaid lists asserting the rendered SVG has the expected symbol count + class names per symbol type.
 
 #### B.4 Pan/zoom controls
 
-- [ ] Create `libs/spatial-ui/src/controls/ZoomPanControls.svelte`. Buttons: zoom in, zoom out, reset, fit-to-route. Internal state via `$state`; emits `'transform'` event with the current pan + zoom values.
-- [ ] Create `libs/spatial-ui/src/controls/LayerToggle.svelte`. Per-layer toggle (basemap, airspace, navaids, airports, route, weather). Internal state via `$state`.
-- [ ] Verify pan/zoom maintains >= 30 fps in a Chrome devtools performance trace on a 5000-feature Memphis geography (acceptance bar from spec.md).
+- [x] Create `libs/spatial-ui/src/controls/ZoomPanControls.svelte`. Buttons: zoom in, zoom out, reset, fit-to-route. Internal state via `$state`; emits `'transform'` event with the current pan + zoom values.
+- [x] Create `libs/spatial-ui/src/controls/LayerToggle.svelte`. Per-layer toggle (basemap, airspace, navaids, airports, route, weather). Internal state via `$state`.
+- [~] (manual, Phase F) Verify pan/zoom maintains >= 30 fps in a Chrome devtools performance trace on a 5000-feature Memphis geography (acceptance bar from spec.md).
 
 #### B.5 XcViewer top-level (sectional-only at Phase B)
 
-- [ ] Create `libs/spatial-ui/src/XcViewer.svelte`. Props: `{ bundle: ScenarioBundle }`. Phase B renders only the sectional layers (basemap + airspace + airports + navaids); subsequent phases add route, weather, performance.
-- [ ] Composition: `<SectionalCanvas>` + `<AirspaceLayer>` + `<NavaidLayer>` + `<AirportLayer>` + `<ZoomPanControls>` + `<LayerToggle>` inside a single SVG element.
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-phase-b.spec.ts` that loads `<XcViewer bundle={memphisOnlyBundle} />` against a fixture and asserts the rendered SVG contains the expected per-class group structure.
+- [x] Create `libs/spatial-ui/src/XcViewer.svelte`. Props: `{ bundle: ScenarioBundle }`. Phase B renders only the sectional layers (basemap + airspace + airports + navaids); subsequent phases add route, weather, performance.
+- [x] Composition: `<SectionalCanvas>` + `<AirspaceLayer>` + `<NavaidLayer>` + `<AirportLayer>` + `<ZoomPanControls>` + `<LayerToggle>` inside a single SVG element.
+- [~] (deferred to Phase F) Playwright smoke at `tests/e2e/xc-viewer-phase-b.spec.ts` that loads `<XcViewer bundle={memphisOnlyBundle} />` against a fixture and asserts the rendered SVG contains the expected per-class group structure.
 
 #### B.6 Phase B close
 
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase B -- sectional renderer (vector basemap + airspace + airports + navaids)`. Body summarizes the per-feature theme tokens added + the Playwright smoke + the pan/zoom performance trace.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase B -- sectional renderer (vector basemap + airspace + airports + navaids)`. Body summarizes the per-feature theme tokens added + the Playwright smoke + the pan/zoom performance trace.
 
 ### Phase C: route + waypoint renderer + leg labels (parallel with Phase B)
 

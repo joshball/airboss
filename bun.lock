@@ -135,6 +135,29 @@
         "vitest": "catalog:",
       },
     },
+    "apps/spatial": {
+      "name": "@ab/spatial",
+      "dependencies": {
+        "@ab/auth": "workspace:*",
+        "@ab/constants": "workspace:*",
+        "@ab/db": "workspace:*",
+        "@ab/help": "workspace:*",
+        "@ab/spatial-engine": "workspace:*",
+        "@ab/spatial-ui": "workspace:*",
+        "@ab/themes": "workspace:*",
+        "@ab/ui": "workspace:*",
+        "@ab/utils": "workspace:*",
+        "zod": "catalog:",
+      },
+      "devDependencies": {
+        "@sveltejs/adapter-node": "catalog:",
+        "@sveltejs/kit": "catalog:",
+        "@sveltejs/vite-plugin-svelte": "catalog:",
+        "svelte": "catalog:",
+        "vite": "catalog:",
+        "vitest": "catalog:",
+      },
+    },
     "apps/study": {
       "name": "@ab/study",
       "dependencies": {
@@ -454,6 +477,7 @@
         "d3-geo": "^3.1.1",
       },
       "devDependencies": {
+        "@testing-library/svelte": "^5.3.1",
         "@types/d3-geo": "^3.1.0",
         "@types/geojson": "^7946.0.16",
         "svelte": "catalog:",
@@ -609,6 +633,8 @@
     "@ab/sim": ["@ab/sim@workspace:apps/sim"],
 
     "@ab/sources": ["@ab/sources@workspace:libs/sources"],
+
+    "@ab/spatial": ["@ab/spatial@workspace:apps/spatial"],
 
     "@ab/spatial-engine": ["@ab/spatial-engine@workspace:libs/spatial-engine"],
 
