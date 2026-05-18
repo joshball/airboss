@@ -1,0 +1,72 @@
+import { mapBetterAuthSession } from '@ab/auth';
+import {
+	APPEARANCE_COOKIE,
+	injectPreHydrationScript,
+	parseAppearancePreference,
+	readThemeFromCookies,
+} from '@ab/themes';
+import { PRE_HYDRATION_SCRIPT } from '@ab/themes/generated/pre-hydration';
+import { createLogger } from '@ab/utils';
+import type { Handle } from '@sveltejs/kit';
+import { building } from '$app/environment';
+import { auth } from '$lib/server/auth';
+
+const log = createLogger('spatial');
+
+const REQUEST_ID_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
+const REQUEST_ID_HEADER = 'x-request-id';
+
+/**
+ * Inbound request-id is correlation-only, never trust-bearing. We accept
+ * any 64-char alphanumeric+`_-` value the caller supplies for log
+ * threading and mint a random UUID when nothing valid arrived.
+ */
+function acceptOrGenerateRequestId(req: Request): string {
+	const raw = req.headers.get(REQUEST_ID_HEADER);
+	return raw && REQUEST_ID_PATTERN.test(raw) ? raw : crypto.randomUUID();
+}
+
+/**
+ * Spatial hooks.
+ *
+ * Spatial does not host the login UI -- study owns that. Spatial reads the
+ * cross-subdomain `bauth_session_token` cookie and populates
+ * `event.locals.user`. v1 is auth-optional: every viewer page renders for
+ * anonymous visitors. This matches `apps/avionics/src/hooks.server.ts`.
+ */
+export const handle: Handle = async ({ event, resolve }) => {
+	if (building) return resolve(event);
+
+	const requestId = acceptOrGenerateRequestId(event.request);
+	event.locals.requestId = requestId;
+	event.locals.appearance = parseAppearancePreference(event.cookies.get(APPEARANCE_COOKIE));
+	event.locals.theme = readThemeFromCookies(event.cookies);
+
+	try {
+		const session = await auth.api.getSession({ headers: event.request.headers });
+		event.locals.session = session?.session ? { id: session.session.id, userId: session.session.userId } : null;
+		event.locals.user = mapBetterAuthSession(session);
+	} catch (err) {
+		// Degrade gracefully -- session lookup is best-effort. Anonymous
+		// visits stay fully functional on the spatial surface.
+		log.error(
+			'session lookup failed',
+			{ requestId, metadata: { path: event.url.pathname } },
+			err instanceof Error ? err : undefined,
+		);
+		event.locals.session = null;
+		event.locals.user = null;
+	}
+
+	const response = await resolve(event, {
+		transformPageChunk: ({ html }) => injectPreHydrationScript(html, PRE_HYDRATION_SCRIPT),
+	});
+
+	try {
+		response.headers.set(REQUEST_ID_HEADER, requestId);
+	} catch {
+		// Some response types (streaming/binary) have frozen headers; skip.
+	}
+
+	return response;
+};

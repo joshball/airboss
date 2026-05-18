@@ -1,0 +1,28 @@
+{
+	"name": "@ab/spatial-engine",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./server": {
+			"types": "./src/server.ts",
+			"default": "./src/server.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*",
+		"d3-geo": "^3.1.1",
+		"yaml": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@types/d3-geo": "^3.1.0",
+		"@types/geojson": "^7946.0.16",
+		"vitest": "catalog:"
+	},
+	"version": "0.1.0"
+}

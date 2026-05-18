@@ -1,0 +1,116 @@
+/*
+ * Spatial-renderer scoped tokens.
+ *
+ * Scope: the XC viewer's sectional / route / weather renderer
+ * (`@ab/spatial-ui`). The viewer renders the sectional with design tokens
+ * rather than the fixed FAA chart palette, so it can recolor for dark mode
+ * and stay legible (see docs/work-packages/xc-viewer-v1/design.md "Why
+ * vector sectional for v1").
+ *
+ * These per-feature accents are renderer-local visual cues, not part of
+ * the platform-wide theme contract -- the same precedent as
+ * `palette-tokens.css`. Living here keeps the theme registry narrow while
+ * still giving the viewer a coherent color story across every airboss
+ * theme.
+ *
+ * The colors are oklch so they keep visual weight across themes. The dark
+ * variant darkens the washes + lightens the inks.
+ *
+ * Loaded via `import '@ab/themes/spatial-tokens.css'` from the spatial-ui
+ * components.
+ */
+
+[data-spatial-tokens] {
+	/* Basemap. */
+	--color-spatial-water: oklch(0.86 0.045 230);
+	--color-spatial-state-outline: oklch(0.7 0.02 260);
+	--color-spatial-road: oklch(0.74 0.06 60);
+	--color-spatial-city: oklch(0.55 0.02 260);
+	--color-spatial-city-label: oklch(0.35 0.02 260);
+
+	/* Airspace -- FAA-convention hues, token-recolorable. */
+	--color-spatial-airspace-b: oklch(0.5 0.16 255);
+	--color-spatial-airspace-c: oklch(0.55 0.2 350);
+	--color-spatial-airspace-d: oklch(0.5 0.16 255);
+	--color-spatial-airspace-e: oklch(0.6 0.16 350);
+	--color-spatial-airspace-sua: oklch(0.55 0.18 25);
+
+	/* Airport + navaid symbols. */
+	--color-spatial-airport-hard: oklch(0.5 0.16 255);
+	--color-spatial-airport-soft: oklch(0.62 0.12 145);
+	--color-spatial-navaid: oklch(0.5 0.05 260);
+	--color-spatial-symbol-label: oklch(0.32 0.02 260);
+
+	/* Route layer. */
+	--color-spatial-route-line: oklch(0.55 0.2 25);
+	--color-spatial-route-waypoint: oklch(0.45 0.21 25);
+	--color-spatial-leg-label-bg: oklch(0.99 0.005 260 / 0.92);
+	--color-spatial-leg-label-ink: oklch(0.28 0.02 260);
+	--color-spatial-leg-leader: oklch(0.55 0.05 260);
+
+	/* Flight-category chips -- mirrors the wx-charts CVA palette. */
+	--color-spatial-cat-vfr: oklch(0.62 0.16 145);
+	--color-spatial-cat-mvfr: oklch(0.58 0.16 255);
+	--color-spatial-cat-ifr: oklch(0.56 0.2 25);
+	--color-spatial-cat-lifr: oklch(0.55 0.2 330);
+
+	/* AIRMET per-family strokes. */
+	--color-spatial-airmet-sierra: oklch(0.66 0.16 55);
+	--color-spatial-airmet-tango: oklch(0.78 0.15 95);
+	--color-spatial-airmet-zulu: oklch(0.7 0.12 215);
+
+	/* Performance-band reserve states. */
+	--color-spatial-reserve-ok: oklch(0.62 0.16 145);
+	--color-spatial-reserve-low: oklch(0.74 0.15 85);
+	--color-spatial-reserve-critical: oklch(0.56 0.2 25);
+
+	/* Canvas surface + chrome. */
+	--color-spatial-canvas-bg: oklch(0.97 0.008 95);
+	--color-spatial-panel-bg: oklch(0.99 0.004 260);
+	--color-spatial-panel-border: oklch(0.88 0.01 260);
+	--color-spatial-panel-ink: oklch(0.28 0.02 260);
+}
+
+[data-spatial-tokens][data-appearance='dark'],
+[data-appearance='dark'] [data-spatial-tokens] {
+	--color-spatial-water: oklch(0.36 0.05 230);
+	--color-spatial-state-outline: oklch(0.5 0.02 260);
+	--color-spatial-road: oklch(0.6 0.07 60);
+	--color-spatial-city: oklch(0.7 0.02 260);
+	--color-spatial-city-label: oklch(0.85 0.01 260);
+
+	--color-spatial-airspace-b: oklch(0.68 0.15 255);
+	--color-spatial-airspace-c: oklch(0.7 0.18 350);
+	--color-spatial-airspace-d: oklch(0.68 0.15 255);
+	--color-spatial-airspace-e: oklch(0.72 0.15 350);
+	--color-spatial-airspace-sua: oklch(0.68 0.17 25);
+
+	--color-spatial-airport-hard: oklch(0.7 0.15 255);
+	--color-spatial-airport-soft: oklch(0.72 0.13 145);
+	--color-spatial-navaid: oklch(0.78 0.04 260);
+	--color-spatial-symbol-label: oklch(0.88 0.01 260);
+
+	--color-spatial-route-line: oklch(0.7 0.19 25);
+	--color-spatial-route-waypoint: oklch(0.78 0.18 25);
+	--color-spatial-leg-label-bg: oklch(0.24 0.015 260 / 0.94);
+	--color-spatial-leg-label-ink: oklch(0.92 0.01 260);
+	--color-spatial-leg-leader: oklch(0.62 0.04 260);
+
+	--color-spatial-cat-vfr: oklch(0.72 0.16 145);
+	--color-spatial-cat-mvfr: oklch(0.7 0.15 255);
+	--color-spatial-cat-ifr: oklch(0.68 0.19 25);
+	--color-spatial-cat-lifr: oklch(0.7 0.18 330);
+
+	--color-spatial-airmet-sierra: oklch(0.76 0.15 55);
+	--color-spatial-airmet-tango: oklch(0.84 0.14 95);
+	--color-spatial-airmet-zulu: oklch(0.78 0.12 215);
+
+	--color-spatial-reserve-ok: oklch(0.72 0.16 145);
+	--color-spatial-reserve-low: oklch(0.8 0.14 85);
+	--color-spatial-reserve-critical: oklch(0.68 0.19 25);
+
+	--color-spatial-canvas-bg: oklch(0.2 0.012 260);
+	--color-spatial-panel-bg: oklch(0.24 0.01 260);
+	--color-spatial-panel-border: oklch(0.36 0.01 260);
+	--color-spatial-panel-ink: oklch(0.92 0.01 260);
+}

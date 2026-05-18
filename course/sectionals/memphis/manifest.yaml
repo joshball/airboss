@@ -1,0 +1,43 @@
+# Memphis Sectional -- region manifest
+#
+# Region metadata for the XC viewer's layer-1 geography. The committed
+# vector geometry in this directory (basemap / airspace / navaids /
+# airports) is extracted from the FAA Digital Sectional Chart (dCS) data
+# for the Memphis sectional region. Source bytes (the dCS archive) live in
+# the developer-local cache per ADR 018, not in the repo.
+#
+# See docs/work-packages/xc-viewer-v1/spec.md "Architecture overview".
+
+regionSlug: memphis
+label: Memphis Sectional
+
+# Geographic bounds -- covers western TN, northern MS, eastern AR, a sliver
+# of KY. Tighter than the full FAA Memphis sectional chart so the v1 route
+# (KMEM / KMKL / KOLV) and its surrounding airports fill the viewport.
+bounds:
+  minLon: -91.5
+  minLat: 33.5
+  maxLon: -87.5
+  maxLat: 36.7
+
+# Lambert Conformal Conic standard parallels for this region.
+parallels: [33, 38]
+
+# FAA dCS source provenance.
+source:
+  product: FAA Digital Sectional Chart (dCS) -- Memphis
+  url: https://www.faa.gov/air_traffic/flight_info/aeronav/digital_products/vfr/
+  # The dCS cycle current at the time of v1 authoring. A cycle bump
+  # triggers a re-ingest pass (follow-on WP).
+  cycle: "2026-05"
+  fetchDate: "2026-05-18"
+  ingestTool: "scripts/sectionals.ts ingest memphis"
+
+# v1 vector geometry is hand-extracted from public FAA chart data (state
+# outlines, the three route airports, surrounding airports, navaids, and
+# the Class B / Class D airspace). The full dCS-table parser is a follow-on;
+# when it ships it reads the cached archive and regenerates these files.
+notes: |
+  v1 ships the extracted geometry as committed files. The geometry is small
+  (tens of KB) and changes only on FAA cycle bumps, so it lives in the repo
+  per the design doc "Strict separation" section.

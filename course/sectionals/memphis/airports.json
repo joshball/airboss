@@ -1,0 +1,655 @@
+{
+  "bounds": {
+    "minLon": -91.5,
+    "minLat": 33.5,
+    "maxLon": -87.5,
+    "maxLat": 36.7
+  },
+  "airports": [
+    {
+      "icao": "KMEM",
+      "name": "Memphis International",
+      "lon": -89.9767,
+      "lat": 35.0424,
+      "elevationFtMsl": 341,
+      "attended": true,
+      "airspaceClass": "B",
+      "runways": [
+        {
+          "designator": "18C/36C",
+          "headingDegMagnetic": 175,
+          "lengthFt": 9320,
+          "widthFt": 150,
+          "surface": "concrete",
+          "hasPrecisionApproach": true
+        },
+        {
+          "designator": "18L/36R",
+          "headingDegMagnetic": 175,
+          "lengthFt": 9000,
+          "widthFt": 150,
+          "surface": "concrete",
+          "hasPrecisionApproach": true
+        },
+        {
+          "designator": "18R/36L",
+          "headingDegMagnetic": 175,
+          "lengthFt": 11120,
+          "widthFt": 150,
+          "surface": "concrete",
+          "hasPrecisionApproach": true
+        },
+        {
+          "designator": "9/27",
+          "headingDegMagnetic": 85,
+          "lengthFt": 8946,
+          "widthFt": 150,
+          "surface": "asphalt",
+          "hasPrecisionApproach": true
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "ATIS",
+          "mhz": 119
+        },
+        {
+          "label": "Tower",
+          "mhz": 118.3
+        },
+        {
+          "label": "Ground",
+          "mhz": 121.9
+        },
+        {
+          "label": "Memphis Approach",
+          "mhz": 124.15
+        }
+      ],
+      "fbos": [
+        {
+          "name": "Wilson Air Center",
+          "fuel": [
+            "100LL",
+            "JET-A"
+          ]
+        },
+        {
+          "name": "Signature Flight Support",
+          "fuel": [
+            "100LL",
+            "JET-A"
+          ]
+        }
+      ]
+    },
+    {
+      "icao": "KMKL",
+      "name": "McKellar-Sipes Regional",
+      "lon": -88.9156,
+      "lat": 35.5999,
+      "elevationFtMsl": 434,
+      "attended": true,
+      "airspaceClass": "D",
+      "runways": [
+        {
+          "designator": "2/20",
+          "headingDegMagnetic": 20,
+          "lengthFt": 6004,
+          "widthFt": 150,
+          "surface": "asphalt",
+          "hasPrecisionApproach": true
+        },
+        {
+          "designator": "7/25",
+          "headingDegMagnetic": 70,
+          "lengthFt": 5004,
+          "widthFt": 100,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "ATIS",
+          "mhz": 120.075
+        },
+        {
+          "label": "Tower",
+          "mhz": 124.2
+        },
+        {
+          "label": "Ground",
+          "mhz": 121.9
+        },
+        {
+          "label": "Memphis Center",
+          "mhz": 134.65
+        }
+      ],
+      "fbos": [
+        {
+          "name": "McKellar-Sipes Aviation",
+          "fuel": [
+            "100LL",
+            "JET-A"
+          ]
+        }
+      ]
+    },
+    {
+      "icao": "KOLV",
+      "name": "Olive Branch",
+      "lon": -89.7869,
+      "lat": 34.9786,
+      "elevationFtMsl": 402,
+      "attended": true,
+      "airspaceClass": "D",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 6000,
+          "widthFt": 100,
+          "surface": "asphalt",
+          "hasPrecisionApproach": true
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "ATIS",
+          "mhz": 124.825
+        },
+        {
+          "label": "Tower",
+          "mhz": 119.075
+        },
+        {
+          "label": "Ground",
+          "mhz": 121.6
+        },
+        {
+          "label": "CTAF",
+          "mhz": 119.075
+        }
+      ],
+      "fbos": [
+        {
+          "name": "Olive Branch Aviation",
+          "fuel": [
+            "100LL",
+            "JET-A"
+          ]
+        }
+      ]
+    },
+    {
+      "icao": "KAWM",
+      "name": "West Memphis Municipal",
+      "lon": -90.2342,
+      "lat": 35.1357,
+      "elevationFtMsl": 215,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KM01",
+      "name": "General DeWitt Spain",
+      "lon": -90.0517,
+      "lat": 35.2069,
+      "elevationFtMsl": 220,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KUTA",
+      "name": "Tunica Municipal",
+      "lon": -90.3469,
+      "lat": 34.6809,
+      "elevationFtMsl": 194,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KHRO",
+      "name": "Boswell Field (Hernando)",
+      "lon": -90.0086,
+      "lat": 34.8392,
+      "elevationFtMsl": 350,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KSQT",
+      "name": "Strawn Field (Sardis)",
+      "lon": -89.7989,
+      "lat": 34.4639,
+      "elevationFtMsl": 274,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KCKM",
+      "name": "Fletcher Field (Clarksdale)",
+      "lon": -90.5114,
+      "lat": 34.3,
+      "elevationFtMsl": 174,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KDYR",
+      "name": "Dyersburg Regional",
+      "lon": -89.4072,
+      "lat": 36.0178,
+      "elevationFtMsl": 338,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KCBM",
+      "name": "Columbus AFB area aux",
+      "lon": -88.4439,
+      "lat": 33.6437,
+      "elevationFtMsl": 219,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KTUP",
+      "name": "Tupelo Regional",
+      "lon": -88.7699,
+      "lat": 34.2681,
+      "elevationFtMsl": 346,
+      "attended": true,
+      "airspaceClass": "D",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KHKA",
+      "name": "Blytheville Municipal",
+      "lon": -89.8311,
+      "lat": 35.9403,
+      "elevationFtMsl": 254,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KPOE",
+      "name": "Parsons Field",
+      "lon": -88.1339,
+      "lat": 35.6519,
+      "elevationFtMsl": 463,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KGLE",
+      "name": "Greenville (Mid Delta)",
+      "lon": -90.9856,
+      "lat": 33.4831,
+      "elevationFtMsl": 131,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KSGT",
+      "name": "Stuttgart Municipal",
+      "lon": -91.575,
+      "lat": 34.5994,
+      "elevationFtMsl": 224,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KHEE",
+      "name": "Thompson-Robbins (Helena)",
+      "lon": -90.6758,
+      "lat": 34.5764,
+      "elevationFtMsl": 252,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KMMS",
+      "name": "Selfs Field (Marks)",
+      "lon": -90.2858,
+      "lat": 34.2275,
+      "elevationFtMsl": 167,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KARG",
+      "name": "Walnut Ridge Regional",
+      "lon": -90.925,
+      "lat": 36.1247,
+      "elevationFtMsl": 279,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KJKA",
+      "name": "Corinth (Roscoe Turner)",
+      "lon": -88.6058,
+      "lat": 34.9156,
+      "elevationFtMsl": 421,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    },
+    {
+      "icao": "KSNL",
+      "name": "Shelbyville Municipal",
+      "lon": -89.6722,
+      "lat": 35.5375,
+      "elevationFtMsl": 433,
+      "attended": false,
+      "airspaceClass": "E",
+      "runways": [
+        {
+          "designator": "18/36",
+          "headingDegMagnetic": 180,
+          "lengthFt": 4000,
+          "widthFt": 75,
+          "surface": "asphalt",
+          "hasPrecisionApproach": false
+        }
+      ],
+      "frequencies": [
+        {
+          "label": "CTAF",
+          "mhz": 122.8
+        }
+      ],
+      "fbos": []
+    }
+  ]
+}

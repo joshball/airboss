@@ -1,0 +1,30 @@
+{
+	"name": "@ab/spatial",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"@ab/auth": "workspace:*",
+		"@ab/constants": "workspace:*",
+		"@ab/db": "workspace:*",
+		"@ab/help": "workspace:*",
+		"@ab/spatial-engine": "workspace:*",
+		"@ab/spatial-ui": "workspace:*",
+		"@ab/themes": "workspace:*",
+		"@ab/ui": "workspace:*",
+		"@ab/utils": "workspace:*",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-node": "catalog:",
+		"@sveltejs/kit": "catalog:",
+		"@sveltejs/vite-plugin-svelte": "catalog:",
+		"svelte": "catalog:",
+		"vite": "catalog:",
+		"vitest": "catalog:"
+	}
+}

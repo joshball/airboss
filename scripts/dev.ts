@@ -37,6 +37,7 @@ const DEV_URLS: Record<string, string> = {
 	hangar: `https://${HOSTS.HANGAR}`,
 	avionics: `https://${HOSTS.AVIONICS}`,
 	flightbag: `https://${HOSTS.FLIGHTBAG}`,
+	spatial: `https://${HOSTS.SPATIAL}`,
 };
 
 const APP_PORTS: Record<string, number> = {
@@ -45,6 +46,7 @@ const APP_PORTS: Record<string, number> = {
 	hangar: PORTS.HANGAR,
 	avionics: PORTS.AVIONICS,
 	flightbag: PORTS.FLIGHTBAG,
+	spatial: PORTS.SPATIAL,
 };
 
 const REPO_ROOT = resolve(import.meta.dir, '..');
