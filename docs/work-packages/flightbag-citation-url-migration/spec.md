@@ -3,7 +3,7 @@ id: flightbag-citation-url-migration
 title: 'Spec: Flightbag citation URL migration'
 product: study
 category: platform
-status: draft
+status: in-flight
 agent_review_status: pending
 human_review_status: pending
 created: 2026-05-14

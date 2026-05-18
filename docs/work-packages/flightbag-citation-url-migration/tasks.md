@@ -3,7 +3,7 @@ id: flightbag-citation-url-migration
 title: 'Tasks: Flightbag citation URL migration'
 product: study
 category: platform
-status: draft
+status: in-flight
 agent_review_status: pending
 human_review_status: pending
 created: 2026-05-14
@@ -50,32 +50,34 @@ PR title: `feat(citation-urls): Phase A -- urlForReferenceRow helper`.
 
 #### A.1 Helper
 
-- [ ] In `libs/sources/src/url-for-reference.ts`, add `export function urlForReferenceRow(row: ReferenceRow): string` next to `urlForReference()`. The helper:
+- [x] In `libs/sources/src/url-for-reference.ts`, add `export function urlForReferenceRow(row: ReferenceRowFields): string` next to `urlForReference()`. The helper:
   - Reads `row.kind`, `row.documentSlug`, `row.edition`.
-  - Builds an `airboss-ref:` URI per corpus (`airboss-ref:handbooks/<slug>/<edition>` for handbooks, `airboss-ref:regs/<slug>` for CFR, `airboss-ref:aim/<slug>` for AIM, `airboss-ref:ac/<docNumber>/<revision>` for AC, etc.).
+  - Builds an `airboss-ref:` URI per corpus (`airboss-ref:handbooks/<slug>/<edition>` for handbooks, `airboss-ref:regs/cfr-<title>/<part>` for CFR, `FLIGHTBAG_AIM` direct for AIM, `airboss-ref:ac/<docNumber>/<revision>` for AC, `airboss-ref:acs/<slug>` for ACS).
   - Delegates to `urlForReference(uri)`.
-  - Returns `ROUTES.FLIGHTBAG_HOME` when the row's kind is not yet routable on flightbag (POH today; the spec captures this).
-- [ ] Add a JSDoc on the export explaining "thin shim over `urlForReference()` for callers that have a `ReferenceRow` instead of a URI." Cite this WP and the citations pattern doc.
-- [ ] Import the `ReferenceRow` type from `@ab/bc-study` (type-only import; the runtime barrel re-exports the row type).
-- [ ] Re-export from `libs/sources/src/index.ts` alongside `urlForReference`.
+  - Returns `ROUTES.FLIGHTBAG_HOME` when the row's kind is not yet routable on flightbag (POH/PTS/NTSB/SAFO/INFO/OTHER today; the spec captures this).
+- [x] Add a JSDoc on the export explaining "thin shim over `urlForReference()` for callers that have a reference row instead of a URI." Cites this WP and the citations pattern doc.
+- [x] Helper accepts a structural `ReferenceRowFields` type defined in `libs/sources` (NOT a type-only import of `ReferenceRow` from `@ab/bc-study`). Rationale: `@ab/bc-study` already depends on `@ab/sources`; importing the row type back -- even type-only -- forms a package cycle and breaks apps that bundle `@ab/sources` without `@ab/bc-study` (e.g. `apps/avionics`, which surfaced the failure). The full `ReferenceRow` structurally satisfies `ReferenceRowFields`, so every projection / component caller still passes its row directly. This is the one deviation from the spec/contract wording; the shim behaviour is unchanged.
+- [x] Re-export `urlForReferenceRow` + `ReferenceRowFields` from `libs/sources/src/index.ts` alongside `urlForReference`.
+- [x] Fix a latent pre-existing bug: `urlForReference()` for handbooks now normalises a full FAA edition designation (`FAA-H-8083-16B`) in the URI to the short form (`8083-16B`) the handbooks locator grammar + flightbag route expect. The stored `reference_section.airboss_ref` values carry the full designation; without this normalisation every handbook `airboss_ref` resolved to `FLIGHTBAG_HOME`. Required for Phase C (help loaders join `airboss_ref` directly).
 
 #### A.2 Tests
 
-- [ ] Extend `libs/sources/src/url-for-reference.test.ts` (or add `url-for-reference-row.test.ts` adjacent) with row-shape tests for:
-  - Handbook row -> `FLIGHTBAG_HANDBOOK(slug, edition)`.
-  - CFR row -> `FLIGHTBAG_CFR_PART(title, part)`.
-  - AIM row -> `FLIGHTBAG_AIM`.
-  - AC row -> `FLIGHTBAG_AC(doc, rev)`.
+- [x] Extend `libs/sources/src/url-for-reference.test.ts` with row-shape tests for:
+  - Handbook row -> `FLIGHTBAG_HANDBOOK(slug, edition)` (incl. full-FAA-edition row).
+  - CFR row -> `FLIGHTBAG_CFR_PART(title, part)` (Title 14 + Title 49).
+  - AIM / PCG row -> `FLIGHTBAG_AIM`.
+  - AC row -> `FLIGHTBAG_AC(doc, rev)` (full FAA edition label + no-revision fallback).
   - ACS row -> `FLIGHTBAG_ACS(slug)`.
-  - POH row -> `FLIGHTBAG_HOME` (no flightbag per-aircraft surface today; the helper falls back per design).
-  - SAFO / INFO / NTSB rows -> `FLIGHTBAG_HOME` (consistent with `urlForReference()` behaviour).
-- [ ] Run `bun test libs/sources/src/url-for-reference` -- all green.
+  - POH / PTS / SAFO / INFO / NTSB / OTHER rows -> `FLIGHTBAG_HOME` (no flightbag route today).
+  - Empty-edition handbook + malformed CFR slug -> `FLIGHTBAG_HOME`.
+  - `urlForReference()` full-FAA-edition handbook URI normalisation (chapter + whole-doc).
+- [x] Run `bun test libs/sources/src/url-for-reference` -- all green (48 tests).
 
 #### A.3 Close Phase A
 
-- [ ] `bun run check` clean.
-- [ ] Commit (`feat(citation-urls): Phase A -- urlForReferenceRow helper`).
-- [ ] Open + merge PR.
+- [x] `bun run check` clean.
+- [x] Commit (`feat(citation-urls): Phase A -- urlForReferenceRow helper`).
+- [x] Open + merge PR (shipped as one WP-wide PR; see Status section).
 
 ### Phase B -- migrate the BC / projection (hot citation + library card paths)
 
