@@ -50,3 +50,22 @@ describe('<XcViewer> (Phase B sectional)', () => {
 		expect(container.querySelectorAll('.airport-symbol').length).toBe(fixtureBundle.geography.airports.length);
 	});
 });
+
+describe('<XcViewer> (Phase C route overlay)', () => {
+	it('renders the route overlay with the route line', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundle });
+		expect(container.querySelector('[data-testid="route-overlay"]')).not.toBeNull();
+		expect(container.querySelector('.route-line')).not.toBeNull();
+	});
+
+	it('renders one waypoint diamond per route waypoint', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundle });
+		expect(container.querySelectorAll('.route-waypoint').length).toBe(fixtureBundle.flight.route.waypoints.length);
+	});
+
+	it('renders one leg label per leg (waypoints - 1)', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundle });
+		const expectedLegs = fixtureBundle.flight.route.waypoints.length - 1;
+		expect(container.querySelectorAll('[data-testid="leg-label"]').length).toBe(expectedLegs);
+	});
+});

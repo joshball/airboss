@@ -16,18 +16,27 @@
  * components here.
  */
 
+// ----------------------------------------------------------------------
+// Layer-1 sectional renderer (Phase B).
+// ----------------------------------------------------------------------
 export { default as AirportLayer } from './AirportLayer.svelte';
 export { default as AirspaceLayer } from './AirspaceLayer.svelte';
 export { default as LayerToggle } from './controls/LayerToggle.svelte';
 export type { CanvasTransform } from './controls/types';
 export { default as ZoomPanControls } from './controls/ZoomPanControls.svelte';
+export { default as LegLabel } from './LegLabel.svelte';
 export { default as NavaidLayer } from './NavaidLayer.svelte';
+// ----------------------------------------------------------------------
+// Layer-2 route renderer (Phase C).
+// ----------------------------------------------------------------------
+export { default as RouteOverlay } from './RouteOverlay.svelte';
 export { default as SectionalCanvas } from './SectionalCanvas.svelte';
 // ----------------------------------------------------------------------
 // Renderer styling tokens + the layer-toggle key enum.
 // ----------------------------------------------------------------------
 export { SPATIAL_LAYER_KEYS, SPATIAL_LAYER_LABELS, type SpatialLayerKey } from './styles/tokens';
+export type { LegLabelData } from './types';
 // ----------------------------------------------------------------------
-// Top-level composition + layer-1 sectional renderer (Phase B).
+// Top-level composition.
 // ----------------------------------------------------------------------
 export { default as XcViewer } from './XcViewer.svelte';

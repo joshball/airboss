@@ -3,34 +3,49 @@
  * XcViewer -- the top-level XC viewer composition.
  *
  * Renders a `ScenarioBundle` into an interactive SVG sectional. Phase B
- * ships the layer-1 sectional (basemap + airspace + airports + navaids)
- * plus the pan/zoom + layer-toggle chrome. Phases C/D/E add the route
- * overlay, the weather overlay, and the performance band.
+ * shipped the layer-1 sectional + pan/zoom chrome; Phase C adds the
+ * layer-2 route overlay + per-leg labels. Phases D/E add the weather
+ * overlay and the performance band.
  *
  * Pure browser-safe rendering -- the bundle is loaded server-side and
  * passed in as a prop.
  *
- * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5.
+ * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5 + C.4.
  */
 
 import '@ab/themes/spatial-tokens.css';
-import type { ScenarioBundle } from '@ab/spatial-engine';
-import { regionalLambertProjection, SECTIONAL_SVG_HEIGHT, SECTIONAL_SVG_WIDTH } from '@ab/spatial-engine';
+import {
+	greatCircleBearing,
+	greatCircleNm,
+	type LegPerformance,
+	regionalLambertProjection,
+	type ScenarioBundle,
+	SECTIONAL_SVG_HEIGHT,
+	SECTIONAL_SVG_WIDTH,
+	type Waypoint,
+} from '@ab/spatial-engine';
 import AirportLayer from './AirportLayer.svelte';
 import AirspaceLayer from './AirspaceLayer.svelte';
 import LayerToggle from './controls/LayerToggle.svelte';
 import type { CanvasTransform } from './controls/types';
 import ZoomPanControls from './controls/ZoomPanControls.svelte';
+import LegLabel from './LegLabel.svelte';
 import NavaidLayer from './NavaidLayer.svelte';
+import RouteOverlay from './RouteOverlay.svelte';
 import SectionalCanvas from './SectionalCanvas.svelte';
 import { SPATIAL_LAYER_KEYS, type SpatialLayerKey } from './styles/tokens';
+import type { LegLabelData } from './types';
 
 interface Props {
 	/** The composed scenario bundle. */
 	bundle: ScenarioBundle;
+	/** Called when a waypoint is clicked (Phase D wires the detail drawer). */
+	onwaypointclick?: (waypoint: Waypoint) => void;
+	/** Called when a leg is clicked (Phase E wires the detail drawer). */
+	onlegclick?: (leg: LegLabelData) => void;
 }
 
-let { bundle }: Props = $props();
+let { bundle, onwaypointclick, onlegclick }: Props = $props();
 
 const WIDTH = SECTIONAL_SVG_WIDTH;
 const HEIGHT = SECTIONAL_SVG_HEIGHT;
@@ -47,19 +62,22 @@ const projection = $derived(
 // Pan / zoom transform applied to the content group.
 let transform = $state<CanvasTransform>({ scale: 1, x: 0, y: 0 });
 
-// Which layers are visible. Phase B exposes the layer-1 layers.
+// Which layers are visible.
 let visibleLayers = $state<SpatialLayerKey[]>([
 	SPATIAL_LAYER_KEYS.BASEMAP,
 	SPATIAL_LAYER_KEYS.AIRSPACE,
 	SPATIAL_LAYER_KEYS.NAVAIDS,
 	SPATIAL_LAYER_KEYS.AIRPORTS,
+	SPATIAL_LAYER_KEYS.ROUTE,
 ]);
 
-const phaseBLayers: SpatialLayerKey[] = [
+// Layers the toggle exposes (route added in Phase C).
+const exposedLayers: SpatialLayerKey[] = [
 	SPATIAL_LAYER_KEYS.BASEMAP,
 	SPATIAL_LAYER_KEYS.AIRSPACE,
 	SPATIAL_LAYER_KEYS.NAVAIDS,
 	SPATIAL_LAYER_KEYS.AIRPORTS,
+	SPATIAL_LAYER_KEYS.ROUTE,
 ];
 
 function shows(layer: SpatialLayerKey): boolean {
@@ -67,6 +85,38 @@ function shows(layer: SpatialLayerKey): boolean {
 }
 
 const contentTransform = $derived(`translate(${transform.x} ${transform.y}) scale(${transform.scale})`);
+
+// --- Leg rendering data ---
+//
+// When the bundle carries a derived performance table (Phase E build),
+// use it. Otherwise compute geometry-only placeholders inline so the leg
+// labels still render (Phase C before performance lands).
+interface LegRender {
+	leg: LegLabelData;
+	midpoint: { x: number; y: number };
+}
+
+const legRenders = $derived.by<LegRender[]>(() => {
+	const waypoints = bundle.flight.route.waypoints;
+	const out: LegRender[] = [];
+	for (let i = 0; i < waypoints.length - 1; i++) {
+		const from = waypoints[i];
+		const to = waypoints[i + 1];
+		const fromP = projection([from.lon, from.lat]);
+		const toP = projection([to.lon, to.lat]);
+		if (!fromP || !toP) continue;
+		const mid = { x: (fromP[0] + toP[0]) / 2, y: (fromP[1] + toP[1]) / 2 };
+		const perfLeg: LegPerformance | undefined = bundle.performance.legs[i];
+		const leg: LegLabelData = perfLeg ?? {
+			from: from.id,
+			to: to.id,
+			distanceNm: greatCircleNm(from.lon, from.lat, to.lon, to.lat),
+			trueCourse: greatCircleBearing(from.lon, from.lat, to.lon, to.lat),
+		};
+		out.push({ leg, midpoint: mid });
+	}
+	return out;
+});
 
 // --- Drag-to-pan ---
 let dragging = $state(false);
@@ -126,6 +176,14 @@ function onWheel(e: WheelEvent) {
 			{#if shows(SPATIAL_LAYER_KEYS.AIRPORTS)}
 				<AirportLayer airports={bundle.geography.airports} {projection} />
 			{/if}
+			{#if shows(SPATIAL_LAYER_KEYS.ROUTE)}
+				<RouteOverlay route={bundle.flight.route} {projection} {onwaypointclick} />
+				<g class="leg-labels" data-testid="leg-labels">
+					{#each legRenders as render (`${render.leg.from}-${render.leg.to}`)}
+						<LegLabel leg={render.leg} midpoint={render.midpoint} {onlegclick} />
+					{/each}
+				</g>
+			{/if}
 		</g>
 	</svg>
 
@@ -133,7 +191,7 @@ function onWheel(e: WheelEvent) {
 		<ZoomPanControls {transform} ontransform={(t) => (transform = t)} />
 	</div>
 	<div class="xc-chrome xc-chrome-top-left">
-		<LayerToggle visible={visibleLayers} layers={phaseBLayers} onchange={(v) => (visibleLayers = v)} />
+		<LayerToggle visible={visibleLayers} layers={exposedLayers} onchange={(v) => (visibleLayers = v)} />
 	</div>
 </div>
 
