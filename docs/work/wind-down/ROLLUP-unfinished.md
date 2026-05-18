@@ -1,7 +1,7 @@
 ---
 type: unfinished-rollup
 sessions: 24
-items: 44
+items: 26
 first_rolled: 2026-05-17T21:02:21Z
 last_rolled: 2026-05-18T03:10:00Z
 consumed:
@@ -34,7 +34,7 @@ consumed:
 
 # Unfinished Work -- Rollup
 
-Consolidated from 24 sessions across 2 days (2026-05-15, 2026-05-17). Each item lists the session(s) that flagged it. De-duplicated by topic; highest severity kept.
+Consolidated from 24 sessions across 2026-05-15 .. 2026-05-18. 8 items resolved in the 2026-05-18 worktree-agent batch (see "Resolved" below). Each item lists the session(s) that flagged it. De-duplicated by topic; highest severity kept.
 
 ## Critical (0)
 
@@ -113,16 +113,7 @@ None.
 - **Severity**: high
 - **Sessions**: cd16e567
 
-## Medium (17)
-
-### `14cfr14` missing CFR section rows (failing seed-shape test)
-
-- **What**: `scripts/db/seed-references-from-manifest.test.ts` fails -- "every CFR reference with sections has at least one top-level section row", missing `14cfr14`. Likely the same class of environment-dependent failure as the "3 pre-existing test failures" / "CFR body derivatives missing in fresh worktrees" items below.
-- **Where**: `scripts/db/seed-references-from-manifest.test.ts:1456`.
-- **Why deferred**: missing-source-corpus / environment-dependent; the test message says to run `bun run sources register cfr --title=14 --edition=<date>` then re-seed.
-- **Next action**: determine whether Title 14 CFR Part 14 should be in the registered corpus; if so register + re-seed it, otherwise scope the test to the parts actually present (see the "CFR body derivatives" low item -- option c).
-- **Severity**: medium
-- **Sessions**: 20260517-222752-41597, 5756488e-807a-478e-91ad-f15964f9d39e
+## Medium (11)
 
 ### `bun run check branch` not run on the zod-4 merged end-state
 
@@ -132,15 +123,6 @@ None.
 - **Next action**: from a clean worktree on latest `main`, run `bun run check branch` and confirm 0 errors / 0 warnings.
 - **Severity**: medium
 - **Sessions**: 20260517-222752-41597
-
-### `ball-worktree/guard.sh` syntax error blocked all tool calls
-
-- **What**: the `ball-worktree` PreToolUse guard hook crashed on a bash syntax error at line 331 -- `unexpected token ';&'`. Because it is a PreToolUse hook it blocked EVERY Bash and Read call until fixed out-of-band. `;&` is a `case`-fallthrough operator, invalid inside a `[[ ]]` conditional.
-- **Where**: `~/src/_me/ai/agent-skills/skills/worktree/ball-worktree/guard.sh:331` (a shared skills repo, outside airboss).
-- **Why deferred**: not an airboss-repo file; fixed out-of-band mid-session so work could continue, but the root cause should be confirmed.
-- **Next action**: verify line 331 of guard.sh (likely `;&` -> `;;`, or a misplaced `[[`/`case` boundary); confirm `bash -n guard.sh` parses cleanly.
-- **Severity**: medium
-- **Sessions**: 5756488e-807a-478e-91ad-f15964f9d39e
 
 ### AvWx citation review queue grind (17 rows)
 
@@ -187,15 +169,6 @@ None.
 - **Severity**: medium
 - **Sessions**: 20260517-160100-94636, 20260517-155020-81423
 
-### Run /ball-wp-drift
-
-- **What**: spec-vs-code drift check across the WP corpus -- produces a punch list of WPs whose specs no longer match reality.
-- **Where**: no artifact yet; `/ball-wp-drift` skill.
-- **Why deferred**: out of scope for the OOS extraction request; user acknowledged but did not ask.
-- **Next action**: run `/ball-wp-drift`, triage the report.
-- **Severity**: medium
-- **Sessions**: 20260515-181752-71057, 20260515-180930-60283
-
 ### course-reader-and-editor sign-off
 
 - **What**: WP `course-reader-and-editor` -- `human_review_status: pending`. The deferred `/ball-review-full` ran (105 findings, all fixed in PR #1042). Review-clean, ready to sign off.
@@ -211,15 +184,6 @@ None.
 - **Where**: `docs/work-packages/hangar-content-census/{spec,tasks}.md`.
 - **Why deferred**: sign-off human-only; Phase 3 breadth-first; Layer 2 gated on ADR 028.
 - **Next action**: user signs off; continue Phase 3 (cards corpus); author Layer 2 once ADR 028 accepted.
-- **Severity**: medium
-- **Sessions**: e76c9f78
-
-### wx-engine AIRMET/SIGMET text emitter
-
-- **What**: the wx-engine has no AIRMET/SIGMET text emitter, so that product is structurally unmatchable by the catalog coverage matcher and cannot be drilled with generated content.
-- **Where**: `libs/wx-engine`; tracked in `docs/work-packages/hangar-content-census/tasks.md` "Known follow-ups".
-- **Why deferred**: a real engine feature, out of scope for catalog-coverage work.
-- **Next action**: design + build an AIRMET text emitter.
 - **Severity**: medium
 - **Sessions**: e76c9f78
 
@@ -241,33 +205,6 @@ None.
 - **Severity**: medium
 - **Sessions**: 17883a4e
 
-### Parallel-worker DB connection terminations in full vitest sweep
-
-- **What**: a full `bun run vitest --run libs/bc/study/ scripts/db/` showed ~22 of ~1307 failures with Postgres `FATAL 57P01 ProcessInterrupts` -- connections killed mid-query. Suspect vitest parallel workers sharing the single connection pool; the 4 target files pass individually.
-- **Where**: reproduce with `bun run vitest --run libs/bc/study/ scripts/db/`; suspect `vitest.globalSetup.ts` teardown vs worker pools.
-- **Why deferred**: out of scope of the original test-isolation ask.
-- **Next action**: confirm contention vs bug via `--no-file-parallelism`; then decide single-threaded DB tests / per-worker connection / transactional rollback.
-- **Severity**: medium
-- **Sessions**: 9d89e07b
-
-### legacy-citation-shape warnings (200 occurrences)
-
-- **What**: the knowledge build emits 200 `legacy-citation-shape` warnings -- citations using `source:` instead of structured `ref:` per ADR 019. (The wx-product reference pages were separately verified in PR #1020; this item is the knowledge-graph corpus.)
-- **Where**: `course/knowledge/weather/*/node.md` and others (ACs, AIM paragraphs, ACS, NTSB, POH cites).
-- **Why deferred**: migration is intentionally human-in-the-loop; dry-run finds 0 auto-migratable rows.
-- **Next action**: deliberate authoring pass mapping each legacy citation to a canonical `airboss-ref:` URI. These warnings become errors per the ADR 019 graduation plan.
-- **Severity**: medium
-- **Sessions**: cd16e567-tests-validator
-
-### Pre-existing red test: upsertEdition idempotency
-
-- **What**: `libs/sources/src/registry/edition-resolver.test.ts` ~line 206 fails (`UNIQUE(source_id, edition_label) blocks bypass-the-helper dupes`). Verified failing on origin/main before the session that flagged it.
-- **Where**: `libs/sources/src/registry/edition-resolver.test.ts:206`.
-- **Why deferred**: pre-existing; failure shape suggests a test-setup issue, not a regression.
-- **Next action**: the edition-writer / promotion-batches WP owner triages -- fix or rewrite the assertion.
-- **Severity**: medium
-- **Sessions**: afc4eeb6
-
 ### card-question-tier Phase 3 UI surfaces
 
 - **What**: schema for `question_tier` / `source_authority` / `acs_codes` is live (PRs #855, #949) but no UI consumes it (filter chips, FAA-vs-CFI side-by-side, ACS coverage lens, source-authority badges).
@@ -277,7 +214,7 @@ None.
 - **Severity**: medium
 - **Sessions**: cd16e567
 
-## Low (19)
+## Low (7)
 
 ### Drift-check Step 3: hangar surface
 
@@ -324,24 +261,6 @@ None.
 - **Severity**: low
 - **Sessions**: 20260515-180643-56167
 
-### 3 pre-existing test failures (ac-conformance, seed-references)
-
-- **What**: `ac-conformance.test.ts` (x2) and `seed-references-from-manifest.test.ts` (x1) -- environmental DB-state issues, pass in isolation. Related to the `14cfr14` medium item and the CFR-body-derivatives item below.
-- **Where**: `libs/bc/study/src/ac-conformance.test.ts`, `scripts/db/seed-references-from-manifest.test.ts`.
-- **Why deferred**: not introduced by the flagging session.
-- **Next action**: investigate test isolation; may be addressed by the `airboss_unit_test` isolated DB (PR #982).
-- **Severity**: low
-- **Sessions**: 20260515-180643-56167
-
-### CFR body derivatives missing in fresh git worktrees
-
-- **What**: CFR section body `.md` files are git-ignored (ADR 018 cache derivatives); `git worktree add` checks out only tracked files, so a fresh worktree has zero CFR bodies, the CFR seed adapter skips every Part, and `seed-references-from-manifest.test.ts` fails there.
-- **Where**: `libs/bc/hangar/.../seeders/cfr.ts:~286`; `scripts/db/unit-test-setup.ts`; ADR 018.
-- **Why deferred**: not a code bug -- passes in any environment that has run `bun run sources register cfr`.
-- **Next action**: cleanest is option (c) -- make the test skip the CFR-section assertion when no CFR body files are present, so a cache-less environment reports "skipped" not "failed".
-- **Severity**: low
-- **Sessions**: 9d89e07b
-
 ### Other agents' worktrees / branches accumulated in shared tree
 
 - **What**: multiple sessions flagged ~8-12 other-agent branches and locked worktrees in the shared repo (`worktree-agent-*`, `track-a/*`, `track-c/*`, `feat/flightbag-*`, `feat/integration-sweep-*`, `chore/zod-4-upgrade`, etc.). The 2026-05-17 branch-triage session resolved the four it owned; most of the rest were cleared by a concurrent cleanup. Worktree-boundary rule means non-owning agents leave them alone.
@@ -362,36 +281,55 @@ None.
 
 ## Resolved since the previous roll
 
-- **`fix/contrast-skips-deep-ink` branch** -- was a medium item ("unmerged, needs rebase"). Resolved 2026-05-17: the branch was rebased onto current main, the theme-palette conflict resolved, `bun run check branch` ran clean (contrast-matrix 119 passed / 0 skipped), and it merged as **PR #1067**. The branch is deleted.
+Resolved 2026-05-17:
+
+- **`fix/contrast-skips-deep-ink` branch** -- was a medium item ("unmerged, needs rebase"). The branch was rebased onto current main, the theme-palette conflict resolved, `bun run check branch` ran clean (contrast-matrix 119 passed / 0 skipped), and it merged as **PR #1067**. The branch is deleted.
 - **zod 3->4 / better-auth prod-build boot crash** -- the adapter-node servers crashed at boot (`z.coerce.boolean().meta is not a function`). Resolved via **PR #1064** (catalog zod -> 4, migration fixes). Both flightbag + study build and boot clean.
 - **`integration list` wrong exit code** -- resolved via **PR #1065** (`--pass-with-no-tests`).
 
+Resolved 2026-05-18 (parallel worktree-agent batch):
+
+- **legacy-citation-shape warnings** -- was medium. **PR #1070** migrated 51 handbook knowledge citations to the structured `ref:` shape (233 -> 182 warnings) and fixed the migration tooling's matcher. PARTIAL: the remaining 162 warnings are non-handbook corpora (AIM/AC/CFR/ACS/NTSB/POH) that cannot migrate until their source-registry entries exist -- converting now would turn 162 warnings into 162 build-blocking errors. Carried as a new low item below ("non-handbook legacy citations blocked on registry ingestion").
+- **wx-engine AIRMET text emitter** -- was medium. **PR #1071** built the AIRMET text-bulletin emitter; AIRMET is now structurally catalog-matchable. SIGMET remains a separate effort (the truth model has no severe-category hazard kind) -- carried as a new medium item below.
+- **upsertEdition idempotency red test** -- was medium. **PR #1073** -- root cause was a test bug (a Drizzle lazy thenable passed to `expect().rejects`); fixed by driving the insert through `await` + `try/catch`.
+- **3 pre-existing test failures (ac-conformance, seed-references) + CFR body derivatives + `14cfr14`** -- was low x2 + medium. **PR #1073**: `seed-references` fixed via option (c) -- conditional `it.skipIf` when CFR cache body files are absent; `ac-conformance` no longer reproduces (resolved upstream by PRs #996 + #982 -- those rollup entries were stale). The `14cfr14` medium item shares this root cause and is closed by the same fix.
+- **content-census Phase 3 cards corpus** -- was medium. **PR #1075** added the real cards-corpus gap-view + next-list (3 of 14 corpora done now; 11 remain).
+- **Parallel-worker DB connection terminations (57P01)** -- was medium. **PR #1080** -- root cause was NOT vitest worker pool-sharing (the rollup's guess); it was two overlapping `bun run test` runs, the second `pg_terminate_backend`-ing the first's live connections. Fixed with a machine-wide cross-process file lock around DB provisioning.
+- **`/ball-wp-drift`** -- was medium. **PR #1074** ran the spec-vs-code drift check across 113 WPs; report at `docs/work/reviews/20260518-wp-drift.md` with a 5-item human-decision punch list (see new high item below).
+- **`ball-worktree/guard.sh` syntax error** -- was medium. The line-331 `;&` syntax error was fixed out-of-band; `bash -n guard.sh` parses clean.
+
+### New items surfaced by the 2026-05-18 batch
+
+- **162 non-handbook legacy citations blocked on source-registry ingestion** -- AIM/AC/CFR/ACS/NTSB/POH knowledge citations still use the legacy `source:` shape. They cannot move to `airboss-ref:` until each corpus has a registry entry + `isKnownLocator` resolver (only handbooks have one today). This is ADR 019 Phase 3/7/8/10 registry-ingestion work. Severity: low (warnings, non-blocking) until those corpora land.
+- **wx-engine SIGMET text emitter** -- the AIRMET emitter shipped (#1071) but SIGMET is a genuine separate effort: the truth model has no severe-category hazard kind, no SIGMET designator-letter state, and no volcanic-ash/dust-storm hazard. Severity: medium. Tracked on the `hangar-content-census` WP follow-ups.
+- **`hangar-platform-dashboard` WP status mismatch** -- PR #1074's drift check found this WP is `status: signed-off` but the `/platform` surface, panes, BC, and constants do not exist in code (0/51 tasks). Either the status was set in error or the feature was descoped. Severity: high -- needs a human decision. Full punch list (5 items) in `docs/work/reviews/20260518-wp-drift.md`.
+
 ## Per-session contributions
 
-| Session | Date | Branch | Items contributed |
-|----------------------------------------|------------|--------|-------------------|
-| 0160f787                               | 2026-05-15 | -      | 0                 |
-| 20260515-180643-56167                  | 2026-05-15 | -      | 6                 |
-| 20260515-180930-60283                  | 2026-05-15 | -      | 1                 |
-| 20260515-181752-71057                  | 2026-05-15 | -      | 2                 |
-| 20260515-181801-71712                  | 2026-05-15 | -      | 3                 |
-| 20260515-223922-1639                   | 2026-05-15 | -      | 0                 |
-| 80d9ef12                               | 2026-05-15 | -      | 2                 |
-| 9d89e07b                               | 2026-05-15 | -      | 2                 |
-| afc4eeb6                               | 2026-05-15 | -      | 1                 |
-| ba6a23ad                               | 2026-05-15 | -      | 1                 |
-| cd16e567-tests-validator               | 2026-05-15 | -      | 2                 |
-| cd16e567                               | 2026-05-15 | -      | 6                 |
-| d83e4218                               | 2026-05-15 | -      | 0                 |
-| 17883a4e                               | 2026-05-17 | main   | 2                 |
-| 20260517-145336-25547                  | 2026-05-17 | main   | 0                 |
-| 20260517-155020-81423                  | 2026-05-17 | main   | 2                 |
-| 20260517-160100-94636                  | 2026-05-17 | main   | 4                 |
-| 20260517-163554-26560                  | 2026-05-17 | main   | 3                 |
-| 9b64fd7c                               | 2026-05-17 | main   | 0                 |
-| e76c9f78                               | 2026-05-17 | main   | 5                 |
-| 20260517-212403-79769                  | 2026-05-17 | main   | 3                 |
-| 20260517-212610-82094                  | 2026-05-17 | main   | 1                 |
-| 20260517-215641-9754                   | 2026-05-17 | main   | 1                 |
-| 20260517-222752-41597                  | 2026-05-17 | main   | 5                 |
-| 5756488e-807a-478e-91ad-f15964f9d39e   | 2026-05-17 | main   | 4                 |
+| Session                              | Date       | Branch | Items contributed |
+| ------------------------------------ | ---------- | ------ | ----------------- |
+| 0160f787                             | 2026-05-15 | -      | 0                 |
+| 20260515-180643-56167                | 2026-05-15 | -      | 6                 |
+| 20260515-180930-60283                | 2026-05-15 | -      | 1                 |
+| 20260515-181752-71057                | 2026-05-15 | -      | 2                 |
+| 20260515-181801-71712                | 2026-05-15 | -      | 3                 |
+| 20260515-223922-1639                 | 2026-05-15 | -      | 0                 |
+| 80d9ef12                             | 2026-05-15 | -      | 2                 |
+| 9d89e07b                             | 2026-05-15 | -      | 2                 |
+| afc4eeb6                             | 2026-05-15 | -      | 1                 |
+| ba6a23ad                             | 2026-05-15 | -      | 1                 |
+| cd16e567-tests-validator             | 2026-05-15 | -      | 2                 |
+| cd16e567                             | 2026-05-15 | -      | 6                 |
+| d83e4218                             | 2026-05-15 | -      | 0                 |
+| 17883a4e                             | 2026-05-17 | main   | 2                 |
+| 20260517-145336-25547                | 2026-05-17 | main   | 0                 |
+| 20260517-155020-81423                | 2026-05-17 | main   | 2                 |
+| 20260517-160100-94636                | 2026-05-17 | main   | 4                 |
+| 20260517-163554-26560                | 2026-05-17 | main   | 3                 |
+| 9b64fd7c                             | 2026-05-17 | main   | 0                 |
+| e76c9f78                             | 2026-05-17 | main   | 5                 |
+| 20260517-212403-79769                | 2026-05-17 | main   | 3                 |
+| 20260517-212610-82094                | 2026-05-17 | main   | 1                 |
+| 20260517-215641-9754                 | 2026-05-17 | main   | 1                 |
+| 20260517-222752-41597                | 2026-05-17 | main   | 5                 |
+| 5756488e-807a-478e-91ad-f15964f9d39e | 2026-05-17 | main   | 4                 |
