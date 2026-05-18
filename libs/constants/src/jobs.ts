@@ -77,6 +77,14 @@ export const JOB_RESULT_TEXT_MAX_BYTES = 256 * 1024;
 export const JOB_LOG_TRUNCATION_MARKER = ' ... [truncated]';
 
 /**
+ * ID prefixes for the hangar job-queue tables (composed via `@ab/utils createId`).
+ * Persisted prefixes -- the literal values must never change.
+ */
+export const HANGAR_JOB_ID_PREFIX = 'job';
+export const HANGAR_JOB_LOG_ID_PREFIX = 'jlg';
+export const HANGAR_SYNC_LOG_ID_PREFIX = 'syn';
+
+/**
  * Reason codes recorded in `metadata.reason` on `hangar.job` audit rows so
  * audit-explorer can surface "why" alongside "what" for state transitions.
  * Centralised so worker, recovery, and cancel paths agree on the vocabulary.
