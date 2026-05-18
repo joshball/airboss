@@ -11,7 +11,7 @@
 import { cleanup, fireEvent, render } from '@testing-library/svelte';
 import { afterEach, describe, expect, it } from 'vitest';
 import XcViewer from '../XcViewer.svelte';
-import { fixtureBundle, fixtureBundleWithWeather } from './fixtures';
+import { fixtureBundle, fixtureBundleWithPerformance, fixtureBundleWithWeather } from './fixtures';
 
 afterEach(cleanup);
 
@@ -108,5 +108,44 @@ describe('<XcViewer> (Phase D weather overlay)', () => {
 		expect(container.querySelector('[data-testid="waypoint-drawer"]')).not.toBeNull();
 		await fireEvent.keyDown(window, { key: 'Escape' });
 		expect(container.querySelector('[data-testid="waypoint-drawer"]')).toBeNull();
+	});
+});
+
+describe('<XcViewer> (Phase E performance)', () => {
+	it('renders the performance band when the bundle carries a performance table', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithPerformance });
+		expect(container.querySelector('[data-testid="performance-band"]')).not.toBeNull();
+	});
+
+	it('omits the performance band when there is no performance table', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundle });
+		expect(container.querySelector('[data-testid="performance-band"]')).toBeNull();
+	});
+
+	it('shows non-zero total fuel + a non-negative reserve in the band', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithPerformance });
+		const fuel = container.querySelector('[data-testid="perf-total-fuel"]')?.textContent ?? '';
+		const reserve = container.querySelector('[data-testid="perf-reserve"]')?.textContent ?? '';
+		expect(Number.parseFloat(fuel)).toBeGreaterThan(0);
+		expect(Number.parseFloat(reserve)).toBeGreaterThanOrEqual(0);
+	});
+
+	it('opens the leg detail drawer when a leg label is clicked', async () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithPerformance });
+		expect(container.querySelector('[data-testid="leg-drawer"]')).toBeNull();
+		const legLabel = container.querySelector('[data-testid="leg-label"]');
+		expect(legLabel).not.toBeNull();
+		if (legLabel) await fireEvent.click(legLabel);
+		expect(container.querySelector('[data-testid="leg-drawer"]')).not.toBeNull();
+	});
+
+	it('renders each leg label with the full four-field payload', () => {
+		const { container } = render(XcViewer, { bundle: fixtureBundleWithPerformance });
+		const label = container.querySelector('[data-testid="leg-label"]');
+		const text = label?.textContent ?? '';
+		expect(text).toContain('nm');
+		expect(text).toContain('gal');
+		expect(text).toContain('min');
+		expect(text).toContain('wind');
 	});
 });
