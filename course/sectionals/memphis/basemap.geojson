@@ -1,0 +1,205 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -89.95,
+            36.5
+          ],
+          [
+            -90.05,
+            36
+          ],
+          [
+            -90.15,
+            35.5
+          ],
+          [
+            -90.05,
+            35
+          ],
+          [
+            -90.3,
+            34.5
+          ],
+          [
+            -90.55,
+            34
+          ],
+          [
+            -91.05,
+            33.5
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "water",
+        "name": "Mississippi River"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -90.05,
+            35.15
+          ],
+          [
+            -89.5,
+            35.3
+          ],
+          [
+            -89,
+            35.5
+          ],
+          [
+            -88.85,
+            35.62
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "road",
+        "name": "I-40"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -90.05,
+            35.1
+          ],
+          [
+            -89.95,
+            34.98
+          ],
+          [
+            -89.85,
+            34.7
+          ],
+          [
+            -90.2,
+            34
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "road",
+        "name": "I-55"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.049,
+          35.1495
+        ]
+      },
+      "properties": {
+        "kind": "city",
+        "name": "Memphis"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.8139,
+          35.6145
+        ]
+      },
+      "properties": {
+        "kind": "city",
+        "name": "Jackson"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.8295,
+          34.9618
+        ]
+      },
+      "properties": {
+        "kind": "city",
+        "name": "Olive Branch"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -90.184,
+          35.7556
+        ]
+      },
+      "properties": {
+        "kind": "city",
+        "name": "Dyersburg"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.6334,
+          34.2576
+        ]
+      },
+      "properties": {
+        "kind": "city",
+        "name": "Tupelo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -91.5,
+              34.995
+            ],
+            [
+              -87.5,
+              34.995
+            ],
+            [
+              -87.5,
+              35.005
+            ],
+            [
+              -91.5,
+              35.005
+            ],
+            [
+              -91.5,
+              34.995
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "state-outline",
+        "name": "TN/MS state line"
+      }
+    }
+  ]
+}

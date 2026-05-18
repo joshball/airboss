@@ -4,6 +4,7 @@ export const HOSTS = {
 	SIM: 'sim.airboss.test',
 	HANGAR: 'hangar.airboss.test',
 	FLIGHTBAG: 'flightbag.airboss.test',
+	SPATIAL: 'spatial.airboss.test',
 } as const;
 
 export const COOKIE_DOMAIN_DEV = '.airboss.test' as const;
@@ -26,6 +27,7 @@ export const HOST_PREFIXES = {
 	SIM: 'sim',
 	HANGAR: 'hangar',
 	FLIGHTBAG: 'flightbag',
+	SPATIAL: 'spatial',
 } as const;
 
 /**

@@ -1,0 +1,77 @@
+{
+  "icao": "KMEM",
+  "name": "Memphis International",
+  "lon": -89.9767,
+  "lat": 35.0424,
+  "elevationFtMsl": 341,
+  "attended": true,
+  "airspaceClass": "B",
+  "runways": [
+    {
+      "designator": "18C/36C",
+      "headingDegMagnetic": 175,
+      "lengthFt": 9320,
+      "widthFt": 150,
+      "surface": "concrete",
+      "hasPrecisionApproach": true
+    },
+    {
+      "designator": "18L/36R",
+      "headingDegMagnetic": 175,
+      "lengthFt": 9000,
+      "widthFt": 150,
+      "surface": "concrete",
+      "hasPrecisionApproach": true
+    },
+    {
+      "designator": "18R/36L",
+      "headingDegMagnetic": 175,
+      "lengthFt": 11120,
+      "widthFt": 150,
+      "surface": "concrete",
+      "hasPrecisionApproach": true
+    },
+    {
+      "designator": "9/27",
+      "headingDegMagnetic": 85,
+      "lengthFt": 8946,
+      "widthFt": 150,
+      "surface": "asphalt",
+      "hasPrecisionApproach": true
+    }
+  ],
+  "frequencies": [
+    {
+      "label": "ATIS",
+      "mhz": 119
+    },
+    {
+      "label": "Tower",
+      "mhz": 118.3
+    },
+    {
+      "label": "Ground",
+      "mhz": 121.9
+    },
+    {
+      "label": "Memphis Approach",
+      "mhz": 124.15
+    }
+  ],
+  "fbos": [
+    {
+      "name": "Wilson Air Center",
+      "fuel": [
+        "100LL",
+        "JET-A"
+      ]
+    },
+    {
+      "name": "Signature Flight Support",
+      "fuel": [
+        "100LL",
+        "JET-A"
+      ]
+    }
+  ]
+}

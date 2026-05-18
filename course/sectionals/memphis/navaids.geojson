@@ -1,0 +1,45 @@
+{
+  "type": "FeatureCollection",
+  "navaids": [
+    {
+      "id": "MEM",
+      "kind": "VORTAC",
+      "name": "Memphis VORTAC",
+      "lon": -89.9836,
+      "lat": 35.0654,
+      "frequencyMhz": 117.5
+    },
+    {
+      "id": "GZX",
+      "kind": "VOR-DME",
+      "name": "Grand Junction VOR-DME",
+      "lon": -89.2003,
+      "lat": 35.0381,
+      "frequencyMhz": 116.1
+    },
+    {
+      "id": "MKL",
+      "kind": "VOR-DME",
+      "name": "McKellar VOR-DME",
+      "lon": -88.9189,
+      "lat": 35.6017,
+      "frequencyMhz": 110.2
+    },
+    {
+      "id": "HLI",
+      "kind": "NDB",
+      "name": "Holly Springs NDB",
+      "lon": -89.4503,
+      "lat": 34.7619,
+      "frequencyMhz": null
+    },
+    {
+      "id": "AWANE",
+      "kind": "FIX",
+      "name": "AWANE intersection",
+      "lon": -89.55,
+      "lat": 35.32,
+      "frequencyMhz": null
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+	"name": "@ab/spatial-ui",
+	"private": true,
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"svelte": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./package.json": "./package.json"
+	},
+	"dependencies": {
+		"@ab/constants": "workspace:*",
+		"@ab/spatial-engine": "workspace:*",
+		"@ab/themes": "workspace:*",
+		"@ab/ui": "workspace:*",
+		"d3-geo": "^3.1.1"
+	},
+	"devDependencies": {
+		"@types/d3-geo": "^3.1.0",
+		"@types/geojson": "^7946.0.16",
+		"svelte": "catalog:",
+		"vitest": "catalog:"
+	},
+	"version": "0.1.0"
+}

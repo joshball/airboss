@@ -1,6 +1,7 @@
 import type { ProgramTab } from './program';
 import type { SimScenarioId } from './sim';
 import type { KnowledgePhase, LibraryRegulationsKind } from './study';
+import type { XcScenario } from './xc-viewer';
 
 /** Query-string parameter names used across study routes. */
 export const QUERY_PARAMS = {
@@ -957,6 +958,15 @@ export const ROUTES = {
 	 * (encoding the slashes would break the catch-all match).
 	 */
 	API_CHART: (slug: string) => `/api/charts/${slug}/chart.svg` as const,
+
+	// Spatial (apps/spatial) -- the XC viewer surface. Served from its own
+	// host (spatial.airboss.test). The XC viewer is the first product on
+	// the spatial surface; route + airport + airspace products land here.
+	// See `docs/work-packages/xc-viewer-v1/spec.md`.
+	/** XC scenario picker -- lists every registered scenario. */
+	SPATIAL_XC_INDEX: '/spatial/xc',
+	/** XC viewer for one composed scenario. */
+	SPATIAL_XC_SCENARIO: (slug: XcScenario): string => `/spatial/xc/${slug}`,
 } as const;
 
 /**

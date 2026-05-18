@@ -1,0 +1,46 @@
+{
+  "icao": "KOLV",
+  "name": "Olive Branch",
+  "lon": -89.7869,
+  "lat": 34.9786,
+  "elevationFtMsl": 402,
+  "attended": true,
+  "airspaceClass": "D",
+  "runways": [
+    {
+      "designator": "18/36",
+      "headingDegMagnetic": 180,
+      "lengthFt": 6000,
+      "widthFt": 100,
+      "surface": "asphalt",
+      "hasPrecisionApproach": true
+    }
+  ],
+  "frequencies": [
+    {
+      "label": "ATIS",
+      "mhz": 124.825
+    },
+    {
+      "label": "Tower",
+      "mhz": 119.075
+    },
+    {
+      "label": "Ground",
+      "mhz": 121.6
+    },
+    {
+      "label": "CTAF",
+      "mhz": 119.075
+    }
+  ],
+  "fbos": [
+    {
+      "name": "Olive Branch Aviation",
+      "fuel": [
+        "100LL",
+        "JET-A"
+      ]
+    }
+  ]
+}

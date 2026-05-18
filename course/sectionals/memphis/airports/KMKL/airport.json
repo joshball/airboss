@@ -1,0 +1,54 @@
+{
+  "icao": "KMKL",
+  "name": "McKellar-Sipes Regional",
+  "lon": -88.9156,
+  "lat": 35.5999,
+  "elevationFtMsl": 434,
+  "attended": true,
+  "airspaceClass": "D",
+  "runways": [
+    {
+      "designator": "2/20",
+      "headingDegMagnetic": 20,
+      "lengthFt": 6004,
+      "widthFt": 150,
+      "surface": "asphalt",
+      "hasPrecisionApproach": true
+    },
+    {
+      "designator": "7/25",
+      "headingDegMagnetic": 70,
+      "lengthFt": 5004,
+      "widthFt": 100,
+      "surface": "asphalt",
+      "hasPrecisionApproach": false
+    }
+  ],
+  "frequencies": [
+    {
+      "label": "ATIS",
+      "mhz": 120.075
+    },
+    {
+      "label": "Tower",
+      "mhz": 124.2
+    },
+    {
+      "label": "Ground",
+      "mhz": 121.9
+    },
+    {
+      "label": "Memphis Center",
+      "mhz": 134.65
+    }
+  ],
+  "fbos": [
+    {
+      "name": "McKellar-Sipes Aviation",
+      "fuel": [
+        "100LL",
+        "JET-A"
+      ]
+    }
+  ]
+}

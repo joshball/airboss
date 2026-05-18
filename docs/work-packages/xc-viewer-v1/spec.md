@@ -3,7 +3,7 @@ id: xc-viewer-v1
 title: 'Spec: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice)'
 product: sim
 category: feature
-status: draft
+status: in-flight
 agent_review_status: pending
 human_review_status: pending
 created: 2026-05-11

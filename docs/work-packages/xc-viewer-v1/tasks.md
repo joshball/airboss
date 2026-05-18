@@ -28,21 +28,21 @@ Depends on: [wx-engine](../wx-engine/) (in flight; the wx-engine emits the scena
 
 ## Pre-flight
 
-- [ ] Read [spec.md](./spec.md), [design.md](./design.md), [test-plan.md](./test-plan.md), [user-stories.md](./user-stories.md), [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) end-to-end.
-- [ ] Read [docs/vision/products/pre-flight/xc-viewer/VISION.md](../../vision/products/pre-flight/xc-viewer/VISION.md) -- the killer-feature thesis + four-layer framing.
-- [ ] Read [docs/vision/products/pre-flight/weather-scenario-engine/VISION.md](../../vision/products/pre-flight/weather-scenario-engine/VISION.md) and [DESIGN.md](../../vision/products/pre-flight/weather-scenario-engine/DESIGN.md) -- the substrate this viewer composes with.
-- [ ] Read [docs/work-packages/wx-engine/spec.md](../wx-engine/spec.md) and [design.md](../wx-engine/design.md) -- the production lib that emits the wx bundle this viewer reads. Skim, do not re-implement; this WP consumes the output as a filesystem-backed contract.
-- [ ] Read [libs/wx-charts/src/projection.ts](../../../libs/wx-charts/src/projection.ts) and [libs/wx-charts/src/server.ts](../../../libs/wx-charts/src/server.ts) -- pattern source for `libs/spatial-engine/src/projection.ts` and the renderer chrome.
-- [ ] Read [libs/constants/src/source-cache.ts](../../../libs/constants/src/source-cache.ts) -- the canonical lazy-load pattern for browser-bundled libs that need Node built-ins.
-- [ ] Read `libs/bc/study/src/index.ts` and `libs/bc/study/src/server.ts` -- the runtime / server barrel split. `libs/spatial-engine/` follows the same shape.
-- [ ] Read [docs/agents/best-practices.md](../../agents/best-practices.md), [docs/agents/reference-engine-patterns.md](../../agents/reference-engine-patterns.md), [docs/agents/reference-sveltekit-patterns.md](../../agents/reference-sveltekit-patterns.md).
-- [ ] Read [docs/agents/common-pitfalls.md](../../agents/common-pitfalls.md) and [docs/agents/debug-playbooks/browser-hydration.md](../../agents/debug-playbooks/browser-hydration.md).
-- [ ] Read [docs/decisions/018-source-artifact-storage-policy/decision.md](../../decisions/018-source-artifact-storage-policy/decision.md) -- the cache-vs-repo policy that drives where the FAA dCS source bytes live.
-- [ ] Read [docs/decisions/025-wp-frontmatter-contract/decision.md](../../decisions/025-wp-frontmatter-contract/decision.md) -- WP frontmatter contract.
-- [ ] Read [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- `apps/spatial/` placement.
-- [ ] Verify the dev cache directory exists: `ls ~/Documents/airboss-handbook-cache/sectionals/` (create if missing).
-- [ ] Verify wx-engine Phase A + B outputs are present: `ls data/wx-scenarios/frontal-xc-march/` (truth.json, products/*.json).
-- [ ] Run `bun run check` -- 0 errors before starting.
+- [x] Read [spec.md](./spec.md), [design.md](./design.md), [test-plan.md](./test-plan.md), [user-stories.md](./user-stories.md), [OUT-OF-SCOPE.md](./OUT-OF-SCOPE.md) end-to-end.
+- [x] Read [docs/vision/products/pre-flight/xc-viewer/VISION.md](../../vision/products/pre-flight/xc-viewer/VISION.md) -- the killer-feature thesis + four-layer framing.
+- [x] Read [docs/vision/products/pre-flight/weather-scenario-engine/VISION.md](../../vision/products/pre-flight/weather-scenario-engine/VISION.md) and [DESIGN.md](../../vision/products/pre-flight/weather-scenario-engine/DESIGN.md) -- the substrate this viewer composes with.
+- [x] Read [docs/work-packages/wx-engine/spec.md](../wx-engine/spec.md) and [design.md](../wx-engine/design.md) -- the production lib that emits the wx bundle this viewer reads. Skim, do not re-implement; this WP consumes the output as a filesystem-backed contract.
+- [x] Read [libs/wx-charts/src/projection.ts](../../../libs/wx-charts/src/projection.ts) and [libs/wx-charts/src/server.ts](../../../libs/wx-charts/src/server.ts) -- pattern source for `libs/spatial-engine/src/projection.ts` and the renderer chrome.
+- [x] Read [libs/constants/src/source-cache.ts](../../../libs/constants/src/source-cache.ts) -- the canonical lazy-load pattern for browser-bundled libs that need Node built-ins.
+- [x] Read `libs/bc/study/src/index.ts` and `libs/bc/study/src/server.ts` -- the runtime / server barrel split. `libs/spatial-engine/` follows the same shape.
+- [x] Read [docs/agents/best-practices.md](../../agents/best-practices.md), [docs/agents/reference-engine-patterns.md](../../agents/reference-engine-patterns.md), [docs/agents/reference-sveltekit-patterns.md](../../agents/reference-sveltekit-patterns.md).
+- [x] Read [docs/agents/common-pitfalls.md](../../agents/common-pitfalls.md) and [docs/agents/debug-playbooks/browser-hydration.md](../../agents/debug-playbooks/browser-hydration.md).
+- [x] Read [docs/decisions/018-source-artifact-storage-policy/decision.md](../../decisions/018-source-artifact-storage-policy/decision.md) -- the cache-vs-repo policy that drives where the FAA dCS source bytes live.
+- [x] Read [docs/decisions/025-wp-frontmatter-contract/decision.md](../../decisions/025-wp-frontmatter-contract/decision.md) -- WP frontmatter contract.
+- [x] Read [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) -- `apps/spatial/` placement.
+- [x] Verify the dev cache directory exists: `ls ~/Documents/airboss-handbook-cache/sectionals/` (create if missing).
+- [x] Verify wx-engine Phase A + B outputs are present: `ls data/wx-scenarios/frontal-xc-march/` (truth.json, products/*.json).
+- [x] Run `bun run check` -- 0 errors before starting.
 
 ## Implementation
 
@@ -54,104 +54,104 @@ PR title: `feat(xc-viewer): Phase A -- scaffold + types + Memphis sectional inge
 
 #### A.1 Constants
 
-- [ ] Create `libs/constants/src/xc-viewer.ts` with `XC_REGIONS`, `XC_REGION_VALUES`, `XcRegion`, `XC_REGION_LABELS`, `XC_AIRCRAFT`, `XC_AIRCRAFT_VALUES`, `XcAircraft`, `XC_ROUTES`, `XC_ROUTE_VALUES`, `XcRoute`, `XC_SCENARIOS`, `XC_SCENARIO_VALUES`, `XcScenario`, `XC_SCENARIO_LABELS` per spec.md "Constants" section. v1 enum values: regions = `['memphis']`, aircraft = `['c172n-skyhawk']`, routes = `['kmem-kmkl-kolv']`, scenarios = `['kmem-kmkl-kolv-frontal-march']`.
-- [ ] Re-export from `libs/constants/src/index.ts`.
-- [ ] Add `ROUTES.SPATIAL_XC_INDEX = '/spatial/xc'` and `ROUTES.SPATIAL_XC_SCENARIO = (slug: XcScenario) => \`/spatial/xc/${slug}\`` to `libs/constants/src/routes.ts`.
+- [x] Create `libs/constants/src/xc-viewer.ts` with `XC_REGIONS`, `XC_REGION_VALUES`, `XcRegion`, `XC_REGION_LABELS`, `XC_AIRCRAFT`, `XC_AIRCRAFT_VALUES`, `XcAircraft`, `XC_ROUTES`, `XC_ROUTE_VALUES`, `XcRoute`, `XC_SCENARIOS`, `XC_SCENARIO_VALUES`, `XcScenario`, `XC_SCENARIO_LABELS` per spec.md "Constants" section. v1 enum values: regions = `['memphis']`, aircraft = `['c172n-skyhawk']`, routes = `['kmem-kmkl-kolv']`, scenarios = `['kmem-kmkl-kolv-frontal-march']`.
+- [x] Re-export from `libs/constants/src/index.ts`.
+- [x] Add `ROUTES.SPATIAL_XC_INDEX = '/spatial/xc'` and `ROUTES.SPATIAL_XC_SCENARIO = (slug: XcScenario) => \`/spatial/xc/${slug}\`` to `libs/constants/src/routes.ts`.
 - [x] `PORTS.SPATIAL = 9650` (+ `SPATIAL_E2E = 9653`) added to `libs/constants/src/ports.ts`. Resolves the prior `9610` collision with `SIM`; follows the dev-port +10 grid and the E2E +3 offset.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(constants): xc-viewer scenario/region/aircraft/route constants + spatial routes + port`).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(constants): xc-viewer scenario/region/aircraft/route constants + spatial routes + port`).
 
 #### A.2 Library scaffolds
 
-- [ ] Create `libs/spatial-engine/` with `package.json` (deps: `zod`, `yaml`, `d3-geo`; peer / dev: `@ab/wx-charts`, `@ab/wx-engine` for type imports), `tsconfig.json` (extend the repo's lib tsconfig), `src/`.
-- [ ] Add `@ab/spatial-engine` and `@ab/spatial-engine/server` path aliases to root `tsconfig.base.json`. Mirror the `@ab/wx-engine` pattern.
-- [ ] Add the lib to the workspace root config (root `package.json` workspaces); run `bun install`.
-- [ ] Create `libs/spatial-engine/src/index.ts` (runtime barrel; type-only re-exports). Pending Phase A primitives below.
-- [ ] Create `libs/spatial-engine/src/server.ts` (server-only barrel). Tag with `// @browser-globals: server-only -- never imported by client .svelte` at the top.
-- [ ] Create `libs/spatial-ui/` with `package.json` (deps: `svelte`, `@ab/themes`, `@ab/ui`, `@ab/constants`; type-only: `@ab/spatial-engine`), `tsconfig.json`, `src/`.
-- [ ] Add `@ab/spatial-ui` path alias to root `tsconfig.base.json`.
-- [ ] Create `libs/spatial-ui/src/index.ts` (runtime barrel; exports components + types -- browser-safe).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): scaffold libs/spatial-engine and libs/spatial-ui + workspace aliases`).
+- [x] Create `libs/spatial-engine/` with `package.json` (deps: `zod`, `yaml`, `d3-geo`; peer / dev: `@ab/wx-charts`, `@ab/wx-engine` for type imports), `tsconfig.json` (extend the repo's lib tsconfig), `src/`.
+- [x] Add `@ab/spatial-engine` and `@ab/spatial-engine/server` path aliases to root `tsconfig.base.json`. Mirror the `@ab/wx-engine` pattern.
+- [x] Add the lib to the workspace root config (root `package.json` workspaces); run `bun install`.
+- [x] Create `libs/spatial-engine/src/index.ts` (runtime barrel; type-only re-exports). Pending Phase A primitives below.
+- [x] Create `libs/spatial-engine/src/server.ts` (server-only barrel). Tag with `// @browser-globals: server-only -- never imported by client .svelte` at the top.
+- [x] Create `libs/spatial-ui/` with `package.json` (deps: `svelte`, `@ab/themes`, `@ab/ui`, `@ab/constants`; type-only: `@ab/spatial-engine`), `tsconfig.json`, `src/`.
+- [x] Add `@ab/spatial-ui` path alias to root `tsconfig.base.json`.
+- [x] Create `libs/spatial-ui/src/index.ts` (runtime barrel; exports components + types -- browser-safe).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): scaffold libs/spatial-engine and libs/spatial-ui + workspace aliases`).
 
 #### A.3 SvelteKit app scaffold (`apps/spatial/`)
 
-- [ ] Create `apps/spatial/` mirroring `apps/study/` shape: `package.json` (workspace deps: `@ab/auth`, `@ab/constants`, `@ab/db`, `@ab/help`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/spatial-engine`, `@ab/spatial-ui`, `@ab/wx-engine` type-only), `svelte.config.js`, `vite.config.ts` (port from `PORTS.SPATIAL`), `tsconfig.json`, `src/app.html`, `src/app.d.ts`, `src/hooks.server.ts`, `src/routes/+layout.svelte`, `src/routes/+page.svelte` (index stub).
-- [ ] Register the app in the root `package.json` workspaces.
-- [ ] Add a `bun run dev:spatial` script alias to `package.json` if the dev-script registry uses per-app aliases (verify by reading the existing `bun run dev:study` registration).
-- [ ] Add an entry for `apps/spatial/` in [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) (mark as "active" in the build-order table -- this WP creates the spatial app).
-- [ ] Create `docs/products/spatial/INDEX.md` stub pointing at the v1 surface (mirror `docs/products/study/INDEX.md` shape, ~20 lines).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): scaffold apps/spatial SvelteKit app + docs/products/spatial`).
+- [x] Create `apps/spatial/` mirroring `apps/study/` shape: `package.json` (workspace deps: `@ab/auth`, `@ab/constants`, `@ab/db`, `@ab/help`, `@ab/themes`, `@ab/ui`, `@ab/utils`, `@ab/spatial-engine`, `@ab/spatial-ui`, `@ab/wx-engine` type-only), `svelte.config.js`, `vite.config.ts` (port from `PORTS.SPATIAL`), `tsconfig.json`, `src/app.html`, `src/app.d.ts`, `src/hooks.server.ts`, `src/routes/+layout.svelte`, `src/routes/+page.svelte` (index stub).
+- [x] Register the app in the root `package.json` workspaces.
+- [x] Add a `bun run dev:spatial` script alias to `package.json` if the dev-script registry uses per-app aliases (verify by reading the existing `bun run dev:study` registration).
+- [x] Add an entry for `apps/spatial/` in [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) (mark as "active" in the build-order table -- this WP creates the spatial app).
+- [x] Create `docs/products/spatial/INDEX.md` stub pointing at the v1 surface (mirror `docs/products/study/INDEX.md` shape, ~20 lines).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): scaffold apps/spatial SvelteKit app + docs/products/spatial`).
 
 #### A.4 Projection helper
 
-- [ ] Create `libs/spatial-engine/src/projection.ts` exporting `regionalLambertProjection(region: XcRegion, opts?)`. Mirrors `libs/wx-charts/src/projection.ts` shape. Per-region standard parallels + central meridian configured from a `REGION_PROJECTIONS` table keyed by `XcRegion`. v1 entry: Memphis = `{ parallels: [33, 38], rotate: [89, 0], center: [0, 35.5] }` (tighter than CONUS default; covers TN / MS / AR / KY).
-- [ ] Re-export the helper as a value from the server barrel (and as a `type` re-export of `RegionalProjectionOptions` from the runtime barrel).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): regional Lambert projection helper`).
+- [x] Create `libs/spatial-engine/src/projection.ts` exporting `regionalLambertProjection(region: XcRegion, opts?)`. Mirrors `libs/wx-charts/src/projection.ts` shape. Per-region standard parallels + central meridian configured from a `REGION_PROJECTIONS` table keyed by `XcRegion`. v1 entry: Memphis = `{ parallels: [33, 38], rotate: [89, 0], center: [0, 35.5] }` (tighter than CONUS default; covers TN / MS / AR / KY).
+- [x] Re-export the helper as a value from the server barrel (and as a `type` re-export of `RegionalProjectionOptions` from the runtime barrel).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): regional Lambert projection helper`).
 
 #### A.5 Layer-1 types + Zod schema (geography)
 
-- [ ] Create `libs/spatial-engine/src/geography/types.ts` exporting `Region`, `Geography`, `AirportRecord`, `AirspacePolygon`, `NavaidRecord`, `BasemapFeatureCollection`, `RunwayRecord`, `FrequencyRecord`. Field set matches FAA NASR shape so S2 substitution is mechanical.
-- [ ] Create `libs/spatial-engine/src/geography/schema.ts` exporting `regionSchema`, `airportSchema`, `airspacePolygonSchema`, `navaidSchema`, `geographySchema` (Zod). Validates: polygon closure, lon/lat in CONUS bounds, runway heading in [0, 360), elevation reasonable.
-- [ ] Create `libs/spatial-engine/src/geography/loader.ts` exporting `loadGeography(regionSlug: XcRegion): Geography`. Reads `course/sectionals/<region>/*.geojson` + `airports.json` + per-airport `airports/<icao>/airport.json`. Uses lazy-loaded `node:fs` via the canonical pattern. Validates against schemas on load.
-- [ ] Add unit tests in `libs/spatial-engine/src/__tests__/geography-schema.test.ts`: `geographySchema` accepts a synthetic Memphis-like literal; rejects malformed airspace polygon (open ring); rejects airport with lon outside CONUS.
-- [ ] Re-export types as `type` from the runtime barrel; loader from the server barrel.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): geography types + Zod schema + loader`).
+- [x] Create `libs/spatial-engine/src/geography/types.ts` exporting `Region`, `Geography`, `AirportRecord`, `AirspacePolygon`, `NavaidRecord`, `BasemapFeatureCollection`, `RunwayRecord`, `FrequencyRecord`. Field set matches FAA NASR shape so S2 substitution is mechanical.
+- [x] Create `libs/spatial-engine/src/geography/schema.ts` exporting `regionSchema`, `airportSchema`, `airspacePolygonSchema`, `navaidSchema`, `geographySchema` (Zod). Validates: polygon closure, lon/lat in CONUS bounds, runway heading in [0, 360), elevation reasonable.
+- [x] Create `libs/spatial-engine/src/geography/loader.ts` exporting `loadGeography(regionSlug: XcRegion): Geography`. Reads `course/sectionals/<region>/*.geojson` + `airports.json` + per-airport `airports/<icao>/airport.json`. Uses lazy-loaded `node:fs` via the canonical pattern. Validates against schemas on load.
+- [x] Add unit tests in `libs/spatial-engine/src/__tests__/geography-schema.test.ts`: `geographySchema` accepts a synthetic Memphis-like literal; rejects malformed airspace polygon (open ring); rejects airport with lon outside CONUS.
+- [x] Re-export types as `type` from the runtime barrel; loader from the server barrel.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): geography types + Zod schema + loader`).
 
 #### A.6 Layer-2 types + Zod schema (flight)
 
-- [ ] Create `libs/spatial-engine/src/flight/types.ts` exporting `Waypoint`, `RouteSpec`, `AltitudeStep`, `SpeedStep`, `AircraftSpec`, `PerformancePolar`, `FuelBurnCurve`, `WeightBalanceEnvelope`, `EquipmentList`, `PilotProfile`, `Flight`, `LegPerformance`, `PerformanceTable`.
-- [ ] Create `libs/spatial-engine/src/flight/schema.ts` exporting `routeSpecSchema`, `aircraftSpecSchema`, `flightSchema` (Zod). Validates: monotonic altitude profile (allow descent), CG envelope is a closed polygon with forward < aft, fuel-burn curve monotone in power setting, equipment values in known enums.
-- [ ] Create `libs/spatial-engine/src/flight/geometry.ts` exporting `greatCircleNm(lon1, lat1, lon2, lat2)`, `greatCircleBearing(lon1, lat1, lon2, lat2)`, `midpoint(a, b)`. Pure functions; browser-safe (re-export from the runtime barrel as values is OK because they're pure math).
-- [ ] Create `libs/spatial-engine/src/flight/wind.ts` exporting `applyWind({ trueCourse, tas, wind }): { groundSpeedKt, magneticHeading }`. v1 uses a single per-region magnetic variation (East 4 deg for Memphis) wired via a constant; v2+ may use a grid.
-- [ ] Create `libs/spatial-engine/src/flight/loader.ts` exporting `loadFlight(routeId, aircraftId): Flight`. Resolves route + aircraft literals from the per-noun directories; validates schemas; returns the typed `Flight`.
-- [ ] Add unit tests in `libs/spatial-engine/src/__tests__/flight-geometry.test.ts`: `greatCircleNm` returns the expected value for known city pairs (KMEM -> KOLV is ~17 nm, KMEM -> KMKL is ~85 nm); `greatCircleBearing` returns expected courses; `applyWind` returns expected heading + ground speed for known inputs.
-- [ ] Add unit tests in `libs/spatial-engine/src/__tests__/flight-schema.test.ts`: schema accepts a synthetic RouteSpec + AircraftSpec; rejects an inverted CG envelope; rejects a route with duplicate waypoint ids.
-- [ ] Re-export types as `type` from the runtime barrel; loader from the server barrel; pure-math helpers (`greatCircleNm`, `greatCircleBearing`, `midpoint`, `applyWind`) as values from both barrels.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): flight types + Zod schema + geometry + wind helpers + loader`).
+- [x] Create `libs/spatial-engine/src/flight/types.ts` exporting `Waypoint`, `RouteSpec`, `AltitudeStep`, `SpeedStep`, `AircraftSpec`, `PerformancePolar`, `FuelBurnCurve`, `WeightBalanceEnvelope`, `EquipmentList`, `PilotProfile`, `Flight`, `LegPerformance`, `PerformanceTable`.
+- [x] Create `libs/spatial-engine/src/flight/schema.ts` exporting `routeSpecSchema`, `aircraftSpecSchema`, `flightSchema` (Zod). Validates: monotonic altitude profile (allow descent), CG envelope is a closed polygon with forward < aft, fuel-burn curve monotone in power setting, equipment values in known enums.
+- [x] Create `libs/spatial-engine/src/flight/geometry.ts` exporting `greatCircleNm(lon1, lat1, lon2, lat2)`, `greatCircleBearing(lon1, lat1, lon2, lat2)`, `midpoint(a, b)`. Pure functions; browser-safe (re-export from the runtime barrel as values is OK because they're pure math).
+- [x] Create `libs/spatial-engine/src/flight/wind.ts` exporting `applyWind({ trueCourse, tas, wind }): { groundSpeedKt, magneticHeading }`. v1 uses a single per-region magnetic variation (East 4 deg for Memphis) wired via a constant; v2+ may use a grid.
+- [x] Create `libs/spatial-engine/src/flight/loader.ts` exporting `loadFlight(routeId, aircraftId): Flight`. Resolves route + aircraft literals from the per-noun directories; validates schemas; returns the typed `Flight`.
+- [x] Add unit tests in `libs/spatial-engine/src/__tests__/flight-geometry.test.ts`: `greatCircleNm` returns the expected value for known city pairs (KMEM -> KOLV is ~17 nm, KMEM -> KMKL is ~85 nm); `greatCircleBearing` returns expected courses; `applyWind` returns expected heading + ground speed for known inputs.
+- [x] Add unit tests in `libs/spatial-engine/src/__tests__/flight-schema.test.ts`: schema accepts a synthetic RouteSpec + AircraftSpec; rejects an inverted CG envelope; rejects a route with duplicate waypoint ids.
+- [x] Re-export types as `type` from the runtime barrel; loader from the server barrel; pure-math helpers (`greatCircleNm`, `greatCircleBearing`, `midpoint`, `applyWind`) as values from both barrels.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): flight types + Zod schema + geometry + wind helpers + loader`).
 
 #### A.7 Layer-3 view types (weather)
 
-- [ ] Create `libs/spatial-engine/src/weather/types.ts` exporting `WxBundleView`, `WaypointWxView`, `AirmetView`, `ChartRef`, `WindAtWaypoint`. Types-only; no runtime values.
-- [ ] Create `libs/spatial-engine/src/weather/view.ts` exporting `loadWeatherForScenario(wxScenarioSlug: WxScenario, validAt: string): WxBundleView`. Reads `data/wx-scenarios/<slug>/truth.json` + `products/*.json` from the wx-engine output. For each route waypoint, projects: nearest METAR + matching TAF + AIRMET membership (point-in-polygon against `truth.hazardZones`) + interpolated wind aloft at the leg cruise altitude. Caches per-process by `(slug, validAt)`.
-- [ ] Add unit tests in `libs/spatial-engine/src/__tests__/weather-view.test.ts` using a synthetic frontal-xc-march bundle: `loadWeatherForScenario` returns a `WxBundleView` with one waypoint view per declared route waypoint; AIRMET membership matches manual point-in-polygon for at least one waypoint inside the IFR zone.
-- [ ] Re-export the view function from the server barrel; types as `type` from the runtime barrel.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): weather view layer + waypoint projection from wx-engine output`).
+- [x] Create `libs/spatial-engine/src/weather/types.ts` exporting `WxBundleView`, `WaypointWxView`, `AirmetView`, `ChartRef`, `WindAtWaypoint`. Types-only; no runtime values.
+- [x] Create `libs/spatial-engine/src/weather/view.ts` exporting `loadWeatherForScenario(wxScenarioSlug: WxScenario, validAt: string): WxBundleView`. Reads `data/wx-scenarios/<slug>/truth.json` + `products/*.json` from the wx-engine output. For each route waypoint, projects: nearest METAR + matching TAF + AIRMET membership (point-in-polygon against `truth.hazardZones`) + interpolated wind aloft at the leg cruise altitude. Caches per-process by `(slug, validAt)`.
+- [x] Add unit tests in `libs/spatial-engine/src/__tests__/weather-view.test.ts` using a synthetic frontal-xc-march bundle: `loadWeatherForScenario` returns a `WxBundleView` with one waypoint view per declared route waypoint; AIRMET membership matches manual point-in-polygon for at least one waypoint inside the IFR zone.
+- [x] Re-export the view function from the server barrel; types as `type` from the runtime barrel.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): weather view layer + waypoint projection from wx-engine output`).
 
 #### A.8 Layer-4 (scenario) types
 
-- [ ] Create `libs/spatial-engine/src/scenario/types.ts` exporting `ScenarioSpec`, `TimedEvent` (union of `WxChangeEvent | AcFailureEvent | AtcChangeEvent | NotamActivationEvent | PirepDropEvent`), `ScenarioBundle`. v1 ships `events: []`; the union is declared so v2+ adds events without a schema migration.
-- [ ] Create `libs/spatial-engine/src/scenario/schema.ts` exporting `scenarioSpecSchema`, `timedEventSchema` (Zod). v1's schema rejects non-empty `events` (`z.array(timedEventSchema).length(0)`) -- explicit so the v2 unlock is an obvious schema change.
-- [ ] Create `libs/spatial-engine/src/scenario/registry.ts` exporting `loadScenario(slug: XcScenario): ScenarioSpec`. Lazy imports the scenario module by slug, validates against `scenarioSpecSchema`, returns the validated spec.
-- [ ] Re-export types as `type` from the runtime barrel; registry from the server barrel.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): scenario types + schema + registry`).
+- [x] Create `libs/spatial-engine/src/scenario/types.ts` exporting `ScenarioSpec`, `TimedEvent` (union of `WxChangeEvent | AcFailureEvent | AtcChangeEvent | NotamActivationEvent | PirepDropEvent`), `ScenarioBundle`. v1 ships `events: []`; the union is declared so v2+ adds events without a schema migration.
+- [x] Create `libs/spatial-engine/src/scenario/schema.ts` exporting `scenarioSpecSchema`, `timedEventSchema` (Zod). v1's schema rejects non-empty `events` (`z.array(timedEventSchema).length(0)`) -- explicit so the v2 unlock is an obvious schema change.
+- [x] Create `libs/spatial-engine/src/scenario/registry.ts` exporting `loadScenario(slug: XcScenario): ScenarioSpec`. Lazy imports the scenario module by slug, validates against `scenarioSpecSchema`, returns the validated spec.
+- [x] Re-export types as `type` from the runtime barrel; registry from the server barrel.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): scenario types + schema + registry`).
 
 #### A.9 Memphis sectional ingest
 
-- [ ] Document the FAA dCS source URL + cycle in `course/sectionals/memphis/manifest.yaml` (the dCS cycle currently in flight at the time of authoring -- record the exact cycle id).
-- [ ] Author the source-bytes acquisition flow: the developer downloads the FAA dCS source archive to `~/Documents/airboss-handbook-cache/sectionals/memphis/dcs-memphis-cycle-<id>.zip`. The ingester reads from there.
-- [ ] Create `libs/spatial-engine/src/geography/ingest.ts` exporting `ingestSectional(regionSlug)`. Server-only; tag `// @browser-globals: server-only`. Reads the cached archive, parses the FAA dCS vector tables (state outlines, airspace, navaids, airports), filters to the region bounds, writes:
+- [x] Document the FAA dCS source URL + cycle in `course/sectionals/memphis/manifest.yaml` (the dCS cycle currently in flight at the time of authoring -- record the exact cycle id).
+- [x] Author the source-bytes acquisition flow: the developer downloads the FAA dCS source archive to `~/Documents/airboss-handbook-cache/sectionals/memphis/dcs-memphis-cycle-<id>.zip`. The ingester reads from there.
+- [x] Create `libs/spatial-engine/src/geography/ingest.ts` exporting `ingestSectional(regionSlug)`. Server-only; tag `// @browser-globals: server-only`. Reads the cached archive, parses the FAA dCS vector tables (state outlines, airspace, navaids, airports), filters to the region bounds, writes:
   - `course/sectionals/<region>/basemap.geojson` (state outlines, water, roads, cities)
   - `course/sectionals/<region>/airspace.geojson` (Class B/C/D/E polygons + SUA)
   - `course/sectionals/<region>/navaids.geojson` (VOR / NDB / fix positions)
   - `course/sectionals/<region>/airports.json` (full airport index for the region)
   - Per-airport `course/sectionals/<region>/airports/<icao>/airport.json` for the three v1 airports (KMEM, KOLV, KMKL) plus a `CITATION.md` per airport mapping each field to its NASR record + dCS cycle.
-- [ ] Hand-author KMEM, KOLV, KMKL airport records if the FAA dCS data is missing detail; supplement from NASR data sheets where dCS lacks frequencies/FBOs.
-- [ ] Validate every emitted GeoJSON file: closure, valid bounds, no self-intersection (drop offending features with a warning logged into the manifest).
-- [ ] Create `scripts/sectionals.ts` dispatcher (`bun run sectionals list`, `bun run sectionals ingest <region>`). Mirror `scripts/wx-scenario.ts` shape; no colons in script names per repo discipline.
-- [ ] Add `"sectionals": "bun scripts/sectionals.ts"` to root `package.json` scripts.
-- [ ] Run `bun run sectionals ingest memphis`. Verify the committed outputs in `course/sectionals/memphis/`. Sanity-check sizes: `basemap.geojson` < 5 MB, `airspace.geojson` < 2 MB, `airports.json` carries the three v1 airports + ~20 surrounding airports the FAA dCS data includes for the region.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): Memphis sectional vector ingest + KMEM/KOLV/KMKL airport records`).
+- [x] Hand-author KMEM, KOLV, KMKL airport records if the FAA dCS data is missing detail; supplement from NASR data sheets where dCS lacks frequencies/FBOs.
+- [x] Validate every emitted GeoJSON file: closure, valid bounds, no self-intersection (drop offending features with a warning logged into the manifest).
+- [x] Create `scripts/sectionals.ts` dispatcher (`bun run sectionals list`, `bun run sectionals ingest <region>`). Mirror `scripts/wx-scenario.ts` shape; no colons in script names per repo discipline.
+- [x] Add `"sectionals": "bun scripts/sectionals.ts"` to root `package.json` scripts.
+- [x] Run `bun run sectionals ingest memphis`. Verify the committed outputs in `course/sectionals/memphis/`. Sanity-check sizes: `basemap.geojson` < 5 MB, `airspace.geojson` < 2 MB, `airports.json` carries the three v1 airports + ~20 surrounding airports the FAA dCS data includes for the region.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(xc-viewer): Memphis sectional vector ingest + KMEM/KOLV/KMKL airport records`).
 
 #### A.10 Composition stub
 
-- [ ] Create `libs/spatial-engine/src/scenario/compose.ts` exporting `composeBundle(args: ComposeArgs): ScenarioBundle` and a placeholder `derivePerformance` that returns `{ legs: [], totalFuelGal: 0, reserveGal: 0 }` (Phase E fills the real implementation). Phase A's `composeBundle` returns `{ scenarioId, geography, flight, weather, events: [], performance: emptyPerf, validAt }` -- the integration point so Phases B/C/D/E can land in parallel against a stable surface.
-- [ ] Create `libs/spatial-engine/src/bundle.ts` exporting `writeScenarioBundle(bundle, opts): Promise<void>`. Writes `data/xc-scenarios/<slug>/{bundle.json, route.geojson, performance.json}`. Lazy-loads `node:fs`, `node:path` per the canonical pattern.
-- [ ] Re-export `composeBundle`, `writeScenarioBundle`, `ComposeArgs` from the server barrel; types as `type` from the runtime barrel.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): composeBundle + writeScenarioBundle (stubs for performance; Phases B/C/D/E fill)`).
+- [x] Create `libs/spatial-engine/src/scenario/compose.ts` exporting `composeBundle(args: ComposeArgs): ScenarioBundle` and a placeholder `derivePerformance` that returns `{ legs: [], totalFuelGal: 0, reserveGal: 0 }` (Phase E fills the real implementation). Phase A's `composeBundle` returns `{ scenarioId, geography, flight, weather, events: [], performance: emptyPerf, validAt }` -- the integration point so Phases B/C/D/E can land in parallel against a stable surface.
+- [x] Create `libs/spatial-engine/src/bundle.ts` exporting `writeScenarioBundle(bundle, opts): Promise<void>`. Writes `data/xc-scenarios/<slug>/{bundle.json, route.geojson, performance.json}`. Lazy-loads `node:fs`, `node:path` per the canonical pattern.
+- [x] Re-export `composeBundle`, `writeScenarioBundle`, `ComposeArgs` from the server barrel; types as `type` from the runtime barrel.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): composeBundle + writeScenarioBundle (stubs for performance; Phases B/C/D/E fill)`).
 
 #### A.11 Phase A close
 
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase A -- scaffold + types + Memphis sectional ingest`. Body summarizes the lib scaffolds, the sectional vector outputs (with line counts / file sizes), the schema coverage, and the parallelism the substrate unlocks for Phases B/C.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase A -- scaffold + types + Memphis sectional ingest`. Body summarizes the lib scaffolds, the sectional vector outputs (with line counts / file sizes), the schema coverage, and the parallelism the substrate unlocks for Phases B/C.
 
 ### Phase B: sectional renderer (browser-safe SVG vector basemap + airspace)
 

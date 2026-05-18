@@ -1,0 +1,22 @@
+/**
+ * `@ab/spatial-ui` -- runtime / browser-safe barrel.
+ *
+ * The XC viewer's renderer component family. Every export here is a
+ * Svelte component or a pure type -- browser-safe. The components render
+ * a `ScenarioBundle` value into SVG; they never touch the filesystem or
+ * the DB. The bundle is loaded server-side (`+page.server.ts` via
+ * `@ab/spatial-engine/server`) and passed to `<XcViewer>` as data.
+ *
+ * Source of truth: `docs/work-packages/xc-viewer-v1/design.md` "Per-layer
+ * module layout (`libs/spatial-ui/src/`)".
+ *
+ * Phase A ships the styling tokens + the scaffold. Phase B ships the
+ * sectional renderer; Phase C the route renderer; Phase D the weather
+ * overlay; Phase E the performance band. Each phase appends its
+ * components here.
+ */
+
+// ----------------------------------------------------------------------
+// Renderer styling tokens + the layer-toggle key enum.
+// ----------------------------------------------------------------------
+export { SPATIAL_LAYER_KEYS, type SpatialLayerKey } from './styles/tokens';

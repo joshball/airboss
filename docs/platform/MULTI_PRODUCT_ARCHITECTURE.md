@@ -127,17 +127,18 @@ FIRC will eventually migrate into `airboss` as a surface app. Not now -- the pla
 
 Products built in the order they're needed, each creating its surface app when first required:
 
-| Order | Product             | Surface app    | Status                 |
-| ----- | ------------------- | -------------- | ---------------------- |
-| 1     | Spaced Memory Items | study          | first build            |
-| 2     | Decision Reps       | study          | first build            |
-| 3     | Calibration Tracker | study          | first build            |
-| 4     | Ten-Minute Ticker   | study          | after MVP              |
-| 5     | Route Walkthrough   | spatial (new)  | creates spatial app    |
-| 6     | Avionics Trainer    | avionics (new) | creates avionics app   |
-| 7     | Recency Recovery    | study          | event prep             |
-| 8     | Per-Flight Journal  | reflect (new)  | creates reflect app    |
-| --    | FIRC migration      | firc (new)     | after study MVP proven |
+| Order | Product             | Surface app    | Status                                                |
+| ----- | ------------------- | -------------- | ----------------------------------------------------- |
+| 1     | Spaced Memory Items | study          | first build                                           |
+| 2     | Decision Reps       | study          | first build                                           |
+| 3     | Calibration Tracker | study          | first build                                           |
+| 4     | Ten-Minute Ticker   | study          | after MVP                                             |
+| 5     | XC Viewer           | spatial (new)  | active -- creates the spatial app (WP `xc-viewer-v1`) |
+| 5b    | Route Walkthrough   | spatial        | follow-on on the spatial surface                      |
+| 6     | Avionics Trainer    | avionics (new) | creates avionics app                                  |
+| 7     | Recency Recovery    | study          | event prep                                            |
+| 8     | Per-Flight Journal  | reflect (new)  | creates reflect app                                   |
+| --    | FIRC migration      | firc (new)     | after study MVP proven                                |
 
 ## Open questions
 
