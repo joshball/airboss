@@ -193,9 +193,14 @@ export default class CoverageReporter implements Reporter {
 		writeFileSync(resolvePath(this.outDir, 'progress.ndjson'), '');
 
 		// Seed book progress from the manifest so the dashboard knows the
-		// expected URL count per book before any test finishes.
+		// expected URL count per book before any test finishes. When the run
+		// is scoped with `--book` (Playwright `--grep`), seed ONLY the matched
+		// books -- otherwise the dashboard shows 45 rows of 0% noise around
+		// the one book that is actually being swept.
+		const bookGrep = readGrepPattern();
 		if (this.manifest) {
 			for (const b of this.manifest.books) {
+				if (bookGrep !== null && !bookGrep.test(b.book)) continue;
 				this.books.set(b.book, {
 					book: b.book,
 					kind: b.kind,
@@ -360,12 +365,17 @@ export default class CoverageReporter implements Reporter {
 		process.stdout.write(`${lines.join('\n')}\n`);
 	}
 
-	/** Planned URL count: prefer the manifest total, else the seeded books. */
+	/**
+	 * Planned URL count for THIS run. Sums the seeded books' expected counts
+	 * -- which `onBegin` already narrowed to the `--book` scope -- so a
+	 * scoped run isn't mistaken for a crashed full sweep. Falls back to the
+	 * manifest total only when no books were seeded.
+	 */
 	private plannedUrlTotal(): number {
-		if (this.manifest) return this.manifest.totals.total;
 		let sum = 0;
 		for (const b of this.books.values()) sum += b.expected;
-		return sum;
+		if (sum > 0) return sum;
+		return this.manifest?.totals.total ?? 0;
 	}
 
 	// --- Live dashboard ---------------------------------------------------
@@ -596,6 +606,29 @@ function readSkipPayload(outDir: string): SkipPayload | null {
 	} catch {
 		return null;
 	}
+}
+
+/**
+ * The Playwright `--grep` pattern, if the run is scoped (e.g. `bun run test
+ * integration --book afh` -> `--grep afh`). Returns `null` for an unscoped
+ * full sweep. Used to narrow the dashboard to the books actually swept.
+ */
+function readGrepPattern(): RegExp | null {
+	const args = process.argv;
+	for (let i = 0; i < args.length; i += 1) {
+		const arg = args[i];
+		if (arg === '--grep' || arg === '-g') {
+			const next = args[i + 1];
+			if (next !== undefined && next.length > 0) {
+				try {
+					return new RegExp(next);
+				} catch {
+					return null;
+				}
+			}
+		}
+	}
+	return null;
 }
 
 /** Group books by `kind`, kinds sorted A-Z, books sorted within a kind. */
