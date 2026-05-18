@@ -69,9 +69,16 @@ export type {
 } from './products/timeline-bundle';
 // ----------------------------------------------------------------------
 // Layer-2 product types. Values (deriveMetar, deriveTaf, deriveAirmets,
-// deriveFbGrid, derivePireps) live in `./server.ts`.
+// deriveAirmetBulletins, deriveFbGrid, derivePireps) live in `./server.ts`.
 // ----------------------------------------------------------------------
-export type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+export type {
+	AirmetAdvisory,
+	DerivedAirmetBulletin,
+	DerivedFbGrid,
+	DerivedMetar,
+	DerivedPirep,
+	DerivedTaf,
+} from './products/types';
 // ----------------------------------------------------------------------
 // Zod schema (inferred type only; the schema value lives in `./server.ts`).
 // Re-exporting the schema value from this barrel is intentionally avoided

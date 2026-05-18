@@ -57,10 +57,18 @@ import { validateAllKnowledgeNodes } from './commentary/knowledge-link';
 import { deriveCommentary } from './commentary/socratic';
 import type { CommentaryCallout } from './commentary/types';
 import { deriveAirmets } from './products/airmet';
+import { deriveAirmetBulletins } from './products/airmet-text';
 import { deriveMetar } from './products/metar';
 import { derivePireps } from './products/pirep';
 import { deriveTaf } from './products/taf';
-import type { AirmetAdvisory, DerivedFbGrid, DerivedMetar, DerivedPirep, DerivedTaf } from './products/types';
+import type {
+	AirmetAdvisory,
+	DerivedAirmetBulletin,
+	DerivedFbGrid,
+	DerivedMetar,
+	DerivedPirep,
+	DerivedTaf,
+} from './products/types';
 import { deriveFbGrid } from './products/winds-aloft';
 import { loadScenario } from './truth/scenarios/registry';
 import type { TruthModel } from './truth/types';
@@ -87,6 +95,15 @@ export interface ScenarioProducts {
 	metars: DerivedMetar[];
 	tafs: DerivedTaf[];
 	airmets: AirmetAdvisory[];
+	/**
+	 * AIRMET *text bulletins* -- the encoded-text companion to `airmets`.
+	 * One per AIRMET family present in the scenario, derived from `airmets`
+	 * by `deriveAirmetBulletins`. The writer lands these as
+	 * `products/airmets.txt`, which makes the AIRMET product matchable by
+	 * the catalog coverage matcher (it links scenarios to catalog examples
+	 * by `raw`-string equality).
+	 */
+	airmetBulletins: DerivedAirmetBulletin[];
 	fbGrid: DerivedFbGrid | null;
 	pireps: DerivedPirep[];
 }
@@ -145,9 +162,10 @@ export function generateScenario(seed: ScenarioSeed): ScenarioBundle {
 	const metars = truth.routeStations.map((icao) => deriveMetar(truth, icao));
 	const tafs = truth.routeStations.map((icao) => deriveTaf(truth, icao, { validHours: tafValidHours }));
 	const airmets = deriveAirmets(truth);
+	const airmetBulletins = deriveAirmetBulletins(airmets);
 	const fbGrid = truth.fbStations.length > 0 ? deriveFbGrid(truth, truth.fbStations) : null;
 	const pireps = derivePireps(truth);
-	const products: ScenarioProducts = { metars, tafs, airmets, fbGrid, pireps };
+	const products: ScenarioProducts = { metars, tafs, airmets, airmetBulletins, fbGrid, pireps };
 
 	// === Phase C: charts ===
 	const charts = deriveAllCharts(truth, products satisfies ChartProductInputs, truth.scenarioId);
@@ -207,7 +225,9 @@ function loadBuiltin<T>(spec: string): T {
  *   tafs.{txt,json}        one TAF per blank-line-separated block / array
  *   fb-bulletin.{txt,json} the bulletin text / the ParsedFbGrid
  *   pireps.{txt,json}      one PIREP per line / array of ParsedPirep
- *   airmets.json           array of AirmetAdvisory
+ *   airmets.json           array of AirmetAdvisory (graphical advisory shape)
+ *   airmets.txt            AIRMET text bulletins, blank-line-separated,
+ *                          one block per AIRMET family (SIERRA/TANGO/ZULU)
  *
  * Phase C writes the chart artifacts produced by `deriveAllCharts` under
  * `data/wx-scenarios/<slug>/charts/<chart-kind>/spec.yaml`,
@@ -287,6 +307,18 @@ export async function writeScenarioBundle(bundle: ScenarioBundle, options: Scena
 	if (products.airmets.length > 0) {
 		ensureDir(fs, productsOut);
 		writeFile(fs, path, path.resolve(productsOut, 'airmets.json'), JSON.stringify(products.airmets, null, 2));
+	}
+
+	if (products.airmetBulletins.length > 0) {
+		ensureDir(fs, productsOut);
+		// AIRMET text bulletins -- blank-line-separated blocks, one per
+		// family. This is the `raw` form the catalog coverage matcher walks.
+		writeFile(
+			fs,
+			path,
+			path.resolve(productsOut, 'airmets.txt'),
+			products.airmetBulletins.map((b) => b.raw).join('\n\n'),
+		);
 	}
 
 	// Charts: write per-chart spec.yaml + source bytes; mirror into the

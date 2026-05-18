@@ -56,6 +56,34 @@ export interface AirmetAdvisory {
 	fromHazardZoneId: string;
 }
 
+/**
+ * A single AIRMET *text bulletin* -- the encoded-text companion to the
+ * graphical `AirmetAdvisory`. One bulletin per AIRMET family (SIERRA /
+ * TANGO / ZULU) present in a scenario; the `raw` field is the fixed-format
+ * FAA AIRMET text per AC 00-45H, emitted by `deriveAirmetBulletins`
+ * (`./airmet-text.ts`).
+ *
+ * Unlike METAR / TAF / PIREP / FB there is no parser round-trip -- the
+ * wx-charts library has no AIRMET text parser in v1 -- so the bulletin
+ * carries no `parsed` field. The `raw` string is what the catalog coverage
+ * matcher (`tools/catalog-build/match-scenarios.ts`) compares by
+ * whitespace-normalized equality to a catalog example.
+ */
+export interface DerivedAirmetBulletin {
+	/** The fixed-format FAA AIRMET bulletin text. */
+	raw: string;
+	/** Which AIRMET family this bulletin covers. */
+	family: AirmetFamily;
+	/** Issuance time -- the start of the validity window (UTC ISO). */
+	issuedAt: string;
+	/** Start of the validity window (UTC ISO). Equals `issuedAt`. */
+	validFrom: string;
+	/** End of the validity window (UTC ISO). */
+	validTo: string;
+	/** Originating hazard-zone ids, one per hazard block in the bulletin. */
+	fromHazardZoneIds: string[];
+}
+
 export interface DerivedFbGrid {
 	raw: string;
 	parsed: ParsedFbGrid;

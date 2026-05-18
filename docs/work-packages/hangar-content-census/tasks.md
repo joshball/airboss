@@ -101,6 +101,13 @@ node until then.
 
 These came out of the 2026-05-16 wx-catalog work and belong on a corpus's next-list:
 
-- [ ] wx-engine AIRMET text emitter (so AIRMET/SIGMET examples can match the catalog)
+- [x] wx-engine AIRMET text emitter -- `deriveAirmetBulletins` emits faithful FAA
+      AIRMET (SIERRA/TANGO/ZULU) text bulletins; the writer lands `products/airmets.txt`
+      and the catalog matcher walks it. AIRMET is now structurally matchable. SIGMET
+      emission is a separate effort (see below).
+- [ ] wx-engine SIGMET text emitter -- the truth model has no severe-category hazard
+      kind, no SIGMET designator-letter state, and no volcanic-ash / dust-storm hazard,
+      so a SIGMET emitter is not a thin extension of the AIRMET one. SIGMET catalog
+      examples stay uncovered until it ships.
 - [ ] Author `frontal-pressure-march` products into the catalog (temporal scenario contributes 0)
 - [ ] Engine features for ~44 uncovered token families (`+FC`, `VA`, `SQ`, `WS`, `BECMG`, ...)

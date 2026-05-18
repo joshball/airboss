@@ -6,6 +6,11 @@
  * bundle under `data/wx-scenarios/<slug>/` and attempts to match each one
  * to a catalog example by whitespace-normalized `raw` string equality.
  *
+ * AIRMET text bulletins (`products/airmets.txt`, emitted by the wx-engine's
+ * `deriveAirmetBulletins`) match against the catalog's `airmet-sigmet`
+ * product. SIGMET bulletins are not yet emitted by the engine, so SIGMET
+ * catalog examples stay uncovered until the SIGMET emitter ships.
+ *
  * Output: a single sidecar carrying both directions of the link:
  *
  *   course/knowledge/weather/encoded-text-catalog/scenario-matches.json
@@ -265,10 +270,19 @@ function matchScenario(result: MatchResult, index: CatalogIndex, slug: WxScenari
 		recordMatch(result, index, slug, 'fb', fbText, 'FB', truth.validAt);
 	}
 
-	// AIRMET / SIGMET: no `raw` field on the scenario side -- the bundle
-	// stores parsed advisories only. There is nothing to match by the
-	// "raw string equality" rule. Skip; coverage stays empty until a
-	// future ADR adds a raw FAX-form emitter.
+	// AIRMET text bulletins: blank-line-separated blocks, one per AIRMET
+	// family. The wx-engine AIRMET text emitter (`deriveAirmetBulletins`)
+	// writes `airmets.txt` alongside the parsed `airmets.json`; each block
+	// is matched against the catalog's `airmet-sigmet` product by raw-string
+	// equality. SIGMET bulletins are not yet emitted -- those catalog
+	// examples stay uncovered until the SIGMET emitter ships.
+	const airmetText = readText(resolve(productsDir, 'airmets.txt'));
+	if (airmetText !== null) {
+		const blocks = splitNonEmpty(airmetText, '\n\n');
+		for (const raw of blocks) {
+			recordMatch(result, index, slug, 'airmet-sigmet', raw, 'WA', truth.validAt);
+		}
+	}
 }
 
 export function buildMatches(): MatchResult {
