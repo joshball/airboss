@@ -576,9 +576,9 @@ describe('loadAimSections', () => {
 	});
 
 	it('never surfaces glossary-level rows (their loader owns them)', async () => {
-		// Glossary rows have code='glossary/<slug>' which 404s through
-		// LIBRARY_REGULATIONS_SECTION. The AIM loader filters them out so
-		// the only surfaces them is `loadGlossaryTerms`.
+		// Glossary rows have code='glossary/<slug>', which is not a routable
+		// AIM locator. The AIM loader filters them out so the only loader
+		// that surfaces them is `loadGlossaryTerms`.
 		const out = await loadAimSections(parseQuery(NEEDLE), HOST_AUTHED);
 		const leak = out.find((r) => r.id === SEC_GLOSSARY_ID);
 		expect(leak).toBeUndefined();

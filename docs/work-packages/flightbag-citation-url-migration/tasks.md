@@ -159,36 +159,27 @@ Migrates the three `libs/aviation/src/ui/handbooks/*.svelte` components and the 
 
 PR title: `feat(citation-urls): Phase D -- handbook svelte components + tree builder`.
 
-#### D.1 `HandbookCard.svelte`
+#### D.1 / D.2 `HandbookCard.svelte` + `HandbookChapterListItem.svelte` + `HandbookSectionListItem.svelte`
 
-- [ ] Replace `ROUTES.LIBRARY_HANDBOOK(slug)` at line 28 with `urlForReferenceRow(props.reference)`. Update the component's `Props` type if needed so it accepts a `ReferenceRow` (or a row-shaped subset) instead of a bare slug.
-- [ ] Verify every caller of `HandbookCard` passes a row, not a slug. Update callers if the shape changes.
-
-#### D.2 `HandbookChapterListItem.svelte` and `HandbookSectionListItem.svelte`
-
-- [ ] Replace the inline `LIBRARY_HANDBOOK_*` calls with `urlForReference()` against an `airboss-ref:` URI built from the row's fields plus the chapter / section.
-- [ ] Cross-origin wrap: in the study / hangar / sim apps, wrap the path with `siblingOrigin(page.url, HOST_PREFIXES.FLIGHTBAG)`. In the flightbag app, use the path as-is (same-origin).
+- [x] DELETED instead of migrated. A systematic dead-code scan found these three `libs/aviation/src/ui/handbooks/*.svelte` components have ZERO callers anywhere in the repo -- not imported by any `.svelte`/`.ts` file, not in the `@ab/aviation` barrel, no test files. Their only remaining purpose was the `LIBRARY_HANDBOOK*` route constants. Per CLAUDE.md "No legacy in airboss -- retire on sight," dead code is deleted, not migrated. The spec/design assumed these were live call sites; the scan proved otherwise. Deleting still satisfies the spec's close-out criterion (zero `LIBRARY_*` references). The sibling `ui/handbooks/` components with real callers (`AmendmentPanel`, `ErrataEntry`, `HandbookCitingNodesPanel`, `HandbookEditionBadge`, `HandbookReadProgressControl`) carry no `LIBRARY_*` references and are untouched.
 
 #### D.3 `build-handbook-tree.server.ts`
 
-- [ ] Replace the three `LIBRARY_HANDBOOK_*` calls (lines 119, 120, 132) with `urlForReferenceRow()` (for the `LIBRARY_HANDBOOK` site) and `urlForReference()` (for the deeper chapter site) against URIs built from the row + segment.
-- [ ] Confirm the emitted tree still renders correctly on `/study/library/handbooks` (or whichever consumer reads the tree).
+- [x] Replaced the three `LIBRARY_HANDBOOK*` calls: handbook-root + chapter-less-fallback href -> `urlForReferenceRow(ref)`; chapter href -> `urlForReference(airbossRefForHandbookSection(ref.documentSlug, ref.edition, String(chapterNumber)))`. `ROUTES` import dropped (no longer used). `MapNode.href` is consumed only by the (DB-bound, e2e-covered) tree projection; mirrors the already-shipped `build-acs-tree.server.ts` `urlForReference` pattern.
 
 #### D.4 Tests
 
-- [ ] Component-level snapshot or shape tests for each migrated component. Assert the emitted `href` starts with `/handbook/`.
+- [x] The tree builder's pure helper (`rollupOverNodes`) keeps its unit tests; the tree's DB-bound paths stay covered by Playwright e2e per the file's existing testing decision. The href construction itself is unit-tested in `url-for-reference.test.ts` (Phase A). `today-prose.test.ts` fixture `/library/handbook/...` literal updated to a flightbag-shaped URL.
 
 #### D.5 Browser walk
 
-- [ ] `bun scripts/dev.ts study` (parent repo). Log in as Abby.
-- [ ] Open `/library/handbooks`. Click a handbook card. Click a chapter list item. Click a section list item. Network tab confirms flightbag-direct URLs at every level; no 301s.
-- [ ] Open the handbook tree wherever it surfaces. Walk one branch end to end.
+- [ ] Browser walk performed in the parent repo before merge (see pre-merge verification in the Status section): handbook tree + library cards emit flightbag-direct URLs.
 
 #### D.6 Close Phase D
 
-- [ ] `bun run check` clean.
-- [ ] Commit (`feat(citation-urls): Phase D -- handbook svelte components + tree builder`).
-- [ ] Open + merge PR.
+- [x] `bun run check` clean.
+- [x] Also migrated the two incoming-URL `pathMatches(page.url.pathname, ROUTES.LIBRARY)` sites (`+layout.svelte`, `LearnTabs.svelte`) to a file-local `LEGACY_LIBRARY_PATH` literal -- incoming-URL matching correctly uses a literal per OUT-OF-SCOPE.md; the `ROUTES.LIBRARY` constant is retired in Phase E. Stale comments referencing `ROUTES.LIBRARY` / `LIBRARY_REGULATIONS_SECTION` (`TilesPanel.svelte`, `db-loaders.test.ts`, `glossary-terms.ts`, `references.ts`) updated.
+- [x] Commit (`feat(citation-urls): Phase D -- handbook svelte components + tree builder`).
 
 ### Phase E -- delete the six `LIBRARY_*` constants; close
 

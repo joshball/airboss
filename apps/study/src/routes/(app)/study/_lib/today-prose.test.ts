@@ -11,7 +11,7 @@ import { describe, expect, it } from 'vitest';
 import { renderTodayProse } from './today-prose';
 import type { TodayBriefing } from './today-types';
 
-const PHAK_CITE = { kind: 'handbook' as const, label: 'PHAK chapter 10', href: '/library/handbook/phak/10' };
+const PHAK_CITE = { kind: 'handbook' as const, label: 'PHAK chapter 10', href: '/handbook/phak/8083-25C/10' };
 
 const ZERO_GATES = {
 	recall: 'insufficient_data' as const,
