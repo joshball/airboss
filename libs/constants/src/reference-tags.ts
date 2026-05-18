@@ -45,7 +45,10 @@ export const REFERENCE_SOURCE_TYPES = {
 
 export type ReferenceSourceType = (typeof REFERENCE_SOURCE_TYPES)[keyof typeof REFERENCE_SOURCE_TYPES];
 
-export const SOURCE_TYPE_VALUES: readonly ReferenceSourceType[] = Object.values(REFERENCE_SOURCE_TYPES);
+export const SOURCE_TYPE_VALUES = Object.values(REFERENCE_SOURCE_TYPES) as [
+	ReferenceSourceType,
+	...ReferenceSourceType[],
+];
 
 export const SOURCE_TYPE_LABELS: Record<ReferenceSourceType, string> = {
 	[REFERENCE_SOURCE_TYPES.CFR]: '14 CFR',
@@ -120,7 +123,7 @@ export const AVIATION_TOPICS = {
 
 export type AviationTopic = (typeof AVIATION_TOPICS)[keyof typeof AVIATION_TOPICS];
 
-export const AVIATION_TOPIC_VALUES: readonly AviationTopic[] = Object.values(AVIATION_TOPICS);
+export const AVIATION_TOPIC_VALUES = Object.values(AVIATION_TOPICS) as [AviationTopic, ...AviationTopic[]];
 
 export const AVIATION_TOPIC_LABELS: Record<AviationTopic, string> = {
 	[AVIATION_TOPICS.REGULATIONS]: 'Regulations',
@@ -167,7 +170,7 @@ export const FLIGHT_RULES = {
 
 export type FlightRules = (typeof FLIGHT_RULES)[keyof typeof FLIGHT_RULES];
 
-export const FLIGHT_RULES_VALUES: readonly FlightRules[] = Object.values(FLIGHT_RULES);
+export const FLIGHT_RULES_VALUES = Object.values(FLIGHT_RULES) as [FlightRules, ...FlightRules[]];
 
 export const FLIGHT_RULES_LABELS: Record<FlightRules, string> = {
 	[FLIGHT_RULES.VFR]: 'VFR',
@@ -191,7 +194,7 @@ export const KNOWLEDGE_KINDS = {
 
 export type KnowledgeKind = (typeof KNOWLEDGE_KINDS)[keyof typeof KNOWLEDGE_KINDS];
 
-export const KNOWLEDGE_KIND_VALUES: readonly KnowledgeKind[] = Object.values(KNOWLEDGE_KINDS);
+export const KNOWLEDGE_KIND_VALUES = Object.values(KNOWLEDGE_KINDS) as [KnowledgeKind, ...KnowledgeKind[]];
 
 export const KNOWLEDGE_KIND_LABELS: Record<KnowledgeKind, string> = {
 	[KNOWLEDGE_KINDS.DEFINITION]: 'Definition',
@@ -225,8 +228,10 @@ export const REFERENCE_PHASES_OF_FLIGHT = {
 
 export type ReferencePhaseOfFlight = (typeof REFERENCE_PHASES_OF_FLIGHT)[keyof typeof REFERENCE_PHASES_OF_FLIGHT];
 
-export const REFERENCE_PHASE_OF_FLIGHT_VALUES: readonly ReferencePhaseOfFlight[] =
-	Object.values(REFERENCE_PHASES_OF_FLIGHT);
+export const REFERENCE_PHASE_OF_FLIGHT_VALUES = Object.values(REFERENCE_PHASES_OF_FLIGHT) as [
+	ReferencePhaseOfFlight,
+	...ReferencePhaseOfFlight[],
+];
 
 export const REFERENCE_PHASE_OF_FLIGHT_LABELS: Record<ReferencePhaseOfFlight, string> = {
 	[REFERENCE_PHASES_OF_FLIGHT.PREFLIGHT]: 'Preflight',
@@ -260,7 +265,10 @@ export const CERT_APPLICABILITIES = {
 
 export type CertApplicability = (typeof CERT_APPLICABILITIES)[keyof typeof CERT_APPLICABILITIES];
 
-export const CERT_APPLICABILITY_VALUES: readonly CertApplicability[] = Object.values(CERT_APPLICABILITIES);
+export const CERT_APPLICABILITY_VALUES = Object.values(CERT_APPLICABILITIES) as [
+	CertApplicability,
+	...CertApplicability[],
+];
 
 export const CERT_APPLICABILITY_LABELS: Record<CertApplicability, string> = {
 	[CERT_APPLICABILITIES.STUDENT]: 'Student',

@@ -26,7 +26,7 @@ import { z } from 'zod';
  * options stay tight and the server-side parse rejects a forged
  * `proposedRole=admin` payload.
  */
-export const INVITABLE_ROLE_VALUES: readonly Role[] = ROLE_VALUES.filter((r) => r !== ROLES.ADMIN);
+export const INVITABLE_ROLE_VALUES = ROLE_VALUES.filter((r) => r !== ROLES.ADMIN) as [Role, ...Role[]];
 
 /** Lowercased + trimmed email. The DB unique partial index relies on the
  * lowercased value being canonical. */
@@ -53,7 +53,7 @@ const passwordSchema = z
  * recoverable (revoke if wrong recipient). */
 export const CreateInvitationInputSchema = z.object({
 	email: emailSchema,
-	proposedRole: z.enum(INVITABLE_ROLE_VALUES as unknown as [string, ...string[]]),
+	proposedRole: z.enum(INVITABLE_ROLE_VALUES),
 });
 
 /** Revoke a pending invitation. Typed-email gate (decision (c) precedent

@@ -27,7 +27,7 @@ const confirmEmailSchema = z.string().trim().min(1, 'Type the user email to conf
 /** Set the target user's `role`. */
 export const SetUserRoleInputSchema = z.object({
 	targetUserId: userIdSchema,
-	newRole: z.enum(ROLE_VALUES as unknown as [string, ...string[]]),
+	newRole: z.enum(ROLE_VALUES),
 });
 
 /** Ban the target user. Optional future expiry; missing = permanent. */

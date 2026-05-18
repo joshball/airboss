@@ -674,7 +674,7 @@ export const CERTS = {
 
 export type Cert = (typeof CERTS)[keyof typeof CERTS];
 
-export const CERT_VALUES: readonly Cert[] = Object.values(CERTS);
+export const CERT_VALUES = Object.values(CERTS) as [Cert, ...Cert[]];
 
 /**
  * Human-readable labels for certs. Short-form aviation acronym matches the
@@ -983,7 +983,7 @@ export const PLAN_STATUSES = {
 
 export type PlanStatus = (typeof PLAN_STATUSES)[keyof typeof PLAN_STATUSES];
 
-export const PLAN_STATUS_VALUES = Object.values(PLAN_STATUSES);
+export const PLAN_STATUS_VALUES = Object.values(PLAN_STATUSES) as [PlanStatus, ...PlanStatus[]];
 
 export const PLAN_STATUS_LABELS: Record<PlanStatus, string> = {
 	[PLAN_STATUSES.DRAFT]: 'Draft',
@@ -1017,7 +1017,7 @@ export const PLAN_ITEM_KINDS = {
 
 export type PlanItemKind = (typeof PLAN_ITEM_KINDS)[keyof typeof PLAN_ITEM_KINDS];
 
-export const PLAN_ITEM_KIND_VALUES = Object.values(PLAN_ITEM_KINDS);
+export const PLAN_ITEM_KIND_VALUES = Object.values(PLAN_ITEM_KINDS) as [PlanItemKind, ...PlanItemKind[]];
 
 export const PLAN_ITEM_KIND_LABELS: Record<PlanItemKind, string> = {
 	[PLAN_ITEM_KINDS.KNOWLEDGE_NODE]: 'Knowledge node',
@@ -1074,7 +1074,7 @@ export const SESSION_MODES = {
 
 export type SessionMode = (typeof SESSION_MODES)[keyof typeof SESSION_MODES];
 
-export const SESSION_MODE_VALUES = Object.values(SESSION_MODES);
+export const SESSION_MODE_VALUES = Object.values(SESSION_MODES) as [SessionMode, ...SessionMode[]];
 
 export const SESSION_MODE_LABELS: Record<SessionMode, string> = {
 	[SESSION_MODES.CONTINUE]: 'Continue where I left off',
@@ -1143,7 +1143,7 @@ export const DEPTH_PREFERENCES = {
 
 export type DepthPreference = (typeof DEPTH_PREFERENCES)[keyof typeof DEPTH_PREFERENCES];
 
-export const DEPTH_PREFERENCE_VALUES = Object.values(DEPTH_PREFERENCES);
+export const DEPTH_PREFERENCE_VALUES = Object.values(DEPTH_PREFERENCES) as [DepthPreference, ...DepthPreference[]];
 
 export const DEPTH_PREFERENCE_LABELS: Record<DepthPreference, string> = {
 	[DEPTH_PREFERENCES.SURFACE]: 'Surface -- overview, key facts',
