@@ -39,13 +39,15 @@ const INTEGRATION_PROJECT = 'flightbag-coverage';
 // Where the spec + reporter write their artefacts. Printed after a run so the
 // user (or an agent) can inspect results without re-running the sweep.
 const INTEGRATION_OUT_DIR = 'tests/integration/.out';
-const INTEGRATION_ARTEFACTS = [
-	'manifest.json',
-	'progress.ndjson',
-	'last-run.json',
-	'coverage-report.md',
-	'coverage-failures.txt',
-	'coverage-summary.json',
+// Each artefact paired with a one-line description, so the run output
+// explains what every file is for instead of dumping six bare paths.
+const INTEGRATION_ARTEFACTS: ReadonlyArray<readonly [file: string, description: string]> = [
+	['coverage-report.md', 'human-readable report -- per-book breakdown, the full record'],
+	['coverage-failures.txt', 'every failed URL, one per line (empty when all passed)'],
+	['coverage-summary.json', 'machine-readable totals: pass/fail counts per tier'],
+	['last-run.json', 'per-URL pass/fail map from the most recent run'],
+	['manifest.json', 'the run plan: which URLs the sweep covers'],
+	['progress.ndjson', 'streaming log -- one JSON line per finished URL'],
 ] as const;
 
 const args = process.argv.slice(2);
@@ -347,14 +349,17 @@ async function runIntegration(input: readonly string[]): Promise<void> {
 	if (code !== 0) process.exit(code);
 }
 
-/** Print artefact paths + a retest-by-book hint after a sweep run. */
+/** Print described artefact paths + retest hints after a sweep run. */
 function printIntegrationArtefacts(): void {
-	console.log('\nartefacts:');
-	for (const name of INTEGRATION_ARTEFACTS) {
-		console.log(`  ${resolve(INTEGRATION_OUT_DIR, name)}`);
+	console.log(`\nartefacts written to ${INTEGRATION_OUT_DIR}/ :`);
+	const width = Math.max(...INTEGRATION_ARTEFACTS.map(([file]) => file.length));
+	for (const [file, description] of INTEGRATION_ARTEFACTS) {
+		console.log(`  ${file.padEnd(width)}  ${description}`);
 	}
-	console.log('\nretry a single book:  bun run test integration --book <name>');
-	console.log('retry only failures:  bun run test integration --resume');
+	console.log('\nnext:');
+	console.log('  re-run one document:   bun run test integration --book <name>');
+	console.log('  re-run only failures:  bun run test integration --resume');
+	console.log('  run the full sweep:    bun run test integration --full   (every URL, not a sample)');
 }
 
 if (first === 'all') {

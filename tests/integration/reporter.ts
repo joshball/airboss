@@ -814,12 +814,19 @@ function renderPlanTree(manifest: Manifest | null): string[] {
 		],
 	});
 
-	const lines = renderTable(columns, rows, 'Flightbag coverage plan');
+	const lines: string[] = [];
+	// One-line "what is this" intro -- the sweep is otherwise unexplained.
+	lines.push(
+		paint(SGR.dim, 'Checks every flightbag reader page (one URL per document section) still loads.'),
+	);
+	lines.push(paint(SGR.dim, 'Documents are grouped by kind: ac/ advisory circulars, cfr/ regulations, aim/, handbook/, acs/.'));
+	lines.push('');
+	lines.push(...renderTable(columns, rows, 'Flightbag coverage plan'));
 	// Legend: the three tier columns are meaningless without it.
 	lines.push(
 		paint(
 			SGR.dim,
-			`  every reader URL is checked at one tier:  ` +
+			`  each URL is checked at one tier:  ` +
 				`${paint(TIER_COLORS.sanity, 'SANITY')} page responds  ` +
 				`${paint(TIER_COLORS.structural, 'STRUCT')} renders real content  ` +
 				`${paint(TIER_COLORS.content, 'CONTENT')} the expected section rendered`,
