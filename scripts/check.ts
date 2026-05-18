@@ -538,6 +538,15 @@ const STEP_HELP: Record<string, StepHelp> = {
 		how: '`bun scripts/wx-scenario/check-round-trip.ts --all`. Always full-scope, mirroring the graph-validator pattern.',
 		links: ['scripts/wx-scenario.ts', 'libs/wx-engine/src/validate/', 'docs/work-packages/wx-engine/spec.md'],
 	},
+	'xc-scenario-validate': {
+		tier: 'fast',
+		scopable: false,
+		summary: 'Validate every XC viewer scenario: schema + cross-layer consistency',
+		what: 'Runs `bun run xc-scenario validate --all`. Composes every scenario from XC_SCENARIO_VALUES in memory (Zod-validating every RouteSpec / AircraftSpec / ScenarioSpec literal as a side effect), then runs the cross-layer consistency rules: route waypoints inside the region bounds, the declared alternate in the airport table, the wx scenario covering the flight window, a non-negative fuel reserve, and altitude below the service ceiling. NO disk writes.',
+		why: 'The load-bearing guarantee that the XC viewer cannot ship a scenario whose composition produces an internally inconsistent bundle -- a route too long for the aircraft, a waypoint off the sectional, or an alternate that does not exist.',
+		how: '`bun scripts/xc-scenario.ts validate --all`. Always full-scope, mirroring the graph-validator pattern.',
+		links: ['scripts/xc-scenario.ts', 'libs/spatial-engine/src/validate/', 'docs/work-packages/xc-viewer-v1/spec.md'],
+	},
 };
 
 function printChecksIndex(): void {
@@ -1202,7 +1211,14 @@ const BROWSER_BUNDLED_LIBS: readonly string[] = [
 ];
 
 function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
-	const SVELTE_APPS = ['apps/study', 'apps/sim', 'apps/hangar', 'apps/avionics', 'apps/flightbag'] as const;
+	const SVELTE_APPS = [
+		'apps/study',
+		'apps/sim',
+		'apps/hangar',
+		'apps/avionics',
+		'apps/flightbag',
+		'apps/spatial',
+	] as const;
 	const isScoped = profile === 'dirty' || profile === 'branch';
 	const defs: StepDef[] = [];
 
@@ -1491,6 +1507,26 @@ function buildStepDefs(profile: Profile, dirty: readonly string[]): StepDef[] {
 		fn: () => shellRun('bun', ['scripts/wx-scenario.ts', 'check-round-trip', '--all']),
 	});
 
+	defs.push({
+		name: 'xc-scenario-validate',
+		tier: 'fast',
+		// Always-full-scope graph validator -- mirrors wx-scenario-round-trip.
+		// Composes every XC scenario in memory + runs the cross-layer
+		// consistency rules. Sub-second; no relevance gate beyond the
+		// spatial-engine / scenario-source surface.
+		relevantWhen: (d) =>
+			anyMatch(
+				d,
+				(f) =>
+					f.startsWith('libs/spatial-engine/') ||
+					f.startsWith('scripts/xc-scenario') ||
+					f.startsWith('course/sectionals/') ||
+					f.startsWith('course/aircraft/') ||
+					f.startsWith('libs/constants/src/xc-viewer'),
+			),
+		fn: () => shellRun('bun', ['scripts/xc-scenario.ts', 'validate', '--all']),
+	});
+
 	// svelte-check predicates: in `dirty` / `branch` scope an app's type-check
 	// runs when that app's own files change, or when a shared lib it imports
 	// changes. `svelte-check --tsconfig` always type-checks the whole app
@@ -1620,7 +1656,14 @@ async function main(): Promise<number> {
 	// SvelteKit sync prereq is needed for any profile that runs svelte-check.
 	const needsSync = args.profile === 'types' || args.profile === 'all';
 	if (needsSync) {
-		const SVELTE_APPS = ['apps/study', 'apps/sim', 'apps/hangar', 'apps/avionics', 'apps/flightbag'] as const;
+		const SVELTE_APPS = [
+			'apps/study',
+			'apps/sim',
+			'apps/hangar',
+			'apps/avionics',
+			'apps/flightbag',
+			'apps/spatial',
+		] as const;
 		const syncJobs = SVELTE_APPS.filter(
 			(app) => !existsSync(resolve(REPO_ROOT, `${app}/.svelte-kit/tsconfig.json`)),
 		).map(async (app) => {

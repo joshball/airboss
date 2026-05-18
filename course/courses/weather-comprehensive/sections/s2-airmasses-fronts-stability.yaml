@@ -68,6 +68,17 @@ body_md: |
   :::chart slug="wx-scenarios/frontal-xc-march/prog-12hr"
   :::
 
+  Now put the synoptic picture onto a real route. The XC viewer below
+  takes the same frontal-passage truth state and lays it over a
+  sectional: a cross-country leg with the airspace, the waypoints, the
+  weather chips at each stop, and the per-leg fuel and time. Click a
+  waypoint to read its METAR and TAF; click a leg to see the wind
+  correction. The point is to feel how the air-mass story you just
+  read becomes a concrete go/no-go on a specific flight:
+
+  :::xc-viewer slug="kmem-kmkl-kolv-frontal-march"
+  :::
+
   A worked-truth example: a March cold front sweeping from KSTL east
   through KORD, with the warm sector ahead and post-frontal cP behind.
   Every METAR, every TAF FM group, every AIRMET polygon, every Socratic

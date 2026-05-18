@@ -335,53 +335,53 @@ PR title: `feat(xc-viewer): Phase F -- SvelteKit page + directive contract + cou
 
 #### F.1 SvelteKit page
 
-- [ ] Create `apps/spatial/src/routes/spatial/xc/[slug]/+page.server.ts`. Loads `data/xc-scenarios/<slug>/bundle.json` + `performance.json`. Returns `{ bundle, performance, scenarioId: slug }` to the page. Uses `@ab/spatial-engine/server` for the load (server-only barrel).
-- [ ] Create `apps/spatial/src/routes/spatial/xc/[slug]/+page.svelte`. Imports `<XcViewer>` from `@ab/spatial-ui`. Renders `<XcViewer bundle={data.bundle} />` at the app's natural full-width.
-- [ ] Create `apps/spatial/src/routes/spatial/xc/+page.server.ts` + `+page.svelte` for the scenario picker (v1 lists one scenario; v2+ lists more). Mirrors `apps/study/src/routes/study/+page.server.ts` shape.
-- [ ] Wire the page route through `ROUTES.SPATIAL_XC_SCENARIO(slug)` constant. Never inline path strings (per CLAUDE.md).
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-page.spec.ts` that visits `/spatial/xc/kmem-kmkl-kolv-frontal-march` on the new spatial app and asserts the full viewer renders end-to-end with all four layers visible.
+- [x] Create `apps/spatial/src/routes/spatial/xc/[slug]/+page.server.ts`. Loads `data/xc-scenarios/<slug>/bundle.json` + `performance.json`. Returns `{ bundle, performance, scenarioId: slug }` to the page. Uses `@ab/spatial-engine/server` for the load (server-only barrel).
+- [x] Create `apps/spatial/src/routes/spatial/xc/[slug]/+page.svelte`. Imports `<XcViewer>` from `@ab/spatial-ui`. Renders `<XcViewer bundle={data.bundle} />` at the app's natural full-width.
+- [x] Create `apps/spatial/src/routes/spatial/xc/+page.server.ts` + `+page.svelte` for the scenario picker (v1 lists one scenario; v2+ lists more). Mirrors `apps/study/src/routes/study/+page.server.ts` shape.
+- [x] Wire the page route through `ROUTES.SPATIAL_XC_SCENARIO(slug)` constant. Never inline path strings (per CLAUDE.md).
+- [x] Add a Playwright smoke at `tests/e2e/xc-viewer-page.spec.ts` that visits `/spatial/xc/kmem-kmkl-kolv-frontal-march` on the new spatial app and asserts the full viewer renders end-to-end with all four layers visible.
 
 #### F.2 CLI dispatcher
 
-- [ ] Create `scripts/xc-scenario.ts` mirroring `scripts/wx-scenario.ts` shape. Reads `process.argv.slice(2)`, switches on the first arg, prints help when called with no args / `help` / `-h` / `--help`.
-- [ ] Create `scripts/xc-scenario/build.ts` -- `bun run xc-scenario build <slug>` and `bun run xc-scenario build --all`. Calls `composeBundle` + `writeScenarioBundle` per scenario.
-- [ ] Create `scripts/xc-scenario/list.ts` -- enumerates `XC_SCENARIO_VALUES` with their human labels.
-- [ ] Create `scripts/xc-scenario/validate.ts` -- `bun run xc-scenario validate <slug>` and `--all`. Runs schema + consistency validation without writing to disk. Returns non-zero on any failure.
-- [ ] Add `"xc-scenario": "bun scripts/xc-scenario.ts"` to root `package.json` scripts.
-- [ ] Run `bun run xc-scenario build kmem-kmkl-kolv-frontal-march`. Verify `data/xc-scenarios/kmem-kmkl-kolv-frontal-march/{bundle.json, route.geojson, performance.json}` exists and validates.
-- [ ] Run `bun run xc-scenario validate --all`. Expected: exits 0; all checks pass.
-- [ ] Commit (`feat(xc-viewer): scripts/xc-scenario.ts dispatcher (build / list / validate)`).
+- [x] Create `scripts/xc-scenario.ts` mirroring `scripts/wx-scenario.ts` shape. Reads `process.argv.slice(2)`, switches on the first arg, prints help when called with no args / `help` / `-h` / `--help`.
+- [x] Create `scripts/xc-scenario/build.ts` -- `bun run xc-scenario build <slug>` and `bun run xc-scenario build --all`. Calls `composeBundle` + `writeScenarioBundle` per scenario.
+- [x] Create `scripts/xc-scenario/list.ts` -- enumerates `XC_SCENARIO_VALUES` with their human labels.
+- [x] Create `scripts/xc-scenario/validate.ts` -- `bun run xc-scenario validate <slug>` and `--all`. Runs schema + consistency validation without writing to disk. Returns non-zero on any failure.
+- [x] Add `"xc-scenario": "bun scripts/xc-scenario.ts"` to root `package.json` scripts.
+- [x] Run `bun run xc-scenario build kmem-kmkl-kolv-frontal-march`. Verify `data/xc-scenarios/kmem-kmkl-kolv-frontal-march/{bundle.json, route.geojson, performance.json}` exists and validates.
+- [x] Run `bun run xc-scenario validate --all`. Expected: exits 0; all checks pass.
+- [x] Commit (`feat(xc-viewer): scripts/xc-scenario.ts dispatcher (build / list / validate)`).
 
 #### F.3 Wire validate --all into `bun run check`
 
-- [ ] Add a step to `scripts/check.ts` that invokes `bun run xc-scenario validate --all` and reports per-scenario pass/fail to `.cache/check/xc-scenario-validate.{stdout,stderr,exit}`. Mirror the existing wx-scenario round-trip step + the broader graph-validator step shape.
-- [ ] Verify the new step runs in dirty / branch / quick / types / all profiles per spec. The validate step always runs full regardless of scope (per the existing graph-validator pattern).
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings. Commit (`chore(check): wire xc-scenario validate-all into the pipeline`).
+- [x] Add a step to `scripts/check.ts` that invokes `bun run xc-scenario validate --all` and reports per-scenario pass/fail to `.cache/check/xc-scenario-validate.{stdout,stderr,exit}`. Mirror the existing wx-scenario round-trip step + the broader graph-validator step shape.
+- [x] Verify the new step runs in dirty / branch / quick / types / all profiles per spec. The validate step always runs full regardless of scope (per the existing graph-validator pattern).
+- [x] Run `bun run check all` -- 0 errors, 0 warnings. Commit (`chore(check): wire xc-scenario validate-all into the pipeline`).
 
 #### F.4 `:::xc-viewer` directive contract
 
-- [ ] Create `docs/work-packages/xc-viewer-v1/CONSUMER-CONTRACT.md` documenting the data contract the `:::xc-viewer slug="..."` directive consumes per design.md "Mountpoint contract".
-- [ ] File a follow-on issue or backlog entry in the course-reader-and-editor consumer WP noting that the `:::xc-viewer` directive resolver should be added per the contract. (This WP does not implement the directive; the consumer WP does.)
-- [ ] Author one course-step example demonstrating the directive at `course/courses/weather-comprehensive/sections/<existing-section>.yaml` (the section best fitting frontal-passage pedagogy -- candidates: `wx-airmasses-and-fronts`, `wx-go-nogo-decision`, `wx-briefing-execution`). The example is a markdown body containing `:::xc-viewer slug="kmem-kmkl-kolv-frontal-march"`. Until the consumer renderer ships, the directive is a no-op placeholder; the example documents intent.
-- [ ] Commit (`docs(xc-viewer): :::xc-viewer directive contract + course-step example`).
+- [x] Create `docs/work-packages/xc-viewer-v1/CONSUMER-CONTRACT.md` documenting the data contract the `:::xc-viewer slug="..."` directive consumes per design.md "Mountpoint contract".
+- [x] File a follow-on issue or backlog entry in the course-reader-and-editor consumer WP noting that the `:::xc-viewer` directive resolver should be added per the contract. (This WP does not implement the directive; the consumer WP does.)
+- [x] Author one course-step example demonstrating the directive at `course/courses/weather-comprehensive/sections/<existing-section>.yaml` (the section best fitting frontal-passage pedagogy -- candidates: `wx-airmasses-and-fronts`, `wx-go-nogo-decision`, `wx-briefing-execution`). The example is a markdown body containing `:::xc-viewer slug="kmem-kmkl-kolv-frontal-march"`. Until the consumer renderer ships, the directive is a no-op placeholder; the example documents intent.
+- [x] Commit (`docs(xc-viewer): :::xc-viewer directive contract + course-step example`).
 
 #### F.5 Documentation surface
 
-- [ ] Update `docs/products/spatial/INDEX.md` (created in Phase A.3) with the v1 scope summary + a link to the WP.
-- [ ] Create `docs/products/spatial/VISION.md` mirroring the platform-product VISION shape -- one paragraph linking to the xc-viewer VISION + naming the next products on the surface (route walkthrough, airport cards).
-- [ ] Update [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) build-order table to mark `apps/spatial/` as built (was "Future"). Update the surface inventory if the order has changed.
+- [x] Update `docs/products/spatial/INDEX.md` (created in Phase A.3) with the v1 scope summary + a link to the WP.
+- [x] Create `docs/products/spatial/VISION.md` mirroring the platform-product VISION shape -- one paragraph linking to the xc-viewer VISION + naming the next products on the surface (route walkthrough, airport cards).
+- [x] Update [docs/platform/MULTI_PRODUCT_ARCHITECTURE.md](../../platform/MULTI_PRODUCT_ARCHITECTURE.md) build-order table to mark `apps/spatial/` as built (was "Future"). Update the surface inventory if the order has changed.
 
 #### F.6 Phase F close
 
-- [ ] Run `bun run xc-scenario build --all` -- the one v1 scenario generates cleanly.
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase F -- SvelteKit page + directive contract + course-step mount + check-wire-in`. Body summarizes the page route, the dispatcher subcommands, the new `bun run check` step, the consumer-contract doc, and the course-step mount.
+- [x] Run `bun run xc-scenario build --all` -- the one v1 scenario generates cleanly.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase F -- SvelteKit page + directive contract + course-step mount + check-wire-in`. Body summarizes the page route, the dispatcher subcommands, the new `bun run check` step, the consumer-contract doc, and the course-step mount.
 
 ## Final close
 
-- [ ] All six phases shipped. `bun run xc-scenario list` shows 1 scenario (v1's `kmem-kmkl-kolv-frontal-march`). `data/xc-scenarios/` carries the v1 directory. `course/sectionals/memphis/` carries the v1 vector geometry.
-- [ ] `apps/spatial/` runs locally on `PORTS.SPATIAL`. Visiting `/spatial/xc/kmem-kmkl-kolv-frontal-march` renders the full v1 viewer with all four layers visible.
-- [ ] The course step at `course/courses/weather-comprehensive/sections/<section>.yaml` contains the `:::xc-viewer slug="..."` directive; the directive is a no-op placeholder until the consumer resolver ships in its own WP.
+- [x] All six phases shipped. `bun run xc-scenario list` shows 1 scenario (v1's `kmem-kmkl-kolv-frontal-march`). `data/xc-scenarios/` carries the v1 directory. `course/sectionals/memphis/` carries the v1 vector geometry.
+- [x] `apps/spatial/` runs locally on `PORTS.SPATIAL`. Visiting `/spatial/xc/kmem-kmkl-kolv-frontal-march` renders the full v1 viewer with all four layers visible.
+- [x] The course step at `course/courses/weather-comprehensive/sections/<section>.yaml` contains the `:::xc-viewer slug="..."` directive; the directive is a no-op placeholder until the consumer resolver ships in its own WP.
 - [ ] Run `/ball-review-full` against the entire `libs/spatial-engine/` + `libs/spatial-ui/` + `apps/spatial/` + `scripts/xc-scenario*` + `scripts/sectionals*` + `course/sectionals/memphis/` + `data/xc-scenarios/` surface. Fix every finding (per CLAUDE.md: always fix everything from a review). Re-run `bun run check all` -- 0 errors, 0 warnings.
 - [ ] Set `agent_review_status: done` on every WP file in this directory.
 - [ ] Update `docs/work/NOW.md` to flag the WP as ready for human walk-through.

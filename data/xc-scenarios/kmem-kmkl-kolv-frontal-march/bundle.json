@@ -1,0 +1,2322 @@
+{
+  "scenarioId": "kmem-kmkl-kolv-frontal-march",
+  "label": "KMEM -> KMKL -> KOLV -- Cold Front Passage (March)",
+  "validAt": "2026-03-19T19:00:00Z",
+  "geography": {
+    "regionSlug": "memphis",
+    "bounds": {
+      "minLon": -91.5,
+      "minLat": 33.5,
+      "maxLon": -87.5,
+      "maxLat": 36.7
+    },
+    "airports": [
+      {
+        "icao": "KMEM",
+        "name": "Memphis International",
+        "lon": -89.9767,
+        "lat": 35.0424,
+        "elevationFtMsl": 341,
+        "attended": true,
+        "airspaceClass": "B",
+        "runways": [
+          {
+            "designator": "18C/36C",
+            "headingDegMagnetic": 175,
+            "lengthFt": 9320,
+            "widthFt": 150,
+            "surface": "concrete",
+            "hasPrecisionApproach": true
+          },
+          {
+            "designator": "18L/36R",
+            "headingDegMagnetic": 175,
+            "lengthFt": 9000,
+            "widthFt": 150,
+            "surface": "concrete",
+            "hasPrecisionApproach": true
+          },
+          {
+            "designator": "18R/36L",
+            "headingDegMagnetic": 175,
+            "lengthFt": 11120,
+            "widthFt": 150,
+            "surface": "concrete",
+            "hasPrecisionApproach": true
+          },
+          {
+            "designator": "9/27",
+            "headingDegMagnetic": 85,
+            "lengthFt": 8946,
+            "widthFt": 150,
+            "surface": "asphalt",
+            "hasPrecisionApproach": true
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "ATIS",
+            "mhz": 119
+          },
+          {
+            "label": "Tower",
+            "mhz": 118.3
+          },
+          {
+            "label": "Ground",
+            "mhz": 121.9
+          },
+          {
+            "label": "Memphis Approach",
+            "mhz": 124.15
+          }
+        ],
+        "fbos": [
+          {
+            "name": "Wilson Air Center",
+            "fuel": [
+              "100LL",
+              "JET-A"
+            ]
+          },
+          {
+            "name": "Signature Flight Support",
+            "fuel": [
+              "100LL",
+              "JET-A"
+            ]
+          }
+        ]
+      },
+      {
+        "icao": "KMKL",
+        "name": "McKellar-Sipes Regional",
+        "lon": -88.9156,
+        "lat": 35.5999,
+        "elevationFtMsl": 434,
+        "attended": true,
+        "airspaceClass": "D",
+        "runways": [
+          {
+            "designator": "2/20",
+            "headingDegMagnetic": 20,
+            "lengthFt": 6004,
+            "widthFt": 150,
+            "surface": "asphalt",
+            "hasPrecisionApproach": true
+          },
+          {
+            "designator": "7/25",
+            "headingDegMagnetic": 70,
+            "lengthFt": 5004,
+            "widthFt": 100,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "ATIS",
+            "mhz": 120.075
+          },
+          {
+            "label": "Tower",
+            "mhz": 124.2
+          },
+          {
+            "label": "Ground",
+            "mhz": 121.9
+          },
+          {
+            "label": "Memphis Center",
+            "mhz": 134.65
+          }
+        ],
+        "fbos": [
+          {
+            "name": "McKellar-Sipes Aviation",
+            "fuel": [
+              "100LL",
+              "JET-A"
+            ]
+          }
+        ]
+      },
+      {
+        "icao": "KOLV",
+        "name": "Olive Branch",
+        "lon": -89.7869,
+        "lat": 34.9786,
+        "elevationFtMsl": 402,
+        "attended": true,
+        "airspaceClass": "D",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 6000,
+            "widthFt": 100,
+            "surface": "asphalt",
+            "hasPrecisionApproach": true
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "ATIS",
+            "mhz": 124.825
+          },
+          {
+            "label": "Tower",
+            "mhz": 119.075
+          },
+          {
+            "label": "Ground",
+            "mhz": 121.6
+          },
+          {
+            "label": "CTAF",
+            "mhz": 119.075
+          }
+        ],
+        "fbos": [
+          {
+            "name": "Olive Branch Aviation",
+            "fuel": [
+              "100LL",
+              "JET-A"
+            ]
+          }
+        ]
+      },
+      {
+        "icao": "KAWM",
+        "name": "West Memphis Municipal",
+        "lon": -90.2342,
+        "lat": 35.1357,
+        "elevationFtMsl": 215,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KM01",
+        "name": "General DeWitt Spain",
+        "lon": -90.0517,
+        "lat": 35.2069,
+        "elevationFtMsl": 220,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KUTA",
+        "name": "Tunica Municipal",
+        "lon": -90.3469,
+        "lat": 34.6809,
+        "elevationFtMsl": 194,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KHRO",
+        "name": "Boswell Field (Hernando)",
+        "lon": -90.0086,
+        "lat": 34.8392,
+        "elevationFtMsl": 350,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KSQT",
+        "name": "Strawn Field (Sardis)",
+        "lon": -89.7989,
+        "lat": 34.4639,
+        "elevationFtMsl": 274,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KCKM",
+        "name": "Fletcher Field (Clarksdale)",
+        "lon": -90.5114,
+        "lat": 34.3,
+        "elevationFtMsl": 174,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KDYR",
+        "name": "Dyersburg Regional",
+        "lon": -89.4072,
+        "lat": 36.0178,
+        "elevationFtMsl": 338,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KCBM",
+        "name": "Columbus AFB area aux",
+        "lon": -88.4439,
+        "lat": 33.6437,
+        "elevationFtMsl": 219,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KTUP",
+        "name": "Tupelo Regional",
+        "lon": -88.7699,
+        "lat": 34.2681,
+        "elevationFtMsl": 346,
+        "attended": true,
+        "airspaceClass": "D",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KHKA",
+        "name": "Blytheville Municipal",
+        "lon": -89.8311,
+        "lat": 35.9403,
+        "elevationFtMsl": 254,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KPOE",
+        "name": "Parsons Field",
+        "lon": -88.1339,
+        "lat": 35.6519,
+        "elevationFtMsl": 463,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KGLE",
+        "name": "Greenville (Mid Delta)",
+        "lon": -90.9856,
+        "lat": 33.4831,
+        "elevationFtMsl": 131,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KSGT",
+        "name": "Stuttgart Municipal",
+        "lon": -91.575,
+        "lat": 34.5994,
+        "elevationFtMsl": 224,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KHEE",
+        "name": "Thompson-Robbins (Helena)",
+        "lon": -90.6758,
+        "lat": 34.5764,
+        "elevationFtMsl": 252,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KMMS",
+        "name": "Selfs Field (Marks)",
+        "lon": -90.2858,
+        "lat": 34.2275,
+        "elevationFtMsl": 167,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KARG",
+        "name": "Walnut Ridge Regional",
+        "lon": -90.925,
+        "lat": 36.1247,
+        "elevationFtMsl": 279,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KJKA",
+        "name": "Corinth (Roscoe Turner)",
+        "lon": -88.6058,
+        "lat": 34.9156,
+        "elevationFtMsl": 421,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      },
+      {
+        "icao": "KSNL",
+        "name": "Shelbyville Municipal",
+        "lon": -89.6722,
+        "lat": 35.5375,
+        "elevationFtMsl": 433,
+        "attended": false,
+        "airspaceClass": "E",
+        "runways": [
+          {
+            "designator": "18/36",
+            "headingDegMagnetic": 180,
+            "lengthFt": 4000,
+            "widthFt": 75,
+            "surface": "asphalt",
+            "hasPrecisionApproach": false
+          }
+        ],
+        "frequencies": [
+          {
+            "label": "CTAF",
+            "mhz": 122.8
+          }
+        ],
+        "fbos": []
+      }
+    ],
+    "airspace": [
+      {
+        "id": "asp-kmem-classb-core",
+        "airspaceClass": "B",
+        "label": "Memphis Class B (core)",
+        "floorFtMsl": 0,
+        "ceilingFtMsl": 10000,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -89.77313203054354,
+                35.0424
+              ],
+              [
+                -89.77622468541432,
+                35.07134136294449
+              ],
+              [
+                -89.7854086812734,
+                35.09940335722094
+              ],
+              [
+                -89.8004049670539,
+                35.125733333333336
+              ],
+              [
+                -89.82075788820086,
+                35.14953126828109
+              ],
+              [
+                -89.84584903150433,
+                35.170074073853165
+              ],
+              [
+                -89.87491601527176,
+                35.186737567297406
+              ],
+              [
+                -89.90707565390998,
+                35.19901543679765
+              ],
+              [
+                -89.94135079307252,
+                35.20653462550204
+              ],
+              [
+                -89.9767,
+                35.209066666666665
+              ],
+              [
+                -90.01204920692747,
+                35.20653462550204
+              ],
+              [
+                -90.04632434609,
+                35.19901543679765
+              ],
+              [
+                -90.07848398472822,
+                35.186737567297406
+              ],
+              [
+                -90.10755096849566,
+                35.170074073853165
+              ],
+              [
+                -90.13264211179913,
+                35.14953126828109
+              ],
+              [
+                -90.1529950329461,
+                35.125733333333336
+              ],
+              [
+                -90.16799131872659,
+                35.09940335722094
+              ],
+              [
+                -90.17717531458567,
+                35.07134136294449
+              ],
+              [
+                -90.18026796945645,
+                35.0424
+              ],
+              [
+                -90.17717531458567,
+                35.013458637055514
+              ],
+              [
+                -90.16799131872659,
+                34.98539664277906
+              ],
+              [
+                -90.1529950329461,
+                34.959066666666665
+              ],
+              [
+                -90.13264211179913,
+                34.935268731718914
+              ],
+              [
+                -90.10755096849566,
+                34.914725926146836
+              ],
+              [
+                -90.07848398472822,
+                34.898062432702595
+              ],
+              [
+                -90.04632434609,
+                34.88578456320235
+              ],
+              [
+                -90.01204920692747,
+                34.878265374497964
+              ],
+              [
+                -89.9767,
+                34.875733333333336
+              ],
+              [
+                -89.94135079307252,
+                34.878265374497964
+              ],
+              [
+                -89.90707565390998,
+                34.88578456320235
+              ],
+              [
+                -89.87491601527176,
+                34.898062432702595
+              ],
+              [
+                -89.84584903150433,
+                34.914725926146836
+              ],
+              [
+                -89.82075788820086,
+                34.935268731718914
+              ],
+              [
+                -89.8004049670539,
+                34.959066666666665
+              ],
+              [
+                -89.7854086812734,
+                34.98539664277906
+              ],
+              [
+                -89.77622468541432,
+                35.013458637055514
+              ],
+              [
+                -89.77313203054354,
+                35.0424
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "id": "asp-kmem-classb-shelf",
+        "airspaceClass": "B",
+        "label": "Memphis Class B (outer shelf)",
+        "floorFtMsl": 2200,
+        "ceilingFtMsl": 10000,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -89.56956406108708,
+                35.0424
+              ],
+              [
+                -89.57574937082865,
+                35.10028272588898
+              ],
+              [
+                -89.59411736254678,
+                35.15640671444189
+              ],
+              [
+                -89.62410993410778,
+                35.209066666666665
+              ],
+              [
+                -89.66481577640172,
+                35.25666253656218
+              ],
+              [
+                -89.71499806300868,
+                35.29774814770633
+              ],
+              [
+                -89.77313203054354,
+                35.33107513459481
+              ],
+              [
+                -89.83745130781996,
+                35.3556308735953
+              ],
+              [
+                -89.90600158614505,
+                35.37066925100407
+              ],
+              [
+                -89.9767,
+                35.375733333333336
+              ],
+              [
+                -90.04739841385494,
+                35.37066925100407
+              ],
+              [
+                -90.11594869218003,
+                35.3556308735953
+              ],
+              [
+                -90.18026796945645,
+                35.33107513459481
+              ],
+              [
+                -90.23840193699131,
+                35.29774814770633
+              ],
+              [
+                -90.28858422359826,
+                35.25666253656218
+              ],
+              [
+                -90.32929006589221,
+                35.209066666666665
+              ],
+              [
+                -90.3592826374532,
+                35.15640671444189
+              ],
+              [
+                -90.37765062917134,
+                35.10028272588898
+              ],
+              [
+                -90.38383593891291,
+                35.0424
+              ],
+              [
+                -90.37765062917134,
+                34.98451727411102
+              ],
+              [
+                -90.3592826374532,
+                34.92839328555811
+              ],
+              [
+                -90.32929006589221,
+                34.875733333333336
+              ],
+              [
+                -90.28858422359826,
+                34.82813746343782
+              ],
+              [
+                -90.23840193699131,
+                34.78705185229367
+              ],
+              [
+                -90.18026796945645,
+                34.75372486540519
+              ],
+              [
+                -90.11594869218003,
+                34.7291691264047
+              ],
+              [
+                -90.04739841385494,
+                34.714130748995935
+              ],
+              [
+                -89.9767,
+                34.709066666666665
+              ],
+              [
+                -89.90600158614505,
+                34.714130748995935
+              ],
+              [
+                -89.83745130781996,
+                34.7291691264047
+              ],
+              [
+                -89.77313203054354,
+                34.75372486540519
+              ],
+              [
+                -89.71499806300868,
+                34.78705185229367
+              ],
+              [
+                -89.66481577640172,
+                34.82813746343782
+              ],
+              [
+                -89.62410993410778,
+                34.875733333333336
+              ],
+              [
+                -89.59411736254678,
+                34.92839328555811
+              ],
+              [
+                -89.57574937082865,
+                34.98451727411102
+              ],
+              [
+                -89.56956406108708,
+                35.0424
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "id": "asp-kolv-classd",
+        "airspaceClass": "D",
+        "label": "Olive Branch Class D",
+        "floorFtMsl": 0,
+        "ceilingFtMsl": 3400,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -89.69943402315849,
+                34.9786
+              ],
+              [
+                -89.70076282788169,
+                34.991044786066134
+              ],
+              [
+                -89.70470886699219,
+                35.00311144360501
+              ],
+              [
+                -89.71115224208843,
+                35.014433333333336
+              ],
+              [
+                -89.71989717447859,
+                35.02466644536087
+              ],
+              [
+                -89.73067795381715,
+                35.03349985175686
+              ],
+              [
+                -89.74316701157925,
+                35.04066515393789
+              ],
+              [
+                -89.75698487406454,
+                35.04594463782299
+              ],
+              [
+                -89.77171169251362,
+                35.04917788896587
+              ],
+              [
+                -89.7869,
+                35.050266666666666
+              ],
+              [
+                -89.80208830748639,
+                35.04917788896587
+              ],
+              [
+                -89.81681512593546,
+                35.04594463782299
+              ],
+              [
+                -89.83063298842076,
+                35.04066515393789
+              ],
+              [
+                -89.84312204618286,
+                35.03349985175686
+              ],
+              [
+                -89.85390282552142,
+                35.02466644536087
+              ],
+              [
+                -89.86264775791157,
+                35.014433333333336
+              ],
+              [
+                -89.86909113300781,
+                35.00311144360501
+              ],
+              [
+                -89.87303717211832,
+                34.991044786066134
+              ],
+              [
+                -89.87436597684152,
+                34.9786
+              ],
+              [
+                -89.87303717211832,
+                34.96615521393387
+              ],
+              [
+                -89.86909113300781,
+                34.95408855639499
+              ],
+              [
+                -89.86264775791157,
+                34.942766666666664
+              ],
+              [
+                -89.85390282552142,
+                34.93253355463913
+              ],
+              [
+                -89.84312204618286,
+                34.92370014824314
+              ],
+              [
+                -89.83063298842076,
+                34.91653484606211
+              ],
+              [
+                -89.81681512593546,
+                34.91125536217701
+              ],
+              [
+                -89.80208830748639,
+                34.90802211103413
+              ],
+              [
+                -89.7869,
+                34.906933333333335
+              ],
+              [
+                -89.77171169251362,
+                34.90802211103413
+              ],
+              [
+                -89.75698487406454,
+                34.91125536217701
+              ],
+              [
+                -89.74316701157925,
+                34.91653484606211
+              ],
+              [
+                -89.73067795381715,
+                34.92370014824314
+              ],
+              [
+                -89.71989717447859,
+                34.93253355463913
+              ],
+              [
+                -89.71115224208843,
+                34.942766666666664
+              ],
+              [
+                -89.70470886699219,
+                34.95408855639499
+              ],
+              [
+                -89.70076282788169,
+                34.96615521393387
+              ],
+              [
+                -89.69943402315849,
+                34.9786
+              ]
+            ]
+          ]
+        }
+      },
+      {
+        "id": "asp-kmkl-classd",
+        "airspaceClass": "D",
+        "label": "McKellar-Sipes Class D",
+        "floorFtMsl": 0,
+        "ceilingFtMsl": 3400,
+        "geometry": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -88.82746015245547,
+                35.5999
+              ],
+              [
+                -88.82879919478884,
+                35.61234478606613
+              ],
+              [
+                -88.83277563566521,
+                35.624411443605005
+              ],
+              [
+                -88.83926865294075,
+                35.635733333333334
+              ],
+              [
+                -88.84808095957116,
+                35.64596644536087
+              ],
+              [
+                -88.85894479807872,
+                35.654799851756856
+              ],
+              [
+                -88.87153007622774,
+                35.661965153937885
+              ],
+              [
+                -88.88545439671012,
+                35.66724463782299
+              ],
+              [
+                -88.90029467609405,
+                35.67047788896587
+              ],
+              [
+                -88.9156,
+                35.67156666666666
+              ],
+              [
+                -88.93090532390595,
+                35.67047788896587
+              ],
+              [
+                -88.94574560328988,
+                35.66724463782299
+              ],
+              [
+                -88.95966992377225,
+                35.661965153937885
+              ],
+              [
+                -88.97225520192127,
+                35.654799851756856
+              ],
+              [
+                -88.98311904042883,
+                35.64596644536087
+              ],
+              [
+                -88.99193134705925,
+                35.635733333333334
+              ],
+              [
+                -88.99842436433478,
+                35.624411443605005
+              ],
+              [
+                -89.00240080521115,
+                35.61234478606613
+              ],
+              [
+                -89.00373984754452,
+                35.5999
+              ],
+              [
+                -89.00240080521115,
+                35.587455213933865
+              ],
+              [
+                -88.99842436433478,
+                35.57538855639499
+              ],
+              [
+                -88.99193134705925,
+                35.56406666666666
+              ],
+              [
+                -88.98311904042883,
+                35.55383355463913
+              ],
+              [
+                -88.97225520192127,
+                35.54500014824314
+              ],
+              [
+                -88.95966992377225,
+                35.53783484606211
+              ],
+              [
+                -88.94574560328988,
+                35.53255536217701
+              ],
+              [
+                -88.93090532390595,
+                35.529322111034126
+              ],
+              [
+                -88.9156,
+                35.52823333333333
+              ],
+              [
+                -88.90029467609405,
+                35.529322111034126
+              ],
+              [
+                -88.88545439671012,
+                35.53255536217701
+              ],
+              [
+                -88.87153007622774,
+                35.53783484606211
+              ],
+              [
+                -88.85894479807872,
+                35.54500014824314
+              ],
+              [
+                -88.84808095957116,
+                35.55383355463913
+              ],
+              [
+                -88.83926865294075,
+                35.56406666666666
+              ],
+              [
+                -88.83277563566521,
+                35.57538855639499
+              ],
+              [
+                -88.82879919478884,
+                35.587455213933865
+              ],
+              [
+                -88.82746015245547,
+                35.5999
+              ]
+            ]
+          ]
+        }
+      }
+    ],
+    "navaids": [
+      {
+        "id": "MEM",
+        "kind": "VORTAC",
+        "name": "Memphis VORTAC",
+        "lon": -89.9836,
+        "lat": 35.0654,
+        "frequencyMhz": 117.5
+      },
+      {
+        "id": "GZX",
+        "kind": "VOR-DME",
+        "name": "Grand Junction VOR-DME",
+        "lon": -89.2003,
+        "lat": 35.0381,
+        "frequencyMhz": 116.1
+      },
+      {
+        "id": "MKL",
+        "kind": "VOR-DME",
+        "name": "McKellar VOR-DME",
+        "lon": -88.9189,
+        "lat": 35.6017,
+        "frequencyMhz": 110.2
+      },
+      {
+        "id": "HLI",
+        "kind": "NDB",
+        "name": "Holly Springs NDB",
+        "lon": -89.4503,
+        "lat": 34.7619,
+        "frequencyMhz": null
+      },
+      {
+        "id": "AWANE",
+        "kind": "FIX",
+        "name": "AWANE intersection",
+        "lon": -89.55,
+        "lat": 35.32,
+        "frequencyMhz": null
+      }
+    ],
+    "basemap": {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -89.95,
+                36.5
+              ],
+              [
+                -90.05,
+                36
+              ],
+              [
+                -90.15,
+                35.5
+              ],
+              [
+                -90.05,
+                35
+              ],
+              [
+                -90.3,
+                34.5
+              ],
+              [
+                -90.55,
+                34
+              ],
+              [
+                -91.05,
+                33.5
+              ]
+            ]
+          },
+          "properties": {
+            "kind": "water",
+            "name": "Mississippi River"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -90.05,
+                35.15
+              ],
+              [
+                -89.5,
+                35.3
+              ],
+              [
+                -89,
+                35.5
+              ],
+              [
+                -88.85,
+                35.62
+              ]
+            ]
+          },
+          "properties": {
+            "kind": "road",
+            "name": "I-40"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "LineString",
+            "coordinates": [
+              [
+                -90.05,
+                35.1
+              ],
+              [
+                -89.95,
+                34.98
+              ],
+              [
+                -89.85,
+                34.7
+              ],
+              [
+                -90.2,
+                34
+              ]
+            ]
+          },
+          "properties": {
+            "kind": "road",
+            "name": "I-55"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -90.049,
+              35.1495
+            ]
+          },
+          "properties": {
+            "kind": "city",
+            "name": "Memphis"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -88.8139,
+              35.6145
+            ]
+          },
+          "properties": {
+            "kind": "city",
+            "name": "Jackson"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -89.8295,
+              34.9618
+            ]
+          },
+          "properties": {
+            "kind": "city",
+            "name": "Olive Branch"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -90.184,
+              35.7556
+            ]
+          },
+          "properties": {
+            "kind": "city",
+            "name": "Dyersburg"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [
+              -88.6334,
+              34.2576
+            ]
+          },
+          "properties": {
+            "kind": "city",
+            "name": "Tupelo"
+          }
+        },
+        {
+          "type": "Feature",
+          "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+              [
+                [
+                  -91.5,
+                  34.995
+                ],
+                [
+                  -87.5,
+                  34.995
+                ],
+                [
+                  -87.5,
+                  35.005
+                ],
+                [
+                  -91.5,
+                  35.005
+                ],
+                [
+                  -91.5,
+                  34.995
+                ]
+              ]
+            ]
+          },
+          "properties": {
+            "kind": "state-outline",
+            "name": "TN/MS state line"
+          }
+        }
+      ]
+    }
+  },
+  "flight": {
+    "scenarioId": "kmem-kmkl-kolv-c172n-skyhawk",
+    "route": {
+      "id": "kmem-kmkl-kolv",
+      "label": "KMEM -> KMKL -> KOLV",
+      "waypoints": [
+        {
+          "id": "wp-kmem",
+          "label": "KMEM",
+          "lon": -89.9767,
+          "lat": 35.0424,
+          "airportIcao": "KMEM",
+          "kind": "airport"
+        },
+        {
+          "id": "wp-kmem-dep-fix",
+          "label": "KMEM-DEP-FIX",
+          "lon": -89.9067,
+          "lat": 35.0974,
+          "kind": "fix"
+        },
+        {
+          "id": "wp-kmkl",
+          "label": "KMKL",
+          "lon": -88.9156,
+          "lat": 35.5999,
+          "airportIcao": "KMKL",
+          "kind": "airport"
+        },
+        {
+          "id": "wp-kolv-arr-fix",
+          "label": "KOLV-ARR-FIX",
+          "lon": -89.7869,
+          "lat": 34.9053,
+          "kind": "fix"
+        },
+        {
+          "id": "wp-kolv",
+          "label": "KOLV",
+          "lon": -89.7869,
+          "lat": 34.9786,
+          "airportIcao": "KOLV",
+          "kind": "airport"
+        }
+      ],
+      "altitudeProfile": [
+        {
+          "altitudeFtMsl": 1500
+        },
+        {
+          "altitudeFtMsl": 4500
+        },
+        {
+          "altitudeFtMsl": 4500
+        },
+        {
+          "altitudeFtMsl": 2500
+        }
+      ],
+      "speedProfile": [
+        {
+          "tasKt": 90
+        },
+        {
+          "tasKt": 110
+        },
+        {
+          "tasKt": 110
+        },
+        {
+          "tasKt": 90
+        }
+      ],
+      "alternateIcao": "KMKL",
+      "plannedDepartureUtc": "2026-03-19T19:00:00Z"
+    },
+    "aircraft": {
+      "id": "c172n-skyhawk",
+      "model": "Cessna 172N Skyhawk",
+      "perfPolar": {
+        "climb": {
+          "rateFpm": 700,
+          "kiasIas": 75
+        },
+        "cruise": {
+          "points": [
+            {
+              "pressureAltitudeFtMsl": 2000,
+              "tasKt": 109,
+              "gph": 8.4
+            },
+            {
+              "pressureAltitudeFtMsl": 4000,
+              "tasKt": 112,
+              "gph": 8.2
+            },
+            {
+              "pressureAltitudeFtMsl": 6000,
+              "tasKt": 114,
+              "gph": 8
+            },
+            {
+              "pressureAltitudeFtMsl": 8000,
+              "tasKt": 116,
+              "gph": 7.8
+            }
+          ]
+        },
+        "descent": {
+          "rateFpm": 500,
+          "kiasIas": 110
+        },
+        "serviceCeilingFtMsl": 14200
+      },
+      "fuelBurnCurve": {
+        "cruise": {
+          "defaultGph": 8
+        },
+        "climb": {
+          "gph": 10
+        },
+        "taxi": {
+          "gph": 1.4
+        }
+      },
+      "fuelCapacityGal": 40,
+      "wbEnvelope": {
+        "maxGrossWeightLb": 2300,
+        "minWeightLb": 1500,
+        "envelope": [
+          {
+            "weightLb": 1500,
+            "fwdCgIn": 33,
+            "aftCgIn": 47.3
+          },
+          {
+            "weightLb": 1950,
+            "fwdCgIn": 35.5,
+            "aftCgIn": 47.3
+          },
+          {
+            "weightLb": 2300,
+            "fwdCgIn": 38.5,
+            "aftCgIn": 47.3
+          }
+        ]
+      },
+      "equipment": {
+        "nav": [
+          "vor",
+          "gps-vfr-only"
+        ],
+        "com": [
+          "comm-1",
+          "comm-2"
+        ],
+        "transponder": "mode-c",
+        "adsbOut": false,
+        "autopilot": false,
+        "ifrCertified": false
+      }
+    }
+  },
+  "weather": {
+    "wxScenarioSlug": "frontal-xc-march",
+    "truthValidAt": "2026-03-19T19:00:00Z",
+    "byWaypoint": {
+      "wp-kmem": {
+        "waypointId": "wp-kmem",
+        "metar": {
+          "station": "KCPS",
+          "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970",
+          "flightCategory": "VFR",
+          "stationDistanceNm": 211.98179513215595
+        },
+        "taf": {
+          "station": "KCPS",
+          "raw": "20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025",
+          "arrivalFlightCategory": "MVFR",
+          "stationDistanceNm": 211.98179513215595
+        },
+        "windsAloft": [
+          {
+            "altitudeFtMsl": 3000,
+            "directionDeg": 220,
+            "speedKt": 22,
+            "temperatureC": null
+          },
+          {
+            "altitudeFtMsl": 6000,
+            "directionDeg": 240,
+            "speedKt": 30,
+            "temperatureC": 0
+          },
+          {
+            "altitudeFtMsl": 9000,
+            "directionDeg": 260,
+            "speedKt": 38,
+            "temperatureC": -5
+          },
+          {
+            "altitudeFtMsl": 12000,
+            "directionDeg": 270,
+            "speedKt": 45,
+            "temperatureC": -11
+          },
+          {
+            "altitudeFtMsl": 18000,
+            "directionDeg": 280,
+            "speedKt": 60,
+            "temperatureC": -23
+          },
+          {
+            "altitudeFtMsl": 24000,
+            "directionDeg": 290,
+            "speedKt": 80,
+            "temperatureC": -36
+          },
+          {
+            "altitudeFtMsl": 30000,
+            "directionDeg": 290,
+            "speedKt": 95,
+            "temperatureC": -50
+          },
+          {
+            "altitudeFtMsl": 34000,
+            "directionDeg": 300,
+            "speedKt": 105,
+            "temperatureC": -55
+          },
+          {
+            "altitudeFtMsl": 39000,
+            "directionDeg": 300,
+            "speedKt": 95,
+            "temperatureC": -58
+          }
+        ],
+        "airmetIds": []
+      },
+      "wp-kmem-dep-fix": {
+        "waypointId": "wp-kmem-dep-fix",
+        "metar": {
+          "station": "KCPS",
+          "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970",
+          "flightCategory": "VFR",
+          "stationDistanceNm": 208.85123109916094
+        },
+        "taf": null,
+        "windsAloft": [
+          {
+            "altitudeFtMsl": 3000,
+            "directionDeg": 220,
+            "speedKt": 22,
+            "temperatureC": null
+          },
+          {
+            "altitudeFtMsl": 6000,
+            "directionDeg": 240,
+            "speedKt": 30,
+            "temperatureC": 0
+          },
+          {
+            "altitudeFtMsl": 9000,
+            "directionDeg": 260,
+            "speedKt": 38,
+            "temperatureC": -5
+          },
+          {
+            "altitudeFtMsl": 12000,
+            "directionDeg": 270,
+            "speedKt": 45,
+            "temperatureC": -11
+          },
+          {
+            "altitudeFtMsl": 18000,
+            "directionDeg": 280,
+            "speedKt": 60,
+            "temperatureC": -23
+          },
+          {
+            "altitudeFtMsl": 24000,
+            "directionDeg": 290,
+            "speedKt": 80,
+            "temperatureC": -36
+          },
+          {
+            "altitudeFtMsl": 30000,
+            "directionDeg": 290,
+            "speedKt": 95,
+            "temperatureC": -50
+          },
+          {
+            "altitudeFtMsl": 34000,
+            "directionDeg": 300,
+            "speedKt": 105,
+            "temperatureC": -55
+          },
+          {
+            "altitudeFtMsl": 39000,
+            "directionDeg": 300,
+            "speedKt": 95,
+            "temperatureC": -58
+          }
+        ],
+        "airmetIds": []
+      },
+      "wp-kmkl": {
+        "waypointId": "wp-kmkl",
+        "metar": {
+          "station": "KCPS",
+          "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970",
+          "flightCategory": "VFR",
+          "stationDistanceNm": 188.01730605383338
+        },
+        "taf": {
+          "station": "KCPS",
+          "raw": "20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025",
+          "arrivalFlightCategory": "MVFR",
+          "stationDistanceNm": 188.01730605383338
+        },
+        "windsAloft": [
+          {
+            "altitudeFtMsl": 3000,
+            "directionDeg": 220,
+            "speedKt": 22,
+            "temperatureC": null
+          },
+          {
+            "altitudeFtMsl": 6000,
+            "directionDeg": 240,
+            "speedKt": 30,
+            "temperatureC": 0
+          },
+          {
+            "altitudeFtMsl": 9000,
+            "directionDeg": 260,
+            "speedKt": 38,
+            "temperatureC": -5
+          },
+          {
+            "altitudeFtMsl": 12000,
+            "directionDeg": 270,
+            "speedKt": 45,
+            "temperatureC": -11
+          },
+          {
+            "altitudeFtMsl": 18000,
+            "directionDeg": 280,
+            "speedKt": 60,
+            "temperatureC": -23
+          },
+          {
+            "altitudeFtMsl": 24000,
+            "directionDeg": 290,
+            "speedKt": 80,
+            "temperatureC": -36
+          },
+          {
+            "altitudeFtMsl": 30000,
+            "directionDeg": 290,
+            "speedKt": 95,
+            "temperatureC": -50
+          },
+          {
+            "altitudeFtMsl": 34000,
+            "directionDeg": 300,
+            "speedKt": 105,
+            "temperatureC": -55
+          },
+          {
+            "altitudeFtMsl": 39000,
+            "directionDeg": 300,
+            "speedKt": 95,
+            "temperatureC": -58
+          }
+        ],
+        "airmetIds": []
+      },
+      "wp-kolv-arr-fix": {
+        "waypointId": "wp-kolv-arr-fix",
+        "metar": {
+          "station": "KCPS",
+          "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970",
+          "flightCategory": "VFR",
+          "stationDistanceNm": 220.76072471455967
+        },
+        "taf": null,
+        "windsAloft": [
+          {
+            "altitudeFtMsl": 3000,
+            "directionDeg": 220,
+            "speedKt": 22,
+            "temperatureC": null
+          },
+          {
+            "altitudeFtMsl": 6000,
+            "directionDeg": 240,
+            "speedKt": 30,
+            "temperatureC": 0
+          },
+          {
+            "altitudeFtMsl": 9000,
+            "directionDeg": 260,
+            "speedKt": 38,
+            "temperatureC": -5
+          },
+          {
+            "altitudeFtMsl": 12000,
+            "directionDeg": 270,
+            "speedKt": 45,
+            "temperatureC": -11
+          },
+          {
+            "altitudeFtMsl": 18000,
+            "directionDeg": 280,
+            "speedKt": 60,
+            "temperatureC": -23
+          },
+          {
+            "altitudeFtMsl": 24000,
+            "directionDeg": 290,
+            "speedKt": 80,
+            "temperatureC": -36
+          },
+          {
+            "altitudeFtMsl": 30000,
+            "directionDeg": 290,
+            "speedKt": 95,
+            "temperatureC": -50
+          },
+          {
+            "altitudeFtMsl": 34000,
+            "directionDeg": 300,
+            "speedKt": 105,
+            "temperatureC": -55
+          },
+          {
+            "altitudeFtMsl": 39000,
+            "directionDeg": 300,
+            "speedKt": 95,
+            "temperatureC": -58
+          }
+        ],
+        "airmetIds": []
+      },
+      "wp-kolv": {
+        "waypointId": "wp-kolv",
+        "metar": {
+          "station": "KCPS",
+          "raw": "KCPS 191953Z 20014KT 10SM BKN045 OVC120 17/13 A2970",
+          "flightCategory": "VFR",
+          "stationDistanceNm": 216.37393161570742
+        },
+        "taf": {
+          "station": "KCPS",
+          "raw": "20014KT 5SM VCSH BKN045 FM192000 32020G30KT 5SM VCSH OVC025",
+          "arrivalFlightCategory": "MVFR",
+          "stationDistanceNm": 216.37393161570742
+        },
+        "windsAloft": [
+          {
+            "altitudeFtMsl": 3000,
+            "directionDeg": 220,
+            "speedKt": 22,
+            "temperatureC": null
+          },
+          {
+            "altitudeFtMsl": 6000,
+            "directionDeg": 240,
+            "speedKt": 30,
+            "temperatureC": 0
+          },
+          {
+            "altitudeFtMsl": 9000,
+            "directionDeg": 260,
+            "speedKt": 38,
+            "temperatureC": -5
+          },
+          {
+            "altitudeFtMsl": 12000,
+            "directionDeg": 270,
+            "speedKt": 45,
+            "temperatureC": -11
+          },
+          {
+            "altitudeFtMsl": 18000,
+            "directionDeg": 280,
+            "speedKt": 60,
+            "temperatureC": -23
+          },
+          {
+            "altitudeFtMsl": 24000,
+            "directionDeg": 290,
+            "speedKt": 80,
+            "temperatureC": -36
+          },
+          {
+            "altitudeFtMsl": 30000,
+            "directionDeg": 290,
+            "speedKt": 95,
+            "temperatureC": -50
+          },
+          {
+            "altitudeFtMsl": 34000,
+            "directionDeg": 300,
+            "speedKt": 105,
+            "temperatureC": -55
+          },
+          {
+            "altitudeFtMsl": 39000,
+            "directionDeg": 300,
+            "speedKt": 95,
+            "temperatureC": -58
+          }
+        ],
+        "airmetIds": []
+      }
+    },
+    "airmets": [
+      {
+        "id": "WAUS41-WXENGINE-HZ-postfrontal-ifr",
+        "family": "airmet-sierra",
+        "label": "AIRMET SIERRA\nIFR Conditions\nSFC-40",
+        "rings": [
+          [
+            [
+              -89.5,
+              39.8
+            ],
+            [
+              -89.2,
+              41.5
+            ],
+            [
+              -89,
+              43
+            ],
+            [
+              -92,
+              44
+            ],
+            [
+              -95,
+              43
+            ],
+            [
+              -95,
+              40
+            ],
+            [
+              -91,
+              39
+            ],
+            [
+              -89.5,
+              39.8
+            ]
+          ]
+        ],
+        "validFrom": "2026-03-19T19:00:00Z",
+        "validTo": "2026-03-20T01:00:00.000Z"
+      },
+      {
+        "id": "WAUS41-WXENGINE-HZ-postfrontal-turb",
+        "family": "airmet-tango",
+        "label": "AIRMET TANGO\nModerate Turbulence\n60-FL240",
+        "rings": [
+          [
+            [
+              -90,
+              36
+            ],
+            [
+              -89.5,
+              39.8
+            ],
+            [
+              -89,
+              43
+            ],
+            [
+              -93,
+              44.5
+            ],
+            [
+              -97,
+              44
+            ],
+            [
+              -98,
+              36
+            ],
+            [
+              -90,
+              36
+            ]
+          ]
+        ],
+        "validFrom": "2026-03-19T19:00:00Z",
+        "validTo": "2026-03-20T01:00:00.000Z"
+      },
+      {
+        "id": "WAUS41-WXENGINE-HZ-prefrontal-tsra",
+        "family": "airmet-tango",
+        "label": "AIRMET TANGO\nModerate Turbulence\nSFC-FL300",
+        "rings": [
+          [
+            [
+              -89.4,
+              36
+            ],
+            [
+              -87,
+              36
+            ],
+            [
+              -87,
+              42
+            ],
+            [
+              -89,
+              42
+            ],
+            [
+              -89.4,
+              36
+            ]
+          ]
+        ],
+        "validFrom": "2026-03-19T19:00:00Z",
+        "validTo": "2026-03-20T01:00:00.000Z"
+      }
+    ],
+    "charts": [
+      {
+        "kind": "pirep-plot",
+        "slug": "pirep-plot"
+      },
+      {
+        "kind": "taf-kmli",
+        "slug": "taf-kmli"
+      },
+      {
+        "kind": "g-airmet-icing",
+        "slug": "g-airmet-icing"
+      },
+      {
+        "kind": "taf-kstl",
+        "slug": "taf-kstl"
+      },
+      {
+        "kind": "taf-kcps",
+        "slug": "taf-kcps"
+      },
+      {
+        "kind": "airmet-sigmet",
+        "slug": "airmet-sigmet"
+      },
+      {
+        "kind": "g-airmet-turbulence",
+        "slug": "g-airmet-turbulence"
+      },
+      {
+        "kind": "gfa",
+        "slug": "gfa"
+      },
+      {
+        "kind": "prog-12hr",
+        "slug": "prog-12hr"
+      },
+      {
+        "kind": "winds-aloft",
+        "slug": "winds-aloft"
+      },
+      {
+        "kind": "freezing-level",
+        "slug": "freezing-level"
+      },
+      {
+        "kind": "taf-kord",
+        "slug": "taf-kord"
+      },
+      {
+        "kind": "cva",
+        "slug": "cva"
+      },
+      {
+        "kind": "surface-analysis",
+        "slug": "surface-analysis"
+      },
+      {
+        "kind": "convective-outlook",
+        "slug": "convective-outlook"
+      },
+      {
+        "kind": "metar-plot",
+        "slug": "metar-plot"
+      },
+      {
+        "kind": "taf-kspi",
+        "slug": "taf-kspi"
+      }
+    ]
+  },
+  "events": [],
+  "performance": {
+    "legs": [
+      {
+        "from": "wp-kmem",
+        "to": "wp-kmem-dep-fix",
+        "distanceNm": 4.7683348772850005,
+        "trueCourse": 46.149009335566205,
+        "magneticHeading": 48.64938828490809,
+        "altitudeFtMsl": 1500,
+        "groundSpeedKt": 111.84257073022023,
+        "eteMin": 2.5580607703234315,
+        "fuelGal": 0.35812850784528044,
+        "windFromDeg": 220,
+        "windKt": 22
+      },
+      {
+        "from": "wp-kmem-dep-fix",
+        "to": "wp-kmkl",
+        "distanceNm": 57.14831465277563,
+        "trueCourse": 57.848603189598784,
+        "magneticHeading": 60.69825249509112,
+        "altitudeFtMsl": 4500,
+        "groundSpeedKt": 135.69912761306784,
+        "eteMin": 25.268392947548577,
+        "fuelGal": 3.4322900420420144,
+        "windFromDeg": 230,
+        "windKt": 26
+      },
+      {
+        "from": "wp-kmkl",
+        "to": "wp-kolv-arr-fix",
+        "distanceNm": 59.70047399346612,
+        "trueCourse": 225.94147579947608,
+        "magneticHeading": 227.90000603914706,
+        "altitudeFtMsl": 4500,
+        "groundSpeedKt": 84.04980793035583,
+        "eteMin": 42.617925344648704,
+        "fuelGal": 5.788934859314781,
+        "windFromDeg": 230,
+        "windKt": 26
+      },
+      {
+        "from": "wp-kolv-arr-fix",
+        "to": "wp-kolv",
+        "distanceNm": 4.400965771701148,
+        "trueCourse": 0,
+        "magneticHeading": 351.95988995780084,
+        "altitudeFtMsl": 2500,
+        "groundSpeedKt": 105.73505051357613,
+        "eteMin": 2.497354898110768,
+        "fuelGal": 0.34754855665374856,
+        "windFromDeg": 220,
+        "windKt": 22
+      }
+    ],
+    "totalFuelGal": 9.926901965855825,
+    "totalEteMin": 72.94173396063148,
+    "reserveGal": 30.073098034144174
+  }
+}

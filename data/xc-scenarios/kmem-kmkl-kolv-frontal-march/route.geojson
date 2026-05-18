@@ -1,0 +1,122 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -89.9767,
+            35.0424
+          ],
+          [
+            -89.9067,
+            35.0974
+          ],
+          [
+            -88.9156,
+            35.5999
+          ],
+          [
+            -89.7869,
+            34.9053
+          ],
+          [
+            -89.7869,
+            34.9786
+          ]
+        ]
+      },
+      "properties": {
+        "kind": "route-line",
+        "routeId": "kmem-kmkl-kolv"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.9767,
+          35.0424
+        ]
+      },
+      "properties": {
+        "kind": "waypoint",
+        "id": "wp-kmem",
+        "label": "KMEM",
+        "waypointKind": "airport",
+        "airportIcao": "KMEM"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.9067,
+          35.0974
+        ]
+      },
+      "properties": {
+        "kind": "waypoint",
+        "id": "wp-kmem-dep-fix",
+        "label": "KMEM-DEP-FIX",
+        "waypointKind": "fix",
+        "airportIcao": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -88.9156,
+          35.5999
+        ]
+      },
+      "properties": {
+        "kind": "waypoint",
+        "id": "wp-kmkl",
+        "label": "KMKL",
+        "waypointKind": "airport",
+        "airportIcao": "KMKL"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.7869,
+          34.9053
+        ]
+      },
+      "properties": {
+        "kind": "waypoint",
+        "id": "wp-kolv-arr-fix",
+        "label": "KOLV-ARR-FIX",
+        "waypointKind": "fix",
+        "airportIcao": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -89.7869,
+          34.9786
+        ]
+      },
+      "properties": {
+        "kind": "waypoint",
+        "id": "wp-kolv",
+        "label": "KOLV",
+        "waypointKind": "airport",
+        "airportIcao": "KOLV"
+      }
+    }
+  ]
+}

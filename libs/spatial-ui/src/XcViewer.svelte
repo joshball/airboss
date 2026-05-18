@@ -170,27 +170,41 @@ function closeLegDrawer() {
 const hasPerformance = $derived(bundle.performance.legs.length > 0);
 
 // --- Drag-to-pan ---
+//
+// A pointer is "armed" on pointerdown but the drag (and the SVG pointer
+// capture) only starts once the pointer actually moves past a small
+// threshold. Capturing on pointerdown would redirect the pointerup to the
+// SVG and swallow the `click` event a child waypoint / chip needs --
+// arming-then-dragging keeps child clicks working.
+const DRAG_THRESHOLD_PX = 4;
 let dragging = $state(false);
+let armedPointerId: number | null = null;
 let dragStart = { x: 0, y: 0, tx: 0, ty: 0 };
 
 function onPointerDown(e: PointerEvent) {
-	dragging = true;
+	armedPointerId = e.pointerId;
+	dragging = false;
 	dragStart = { x: e.clientX, y: e.clientY, tx: transform.x, ty: transform.y };
-	(e.currentTarget as SVGElement).setPointerCapture(e.pointerId);
 }
 
 function onPointerMove(e: PointerEvent) {
-	if (!dragging) return;
-	transform = {
-		...transform,
-		x: dragStart.tx + (e.clientX - dragStart.x),
-		y: dragStart.ty + (e.clientY - dragStart.y),
-	};
+	if (armedPointerId !== e.pointerId) return;
+	const dx = e.clientX - dragStart.x;
+	const dy = e.clientY - dragStart.y;
+	if (!dragging && Math.hypot(dx, dy) < DRAG_THRESHOLD_PX) return;
+	if (!dragging) {
+		dragging = true;
+		(e.currentTarget as SVGElement).setPointerCapture(e.pointerId);
+	}
+	transform = { ...transform, x: dragStart.tx + dx, y: dragStart.ty + dy };
 }
 
 function onPointerUp(e: PointerEvent) {
+	if (dragging) {
+		(e.currentTarget as SVGElement).releasePointerCapture?.(e.pointerId);
+	}
 	dragging = false;
-	(e.currentTarget as SVGElement).releasePointerCapture?.(e.pointerId);
+	armedPointerId = null;
 }
 
 function onWheel(e: WheelEvent) {
