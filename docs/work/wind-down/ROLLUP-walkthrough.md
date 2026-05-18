@@ -1,8 +1,8 @@
 ---
 type: walkthrough-rollup
-sessions: 20
+sessions: 25
 first_rolled: 2026-05-17T21:02:21Z
-last_rolled: 2026-05-17T21:02:21Z
+last_rolled: 2026-05-18T03:10:00Z
 consumed:
   - 0160f787-1218-43bd-8d38-56fb67570489
   - 20260515-180643-56167
@@ -24,11 +24,16 @@ consumed:
   - 20260517-163554-26560
   - 9b64fd7c-3daa-4190-a412-0f87197e476e
   - e76c9f78-a389-4c89-8c61-10fc4ee1e108
+  - 20260517-212403-79769
+  - 20260517-212610-82094
+  - 20260517-215641-9754
+  - 20260517-222752-41597
+  - 5756488e-807a-478e-91ad-f15964f9d39e
 ---
 
 # Walkthrough -- Rollup
 
-Consolidated manual-test entry points from 20 wind-down sessions across 2 days. Grouped by surface. URLs are as recorded by each session (dev hosts vary -- `localhost:5173`, `localhost:9600`, `study.airboss.test`; substitute your running dev host).
+Consolidated manual-test entry points from 25 wind-down sessions across 2 days. Grouped by surface. URLs are as recorded by each session (dev hosts vary -- `localhost:5173`, `localhost:9600`, `study.airboss.test`; substitute your running dev host).
 
 ## Aviation weather products reference
 
@@ -50,6 +55,7 @@ Consolidated manual-test entry points from 20 wind-down sessions across 2 days. 
 
 - **Reader**: catalog + `/handbook/[slug]/[edition]` + AIM / CFR / ACS / AC readers; section pages `/handbook/phak/[edition]/[chapter]/[section]`.
 - Rich reader: highlight / card-draft / inline-composer flows (anonymous smoke only -- authenticated e2e is deferred).
+- **Production build boot**: `bunx vite build` in `apps/flightbag` (and `apps/study`) then `bun ./build/index.js` -- the adapter-node prod server boots clean (flightbag HTTP 200, study 303). Before PR #1064 this crashed at boot with `z.coerce.boolean().meta is not a function` (zod 3/4 skew vs better-auth).
 
 ## study app -- other surfaces
 
@@ -58,13 +64,20 @@ Consolidated manual-test entry points from 20 wind-down sessions across 2 days. 
 - **Command palette**: Cmd+K from any authenticated page -- knowledge-node / glossary / doc results.
 - **Memory / reps**: `/memory`, `/memory/drafts`, `/reps`, `/study/learn`.
 
+## Theme -- deepInk contrast tokens (PR #1067)
+
+- Status pills / banners / toasts / badges on tinted (wash) backgrounds now use `--signal-X-deep-ink` instead of `--signal-X-ink` -- a darker text-on-wash variant. Visible across study status chips and hangar ingest-review badges. The theme contrast-matrix test went 81 passed / 38 skipped -> 119 passed / 0 skipped.
+
 ## CLI / tooling
 
+- `bun run test integration [--help|list|--book <name>|--full]` -- flightbag coverage sweep dispatcher. `--help` renders friendly help; `list` prints a per-book tree plan and exits 0; `--book <name>` runs one book (builds flightbag once, caches after); default runs a per-book sample (209 URLs, live progress dashboard). `--full` is the ~3484-URL prod-build sweep. Artefacts under `tests/integration/.out/`.
+- `bun run test all` -- unit + e2e + integration in sequence.
 - `bun run sources report` (+ `--strict`) -- FAA source-corpus drift report.
 - `bun run sources download --corpus=ac` -- fetches the catalogued ACs incl. AC 00-45H.
 - `bun run sources discover-errata` -- scans 14 handbooks (0 failures after the URL fixes).
 - `bun scripts/db/classify-card-tier.ts` -- interactive card question_tier classification.
 - `bun run track generate` -- regenerate SHIPPED.md / BOARD.md.
+- `bun run track format` -- idempotent markdown table-alignment + fence/heading rules; `bun run check` runs it scoped to touched files.
 
 ## Durable walkthrough docs (authored, in the repo)
 
@@ -78,24 +91,29 @@ These per-feature walkthroughs are the authoritative manual-test sources:
 ## Per-session walkthrough sources
 
 | Session | Date | Surface |
-|---------|------|---------|
-| 0160f787 | 2026-05-15 | knowledge-node `:::cards` directive |
-| 20260515-180643-56167 | 2026-05-15 | platform hygiene + palette (PRs #945-#980) |
-| 20260515-180930-60283 | 2026-05-15 | flight-reading walkthrough set (PR #967) |
-| 20260515-181752-71057 | 2026-05-15 | OOS extraction (no user-facing artifact) |
-| 20260515-181801-71712 | 2026-05-15 | flightbag rich reader + notes primitive |
-| 20260515-223922-1639 | 2026-05-15 | command palette Phase 1 + design |
-| 80d9ef12 | 2026-05-15 | weather-comprehensive course + per-product nodes |
-| 9d89e07b | 2026-05-15 | vitest test-DB isolation + seed fixes |
-| afc4eeb6 | 2026-05-15 | browser-hydration leak fix (PR #925) |
-| ba6a23ad | 2026-05-15 | command-palette WP build-out |
-| cd16e567-tests-validator | 2026-05-15 | test-suite + validator + contrast work |
-| cd16e567 | 2026-05-15 | bookkeeping (PR #966 close-out) |
-| d83e4218 | 2026-05-15 | test-runner logging |
-| 17883a4e | 2026-05-17 | flightbag coverage (PRs #981, #999, #1005) |
-| 20260517-145336-25547 | 2026-05-17 | palette Phase 1 loose-ends (PR #1013) |
-| 20260517-155020-81423 | 2026-05-17 | Navigating FAA Documentation course |
-| 20260517-160100-94636 | 2026-05-17 | wx products reference + source-corpus drift check |
-| 20260517-163554-26560 | 2026-05-17 | WP review + sign-off prep |
-| 9b64fd7c | 2026-05-17 | unit-test repair (PR #1018) |
-| e76c9f78 | 2026-05-17 | content census + catalog coverage |
+|----------------------------------------|------------|---------|
+| 0160f787                               | 2026-05-15 | knowledge-node `:::cards` directive |
+| 20260515-180643-56167                  | 2026-05-15 | platform hygiene + palette (PRs #945-#980) |
+| 20260515-180930-60283                  | 2026-05-15 | flight-reading walkthrough set (PR #967) |
+| 20260515-181752-71057                  | 2026-05-15 | OOS extraction (no user-facing artifact) |
+| 20260515-181801-71712                  | 2026-05-15 | flightbag rich reader + notes primitive |
+| 20260515-223922-1639                   | 2026-05-15 | command palette Phase 1 + design |
+| 80d9ef12                               | 2026-05-15 | weather-comprehensive course + per-product nodes |
+| 9d89e07b                               | 2026-05-15 | vitest test-DB isolation + seed fixes |
+| afc4eeb6                               | 2026-05-15 | browser-hydration leak fix (PR #925) |
+| ba6a23ad                               | 2026-05-15 | command-palette WP build-out |
+| cd16e567-tests-validator               | 2026-05-15 | test-suite + validator + contrast work |
+| cd16e567                               | 2026-05-15 | bookkeeping (PR #966 close-out) |
+| d83e4218                               | 2026-05-15 | test-runner logging |
+| 17883a4e                               | 2026-05-17 | flightbag coverage (PRs #981, #999, #1005) |
+| 20260517-145336-25547                  | 2026-05-17 | palette Phase 1 loose-ends (PR #1013) |
+| 20260517-155020-81423                  | 2026-05-17 | Navigating FAA Documentation course |
+| 20260517-160100-94636                  | 2026-05-17 | wx products reference + source-corpus drift check |
+| 20260517-163554-26560                  | 2026-05-17 | WP review + sign-off prep |
+| 9b64fd7c                               | 2026-05-17 | unit-test repair (PR #1018) |
+| e76c9f78                               | 2026-05-17 | content census + catalog coverage |
+| 20260517-212403-79769                  | 2026-05-17 | integration coverage sweep rework dispatcher |
+| 20260517-212610-82094                  | 2026-05-17 | e2e + md-format tooling (PRs #1034-#1049) |
+| 20260517-215641-9754                   | 2026-05-17 | project-wide 10x review (10 PRs, #1050-#1063) |
+| 20260517-222752-41597                  | 2026-05-17 | zod-4 prod-build boot + integration dispatcher |
+| 5756488e-807a-478e-91ad-f15964f9d39e   | 2026-05-17 | zod-4 alignment + dispatcher fix + branch triage (PRs #1064/#1065/#1067) |
