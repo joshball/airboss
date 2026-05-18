@@ -1,14 +1,6 @@
 import { requireAuth } from '@ab/auth';
 import { createScenario, newScenarioSchema, type ScenarioOption, type ScenarioRow } from '@ab/bc-study/server';
-import {
-	ASSESSMENT_METHOD_VALUES,
-	type AssessmentMethod,
-	type DIFFICULTY_VALUES,
-	type DOMAIN_VALUES,
-	type PHASE_OF_FLIGHT_VALUES,
-	QUERY_PARAMS,
-	ROUTES,
-} from '@ab/constants';
+import { ASSESSMENT_METHOD_VALUES, type AssessmentMethod, QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
@@ -133,11 +125,11 @@ export const actions: Actions = {
 				situation: parsed.data.situation,
 				options: parsed.data.options as ScenarioOption[],
 				teachingPoint: parsed.data.teachingPoint,
-				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
-				difficulty: parsed.data.difficulty as (typeof DIFFICULTY_VALUES)[number],
-				phaseOfFlight: (parsed.data.phaseOfFlight ?? null) as (typeof PHASE_OF_FLIGHT_VALUES)[number] | null,
+				domain: parsed.data.domain,
+				difficulty: parsed.data.difficulty,
+				phaseOfFlight: parsed.data.phaseOfFlight ?? null,
 				regReferences: parsed.data.regReferences,
-				assessmentMethods: parsed.data.assessmentMethods as readonly AssessmentMethod[] | undefined,
+				assessmentMethods: parsed.data.assessmentMethods,
 			});
 		} catch (err) {
 			log.error(

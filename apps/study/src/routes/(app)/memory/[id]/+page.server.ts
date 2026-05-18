@@ -21,15 +21,12 @@ import {
 	updateCardSchema,
 } from '@ab/bc-study/server';
 import {
-	type CARD_KIND_VALUES,
 	CARD_STATUS_VALUES,
 	CARD_STATUSES,
-	type CARD_TYPE_VALUES,
 	type CardStatus,
 	CITATION_SOURCE_TYPES,
 	CITATION_TARGET_VALUES,
 	type CitationTargetType,
-	type DOMAIN_VALUES,
 	MEMORY_CARD_RECENT_REVIEWS_LIMIT,
 	ROUTES,
 } from '@ab/constants';
@@ -102,9 +99,9 @@ export const actions: Actions = {
 			await updateCard(params.id, user.id, {
 				front: parsed.data.front,
 				back: parsed.data.back,
-				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
-				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
-				kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
+				domain: parsed.data.domain,
+				cardType: parsed.data.cardType,
+				kind: parsed.data.kind,
 				tags: parsed.data.tags,
 			});
 		} catch (err) {

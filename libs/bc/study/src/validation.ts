@@ -27,12 +27,12 @@ import {
 import { z } from 'zod';
 
 const cardEnum = {
-	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
-	cardType: z.enum(CARD_TYPE_VALUES as [string, ...string[]]),
-	kind: z.enum(CARD_KIND_VALUES as [string, ...string[]]),
-	sourceType: z.enum(CONTENT_SOURCE_VALUES as [string, ...string[]]),
-	questionTier: z.enum(QUESTION_TIER_VALUES as [string, ...string[]]),
-	sourceAuthorityKind: z.enum(SOURCE_AUTHORITY_KIND_VALUES as [string, ...string[]]),
+	domain: z.enum(DOMAIN_VALUES),
+	cardType: z.enum(CARD_TYPE_VALUES),
+	kind: z.enum(CARD_KIND_VALUES),
+	sourceType: z.enum(CONTENT_SOURCE_VALUES),
+	questionTier: z.enum(QUESTION_TIER_VALUES),
+	sourceAuthorityKind: z.enum(SOURCE_AUTHORITY_KIND_VALUES),
 };
 
 export const cardTextSchema = z.string().trim().min(1).max(10_000);
@@ -119,10 +119,10 @@ export const submitReviewSchema = z.object({
 // -------- Decision Reps (scenarios) --------
 
 const scenarioEnum = {
-	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
-	difficulty: z.enum(DIFFICULTY_VALUES as [string, ...string[]]),
-	phaseOfFlight: z.enum(PHASE_OF_FLIGHT_VALUES as [string, ...string[]]),
-	sourceType: z.enum(CONTENT_SOURCE_VALUES as [string, ...string[]]),
+	domain: z.enum(DOMAIN_VALUES),
+	difficulty: z.enum(DIFFICULTY_VALUES),
+	phaseOfFlight: z.enum(PHASE_OF_FLIGHT_VALUES),
+	sourceType: z.enum(CONTENT_SOURCE_VALUES),
 };
 
 export const scenarioOptionSchema = z.object({
@@ -192,7 +192,7 @@ export const regReferencesSchema = z.array(z.string().trim().min(1).max(200)).ma
  * - No duplicates within the array.
  */
 export const assessmentMethodsSchema = z
-	.array(z.enum(ASSESSMENT_METHOD_VALUES as [string, ...string[]]))
+	.array(z.enum(ASSESSMENT_METHOD_VALUES))
 	.min(1, 'assessmentMethods must be a non-empty array')
 	.superRefine((values, ctx) => {
 		const seen = new Set<string>();
@@ -236,7 +236,7 @@ export type NewScenarioInput = z.infer<typeof newScenarioSchema>;
 export const newTeachingExerciseSchema = z.object({
 	title: z.string().trim().min(1).max(200),
 	prompt: z.string().trim().min(1).max(10_000),
-	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
+	domain: z.enum(DOMAIN_VALUES),
 	nodeId: z.string().trim().min(1).max(150).nullish(),
 	isEditable: z.boolean().optional(),
 });
@@ -246,7 +246,7 @@ export type NewTeachingExerciseInput = z.infer<typeof newTeachingExerciseSchema>
 export const updateTeachingExerciseSchema = z.object({
 	title: z.string().trim().min(1).max(200).optional(),
 	prompt: z.string().trim().min(1).max(10_000).optional(),
-	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]).optional(),
+	domain: z.enum(DOMAIN_VALUES).optional(),
 	nodeId: z.string().trim().min(1).max(150).nullish(),
 });
 

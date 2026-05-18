@@ -22,7 +22,6 @@
 
 import { requireAuth } from '@ab/auth';
 import { createCard, newCardSchema, SourceRefRequiredError } from '@ab/bc-study/server';
-import type { CARD_KIND_VALUES, CARD_TYPE_VALUES, DOMAIN_VALUES } from '@ab/constants';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -51,9 +50,9 @@ export const POST: RequestHandler = async (event) => {
 			userId: user.id,
 			front: parsed.data.front,
 			back: parsed.data.back,
-			domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
-			cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
-			kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
+			domain: parsed.data.domain,
+			cardType: parsed.data.cardType,
+			kind: parsed.data.kind,
 			tags: parsed.data.tags,
 		});
 		return json(card, { status: 201 });

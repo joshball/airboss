@@ -7,7 +7,7 @@ import {
 	newCardSchema,
 	SourceRefRequiredError,
 } from '@ab/bc-study/server';
-import { type CARD_KIND_VALUES, type CARD_TYPE_VALUES, type DOMAIN_VALUES, QUERY_PARAMS, ROUTES } from '@ab/constants';
+import { QUERY_PARAMS, ROUTES } from '@ab/constants';
 import { createLogger } from '@ab/utils';
 import { error, fail, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
@@ -114,10 +114,9 @@ export const actions: Actions = {
 				userId: user.id,
 				front: parsed.data.front,
 				back: parsed.data.back,
-				// zod's enum() widens to string; newCardSchema guarantees membership.
-				domain: parsed.data.domain as (typeof DOMAIN_VALUES)[number],
-				cardType: parsed.data.cardType as (typeof CARD_TYPE_VALUES)[number],
-				kind: parsed.data.kind as (typeof CARD_KIND_VALUES)[number] | undefined,
+				domain: parsed.data.domain,
+				cardType: parsed.data.cardType,
+				kind: parsed.data.kind,
 				tags: parsed.data.tags,
 			});
 		} catch (err) {
