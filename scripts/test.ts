@@ -305,17 +305,13 @@ async function runIntegration(input: readonly string[]): Promise<void> {
 
 	const cmd: string[] = ['bunx', 'playwright', 'test', `--project=${INTEGRATION_PROJECT}`];
 
-	// `list` mode -> a --grep that matches nothing, so Playwright registers
-	// the project (booting the webServer + spec) without executing a test.
-	// The spec, seeing SWEEP_LIST=1, prints the URL inventory itself.
-	// `--pass-with-no-tests` keeps the exit code 0: a zero-test run is the
-	// intended success path here, not a "no tests found" failure.
-	if (parsed.list) {
-		cmd.push('--grep', '$^', '--pass-with-no-tests');
-	} else if (parsed.books.length > 0) {
-		// `--book` filters via a Playwright --grep against the test titles
-		// (which the spec names `kind/documentSlug`). Multiple books are
-		// OR-joined into a single alternation.
+	// `--book` filters via a Playwright --grep against the test titles (which
+	// the spec names `kind/documentSlug`). Multiple books are OR-joined into a
+	// single alternation. `list` mode needs no Playwright flags: SWEEP_LIST=1
+	// in the env makes the spec emit one passing sentinel test (instead of the
+	// URL sweep) while the reporter prints the URL inventory, so Playwright
+	// runs that one test and exits 0 cleanly.
+	if (!parsed.list && parsed.books.length > 0) {
 		const escaped = parsed.books.map((b) => b.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 		cmd.push('--grep', escaped.join('|'));
 	}

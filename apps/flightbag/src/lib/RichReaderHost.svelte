@@ -59,7 +59,7 @@ export interface RichReaderHostProps {
 
 <script lang="ts">
 import { ROUTES, USER_PREF_KEYS } from '@ab/constants';
-import { onDestroy } from 'svelte';
+import { onDestroy, untrack } from 'svelte';
 import { useComposerState, useSectionContext } from '@ab/library';
 import AnnotationFilterChip from '@ab/library/AnnotationFilterChip.svelte';
 import AnnotationLayer from '@ab/library/AnnotationLayer.svelte';
@@ -97,22 +97,29 @@ $effect(() => {
 	);
 });
 
+// `annotations` is local working state seeded once from the prop, then
+// mutated in place by this host as the user adds/removes annotations.
+// `filter` re-syncs via the `$effect` below on section change. Both
+// initializers read a `$props()` value, so `untrack` makes the
+// "initial value only" intent explicit and silences `state_referenced_locally`.
 let annotations = $state<AnnotationLayerRecord[]>(
-	annotationContext.annotations.map((a) => ({
-		id: a.id,
-		kind: a.kind,
-		color: a.color,
-		noteId: a.noteId,
-		cardDraftId: a.cardDraftId,
-		createdAt: a.createdAt,
-		anchor: a.anchor,
-	})),
+	untrack(() =>
+		annotationContext.annotations.map((a) => ({
+			id: a.id,
+			kind: a.kind,
+			color: a.color,
+			noteId: a.noteId,
+			cardDraftId: a.cardDraftId,
+			createdAt: a.createdAt,
+			anchor: a.anchor,
+		})),
+	),
 );
 let toastVisible = $state(false);
 let toastMessage = $state('');
 let toastTimer: ReturnType<typeof setTimeout> | null = null;
 let orphans = $state<AnnotationLayerRecord[]>([]);
-let filter = $state<AnnotationFilter>(annotationContext.filter);
+let filter = $state<AnnotationFilter>(untrack(() => annotationContext.filter));
 
 $effect(() => {
 	// Re-sync filter when navigating to a different section (the

@@ -42,6 +42,24 @@ const BAR_WIDTH = 32;
 const BAR_FILLED = '█';
 const BAR_EMPTY = '░';
 
+// --- Terminal colour ---------------------------------------------------------
+// Plain ANSI SGR codes; disabled when stdout is not a TTY (piped / CI) or
+// when NO_COLOR is set, so a captured log stays clean text.
+const COLOR_ENABLED = process.stdout.isTTY === true && process.env.NO_COLOR === undefined;
+const SGR = {
+	reset: '\x1b[0m',
+	bold: '\x1b[1m',
+	dim: '\x1b[2m',
+	cyan: '\x1b[36m',
+	green: '\x1b[32m',
+	yellow: '\x1b[33m',
+	blue: '\x1b[34m',
+} as const;
+/** Wrap `text` in an SGR code, or return it untouched when colour is off. */
+function paint(code: string, text: string): string {
+	return COLOR_ENABLED ? `${code}${text}${SGR.reset}` : text;
+}
+
 type Tier = 'sanity' | 'structural' | 'content';
 
 interface FailureRecord {
@@ -80,18 +98,26 @@ interface ManifestBook {
 	readonly total: number;
 }
 
+interface ManifestTotals {
+	readonly sanity: number;
+	readonly structural: number;
+	readonly content: number;
+	readonly total: number;
+	readonly books: number;
+}
+
 interface Manifest {
 	readonly generatedAt: string;
 	readonly mode: string;
 	readonly sampledPerBook: number | null;
-	readonly totals: {
-		readonly sanity: number;
-		readonly structural: number;
-		readonly content: number;
-		readonly total: number;
-		readonly books: number;
-	};
+	/** What this invocation runs (post sample / tier / resume narrowing). */
+	readonly totals: ManifestTotals;
 	readonly books: readonly ManifestBook[];
+	/** Full coverage territory before narrowing. Absent on old manifests. */
+	readonly coverage?: {
+		readonly totals: ManifestTotals;
+		readonly books: readonly ManifestBook[];
+	};
 }
 
 /** Mutable run-time tally for a single book. */
@@ -366,57 +392,86 @@ export default class CoverageReporter implements Reporter {
 	}
 
 	private printCrashBanner(plannedTotal: number): void {
-		const bar = '='.repeat(72);
-		process.stdout.write(`\n${bar}\n`);
+		const RED = '\x1b[31m';
+		const bar = '━'.repeat(72);
+		process.stdout.write(`\n${paint(RED, bar)}\n`);
 		process.stdout.write(
-			`⚠ RUN DID NOT FINISH -- server likely crashed. ${this.urlTestsRun}/${plannedTotal} URLs checked. Partial results below.\n`,
+			paint(
+				RED + SGR.bold,
+				`  ⚠  RUN DID NOT FINISH -- server likely crashed.\n` +
+					`     ${this.urlTestsRun}/${plannedTotal} URLs checked. Partial results below.`,
+			) + '\n',
 		);
-		process.stdout.write(`${bar}\n`);
+		process.stdout.write(`${paint(RED, bar)}\n`);
 	}
 
 	// --- Terminal summary -------------------------------------------------
 
 	private printSummary(skip: SkipPayload | null, interrupted: boolean, plannedTotal: number): void {
+		const RED = '\x1b[31m';
 		const out: string[] = [];
 		out.push('');
-		out.push('Flightbag coverage sweep');
-		out.push(`  mode: ${this.sweepMode}${this.manifest?.sampledPerBook ? ` (${this.manifest.sampledPerBook}/book)` : ''}`);
+		out.push(
+			`${paint(SGR.bold, 'Flightbag coverage sweep')}  ${paint(
+				SGR.dim,
+				`${this.sweepMode} mode${this.manifest?.sampledPerBook ? ` (${this.manifest.sampledPerBook}/book)` : ''}`,
+			)}`,
+		);
 		out.push('');
 
-		// Per-tier counts + timings.
-		out.push('Tiers');
+		// Per-tier counts + timings, as a bordered table.
+		const tierRows: TableRow[] = [];
 		for (const tier of ['sanity', 'structural', 'content'] as const) {
 			const b = this.perTier[tier];
 			if (!b) continue;
 			const total = b.passed + b.failed;
-			const secs = (b.durationMs / 1000).toFixed(1);
-			const failNote = b.failed > 0 ? `  ${b.failed} failed` : '';
-			out.push(`  ${tier.padEnd(11)} ${String(b.passed).padStart(5)} / ${total} passed  ${secs}s${failNote}`);
+			const fail = b.failed > 0 ? paint(SGR.yellow, String(b.failed)) : paint(SGR.dim, '0');
+			tierRows.push({
+				cells: [
+					paint(TIER_COLORS[tier], tier),
+					`${paint(SGR.green, String(b.passed))}/${total}`,
+					fail,
+					`${(b.durationMs / 1000).toFixed(1)}s`,
+				],
+			});
 		}
 		const guardTotal = this.guardPassed + this.guardFailed;
 		if (guardTotal > 0) {
-			out.push(`  Guards: ${this.guardPassed} passed${this.guardFailed > 0 ? `, ${this.guardFailed} failed` : ''}`);
+			const gf = this.guardFailed > 0 ? paint(SGR.yellow, String(this.guardFailed)) : paint(SGR.dim, '0');
+			tierRows.push({
+				cells: [paint(SGR.dim, 'guards'), `${paint(SGR.green, String(this.guardPassed))}/${guardTotal}`, gf, ''],
+			});
+		}
+		for (const line of renderTable(
+			[
+				{ header: 'TIER', align: 'left' },
+				{ header: 'PASS', align: 'right' },
+				{ header: 'FAIL', align: 'right' },
+				{ header: 'TIME', align: 'right' },
+			],
+			tierRows,
+		)) {
+			out.push(line);
 		}
 		out.push('');
 
-		// Tree-grouped per-book breakdown.
-		out.push('Books');
-		for (const line of renderBookBreakdown(this.books)) out.push(`  ${line}`);
+		// Per-book breakdown, bordered table.
+		for (const line of renderBookBreakdown(this.books)) out.push(line);
 		out.push('');
 
 		// Failures grouped by book, each with a retest command.
 		if (this.failures.length === 0) {
-			out.push('No failures.');
+			out.push(paint(SGR.green + SGR.bold, '✓  No failures.'));
 		} else {
-			out.push(`Failures (${this.failures.length})`);
+			out.push(paint(RED + SGR.bold, `✗  Failures (${this.failures.length})`));
 			const byBook = groupFailuresByBook(this.failures);
 			for (const [book, recs] of byBook) {
-				out.push(`  ${book}  (${recs.length})`);
+				out.push(`  ${paint(SGR.bold, book)}  ${paint(SGR.dim, `(${recs.length})`)}`);
 				for (const rec of recs) {
-					out.push(`    [${rec.tier}] ${rec.url}`);
-					out.push(`      ${rec.errorMessage.split('\n')[0]}`);
+					out.push(`    ${paint(tierColor(rec.tier), `[${rec.tier}]`)} ${rec.url}`);
+					out.push(`      ${paint(RED, rec.errorMessage.split('\n')[0] ?? '')}`);
 				}
-				out.push(`    retest: bun run test integration --book "${book}"`);
+				out.push(paint(SGR.dim, `    retest: bun run test integration --book "${book}"`));
 			}
 		}
 		out.push('');
@@ -561,82 +616,238 @@ function booksByKind<T extends { readonly book: string; readonly kind: string }>
 	return out;
 }
 
+// --- Shared bordered-table renderer -----------------------------------------
+//
+// One table primitive backs the run plan, the final per-book breakdown, and
+// the live dashboard so they share a single look: rounded box-drawing border,
+// a bold header row, a header rule, and ANSI-aware column alignment (padding
+// measures *visible* width, so coloured cells still line up).
+
+const BOX = {
+	tl: '╭',
+	tr: '╮',
+	bl: '╰',
+	br: '╯',
+	h: '─',
+	v: '│',
+	teeL: '├',
+	teeR: '┤',
+} as const;
+
+/** Visible width of a string, ignoring ANSI SGR escape sequences. */
+function visibleWidth(text: string): number {
+	// biome-ignore lint/suspicious/noControlCharactersInRegex: matching ANSI SGR.
+	return text.replace(/\x1b\[[0-9;]*m/g, '').length;
+}
+
+/** Pad `text` to `width` visible columns (ANSI-aware). `align` defaults left. */
+function padCell(text: string, width: number, align: 'left' | 'right'): string {
+	const gap = Math.max(0, width - visibleWidth(text));
+	const pad = ' '.repeat(gap);
+	return align === 'right' ? `${pad}${text}` : `${text}${pad}`;
+}
+
+interface TableColumn {
+	readonly header: string;
+	readonly align: 'left' | 'right';
+}
+
+interface TableRow {
+	/** Cell strings (may carry ANSI). A `rule` row draws a horizontal divider. */
+	readonly cells?: readonly string[];
+	readonly rule?: boolean;
+}
+
 /**
- * Render the compact tree-grouped plan table from the manifest. A kind with
- * exactly one book is one-lined (`aim/  aim  545  ...`); kinds with more than
- * one book nest their books under the kind header.
+ * Render a bordered table. Column widths fit the widest visible cell. Body
+ * rows may carry ANSI colour; the header is bold, a `rule: true` row draws an
+ * internal divider (e.g. before a totals footer).
+ */
+function renderTable(columns: readonly TableColumn[], rows: readonly TableRow[], title?: string): string[] {
+	const widths = columns.map((c, i) => {
+		let w = visibleWidth(c.header);
+		for (const r of rows) {
+			const cell = r.cells?.[i];
+			if (cell !== undefined) w = Math.max(w, visibleWidth(cell));
+		}
+		return w;
+	});
+	// Inner width = sum of columns + " │ " separators + 1 pad each edge.
+	const inner = widths.reduce((a, b) => a + b, 0) + (columns.length - 1) * 3 + 2;
+	const hRule = BOX.h.repeat(inner);
+
+	const lines: string[] = [];
+	lines.push(paint(SGR.dim, `${BOX.tl}${hRule}${BOX.tr}`));
+	if (title !== undefined) {
+		lines.push(`${paint(SGR.dim, BOX.v)} ${padCell(paint(SGR.bold, title), inner - 2, 'left')} ${paint(SGR.dim, BOX.v)}`);
+		lines.push(paint(SGR.dim, `${BOX.teeL}${hRule}${BOX.teeR}`));
+	}
+	const renderCells = (cells: readonly string[], bold: boolean): string => {
+		const painted = columns.map((c, i) => {
+			const raw = cells[i] ?? '';
+			const padded = padCell(raw, widths[i] ?? 0, c.align);
+			return bold ? paint(SGR.bold, padded) : padded;
+		});
+		return `${paint(SGR.dim, BOX.v)} ${painted.join(paint(SGR.dim, ' │ '))} ${paint(SGR.dim, BOX.v)}`;
+	};
+	lines.push(renderCells(columns.map((c) => c.header), true));
+	lines.push(paint(SGR.dim, `${BOX.teeL}${hRule}${BOX.teeR}`));
+	for (const r of rows) {
+		if (r.rule) {
+			lines.push(paint(SGR.dim, `${BOX.teeL}${hRule}${BOX.teeR}`));
+			continue;
+		}
+		lines.push(renderCells(r.cells ?? [], false));
+	}
+	lines.push(paint(SGR.dim, `${BOX.bl}${hRule}${BOX.br}`));
+	return lines;
+}
+
+/** Tier colour per column: sanity green, structural yellow, content blue. */
+const TIER_COLORS = { sanity: SGR.green, structural: SGR.yellow, content: SGR.blue } as const;
+
+/** Colour for a tier name; falls back to dim for an unrecognised tier. */
+function tierColor(tier: string): string {
+	return tier === 'sanity' || tier === 'structural' || tier === 'content' ? TIER_COLORS[tier] : SGR.dim;
+}
+
+/**
+ * Render the run plan as a bordered table. Shows the FULL coverage territory
+ * (every URL across all three tiers), with a one-line note of what the
+ * current invocation will actually execute.
+ *
+ * SANITY / STRUCT / CONTENT are the three tiers the sweep walks:
+ *   - sanity   -- every URL must respond < 400
+ *   - struct   -- landing + chapter pages must render real content
+ *   - content  -- chapter samples must show the expected row
  */
 function renderPlanTree(manifest: Manifest | null): string[] {
 	if (!manifest) {
-		return ['Flightbag coverage plan', '  (manifest.json not found -- run the spec to generate it)'];
+		return [
+			paint(SGR.bold, 'Flightbag coverage plan'),
+			paint(SGR.dim, '  manifest.json not found -- run the spec to generate it'),
+		];
 	}
-	const lines: string[] = [];
-	lines.push(`Flightbag coverage plan -- mode: ${manifest.mode}, ${manifest.totals.books} books, ${manifest.totals.total} URLs`);
-	const grouped = booksByKind(manifest.books);
-	// Column widths over all books for tidy alignment.
-	const slugWidth = Math.max(4, ...manifest.books.map((b) => b.documentSlug.length));
-	const totalWidth = Math.max(5, ...manifest.books.map((b) => String(b.total).length));
-	for (const [kind, list] of grouped) {
-		if (list.length === 1) {
-			const b = list[0] as ManifestBook;
-			lines.push(
-				`${kind}/  ${b.documentSlug.padEnd(slugWidth)}  ${String(b.total).padStart(totalWidth)}   ${b.sanity} / ${b.structural} / ${b.content}`,
-			);
-			continue;
-		}
-		lines.push(`${kind}/`);
+
+	// Prefer the full coverage territory; fall back to `totals`/`books` for
+	// manifests written before the `coverage` block existed.
+	const cov = manifest.coverage ?? { totals: manifest.totals, books: manifest.books };
+	const columns: readonly TableColumn[] = [
+		{ header: 'DOCUMENT', align: 'left' },
+		{ header: 'URLs', align: 'right' },
+		{ header: 'SANITY', align: 'right' },
+		{ header: 'STRUCT', align: 'right' },
+		{ header: 'CONTENT', align: 'right' },
+	];
+	const rows: TableRow[] = [];
+	for (const [kind, list] of booksByKind(cov.books)) {
+		rows.push({ cells: [paint(SGR.cyan, `${kind}/`), '', '', '', ''] });
 		for (const b of list) {
-			lines.push(
-				`  ${b.documentSlug.padEnd(slugWidth)}  ${String(b.total).padStart(totalWidth)}   ${b.sanity} / ${b.structural} / ${b.content}`,
-			);
+			rows.push({
+				cells: [
+					`  ${b.documentSlug}`,
+					String(b.total),
+					paint(TIER_COLORS.sanity, String(b.sanity)),
+					paint(TIER_COLORS.structural, String(b.structural)),
+					paint(TIER_COLORS.content, String(b.content)),
+				],
+			});
 		}
 	}
-	lines.push(`(counts: sanity / structural / content)`);
+	rows.push({ rule: true });
+	const t = cov.totals;
+	rows.push({
+		cells: [
+			paint(SGR.bold, `TOTAL (${t.books} books)`),
+			paint(SGR.bold, String(t.total)),
+			paint(SGR.bold, String(t.sanity)),
+			paint(SGR.bold, String(t.structural)),
+			paint(SGR.bold, String(t.content)),
+		],
+	});
+
+	const lines = renderTable(columns, rows, 'Flightbag coverage plan');
+	// One line under the table: what THIS invocation runs vs the full plan.
+	const willRun = manifest.totals.total;
+	const note =
+		manifest.mode === 'full'
+			? `This run: full sweep -- all ${willRun} URLs.`
+			: `This run: ${manifest.mode} sweep -- ${willRun} of ${t.total} URLs` +
+				`${manifest.sampledPerBook ? ` (${manifest.sampledPerBook}/book)` : ''}.`;
+	lines.push(paint(SGR.dim, note));
 	return lines;
 }
 
-/** Render the per-book breakdown tree for the terminal summary + report. */
-function renderBookBreakdown(books: Map<string, BookProgress>): string[] {
-	if (books.size === 0) return ['(no books)'];
-	const list = [...books.values()];
-	const slugWidth = Math.max(4, ...list.map((b) => b.documentSlug.length));
-	const doneWidth = Math.max(4, ...list.map((b) => String(b.done).length));
-	const lines: string[] = [];
-	for (const [kind, group] of booksByKind(list)) {
-		lines.push(`${kind}/`);
-		for (const b of group) {
-			const expected = b.expected > 0 ? b.expected : b.done;
-			const failNote = b.failed > 0 ? `  ${b.failed} failed` : '';
-			lines.push(
-				`  ${b.documentSlug.padEnd(slugWidth)}  ${String(b.done).padStart(doneWidth)}/${expected}  ${b.passed} passed${failNote}`,
-			);
-		}
+/** Build kind-grouped table rows from live book progress; `cellsFor` per book. */
+function bookTableRows(
+	books: Map<string, BookProgress>,
+	cellsFor: (b: BookProgress) => readonly string[],
+	columnCount: number,
+): TableRow[] {
+	const rows: TableRow[] = [];
+	const blank = Array<string>(columnCount).fill('');
+	for (const [kind, group] of booksByKind([...books.values()])) {
+		rows.push({ cells: [paint(SGR.cyan, `${kind}/`), ...blank.slice(1)] });
+		for (const b of group) rows.push({ cells: cellsFor(b) });
 	}
-	return lines;
+	return rows;
+}
+
+/** Render the final per-book breakdown as a bordered table. */
+function renderBookBreakdown(books: Map<string, BookProgress>): string[] {
+	if (books.size === 0) return [paint(SGR.dim, '(no books)')];
+	const columns: readonly TableColumn[] = [
+		{ header: 'DOCUMENT', align: 'left' },
+		{ header: 'DONE', align: 'right' },
+		{ header: 'PASS', align: 'right' },
+		{ header: 'FAIL', align: 'right' },
+	];
+	const rows = bookTableRows(
+		books,
+		(b) => {
+			const expected = b.expected > 0 ? b.expected : b.done;
+			const fail = b.failed > 0 ? paint(SGR.yellow, String(b.failed)) : paint(SGR.dim, '0');
+			return [`  ${b.documentSlug}`, `${b.done}/${expected}`, paint(SGR.green, String(b.passed)), fail];
+		},
+		columns.length,
+	);
+	return renderTable(columns, rows);
 }
 
 /**
- * Render the live dashboard: a tree of books, each with a progress bar,
- * percentage, and pass/fail counts once results land.
+ * Render the live dashboard as a bordered table -- one progress bar per book,
+ * percentage, and pass/fail counts. Repainted in place during the sweep.
  */
 function renderDashboard(books: Map<string, BookProgress>): string[] {
-	const list = [...books.values()];
-	if (list.length === 0) return ['(no books in manifest)'];
-	const nameWidth = Math.max(4, ...list.map((b) => b.documentSlug.length));
-	const lines: string[] = [];
-	for (const [kind, group] of booksByKind(list)) {
-		lines.push(`${kind}/`);
-		for (const b of group) {
+	if (books.size === 0) return [paint(SGR.dim, '(no books in manifest)')];
+	const columns: readonly TableColumn[] = [
+		{ header: 'DOCUMENT', align: 'left' },
+		{ header: 'PROGRESS', align: 'left' },
+		{ header: '%', align: 'right' },
+		{ header: 'PASS', align: 'right' },
+		{ header: 'FAIL', align: 'right' },
+	];
+	const rows = bookTableRows(
+		books,
+		(b) => {
 			const expected = b.expected > 0 ? b.expected : Math.max(b.done, 1);
 			const frac = Math.min(1, b.done / expected);
 			const filled = Math.round(frac * BAR_WIDTH);
-			const bar = BAR_FILLED.repeat(filled) + BAR_EMPTY.repeat(BAR_WIDTH - filled);
-			const pct = `${Math.round(frac * 100)}%`.padStart(4);
-			const counts = b.done > 0 ? `  ${b.passed} ok${b.failed > 0 ? ` / ${b.failed} fail` : ''}` : '';
-			lines.push(`  ${b.documentSlug.padEnd(nameWidth)}  ${bar} ${pct}${counts}`);
-		}
-	}
-	return lines;
+			const done = frac >= 1 && b.failed === 0;
+			const barColor = b.failed > 0 ? SGR.yellow : done ? SGR.green : SGR.cyan;
+			const bar = paint(barColor, BAR_FILLED.repeat(filled)) + paint(SGR.dim, BAR_EMPTY.repeat(BAR_WIDTH - filled));
+			const fail = b.failed > 0 ? paint(SGR.yellow, String(b.failed)) : paint(SGR.dim, '0');
+			return [
+				`  ${b.documentSlug}`,
+				bar,
+				`${Math.round(frac * 100)}%`,
+				b.done > 0 ? paint(SGR.green, String(b.passed)) : paint(SGR.dim, '-'),
+				b.done > 0 ? fail : paint(SGR.dim, '-'),
+			];
+		},
+		columns.length,
+	);
+	return renderTable(columns, rows);
 }
 
 function groupFailuresByBook(failures: readonly FailureRecord[]): Array<[string, FailureRecord[]]> {

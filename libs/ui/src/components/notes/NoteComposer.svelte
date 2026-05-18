@@ -14,6 +14,7 @@
  */
 
 import { NOTE_BODY_MAX_LENGTH, NOTE_FOLLOW_UP_MAX_LENGTH, NOTE_TITLE_MAX_LENGTH } from '@ab/constants';
+import { untrack } from 'svelte';
 import NoteContextPicker from './NoteContextPicker.svelte';
 import { EMPTY_NOTE_CONTEXT, type NoteContext, type NoteContextOptions } from './note-context-types';
 import TagChipInput from './TagChipInput.svelte';
@@ -76,12 +77,16 @@ let {
 	tagSuggestions?: string[] | null;
 } = $props();
 
-let bodyMd = $state(initial?.bodyMd ?? '');
-let title = $state(initial?.title ?? '');
-let context = $state<NoteContext>({ ...EMPTY_NOTE_CONTEXT, ...(initial?.context ?? {}) });
-let tags = $state<string[]>(initial?.tags ?? []);
-let followUpMd = $state(initial?.followUpMd ?? '');
-let quotedExcerpt = $state(initial?.quotedExcerpt ?? '');
+// `initial` seeds the form once; the composer is never re-initialized
+// when the prop changes (the parent unmounts/remounts for a new note).
+// `untrack` states that "initial value only" intent and silences
+// `state_referenced_locally`.
+let bodyMd = $state(untrack(() => initial?.bodyMd ?? ''));
+let title = $state(untrack(() => initial?.title ?? ''));
+let context = $state<NoteContext>(untrack(() => ({ ...EMPTY_NOTE_CONTEXT, ...(initial?.context ?? {}) })));
+let tags = $state<string[]>(untrack(() => initial?.tags ?? []));
+let followUpMd = $state(untrack(() => initial?.followUpMd ?? ''));
+let quotedExcerpt = $state(untrack(() => initial?.quotedExcerpt ?? ''));
 
 let bodyEl = $state<HTMLTextAreaElement | null>(null);
 let formEl = $state<HTMLFormElement | null>(null);
@@ -128,6 +133,9 @@ $effect(() => {
 });
 </script>
 
+<!-- Forms bubble keydown from their inputs; Cmd+Enter-to-submit is an
+     intentional shortcut. -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form
 	bind:this={formEl}
 	method={formMethod}

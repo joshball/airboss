@@ -325,7 +325,24 @@ async function collectTargets(): Promise<PickedTargets> {
 	}
 }
 
-const collected = await collectTargets();
+/**
+ * `list` mode: print the URL plan, run no URL tests. The spec emits one
+ * trivial passing sentinel test (see the `LIST_MODE` branch in the
+ * `test.describe` below) so Playwright has a real test to run and exits 0
+ * -- no `--grep $^` / `--pass-with-no-tests` workaround.
+ *
+ * Crucially, list mode renders the plan from the cached `manifest.json`
+ * written by the last real sweep, so it needs NO database: `collectTargets`
+ * (which queries the reference registry) is skipped entirely. Without this,
+ * `bun run test integration list` crashes at module-load with
+ * "DATABASE_URL is not set".
+ */
+const LIST_MODE = process.env.SWEEP_LIST === '1';
+
+// An empty `collected` in list mode keeps the manifest write below a no-op,
+// so the cached plan the reporter reads is preserved untouched.
+const EMPTY_COLLECTED: PickedTargets = { sanity: [], structural: [], content: [], skipped: [] };
+const collected = LIST_MODE ? EMPTY_COLLECTED : await collectTargets();
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve as resolvePath } from 'node:path';
@@ -480,23 +497,28 @@ const targets: PickedTargets = {
 // the reporter has no DB connection of its own. The writer below is
 // intentionally append-fragile (one writer, one run) to avoid coordinating
 // across 32 workers.
-writeFileSync(
-	resolvePath(REPORT_DIR, 'skipped.json'),
-	JSON.stringify(
-		{
-			generatedAt: new Date().toISOString(),
-			counts: {
-				sanity: targets.sanity.length,
-				structural: targets.structural.length,
-				content: targets.content.length,
-				skipped: targets.skipped.length,
+//
+// Skipped entirely in list mode: list mode collected nothing and must NOT
+// clobber the cached `skipped.json` / `manifest.json` the reporter renders.
+if (!LIST_MODE) {
+	writeFileSync(
+		resolvePath(REPORT_DIR, 'skipped.json'),
+		JSON.stringify(
+			{
+				generatedAt: new Date().toISOString(),
+				counts: {
+					sanity: targets.sanity.length,
+					structural: targets.structural.length,
+					content: targets.content.length,
+					skipped: targets.skipped.length,
+				},
+				skipped: targets.skipped,
 			},
-			skipped: targets.skipped,
-		},
-		null,
-		2,
-	),
-);
+			null,
+			2,
+		),
+	);
+}
 
 // Persist the run manifest: what will ACTUALLY run this invocation, after
 // sampling + tier filter + resume. Written at module-load so it exists even
@@ -511,11 +533,11 @@ interface ManifestBook {
 	readonly total: number;
 }
 
-const manifestBooks = new Map<string, ManifestBook>();
-function tallyBook(tier: SweepTier, list: readonly CoverageTarget[]): void {
+/** Tally a tier's targets into the supplied per-book map. */
+function tallyInto(map: Map<string, ManifestBook>, tier: SweepTier, list: readonly CoverageTarget[]): void {
 	for (const target of list) {
 		const key = bookKey(target);
-		const existing = manifestBooks.get(key) ?? {
+		const existing = map.get(key) ?? {
 			book: key,
 			kind: target.kind,
 			documentSlug: target.documentSlug,
@@ -524,44 +546,87 @@ function tallyBook(tier: SweepTier, list: readonly CoverageTarget[]): void {
 			content: 0,
 			total: 0,
 		};
-		manifestBooks.set(key, {
-			...existing,
-			[tier]: existing[tier] + 1,
-			total: existing.total + 1,
-		});
+		map.set(key, { ...existing, [tier]: existing[tier] + 1, total: existing.total + 1 });
 	}
 }
-tallyBook('sanity', targets.sanity);
-tallyBook('structural', targets.structural);
-tallyBook('content', targets.content);
 
-const sortedManifestBooks = [...manifestBooks.values()].sort((a, b) => (a.book < b.book ? -1 : a.book > b.book ? 1 : 0));
+// `manifestBooks` -- what this invocation will ACTUALLY run (post sample /
+// tier filter / resume). `coverageBooks` -- the FULL coverage territory the
+// sweep is derived from, before any narrowing. `list` mode shows the full
+// territory so the plan is meaningful instead of 46 identical sampled rows;
+// a real run shows the executed set.
+const manifestBooks = new Map<string, ManifestBook>();
+tallyInto(manifestBooks, 'sanity', targets.sanity);
+tallyInto(manifestBooks, 'structural', targets.structural);
+tallyInto(manifestBooks, 'content', targets.content);
+
+const coverageBooks = new Map<string, ManifestBook>();
+tallyInto(coverageBooks, 'sanity', collected.sanity);
+tallyInto(coverageBooks, 'structural', collected.structural);
+tallyInto(coverageBooks, 'content', collected.content);
+
+const byBookKey = (a: ManifestBook, b: ManifestBook): number => (a.book < b.book ? -1 : a.book > b.book ? 1 : 0);
+const sortedManifestBooks = [...manifestBooks.values()].sort(byBookKey);
+const sortedCoverageBooks = [...coverageBooks.values()].sort(byBookKey);
+const sumTier = (books: readonly ManifestBook[], tier: SweepTier): number =>
+	books.reduce((acc, b) => acc + b[tier], 0);
 const totalSanity = targets.sanity.length;
 const totalStructural = targets.structural.length;
 const totalContent = targets.content.length;
 
-writeFileSync(
-	resolvePath(REPORT_DIR, 'manifest.json'),
-	JSON.stringify(
-		{
-			generatedAt: new Date().toISOString(),
-			mode: sweepMode,
-			sampledPerBook: samplePerBook,
-			totals: {
-				sanity: totalSanity,
-				structural: totalStructural,
-				content: totalContent,
-				total: totalSanity + totalStructural + totalContent,
-				books: sortedManifestBooks.length,
+const coverageSanity = sumTier(sortedCoverageBooks, 'sanity');
+const coverageStructural = sumTier(sortedCoverageBooks, 'structural');
+const coverageContent = sumTier(sortedCoverageBooks, 'content');
+
+// Persist the run manifest -- skipped in list mode so the cached plan from
+// the last real sweep survives (list mode collected nothing).
+if (!LIST_MODE) {
+	writeFileSync(
+		resolvePath(REPORT_DIR, 'manifest.json'),
+		JSON.stringify(
+			{
+				generatedAt: new Date().toISOString(),
+				mode: sweepMode,
+				sampledPerBook: samplePerBook,
+				// `totals` + `books` -- what this invocation runs (post-narrowing).
+				totals: {
+					sanity: totalSanity,
+					structural: totalStructural,
+					content: totalContent,
+					total: totalSanity + totalStructural + totalContent,
+					books: sortedManifestBooks.length,
+				},
+				books: sortedManifestBooks,
+				// `coverage` -- the full territory before sample/tier/resume
+				// narrowing. `list` mode renders this so the plan is meaningful.
+				coverage: {
+					totals: {
+						sanity: coverageSanity,
+						structural: coverageStructural,
+						content: coverageContent,
+						total: coverageSanity + coverageStructural + coverageContent,
+						books: sortedCoverageBooks.length,
+					},
+					books: sortedCoverageBooks,
+				},
 			},
-			books: sortedManifestBooks,
-		},
-		null,
-		2,
-	),
-);
+			null,
+			2,
+		),
+	);
+}
 
 test.describe('flightbag coverage', () => {
+	if (LIST_MODE) {
+		// List mode prints the plan via the reporter and runs nothing else.
+		// This single passing test gives Playwright a test to execute, so it
+		// exits 0 without the `--grep $^` / `--pass-with-no-tests` workaround.
+		test('list mode -- plan printed, no URLs swept', () => {
+			expect(LIST_MODE).toBe(true);
+		});
+		return;
+	}
+
 	test('sample size is non-trivial -- catches a fully-empty registry', () => {
 		// Floor pinned at 50; the dev seed today produces several hundred
 		// sanity URLs (handbook sections, AIM paragraphs, CFR sections,
