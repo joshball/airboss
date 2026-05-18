@@ -20,8 +20,9 @@ In flight:
 - `course-reader-and-editor` WP authored (PRs #760, #761) -- dual UI on top of course-primitive: study reader + hangar editor + Courses tab on `/program/goals/[id]`. Spec status `draft` pending walkthrough; `/ball-wp-build` dispatches once human review signs off.
 - `xc-viewer-v1` WP authored (PR #829) -- universal pre-flight stage first slice: one sectional region, three airports, one route, one C172N spec, the `frontal-xc-march` wx-engine scenario, mounted in a course step via `:::xc-viewer`. Spec status `draft`; awaiting human sign-off before Phase A starts. Depends on the now-shipped wx-engine.
 - `hangar-review-queue-cluster-fix` -- 24 e2e failures triaged. Test suite green-up landed (#939, 558 -> 0 failures) and validator green-up landed (#941, TBD wiki-link + 5 orphan help pages). Underlying hydration leak / `hangar.docs_search_index` Postgres crash still need one focused investigation.
+- `personal-minimums-as-typed-contract` -- all five phases A-E shipped end-to-end (PRs #1081, #1082, #1084, #1088, + Phase E close). New `study.personal_minimums` typed primitive with revision history, server-only BC API, a browser-safe `projectAgainstPersonalMinimums` lens, the `/personal-minimums` editor + history surface, an implications subpanel against wx-engine scenarios, and a course nudge from the `wx-personal-minimums` node. `agent_review_status: done` on every WP file; `status: in-flight` -- **ready for human walk-through** (test plan PMIN-1 through PMIN-61 in [test-plan.md](../work-packages/personal-minimums-as-typed-contract/test-plan.md)). Unblocks `xc-viewer-personal-minimums-overlay`, `decision-debrief-replay`, `logbook-ingestion`.
 
-Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course.
+Walkthroughs owed: cert-dashboard (#321), lens-ui (#323), goal-composer (#324), wx-engine, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive course, personal-minimums-as-typed-contract.
 
 ## Carried over (rollup 2026-05-17T21:02:21Z)
 

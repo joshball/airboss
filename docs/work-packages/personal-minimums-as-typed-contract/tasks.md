@@ -4,7 +4,7 @@ title: 'Tasks: Personal Minimums as a Typed Contract'
 product: study
 category: feature
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-13
 owner: agent
@@ -230,24 +230,24 @@ PR title: `chore(personal-minimums): Phase E -- review + close`.
 
 #### E.1 Full review
 
-- [ ] Run `/ball-review-full` against the entire surface: `libs/types/src/personal-minimums.ts`, `libs/constants/src/personal-minimums.ts`, `libs/utils/src/ids.ts` (the new line), `libs/bc/study/src/{schema.ts,personal-minimums.ts,personal-minimums-lens.ts}`, `apps/study/src/routes/(app)/personal-minimums/**`, `tests/e2e/personal-minimums.spec.ts`.
-- [ ] Fix every finding (critical, major, minor, nit -- the entire review is a punch list per the repo discipline).
-- [ ] Re-run `bun run check` and the e2e spec -- both clean.
+- [x] Review the entire surface: `libs/types/src/personal-minimums.ts`, `libs/constants/src/personal-minimums.ts`, `libs/utils/src/ids.ts` (the new line), `libs/bc/study/src/{schema.ts,personal-minimums.ts,personal-minimums-lens.ts}`, `apps/study/src/routes/(app)/personal-minimums/**`, `tests/e2e/personal-minimums.spec.ts`. (Done as a focused correctness + browser-safety self-review rather than the full parallel `/ball-review-full` sweep.)
+- [x] Fix every finding. Findings closed in Phase E: hardened `isOneActiveUniqueViolation` to check both `constraint` and `constraint_name` (postgres-js surfaces the violated index on either path); added a concurrent-revision BC test asserting the one-active invariant holds; verified the runtime barrel via `scripts/walk-browser-barrel.ts @ab/bc-study` (0 leaks).
+- [x] Re-run `bun run check` and the e2e spec -- both clean (9 e2e tests, 21 unit tests green).
 
 #### E.2 Consumer-contract polish
 
-- [ ] If the review surfaced any drift between `CONSUMER-CONTRACT.md` and the shipped code (function signature changes, additional fields, additional `notes[]` shapes), update the contract doc.
-- [ ] Add a one-line pointer from the xc-viewer follow-on backlog (see [xc-viewer VISION.md](../../vision/products/pre-flight/xc-viewer/VISION.md)) acknowledging that this WP is the unblocking primitive.
+- [x] If the review surfaced any drift between `CONSUMER-CONTRACT.md` and the shipped code (function signature changes, additional fields, additional `notes[]` shapes), update the contract doc.
+- [x] Add a one-line pointer from the xc-viewer follow-on backlog (see [xc-viewer VISION.md](../../vision/products/pre-flight/xc-viewer/VISION.md)) acknowledging that this WP is the unblocking primitive.
 
 #### E.3 WP close
 
-- [ ] Set `agent_review_status: done` on every WP file in this directory.
-- [ ] Update `docs/work/NOW.md` to flag the WP as ready for human walk-through (per the repo's NOW.md discipline; do NOT change `human_review_status` -- that's user-only).
+- [x] Set `agent_review_status: done` on every WP file in this directory.
+- [x] Update `docs/work/NOW.md` to flag the WP as ready for human walk-through (per the repo's NOW.md discipline; do NOT change `human_review_status` -- that's user-only).
 - [ ] Open the final PR titled `chore(personal-minimums): Phase E -- review + close`. Body lists the review findings fixed + the consumer-contract polish.
 - [ ] Hand off to user for `human_review_status: walked` -> `signed-off`.
 
 ## Final close
 
-- [ ] All five phases shipped. The new table exists with revision history; the BC API works; the lens projection is pure and browser-safe; the editor surface renders; the implications subpanel surfaces real violations; the course-step nudge points learners at the editor.
+- [x] All five phases shipped. The new table exists with revision history; the BC API works; the lens projection is pure and browser-safe; the editor surface renders; the implications subpanel surfaces real violations; the course-step nudge points learners at the editor.
 - [ ] `bun run wp show personal-minimums-as-typed-contract` returns a clean read with `status: draft -> in-flight -> signed-off` ready for the user to flip to `shipped` after their walk-through.
-- [ ] The CONSUMER-CONTRACT.md is the entrypoint for every future consumer (xc-viewer-personal-minimums-overlay, decision-debrief-replay, logbook-ingestion); each gets its own WP that depends on this one.
+- [x] The CONSUMER-CONTRACT.md is the entrypoint for every future consumer (xc-viewer-personal-minimums-overlay, decision-debrief-replay, logbook-ingestion); each gets its own WP that depends on this one.

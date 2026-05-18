@@ -4,7 +4,7 @@ title: 'Design: Personal Minimums as a Typed Contract'
 product: study
 category: feature
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-13
 owner: agent

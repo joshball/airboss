@@ -77,15 +77,21 @@ export class PersonalMinimumsConflictError extends Error {
 /** Postgres unique-violation SQLSTATE. */
 const UNIQUE_VIOLATION = '23505';
 
+/** Name of the partial unique index that enforces one-active-per-user. */
+const ONE_ACTIVE_INDEX = 'personal_minimums_one_active_per_user_uidx';
+
 /**
  * True when `err` is a postgres unique-constraint violation on the
- * personal-minimums one-active index. Drizzle surfaces the driver error
- * with a `code` field; we narrow defensively.
+ * personal-minimums one-active index. postgres-js surfaces the violated
+ * constraint on either `constraint` or `constraint_name` depending on the
+ * driver path (see `composite-fks.schema.test.ts`); we check both, gated
+ * on the `23505` SQLSTATE.
  */
 function isOneActiveUniqueViolation(err: unknown): boolean {
 	if (typeof err !== 'object' || err === null) return false;
-	const e = err as { code?: unknown; constraint_name?: unknown };
-	return e.code === UNIQUE_VIOLATION && e.constraint_name === 'personal_minimums_one_active_per_user_uidx';
+	const e = err as { code?: unknown; constraint?: unknown; constraint_name?: unknown };
+	if (e.code !== UNIQUE_VIOLATION) return false;
+	return e.constraint === ONE_ACTIVE_INDEX || e.constraint_name === ONE_ACTIVE_INDEX;
 }
 
 /** Normalise a raw Drizzle row (`visibility_sm` is `string`) to {@link PersonalMinimums}. */
