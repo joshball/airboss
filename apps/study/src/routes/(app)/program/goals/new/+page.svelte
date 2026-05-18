@@ -79,7 +79,7 @@ const seed = $derived(form?.values);
 		margin: 0;
 		padding: var(--space-md);
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		border: 1px solid var(--signal-danger-edge);
 		border-radius: var(--radius-md);
 	}

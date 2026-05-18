@@ -209,7 +209,7 @@ const hasUnsavedContent = $derived(front.trim().length > 0 || back.trim().length
 		background: var(--signal-success-wash);
 		border: 1px solid var(--signal-success-edge);
 		border-radius: var(--radius-sm);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.error {
@@ -218,7 +218,7 @@ const hasUnsavedContent = $derived(front.trim().length > 0 || back.trim().length
 		background: var(--signal-danger-wash);
 		border: 1px solid var(--signal-danger-edge);
 		border-radius: var(--radius-sm);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.field {

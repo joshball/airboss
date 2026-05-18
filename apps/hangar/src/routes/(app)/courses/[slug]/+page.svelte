@@ -1,5 +1,11 @@
 <script lang="ts">
-import { COURSE_STATUS_LABELS, COURSE_STATUSES, COURSE_TITLE_MAX_LENGTH, type CourseStatus, ROUTES } from '@ab/constants';
+import {
+	COURSE_STATUS_LABELS,
+	COURSE_STATUSES,
+	COURSE_TITLE_MAX_LENGTH,
+	type CourseStatus,
+	ROUTES,
+} from '@ab/constants';
 import Button from '@ab/ui/components/Button.svelte';
 import ConfirmAction from '@ab/ui/components/ConfirmAction.svelte';
 import EmptyState from '@ab/ui/components/EmptyState.svelte';
@@ -257,7 +263,7 @@ const STATUS_OPTIONS: Array<{ value: string; label: string }> = [
 
 	.banner-error {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		border-color: var(--signal-danger-edge);
 	}
 

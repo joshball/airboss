@@ -732,15 +732,15 @@ const activeRecorded = $derived<RecordedEntry | null>(
 	}
 
 	.summary dd.pass {
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.summary dd.fail {
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.summary dd.blocked {
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.actions {
@@ -856,26 +856,26 @@ const activeRecorded = $derived<RecordedEntry | null>(
 
 	.outcome[data-outcome='pass'].active {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
-		border-color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
+		border-color: var(--signal-success-deep-ink);
 	}
 
 	.outcome[data-outcome='fail'].active {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.outcome[data-outcome='blocked'].active {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
-		border-color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
+		border-color: var(--signal-warning-deep-ink);
 	}
 
 	.row-error {
 		margin: 0;
 		font-size: var(--type-ui-caption-size);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.content-pane {
@@ -988,14 +988,14 @@ const activeRecorded = $derived<RecordedEntry | null>(
 
 	.finish-option[data-tone='success'].active {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
-		border-color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
+		border-color: var(--signal-success-deep-ink);
 	}
 
 	.finish-option[data-tone='danger'].active {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.finish-option[data-tone='muted'].active {

@@ -202,7 +202,7 @@ function selectedDisplayName(id: SimAircraftId): string {
 
 	.error {
 		margin: 0 0 var(--space-md) 0;
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		font-size: var(--font-size-sm);
 	}
 

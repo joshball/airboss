@@ -126,13 +126,13 @@ function reasonText(area: {
 
 	[data-severity='severe'] {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 		border: 1px solid var(--signal-danger-edge);
 	}
 
 	[data-severity='moderate'] {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 		border: 1px solid var(--signal-warning-edge);
 	}
 

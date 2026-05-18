@@ -291,7 +291,7 @@ $effect(() => {
 	.errors h2 {
 		margin: 0 0 var(--space-xs);
 		font-size: var(--type-heading-3-size);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.errors ul {
@@ -398,26 +398,26 @@ $effect(() => {
 	.pill[data-state='done'],
 	.pill[data-state='signed-off'] {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.pill[data-state='in-flight'],
 	.pill[data-state='walked'] {
 		background: var(--signal-info-wash);
-		color: var(--signal-info-ink);
+		color: var(--signal-info-deep-ink);
 	}
 
 	.pill[data-state='draft'],
 	.pill[data-state='pending'] {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.pill[data-state='abandoned'],
 	.pill[data-state='superseded'],
 	.pill[data-state='error'] {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.mutate-hint {

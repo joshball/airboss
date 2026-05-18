@@ -158,6 +158,7 @@ function paletteBlock(palette: Palette, isDark: boolean): string[] {
 		push(`--signal-${key}-wash`, s.wash);
 		push(`--signal-${key}-edge`, s.edge);
 		push(`--signal-${key}-ink`, s.ink);
+		push(`--signal-${key}-deep-ink`, s.deepInk);
 	}
 
 	// focus

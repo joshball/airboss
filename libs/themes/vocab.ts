@@ -90,25 +90,32 @@ export const TOKENS = {
 	actionLinkDisabled: '--action-link-disabled',
 
 	// -------- signal (success, warning, danger, info) --------
+	// `ink` is text-on-solid (the chip with a saturated bg). `deepInk` is
+	// text-on-wash (the soft chip / pill / banner-text pattern) -- same
+	// signal hue, lightness shifted to clear 4.5:1 against the wash.
 	signalSuccess: '--signal-success',
 	signalSuccessWash: '--signal-success-wash',
 	signalSuccessEdge: '--signal-success-edge',
 	signalSuccessInk: '--signal-success-ink',
+	signalSuccessDeepInk: '--signal-success-deep-ink',
 
 	signalWarning: '--signal-warning',
 	signalWarningWash: '--signal-warning-wash',
 	signalWarningEdge: '--signal-warning-edge',
 	signalWarningInk: '--signal-warning-ink',
+	signalWarningDeepInk: '--signal-warning-deep-ink',
 
 	signalDanger: '--signal-danger',
 	signalDangerWash: '--signal-danger-wash',
 	signalDangerEdge: '--signal-danger-edge',
 	signalDangerInk: '--signal-danger-ink',
+	signalDangerDeepInk: '--signal-danger-deep-ink',
 
 	signalInfo: '--signal-info',
 	signalInfoWash: '--signal-info-wash',
 	signalInfoEdge: '--signal-info-edge',
 	signalInfoInk: '--signal-info-ink',
+	signalInfoDeepInk: '--signal-info-deep-ink',
 
 	// -------- focus --------
 	focusRing: '--focus-ring',

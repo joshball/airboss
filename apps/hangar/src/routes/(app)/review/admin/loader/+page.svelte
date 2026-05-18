@@ -209,7 +209,7 @@ $effect(() => {
 	}
 
 	.status dd.err {
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.errors {

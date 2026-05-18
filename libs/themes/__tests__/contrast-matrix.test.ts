@@ -28,12 +28,16 @@ interface ResolvedRolePalette {
 	'action.neutral.ink': string;
 	'signal.success.wash': string;
 	'signal.success.ink': string;
+	'signal.success.deepInk': string;
 	'signal.warning.wash': string;
 	'signal.warning.ink': string;
+	'signal.warning.deepInk': string;
 	'signal.danger.wash': string;
 	'signal.danger.ink': string;
+	'signal.danger.deepInk': string;
 	'signal.info.wash': string;
 	'signal.info.ink': string;
+	'signal.info.deepInk': string;
 }
 
 function resolvePalette(theme: Theme, appearance: AppearanceMode): ResolvedRolePalette | undefined {
@@ -79,12 +83,16 @@ function resolvePalette(theme: Theme, appearance: AppearanceMode): ResolvedRoleP
 		'action.neutral.ink': actionNeutral.ink,
 		'signal.success.wash': signalSuccess.wash,
 		'signal.success.ink': signalSuccess.ink,
+		'signal.success.deepInk': signalSuccess.deepInk,
 		'signal.warning.wash': signalWarning.wash,
 		'signal.warning.ink': signalWarning.ink,
+		'signal.warning.deepInk': signalWarning.deepInk,
 		'signal.danger.wash': signalDanger.wash,
 		'signal.danger.ink': signalDanger.ink,
+		'signal.danger.deepInk': signalDanger.deepInk,
 		'signal.info.wash': signalInfo.wash,
 		'signal.info.ink': signalInfo.ink,
+		'signal.info.deepInk': signalInfo.deepInk,
 	};
 }
 
@@ -105,10 +113,10 @@ const REQUIRED_PAIRS: Pair[] = [
 	{ fg: 'action.default.ink', bg: 'action.default', min: 4.5, description: 'action-default label on fill' },
 	{ fg: 'action.hazard.ink', bg: 'action.hazard', min: 4.5, description: 'action-hazard label on fill' },
 	{ fg: 'action.neutral.ink', bg: 'action.neutral', min: 4.5, description: 'action-neutral label on fill' },
-	// Body-ink on signal washes -- the realistic "chip text" pair. A
-	// dedicated `signal.*.deepInk` role lands in package #6 alongside
-	// OKLCH dark palettes; the signal.*.ink field in the current palette
-	// describes text-on-solid only (it is always white/black).
+	// Body-ink on signal washes -- the realistic "chip text" pair when
+	// the chip uses body ink instead of the signal-hued `deepInk`. Both
+	// readings have to clear AA; the dedicated `signal.*.deepInk` rung
+	// gives chips a hued-but-readable label.
 	{ fg: 'ink.body', bg: 'signal.success.wash', min: 4.5, description: 'body on success wash' },
 	{ fg: 'ink.body', bg: 'signal.warning.wash', min: 4.5, description: 'body on warning wash' },
 	{ fg: 'ink.body', bg: 'signal.danger.wash', min: 4.5, description: 'body on danger wash' },
@@ -116,21 +124,22 @@ const REQUIRED_PAIRS: Pair[] = [
 ];
 
 /**
- * Advisory pairs -- logged but non-fatal. Edge-visibility hasn't hit 3:1
- * in the current palettes (light edges on white panels are a deliberate
- * visual choice). Package #6's OKLCH dark-mode rework revisits these
- * rungs; until then we surface the ratios so regression is still visible.
+ * Advisory pairs -- logged via `it.skip` until the bar is met, then
+ * automatically pinned by the ratchet below. Two families live here:
+ *
+ *   - `edge.default` on `surface.{page,panel}` -- borders must clear
+ *     3:1 to count as visible-component contrast under WCAG.
+ *   - `signal.*.deepInk` on `signal.*.wash` -- chip-text-on-tint reads
+ *     as the signal hue at AA. `signal.*.ink` stays the
+ *     text-on-solid value (white/black); `deepInk` is the wash partner.
  */
 const ADVISORY_PAIRS: Pair[] = [
 	{ fg: 'edge.default', bg: 'surface.page', min: 3.0, description: 'edge visibility on page (advisory)' },
 	{ fg: 'edge.default', bg: 'surface.panel', min: 3.0, description: 'edge visibility on panel (advisory)' },
-	// Signal "ink" today is text-on-solid only. A `deepInk` for text-on-wash
-	// lands with the OKLCH palette rework in package #6. Track the ratio
-	// so the eventual deepInk value is discoverable.
-	{ fg: 'signal.success.ink', bg: 'signal.success.wash', min: 4.5, description: 'success ink on wash (deepInk TBD)' },
-	{ fg: 'signal.warning.ink', bg: 'signal.warning.wash', min: 4.5, description: 'warning ink on wash (deepInk TBD)' },
-	{ fg: 'signal.danger.ink', bg: 'signal.danger.wash', min: 4.5, description: 'danger ink on wash (deepInk TBD)' },
-	{ fg: 'signal.info.ink', bg: 'signal.info.wash', min: 4.5, description: 'info ink on wash (deepInk TBD)' },
+	{ fg: 'signal.success.deepInk', bg: 'signal.success.wash', min: 4.5, description: 'success deepInk on wash' },
+	{ fg: 'signal.warning.deepInk', bg: 'signal.warning.wash', min: 4.5, description: 'warning deepInk on wash' },
+	{ fg: 'signal.danger.deepInk', bg: 'signal.danger.wash', min: 4.5, description: 'danger deepInk on wash' },
+	{ fg: 'signal.info.deepInk', bg: 'signal.info.wash', min: 4.5, description: 'info deepInk on wash' },
 ];
 
 const themes = listThemes();

@@ -233,13 +233,13 @@ const tasks = $derived(data.tasks);
 
 	[data-triad='risk_management'] {
 		background: var(--surface-panel);
-		color: var(--signal-warning-ink, var(--ink-body));
+		color: var(--signal-warning-deep-ink, var(--ink-body));
 		border: 1px solid var(--signal-warning-edge, var(--edge-strong));
 	}
 
 	[data-triad='skill'] {
 		background: var(--surface-panel);
-		color: var(--signal-success-ink, var(--ink-body));
+		color: var(--signal-success-deep-ink, var(--ink-body));
 		border: 1px solid var(--signal-success-edge, var(--edge-strong));
 	}
 

@@ -267,28 +267,28 @@ export function focus(): void {
 		padding: 0 var(--space-2xs);
 		border-radius: var(--radius-sm);
 		background: var(--signal-info-wash);
-		color: var(--signal-info-ink);
+		color: var(--signal-info-deep-ink);
 	}
 
 	.row-error {
 		margin: 0;
 		font-size: var(--type-ui-caption-size);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.recorded-pill[data-outcome='pass'] {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
 	}
 
 	.recorded-pill[data-outcome='fail'] {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
 	}
 
 	.recorded-pill[data-outcome='blocked'] {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
 	}
 
 	.step-body {
@@ -359,20 +359,20 @@ export function focus(): void {
 
 	.outcome[data-outcome='pass'].active {
 		background: var(--signal-success-wash);
-		color: var(--signal-success-ink);
-		border-color: var(--signal-success-ink);
+		color: var(--signal-success-deep-ink);
+		border-color: var(--signal-success-deep-ink);
 	}
 
 	.outcome[data-outcome='fail'].active {
 		background: var(--signal-danger-wash);
-		color: var(--signal-danger-ink);
-		border-color: var(--signal-danger-ink);
+		color: var(--signal-danger-deep-ink);
+		border-color: var(--signal-danger-deep-ink);
 	}
 
 	.outcome[data-outcome='blocked'].active {
 		background: var(--signal-warning-wash);
-		color: var(--signal-warning-ink);
-		border-color: var(--signal-warning-ink);
+		color: var(--signal-warning-deep-ink);
+		border-color: var(--signal-warning-deep-ink);
 	}
 
 	.note-field {
