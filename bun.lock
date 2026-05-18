@@ -437,7 +437,11 @@
     "libs/types": {
       "name": "@ab/types",
       "dependencies": {
+        "@ab/constants": "workspace:*",
         "zod": "catalog:",
+      },
+      "devDependencies": {
+        "vitest": "catalog:",
       },
     },
     "libs/ui": {

@@ -3,6 +3,10 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
+		"@ab/constants": "workspace:*",
 		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"vitest": "catalog:"
 	}
 }
