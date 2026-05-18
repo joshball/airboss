@@ -38,6 +38,15 @@ High-severity carried items:
 
 Medium / low items (16 medium, 19 low) -- see the rollup. Notable: build the personal-minimums / flightbag-citation-url-migration / xc-viewer-v1 WPs; `/ball-wp-drift`; wx-engine AIRMET text emitter; `legacy-citation-shape` warnings (200); `fix/contrast-skips-deep-ink` branch needs rebase.
 
+## Carried over (rollup 2026-05-18T03:10Z)
+
+Consolidated 5 further wind-down sessions (24 sessions total) into [ROLLUP-unfinished.md](./wind-down/ROLLUP-unfinished.md). New high-severity items surfaced by the integration-sweep / zod-4 work:
+
+- **`integration --full` never verified green** -- the ~3484-URL prod-build sweep has not had a clean uninterrupted pass; attempts hit port conflicts / were killed. The default 209-URL sample sweep passes. Kill stale `build/index.js` + `playwright` procs, free port 9647, run `bun run test integration --full` to completion.
+- **`@ab/sources/regs/ingest` subpath export missing** -- `scripts/sources/register.test.ts` fails; PR #1056 imports a subpath `libs/sources/package.json` never declared. Add the `./regs/ingest` exports entry.
+
+Resolved since the previous roll: the zod 3->4 / better-auth prod-build boot crash (**PR #1064**), `integration list` exit code (**PR #1065**), and the `fix/contrast-skips-deep-ink` branch -- rebased, conflict-resolved, `check branch` clean, merged as **PR #1067**.
+
 ## Live views
 
 - [Work package board](./BOARD.md) -- every WP grouped by status (generated)
