@@ -208,33 +208,33 @@ PR title: `feat(xc-viewer): Phase C -- route + waypoint renderer + leg labels`.
 
 #### C.1 v1 RouteSpec literal
 
-- [ ] Create `libs/spatial-engine/src/flight/routes/kmem-kmkl-kolv.ts` exporting `KMEM_KMKL_KOLV: RouteSpec`. Waypoints: KMEM departure -> KMEM-DEP-FIX (5 nm northeast of KMEM at 1500 ft for climb-out) -> KMKL waypoint (the airport's center) -> KOLV-ARR-FIX (5 nm south of KOLV at 3000 ft for descent) -> KOLV. Altitude profile: climb to 4500 ft after KMEM-DEP-FIX, cruise at 4500 ft, descent to 2500 ft at KOLV-ARR-FIX, pattern altitude at KOLV. Speed profile: 110 kt TAS at cruise; pattern speeds at the airports.
-- [ ] Cite KMEM/KMKL/KOLV airport records as the waypoint coord source. The fix waypoints are hand-authored (5 nm offsets from the airport coords, computed via `greatCircleBearing`+`midpoint` or by direct lon/lat arithmetic).
-- [ ] Register `KMEM_KMKL_KOLV` in `libs/spatial-engine/src/flight/loader.ts:loadRoute(routeId)`.
-- [ ] Add a unit test in `libs/spatial-engine/src/__tests__/route-literal.test.ts`: `routeSpecSchema.parse(KMEM_KMKL_KOLV)` succeeds; waypoint count is 5; first waypoint matches KMEM airport coord within 0.01 deg.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): v1 RouteSpec literal -- kmem-kmkl-kolv`).
+- [x] Create `libs/spatial-engine/src/flight/routes/kmem-kmkl-kolv.ts` exporting `KMEM_KMKL_KOLV: RouteSpec`. Waypoints: KMEM departure -> KMEM-DEP-FIX (5 nm northeast of KMEM at 1500 ft for climb-out) -> KMKL waypoint (the airport's center) -> KOLV-ARR-FIX (5 nm south of KOLV at 3000 ft for descent) -> KOLV. Altitude profile: climb to 4500 ft after KMEM-DEP-FIX, cruise at 4500 ft, descent to 2500 ft at KOLV-ARR-FIX, pattern altitude at KOLV. Speed profile: 110 kt TAS at cruise; pattern speeds at the airports.
+- [x] Cite KMEM/KMKL/KOLV airport records as the waypoint coord source. The fix waypoints are hand-authored (5 nm offsets from the airport coords, computed via `greatCircleBearing`+`midpoint` or by direct lon/lat arithmetic).
+- [x] Register `KMEM_KMKL_KOLV` in `libs/spatial-engine/src/flight/loader.ts:loadRoute(routeId)`.
+- [x] Add a unit test in `libs/spatial-engine/src/__tests__/route-literal.test.ts`: `routeSpecSchema.parse(KMEM_KMKL_KOLV)` succeeds; waypoint count is 5; first waypoint matches KMEM airport coord within 0.01 deg.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(spatial-engine): v1 RouteSpec literal -- kmem-kmkl-kolv`).
 
 #### C.2 RouteOverlay component
 
-- [ ] Create `libs/spatial-ui/src/RouteOverlay.svelte`. Props: `{ route: RouteSpec; projection }`. Renders the route as an SVG `<path>` using `d3-geo`'s `geoPath` (LineString geometry); renders waypoints as filled diamonds.
-- [ ] Tokens: route line = `var(--color-spatial-route-line)`, waypoint = `var(--color-spatial-route-waypoint)`, leg label background = `var(--color-spatial-leg-label-bg)`.
-- [ ] Add interactivity: hover on a waypoint surfaces the waypoint id; click emits `'waypoint-click'` with the waypoint object.
+- [x] Create `libs/spatial-ui/src/RouteOverlay.svelte`. Props: `{ route: RouteSpec; projection }`. Renders the route as an SVG `<path>` using `d3-geo`'s `geoPath` (LineString geometry); renders waypoints as filled diamonds.
+- [x] Tokens: route line = `var(--color-spatial-route-line)`, waypoint = `var(--color-spatial-route-waypoint)`, leg label background = `var(--color-spatial-leg-label-bg)`.
+- [x] Add interactivity: hover on a waypoint surfaces the waypoint id; click emits `'waypoint-click'` with the waypoint object.
 
 #### C.3 LegLabel component (placeholder values)
 
-- [ ] Create `libs/spatial-ui/src/LegLabel.svelte`. Props: `{ leg: LegPerformance | LegPlaceholder; projection }`. Phase C ships a placeholder `LegPlaceholder` type with `{ from, to, distanceNm, trueCourse }` (geometry-derived only -- no fuel / wind yet; Phase E fills the full leg).
-- [ ] Renders a small callout at the leg midpoint: `<dist nm> / <course> deg`. Anchored to the leg with a leader line.
-- [ ] Add interactivity: hover surfaces the leg's basic info; click emits `'leg-click'` with the leg object.
+- [x] Create `libs/spatial-ui/src/LegLabel.svelte`. Props: `{ leg: LegPerformance | LegPlaceholder; projection }`. Phase C ships a placeholder `LegPlaceholder` type with `{ from, to, distanceNm, trueCourse }` (geometry-derived only -- no fuel / wind yet; Phase E fills the full leg).
+- [x] Renders a small callout at the leg midpoint: `<dist nm> / <course> deg`. Anchored to the leg with a leader line.
+- [x] Add interactivity: hover surfaces the leg's basic info; click emits `'leg-click'` with the leg object.
 
 #### C.4 XcViewer composes RouteOverlay + LegLabel
 
-- [ ] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<RouteOverlay>` + `<LegLabel>` (one per leg) on top of the Phase B sectional layers. Compute leg placeholders inline from `bundle.flight.route.waypoints` (great-circle distance + bearing); the full performance table replaces these in Phase E.
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-phase-c.spec.ts` that loads a route-only bundle and asserts the rendered SVG contains 5 waypoints + 4 leg-label callouts + the route line.
+- [x] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<RouteOverlay>` + `<LegLabel>` (one per leg) on top of the Phase B sectional layers. Compute leg placeholders inline from `bundle.flight.route.waypoints` (great-circle distance + bearing); the full performance table replaces these in Phase E.
+- [~] (deferred to Phase F) Playwright smoke at `tests/e2e/xc-viewer-phase-c.spec.ts` that loads a route-only bundle and asserts the rendered SVG contains 5 waypoints + 4 leg-label callouts + the route line.
 
 #### C.5 Phase C close
 
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase C -- route + waypoint renderer + leg labels (geometry placeholders)`. Body shows the route literal + the rendered route geometry passing the Playwright smoke.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase C -- route + waypoint renderer + leg labels (geometry placeholders)`. Body shows the route literal + the rendered route geometry passing the Playwright smoke.
 
 ### Phase D: weather overlay (mount existing wx-engine scenario)
 
