@@ -85,10 +85,17 @@ export type {
 	RunwayRecord,
 } from './geography/types';
 // ----------------------------------------------------------------------
-// Projection-options types. The projection helper itself is a value and
-// lives in `./server.ts`.
+// Projection helper. `projection.ts` imports only `d3-geo` + `@ab/constants`
+// -- fully browser-safe -- so the helper + its canvas constants are value
+// re-exports on the runtime barrel. The renderer needs them.
 // ----------------------------------------------------------------------
 export type { FitTarget, RegionalProjectionOptions } from './projection';
+export {
+	regionalLambertProjection,
+	SECTIONAL_MARGIN,
+	SECTIONAL_SVG_HEIGHT,
+	SECTIONAL_SVG_WIDTH,
+} from './projection';
 export type { ScenarioSpecSchema } from './scenario/schema';
 // ----------------------------------------------------------------------
 // Layer-4 scenario types + the composed bundle.

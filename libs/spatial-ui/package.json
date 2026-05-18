@@ -18,6 +18,7 @@
 		"d3-geo": "^3.1.1"
 	},
 	"devDependencies": {
+		"@testing-library/svelte": "^5.3.1",
 		"@types/d3-geo": "^3.1.0",
 		"@types/geojson": "^7946.0.16",
 		"svelte": "catalog:",
