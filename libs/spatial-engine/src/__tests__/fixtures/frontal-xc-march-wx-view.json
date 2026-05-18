@@ -1,0 +1,52 @@
+{
+  "wxScenarioSlug": "frontal-xc-march",
+  "truthValidAt": "2026-03-19T19:00:00Z",
+  "byWaypoint": {
+    "wp-kmem": {
+      "metarStation": "KCPS",
+      "metarCategory": "VFR",
+      "tafStation": "KCPS",
+      "tafCategory": "MVFR",
+      "airmetCount": 0,
+      "windsAloftCount": 9
+    },
+    "wp-kmem-dep-fix": {
+      "metarStation": "KCPS",
+      "metarCategory": "VFR",
+      "tafStation": null,
+      "tafCategory": null,
+      "airmetCount": 0,
+      "windsAloftCount": 9
+    },
+    "wp-kmkl": {
+      "metarStation": "KCPS",
+      "metarCategory": "VFR",
+      "tafStation": "KCPS",
+      "tafCategory": "MVFR",
+      "airmetCount": 0,
+      "windsAloftCount": 9
+    },
+    "wp-kolv-arr-fix": {
+      "metarStation": "KCPS",
+      "metarCategory": "VFR",
+      "tafStation": null,
+      "tafCategory": null,
+      "airmetCount": 0,
+      "windsAloftCount": 9
+    },
+    "wp-kolv": {
+      "metarStation": "KCPS",
+      "metarCategory": "VFR",
+      "tafStation": "KCPS",
+      "tafCategory": "MVFR",
+      "airmetCount": 0,
+      "windsAloftCount": 9
+    }
+  },
+  "airmetCount": 3,
+  "airmetFamilies": [
+    "airmet-sierra",
+    "airmet-tango",
+    "airmet-tango"
+  ]
+}

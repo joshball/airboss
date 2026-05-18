@@ -3,14 +3,15 @@
  * XcViewer -- the top-level XC viewer composition.
  *
  * Renders a `ScenarioBundle` into an interactive SVG sectional. Phase B
- * shipped the layer-1 sectional + pan/zoom chrome; Phase C adds the
- * layer-2 route overlay + per-leg labels. Phases D/E add the weather
- * overlay and the performance band.
+ * shipped the layer-1 sectional + pan/zoom chrome; Phase C added the
+ * layer-2 route overlay + per-leg labels; Phase D adds the layer-3
+ * weather overlay (chips + AIRMET polygons + the waypoint detail drawer).
+ * Phase E adds the performance band.
  *
  * Pure browser-safe rendering -- the bundle is loaded server-side and
  * passed in as a prop.
  *
- * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5 + C.4.
+ * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5 + C.4 + D.4.
  */
 
 import '@ab/themes/spatial-tokens.css';
@@ -24,6 +25,7 @@ import {
 	SECTIONAL_SVG_WIDTH,
 	type Waypoint,
 } from '@ab/spatial-engine';
+import AirmetPolygon from './AirmetPolygon.svelte';
 import AirportLayer from './AirportLayer.svelte';
 import AirspaceLayer from './AirspaceLayer.svelte';
 import LayerToggle from './controls/LayerToggle.svelte';
@@ -35,17 +37,17 @@ import RouteOverlay from './RouteOverlay.svelte';
 import SectionalCanvas from './SectionalCanvas.svelte';
 import { SPATIAL_LAYER_KEYS, type SpatialLayerKey } from './styles/tokens';
 import type { LegLabelData } from './types';
+import WaypointDetailDrawer from './WaypointDetailDrawer.svelte';
+import WaypointWxChip from './WaypointWxChip.svelte';
 
 interface Props {
 	/** The composed scenario bundle. */
 	bundle: ScenarioBundle;
-	/** Called when a waypoint is clicked (Phase D wires the detail drawer). */
-	onwaypointclick?: (waypoint: Waypoint) => void;
-	/** Called when a leg is clicked (Phase E wires the detail drawer). */
+	/** Called when a leg is clicked (Phase E wires a leg detail drawer). */
 	onlegclick?: (leg: LegLabelData) => void;
 }
 
-let { bundle, onwaypointclick, onlegclick }: Props = $props();
+let { bundle, onlegclick }: Props = $props();
 
 const WIDTH = SECTIONAL_SVG_WIDTH;
 const HEIGHT = SECTIONAL_SVG_HEIGHT;
@@ -69,15 +71,16 @@ let visibleLayers = $state<SpatialLayerKey[]>([
 	SPATIAL_LAYER_KEYS.NAVAIDS,
 	SPATIAL_LAYER_KEYS.AIRPORTS,
 	SPATIAL_LAYER_KEYS.ROUTE,
+	SPATIAL_LAYER_KEYS.WEATHER,
 ]);
 
-// Layers the toggle exposes (route added in Phase C).
 const exposedLayers: SpatialLayerKey[] = [
 	SPATIAL_LAYER_KEYS.BASEMAP,
 	SPATIAL_LAYER_KEYS.AIRSPACE,
 	SPATIAL_LAYER_KEYS.NAVAIDS,
 	SPATIAL_LAYER_KEYS.AIRPORTS,
 	SPATIAL_LAYER_KEYS.ROUTE,
+	SPATIAL_LAYER_KEYS.WEATHER,
 ];
 
 function shows(layer: SpatialLayerKey): boolean {
@@ -90,7 +93,7 @@ const contentTransform = $derived(`translate(${transform.x} ${transform.y}) scal
 //
 // When the bundle carries a derived performance table (Phase E build),
 // use it. Otherwise compute geometry-only placeholders inline so the leg
-// labels still render (Phase C before performance lands).
+// labels still render before the performance derivation lands.
 interface LegRender {
 	leg: LegLabelData;
 	midpoint: { x: number; y: number };
@@ -117,6 +120,25 @@ const legRenders = $derived.by<LegRender[]>(() => {
 	}
 	return out;
 });
+
+// --- Waypoint detail drawer state ---
+let drawerWaypoint = $state<Waypoint | null>(null);
+
+const drawerWxView = $derived(drawerWaypoint ? (bundle.weather.byWaypoint[drawerWaypoint.id] ?? null) : null);
+const drawerAirport = $derived(
+	drawerWaypoint?.airportIcao
+		? (bundle.geography.airports.find((a) => a.icao === drawerWaypoint?.airportIcao) ?? null)
+		: null,
+);
+const drawerOpen = $derived(drawerWaypoint !== null);
+
+function openWaypoint(waypoint: Waypoint) {
+	drawerWaypoint = waypoint;
+}
+
+function closeDrawer() {
+	drawerWaypoint = null;
+}
 
 // --- Drag-to-pan ---
 let dragging = $state(false);
@@ -170,6 +192,13 @@ function onWheel(e: WheelEvent) {
 			{#if shows(SPATIAL_LAYER_KEYS.AIRSPACE)}
 				<AirspaceLayer airspace={bundle.geography.airspace} {projection} />
 			{/if}
+			{#if shows(SPATIAL_LAYER_KEYS.WEATHER)}
+				<g class="airmet-layer" data-testid="airmet-layer">
+					{#each bundle.weather.airmets as airmet (airmet.id)}
+						<AirmetPolygon {airmet} {projection} />
+					{/each}
+				</g>
+			{/if}
 			{#if shows(SPATIAL_LAYER_KEYS.NAVAIDS)}
 				<NavaidLayer navaids={bundle.geography.navaids} {projection} />
 			{/if}
@@ -177,10 +206,20 @@ function onWheel(e: WheelEvent) {
 				<AirportLayer airports={bundle.geography.airports} {projection} />
 			{/if}
 			{#if shows(SPATIAL_LAYER_KEYS.ROUTE)}
-				<RouteOverlay route={bundle.flight.route} {projection} {onwaypointclick} />
+				<RouteOverlay route={bundle.flight.route} {projection} onwaypointclick={openWaypoint} />
 				<g class="leg-labels" data-testid="leg-labels">
 					{#each legRenders as render (`${render.leg.from}-${render.leg.to}`)}
 						<LegLabel leg={render.leg} midpoint={render.midpoint} {onlegclick} />
+					{/each}
+				</g>
+			{/if}
+			{#if shows(SPATIAL_LAYER_KEYS.WEATHER)}
+				<g class="wx-chip-layer" data-testid="wx-chip-layer">
+					{#each bundle.flight.route.waypoints as wp (wp.id)}
+						{@const wxView = bundle.weather.byWaypoint[wp.id]}
+						{#if wxView}
+							<WaypointWxChip waypoint={wp} {wxView} {projection} onchipclick={({ waypoint }) => openWaypoint(waypoint)} />
+						{/if}
 					{/each}
 				</g>
 			{/if}
@@ -193,6 +232,15 @@ function onWheel(e: WheelEvent) {
 	<div class="xc-chrome xc-chrome-top-left">
 		<LayerToggle visible={visibleLayers} layers={exposedLayers} onchange={(v) => (visibleLayers = v)} />
 	</div>
+
+	<WaypointDetailDrawer
+		open={drawerOpen}
+		waypoint={drawerWaypoint}
+		wxView={drawerWxView}
+		airport={drawerAirport}
+		airmets={bundle.weather.airmets}
+		onclose={closeDrawer}
+	/>
 </div>
 
 <style>

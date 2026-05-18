@@ -244,38 +244,38 @@ PR title: `feat(xc-viewer): Phase D -- weather overlay (wx-engine scenario mount
 
 #### D.1 Weather view tests
 
-- [ ] Author the test fixture: `libs/spatial-engine/src/__tests__/fixtures/frontal-xc-march-wx-view.json` -- the expected `WxBundleView` for the v1 route (KMEM, KOLV, KMKL each get one waypoint view; AIRMETs come from the wx-engine bundle).
-- [ ] Add an integration test asserting `loadWeatherForScenario('frontal-xc-march', validAt)` returns a view matching the fixture for the v1 route's waypoints. Updates the fixture if the wx-engine output drifts.
+- [x] Author the test fixture: `libs/spatial-engine/src/__tests__/fixtures/frontal-xc-march-wx-view.json` -- the expected `WxBundleView` for the v1 route (KMEM, KOLV, KMKL each get one waypoint view; AIRMETs come from the wx-engine bundle).
+- [x] Add an integration test asserting `loadWeatherForScenario('frontal-xc-march', validAt)` returns a view matching the fixture for the v1 route's waypoints. Updates the fixture if the wx-engine output drifts.
 
 #### D.2 WaypointWxChip component
 
-- [ ] Create `libs/spatial-ui/src/WaypointWxChip.svelte`. Props: `{ waypoint: Waypoint; wxView: WaypointWxView }`. Renders a small chip at the waypoint's projected position carrying the METAR flight category (VFR/MVFR/IFR/LIFR) + the TAF arrival flight category (when present) + a click-to-open affordance.
-- [ ] Tokens: VFR = green token, MVFR = blue token, IFR = red token, LIFR = magenta token (matches the wx-charts CVA palette).
-- [ ] Add interactivity: click emits `'wx-chip-click'` with the waypoint + the view.
+- [x] Create `libs/spatial-ui/src/WaypointWxChip.svelte`. Props: `{ waypoint: Waypoint; wxView: WaypointWxView }`. Renders a small chip at the waypoint's projected position carrying the METAR flight category (VFR/MVFR/IFR/LIFR) + the TAF arrival flight category (when present) + a click-to-open affordance.
+- [x] Tokens: VFR = green token, MVFR = blue token, IFR = red token, LIFR = magenta token (matches the wx-charts CVA palette).
+- [x] Add interactivity: click emits `'wx-chip-click'` with the waypoint + the view.
 
 #### D.3 AirmetPolygon component
 
-- [ ] Create `libs/spatial-ui/src/AirmetPolygon.svelte`. Props: `{ airmet: AirmetView; projection }`. Renders the AIRMET polygon as an SVG `<path>` with per-family stroke + dasharray:
+- [x] Create `libs/spatial-ui/src/AirmetPolygon.svelte`. Props: `{ airmet: AirmetView; projection }`. Renders the AIRMET polygon as an SVG `<path>` with per-family stroke + dasharray:
   - Sierra (IFR / mountain obscuration): orange dashed
   - Tango (turbulence): yellow dashed
   - Zulu (icing): cyan dashed
-- [ ] Hover surfaces the AIRMET id + family + valid window; click emits `'airmet-click'` with the AirmetView.
+- [x] Hover surfaces the AIRMET id + family + valid window; click emits `'airmet-click'` with the AirmetView.
 
 #### D.4 XcViewer composes weather overlay
 
-- [ ] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<WaypointWxChip>` (one per waypoint with an available view) + `<AirmetPolygon>` (one per AIRMET in `bundle.weather.airmets`) above the route overlay.
-- [ ] Update `composeBundle` to populate `bundle.weather` from `loadWeatherForScenario(scenarioSpec.wxScenarioSlug, scenarioSpec.validAt)`.
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-phase-d.spec.ts` that loads the full v1 bundle and asserts: 5 waypoint chips + 3 AIRMET polygons (matching the wx-engine spike scenario count) + per-chip color matches the METAR flight category.
+- [x] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<WaypointWxChip>` (one per waypoint with an available view) + `<AirmetPolygon>` (one per AIRMET in `bundle.weather.airmets`) above the route overlay.
+- [x] Update `composeBundle` to populate `bundle.weather` from `loadWeatherForScenario(scenarioSpec.wxScenarioSlug, scenarioSpec.validAt)`.
+- [~] (deferred to Phase F) Playwright smoke at `tests/e2e/xc-viewer-phase-d.spec.ts` that loads the full v1 bundle and asserts: 5 waypoint chips + 3 AIRMET polygons (matching the wx-engine spike scenario count) + per-chip color matches the METAR flight category.
 
 #### D.5 Waypoint detail drawer (read-only)
 
-- [ ] Create `libs/spatial-ui/src/WaypointDetailDrawer.svelte`. Slides in from the right on `'waypoint-click'`. Shows: airport metadata (name, elevation, runways, frequencies), the latest METAR text + parsed flight category, the latest TAF text (if a TAF station), the AIRMETs the waypoint sits inside, a "view in flightbag" stub link (deep-link target deferred).
-- [ ] Wire `<XcViewer>` to open the drawer on waypoint click; close on backdrop click or Esc.
+- [x] Create `libs/spatial-ui/src/WaypointDetailDrawer.svelte`. Slides in from the right on `'waypoint-click'`. Shows: airport metadata (name, elevation, runways, frequencies), the latest METAR text + parsed flight category, the latest TAF text (if a TAF station), the AIRMETs the waypoint sits inside, a "view in flightbag" stub link (deep-link target deferred).
+- [x] Wire `<XcViewer>` to open the drawer on waypoint click; close on backdrop click or Esc.
 
 #### D.6 Phase D close
 
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase D -- weather overlay (wx-engine scenario mount + airmet polygons + waypoint drawer)`. Body shows the wx-view test fixture + the rendered overlay + the drawer behavior.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase D -- weather overlay (wx-engine scenario mount + airmet polygons + waypoint drawer)`. Body shows the wx-view test fixture + the rendered overlay + the drawer behavior.
 
 ### Phase E: aircraft performance projection + the C172N spec
 
