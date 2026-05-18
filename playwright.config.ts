@@ -6,6 +6,19 @@ import { DEV_DB_URL_E2E, DEV_DB_URL_INTEGRATION, ENV_VARS, PORTS } from './libs/
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
+// Playwright project name for the flightbag integration sweep. Referenced
+// by the worker-count resolver, the reporter-stack selector, and the
+// webServer chooser -- all of which need to know "is this an
+// integration-only run?".
+const INTEGRATION_PROJECT = 'flightbag-coverage';
+// Default worker count for the integration sweep. The sweep is HTTP-only
+// (Playwright `request` fixture, no browser context), so it fans out far
+// wider than the browser-driven e2e suite. Override via
+// `TEST_INTEGRATION_WORKERS`; the resolved value is clamped to this range.
+const INTEGRATION_WORKERS_DEFAULT = 100;
+const INTEGRATION_WORKERS_MIN = 1;
+const INTEGRATION_WORKERS_MAX = 512;
+
 // E2E ports = dev ports + 3. Tests get their own vite processes pointed at
 // the e2e database, so a `bun run dev` session can keep running on the
 // canonical ports without colliding. Override via env if you want to point
@@ -100,13 +113,27 @@ export default defineConfig({
 	fullyParallel: true,
 	forbidOnly: !!process.env.CI,
 	retries: process.env.CI ? 1 : 0,
-	// The custom `tests/integration/reporter.ts` filters by project name, so
-	// it's a no-op for the e2e projects and only writes its markdown report
-	// when the `flightbag-coverage` project runs. Layering it next to the
-	// existing list/github reporters keeps both suites visible.
-	reporter: process.env.CI
-		? [['github'], ['list'], ['./tests/integration/reporter.ts']]
-		: [['list'], ['./tests/integration/reporter.ts']],
+	// `workers` MUST be a top-level field. A `workers` key inside a
+	// `projects[]` entry is SILENTLY IGNORED by Playwright -- the old
+	// `flightbag-coverage` project carried `workers: 32` that never took
+	// effect, so the sweep defaulted to ~5 workers. When the integration
+	// sweep is the only requested project we resolve a high worker count
+	// here (HTTP-only requests, no browser context -- safe to fan out wide).
+	// `TEST_INTEGRATION_WORKERS` overrides; the result is clamped to 1..512.
+	// For every other run we return `undefined` so Playwright keeps its
+	// default heuristic for the browser-driven e2e suite.
+	workers: integrationWorkerCount(),
+	// Reporter selection is project-scoped. The integration sweep
+	// (`--project=flightbag-coverage`) gets ONLY the custom
+	// `tests/integration/reporter.ts`: that reporter draws a live in-place
+	// TTY dashboard, and Playwright's built-in `list`/`dot` reporters fight
+	// it for the cursor. For every other run (the e2e suite) the standard
+	// `list` reporter applies; `github` is layered on under CI.
+	reporter: isIntegrationOnlyRun()
+		? [['./tests/integration/reporter.ts']]
+		: process.env.CI
+			? [['github'], ['list']]
+			: [['list']],
 	timeout: 30_000,
 	expect: { timeout: 5_000 },
 	use: {
@@ -212,19 +239,22 @@ export default defineConfig({
 		},
 		{
 			// Flightbag coverage sweep -- HTTP-only request fixture (no browser
-			// context), 32 workers, no auth, no storage state. Iterates every
-			// reader URL derived from `notSupersededInRegistry()` references
-			// and asserts each one responds with a non-error status and a
-			// non-empty body. The integration spec lives outside `tests/e2e/`
-			// so the e2e project filters never sweep it up.
+			// context), no auth, no storage state. Iterates every reader URL
+			// derived from `notSupersededInRegistry()` references and asserts
+			// each one responds with a non-error status and a non-empty body.
+			// The integration spec lives outside `tests/e2e/` so the e2e
+			// project filters never sweep it up.
+			//
+			// Worker count is resolved at the TOP LEVEL of this config
+			// (`workers: integrationWorkerCount()`) -- a `workers` field here
+			// inside the project object is silently ignored by Playwright.
 			//
 			// Pointed at the dedicated `flightbag-integration` webServer below
 			// so the e2e flightbag project (also on its own webServer) can
 			// continue to run unaffected by this project's traffic.
-			name: 'flightbag-coverage',
+			name: INTEGRATION_PROJECT,
 			testDir: './tests/integration',
 			testMatch: /flightbag-coverage\.spec\.ts/,
-			workers: 32,
 			fullyParallel: true,
 			use: {
 				baseURL: flightbagIntegrationBaseURL,
@@ -269,17 +299,31 @@ function projectArgs(): readonly string[] {
 
 function chooseWebServers() {
 	const requested = projectArgs();
-	// Only the integration project requested -> boot the integration vite
-	// process only. Skip the e2e study/flightbag/hangar webServers.
-	if (requested.length > 0 && requested.every((p) => p === 'flightbag-coverage')) {
+	// Only the integration project requested -> boot the integration server
+	// only. Skip the e2e study/flightbag/hangar webServers.
+	//
+	// The integration server runs the adapter-node PRODUCTION build
+	// (`apps/flightbag/build/index.js`, started via `bun ./build/index.js` --
+	// this is a Bun shop, never `node`), NOT `vite dev`. The dev server
+	// OOM-crashes (SIGKILL) under the sweep's high worker count; the prebuilt
+	// server is a single steady-state process and survives the load.
+	// `NODE_OPTIONS=--max-old-space-size=2048` caps the heap (Bun honours it)
+	// so a runaway render fails loudly instead of swapping the box. The build
+	// itself is produced/cached by `scripts/lib/flightbag-build.ts`, which the
+	// `bun run test integration` dispatcher runs before Playwright.
+	if (requested.length > 0 && requested.every((p) => p === INTEGRATION_PROJECT)) {
 		return [
 			{
-				command: 'bun run dev',
+				command: 'bun ./build/index.js',
 				cwd: 'apps/flightbag',
 				url: flightbagIntegrationBaseURL,
 				reuseExistingServer: false,
 				timeout: 120_000,
-				env: { ...integrationEnv, PORT: String(flightbagIntegrationPort) },
+				env: {
+					...integrationEnv,
+					PORT: String(flightbagIntegrationPort),
+					NODE_OPTIONS: '--max-old-space-size=2048',
+				},
 			},
 		];
 	}
@@ -310,8 +354,13 @@ function chooseWebServers() {
 		},
 		{
 			// Flightbag integration -- dedicated vite process pointed at
-			// `airboss_integration`. The `flightbag-coverage` project drives
-			// 32 parallel workers against it; running it on its own port
+			// `airboss_integration`. This entry only serves the
+			// `flightbag-coverage` project when the WHOLE matrix is run bare
+			// (`bunx playwright test` with no `--project`). The canonical
+			// integration path -- `bun run test integration`, which always
+			// passes `--project=flightbag-coverage` -- takes the
+			// integration-only branch above and serves the adapter-node
+			// production build instead. Running on its own port
 			// (PORTS.FLIGHTBAG_INTEGRATION = 9647) keeps the e2e flightbag
 			// webServer at 9643 free for `representative-pages.spec.ts`.
 			command: 'bun run dev',
@@ -322,4 +371,36 @@ function chooseWebServers() {
 			env: { ...integrationEnv, PORT: String(flightbagIntegrationPort) },
 		},
 	];
+}
+
+/**
+ * True when the only Playwright project requested is the flightbag
+ * integration sweep. Both the reporter-stack selector and the worker-count
+ * resolver key off this: an integration-only run gets the live-dashboard
+ * reporter and a high worker count; any other run keeps the e2e defaults.
+ */
+function isIntegrationOnlyRun(): boolean {
+	const requested = projectArgs();
+	return requested.length > 0 && requested.every((p) => p === INTEGRATION_PROJECT);
+}
+
+/**
+ * Top-level `workers` value. Returns a high integer for an integration-only
+ * run (default `INTEGRATION_WORKERS_DEFAULT`, overridable via
+ * `TEST_INTEGRATION_WORKERS`, clamped to `[MIN, MAX]`), and `undefined` for
+ * every other run so Playwright keeps its default heuristic for the
+ * browser-driven e2e suite.
+ *
+ * This MUST be assigned to the top-level `workers` field -- a `workers` key
+ * inside a `projects[]` entry is silently ignored by Playwright.
+ */
+function integrationWorkerCount(): number | undefined {
+	if (!isIntegrationOnlyRun()) return undefined;
+	const raw = process.env.TEST_INTEGRATION_WORKERS;
+	let count = INTEGRATION_WORKERS_DEFAULT;
+	if (raw !== undefined && raw !== '') {
+		const parsed = Number.parseInt(raw, 10);
+		if (!Number.isNaN(parsed)) count = parsed;
+	}
+	return Math.min(INTEGRATION_WORKERS_MAX, Math.max(INTEGRATION_WORKERS_MIN, count));
 }
