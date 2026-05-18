@@ -15,7 +15,6 @@
 
 import { requireAuth } from '@ab/auth';
 import { pinToToday } from '@ab/bc-study/server';
-import type { PlanItemKind } from '@ab/constants';
 import {
 	PLAN_ITEM_HREF_MAX_LENGTH,
 	PLAN_ITEM_KIND_VALUES,
@@ -28,7 +27,7 @@ import { z } from 'zod';
 import type { RequestHandler } from './$types';
 
 const bodySchema = z.object({
-	kind: z.enum(PLAN_ITEM_KIND_VALUES as [string, ...string[]]),
+	kind: z.enum(PLAN_ITEM_KIND_VALUES),
 	targetId: z.string().trim().min(1).max(256),
 	title: z.string().trim().min(1).max(PLAN_ITEM_TITLE_MAX_LENGTH),
 	href: z.string().trim().min(1).max(PLAN_ITEM_HREF_MAX_LENGTH),
@@ -50,7 +49,7 @@ export const POST: RequestHandler = async (event) => {
 	const row = await pinToToday(
 		{
 			userId: user.id,
-			kind: parsed.data.kind as PlanItemKind,
+			kind: parsed.data.kind,
 			targetId: parsed.data.targetId,
 			title: parsed.data.title,
 			href: parsed.data.href,

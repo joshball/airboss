@@ -127,7 +127,7 @@ export async function pinPlanItem(input: PinPlanItemInput, db: Db = defaultDb): 
 		notes: input.notes,
 		pinnedForDate: input.pinnedForDate ?? today,
 	});
-	const kind = parsed.kind as PlanItemKind;
+	const kind = parsed.kind;
 	const pinnedForDate = parsed.pinnedForDate ?? today;
 
 	// Idempotency: same (user, kind, target, date) returns the existing row.

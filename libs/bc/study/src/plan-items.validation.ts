@@ -29,7 +29,7 @@ export const planItemDateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'pinne
  * FK column based on `kind`.
  */
 export const pinPlanItemSchema = z.object({
-	kind: z.enum(PLAN_ITEM_KIND_VALUES as [string, ...string[]]),
+	kind: z.enum(PLAN_ITEM_KIND_VALUES),
 	targetId: z.string().trim().min(1).max(256),
 	title: z.string().trim().min(1).max(PLAN_ITEM_TITLE_MAX_LENGTH),
 	href: z.string().trim().min(1).max(PLAN_ITEM_HREF_MAX_LENGTH),

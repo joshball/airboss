@@ -15,11 +15,11 @@ import {
 import { z } from 'zod';
 
 const planEnum = {
-	cert: z.enum(CERT_VALUES as [string, ...string[]]),
-	domain: z.enum(DOMAIN_VALUES as [string, ...string[]]),
-	status: z.enum(PLAN_STATUS_VALUES as [string, ...string[]]),
-	mode: z.enum(SESSION_MODE_VALUES as [string, ...string[]]),
-	depth: z.enum(DEPTH_PREFERENCE_VALUES as [string, ...string[]]),
+	cert: z.enum(CERT_VALUES),
+	domain: z.enum(DOMAIN_VALUES),
+	status: z.enum(PLAN_STATUS_VALUES),
+	mode: z.enum(SESSION_MODE_VALUES),
+	depth: z.enum(DEPTH_PREFERENCE_VALUES),
 };
 
 export const planTitleSchema = z.string().trim().min(1).max(200);

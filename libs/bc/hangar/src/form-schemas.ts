@@ -54,18 +54,15 @@ export const relatedSchema = z.array(referenceIdSchema).max(32, 'No more than 32
 
 export const tagsSchema = z
 	.object({
-		sourceType: z.enum(SOURCE_TYPE_VALUES as unknown as [string, ...string[]]),
+		sourceType: z.enum(SOURCE_TYPE_VALUES),
 		aviationTopic: z
-			.array(z.enum(AVIATION_TOPIC_VALUES as unknown as [string, ...string[]]))
+			.array(z.enum(AVIATION_TOPIC_VALUES))
 			.min(1, 'At least one topic is required')
 			.max(4, 'No more than 4 topics'),
-		flightRules: z.enum(FLIGHT_RULES_VALUES as unknown as [string, ...string[]]),
-		knowledgeKind: z.enum(KNOWLEDGE_KIND_VALUES as unknown as [string, ...string[]]),
-		phaseOfFlight: z
-			.array(z.enum(REFERENCE_PHASE_OF_FLIGHT_VALUES as unknown as [string, ...string[]]))
-			.max(REFERENCE_PHASE_OF_FLIGHT_MAX)
-			.default([]),
-		certApplicability: z.array(z.enum(CERT_APPLICABILITY_VALUES as unknown as [string, ...string[]])).default([]),
+		flightRules: z.enum(FLIGHT_RULES_VALUES),
+		knowledgeKind: z.enum(KNOWLEDGE_KIND_VALUES),
+		phaseOfFlight: z.array(z.enum(REFERENCE_PHASE_OF_FLIGHT_VALUES)).max(REFERENCE_PHASE_OF_FLIGHT_MAX).default([]),
+		certApplicability: z.array(z.enum(CERT_APPLICABILITY_VALUES)).default([]),
 		keywords: keywordsSchema,
 	})
 	.superRefine((tags, ctx) => {
@@ -168,7 +165,7 @@ export const sourceFormatSchema = z.enum(['xml', 'pdf', 'html', 'txt', 'json', '
 
 export const sourceSchema = z.object({
 	id: sourceIdSchema,
-	type: z.enum(SOURCE_TYPE_VALUES as unknown as [string, ...string[]]),
+	type: z.enum(SOURCE_TYPE_VALUES),
 	title: z.string().trim().min(1).max(200),
 	version: z.string().trim().min(1).max(120),
 	url: outboundUrlSchema,

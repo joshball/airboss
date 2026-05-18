@@ -12,7 +12,7 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
  * UI surfaces that render role pickers, badges, or summary counts so the
  * order is stable across pages.
  */
-export const ROLE_VALUES: readonly Role[] = [ROLES.LEARNER, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN] as const;
+export const ROLE_VALUES = [ROLES.LEARNER, ROLES.AUTHOR, ROLES.OPERATOR, ROLES.ADMIN] as [Role, ...Role[]];
 
 /**
  * Human-readable labels for each role. Title-cased copy for badges,

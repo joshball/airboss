@@ -162,9 +162,9 @@ export async function createPlan(input: CreatePlanInput, db: Db = defaultDb): Pr
 			focusDomains: (parsed.focusDomains ?? []) as Domain[],
 			skipDomains: (parsed.skipDomains ?? []) as Domain[],
 			skipNodes: parsed.skipNodes ?? [],
-			...(parsed.depthPreference !== undefined ? { depthPreference: parsed.depthPreference as DepthPreference } : {}),
+			...(parsed.depthPreference !== undefined ? { depthPreference: parsed.depthPreference } : {}),
 			...(parsed.sessionLength !== undefined ? { sessionLength: parsed.sessionLength } : {}),
-			...(parsed.defaultMode !== undefined ? { defaultMode: parsed.defaultMode as SessionMode } : {}),
+			...(parsed.defaultMode !== undefined ? { defaultMode: parsed.defaultMode } : {}),
 			createdAt: now,
 			updatedAt: now,
 		};
@@ -242,14 +242,14 @@ export async function updatePlan(
 
 	const update: Partial<StudyPlanRow> = { updatedAt: new Date() };
 	if (parsed.title !== undefined) update.title = parsed.title;
-	if (parsed.certGoals !== undefined) update.certGoals = parsed.certGoals as Cert[];
+	if (parsed.certGoals !== undefined) update.certGoals = parsed.certGoals;
 	if (parsed.focusDomains !== undefined) update.focusDomains = parsed.focusDomains as Domain[];
 	if (parsed.skipDomains !== undefined) update.skipDomains = parsed.skipDomains as Domain[];
 	if (parsed.skipNodes !== undefined) update.skipNodes = parsed.skipNodes;
-	if (parsed.depthPreference !== undefined) update.depthPreference = parsed.depthPreference as DepthPreference;
+	if (parsed.depthPreference !== undefined) update.depthPreference = parsed.depthPreference;
 	if (parsed.sessionLength !== undefined) update.sessionLength = parsed.sessionLength;
-	if (parsed.defaultMode !== undefined) update.defaultMode = parsed.defaultMode as SessionMode;
-	if (parsed.status !== undefined) update.status = parsed.status as PlanStatus;
+	if (parsed.defaultMode !== undefined) update.defaultMode = parsed.defaultMode;
+	if (parsed.status !== undefined) update.status = parsed.status;
 
 	const [updated] = await db
 		.update(studyPlan)
