@@ -64,6 +64,7 @@ export {
 // Layer-2 product derivations. Pure functions of TruthModel + opts.
 // ----------------------------------------------------------------------
 export { deriveAirmets } from './products/airmet';
+export { deriveAirmetBulletins } from './products/airmet-text';
 export { deriveMetar } from './products/metar';
 export { derivePireps } from './products/pirep';
 export { deriveTaf } from './products/taf';

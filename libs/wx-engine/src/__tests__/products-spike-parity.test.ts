@@ -51,4 +51,10 @@ describe('products spike-parity (frontal-xc-march)', () => {
 		const baseline = JSON.parse(readBaseline('airmets.json')) as unknown;
 		expect(bundle.products.airmets).toEqual(baseline);
 	});
+
+	it('AIRMET text bulletins match the recorded airmets.txt', () => {
+		const baseline = readBaseline('airmets.txt').trimEnd();
+		const actual = bundle.products.airmetBulletins.map((b) => b.raw).join('\n\n');
+		expect(actual).toBe(baseline);
+	});
 });
