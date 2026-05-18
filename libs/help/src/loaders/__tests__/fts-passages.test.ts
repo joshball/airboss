@@ -83,7 +83,10 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 1,
 			code: '7',
-			airbossRef: `airboss-ref:handbook/fts-phak/7`,
+			// Canonical `airboss-ref:` URI; the loader maps it to a flightbag
+			// reader URL via `urlForReference()`. The doc slug must be a
+			// registered handbook (`phak`).
+			airbossRef: `airboss-ref:handbooks/phak/8083-25C/7`,
 			title: 'Night flying considerations',
 			sourceLocator: 'FTS Ch 7',
 			contentMd: `Pilot rest before night flying is essential. ${PHRASE} appear in the descent profile when the sun dips below the horizon. Adequate planning mitigates risk.`,
@@ -102,7 +105,7 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 2,
 			code: '91.151',
-			airbossRef: `airboss-ref:cfr/14-91/91.151`,
+			airbossRef: `airboss-ref:regs/cfr-14/91/151`,
 			title: 'Fuel requirements for flight in VFR conditions',
 			sourceLocator: '14 CFR §91.151',
 			contentMd: `Fuel rules apply for VFR conditions. The phrase ${PHRASE} is repeated here so the FTS test can hit the CFR source.`,
@@ -195,6 +198,9 @@ describe('loadFtsPassages', () => {
 		expect(hit?.passageHighlight).toBeDefined();
 		expect(hit?.passageHighlight).toMatch(/<mark>/);
 		expect(hit?.passageHighlight).toMatch(/<\/mark>/);
+		// Flightbag-direct reader URL from the section's `airboss-ref:` URI.
+		expect(hit?.href).toBe('/handbook/phak/8083-25C/7');
+		expect(hit?.href.startsWith('/library/')).toBe(false);
 	});
 
 	it('returns the seeded CFR section on a phrase needle', async () => {
@@ -204,6 +210,8 @@ describe('loadFtsPassages', () => {
 		expect(hit?.type).toBe('faa.cfr.sect');
 		expect(hit?.title).toMatch(/^14 CFR §/);
 		expect(hit?.passageHighlight).toMatch(/<mark>/);
+		expect(hit?.href).toBe('/cfr/14/91/151');
+		expect(hit?.href.startsWith('/library/')).toBe(false);
 	});
 
 	it('returns the seeded knowledge node on a phrase needle', async () => {

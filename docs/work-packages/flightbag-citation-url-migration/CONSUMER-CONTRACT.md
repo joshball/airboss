@@ -1,7 +1,7 @@
 ---
 title: 'flightbag-citation-url-migration -- consumer contract for citation URL emission'
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-14
 owner: agent

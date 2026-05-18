@@ -67,6 +67,7 @@ import {
 import {
 	knowledgeNode,
 	type NewKnowledgeNodeRow,
+	type ReferenceRow,
 	reference,
 	referenceFigure,
 	referenceSection,
@@ -600,30 +601,51 @@ describe('getHandbookProgressMap', () => {
 });
 
 describe('resolveCitationUrl', () => {
-	it('resolves a handbook section citation', async () => {
-		const refs = await listReferences();
+	// Handbook citation routing is exercised against a hand-built reference
+	// row carrying the canonical `phak` slug. The flightbag handbook URL
+	// helper validates the doc slug against the `HANDBOOK_DOC_SLUGS`
+	// allowlist, so the suite-tokenised slugs the DB fixture uses for
+	// (document_slug, edition) isolation would not route -- a real slug is
+	// required here. The resolver is pure given its `references` argument.
+	const phakHandbookRef = (): ReferenceRow => ({
+		id: PHAK_25C_ID,
+		kind: REFERENCE_KINDS.HANDBOOK,
+		documentSlug: 'phak',
+		edition: 'FAA-H-8083-25C',
+		title: "Pilot's Handbook of Aeronautical Knowledge (25C)",
+		publisher: 'FAA',
+		url: null,
+		subjects: [],
+		primaryCert: null,
+		sectionSchema: {},
+		metadata: {},
+		seedOrigin: null,
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	});
+
+	it('resolves a handbook section citation to the flightbag reader URL', () => {
 		const url = resolveCitationUrl(
 			{
 				kind: REFERENCE_KINDS.HANDBOOK,
 				reference_id: PHAK_25C_ID,
 				locator: { chapter: 12, section: 3 },
 			},
-			refs,
+			[phakHandbookRef()],
 		);
-		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_SLUG, 12, 3));
+		expect(url).toBe(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '12', '3'));
 	});
 
-	it('resolves a chapter-only citation to the chapter URL', async () => {
-		const refs = await listReferences();
+	it('resolves a chapter-only citation to the flightbag chapter URL', () => {
 		const url = resolveCitationUrl(
 			{
 				kind: REFERENCE_KINDS.HANDBOOK,
 				reference_id: PHAK_25C_ID,
 				locator: { chapter: 12 },
 			},
-			refs,
+			[phakHandbookRef()],
 		);
-		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_CHAPTER(PHAK_SLUG, 12));
+		expect(url).toBe(ROUTES.FLIGHTBAG_HANDBOOK_CHAPTER('phak', '8083-25C', '12'));
 	});
 
 	it('returns null for legacy freeform citations', async () => {
@@ -748,8 +770,7 @@ describe('resolveCitationUrl', () => {
 		expect(url).toBe('https://www.faa.gov/training_testing/testing/acs');
 	});
 
-	it('handbook citations ignore airboss_ref and route to the in-app reader', async () => {
-		const refs = await listReferences();
+	it('handbook citations ignore airboss_ref and route to the flightbag reader', () => {
 		const url = resolveCitationUrl(
 			{
 				kind: REFERENCE_KINDS.HANDBOOK,
@@ -757,9 +778,9 @@ describe('resolveCitationUrl', () => {
 				locator: { chapter: 12, section: 3 },
 				airboss_ref: 'airboss-ref:handbooks/phak/8083-25C/12/3',
 			},
-			refs,
+			[phakHandbookRef()],
 		);
-		expect(url).toBe(ROUTES.LIBRARY_HANDBOOK_SECTION(PHAK_SLUG, 12, 3));
+		expect(url).toBe(ROUTES.FLIGHTBAG_HANDBOOK_SECTION('phak', '8083-25C', '12', '3'));
 	});
 
 	it('returns null when reference id does not resolve for a handbook citation', async () => {

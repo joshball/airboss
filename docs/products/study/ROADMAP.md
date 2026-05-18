@@ -9,23 +9,25 @@
 Work packages targeting the `study` surface, grouped by status.
 Within each section WPs sort alphabetically by id.
 
-## In flight (13)
+## In flight (15)
 
-| ID                                                                                             | Title                                                                       | Product | Category | Agent review | Human review |
-| ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
-| [bc-citations-coupling](../../work-packages/bc-citations-coupling/spec.md)                     | Decide: own libs/bc/citations or fold into bc-study                         | study   | platform | done         | pending      |
-| [card-page-and-cross-references](../../work-packages/card-page-and-cross-references/spec.md)   | card-page-and-cross-references                                              | study   | feature  | pending      | pending      |
-| [card-state-fk-tightening](../../work-packages/card-state-fk-tightening/spec.md)               | Tighten card_state and session_item_result ownership FKs                    | study   | platform | done         | pending      |
-| [cert-syllabus-and-goal-composer](../../work-packages/cert-syllabus-and-goal-composer/spec.md) | Spec: Cert, Syllabus, and Goal Composer                                     | study   | feature  | pending      | pending      |
-| [content-citations](../../work-packages/content-citations/spec.md)                             | content-citations                                                           | study   | feature  | pending      | pending      |
-| [engine-goal-cutover](../../work-packages/engine-goal-cutover/spec.md)                         | Spec: Engine Goal Cutover                                                   | study   | feature  | pending      | pending      |
-| [evidence-kind-gating](../../work-packages/evidence-kind-gating/spec.md)                       | Spec: Evidence Kind Gating                                                  | study   | feature  | pending      | pending      |
-| [library-substrate](../../work-packages/library-substrate/spec.md)                             | Library substrate -- WP-SUB implementation plan                             | study   | feature  | pending      | pending      |
-| [review-flow-v2](../../work-packages/review-flow-v2/spec.md)                                   | review-flow-v2                                                              | study   | feature  | pending      | pending      |
-| [review-sessions-url](../../work-packages/review-sessions-url/spec.md)                         | review-sessions-url                                                         | study   | feature  | pending      | pending      |
-| [scenario-options-relational](../../work-packages/scenario-options-relational/spec.md)         | Promote scenario.options JSONB to a relational table                        | study   | platform | done         | pending      |
-| [snooze-and-flag](../../work-packages/snooze-and-flag/spec.md)                                 | snooze-and-flag                                                             | study   | feature  | pending      | pending      |
-| [wp-handbooks-extras-retire](../../work-packages/wp-handbooks-extras-retire/spec.md)           | Spec: WP-EXTRAS-RETIRE -- slim the handbooks-extras corpus to mtn-tips only | study   | feature  | pending      | pending      |
+| ID                                                                                                     | Title                                                                       | Product | Category | Agent review | Human review |
+| ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
+| [bc-citations-coupling](../../work-packages/bc-citations-coupling/spec.md)                             | Decide: own libs/bc/citations or fold into bc-study                         | study   | platform | done         | pending      |
+| [card-page-and-cross-references](../../work-packages/card-page-and-cross-references/spec.md)           | card-page-and-cross-references                                              | study   | feature  | pending      | pending      |
+| [card-state-fk-tightening](../../work-packages/card-state-fk-tightening/spec.md)                       | Tighten card_state and session_item_result ownership FKs                    | study   | platform | done         | pending      |
+| [cert-syllabus-and-goal-composer](../../work-packages/cert-syllabus-and-goal-composer/spec.md)         | Spec: Cert, Syllabus, and Goal Composer                                     | study   | feature  | pending      | pending      |
+| [content-citations](../../work-packages/content-citations/spec.md)                                     | content-citations                                                           | study   | feature  | pending      | pending      |
+| [engine-goal-cutover](../../work-packages/engine-goal-cutover/spec.md)                                 | Spec: Engine Goal Cutover                                                   | study   | feature  | pending      | pending      |
+| [evidence-kind-gating](../../work-packages/evidence-kind-gating/spec.md)                               | Spec: Evidence Kind Gating                                                  | study   | feature  | pending      | pending      |
+| [flightbag-citation-url-migration](../../work-packages/flightbag-citation-url-migration/spec.md)       | Spec: Flightbag citation URL migration                                      | study   | platform | done         | pending      |
+| [library-substrate](../../work-packages/library-substrate/spec.md)                                     | Library substrate -- WP-SUB implementation plan                             | study   | feature  | pending      | pending      |
+| [personal-minimums-as-typed-contract](../../work-packages/personal-minimums-as-typed-contract/spec.md) | Spec: Personal Minimums as a Typed Contract                                 | study   | feature  | pending      | pending      |
+| [review-flow-v2](../../work-packages/review-flow-v2/spec.md)                                           | review-flow-v2                                                              | study   | feature  | pending      | pending      |
+| [review-sessions-url](../../work-packages/review-sessions-url/spec.md)                                 | review-sessions-url                                                         | study   | feature  | pending      | pending      |
+| [scenario-options-relational](../../work-packages/scenario-options-relational/spec.md)                 | Promote scenario.options JSONB to a relational table                        | study   | platform | done         | pending      |
+| [snooze-and-flag](../../work-packages/snooze-and-flag/spec.md)                                         | snooze-and-flag                                                             | study   | feature  | pending      | pending      |
+| [wp-handbooks-extras-retire](../../work-packages/wp-handbooks-extras-retire/spec.md)                   | Spec: WP-EXTRAS-RETIRE -- slim the handbooks-extras corpus to mtn-tips only | study   | feature  | pending      | pending      |
 
 ## Signed off (15)
 
@@ -47,18 +49,16 @@ Within each section WPs sort alphabetically by id.
 | [stage5-citation-deeplink](../../work-packages/stage5-citation-deeplink/spec.md)                           | Spec: Stage-5 citation deep-linking                                           | study   | feature  | pending      | pending      |
 | [study-plan-and-session-engine](../../work-packages/study-plan-and-session-engine/spec.md)                 | Spec: Study Plan + Session Engine                                             | study   | feature  | pending      | pending      |
 
-## Draft (11)
+## Draft (9)
 
-| ID                                                                                                     | Title                                                                                     | Product | Category | Agent review | Human review |
-| ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
-| [card-question-tier](../../work-packages/card-question-tier/spec.md)                                   | Spec: Card Question-Tier + Provenance                                                     | study   | feature  | pending      | pending      |
-| [cert-dashboard](../../work-packages/cert-dashboard/spec.md)                                           | Spec: Cert Dashboard                                                                      | study   | feature  | pending      | pending      |
-| [course-reader-and-editor](../../work-packages/course-reader-and-editor/spec.md)                       | Spec: Course Reader and Editor                                                            | study   | feature  | pending      | pending      |
-| [flight-evidence-and-cfi-feedback](../../work-packages/flight-evidence-and-cfi-feedback/spec.md)       | Spec: Flight evidence and teacher feedback                                                | study   | feature  | pending      | pending      |
-| [flightbag-citation-url-migration](../../work-packages/flightbag-citation-url-migration/spec.md)       | Spec: Flightbag citation URL migration                                                    | study   | platform | pending      | pending      |
-| [goal-composer](../../work-packages/goal-composer/spec.md)                                             | Spec: Goal Composer                                                                       | study   | feature  | pending      | pending      |
-| [lens-ui](../../work-packages/lens-ui/spec.md)                                                         | Spec: Lens UI                                                                             | study   | feature  | pending      | pending      |
-| [node-render-modes](../../work-packages/node-render-modes/spec.md)                                     | Spec: Node render modes                                                                   | study   | feature  | pending      | pending      |
-| [personal-minimums-as-typed-contract](../../work-packages/personal-minimums-as-typed-contract/spec.md) | Spec: Personal Minimums as a Typed Contract                                               | study   | feature  | pending      | pending      |
-| [study-home](../../work-packages/study-home/spec.md)                                                   | Spec: Study home                                                                          | study   | feature  | pending      | pending      |
-| [wp-notes-primitive](../../work-packages/wp-notes-primitive/spec.md)                                   | Spec: WP-NOTES-PRIMITIVE -- platform-wide note primitive (schema, BC, components, viewer) | study   | feature  | pending      | pending      |
+| ID                                                                                               | Title                                                                                     | Product | Category | Agent review | Human review |
+| ------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
+| [card-question-tier](../../work-packages/card-question-tier/spec.md)                             | Spec: Card Question-Tier + Provenance                                                     | study   | feature  | pending      | pending      |
+| [cert-dashboard](../../work-packages/cert-dashboard/spec.md)                                     | Spec: Cert Dashboard                                                                      | study   | feature  | pending      | pending      |
+| [course-reader-and-editor](../../work-packages/course-reader-and-editor/spec.md)                 | Spec: Course Reader and Editor                                                            | study   | feature  | pending      | pending      |
+| [flight-evidence-and-cfi-feedback](../../work-packages/flight-evidence-and-cfi-feedback/spec.md) | Spec: Flight evidence and teacher feedback                                                | study   | feature  | pending      | pending      |
+| [goal-composer](../../work-packages/goal-composer/spec.md)                                       | Spec: Goal Composer                                                                       | study   | feature  | pending      | pending      |
+| [lens-ui](../../work-packages/lens-ui/spec.md)                                                   | Spec: Lens UI                                                                             | study   | feature  | pending      | pending      |
+| [node-render-modes](../../work-packages/node-render-modes/spec.md)                               | Spec: Node render modes                                                                   | study   | feature  | pending      | pending      |
+| [study-home](../../work-packages/study-home/spec.md)                                             | Spec: Study home                                                                          | study   | feature  | pending      | pending      |
+| [wp-notes-primitive](../../work-packages/wp-notes-primitive/spec.md)                             | Spec: WP-NOTES-PRIMITIVE -- platform-wide note primitive (schema, BC, components, viewer) | study   | feature  | pending      | pending      |

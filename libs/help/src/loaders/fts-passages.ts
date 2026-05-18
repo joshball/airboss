@@ -45,6 +45,7 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { type SourceId, urlForReference } from '@ab/sources';
 import { createLogger } from '@ab/utils';
 import { sql } from 'drizzle-orm';
 import type { SearchResult, SearchResultType } from '../schema/result-types';
@@ -174,6 +175,7 @@ interface ReferenceSectionFtsRowRaw extends Record<string, unknown> {
 	document_slug: string;
 	reference_title: string;
 	reference_kind: string;
+	airboss_ref: string;
 }
 
 /**
@@ -195,6 +197,7 @@ async function queryReferenceSections(db: LoaderDb, needle: string, limit: numbe
 			rs.code AS code,
 			rs.title AS section_title,
 			rs.depth AS depth,
+			rs.airboss_ref AS airboss_ref,
 			r.document_slug AS document_slug,
 			r.title AS reference_title,
 			r.kind AS reference_kind,
@@ -222,7 +225,9 @@ async function queryReferenceSections(db: LoaderDb, needle: string, limit: numbe
 			type: mapped.type,
 			title: mapped.title(r.code, r.section_title),
 			subtitle: `${r.document_slug.toUpperCase()} - ${r.reference_title}`,
-			href: mapped.href(r.document_slug, r.code),
+			// Flightbag-direct reader URL from the section's canonical
+			// `airboss-ref:` URI.
+			href: urlForReference(r.airboss_ref as SourceId),
 			headline: r.headline,
 			rank: Number(r.rank ?? 0),
 			depth: Number(r.depth ?? 0),
@@ -235,15 +240,17 @@ async function queryReferenceSections(db: LoaderDb, needle: string, limit: numbe
 interface ReferenceKindMapping {
 	readonly type: SearchResultType;
 	title(code: string, sectionTitle: string): string;
-	href(documentSlug: string, code: string): string;
 }
 
 /**
- * Map `study.reference.kind` to the passage row shape (type + title + href).
+ * Map `study.reference.kind` to the passage row shape (type + title).
  * Returns `null` for kinds that don't have a section reader today (POH,
  * NTSB, SAFO, INFO, OTHER): those rows wouldn't navigate to a meaningful
- * destination via the existing routes, so we drop them rather than emit a
- * broken link.
+ * destination, so we drop them rather than emit a broken link.
+ *
+ * The `href` is no longer derived here -- it comes from the section's
+ * canonical `airboss-ref:` URI via `urlForReference()` (this WP). This
+ * function only owns the row's `type` discriminator + display title.
  */
 function mapReferenceKind(kind: string, documentSlug: string): ReferenceKindMapping | null {
 	switch (kind) {
@@ -251,12 +258,6 @@ function mapReferenceKind(kind: string, documentSlug: string): ReferenceKindMapp
 			return {
 				type: 'faa.handbook.chapter',
 				title: (code, sectionTitle) => `${code} - ${sectionTitle}`,
-				href: (slug, code) => {
-					const { chapter, section } = splitHandbookCode(code);
-					return section.length === 0
-						? ROUTES.LIBRARY_HANDBOOK_CHAPTER(slug, chapter)
-						: ROUTES.LIBRARY_HANDBOOK_SECTION(slug, chapter, section);
-				},
 			};
 		case REFERENCE_KINDS.CFR: {
 			const cfrKind = documentSlug.startsWith('49')
@@ -266,35 +267,21 @@ function mapReferenceKind(kind: string, documentSlug: string): ReferenceKindMapp
 			return {
 				type: 'faa.cfr.sect',
 				title: (code, sectionTitle) => `${prefix} §${code} - ${sectionTitle}`,
-				href: (slug, code) => ROUTES.LIBRARY_REGULATIONS_SECTION(cfrKind, slug, code),
 			};
 		}
 		case REFERENCE_KINDS.AIM:
 			return {
 				type: 'faa.aim',
 				title: (code, sectionTitle) => `AIM ${code} - ${sectionTitle}`,
-				href: (slug, code) => ROUTES.LIBRARY_REGULATIONS_SECTION(LIBRARY_REGULATIONS_KINDS.AIM, slug, code),
 			};
 		case REFERENCE_KINDS.AC:
 			return {
 				type: 'faa.ac',
 				title: (code, sectionTitle) => `AC ${code} - ${sectionTitle}`,
-				href: (slug, code) => ROUTES.LIBRARY_REGULATIONS_SECTION(LIBRARY_REGULATIONS_KINDS.AC, slug, code),
 			};
 		default:
 			return null;
 	}
-}
-
-/**
- * Split a handbook section `code` (`"12"` or `"12.3"`) into chapter +
- * section fragments for the in-app reader href. Mirrors the helper in
- * `handbook-sections.ts`.
- */
-function splitHandbookCode(code: string): { chapter: string; section: string } {
-	const dot = code.indexOf('.');
-	if (dot < 0) return { chapter: code, section: '' };
-	return { chapter: code.slice(0, dot), section: code.slice(dot + 1) };
 }
 
 // -------- source: knowledge_node --------

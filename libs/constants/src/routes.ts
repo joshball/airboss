@@ -1,6 +1,6 @@
 import type { ProgramTab } from './program';
 import type { SimScenarioId } from './sim';
-import type { KnowledgePhase, LibraryRegulationsKind } from './study';
+import type { KnowledgePhase } from './study';
 import type { XcScenario } from './xc-viewer';
 
 /** Query-string parameter names used across study routes. */
@@ -449,47 +449,16 @@ export const ROUTES = {
 	 */
 	GLOSSARY_ID: (id: string) => `/reference/glossary/${encodeURIComponent(id)}` as const,
 
-	// Study -- Library (LEGACY -- redirects to the flightbag).
-	//
-	// Per ADR 023 + WP-FLIGHTBAG-READER-UX Phase 2, the canonical reference
-	// browse + reader surface lives in the flightbag app. Every `LIBRARY_*`
-	// constant below now resolves to a study URL that 301s to its flightbag
-	// equivalent. The constants stay exported (for stable in-flight callers)
-	// but every new caller MUST use the corresponding `FLIGHTBAG_*` constant
-	// + the cross-app origin (`siblingOrigin(url, HOST_PREFIXES.FLIGHTBAG)`)
-	// so links don't take an extra HTTP roundtrip.
-	/**
-	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin. The legacy
-	 * `/library` URL 301s to the flightbag landing.
-	 */
-	LIBRARY: '/library',
-	/**
-	 * @deprecated Use `FLIGHTBAG_CFR_SECTION` / `FLIGHTBAG_AIM_SECTION` on
-	 * the flightbag origin.
-	 */
-	LIBRARY_REGULATIONS_SECTION: (kind: LibraryRegulationsKind, group: string, section: string) =>
-		`/library/regulations/${encodeURIComponent(kind)}/${encodeURIComponent(group)}/${encodeURIComponent(section)}` as const,
-	/**
-	 * @deprecated Use `FLIGHTBAG_HANDBOOK` on the flightbag origin (note:
-	 * the flightbag URL takes an explicit `edition` argument; resolve the
-	 * latest non-superseded edition via `getReferenceByDocument`).
-	 */
-	LIBRARY_HANDBOOK: (slug: string) => `/library/handbook/${encodeURIComponent(slug)}` as const,
-	/**
-	 * @deprecated Use `FLIGHTBAG_HANDBOOK_CHAPTER` on the flightbag origin.
-	 */
-	LIBRARY_HANDBOOK_CHAPTER: (slug: string, chapter: number | string) =>
-		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}` as const,
-	/**
-	 * @deprecated Use `FLIGHTBAG_HANDBOOK_SECTION` on the flightbag origin.
-	 */
-	LIBRARY_HANDBOOK_SECTION: (slug: string, chapter: number | string, section: number | string) =>
-		`/library/handbook/${encodeURIComponent(slug)}/${encodeURIComponent(String(chapter))}/${encodeURIComponent(String(section))}` as const,
-	/**
-	 * @deprecated Use `FLIGHTBAG_HOME` on the flightbag origin. The legacy
-	 * URL returns 410 Gone (no per-aircraft reader exists yet).
-	 */
-	LIBRARY_AIRCRAFT: (slug: string) => `/library/aircraft/${encodeURIComponent(slug)}` as const,
+	// Study -- Library: the canonical reference browse + reader surface
+	// lives in the flightbag app (`FLIGHTBAG_*` routes below). The six
+	// `LIBRARY_*` route constants that emitted study-local `/library/*` URLs
+	// were retired by the flightbag-citation-url-migration WP -- every
+	// citation chip, library card, help-search result, and handbook tree
+	// node now goes through `urlForReference()` / `urlForReferenceRow()`
+	// (`@ab/sources`) and emits a flightbag URL by construction. The study
+	// 301-redirect layer in `apps/study/src/hooks.server.ts` still handles
+	// legacy `/library/*` request URLs (stale bookmarks) -- that incoming-URL
+	// match correctly uses a literal, not a route constant.
 
 	// Study -- Invite acceptance (hangar-invite-flow WP).
 	// Public route -- the token IS the credential. Lives outside the

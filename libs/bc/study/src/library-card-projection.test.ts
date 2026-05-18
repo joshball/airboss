@@ -33,13 +33,13 @@ function makeRow(overrides: Partial<ReferenceRow>): ReferenceRow {
 }
 
 describe('projectReferenceToLibraryCard', () => {
-	it('handbook -> HandbookCard with in-app reader href when readable', () => {
+	it('handbook -> HandbookCard with flightbag-direct reader href when readable', () => {
 		const row = makeRow({
 			kind: REFERENCE_KINDS.HANDBOOK,
 			documentSlug: 'phak',
 			title: "Pilot's Handbook of Aeronautical Knowledge",
 			publisher: 'FAA',
-			edition: '2024',
+			edition: 'FAA-H-8083-25C',
 			subjects: ['weather', 'aerodynamics'],
 			metadata: { description: 'desc', whyItMatters: 'why' },
 		});
@@ -47,11 +47,25 @@ describe('projectReferenceToLibraryCard', () => {
 		expect(payload.variant).toBe('HandbookCard');
 		if (payload.variant !== 'HandbookCard') return;
 		expect(payload.props.shortSlug).toBe('phak');
-		expect(payload.props.href).toBe('/library/handbook/phak');
+		// Flightbag-direct path; the full FAA edition is shortened to the
+		// form the flightbag handbook route expects.
+		expect(payload.props.href).toBe('/handbook/phak/8083-25C');
 		expect(payload.props.publisher).toBe('FAA');
 		expect(payload.props.description).toBe('desc');
 		expect(payload.props.whyItMatters).toBe('why');
 		expect(payload.props.topics.map((t) => t.value)).toEqual(['weather', 'aerodynamics']);
+	});
+
+	it('handbook -> HandbookCard falls back to the flightbag landing when not readable', () => {
+		const row = makeRow({
+			kind: REFERENCE_KINDS.HANDBOOK,
+			documentSlug: 'phak',
+			edition: 'FAA-H-8083-25C',
+		});
+		const payload = projectReferenceToLibraryCard(row, false);
+		expect(payload.variant).toBe('HandbookCard');
+		if (payload.variant !== 'HandbookCard') return;
+		expect(payload.props.href).toBe('/');
 	});
 
 	it('cfr part slug -> CfrPartCard with eCFR external + part-derived href', () => {
@@ -166,9 +180,25 @@ describe('projectReferenceToLibraryCard', () => {
 		if (payload.variant !== 'PohCard') return;
 		expect(payload.props.aircraftModel).toBe('C172S');
 		expect(payload.props.manufacturer).toBe('Cessna');
-		expect(payload.props.href).toBe('/library/aircraft/cessna-172s-phak');
+		// Chrome-only: no flightbag per-aircraft reader yet, so the POH card
+		// body is not a link. The manufacturer external link is preserved.
+		expect(payload.props.href).toBeNull();
 		expect(payload.props.external?.label).toBe('Cessna');
 		expect(payload.props.topics.map((t) => t.value)).toEqual(['systems']);
+	});
+
+	it('poh -> PohCard always emits href: null (chrome-only)', () => {
+		const row = makeRow({
+			kind: REFERENCE_KINDS.POH,
+			documentSlug: 'piper-pa28-poh',
+			title: 'PA-28 POH',
+			edition: '3',
+			publisher: 'Piper',
+		});
+		const payload = projectReferenceToLibraryCard(row, false);
+		expect(payload.variant).toBe('PohCard');
+		if (payload.variant !== 'PohCard') return;
+		expect(payload.props.href).toBeNull();
 	});
 
 	it('safo + info -> Safo/InfoCard with audience + date', () => {

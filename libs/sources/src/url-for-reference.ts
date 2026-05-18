@@ -15,6 +15,11 @@ import { ROUTES } from '@ab/constants';
 import { parseAcLocator } from './ac/locator.ts';
 import { parseAcsLocator } from './acs/locator.ts';
 import { parseAimLocator } from './aim/locator.ts';
+import {
+	airbossRefForAcDocument,
+	airbossRefForAcsPublication,
+	airbossRefForWholeDocHandbook,
+} from './airboss-ref-builder.ts';
 import { parseHandbooksLocator } from './handbooks/locator.ts';
 import { parseInfoLocator } from './info/locator.ts';
 import { parseNtsbAljLocator } from './ntsb-alj/locator.ts';
@@ -71,7 +76,28 @@ export function urlForReference(uri: SourceId): string {
 	}
 }
 
-function urlForHandbooks(locator: string): string {
+/**
+ * The handbook section/edition `airboss-ref:` URIs persisted on
+ * `study.reference_section.airboss_ref` carry the full FAA edition
+ * designation (`FAA-H-8083-16B`). The handbooks locator grammar -- and the
+ * flightbag `/handbook/[slug]/[edition]` route -- use the short form
+ * (`8083-16B`, the designation minus the `FAA-H-` prefix; mirrors
+ * `shortHandbookEdition()` in the flightbag app). Normalise the edition
+ * segment (index 1 of the locator) to the short form before parsing so a
+ * stored URI resolves to a real reader URL instead of falling back to home.
+ */
+function normalizeHandbookLocator(locator: string): string {
+	const segments = locator.split('/');
+	const edition = segments[1];
+	if (edition !== undefined && edition.startsWith('FAA-H-')) {
+		segments[1] = edition.slice('FAA-H-'.length);
+		return segments.join('/');
+	}
+	return locator;
+}
+
+function urlForHandbooks(rawLocator: string): string {
+	const locator = normalizeHandbookLocator(rawLocator);
 	const result = parseHandbooksLocator(locator);
 	if (result.kind === 'error') return ROUTES.FLIGHTBAG_HOME;
 	const hb = result.handbooks;
@@ -194,4 +220,134 @@ function urlForInfo(locator: string): string {
 	if (info === undefined) return ROUTES.FLIGHTBAG_HOME;
 	void info;
 	return ROUTES.FLIGHTBAG_HOME;
+}
+
+/**
+ * Minimal structural row shape consumed by {@link urlForReferenceRow}.
+ *
+ * The full `ReferenceRow` (`study.reference.$inferSelect`, re-exported from
+ * `@ab/bc-study`) structurally satisfies this type, so every projection /
+ * component caller passes its row directly. The shim deliberately depends on
+ * a structural shape rather than importing `@ab/bc-study`: `libs/sources` is
+ * a foundational lib that `@ab/bc-study` itself depends on, and a back-edge
+ * (even a type-only one) would form a package cycle and break apps that
+ * bundle `@ab/sources` without `@ab/bc-study` (e.g. `apps/avionics`).
+ */
+export interface ReferenceRowFields {
+	readonly kind: string;
+	readonly documentSlug: string;
+	readonly edition: string;
+}
+
+/**
+ * Row-shaped sibling of {@link urlForReference}. Thin shim for callers that
+ * hold a `study.reference` row instead of an `airboss-ref:` URI string -- the
+ * library-card projection, the handbook svelte components, the handbook tree
+ * builder. Accepts any value with the `kind` / `documentSlug` / `edition`
+ * fields ({@link ReferenceRowFields}); a full `ReferenceRow` satisfies it.
+ *
+ * The shim builds the corpus-appropriate whole-document `airboss-ref:` URI
+ * from the row's `kind` / `documentSlug` / `edition` fields and delegates to
+ * `urlForReference()`, so all per-corpus kind-switching, edition validation,
+ * and malformed-input fallback stay in one place.
+ *
+ * Mapping per `study.reference.kind`:
+ *
+ * - `handbook` -> `airboss-ref:handbooks/<slug>/<edition>` -> `FLIGHTBAG_HANDBOOK(slug, edition)`.
+ * - `cfr`      -> `airboss-ref:regs/cfr-<title>/<part>`    -> `FLIGHTBAG_CFR_PART(title, part)`.
+ *               The CFR `documentSlug` is the seeder shape `<title>cfr<part>`
+ *               (`14cfr91`, `49cfr830`); the title prefix is parsed off.
+ * - `aim` / `pcg` -> `FLIGHTBAG_AIM` directly. The AIM `airboss-ref:` grammar
+ *               has no whole-document locator (the locator after `aim/` is
+ *               required), so the row shim short-circuits to the AIM landing.
+ * - `ac`       -> `airboss-ref:ac/<docNumber>/<revision>`  -> `FLIGHTBAG_AC(doc, rev)`.
+ *               The AC `documentSlug` is `ac-<docNumber>`; `edition` is the
+ *               revision letter.
+ * - `acs`      -> `airboss-ref:acs/<slug>`                 -> `FLIGHTBAG_ACS(slug)`.
+ * - every other kind (`pts`, `poh`, `ntsb`, `safo`, `info`, `other`) ->
+ *               `FLIGHTBAG_HOME`. These corpora have no flightbag reader
+ *               route today; PTS publications are not registered ACS slugs.
+ *               The fallback matches `urlForReference()` for the same corpora.
+ *
+ * Pure: no DB access, no side effects. The row argument carries every field
+ * the shim reads. Returns a path only -- callers crossing app origins prefix
+ * with `siblingOrigin(url, HOST_PREFIXES.FLIGHTBAG)`.
+ *
+ * See `docs/work-packages/flightbag-citation-url-migration/` (Phase A) and
+ * the citations pattern doc `docs/ingestion-pipeline/reference-citations-pattern.md`.
+ */
+export function urlForReferenceRow(row: ReferenceRowFields): string {
+	switch (row.kind) {
+		case 'handbook':
+			// `edition` is required by the flightbag handbook routes; an empty
+			// edition produces a malformed URI that `urlForReference()` already
+			// falls back to home for.
+			return urlForReference(airbossRefForWholeDocHandbook(row.documentSlug, row.edition) as SourceId);
+		case 'cfr': {
+			const parsed = parseCfrDocumentSlug(row.documentSlug);
+			if (parsed === null) return ROUTES.FLIGHTBAG_HOME;
+			return ROUTES.FLIGHTBAG_CFR_PART(parsed.title, parsed.part);
+		}
+		case 'aim':
+		case 'pcg':
+			// No whole-document AIM `airboss-ref:` locator exists; route to the
+			// AIM landing directly.
+			return ROUTES.FLIGHTBAG_AIM;
+		case 'ac': {
+			// `documentSlug` is `ac-<docNumber>` (`ac-61-65`); `edition` is the
+			// full FAA label (`AC 61-65J`, or `AC 60-22` with no revision). The
+			// AC URI revision segment is the trailing letter(s) of the label,
+			// lowercased; absent when the AC has no revision.
+			const docNumber = row.documentSlug.replace(/^ac-/, '');
+			const revision = acRevisionFromEdition(row.edition, docNumber);
+			if (revision === null) {
+				// No revision -- route to the whole-AC landing via its document
+				// slug; the flightbag AC route requires a revision segment, so
+				// fall back to home when the label carries none.
+				return ROUTES.FLIGHTBAG_HOME;
+			}
+			return urlForReference(airbossRefForAcDocument(docNumber, revision) as SourceId);
+		}
+		case 'acs':
+			return urlForReference(airbossRefForAcsPublication(row.documentSlug) as SourceId);
+		default:
+			// `pts`, `poh`, `ntsb`, `safo`, `info`, `other` -- no flightbag
+			// reader route. PTS publications predate the ACS and are not
+			// registered ACS slugs, so they fall back to home alongside the
+			// other unrouted corpora; the underlying `urlForReference()` would
+			// reject a PTS slug as a non-registered ACS publication anyway.
+			return ROUTES.FLIGHTBAG_HOME;
+	}
+}
+
+/**
+ * Parse a CFR `documentSlug` of the seeder shape `<title>cfr<part>`
+ * (`14cfr91`, `49cfr830`) into its title + part. Returns `null` when the
+ * slug does not match the convention so the caller can fall back to home.
+ */
+function parseCfrDocumentSlug(documentSlug: string): { title: string; part: string } | null {
+	const match = /^(14|49)cfr(\d{1,4})$/.exec(documentSlug);
+	if (match === null) return null;
+	const title = match[1];
+	const part = match[2];
+	if (title === undefined || part === undefined) return null;
+	return { title, part };
+}
+
+/**
+ * Extract the AC revision segment from a `study.reference.edition` label.
+ *
+ * AC editions are stored as the full FAA label -- `AC 61-65J`, `AC 00-6B`,
+ * or `AC 60-22` (no revision). The AC `airboss-ref:` URI revision segment is
+ * the trailing alpha suffix, lowercased. Returns `null` when the label
+ * carries no revision letter so the caller can fall back gracefully.
+ */
+function acRevisionFromEdition(edition: string, docNumber: string): string | null {
+	// Strip the leading "AC " label and the doc number prefix; whatever
+	// trailing alpha remains is the revision.
+	const trimmed = edition.replace(/^AC\s+/i, '').trim();
+	const withoutDoc = trimmed.startsWith(docNumber) ? trimmed.slice(docNumber.length) : trimmed;
+	const match = /^([A-Za-z]+)$/.exec(withoutDoc);
+	if (match === null || match[1] === undefined) return null;
+	return match[1].toLowerCase();
 }

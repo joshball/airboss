@@ -24,8 +24,9 @@ import {
 	type NodeEvidenceState,
 	type ReferenceSectionRow,
 } from '@ab/bc-study/server';
-import { NODE_MASTERY_GATES, REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { NODE_MASTERY_GATES, REFERENCE_KINDS } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { airbossRefForHandbookSection, type SourceId, urlForReference, urlForReferenceRow } from '@ab/sources';
 import type { PgDatabase, PgQueryResultHKT } from 'drizzle-orm/pg-core';
 import type { MapNode } from './map-types';
 
@@ -115,9 +116,14 @@ export async function buildHandbookTree(
 				level: 'subgroup',
 				code: chapter.code,
 				rollup: { masteredLeaves: mastered, coveredLeaves: covered, totalLeaves: total },
+				// Flightbag-direct reader URL. `urlForReference` owns the
+				// per-corpus dispatch + edition normalisation; the consumer
+				// prefixes the flightbag origin via `siblingOrigin`.
 				href: Number.isFinite(chapterNumber)
-					? ROUTES.LIBRARY_HANDBOOK_CHAPTER(ref.documentSlug, chapterNumber)
-					: ROUTES.LIBRARY_HANDBOOK(ref.documentSlug),
+					? urlForReference(
+							airbossRefForHandbookSection(ref.documentSlug, ref.edition, String(chapterNumber)) as SourceId,
+						)
+					: urlForReferenceRow(ref),
 				children: [],
 				defaultOpen: isFocusChapter,
 			});
@@ -129,7 +135,7 @@ export async function buildHandbookTree(
 			level: 'group',
 			code: ref.documentSlug.toUpperCase(),
 			rollup: { masteredLeaves: refMastered, coveredLeaves: refCovered, totalLeaves: refTotal },
-			href: ROUTES.LIBRARY_HANDBOOK(ref.documentSlug),
+			href: urlForReferenceRow(ref),
 			children: childChapters,
 			defaultOpen: focus !== null && focus.referenceId === ref.id,
 		});

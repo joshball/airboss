@@ -37,13 +37,21 @@ function pathMatches(current: string, prefix: string): boolean {
 	return current === prefix || current.startsWith(`${prefix}/`);
 }
 
+// The legacy `/library` path prefix is matched as an INCOMING request URL
+// (not constructed as an outgoing link) -- the study 301-redirect layer in
+// `hooks.server.ts` still handles `/library/*` for stale bookmarks. A
+// literal is the correct shape for incoming-URL pattern matching (the
+// `ROUTES` constants govern outgoing URL construction); the `LIBRARY_*`
+// route constants were retired by the flightbag-citation-url-migration WP.
+const LEGACY_LIBRARY_PATH = '/library';
+
 const cardsActive = $derived(active === 'cards' || pathMatches(page.url.pathname, ROUTES.MEMORY));
 const repsActive = $derived(active === 'reps' || pathMatches(page.url.pathname, ROUTES.REPS));
 // Read is now a cross-app link to the flightbag. The legacy `/library/*`
 // paths still 301 to flightbag for any stale bookmark, but the tab itself
 // points directly at the canonical reader so a click crosses subdomains
 // once instead of round-tripping through study.
-const readActive = $derived(active === 'read' || pathMatches(page.url.pathname, ROUTES.LIBRARY));
+const readActive = $derived(active === 'read' || pathMatches(page.url.pathname, LEGACY_LIBRARY_PATH));
 const learnIndexActive = $derived(active === 'learn' || page.url.pathname === ROUTES.LEARN);
 const flightbagOrigin = $derived(page.data.flightbagOrigin ?? '');
 const readHref = $derived(`${flightbagOrigin}${ROUTES.FLIGHTBAG_HOME}`);

@@ -113,4 +113,4 @@ export {
 	type SourcePdfDescriptor,
 } from './source-pdf.ts';
 export * from './types.ts';
-export { urlForReference } from './url-for-reference.ts';
+export { type ReferenceRowFields, urlForReference, urlForReferenceRow } from './url-for-reference.ts';

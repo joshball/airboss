@@ -9,21 +9,16 @@
 Work packages targeting the `sim` surface, grouped by status.
 Within each section WPs sort alphabetically by id.
 
-## In flight (2)
+## In flight (3)
 
-| ID                                                                                 | Title                                                  | Product | Category | Agent review | Human review |
-| ---------------------------------------------------------------------------------- | ------------------------------------------------------ | ------- | -------- | ------------ | ------------ |
-| [extract-sim-cockpit-panel](../../work-packages/extract-sim-cockpit-panel/spec.md) | Promote CockpitPanel to libs/activities/cockpit-panel/ | sim     | platform | done         | pending      |
-| [extract-sim-instruments](../../work-packages/extract-sim-instruments/spec.md)     | Promote PFD components to libs/activities/pfd/         | sim     | platform | done         | pending      |
+| ID                                                                                 | Title                                                          | Product | Category | Agent review | Human review |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
+| [extract-sim-cockpit-panel](../../work-packages/extract-sim-cockpit-panel/spec.md) | Promote CockpitPanel to libs/activities/cockpit-panel/         | sim     | platform | done         | pending      |
+| [extract-sim-instruments](../../work-packages/extract-sim-instruments/spec.md)     | Promote PFD components to libs/activities/pfd/                 | sim     | platform | done         | pending      |
+| [xc-viewer-v1](../../work-packages/xc-viewer-v1/spec.md)                           | Spec: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice) | sim     | feature  | pending      | pending      |
 
 ## Signed off (1)
 
 | ID                                                                     | Title                     | Product | Category | Agent review | Human review |
 | ---------------------------------------------------------------------- | ------------------------- | ------- | -------- | ------------ | ------------ |
 | [flight-dynamics-sim](../../work-packages/flight-dynamics-sim/spec.md) | Spec: Flight Dynamics Sim | sim     | feature  | pending      | pending      |
-
-## Draft (1)
-
-| ID                                                       | Title                                                          | Product | Category | Agent review | Human review |
-| -------------------------------------------------------- | -------------------------------------------------------------- | ------- | -------- | ------------ | ------------ |
-| [xc-viewer-v1](../../work-packages/xc-viewer-v1/spec.md) | Spec: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice) | sim     | feature  | pending      | pending      |

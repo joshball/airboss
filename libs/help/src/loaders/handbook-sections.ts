@@ -21,8 +21,9 @@
  */
 
 import { reference, referenceSection } from '@ab/bc-study';
-import { REFERENCE_KINDS, ROUTES } from '@ab/constants';
+import { REFERENCE_KINDS } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { type SourceId, urlForReference } from '@ab/sources';
 import { and, eq, ilike, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, SearchResult } from '../schema/result-types';
@@ -57,8 +58,8 @@ export async function loadHandbookSections(
 			code: referenceSection.code,
 			title: referenceSection.title,
 			contentMd: referenceSection.contentMd,
+			airbossRef: referenceSection.airbossRef,
 			documentSlug: reference.documentSlug,
-			edition: reference.edition,
 			referenceTitle: reference.title,
 		})
 		.from(referenceSection)
@@ -69,34 +70,20 @@ export async function loadHandbookSections(
 
 	const out: SearchResult[] = [];
 	for (const r of rows) {
-		const { chapter, section } = splitCode(r.code);
-		const href =
-			section.length === 0
-				? ROUTES.LIBRARY_HANDBOOK_CHAPTER(r.documentSlug, chapter)
-				: ROUTES.LIBRARY_HANDBOOK_SECTION(r.documentSlug, chapter, section);
 		const result: SearchResult = {
 			id: r.sectionId,
 			type: 'faa.handbook.chapter',
 			title: `${r.code} - ${r.title}`,
 			subtitle: `${r.documentSlug.toUpperCase()} - ${r.referenceTitle}`,
 			snippet: bodySnippet(r.contentMd, needle),
-			href,
+			// Flightbag-direct handbook reader URL from the section's
+			// canonical `airboss-ref:` URI -- the chapter / section depth and
+			// edition normalisation are handled by `urlForReference()`.
+			href: urlForReference(r.airbossRef as SourceId),
 			rankBucket: bucketByMatch(needle, r.code, r.title),
 			clusterKey: r.documentSlug,
 		};
 		out.push(result);
 	}
 	return out;
-}
-
-/**
- * Split a handbook section `code` (`"12"` or `"12.3"`) into chapter + section
- * fragments for the in-app reader href. Whole-doc handbooks carry `"1"` or
- * `"publication"` as `code`; the route degrades to the chapter-only path
- * when no dot-separator is present.
- */
-function splitCode(code: string): { chapter: string; section: string } {
-	const dot = code.indexOf('.');
-	if (dot < 0) return { chapter: code, section: '' };
-	return { chapter: code.slice(0, dot), section: code.slice(dot + 1) };
 }

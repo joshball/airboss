@@ -190,6 +190,12 @@ function pathMatches(current: string, prefix: string): boolean {
 // `nav-program`, `nav-insights`, `nav-reference` -- is the contract that
 // the `ia-flow.spec.ts` and `ia-page-anchor-guard.spec.ts` guards enforce.
 const studyActive = $derived(page.url.pathname === ROUTES.STUDY);
+// The legacy `/library` path prefix is matched as an INCOMING request URL
+// (not constructed as an outgoing link). The study 301-redirect layer still
+// handles `/library/*` for stale bookmarks; a literal is the correct shape
+// for incoming-URL matching (the `LIBRARY_*` route constants were retired by
+// the flightbag-citation-url-migration WP).
+const LEGACY_LIBRARY_PATH = '/library';
 // `/study/learn` consolidates Cards (`/memory`), Reps (`/reps`), and
 // Read (`/library`). The highlight matches anywhere under `/study/learn`,
 // `/memory`, `/reps`, or `/library` so Learn stays lit no matter which
@@ -198,7 +204,7 @@ const learnActive = $derived(
 	pathMatches(page.url.pathname, ROUTES.LEARN) ||
 		pathMatches(page.url.pathname, ROUTES.MEMORY) ||
 		pathMatches(page.url.pathname, ROUTES.REPS) ||
-		pathMatches(page.url.pathname, ROUTES.LIBRARY),
+		pathMatches(page.url.pathname, LEGACY_LIBRARY_PATH),
 );
 // `/courses` -- instructor-authored courses (course-primitive WP). Pedagogical
 // content the learner consumes; lives next to Learn in the nav.

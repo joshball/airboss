@@ -5,7 +5,7 @@
  *
  * Tile targets:
  *
- *   - Read       -> ROUTES.LIBRARY (the flightbag handbook reader)
+ *   - Read       -> flightbag origin + ROUTES.FLIGHTBAG_HOME (cross-app link)
  *   - Cards      -> ROUTES.MEMORY_REVIEW or MEMORY_REVIEW_FOR_NODE(focus)
  *   - Sim        -> sim app origin (cross-app link)
  *   - Scenarios  -> ROUTES.REPS

@@ -13,15 +13,15 @@
  */
 
 import { reference, referenceSection } from '@ab/bc-study';
-import { LIBRARY_REGULATIONS_KINDS, REFERENCE_KINDS, REFERENCE_SECTION_LEVELS, ROUTES } from '@ab/constants';
+import { REFERENCE_KINDS, REFERENCE_SECTION_LEVELS } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { type SourceId, urlForReference } from '@ab/sources';
 import { and, eq, ilike, ne, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, SearchResult } from '../schema/result-types';
 import { bodySnippet, bucketByMatch, buildIlikePattern, type LoaderDb, MIN_BODY_NEEDLE_LENGTH } from './_shared';
 
 const LOADER_LIMIT = 30;
-const AIM_KIND = LIBRARY_REGULATIONS_KINDS.AIM;
 
 export async function loadAimSections(
 	parsed: ParsedQuery,
@@ -44,6 +44,7 @@ export async function loadAimSections(
 			code: referenceSection.code,
 			title: referenceSection.title,
 			contentMd: referenceSection.contentMd,
+			airbossRef: referenceSection.airbossRef,
 			documentSlug: reference.documentSlug,
 			referenceTitle: reference.title,
 		})
@@ -72,7 +73,9 @@ export async function loadAimSections(
 			title: `AIM ${r.code} - ${r.title}`,
 			subtitle: r.referenceTitle,
 			snippet: bodySnippet(r.contentMd, needle),
-			href: ROUTES.LIBRARY_REGULATIONS_SECTION(AIM_KIND, r.documentSlug, r.code),
+			// Flightbag-direct AIM reader URL from the section's canonical
+			// `airboss-ref:` URI.
+			href: urlForReference(r.airbossRef as SourceId),
 			rankBucket: bucketByMatch(needle, r.code, r.title),
 			clusterKey: r.documentSlug,
 		};
