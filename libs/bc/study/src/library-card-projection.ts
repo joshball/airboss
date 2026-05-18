@@ -22,6 +22,7 @@ import {
 	type ReferenceKind,
 	ROUTES,
 } from '@ab/constants';
+import { urlForReferenceRow } from '@ab/sources';
 import type { ReferenceRow } from './schema';
 
 /** Topic chip shape consumed by the wrappers (HandbookCard, CfrPartCard, ...). */
@@ -260,7 +261,11 @@ export function projectReferenceToLibraryCard(
 					description,
 					whyItMatters,
 					topics: topicsFromSubjects(subjects),
-					href: isReadable ? ROUTES.LIBRARY_HANDBOOK(ref.documentSlug) : ROUTES.LIBRARY,
+					// Flightbag-direct reader URL when the handbook is ingested;
+					// the flightbag landing otherwise. `urlForReferenceRow`
+					// returns a path -- the svelte renderer prefixes the
+					// flightbag origin via `siblingOrigin` at the render site.
+					href: isReadable ? urlForReferenceRow(ref) : ROUTES.FLIGHTBAG_HOME,
 					external: externalLink,
 				},
 			};
@@ -366,7 +371,14 @@ export function projectReferenceToLibraryCard(
 					description,
 					whyItMatters,
 					topics: topicsFromMetadata(meta),
-					href: ROUTES.LIBRARY_AIRCRAFT(ref.documentSlug),
+					// Chrome-only: the flightbag app has no per-aircraft reader
+					// yet, and the legacy study `/library/aircraft/*` route is
+					// 410 Gone. The card renders its body as chrome (not a
+					// link); the manufacturer external link is preserved. See
+					// docs/work-packages/flightbag-citation-url-migration/
+					// OUT-OF-SCOPE.md -- re-add the href when a flightbag
+					// per-aircraft surface ships.
+					href: null,
 					external: pohExternal,
 				},
 			};

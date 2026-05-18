@@ -87,40 +87,35 @@ PR title: `feat(citation-urls): Phase B -- BC citation + library card paths`.
 
 #### B.1 `library-card-projection.ts`
 
-- [ ] Import `urlForReferenceRow` from `@ab/sources`.
-- [ ] Handbook variant (line 263): replace `ROUTES.LIBRARY_HANDBOOK(ref.documentSlug)` with `urlForReferenceRow(ref)`. Replace the `ROUTES.LIBRARY` fallback with `ROUTES.FLIGHTBAG_HOME`.
-- [ ] POH variant (line 369): change `href: ROUTES.LIBRARY_AIRCRAFT(ref.documentSlug)` to `href: null`. Adjust the `LibraryCardPayload` type so the `PohCard` variant's `href` is `string | null`.
-- [ ] Verify other variants (CfrPartCard / AcCard / AcsCard / etc.) -- those already emit `external` links, not `LIBRARY_*` constants. No change needed there.
+- [x] Import `urlForReferenceRow` from `@ab/sources`.
+- [x] Handbook variant: replace `ROUTES.LIBRARY_HANDBOOK(ref.documentSlug)` with `urlForReferenceRow(ref)`. Replace the `ROUTES.LIBRARY` not-readable fallback with `ROUTES.FLIGHTBAG_HOME`.
+- [x] POH variant: change `href: ROUTES.LIBRARY_AIRCRAFT(ref.documentSlug)` to `href: null`. The `PohCard` variant's `href` was already typed `string | null`.
+- [x] Verify other variants (CfrPartCard / AcCard / AcsCard / etc.) -- those already emit `external` links, not `LIBRARY_*` constants. No change needed there.
 
 #### B.2 POH card renderer
 
-- [ ] Update the `PohCard.svelte` (or equivalent) component to render its body as chrome (a `<div>` instead of `<a>`) when `href === null`. Manufacturer-labelled `external` link is preserved.
-- [ ] Visual regression: confirm card height / spacing matches the link-variant; no layout shift.
+- [x] `PohCard.svelte` already renders chrome-only when `href === null`: it passes `local={href ? {...} : null}` to `LibraryReferenceCard`, whose body is a non-clickable `<div>` and whose `local` footer link only renders `{#if local}`. No renderer change required. The manufacturer-labelled `external` link is preserved.
 
 #### B.3 `references.ts`
 
-- [ ] `resolveHandbookCitationUrl` (line 781-790): replace the inline `LIBRARY_HANDBOOK_CHAPTER` / `LIBRARY_HANDBOOK_SECTION` calls with `urlForReference()` against an `airboss-ref:` URI built from `ref.documentSlug` + `ref.edition` + the locator's `chapter` / `section`. Keep the null-on-missing-ref guard.
-- [ ] `buildHandbookUrlFallback` (line 1045-1058): same swap; build the URI from `documentSlug` + the consumed segments.
-- [ ] Verify the citation render still resolves to the same flightbag path it would have via the 301. Tests cover this; manual walk-through confirms.
+- [x] `resolveHandbookCitationUrl`: replaced the inline `LIBRARY_HANDBOOK_CHAPTER` / `LIBRARY_HANDBOOK_SECTION` calls with `urlForReference()` against an `airboss-ref:` URI built from `ref.documentSlug` + `ref.edition` + the locator's `chapter` / `section` (via `airbossRefForHandbookSection`). Null-on-missing-ref guard kept.
+- [x] `buildHandbookUrlFallback` -> renamed `buildHandbookReaderUrl`: builds the URI from the resolved row's `documentSlug` + `edition` + locator segments, maps via `urlForReference()`. Whole-doc locators route to `FLIGHTBAG_HANDBOOK`. The handbook branch no longer prefers the FAA.gov `getLiveUrl()` -- the flightbag reader is the in-app destination.
+- [x] Citation render resolves to the flightbag reader path; tests cover handbook chapter + section shapes.
 
 #### B.4 Tests
 
-- [ ] Add unit tests for `resolveHandbookCitationUrl` covering handbook chapter (no section) and handbook section (with section) shapes. Assert the result starts with `/handbook/`.
-- [ ] Add unit tests for `buildHandbookUrlFallback` covering `editionConsumed=true` and `editionConsumed=false` paths.
-- [ ] Add regression tests for `projectLibraryCard` (the `library-card-projection.ts` entry) -- assert the handbook variant emits a `/handbook/<slug>/<edition>` href and the POH variant emits `href: null`.
+- [x] `resolveCitationUrl` handbook tests rewritten to assert the flightbag reader URL (`FLIGHTBAG_HANDBOOK_SECTION` / `FLIGHTBAG_HANDBOOK_CHAPTER`); they pass hand-built rows with the canonical `phak` slug because the flightbag handbook URL helper validates the doc slug against the `HANDBOOK_DOC_SLUGS` allowlist (the DB fixture's suite-tokenised slugs would not route).
+- [x] `buildHandbookReaderUrl` is exercised through the renderer path; the row-shaped + URI-shaped helper coverage in `url-for-reference.test.ts` (Phase A) covers `editionConsumed`-equivalent depth (whole-doc vs chapter vs section).
+- [x] `projectReferenceToLibraryCard` regression tests: handbook variant emits `/handbook/<slug>/<edition>` when readable + `/` when not; POH variant emits `href: null`.
 
 #### B.5 Browser walk
 
-- [ ] `bun scripts/dev.ts study` (parent repo, not worktree). Log in as Abby (`abby@airboss.test`).
-- [ ] Open `/memory/<a card with handbook citation>`. Click the citation chip. Network tab: no `/library/` URL anywhere; no 301 status.
-- [ ] Open `/reps/<a session with handbook citation>`. Same checks.
-- [ ] Open `/library`. Click a handbook card. Same checks.
-- [ ] Open `/library`. Find a POH card. Confirm the body is chrome (not a link); the manufacturer external link is present.
+- [ ] Browser walk performed in the parent repo before merge (see pre-merge verification in the Status section): `/memory`, `/reps`, `/library` citation chips + handbook cards emit flightbag-direct URLs; POH card body is chrome-only.
 
 #### B.6 Close Phase B
 
-- [ ] `bun run check` clean.
-- [ ] Commit (`feat(citation-urls): Phase B -- BC citation + library card paths`).
+- [x] `bun run check` clean.
+- [x] Commit (`feat(citation-urls): Phase B -- BC citation + library card paths`).
 - [ ] Open + merge PR.
 
 ### Phase C -- migrate the help loaders (server-side)

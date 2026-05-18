@@ -50,7 +50,15 @@ import {
 	ROUTES,
 } from '@ab/constants';
 import { client, db as defaultDb } from '@ab/db/connection';
-import { getAcSeedMappingByReference, isParseError, parseIdentifier, type SourceId } from '@ab/sources';
+import {
+	airbossRefForHandbookSection,
+	airbossRefForWholeDocHandbook,
+	getAcSeedMappingByReference,
+	isParseError,
+	parseIdentifier,
+	type SourceId,
+	urlForReference,
+} from '@ab/sources';
 import { getCorpusResolver } from '@ab/sources/server';
 import type { Citation, StructuredCitation } from '@ab/types';
 import { isHandbookCitation, isStructuredCitation } from '@ab/types';
@@ -745,8 +753,9 @@ export async function getNodesCitingSectionsBatch(
  *
  * Routing rules:
  *
- * 1. Handbook citations resolve to the in-app handbook reader route
- *    (`ROUTES.LIBRARY_HANDBOOK_CHAPTER` or `ROUTES.LIBRARY_HANDBOOK_SECTION`).
+ * 1. Handbook citations resolve to the flightbag handbook reader via
+ *    `urlForReference()` (a path on the flightbag origin; the render site
+ *    prefixes the cross-app origin with `siblingOrigin`).
  * 2. When `airboss_ref` is set, attempt the `@ab/sources` registry's
  *    per-corpus `getLiveUrl()`. This is the canonical resolution path for
  *    cross-corpus identifiers per ADR 019. Falls through to the
@@ -815,8 +824,13 @@ function resolveHandbookCitationUrl(
 	const ref = references.find((r) => r.id === citation.reference_id);
 	if (!ref) return null;
 	const { chapter, section } = citation.locator;
-	if (section === undefined) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(ref.documentSlug, chapter);
-	return ROUTES.LIBRARY_HANDBOOK_SECTION(ref.documentSlug, chapter, section);
+	// Build the canonical `airboss-ref:` URI from the resolved reference row
+	// + the citation's locator, then map it to a flightbag-direct reader URL
+	// via `urlForReference()`. The helper owns the per-corpus dispatch and
+	// the edition normalisation (the row's `edition` carries the full FAA
+	// designation; `urlForReference` shortens it).
+	const code = section === undefined ? String(chapter) : `${chapter}.${section}`;
+	return urlForReference(airbossRefForHandbookSection(ref.documentSlug, ref.edition, code) as SourceId);
 }
 
 /**
@@ -1027,11 +1041,11 @@ function resolveRefShapeCitation(
 		const resolvedRow = pinnedEdition !== '' ? (candidateRow ?? null) : currentRow;
 		const isPriorEdition =
 			pinnedEdition !== '' && currentRow !== null && resolvedRow !== null && resolvedRow.id !== currentRow.id;
-		const url =
-			resolvedRow !== null
-				? (resolveAirbossRefUrl(value.ref) ??
-					buildHandbookUrlFallback(resolvedRow.documentSlug, segments, pinnedEdition !== ''))
-				: null;
+		// Handbook citations route to the flightbag reader directly (not the
+		// FAA.gov live URL): the resolved row carries the authoritative
+		// edition, so `buildHandbookReaderUrl` maps the locator to a
+		// flightbag-direct path via `urlForReference()`.
+		const url = resolvedRow !== null ? buildHandbookReaderUrl(resolvedRow, segments, pinnedEdition !== '') : null;
 		return {
 			kind: REFERENCE_KINDS.HANDBOOK,
 			title: resolvedRow?.title ?? '',
@@ -1067,24 +1081,35 @@ function resolveRefShapeCitation(
 }
 
 /**
- * Build the in-app handbook URL from a parsed handbooks locator. Used as a
- * fallback when {@link resolveAirbossRefUrl} returns null (the per-corpus
- * resolver returned the doc-level live URL, but the in-app reader has a
- * deeper deep-link).
+ * Build the flightbag-direct handbook reader URL from a parsed handbooks
+ * locator and the resolved reference row.
+ *
+ * The `airboss-ref:` URI on the citation may carry no edition pin (it
+ * resolves to the current edition at render time) or pin a prior edition.
+ * Either way the resolved row carries the authoritative edition, so the URL
+ * is built from `resolvedRow.documentSlug` + `resolvedRow.edition` + the
+ * locator's chapter / section segments and mapped through `urlForReference()`
+ * -- which owns the per-corpus dispatch + edition normalisation.
+ *
+ * A bare whole-doc locator (no chapter) maps to `FLIGHTBAG_HANDBOOK`; a
+ * chapter / section locator maps to the deeper reader route.
  */
-function buildHandbookUrlFallback(
-	documentSlug: string,
+function buildHandbookReaderUrl(
+	resolvedRow: ReferenceRow,
 	segments: ReadonlyArray<string>,
 	editionConsumed: boolean,
-): string | null {
+): string {
 	const tailStart = editionConsumed ? 2 : 1;
 	const chapterSegment = segments[tailStart];
-	if (chapterSegment === undefined || !/^\d+$/.test(chapterSegment)) return null;
-	const chapter = Number(chapterSegment);
+	if (chapterSegment === undefined || !/^\d+$/.test(chapterSegment)) {
+		return urlForReference(airbossRefForWholeDocHandbook(resolvedRow.documentSlug, resolvedRow.edition) as SourceId);
+	}
 	const sectionSegment = segments[tailStart + 1];
-	if (sectionSegment === undefined) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(documentSlug, chapter);
-	if (!/^\d+$/.test(sectionSegment)) return ROUTES.LIBRARY_HANDBOOK_CHAPTER(documentSlug, chapter);
-	return ROUTES.LIBRARY_HANDBOOK_SECTION(documentSlug, chapter, Number(sectionSegment));
+	const code =
+		sectionSegment !== undefined && /^\d+$/.test(sectionSegment)
+			? `${chapterSegment}.${sectionSegment}`
+			: chapterSegment;
+	return urlForReference(airbossRefForHandbookSection(resolvedRow.documentSlug, resolvedRow.edition, code) as SourceId);
 }
 
 /**
