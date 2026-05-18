@@ -342,3 +342,33 @@ export const fixtureBundleWithWeather: ScenarioBundle = {
 		charts: [],
 	},
 };
+
+/**
+ * A fully-built `ScenarioBundle` -- weather + a derived performance table.
+ * The performance figures are a small hand-built table consistent with
+ * the fixture route + C172N + the fixture winds; the renderer tests only
+ * need a non-empty, internally-consistent table.
+ */
+export const fixtureBundleWithPerformance: ScenarioBundle = {
+	...fixtureBundleWithWeather,
+	performance: {
+		legs: [
+			{
+				from: 'wp-a',
+				to: 'wp-b',
+				distanceNm: 61.1,
+				trueCourse: 57,
+				magneticHeading: 51,
+				altitudeFtMsl: 4500,
+				groundSpeedKt: 127,
+				eteMin: 28.8,
+				fuelGal: 3.9,
+				windFromDeg: 275,
+				windKt: 23,
+			},
+		],
+		totalFuelGal: 3.9,
+		totalEteMin: 28.8,
+		reserveGal: 36.1,
+	},
+};

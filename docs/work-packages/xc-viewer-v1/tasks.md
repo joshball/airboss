@@ -285,19 +285,19 @@ PR title: `feat(xc-viewer): Phase E -- aircraft performance projection (C172N + 
 
 #### E.1 v1 AircraftSpec literal
 
-- [ ] Create `libs/spatial-engine/src/flight/aircraft/c172n-skyhawk.ts` exporting `C172N_SKYHAWK: AircraftSpec` per design.md "Aircraft spec authoring discipline". Cite the POH section for each field in a JSDoc comment.
-- [ ] Create `course/aircraft/c172n-skyhawk/CITATION.md` mapping each `AircraftSpec` field to a POH page. Reference the 1978 reprint of the C172N POH.
-- [ ] Register the aircraft in `libs/spatial-engine/src/flight/loader.ts:loadAircraft(aircraftId)`.
-- [ ] Add a unit test in `libs/spatial-engine/src/__tests__/aircraft-literal.test.ts`: `aircraftSpecSchema.parse(C172N_SKYHAWK)` succeeds; CG envelope passes the "fwd < aft" rule; perf polar is monotonic in pressure altitude.
+- [x] Create `libs/spatial-engine/src/flight/aircraft/c172n-skyhawk.ts` exporting `C172N_SKYHAWK: AircraftSpec` per design.md "Aircraft spec authoring discipline". Cite the POH section for each field in a JSDoc comment.
+- [x] Create `course/aircraft/c172n-skyhawk/CITATION.md` mapping each `AircraftSpec` field to a POH page. Reference the 1978 reprint of the C172N POH.
+- [x] Register the aircraft in `libs/spatial-engine/src/flight/loader.ts:loadAircraft(aircraftId)`.
+- [x] Add a unit test in `libs/spatial-engine/src/__tests__/aircraft-literal.test.ts`: `aircraftSpecSchema.parse(C172N_SKYHAWK)` succeeds; CG envelope passes the "fwd < aft" rule; perf polar is monotonic in pressure altitude.
 
 #### E.2 derivePerformance implementation
 
-- [ ] Replace the Phase A stub in `libs/spatial-engine/src/flight/performance.ts` with the real `derivePerformance(args: PerfArgs): PerformanceTable` per spec.md "Performance derivation (v1 -- straight-leg, simplified ISA)".
-- [ ] Wire `interpolateWind` (from `weather/view.ts`) at leg midpoint + cruise altitude.
-- [ ] Wire `applyWind` (from `flight/wind.ts`) to compute heading + ground speed.
-- [ ] Look up `aircraft.perfPolar.cruise` for TAS at the leg's cruise altitude (linear interp between polar points).
-- [ ] Look up `aircraft.fuelBurnCurve.cruise.defaultGph` for fuel burn (v1 is a flat 8 gph; richer curves are a follow-on).
-- [ ] Add unit tests in `libs/spatial-engine/src/__tests__/performance.test.ts`:
+- [x] Replace the Phase A stub in `libs/spatial-engine/src/flight/performance.ts` with the real `derivePerformance(args: PerfArgs): PerformanceTable` per spec.md "Performance derivation (v1 -- straight-leg, simplified ISA)".
+- [x] Wire `interpolateWind` (from `weather/view.ts`) at leg midpoint + cruise altitude.
+- [x] Wire `applyWind` (from `flight/wind.ts`) to compute heading + ground speed.
+- [x] Look up `aircraft.perfPolar.cruise` for TAS at the leg's cruise altitude (linear interp between polar points).
+- [x] Look up `aircraft.fuelBurnCurve.cruise.defaultGph` for fuel burn (v1 is a flat 8 gph; richer curves are a follow-on).
+- [x] Add unit tests in `libs/spatial-engine/src/__tests__/performance.test.ts`:
   - `derivePerformance` for the v1 route + C172N + frontal-xc-march wx returns a table with 4 legs
   - The total fuel is within 1 gal of a hand-calculated expected value (compute by hand from waypoint coords + 110 kt TAS + the wx scenario's winds aloft + 8 gph)
   - `reserveGal` is non-negative for the v1 scenario
@@ -305,27 +305,27 @@ PR title: `feat(xc-viewer): Phase E -- aircraft performance projection (C172N + 
 
 #### E.3 LegLabel updated with full performance
 
-- [ ] Update `libs/spatial-ui/src/LegLabel.svelte` to render the full leg payload: `<dist nm> @ <course> deg | <fuel gal> @ <ETE min> | <wind dir>/<wind kt>`. Keep the placeholder shape acceptable when Phase C output is still in the bundle (graceful degradation).
+- [x] Update `libs/spatial-ui/src/LegLabel.svelte` to render the full leg payload: `<dist nm> @ <course> deg | <fuel gal> @ <ETE min> | <wind dir>/<wind kt>`. Keep the placeholder shape acceptable when Phase C output is still in the bundle (graceful degradation).
 
 #### E.4 PerformanceBand component (sticky footer)
 
-- [ ] Create `libs/spatial-ui/src/PerformanceBand.svelte`. Props: `{ performance: PerformanceTable; aircraft: AircraftSpec }`. Renders a sticky footer-strip with: total fuel + reserve + total ETE + W&B / CG indicator (a small CG envelope graph with the current CG plotted).
-- [ ] Tokens: reserve OK = green; reserve <30 min = yellow; reserve <legal-min = red.
+- [x] Create `libs/spatial-ui/src/PerformanceBand.svelte`. Props: `{ performance: PerformanceTable; aircraft: AircraftSpec }`. Renders a sticky footer-strip with: total fuel + reserve + total ETE + W&B / CG indicator (a small CG envelope graph with the current CG plotted).
+- [x] Tokens: reserve OK = green; reserve <30 min = yellow; reserve <legal-min = red.
 
 #### E.5 LegDetailDrawer
 
-- [ ] Create `libs/spatial-ui/src/LegDetailDrawer.svelte`. Slides in from the right on `'leg-click'`. Shows the full leg payload + the cumulative fuel + the per-leg wind triangle visualization + the from/to waypoint summaries.
+- [x] Create `libs/spatial-ui/src/LegDetailDrawer.svelte`. Slides in from the right on `'leg-click'`. Shows the full leg payload + the cumulative fuel + the per-leg wind triangle visualization + the from/to waypoint summaries.
 
 #### E.6 XcViewer composes performance band + leg drawer
 
-- [ ] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<PerformanceBand>` at the bottom of the viewer + open `<LegDetailDrawer>` on leg click.
-- [ ] Update `composeBundle` to populate `bundle.performance` via `derivePerformance` after weather is loaded.
-- [ ] Add a Playwright smoke at `tests/e2e/xc-viewer-phase-e.spec.ts` that loads the full v1 bundle, asserts the performance band shows non-zero total fuel + non-negative reserve, asserts each leg label shows the four fields (dist, course, fuel, ETE).
+- [x] Update `libs/spatial-ui/src/XcViewer.svelte` to mount `<PerformanceBand>` at the bottom of the viewer + open `<LegDetailDrawer>` on leg click.
+- [x] Update `composeBundle` to populate `bundle.performance` via `derivePerformance` after weather is loaded.
+- [~] (deferred to Phase F) Playwright smoke at `tests/e2e/xc-viewer-phase-e.spec.ts` that loads the full v1 bundle, asserts the performance band shows non-zero total fuel + non-negative reserve, asserts each leg label shows the four fields (dist, course, fuel, ETE).
 
 #### E.7 Phase E close
 
-- [ ] Run `bun run check all` -- 0 errors, 0 warnings.
-- [ ] Open PR `feat(xc-viewer): Phase E -- aircraft performance projection (C172N + per-leg fuel + W&B band)`. Body shows the hand-calculated expected total fuel vs `derivePerformance` output (within 1 gal), the per-leg breakdown, and the W&B envelope rendering.
+- [x] Run `bun run check all` -- 0 errors, 0 warnings.
+- [x] Open PR `feat(xc-viewer): Phase E -- aircraft performance projection (C172N + per-leg fuel + W&B band)`. Body shows the hand-calculated expected total fuel vs `derivePerformance` output (within 1 gal), the per-leg breakdown, and the W&B envelope rendering.
 
 ### Phase F: SvelteKit page + `:::xc-viewer` directive + course-step mount + check-wire-in
 

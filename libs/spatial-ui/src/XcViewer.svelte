@@ -4,14 +4,15 @@
  *
  * Renders a `ScenarioBundle` into an interactive SVG sectional. Phase B
  * shipped the layer-1 sectional + pan/zoom chrome; Phase C added the
- * layer-2 route overlay + per-leg labels; Phase D adds the layer-3
- * weather overlay (chips + AIRMET polygons + the waypoint detail drawer).
- * Phase E adds the performance band.
+ * layer-2 route overlay + per-leg labels; Phase D added the layer-3
+ * weather overlay (chips + AIRMET polygons + the waypoint detail drawer);
+ * Phase E adds the per-leg performance, the leg detail drawer, and the
+ * sticky performance band.
  *
  * Pure browser-safe rendering -- the bundle is loaded server-side and
  * passed in as a prop.
  *
- * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5 + C.4 + D.4.
+ * See `docs/work-packages/xc-viewer-v1/tasks.md` B.5 + C.4 + D.4 + E.6.
  */
 
 import '@ab/themes/spatial-tokens.css';
@@ -31,8 +32,10 @@ import AirspaceLayer from './AirspaceLayer.svelte';
 import LayerToggle from './controls/LayerToggle.svelte';
 import type { CanvasTransform } from './controls/types';
 import ZoomPanControls from './controls/ZoomPanControls.svelte';
+import LegDetailDrawer from './LegDetailDrawer.svelte';
 import LegLabel from './LegLabel.svelte';
 import NavaidLayer from './NavaidLayer.svelte';
+import PerformanceBand from './PerformanceBand.svelte';
 import RouteOverlay from './RouteOverlay.svelte';
 import SectionalCanvas from './SectionalCanvas.svelte';
 import { SPATIAL_LAYER_KEYS, type SpatialLayerKey } from './styles/tokens';
@@ -43,11 +46,9 @@ import WaypointWxChip from './WaypointWxChip.svelte';
 interface Props {
 	/** The composed scenario bundle. */
 	bundle: ScenarioBundle;
-	/** Called when a leg is clicked (Phase E wires a leg detail drawer). */
-	onlegclick?: (leg: LegLabelData) => void;
 }
 
-let { bundle, onlegclick }: Props = $props();
+let { bundle }: Props = $props();
 
 const WIDTH = SECTIONAL_SVG_WIDTH;
 const HEIGHT = SECTIONAL_SVG_HEIGHT;
@@ -134,11 +135,39 @@ const drawerOpen = $derived(drawerWaypoint !== null);
 
 function openWaypoint(waypoint: Waypoint) {
 	drawerWaypoint = waypoint;
+	drawerLeg = null;
 }
 
 function closeDrawer() {
 	drawerWaypoint = null;
 }
+
+// --- Leg detail drawer state ---
+//
+// Only a full `LegPerformance` opens the drawer; a geometry-only
+// placeholder (before the performance build) is not worth a drawer.
+let drawerLeg = $state<LegPerformance | null>(null);
+
+const legDrawerOpen = $derived(drawerLeg !== null);
+
+function isFullLeg(leg: LegLabelData): leg is LegPerformance {
+	return 'fuelGal' in leg && 'eteMin' in leg;
+}
+
+function openLeg(leg: LegLabelData) {
+	if (isFullLeg(leg)) {
+		drawerLeg = leg;
+		drawerWaypoint = null;
+	}
+}
+
+function closeLegDrawer() {
+	drawerLeg = null;
+}
+
+// The performance band renders only when the bundle carries a derived
+// performance table (it does once `xc-scenario build` has run).
+const hasPerformance = $derived(bundle.performance.legs.length > 0);
 
 // --- Drag-to-pan ---
 let dragging = $state(false);
@@ -173,6 +202,7 @@ function onWheel(e: WheelEvent) {
 </script>
 
 <div class="xc-viewer" data-testid="xc-viewer">
+	<div class="xc-stage">
 	<svg
 		class="xc-canvas"
 		class:dragging
@@ -209,7 +239,7 @@ function onWheel(e: WheelEvent) {
 				<RouteOverlay route={bundle.flight.route} {projection} onwaypointclick={openWaypoint} />
 				<g class="leg-labels" data-testid="leg-labels">
 					{#each legRenders as render (`${render.leg.from}-${render.leg.to}`)}
-						<LegLabel leg={render.leg} midpoint={render.midpoint} {onlegclick} />
+						<LegLabel leg={render.leg} midpoint={render.midpoint} onlegclick={openLeg} />
 					{/each}
 				</g>
 			{/if}
@@ -241,16 +271,36 @@ function onWheel(e: WheelEvent) {
 		airmets={bundle.weather.airmets}
 		onclose={closeDrawer}
 	/>
+
+	<LegDetailDrawer
+		open={legDrawerOpen}
+		leg={drawerLeg}
+		performance={bundle.performance}
+		onclose={closeLegDrawer}
+	/>
+	</div>
+
+	{#if hasPerformance}
+		<PerformanceBand performance={bundle.performance} aircraft={bundle.flight.aircraft} />
+	{/if}
 </div>
 
 <style>
 	.xc-viewer {
 		position: relative;
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		border-radius: var(--radius-md);
+		border: 1px solid var(--color-spatial-panel-border);
+		overflow: hidden;
+	}
+
+	.xc-stage {
+		position: relative;
 		width: 100%;
 		aspect-ratio: 16 / 10;
 		overflow: hidden;
-		border-radius: var(--radius-md);
-		border: 1px solid var(--color-spatial-panel-border);
 	}
 
 	.xc-canvas {
