@@ -8,6 +8,13 @@
       "when": 1778730041666,
       "tag": "0000_initial",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779080571295,
+      "tag": "0001_personal_minimums",
+      "breakpoints": true
     }
   ]
 }

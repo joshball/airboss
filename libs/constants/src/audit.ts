@@ -136,6 +136,15 @@ export const AUDIT_TARGETS = {
 	 * audit reader can split the create/edit/promote/discard flows.
 	 */
 	CARD_DRAFT: 'study.card_draft',
+	/**
+	 * Per-revision mutation on `study.personal_minimums`
+	 * (personal-minimums-as-typed-contract WP). `targetId` is the affected
+	 * revision's id; `before` / `after` snapshot the prior + next records;
+	 * `metadata.subKind` (from `PERSONAL_MINIMUMS_OP_SUBKINDS`) splits the
+	 * `revise` (new revision saved) and `deactivate` (active record
+	 * retracted) flows on the audit reader.
+	 */
+	PERSONAL_MINIMUMS: 'study.personal_minimums',
 } as const;
 
 export type AuditTarget = (typeof AUDIT_TARGETS)[keyof typeof AUDIT_TARGETS];
@@ -320,6 +329,22 @@ export const CARD_DRAFT_OP_SUBKINDS = {
 
 export type CardDraftOpSubkind = (typeof CARD_DRAFT_OP_SUBKINDS)[keyof typeof CARD_DRAFT_OP_SUBKINDS];
 export const CARD_DRAFT_OP_SUBKIND_VALUES: readonly CardDraftOpSubkind[] = Object.values(CARD_DRAFT_OP_SUBKINDS);
+
+/**
+ * Op-distinguishing sub-kind for `AUDIT_TARGETS.PERSONAL_MINIMUMS` audit
+ * rows (personal-minimums-as-typed-contract WP). `revise` fires when a new
+ * revision is saved (`op = create`); `deactivate` fires when the active
+ * record is retracted without replacement (`op = update`).
+ */
+export const PERSONAL_MINIMUMS_OP_SUBKINDS = {
+	REVISE: 'revise',
+	DEACTIVATE: 'deactivate',
+} as const;
+
+export type PersonalMinimumsOpSubkind =
+	(typeof PERSONAL_MINIMUMS_OP_SUBKINDS)[keyof typeof PERSONAL_MINIMUMS_OP_SUBKINDS];
+export const PERSONAL_MINIMUMS_OP_SUBKIND_VALUES: readonly PersonalMinimumsOpSubkind[] =
+	Object.values(PERSONAL_MINIMUMS_OP_SUBKINDS);
 
 /**
  * Default expiry on a freshly minted hangar invitation, in days. Matches

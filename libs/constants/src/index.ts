@@ -49,6 +49,9 @@ export {
 	NOTE_OP_SUBKIND_VALUES,
 	NOTE_OP_SUBKINDS,
 	type NoteOpSubkind,
+	PERSONAL_MINIMUMS_OP_SUBKIND_VALUES,
+	PERSONAL_MINIMUMS_OP_SUBKINDS,
+	type PersonalMinimumsOpSubkind,
 } from './audit';
 export {
 	AUTH_RATE_LIMIT,

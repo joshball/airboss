@@ -99,15 +99,15 @@ PR title: `feat(personal-minimums): Phase B -- DB schema + BC API + lens project
 
 #### B.1 Drizzle table
 
-- [ ] Add `personalMinimums` table to `libs/bc/study/src/schema.ts` per spec.md "Data model" section. Column shape, CHECK constraints, partial unique index, and the two read-indexes all match the spec table.
-- [ ] Re-export `PersonalMinimumsRow` and `NewPersonalMinimumsRow` (`$inferSelect` / `$inferInsert`).
-- [ ] Regenerate `drizzle/0000_initial.sql` via `bun run db generate` (regeneration only -- no separate migration file per the project's greenfield discipline).
-- [ ] Run `bun run db reset && bun run db seed` -- confirm the new table exists, the partial index applies, and `seed` runs clean.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal_minimums Drizzle table + indexes + checks`).
+- [x] Add `personalMinimums` table to `libs/bc/study/src/schema.ts` per spec.md "Data model" section. Column shape, CHECK constraints, partial unique index, and the two read-indexes all match the spec table.
+- [x] Re-export `PersonalMinimumsRow` and `NewPersonalMinimumsRow` (`$inferSelect` / `$inferInsert`).
+- [x] Regenerate the drizzle baseline via `drizzle-kit generate`. Per `drizzle/README.md` the legitimate path is a journaled `drizzle-kit generate` (the project uses `db push`, never hand-written numbered migrations); this co-generated `drizzle/0001_personal_minimums.sql` + the journal/snapshot entry. The runtime schema source of truth stays `libs/**/schema.ts`.
+- [x] Run `bun run db reset && bun run db seed` -- confirm the new table exists, the partial index applies, and `seed` runs clean.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal_minimums Drizzle table + indexes + checks`).
 
 #### B.2 BC API (server-only)
 
-- [ ] Create `libs/bc/study/src/personal-minimums.ts` exporting:
+- [x] Create `libs/bc/study/src/personal-minimums.ts` exporting:
   - `getActivePersonalMinimums(userId): Promise<PersonalMinimumsRow | null>` -- selects WHERE `user_id = $1 AND is_active = true` LIMIT 1.
   - `getPersonalMinimumsHistory(userId): Promise<PersonalMinimumsRow[]>` -- selects WHERE `user_id = $1` ORDER BY `effective_from DESC`.
   - `createPersonalMinimumsRevision(userId, input: PersonalMinimumsInput): Promise<PersonalMinimumsRow>` -- transactional:
@@ -116,37 +116,37 @@ PR title: `feat(personal-minimums): Phase B -- DB schema + BC API + lens project
     3. Emit `audit_log` row referencing both prior and next via `auditWrite` from `@ab/audit`.
     4. Return the new row.
   - `deactivatePersonalMinimums(userId): Promise<void>` -- UPDATE the existing active row: `SET is_active = false, effective_until = now()`. No insert. Emits audit_log.
-- [ ] Use the existing `db` import from `@ab/db/connection` and the `auditWrite` helper from `@ab/audit`.
-- [ ] Re-export every function from `libs/bc/study/src/server.ts` (the server-only barrel).
-- [ ] Do NOT re-export from `libs/bc/study/src/index.ts` -- the BC mutates the DB; runtime barrel must stay browser-safe.
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal-minimums BC API (read + revision + deactivate)`).
+- [x] Use the existing `db` import from `@ab/db/connection` and the `auditWrite` helper from `@ab/audit`.
+- [x] Re-export every function from `libs/bc/study/src/server.ts` (the server-only barrel).
+- [x] Do NOT re-export from `libs/bc/study/src/index.ts` -- the BC mutates the DB; runtime barrel must stay browser-safe.
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal-minimums BC API (read + revision + deactivate)`).
 
 #### B.3 Lens projection (browser-safe pure function)
 
-- [ ] Create `libs/bc/study/src/personal-minimums-lens.ts` exporting `projectAgainstPersonalMinimums(minimums: PersonalMinimumsRow, observation: PersonalMinimumsObservation): ConformanceResult`. Pure function -- no DB, no fs, no node:* imports. Implements:
+- [x] Create `libs/bc/study/src/personal-minimums-lens.ts` exporting `projectAgainstPersonalMinimums(minimums: PersonalMinimumsRow, observation: PersonalMinimumsObservation): ConformanceResult`. Pure function -- no DB, no fs, no node:* imports. Implements:
   - Per-field comparison (ceiling, visibility, windTotal, crosswind) producing the `fields.*.{observed, floor, withinFloor}` triple.
   - Overall `pass`: `'within'` when every field is within floor; `'below'` when any field is below; `'unknown'` when `minimums` is null (the function signature says it isn't, but callers may pass null -- guard explicitly and document).
   - `notes[]` carries human-readable "ceiling 800 ft AGL below your 1500 ft floor at KMKL" strings.
   - Night-aware: when `observation.isNight === true`, the function reads the same numeric floors (v1 does not split day-vs-night floors per spec; see OUT-OF-SCOPE.md for the future day/night split).
-- [ ] Re-export from `libs/bc/study/src/index.ts` as a value re-export. Verify `check-browser-globals.ts` accepts it (the file must have zero node:* imports and zero `@ab/db/connection` reach).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal-minimums lens projection (browser-safe)`).
+- [x] Re-export from `libs/bc/study/src/index.ts` as a value re-export. Verify `check-browser-globals.ts` accepts it (the file must have zero node:* imports and zero `@ab/db/connection` reach).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(bc-study): personal-minimums lens projection (browser-safe)`).
 
 #### B.4 Phase B close
 
-- [ ] Add unit tests at `libs/bc/study/src/__tests__/personal-minimums.test.ts`:
+- [x] Add unit tests at `libs/bc/study/src/__tests__/personal-minimums.test.ts`:
   - `getActivePersonalMinimums` returns null when the user has no records.
   - `createPersonalMinimumsRevision` against a clean state returns a row with `is_active = true` + `effective_until = null`.
   - A second `createPersonalMinimumsRevision` for the same user flips the first row's `is_active = false` and stamps `effective_until` non-null, and the new row carries `is_active = true`.
   - `getPersonalMinimumsHistory` returns both rows ordered by `effective_from DESC`.
   - `deactivatePersonalMinimums` flips the active row without inserting; subsequent `getActivePersonalMinimums` returns null.
   - The partial unique index rejects two simultaneous `is_active = true` rows for the same user (insert directly, expect a unique-constraint failure).
-- [ ] Add unit tests at `libs/bc/study/src/__tests__/personal-minimums-lens.test.ts`:
+- [x] Add unit tests at `libs/bc/study/src/__tests__/personal-minimums-lens.test.ts`:
   - All-within observation produces `pass: 'within'`, every field's `withinFloor: true`.
   - Ceiling below floor produces `pass: 'below'`, `fields.ceiling.withinFloor: false`, `notes` contains the per-field message.
   - Crosswind below floor produces `pass: 'below'`.
   - The function is pure (call twice with the same inputs, deep-equal output).
-- [ ] Run `bun test libs/bc/study` -- all green. Run `bun run check` -- 0 errors.
-- [ ] Open PR `feat(personal-minimums): Phase B -- DB schema + BC API + lens projection`. Body summarizes the table shape + BC functions + lens contract.
+- [x] Run `bun test libs/bc/study` -- all green. Run `bun run check` -- 0 errors.
+- [x] Open PR `feat(personal-minimums): Phase B -- DB schema + BC API + lens projection`. Body summarizes the table shape + BC functions + lens contract.
 
 ### Phase C: editor surface
 

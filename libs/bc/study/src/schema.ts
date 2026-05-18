@@ -75,6 +75,8 @@ import {
 	NOTE_FOLLOW_UP_MAX_LENGTH,
 	NOTE_TAGS_MAX,
 	NOTE_TITLE_MAX_LENGTH,
+	PERSONAL_MINIMUMS_CONSTRAINTS,
+	PERSONAL_MINIMUMS_NOTES_MAX_LENGTH,
 	PHASE_OF_FLIGHT_VALUES,
 	PLAN_ITEM_HREF_MAX_LENGTH,
 	PLAN_ITEM_KIND_VALUES,
@@ -122,6 +124,7 @@ import {
 	index,
 	integer,
 	jsonb,
+	numeric,
 	pgSchema,
 	primaryKey,
 	real,
@@ -2997,3 +3000,130 @@ export const planItem = studySchema.table(
 
 export type PlanItemRow = typeof planItem.$inferSelect;
 export type NewPlanItemRow = typeof planItem.$inferInsert;
+
+/**
+ * Personal minimums -- a pilot's self-imposed go/no-go floors as a typed
+ * primitive (personal-minimums-as-typed-contract WP).
+ *
+ * Append-only revision log: every save inserts a new row, the prior row
+ * flips `is_active = false` and stamps `effective_until = now()`. The
+ * active record is the one row with `is_active = true` -- enforced at the
+ * storage layer by the partial unique index `personal_minimums_one_active
+ * _per_user_uidx`. The full history (every revision) backs the future
+ * decision-debrief replay + logbook-ingestion consumers.
+ *
+ * The pedagogy of *why* a pilot sets personal minimums lives in the
+ * `wx-personal-minimums` knowledge node (ADR 011 -- prose stays content);
+ * this table is the mechanism the learner records the numbers against.
+ * Shape mirrors the `study_plan` one-active-per-user discipline.
+ */
+export const personalMinimums = studySchema.table(
+	'personal_minimums',
+	{
+		id: text('id').primaryKey(),
+		userId: text('user_id')
+			.notNull()
+			.references(() => bauthUser.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+		/** Ceiling floor in feet AGL. */
+		ceilingFt: integer('ceiling_ft').notNull(),
+		/** Visibility floor in statute miles. `numeric(4,1)` -- one fractional digit. */
+		visibilitySm: numeric('visibility_sm', { precision: 4, scale: 1 }).notNull(),
+		/** Total wind floor in knots. */
+		windTotalKt: integer('wind_total_kt').notNull(),
+		/** Crosswind-component floor in knots. Always <= `wind_total_kt`. */
+		crosswindTotalKt: integer('crosswind_total_kt').notNull(),
+		/** Pilot's required night-currency landing count (legal floor is 3). */
+		nightRequiredRecencyLandings: integer('night_required_recency_landings').notNull().default(3),
+		/** Pilot's required IMC-currency approach count (legal floor is 6). */
+		imcRequiredRecencyApproaches: integer('imc_required_recency_approaches').notNull().default(6),
+		/** Maximum passengers the pilot will carry under these minimums. */
+		paxMax: integer('pax_max').notNull(),
+		/** Terrain-clearance buffer in feet AGL. */
+		terrainBufferAgl: integer('terrain_buffer_agl').notNull(),
+		/** Optional markdown rationale. Rendered server-side via the existing pipeline. */
+		notes: text('notes'),
+		/** True for the single active revision; false for every superseded one. */
+		isActive: boolean('is_active').notNull().default(true),
+		/** When this revision became active. */
+		effectiveFrom: timestamp('effective_from', { withTimezone: true }).notNull().defaultNow(),
+		/** When this revision was superseded; NULL while active. */
+		effectiveUntil: timestamp('effective_until', { withTimezone: true }),
+		/** Dev-seed marker. NULL on production rows. */
+		seedOrigin: text('seed_origin'),
+		...timestamps(),
+	},
+	(t) => ({
+		// The active read: "this user's current minimums."
+		userIdx: index('personal_minimums_user_idx').on(t.userId),
+		// The history read: every revision newest-first.
+		userEffectiveIdx: index('personal_minimums_user_effective_idx').on(t.userId, desc(t.effectiveFrom)),
+		// At most one active record per user -- storage-layer guarantee on top
+		// of the BC's transactional revision bump.
+		oneActivePerUser: uniqueIndex('personal_minimums_one_active_per_user_uidx')
+			.on(t.userId)
+			.where(sql`is_active = true`),
+		crosswindLeWindCheck: check(
+			'personal_minimums_crosswind_le_wind_check',
+			sql.raw(`"crosswind_total_kt" <= "wind_total_kt"`),
+		),
+		effectiveWindowCheck: check(
+			'personal_minimums_effective_window_check',
+			sql.raw(`"effective_until" IS NULL OR "effective_until" > "effective_from"`),
+		),
+		ceilingRangeCheck: check(
+			'personal_minimums_ceiling_range_check',
+			sql.raw(
+				`"ceiling_ft" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.CEILING_FT.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.CEILING_FT.max}`,
+			),
+		),
+		visibilityRangeCheck: check(
+			'personal_minimums_visibility_range_check',
+			sql.raw(
+				`"visibility_sm" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.VISIBILITY_SM.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.VISIBILITY_SM.max}`,
+			),
+		),
+		windRangeCheck: check(
+			'personal_minimums_wind_range_check',
+			sql.raw(
+				`"wind_total_kt" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.WIND_TOTAL_KT.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.WIND_TOTAL_KT.max}`,
+			),
+		),
+		crosswindRangeCheck: check(
+			'personal_minimums_crosswind_range_check',
+			sql.raw(
+				`"crosswind_total_kt" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.CROSSWIND_TOTAL_KT.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.CROSSWIND_TOTAL_KT.max}`,
+			),
+		),
+		nightRecencyRangeCheck: check(
+			'personal_minimums_night_recency_range_check',
+			sql.raw(
+				`"night_required_recency_landings" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.NIGHT_REQUIRED_RECENCY_LANDINGS.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.NIGHT_REQUIRED_RECENCY_LANDINGS.max}`,
+			),
+		),
+		imcRecencyRangeCheck: check(
+			'personal_minimums_imc_recency_range_check',
+			sql.raw(
+				`"imc_required_recency_approaches" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.IMC_REQUIRED_RECENCY_APPROACHES.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.IMC_REQUIRED_RECENCY_APPROACHES.max}`,
+			),
+		),
+		paxRangeCheck: check(
+			'personal_minimums_pax_range_check',
+			sql.raw(
+				`"pax_max" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.PAX_MAX.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.PAX_MAX.max}`,
+			),
+		),
+		terrainBufferRangeCheck: check(
+			'personal_minimums_terrain_buffer_range_check',
+			sql.raw(
+				`"terrain_buffer_agl" BETWEEN ${PERSONAL_MINIMUMS_CONSTRAINTS.TERRAIN_BUFFER_AGL.min} AND ${PERSONAL_MINIMUMS_CONSTRAINTS.TERRAIN_BUFFER_AGL.max}`,
+			),
+		),
+		notesLengthCheck: check(
+			'personal_minimums_notes_length_check',
+			sql.raw(`"notes" IS NULL OR char_length("notes") <= ${PERSONAL_MINIMUMS_NOTES_MAX_LENGTH}`),
+		),
+	}),
+);
+
+export type PersonalMinimumsRow = typeof personalMinimums.$inferSelect;
+export type NewPersonalMinimumsRow = typeof personalMinimums.$inferInsert;

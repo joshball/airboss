@@ -375,6 +375,16 @@ export {
 	updateNoteInputSchema,
 } from './notes';
 export { deriveNoteTitle, encodeNotesCursor } from './notes-display';
+// Personal-minimums BC -- a pilot's go/no-go floors as a typed primitive
+// (personal-minimums-as-typed-contract WP). DB-touching; server-only.
+export type { PersonalMinimums } from './personal-minimums';
+export {
+	createPersonalMinimumsRevision,
+	deactivatePersonalMinimums,
+	getActivePersonalMinimums,
+	getPersonalMinimumsHistory,
+	PersonalMinimumsConflictError,
+} from './personal-minimums';
 // Plan-items BC -- command-palette pin-to-today + /today queue (consumer
 // surface tracked as a follow-up).
 export type { PinPlanItemInput } from './plan-items';
