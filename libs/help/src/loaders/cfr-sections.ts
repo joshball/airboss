@@ -22,9 +22,9 @@ import {
 	LIBRARY_REGULATIONS_KINDS,
 	type LibraryRegulationsKind,
 	REFERENCE_KINDS,
-	ROUTES,
 } from '@ab/constants';
 import { db as defaultDb } from '@ab/db/connection';
+import { type SourceId, urlForReference } from '@ab/sources';
 import { and, eq, ilike, or, type SQL } from 'drizzle-orm';
 import type { ParsedQuery } from '../schema/help-registry';
 import type { PaletteHost, SearchResult } from '../schema/result-types';
@@ -53,6 +53,7 @@ export async function loadCfrSections(
 			code: referenceSection.code,
 			title: referenceSection.title,
 			contentMd: referenceSection.contentMd,
+			airbossRef: referenceSection.airbossRef,
 			documentSlug: reference.documentSlug,
 			referenceTitle: reference.title,
 		})
@@ -72,7 +73,10 @@ export async function loadCfrSections(
 			title: `${titlePrefix} §${r.code} - ${r.title}`,
 			subtitle: `${r.documentSlug.toUpperCase()} - ${r.referenceTitle}`,
 			snippet: bodySnippet(r.contentMd, needle),
-			href: ROUTES.LIBRARY_REGULATIONS_SECTION(cfrKind, r.documentSlug, r.code),
+			// Flightbag-direct reader URL from the section's canonical
+			// `airboss-ref:` URI. The consumer (palette / help drawer)
+			// prefixes the flightbag origin via `siblingOrigin` at render.
+			href: urlForReference(r.airbossRef as SourceId),
 			rankBucket: bucketByMatch(needle, r.code, r.title),
 			clusterKey: r.documentSlug,
 		};

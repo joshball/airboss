@@ -186,7 +186,11 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 0,
 			code: '12',
-			airbossRef: `airboss-ref:handbook/palette-phak/12`,
+			// Canonical `airboss-ref:` URI -- the help loader maps it to a
+			// flightbag reader URL via `urlForReference()`. The doc slug must
+			// be a registered handbook (`phak`); the loader builds the href
+			// from this URI, not from the row's suite-tokenised documentSlug.
+			airbossRef: `airboss-ref:handbooks/phak/8083-25C/12`,
 			title: `Chapter 12 ${NEEDLE} content`,
 			sourceLocator: 'Test Ch 12',
 			contentMd: `# 12 ${NEEDLE} discussion\n\nBody includes ${NEEDLE} prose.`,
@@ -205,7 +209,7 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 0,
 			code: '91.103',
-			airbossRef: `airboss-ref:cfr/14-91/91.103`,
+			airbossRef: `airboss-ref:regs/cfr-14/91/103`,
 			title: `Preflight action ${NEEDLE}`,
 			sourceLocator: '14 CFR §91.103',
 			contentMd: `Each pilot in command shall, before beginning a flight, become familiar with all available information concerning that flight. ${NEEDLE} mention.`,
@@ -224,7 +228,7 @@ beforeAll(async () => {
 			ordinal: 1,
 			depth: 0,
 			code: '175.10',
-			airbossRef: `airboss-ref:cfr/49-175/175.10`,
+			airbossRef: `airboss-ref:regs/cfr-49/175/10`,
 			title: `Hazmat exception ${NEEDLE}`,
 			sourceLocator: '49 CFR §175.10',
 			contentMd: `Operator-specific hazmat materials carriage rules. ${NEEDLE} mention.`,
@@ -492,6 +496,13 @@ describe('loadHandbookSections', () => {
 		expect(hit?.title).toContain('12');
 	});
 
+	it('emits a flightbag-direct handbook chapter URL (no /library/)', async () => {
+		const out = await loadHandbookSections(parseQuery(NEEDLE), HOST_AUTHED);
+		const hit = out.find((r) => r.id === SEC_HANDBOOK_ID);
+		expect(hit?.href).toBe('/handbook/phak/8083-25C/12');
+		expect(hit?.href.startsWith('/library/')).toBe(false);
+	});
+
 	it('returns empty when needle is blank', async () => {
 		const out = await loadHandbookSections(parseQuery(''), HOST_AUTHED);
 		expect(out).toEqual([]);
@@ -512,6 +523,15 @@ describe('loadCfrSections', () => {
 		expect(hit).toBeDefined();
 		expect(hit?.type).toBe('faa.cfr.sect');
 		expect(hit?.title).toContain('§');
+	});
+
+	it('emits a flightbag-direct CFR section URL (no /library/)', async () => {
+		const out = await loadCfrSections(parseQuery(NEEDLE), HOST_AUTHED);
+		const t14 = out.find((r) => r.id === SEC_CFR_ID);
+		const t49 = out.find((r) => r.id === SEC_CFR49_ID);
+		expect(t14?.href).toBe('/cfr/14/91/103');
+		expect(t49?.href).toBe('/cfr/49/175/10');
+		expect(t14?.href.startsWith('/library/')).toBe(false);
 	});
 
 	it('returns empty when needle is blank', async () => {
@@ -540,6 +560,14 @@ describe('loadAimSections', () => {
 		expect(hit).toBeDefined();
 		expect(hit?.type).toBe('faa.aim');
 		expect(hit?.title).toContain('5-2-1');
+	});
+
+	it('emits a flightbag-direct AIM URL (no /library/)', async () => {
+		const out = await loadAimSections(parseQuery(NEEDLE), HOST_AUTHED);
+		const hit = out.find((r) => r.id === SEC_AIM_ID);
+		// `airboss-ref:aim/5-2-1` -> AIM paragraph reader URL `/aim/5/2/1`.
+		expect(hit?.href).toBe('/aim/5/2/1');
+		expect(hit?.href.startsWith('/library/')).toBe(false);
 	});
 
 	it('returns empty when needle is blank', async () => {

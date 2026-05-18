@@ -6,12 +6,13 @@
  * sections) land in the airboss-content column under their own
  * discriminator -- separate from the AIM paragraph reader.
  *
- * Why this is its own loader, not part of `aim-sections.ts`: the AIM loader
- * routes through `LIBRARY_REGULATIONS_SECTION(...)`, which calls
- * `parseRegulationSection()` and 404s on the `glossary/<slug>` code shape.
- * Glossary entries need their own URL (in-app `/reference/glossary/<id>`),
- * a different result-type discriminator, and ideally a different column
- * (airboss-content vs faa-resources). Splitting the query gives all three.
+ * Why this is its own loader, not part of `aim-sections.ts`: glossary
+ * entries have no flightbag reader route -- the `glossary/<slug>` code shape
+ * is not a routable AIM locator. Glossary entries need their own URL (in-app
+ * `/reference/glossary/<id>`), a different result-type discriminator, and
+ * ideally a different column (airboss-content vs faa-resources). Splitting
+ * the query gives all three; the AIM loader excludes `level = 'glossary'`
+ * rows so they only surface here.
  *
  * The aviation registry already publishes hand-authored glossary refs
  * (`va-aircraft`, `adm-safety`, ...) via `aviation-refs.ts`. This loader

@@ -126,33 +126,32 @@ PR title: `feat(citation-urls): Phase C -- help loader citation URLs`.
 
 #### C.1 `cfr-sections.ts`
 
-- [ ] Import `urlForReference` from `@ab/sources`.
-- [ ] At line 75, replace `ROUTES.LIBRARY_REGULATIONS_SECTION(cfrKind, r.documentSlug, r.code)` with `urlForReference(r.airbossRef)`. Add the join to `referenceSection.airbossRef` in the query if not already present.
-- [ ] Verify the loader's return shape is unchanged (the `href` field still carries a string).
+- [x] Import `urlForReference` from `@ab/sources`. Added `referenceSection.airbossRef` to the select.
+- [x] Replaced `ROUTES.LIBRARY_REGULATIONS_SECTION(...)` with `urlForReference(r.airbossRef)`. `cfrTitleFromSlug` + `LIBRARY_REGULATIONS_KIND_LABELS` retained -- they still drive the display-title prefix.
+- [x] Loader return shape unchanged (`href` is still a string).
 
 #### C.2 `aim-sections.ts`
 
-- [ ] Same swap at line 64.
+- [x] Same swap; `AIM_KIND` constant + `LIBRARY_REGULATIONS_KINDS` import removed (only used for the old href).
 
 #### C.3 `handbook-sections.ts`
 
-- [ ] Same swap at lines 75-76 (both chapter and section paths collapse to `urlForReference(r.airbossRef)`).
+- [x] Same swap; the chapter/section `splitCode` helper + the `edition` select column removed -- `urlForReference()` derives depth from the URI.
 
 #### C.4 `fts-passages.ts`
 
-- [ ] `mapReferenceKind` (lines 240-279): the function returns a per-kind `href: (slug, code) => ...` closure. Replace the four closures with a single `href: (_slug, _code, airbossRef) => urlForReference(airbossRef)` shape. Pass the URI through the call-site at lines 249-250 (handbook) and 261/268/274 (CFR/AIM/AC).
-- [ ] Verify the `SearchResult.href` shape upstream still works.
+- [x] `mapReferenceKind` no longer carries an `href` closure -- it owns only `type` + display title. The SQL query selects `rs.airboss_ref`; the row mapping emits `href: urlForReference(r.airboss_ref)`. The `splitHandbookCode` helper removed.
 
 #### C.5 Tests
 
-- [ ] Add a focused test per loader: feed a known URI shape, assert the loader emits the expected flightbag URL. The existing loader tests already shape the join; this adds an `href` assertion.
+- [x] Added a flightbag-direct `href` assertion per loader in `db-loaders.test.ts` (CFR Title 14 + Title 49, AIM paragraph, handbook chapter) and `fts-passages.test.ts` (handbook + CFR). Each asserts the exact `/cfr|/aim|/handbook` path and that `href` does NOT start with `/library/`.
+- [x] Fixed stale test fixtures: the loader test seed rows carried non-canonical `airboss_ref` values (`airboss-ref:handbook/...`, `airboss-ref:cfr/14-91/...`) that predate the `airboss-ref:` grammar and would not route. Updated to the canonical form (`handbooks/`, `regs/cfr-14/`).
 
 #### C.6 Close Phase C
 
-- [ ] `bun run check` clean.
-- [ ] Manual smoke: open `/study/help/search?q=cessna`. Click a result. Network tab confirms flightbag-direct URL.
-- [ ] Commit (`feat(citation-urls): Phase C -- help loader citation URLs`).
-- [ ] Open + merge PR.
+- [x] `bun run check` clean.
+- [ ] Manual smoke: help-search result emits flightbag-direct URL (covered in the pre-merge browser walk).
+- [x] Commit (`feat(citation-urls): Phase C -- help loader citation URLs`).
 
 ### Phase D -- migrate the svelte components + tree builder + POH chrome closeout
 
