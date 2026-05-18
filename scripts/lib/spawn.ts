@@ -137,6 +137,46 @@ export async function runTee(
 	return code;
 }
 
+/**
+ * Run a subprocess fully silently, streaming stdout+stderr only into a log
+ * file. Nothing reaches the terminal -- the caller is expected to show its
+ * own one-line status (e.g. a spinner) while this runs and to surface the
+ * log path on failure. Returns the child's exit code.
+ *
+ * Use this for noisy build steps (`vite build` dumps a ~350-line asset
+ * table) whose output is archival, not something the operator reads live.
+ */
+export async function runToLogFile(
+	cmd: readonly string[],
+	logPath: string,
+	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},
+): Promise<number> {
+	const writer = Bun.file(logPath).writer();
+	writer.write(`> ${cmd.join(' ')}\n`);
+	const proc = Bun.spawn([...cmd], {
+		cwd: opts.cwd,
+		env: spawnEnv(opts.env),
+		stdio: ['inherit', 'pipe', 'pipe'],
+	});
+	const drain = async (stream: ReadableStream<Uint8Array> | null): Promise<void> => {
+		if (stream === null) return;
+		const reader = stream.getReader();
+		try {
+			while (true) {
+				const { value, done } = await reader.read();
+				if (done) break;
+				if (value && value.length > 0) writer.write(value);
+			}
+		} finally {
+			reader.releaseLock();
+		}
+	};
+	await Promise.all([drain(proc.stdout), drain(proc.stderr)]);
+	const code = await proc.exited;
+	await writer.end();
+	return code;
+}
+
 export async function runOrThrowPiped(
 	cmd: readonly string[],
 	opts: { readonly cwd?: string; readonly env?: Record<string, string | undefined> } = {},

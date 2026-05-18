@@ -100,14 +100,16 @@ async function readStoredHash(): Promise<string | null> {
  * - otherwise -> builds only when the input hash changed or the build
  *   entry point is missing.
  *
- * The `run` parameter is the subprocess runner injected by the caller
- * (`scripts/lib/spawn.ts` `run`) so this module stays free of a direct
- * `spawn` dependency and is trivially testable.
+ * The `runBuild` parameter is the subprocess runner injected by the caller
+ * so this module stays free of a direct `spawn` dependency and is trivially
+ * testable. It must run `bunx vite build` SILENTLY (vite dumps a ~350-line
+ * asset table that nobody reads live) and resolve to the exit code; the
+ * caller streams that output to a log file. A non-zero code throws.
  */
 export async function ensureFlightbagBuild(opts: {
 	readonly forceRebuild: boolean;
 	readonly skipBuild: boolean;
-	readonly run: (cmd: readonly string[], runOpts?: { readonly cwd?: string }) => Promise<void>;
+	readonly runBuild: (cmd: readonly string[], runOpts: { readonly cwd: string }) => Promise<number>;
 }): Promise<BuildResult> {
 	if (opts.skipBuild) {
 		console.log('build: skipped (SWEEP_SKIP_BUILD)');
@@ -119,20 +121,20 @@ export async function ensureFlightbagBuild(opts: {
 	if (!opts.forceRebuild) {
 		const stored = await readStoredHash();
 		if (stored !== null && stored === inputHash && existsSync(BUILD_ENTRY)) {
-			console.log('build: cached (hash match)');
+			console.log('build: flightbag up to date (cached)');
 			return { status: 'cached', seconds: 0 };
 		}
 	}
 
-	const reason = opts.forceRebuild ? 'forced' : 'inputs changed';
-	console.log(`build: rebuilding flightbag (${reason})...`);
 	const startedAt = Date.now();
-	await opts.run(['bunx', 'vite', 'build'], { cwd: FLIGHTBAG_DIR });
+	const code = await opts.runBuild(['bunx', 'vite', 'build'], { cwd: FLIGHTBAG_DIR });
+	if (code !== 0) {
+		throw new Error(`flightbag build failed (vite exited ${code})`);
+	}
 	const seconds = Math.round((Date.now() - startedAt) / 1000);
 
-	// Persist the hash only after a successful build (`run` exits the
-	// process on failure, so reaching here means vite succeeded).
+	// Persist the hash only after a successful build.
 	await Bun.write(HASH_FILE, `${inputHash}\n`);
-	console.log(`build: rebuilt flightbag (${seconds}s)`);
+	console.log(`build: flightbag rebuilt in ${seconds}s`);
 	return { status: 'rebuilt', seconds };
 }

@@ -11,7 +11,8 @@
 import { existsSync, mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { ensureFlightbagBuild } from './lib/flightbag-build';
-import { run, runTee } from './lib/spawn';
+import { run, runTee, runToLogFile } from './lib/spawn';
+import { startStatusLine } from './lib/status-line';
 
 // --- Integration sweep: env-var contract -------------------------------------
 //
@@ -282,12 +283,26 @@ async function runIntegration(input: readonly string[]): Promise<void> {
 	}
 
 	// Build-cache step. Skipped only when the environment carries
-	// SWEEP_SKIP_BUILD=1; `--rebuild` forces a fresh build.
+	// SWEEP_SKIP_BUILD=1; `--rebuild` forces a fresh build. `vite build`
+	// dumps a ~350-line asset table, so its output is streamed to a log
+	// file and the operator sees only a one-line spinner while it runs.
 	const skipBuild = process.env[SWEEP_ENV.SKIP_BUILD] === '1';
 	await ensureFlightbagBuild({
 		forceRebuild: parsed.rebuild,
 		skipBuild,
-		run,
+		runBuild: async (cmd, runOpts) => {
+			const buildLog = newLogPath('flightbag-build');
+			const status = startStatusLine('build: rebuilding flightbag');
+			try {
+				const code = await runToLogFile(cmd, buildLog, runOpts);
+				if (code !== 0) {
+					status.finish(`build: FAILED -- see ${buildLog}`);
+				}
+				return code;
+			} finally {
+				status.stop();
+			}
+		},
 	});
 
 	// Translate flags into the SWEEP_* env-var contract. Start from the
@@ -318,9 +333,16 @@ async function runIntegration(input: readonly string[]): Promise<void> {
 
 	cmd.push(...parsed.passthrough);
 
-	const logPath = newLogPath('integration');
-	const code = await runTee(cmd, logPath, { env });
-	console.log(`\nlog: ${logPath}`);
+	// Run Playwright with INHERITED stdio so the integration reporter sees a
+	// real TTY: its live progress dashboard (per-book bars, colour, in-place
+	// repaint) is gated on `process.stdout.isTTY`. Teeing through a pipe (the
+	// old `runTee` path) made `isTTY` false and silently degraded the sweep
+	// to plain non-TTY lines -- no bars, no colour. The reporter writes its
+	// own durable artefacts under `tests/integration/.out/`, so dropping the
+	// per-run `.cache/test` tee loses nothing.
+	console.log(`> ${cmd.join(' ')}`);
+	const proc = Bun.spawn([...cmd], { env, stdio: ['inherit', 'inherit', 'inherit'] });
+	const code = await proc.exited;
 	printIntegrationArtefacts();
 	if (code !== 0) process.exit(code);
 }
