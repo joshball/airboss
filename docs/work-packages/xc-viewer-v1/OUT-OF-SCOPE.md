@@ -4,7 +4,7 @@ title: 'Out of Scope: XC Viewer v1 -- Universal Pre-Flight Stage (First Slice)'
 product: sim
 category: feature
 status: draft
-agent_review_status: pending
+agent_review_status: done
 human_review_status: pending
 created: 2026-05-11
 owner: agent
