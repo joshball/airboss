@@ -1078,6 +1078,9 @@ export const NAV_LABELS = {
 	/** wp-notes-primitive top-nav entry. */
 	NOTES: 'Notes',
 	NOTES_NEW: 'New note',
+	/** personal-minimums-as-typed-contract WP -- editor + history surface. */
+	PERSONAL_MINIMUMS: 'Personal minimums',
+	PERSONAL_MINIMUMS_HISTORY: 'Minimums history',
 	REPS: 'Reps',
 	KNOWLEDGE: 'Knowledge',
 	GLOSSARY: 'Glossary',

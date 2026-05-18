@@ -100,9 +100,31 @@ function pct(num: number, den: number): number {
 			{/each}
 		</ul>
 	{/if}
+
+	<aside class="related" aria-label="Related">
+		<p>
+			Currency and weather floors are personal, not just regulatory.
+			<a href={ROUTES.STUDY_PERSONAL_MINIMUMS}>Record your personal minimums</a>
+			-- the go / no-go numbers you commit to before you're under pressure.
+		</p>
+	</aside>
 </section>
 
 <style>
+	.related {
+		padding: var(--space-md) var(--space-lg);
+		background: var(--surface-raised);
+		border: 1px solid var(--edge-default);
+		border-radius: var(--radius-md);
+		color: var(--ink-muted);
+		font-size: var(--font-size-body);
+	}
+
+	.related a {
+		color: var(--action-link);
+		font-weight: var(--font-weight-semibold);
+	}
+
 	.page {
 		display: flex;
 		flex-direction: column;

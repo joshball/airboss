@@ -26,7 +26,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postgres from 'postgres';
-import { seedCourses } from '../../libs/bc/study/src/seed-courses';
+import { seedCourses } from '../../libs/bc/study/src/seed-courses.server';
 import { course, goal, goalCourse } from '../../libs/bc/study/src/schema';
 import { DEV_DB_URL_E2E } from '../../libs/constants/src';
 
