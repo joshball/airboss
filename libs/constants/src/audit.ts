@@ -212,6 +212,12 @@ export const AUDIT_WINDOW_LABELS: Record<AuditWindow, string> = {
  */
 export const AUDIT_LIST_DEFAULT_LIMIT = 50;
 
+/**
+ * ID prefix for audit-log rows (`aud_<ulid>`, composed via `@ab/utils createId`).
+ * Persisted prefix -- the literal value must never change.
+ */
+export const AUDIT_LOG_ID_PREFIX = 'aud';
+
 /** Hard cap on `listAuditEntries` page size. Spec section "In Scope" #6. */
 export const AUDIT_LIST_HARD_CAP = 200;
 

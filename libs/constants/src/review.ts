@@ -41,6 +41,19 @@ export const REVIEW_KINDS = {
 } as const satisfies Record<string, ReviewKind>;
 
 /**
+ * ID prefixes for the hangar review-queue tables (composed via `@ab/utils createId`).
+ * Persisted prefixes -- the literal values must never change.
+ */
+export const HANGAR_BOARD_ID_PREFIX = 'brd';
+export const HANGAR_BOARD_COLUMN_ID_PREFIX = 'bcol';
+export const HANGAR_REVIEW_KIND_ID_PREFIX = 'rkind';
+export const HANGAR_REVIEW_BUCKET_ID_PREFIX = 'rbkt';
+export const HANGAR_REVIEW_ITEM_ID_PREFIX = 'ritem';
+export const HANGAR_REVIEW_SESSION_ID_PREFIX = 'rses';
+export const HANGAR_REVIEW_STEP_ID_PREFIX = 'rstp';
+export const HANGAR_BOARD_TASK_ID_PREFIX = 'task';
+
+/**
  * Per-step review outcome (test-plan walker, TOC spot-check). One per
  * `review_step` row.
  */

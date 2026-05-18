@@ -7,6 +7,12 @@
  * from BC code, the worker, or the UI lives here.
  */
 
+/**
+ * ID prefix for sim-attempt rows (`sat_<ulid>`, composed via `@ab/utils createId`).
+ * Persisted prefix -- the literal value must never change.
+ */
+export const SIM_ATTEMPT_ID_PREFIX = 'sat';
+
 /** Identifiers for sim scenarios. Extend as scenarios are added. */
 export const SIM_SCENARIO_IDS = {
 	PLAYGROUND: 'playground',

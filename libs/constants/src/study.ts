@@ -38,7 +38,7 @@ export const DOMAINS = {
 
 export type Domain = (typeof DOMAINS)[keyof typeof DOMAINS];
 
-export const DOMAIN_VALUES = Object.values(DOMAINS);
+export const DOMAIN_VALUES = Object.values(DOMAINS) as [Domain, ...Domain[]];
 
 /**
  * Human-readable labels for domains. Preferred over auto-humanized slug
@@ -107,7 +107,7 @@ export const DIFFICULTIES = {
 
 export type Difficulty = (typeof DIFFICULTIES)[keyof typeof DIFFICULTIES];
 
-export const DIFFICULTY_VALUES = Object.values(DIFFICULTIES);
+export const DIFFICULTY_VALUES = Object.values(DIFFICULTIES) as [Difficulty, ...Difficulty[]];
 
 export const DIFFICULTY_LABELS: Record<Difficulty, string> = {
 	[DIFFICULTIES.BEGINNER]: 'Beginner',
@@ -132,7 +132,7 @@ export const PHASES_OF_FLIGHT = {
 
 export type PhaseOfFlight = (typeof PHASES_OF_FLIGHT)[keyof typeof PHASES_OF_FLIGHT];
 
-export const PHASE_OF_FLIGHT_VALUES = Object.values(PHASES_OF_FLIGHT);
+export const PHASE_OF_FLIGHT_VALUES = Object.values(PHASES_OF_FLIGHT) as [PhaseOfFlight, ...PhaseOfFlight[]];
 
 export const PHASE_OF_FLIGHT_LABELS: Record<PhaseOfFlight, string> = {
 	[PHASES_OF_FLIGHT.PREFLIGHT]: 'Preflight',
@@ -219,7 +219,7 @@ export const CARD_TYPES = {
 
 export type CardType = (typeof CARD_TYPES)[keyof typeof CARD_TYPES];
 
-export const CARD_TYPE_VALUES = Object.values(CARD_TYPES);
+export const CARD_TYPE_VALUES = Object.values(CARD_TYPES) as [CardType, ...CardType[]];
 
 export const CARD_TYPE_LABELS: Record<CardType, string> = {
 	[CARD_TYPES.BASIC]: 'Basic',
@@ -247,7 +247,7 @@ export const CARD_KINDS = {
 
 export type CardKind = (typeof CARD_KINDS)[keyof typeof CARD_KINDS];
 
-export const CARD_KIND_VALUES = Object.values(CARD_KINDS);
+export const CARD_KIND_VALUES = Object.values(CARD_KINDS) as [CardKind, ...CardKind[]];
 
 export const CARD_KIND_LABELS: Record<CardKind, string> = {
 	[CARD_KINDS.RECALL]: 'Recall',
@@ -279,7 +279,7 @@ export const QUESTION_TIERS = {
 
 export type QuestionTier = (typeof QUESTION_TIERS)[keyof typeof QUESTION_TIERS];
 
-export const QUESTION_TIER_VALUES = Object.values(QUESTION_TIERS);
+export const QUESTION_TIER_VALUES = Object.values(QUESTION_TIERS) as [QuestionTier, ...QuestionTier[]];
 
 /**
  * Human-readable labels for question tiers. Used by future filter chips
@@ -320,7 +320,10 @@ export const SOURCE_AUTHORITY_KINDS = {
 
 export type SourceAuthorityKind = (typeof SOURCE_AUTHORITY_KINDS)[keyof typeof SOURCE_AUTHORITY_KINDS];
 
-export const SOURCE_AUTHORITY_KIND_VALUES = Object.values(SOURCE_AUTHORITY_KINDS);
+export const SOURCE_AUTHORITY_KIND_VALUES = Object.values(SOURCE_AUTHORITY_KINDS) as [
+	SourceAuthorityKind,
+	...SourceAuthorityKind[],
+];
 
 /**
  * Human-readable labels for source-authority kinds. Used by future
@@ -396,7 +399,7 @@ export const CONTENT_SOURCES = {
 
 export type ContentSource = (typeof CONTENT_SOURCES)[keyof typeof CONTENT_SOURCES];
 
-export const CONTENT_SOURCE_VALUES = Object.values(CONTENT_SOURCES);
+export const CONTENT_SOURCE_VALUES = Object.values(CONTENT_SOURCES) as [ContentSource, ...ContentSource[]];
 
 /**
  * Human-readable labels for content sources. Lets the card detail + browse
@@ -837,7 +840,7 @@ export const ASSESSMENT_METHODS = {
 
 export type AssessmentMethod = (typeof ASSESSMENT_METHODS)[keyof typeof ASSESSMENT_METHODS];
 
-export const ASSESSMENT_METHOD_VALUES = Object.values(ASSESSMENT_METHODS);
+export const ASSESSMENT_METHOD_VALUES = Object.values(ASSESSMENT_METHODS) as [AssessmentMethod, ...AssessmentMethod[]];
 
 /**
  * Default `scenario.assessment_methods` array applied when authoring tools
@@ -2269,6 +2272,24 @@ export const REFERENCE_ID_PREFIX = 'ref';
 export const REFERENCE_SECTION_ID_PREFIX = 'refsec';
 export const REFERENCE_FIGURE_ID_PREFIX = 'reffig';
 export const REFERENCE_SECTION_ERRATA_ID_PREFIX = 'refera';
+
+/**
+ * ID prefixes for the core study-BC tables (composed via `@ab/utils createId`).
+ * These are persisted ID prefixes -- the literal values must never change.
+ */
+export const CARD_ID_PREFIX = 'crd';
+export const REVIEW_ID_PREFIX = 'rev';
+export const CARD_SNOOZE_ID_PREFIX = 'csnz';
+export const CARD_FEEDBACK_ID_PREFIX = 'cfbk';
+export const SCENARIO_ID_PREFIX = 'rep';
+export const TEACHING_EXERCISE_ID_PREFIX = 'texr';
+export const STUDY_PLAN_ID_PREFIX = 'plan';
+export const SESSION_ID_PREFIX = 'ses';
+export const SESSION_ITEM_RESULT_ID_PREFIX = 'sir';
+export const REVIEW_SESSION_ID_PREFIX = 'mrs';
+export const SAVED_DECK_ID_PREFIX = 'sdck';
+export const KNOWLEDGE_NODE_PROGRESS_ID_PREFIX = 'knp';
+export const CONTENT_CITATION_ID_PREFIX = 'ccit';
 
 /**
  * Heartbeat + suggestion-prompt thresholds (spec Open Question 5).
