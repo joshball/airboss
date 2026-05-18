@@ -79,7 +79,8 @@ build its real gap view + next-list. Order by value:
 
 - [~] Knowledge nodes -- gap view + next-list shipped (`full` mode); Layer-2
       intent frontmatter blocked on ADR 028 approval
-- [ ] Cards -- intent + gap + next
+- [~] Cards -- gap view + next-list shipped (`full` mode); Layer-2 intent
+      frontmatter blocked on ADR 028 approval
 - [ ] Encoded-text catalog -- close the catalog's own intent (already has the richest gap view from Phase 1)
 - [ ] wx scenarios -- intent + the AIRMET-emitter + temporal-scenario gaps as real next-items
 - [ ] Handbooks -- ingestion-completeness intent
@@ -96,6 +97,15 @@ has no ADR-028 dependency. Layer-2 content-intent frontmatter on node files is
 deferred until ADR 028 moves from `proposed` to `accepted`; the next-list
 ranking proxies value from the `study_priority` frontmatter already on each
 node until then.
+
+The cards gap view + next-list (Layer-1 analysis) follows the same pattern:
+the gap view derives entirely from node content on disk (cardless-authored /
+thin-deck / deck-on-skeleton analysis), so it has no ADR-028 dependency. The
+adapter graduates from `census` mode to `full` mode. Layer-2 content-intent
+frontmatter is deferred until ADR 028 is accepted; the next-list ranking
+proxies value from `study_priority` until then. The cards corpus reports the
+node graph from the deck's point of view -- where knowledge-nodes flags a
+node skeleton, cards flags its deck as the readable-but-undrillable gap.
 
 ## Known follow-ups surfaced by this WP (tracked, not lost)
 
