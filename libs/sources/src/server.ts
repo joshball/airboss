@@ -47,20 +47,6 @@ import { __setResolveStub as _setResolveStub } from './render/tokens.ts';
 
 _setResolveStub(_resolveIdentifier);
 
-// Re-export server-only registry entry points so callers can hit one barrel.
-export { initRegistry } from './registry/init.ts';
-export { getCorpusResolver } from './registry/corpus-resolver.ts';
-export { productionRegistry } from './registry/index.ts';
-export { writeCfrNavTree } from './regs/nav-tree.ts';
-
-// `batchResolve` walks the production registry via `registry/query.ts`, which
-// static-imports `node:fs`. Server-side render-loader entry point lives here
-// so the runtime barrel (`@ab/sources`) stays browser-safe. The other render
-// helpers (`extractIdentifiers`, `substituteTokens`, `toSerializable`,
-// `fromSerializable`, token registry) stay on the runtime barrel -- they're
-// pure and used by `.svelte` components directly.
-export { __batch_internal__, batchResolve } from './render/batch-resolve.ts';
-
 // Phase 9 runtime registry hydration. `bootstrap.ts` statically imports
 // `node:fs` and synthesizes `SourceEntry` + `Edition` rows from on-disk
 // derivative manifests, so it cannot evaluate in a browser bundle. Callers
@@ -72,6 +58,7 @@ export { hydrateRegsFromDerivatives, PHASE_9_BOOTSTRAP_REVIEWER_ID } from './boo
 // against `study.reference`). Surfaced from the server barrel because their
 // only legitimate consumers are query authors -- not types.
 export { type EditionRow, editions, type NewEditionRow } from './db/schema.ts';
+export { getCorpusResolver } from './registry/corpus-resolver.ts';
 // ADR 026 §6 resolver API.
 export {
 	getCurrentEdition,
@@ -82,14 +69,25 @@ export {
 // ADR 026 §3 seed-time writer (the seed is the only caller; the
 // `edition-cache-write-guard` lint blocks non-seed call sites).
 export { markPriorEditionsRetired, type UpsertEditionInput, upsertEdition } from './registry/edition-writer.ts';
-// Existing server-only helpers callers reach via deep file import today.
-// Surface them here so future callers don't reach into `registry/editions.ts`
-// directly. `getEditionsMap` (the sync, in-memory variant called from
-// per-corpus resolvers that ship in the browser barrel) is intentionally
-// omitted -- it's pure-read and stays callable from the runtime barrel.
+// Edition-history DB reads. They reach `@ab/db/connection`, so they live in
+// the server-only `registry/editions-db.ts` and are surfaced here. The sync,
+// in-memory `getEditionsMap` (called from per-corpus resolvers that ship in
+// the browser barrel) is intentionally omitted -- it's pure-read and stays
+// callable from the runtime barrel via `registry/editions.ts`.
 export {
 	getCurrentEditionForSource,
 	getEditionsMapAsync,
 	loadEditionsFromDb,
 	warmEditionsCache,
-} from './registry/editions.ts';
+} from './registry/editions-db.ts';
+export { productionRegistry } from './registry/index.ts';
+// Re-export server-only registry entry points so callers can hit one barrel.
+export { initRegistry } from './registry/init.ts';
+export { writeCfrNavTree } from './regs/nav-tree-writer.ts';
+// `batchResolve` walks the production registry via `registry/query.ts`, which
+// static-imports `node:fs`. Server-side render-loader entry point lives here
+// so the runtime barrel (`@ab/sources`) stays browser-safe. The other render
+// helpers (`extractIdentifiers`, `substituteTokens`, `toSerializable`,
+// `fromSerializable`, token registry) stay on the runtime barrel -- they're
+// pure and used by `.svelte` components directly.
+export { __batch_internal__, batchResolve } from './render/batch-resolve.ts';

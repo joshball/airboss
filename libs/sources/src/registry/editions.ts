@@ -1,5 +1,5 @@
 /**
- * Per-entry edition history.
+ * Per-entry edition history -- the browser-safe in-memory cache.
  *
  * Source of truth: ADR 019 §6.1 (`Edition` + `AliasEntry`) + §1.3 (edition
  * pinning). Editions live in the indexed tier per ADR 019 §2.1's removal
@@ -8,12 +8,26 @@
  * gated by a generation counter so existing sync callers (resolvers,
  * snapshot writers, the renderer) stay sync.
  *
+ * # Browser safety
+ *
+ * This module is reached from the `@ab/sources` runtime barrel (every
+ * per-corpus resolver imports `getEditionsMap` here, and `corpus-resolver.ts`
+ * re-exports `ENUMERATED_CORPORA` off the barrel). It MUST stay browser-safe:
+ * no static OR dynamic edge to `@ab/db/connection`. The DB-reading functions
+ * (`loadEditionsFromDb`, `warmEditionsCache`, `getEditionsMapAsync`,
+ * `getCurrentEditionForSource`) live in the server-only `editions-db.ts`,
+ * which calls back into this module's `__editions_internal__.commitDbLoad`
+ * to populate the cache. A `vite build` follows dynamic imports too, so a
+ * deferred `await import('@ab/db/connection')` here would still ship the
+ * `postgres` driver into the client bundle and crash the build.
+ *
  * Cache contract:
  *
  *   - `_activeEditions` is the in-memory `Map<SourceId, readonly Edition[]>`
  *     consumed by every sync caller. It is populated either by
- *     `warmEditionsCache()` at bootstrap (Postgres -> map) or by ingestion
- *     pipelines via `__editions_internal__.setActiveTable` (in-memory only).
+ *     `warmEditionsCache()` at bootstrap (Postgres -> map via `editions-db.ts`)
+ *     or by ingestion pipelines via `__editions_internal__.setActiveTable`
+ *     (in-memory only).
  *   - `_loaded` distinguishes "no row in DB for this id" (entry absent) from
  *     "cache has not been warmed yet" (cache cold).
  *   - `_editionsGeneration` is monotonic; bumped on every cache mutation
@@ -26,31 +40,8 @@
  * the persistence design.
  */
 
-import { and, eq, isNull } from 'drizzle-orm';
-import { type EditionAliasEntry, type EditionRow, editions as editionsTable } from '../db/schema.ts';
+import type { EditionAliasEntry, EditionRow } from '../db/schema.ts';
 import type { Edition, SourceId } from '../types.ts';
-
-/**
- * Lazy `db` accessor. Statically importing `db` from `'../db/client.ts'` pulls
- * `@ab/db/connection` into the runtime barrel, which Vite then bundles into
- * every browser page that imports `@ab/sources` (e.g. via the palette's
- * `urlForReference`). `@ab/db/connection` calls `postgres(...)` at top-level
- * and the `postgres` package references `Buffer` at module top-level, which
- * crashes hydration in the browser with `ReferenceError: Buffer is not
- * defined`. Deferring the import to the first DB call keeps `@ab/sources`
- * browser-safe -- the resolvers' sync `getEditionsMap()` path never reaches
- * `@ab/db/connection`, and the async DB-reading paths only run server-side
- * (bootstrap warm, ingest writes, edition resolver), where the dynamic
- * import works as a regular module load.
- */
-let _db: typeof import('@ab/db/connection').db | null = null;
-async function getDb(): Promise<typeof import('@ab/db/connection').db> {
-	if (_db === null) {
-		const mod = await import('@ab/db/connection');
-		_db = mod.db;
-	}
-	return _db;
-}
 
 /**
  * The edition map. Keys are the canonical `airboss-ref:` URI string with
@@ -67,7 +58,10 @@ let _loaded = false;
 let _cachedGeneration = -1;
 
 /**
- * Test-only mutation surface. Production code MUST NOT call this.
+ * Mutation surface. Test-only EXCEPT for `commitDbLoad` / `needsDbReload` /
+ * `getActiveTable`, which the server-only `editions-db.ts` uses to populate
+ * the cache from Postgres. Production application code MUST NOT call the
+ * `setActiveTable` / reset members directly.
  *
  * Bumps the editions generation counter on every swap so any cached index
  * (`registry/index-cache.ts`) sees an invalidation signal on the next read.
@@ -83,6 +77,26 @@ export const __editions_internal__ = {
 		_cachedGeneration = _editionsGeneration;
 		_loaded = true;
 		return prev;
+	},
+	/**
+	 * Server-only: commit a freshly-loaded edition map from Postgres. Called
+	 * by `editions-db.ts`'s `loadEditionsFromDb`. Mirrors `setActiveTable`
+	 * (swap + generation bump + mark loaded) but is named for the DB-load
+	 * path so the call site reads as production code rather than test wiring.
+	 */
+	commitDbLoad(next: Map<SourceId, readonly Edition[]>): void {
+		_activeEditions = next;
+		_editionsGeneration += 1;
+		_cachedGeneration = _editionsGeneration;
+		_loaded = true;
+	},
+	/**
+	 * Server-only: true when the cache has never been warmed, or when the
+	 * write path bumped the generation since the last DB load. Drives the
+	 * read-through in `editions-db.ts`'s `getEditionsMapAsync`.
+	 */
+	needsDbReload(): boolean {
+		return !_loaded || _cachedGeneration !== _editionsGeneration;
 	},
 	/**
 	 * Monotonic generation counter. Bumped on every `setActiveTable` call.
@@ -118,7 +132,7 @@ export const __editions_internal__ = {
 /**
  * Read the currently-active edition map. Sync surface preserved for the ~25
  * resolver call sites. Callers that need the latest persisted state must
- * call `warmEditionsCache()` (or `loadEditionsFromDb()`) before reading.
+ * call `warmEditionsCache()` (from `editions-db.ts`) before reading.
  *
  * Phase 2 contract: production code calls `warmEditionsCache()` once at
  * bootstrap from `apps/{app}/src/hooks.server.ts` via `initRegistry()`;
@@ -130,88 +144,15 @@ export function getEditionsMap(): Map<SourceId, readonly Edition[]> {
 	return _activeEditions;
 }
 
-/**
- * Async read-through: returns the edition map after ensuring the cache is
- * warm and current. The first call hits the DB; subsequent calls within the
- * same generation return the cached map. Generation bumps from the write
- * path force a re-query on the next call.
- */
-export async function getEditionsMapAsync(): Promise<Map<SourceId, readonly Edition[]>> {
-	if (!_loaded || _cachedGeneration !== _editionsGeneration) {
-		await loadEditionsFromDb();
-	}
-	return _activeEditions;
-}
-
-/**
- * Read the row with the highest `published_at` and `retired_at IS NULL` for
- * `sourceId`. Returns null when the entry has no current edition.
- *
- * Tiebreak: when two editions share the same `published_at`, the row with
- * the lex-greater `id` wins. Edition ids are `edition_<ULID>` and ULIDs are
- * monotonic so the lex-max is the most recently inserted row, which is the
- * deterministic choice operators expect.
- *
- * No per-call cache yet (per design.md "defer until measured"). The W5
- * generation-counter cache in `index-cache.ts` already memoizes the
- * lex-max edition slug per corpus, which covers the renderer hot path.
- */
-export async function getCurrentEditionForSource(sourceId: SourceId): Promise<Edition | null> {
-	const db = await getDb();
-	const rows = await db
-		.select()
-		.from(editionsTable)
-		.where(and(eq(editionsTable.sourceId, sourceId), isNull(editionsTable.retiredAt)));
-	if (rows.length === 0) return null;
-	let winner = rows[0];
-	if (winner === undefined) return null;
-	for (let i = 1; i < rows.length; i += 1) {
-		const row = rows[i];
-		if (row === undefined) continue;
-		if (compareForCurrent(row, winner) > 0) winner = row;
-	}
-	return rowToEdition(winner);
-}
-
-/**
- * Replace the in-memory edition map with the rows currently in
- * `sources_registry.editions`. Bumps generation so derived caches rebuild.
- * Idempotent on no-op DB content.
- */
-export async function loadEditionsFromDb(): Promise<void> {
-	const db = await getDb();
-	const rows = await db.select().from(editionsTable);
-	const next = new Map<SourceId, Edition[]>();
-	for (const row of rows) {
-		const id = row.sourceId as SourceId;
-		const list = next.get(id) ?? [];
-		list.push(rowToEdition(row));
-		next.set(id, list);
-	}
-	for (const [id, list] of next) {
-		list.sort(comparePublishedAtAscending);
-		next.set(id, list);
-	}
-	_activeEditions = next as Map<SourceId, readonly Edition[]>;
-	_editionsGeneration += 1;
-	_cachedGeneration = _editionsGeneration;
-	_loaded = true;
-}
-
-/**
- * Bootstrap-time helper: hydrate the in-memory editions map from Postgres.
- * Distinct from `loadEditionsFromDb()` only by intent (run once on startup
- * vs. re-query on cache miss); both go through the same read path.
- */
-export async function warmEditionsCache(): Promise<void> {
-	await loadEditionsFromDb();
-}
-
 // ---------------------------------------------------------------------------
-// Helpers
+// Row -> domain helpers (pure -- shared with the server-only `editions-db.ts`)
 // ---------------------------------------------------------------------------
 
-function rowToEdition(row: EditionRow): Edition {
+/**
+ * Convert a persisted `editions` row into the in-memory `Edition` shape.
+ * Pure (no I/O); shared by `editions-db.ts`'s DB-read path.
+ */
+export function rowToEdition(row: EditionRow): Edition {
 	const aliases = row.metadata?.aliases;
 	if (aliases !== undefined && aliases.length > 0) {
 		return {
@@ -239,25 +180,4 @@ function toAliasEntry(raw: EditionAliasEntry): {
 		to,
 		kind: raw.kind,
 	};
-}
-
-function comparePublishedAtAscending(a: Edition, b: Edition): number {
-	const aMs = a.published_date.getTime();
-	const bMs = b.published_date.getTime();
-	if (aMs !== bMs) return aMs - bMs;
-	return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-}
-
-/**
- * Comparator for the `getCurrentEditionForSource` tiebreak. Returns positive when
- * `a` should beat `b`. Higher `published_at` wins; on tie, lex-greater `id`
- * wins. Null `published_at` loses to any non-null timestamp; if both are
- * null the lex-greater id wins.
- */
-function compareForCurrent(a: EditionRow, b: EditionRow): number {
-	const aMs = a.publishedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
-	const bMs = b.publishedAt?.getTime() ?? Number.NEGATIVE_INFINITY;
-	if (aMs !== bMs) return aMs - bMs;
-	if (a.id === b.id) return 0;
-	return a.id < b.id ? -1 : 1;
 }

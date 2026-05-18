@@ -22,8 +22,8 @@ import {
 	findChapterForPart,
 	getCfrNavTree,
 	logUnmappedParts,
-	writeCfrNavTree,
 } from './nav-tree';
+import { toYamlShape, writeCfrNavTree } from './nav-tree-writer';
 import { walkRegsXml } from './xml-walker';
 
 // ---------------------------------------------------------------------------
@@ -214,7 +214,7 @@ describe('walker -> writer -> loader round-trip', () => {
 
 describe('YAML shape', () => {
 	it('toYamlShape uses kebab-case keys', () => {
-		const shape = __nav_tree_internal__.toYamlShape(
+		const shape = toYamlShape(
 			{
 				title: '14',
 				titleName: 'Aeronautics and Space',

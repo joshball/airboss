@@ -1,13 +1,18 @@
 /**
- * `bun run sources register cfr` -- thin delegator to `@ab/sources/regs`.
+ * `bun run sources register cfr` -- thin delegator to the CFR ingest CLI.
  *
  * The per-corpus runner lives in `libs/sources/src/regs/ingest.ts` and owns
  * arg parsing, validation, network fetch, and derivative emission. This
  * module exists so the dispatcher can route by corpus name without importing
  * the per-corpus surface directly.
+ *
+ * Imports the CLI from the deep `@ab/sources/regs/ingest` path rather than
+ * the `@ab/sources/regs` corpus barrel: the barrel is the resolver-
+ * registration entry point loaded by every server, and `ingest.ts` reaches
+ * `fast-xml-parser` -- which has no business in an app server bundle.
  */
 
-import { runIngestCli } from '@ab/sources/regs';
+import { runIngestCli } from '@ab/sources/regs/ingest';
 
 export const HELP = `bun run sources register cfr [--title=14|49] [--edition=<YYYY-MM-DD>] [--fixture=<path>] [--out=<path>]
 

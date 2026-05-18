@@ -154,13 +154,13 @@ export {
 	makeDefaultResolver,
 	registerCorpusResolver,
 } from './corpus-resolver.ts';
+export { EDITIONS } from './editions.ts';
 export {
-	EDITIONS,
 	getCurrentEditionForSource,
 	getEditionsMapAsync,
 	loadEditionsFromDb,
 	warmEditionsCache,
-} from './editions.ts';
+} from './editions-db.ts';
 export { initRegistry } from './init.ts';
 export {
 	commitIngestBatch,
