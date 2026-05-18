@@ -156,37 +156,37 @@ PR title: `feat(personal-minimums): Phase C -- editor surface (study app)`.
 
 #### C.1 Reader / editor page
 
-- [ ] Create `apps/study/src/routes/(app)/personal-minimums/+page.server.ts`:
+- [x] Create `apps/study/src/routes/(app)/personal-minimums/+page.server.ts`:
   - `load`: read the active record via `getActivePersonalMinimums(locals.user.id)` and the latest 5 history rows via `getPersonalMinimumsHistory(locals.user.id)`.
   - `actions.save`: validate FormData via `personalMinimumsInputSchema.safeParse`; on failure return `fail(400, { errors })`; on success call `createPersonalMinimumsRevision(locals.user.id, input)`; redirect back to the page.
   - `actions.deactivate`: call `deactivatePersonalMinimums(locals.user.id)`; redirect.
-- [ ] Create `apps/study/src/routes/(app)/personal-minimums/+page.svelte`:
+- [x] Create `apps/study/src/routes/(app)/personal-minimums/+page.svelte`:
   - Renders the active record (or the empty-state form pre-seeded with `PERSONAL_MINIMUMS_DEFAULTS`).
   - "Edit" toggle opens the form inline; per-field controls are `<input type="number">` with min/max attributes mirroring `PERSONAL_MINIMUMS_CONSTRAINTS`.
   - Form submission uses SvelteKit's `enhance` to keep the active record visible while saving.
   - On save: shows a toast / banner ("saved at HH:MM; effective immediately") and re-renders the new active record in read mode.
   - Uses existing UI primitives from `@ab/ui` for inputs, buttons, and the banner.
-- [ ] Add an `+layout` breadcrumb or nav-link from the existing study app navigation pointing at `/personal-minimums` (use the existing nav pattern -- this WP doesn't reshape navigation).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): reader + editor page`).
+- [x] Add an `+layout` breadcrumb or nav-link from the existing study app navigation pointing at `/personal-minimums` (use the existing nav pattern -- this WP doesn't reshape navigation).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): reader + editor page`).
 
 #### C.2 History page
 
-- [ ] Create `apps/study/src/routes/(app)/personal-minimums/history/+page.server.ts`: loads `getPersonalMinimumsHistory(locals.user.id)`.
-- [ ] Create `apps/study/src/routes/(app)/personal-minimums/history/+page.svelte`:
+- [x] Create `apps/study/src/routes/(app)/personal-minimums/history/+page.server.ts`: loads `getPersonalMinimumsHistory(locals.user.id)`.
+- [x] Create `apps/study/src/routes/(app)/personal-minimums/history/+page.svelte`:
   - Lists every revision, newest first, with `effective_from` -> `effective_until` window and the per-field values.
   - Read-only; no edit / delete controls. (Editing happens by creating a new revision on the main page.)
   - Notes field renders rendered markdown if present (server-side render via the existing markdown pipeline).
-- [ ] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): read-only history page`).
+- [x] Run `bun run check` -- 0 errors. Commit (`feat(study/personal-minimums): read-only history page`).
 
 #### C.3 Phase C close
 
-- [ ] Add Playwright e2e tests at `tests/e2e/personal-minimums.spec.ts`:
+- [x] Add Playwright e2e tests at `tests/e2e/personal-minimums.spec.ts`:
   - Empty-state: pilot navigates to `/personal-minimums`, sees the empty state pre-seeded with defaults, fills the form, saves, sees the saved record.
   - Edit flow: existing record renders in read mode; click Edit, change ceiling, save, see the new value as active.
   - Validation: enter `crosswindTotalKt: 25, windTotalKt: 20` and submit; expect the inline error to surface and the save NOT to fire.
   - History: after two edits, `/personal-minimums/history` shows three rows (one active + two superseded) ordered newest-first.
-- [ ] Run `bun test:e2e tests/e2e/personal-minimums.spec.ts` -- all green. Run `bun run check` -- 0 errors.
-- [ ] Open PR `feat(personal-minimums): Phase C -- editor surface (study app)`. Body summarizes the routes + form actions + e2e coverage.
+- [x] Run `bun test:e2e tests/e2e/personal-minimums.spec.ts` -- all green. Run `bun run check` -- 0 errors.
+- [x] Open PR `feat(personal-minimums): Phase C -- editor surface (study app)`. Body summarizes the routes + form actions + e2e coverage.
 
 ### Phase D: implications subpanel + knowledge-node nudge
 
