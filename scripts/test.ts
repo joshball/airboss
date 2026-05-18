@@ -308,8 +308,10 @@ async function runIntegration(input: readonly string[]): Promise<void> {
 	// `list` mode -> a --grep that matches nothing, so Playwright registers
 	// the project (booting the webServer + spec) without executing a test.
 	// The spec, seeing SWEEP_LIST=1, prints the URL inventory itself.
+	// `--pass-with-no-tests` keeps the exit code 0: a zero-test run is the
+	// intended success path here, not a "no tests found" failure.
 	if (parsed.list) {
-		cmd.push('--grep', '$^');
+		cmd.push('--grep', '$^', '--pass-with-no-tests');
 	} else if (parsed.books.length > 0) {
 		// `--book` filters via a Playwright --grep against the test titles
 		// (which the spec names `kind/documentSlug`). Multiple books are
