@@ -27,6 +27,7 @@ import { QUERY_PARAMS } from '@ab/constants';
 import { personalMinimumsInputSchema } from '@ab/types';
 import { renderMarkdown } from '@ab/utils';
 import { fail, redirect } from '@sveltejs/kit';
+import { computeImplications, type ImplicationsResult } from './_lib/implications.server';
 import type { Actions, PageServerLoad } from './$types';
 
 /** Number of recent revisions shown inline on the main page. */
@@ -44,6 +45,13 @@ export interface PersonalMinimumsPageData {
 	 * the read / edit flip needs no client-side action round-trip.
 	 */
 	editing: boolean;
+	/**
+	 * Implications of the active minimums against the wx-engine scenarios.
+	 * `null` when there is no active record -- the subpanel renders a
+	 * "set your minimums" placeholder rather than running comparisons
+	 * against values the pilot has not agreed to.
+	 */
+	implications: ImplicationsResult | null;
 }
 
 export const load: PageServerLoad = async (event): Promise<PersonalMinimumsPageData> => {
@@ -53,11 +61,13 @@ export const load: PageServerLoad = async (event): Promise<PersonalMinimumsPageD
 		getPersonalMinimumsHistory(user.id),
 	]);
 	const editing = active === null || event.url.searchParams.get(QUERY_PARAMS.EDIT) === '1';
+	const implications = active === null ? null : await computeImplications(active);
 	return {
 		active,
 		activeNotesHtml: active?.notes ? renderMarkdown(active.notes) : null,
 		history: history.slice(0, HISTORY_PREVIEW_LIMIT),
 		editing,
+		implications,
 	};
 };
 
