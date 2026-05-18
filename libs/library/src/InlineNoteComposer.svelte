@@ -31,12 +31,16 @@ export interface InlineNoteComposerProps {
 
 <script lang="ts">
 import { NOTE_BODY_MAX_LENGTH, NOTE_FOLLOW_UP_MAX_LENGTH, NOTE_TITLE_MAX_LENGTH } from '@ab/constants';
+import { untrack } from 'svelte';
 
 let { prefill, onSave, onClose, busy = false, flash = null, errorMessage = null }: InlineNoteComposerProps = $props();
 
-let bodyMd = $state(prefill.bodyMd ?? '');
-let title = $state(prefill.title ?? '');
-let quotedExcerpt = $state(prefill.quotedExcerpt ?? '');
+// Seed from the toolbar capture. The `$effect` below re-syncs on every
+// prefill change, so the initializer only needs the first value --
+// `untrack` makes that intent explicit and silences `state_referenced_locally`.
+let bodyMd = $state(untrack(() => prefill.bodyMd ?? ''));
+let title = $state(untrack(() => prefill.title ?? ''));
+let quotedExcerpt = $state(untrack(() => prefill.quotedExcerpt ?? ''));
 let tagsRaw = $state('');
 let bodyEl = $state<HTMLTextAreaElement | null>(null);
 
@@ -83,6 +87,9 @@ function close() {
 void NOTE_FOLLOW_UP_MAX_LENGTH;
 </script>
 
+<!-- Forms bubble keydown from their inputs; Cmd+Enter-to-submit is an
+     intentional shortcut. -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form class="composer" onsubmit={submit} onkeydown={handleKeyDown} data-testid="inline-note-composer">
 	<header class="composer-head">
 		<h2>Note</h2>

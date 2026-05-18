@@ -54,6 +54,7 @@
 
 import { mkdirSync, openSync, writeSync } from 'node:fs';
 import { resolve } from 'node:path';
+import { seedCourses } from '@ab/bc-study/server';
 import { DEV_ACCOUNTS, DEV_DB_URL, DEV_SEED_ORIGIN_TAG, ENV_VARS } from '@ab/constants';
 import { client } from '@ab/db/connection';
 import { seedAsrsFromManifest } from '@ab/sources/asrs/seed';
@@ -73,7 +74,6 @@ import { prompt } from '../lib/prompt';
 import { runOrThrowPiped } from '../lib/spawn';
 import { type StatusLine, startStatusLine } from '../lib/status-line';
 import { migrateReferencesToStructured } from './migrate-references-to-structured';
-import { seedCourses } from '@ab/bc-study/server';
 import { type AbbySeedCounts, seedAbby } from './seed-abby';
 import { seedCardsForUser } from './seed-cards';
 import { seedCredentials } from './seed-credentials';
@@ -156,6 +156,42 @@ interface PhaseRunResult {
 type ProgressFn = (detail: string) => void;
 type PhaseFn = (progress: ProgressFn) => Promise<PhaseSummary>;
 
+/**
+ * A phase failure, carrying the phase name + per-phase log path so the
+ * top-level handler can print a tight one-liner instead of dumping a
+ * multi-screen drizzle `Failed query` stack. The full transcript (SQL,
+ * params, stack) is already in `.reports/seed/<phase>.log`.
+ */
+class PhaseError extends Error {
+	constructor(
+		readonly phase: Phase,
+		readonly logPath: string,
+		readonly cause: unknown,
+	) {
+		super(`seed phase "${phase}" failed`);
+		this.name = 'PhaseError';
+	}
+}
+
+/**
+ * Distil a thrown seed error to one human line. Drizzle wraps DB errors as
+ * `Failed query: <sql> params: <...>`; the useful signal is the Postgres
+ * detail on the `cause` (constraint name, conflicting value). Surface that;
+ * leave the SQL + params to the log file.
+ */
+function summarizeSeedError(err: unknown): string {
+	const pgCause = (err as { cause?: { detail?: string; constraint?: string; message?: string } }).cause;
+	if (pgCause?.constraint || pgCause?.detail) {
+		const constraint = pgCause.constraint ? `constraint ${pgCause.constraint}` : 'a constraint';
+		const detail = pgCause.detail ? ` -- ${pgCause.detail}` : '';
+		return `${constraint} violated${detail}`;
+	}
+	const msg = err instanceof Error ? err.message : String(err);
+	// Drizzle's `Failed query:` prefix is followed by raw SQL -- keep only
+	// the first line so the terminal stays one line, not a paragraph.
+	return msg.split('\n')[0] ?? msg;
+}
+
 async function runPhaseWithReport(phase: Phase, fn: PhaseFn): Promise<PhaseRunResult> {
 	mkdirSync(REPORT_DIR, { recursive: true });
 	const logPath = resolve(REPORT_DIR, `${phase}.log`);
@@ -204,8 +240,14 @@ async function runPhaseWithReport(phase: Phase, fn: PhaseFn): Promise<PhaseRunRe
 	console.error = consoleViaLog;
 
 	let summary: PhaseSummary = { headline: phase };
+	let phaseError: unknown;
 	try {
 		summary = await fn((detail) => status.detail(detail));
+	} catch (err) {
+		// The full SQL/params/stack is already in the per-phase log via the
+		// `logOnly` redirect. Capture the error and re-throw it wrapped so
+		// the top-level handler can print one clean line + the log path.
+		phaseError = err;
 	} finally {
 		process.stdout.write = originalStdoutWrite;
 		process.stderr.write = originalStderrWrite;
@@ -218,6 +260,17 @@ async function runPhaseWithReport(phase: Phase, fn: PhaseFn): Promise<PhaseRunRe
 		} catch {
 			// ignore
 		}
+	}
+	if (phaseError !== undefined) {
+		// Make sure the raw error lands in the log before surfacing the
+		// summary (the stdout redirect is already torn down here).
+		try {
+			const raw = phaseError instanceof Error ? (phaseError.stack ?? phaseError.message) : String(phaseError);
+			writeSync(fd, Buffer.from(`\n--- phase error ---\n${raw}\n`, 'utf8'));
+		} catch {
+			// best-effort
+		}
+		throw new PhaseError(phase, logPath, phaseError);
 	}
 	return { bytesLogged, logPath, summary };
 }
@@ -561,7 +614,16 @@ async function main(): Promise<void> {
 
 main()
 	.catch((err) => {
-		process.stderr.write(`seed-all: ${(err as Error).stack ?? err}\n`);
+		if (err instanceof PhaseError) {
+			// One clean line: which phase, what broke, where the full
+			// transcript is. No SQL, no params, no multi-screen stack.
+			process.stderr.write(
+				`\nseed-all: phase "${err.phase}" failed -- ${summarizeSeedError(err.cause)}\n` +
+					`  full transcript: ${err.logPath}\n`,
+			);
+		} else {
+			process.stderr.write(`seed-all: ${(err as Error).stack ?? err}\n`);
+		}
 		process.exitCode = 1;
 	})
 	.finally(() => client.end());

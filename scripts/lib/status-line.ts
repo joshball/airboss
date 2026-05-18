@@ -49,7 +49,8 @@ export function startStatusLine(initialLabel: string): StatusLine {
 	let interval: NodeJS.Timeout | null = null;
 	let stopped = false;
 	let lastNonTtyEmittedAt = 0;
-	let lastNonTtyLine = '';
+	/** Last `label: detail` actually emitted to a non-TTY stream (no timestamp). */
+	let lastNonTtyContent = '';
 
 	const formatElapsed = (): string => {
 		const seconds = Math.floor((Date.now() - startedAt) / 1000);
@@ -69,13 +70,21 @@ export function startStatusLine(initialLabel: string): StatusLine {
 				detail.length > 0 ? `${spinner} ${label} (${elapsed}) -- ${detail}` : `${spinner} ${label} (${elapsed})`;
 			process.stdout.write(`${ANSI_CR}${ANSI_CLEAR_LINE}${truncateForTerminal(line)}`);
 		} else {
-			// Non-TTY: emit plain lines but throttle to once every 5s so a
-			// piped seed log doesn't grow unbounded.
-			const NON_TTY_THROTTLE_MS = 5_000;
-			const line = detail.length > 0 ? `[${elapsed}] ${label}: ${detail}` : `[${elapsed}] ${label}`;
-			if (line !== lastNonTtyLine && Date.now() - lastNonTtyEmittedAt >= NON_TTY_THROTTLE_MS) {
-				process.stdout.write(`${line}\n`);
-				lastNonTtyLine = line;
+			// Non-TTY (piped to a file / through `runTee`): emit one plain
+			// line per *real* state change -- a new label or detail -- not
+			// once per elapsed-clock tick. The old throttle keyed off the
+			// whole line (which carries the timestamp), so a 50s phase that
+			// never changed its detail still printed 10 near-identical
+			// `[5s]/[10s]/.../[50s]` lines. A heartbeat every HEARTBEAT_MS
+			// proves liveness on a long silent phase without the spam.
+			const HEARTBEAT_MS = 30_000;
+			const content = detail.length > 0 ? `${label}: ${detail}` : label;
+			const contentChanged = content !== lastNonTtyContent;
+			const heartbeatDue = Date.now() - lastNonTtyEmittedAt >= HEARTBEAT_MS;
+			if (contentChanged || heartbeatDue) {
+				const suffix = contentChanged ? '' : ' (still running)';
+				process.stdout.write(`[${elapsed}] ${content}${suffix}\n`);
+				lastNonTtyContent = content;
 				lastNonTtyEmittedAt = Date.now();
 			}
 		}

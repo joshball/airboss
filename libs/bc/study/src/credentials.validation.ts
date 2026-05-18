@@ -130,45 +130,42 @@ export type SyllabusManifest = z.infer<typeof syllabusManifestSchema>;
  * derives `is_leaf` from the absence of children at upsert time, but the
  * schema enforces the level-vs-children consistency where authoring should
  * align (an area must have children; an element must not).
+ *
+ * Recursion is expressed with a zod-4 getter, and the getter's return is
+ * annotated `z.ZodTypeAny` -- the minimum that breaks the self-reference
+ * cycle without forcing TypeScript to re-instantiate (and then fail to
+ * reconcile) the `citations` discriminated-union inference across module
+ * graphs. Consumers read the node type from `SyllabusNodeYaml` below,
+ * which `z.infer` derives from the finished schema in one pass.
  */
-type SyllabusNodeYamlBase = {
-	level: SyllabusNodeLevel;
-	code: string;
-	title: string;
-	description?: string;
-	triad?: ACSTriad;
-	required_bloom?: BloomLevel;
-	airboss_ref?: string;
-	citations: z.infer<typeof structuredCitationSchema>[];
-	knowledge_nodes: { node_slug: string; weight?: number; notes?: string }[];
-	children: SyllabusNodeYamlBase[];
-};
+export const syllabusNodeYamlSchema = z.object({
+	level: z.enum(SYLLABUS_NODE_LEVEL_VALUES as unknown as readonly [SyllabusNodeLevel, ...SyllabusNodeLevel[]]),
+	code: z.string().min(1),
+	title: z.string().min(1),
+	description: z.string().optional(),
+	triad: z.enum(ACS_TRIAD_VALUES as unknown as readonly [ACSTriad, ...ACSTriad[]]).optional(),
+	required_bloom: z.enum(BLOOM_LEVEL_VALUES as unknown as readonly [BloomLevel, ...BloomLevel[]]).optional(),
+	airboss_ref: z
+		.string()
+		.regex(/^airboss-ref:.+$/, { message: 'airboss_ref must start with `airboss-ref:`' })
+		.optional(),
+	citations: z.array(structuredCitationSchema).default([]),
+	knowledge_nodes: z
+		.array(
+			z.object({
+				node_slug: z.string().min(1),
+				weight: z.number().min(0).max(1).default(1.0),
+				notes: z.string().default(''),
+			}),
+		)
+		.default([]),
+	get children(): z.ZodTypeAny {
+		return z.array(syllabusNodeYamlSchema).default([]);
+	},
+});
 
-export const syllabusNodeYamlSchema: z.ZodType<SyllabusNodeYamlBase> = z.lazy(() =>
-	z.object({
-		level: z.enum(SYLLABUS_NODE_LEVEL_VALUES as unknown as readonly [SyllabusNodeLevel, ...SyllabusNodeLevel[]]),
-		code: z.string().min(1),
-		title: z.string().min(1),
-		description: z.string().optional(),
-		triad: z.enum(ACS_TRIAD_VALUES as unknown as readonly [ACSTriad, ...ACSTriad[]]).optional(),
-		required_bloom: z.enum(BLOOM_LEVEL_VALUES as unknown as readonly [BloomLevel, ...BloomLevel[]]).optional(),
-		airboss_ref: z
-			.string()
-			.regex(/^airboss-ref:.+$/, { message: 'airboss_ref must start with `airboss-ref:`' })
-			.optional(),
-		citations: z.array(structuredCitationSchema).default([]),
-		knowledge_nodes: z
-			.array(
-				z.object({
-					node_slug: z.string().min(1),
-					weight: z.number().min(0).max(1).default(1.0),
-					notes: z.string().default(''),
-				}),
-			)
-			.default([]),
-		children: z.array(syllabusNodeYamlSchema).default([]),
-	}),
-);
+/** Parsed (output) shape of one syllabus node, inferred from the schema. */
+export type SyllabusNodeYaml = z.infer<typeof syllabusNodeYamlSchema>;
 
 /**
  * Per-area authoring file: `course/syllabi/<slug>/areas/<area-code>-<title>.yaml`.

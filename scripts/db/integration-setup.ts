@@ -79,4 +79,11 @@ async function main(): Promise<void> {
 	process.stdout.write(`integration DB ready: ${INTEGRATION_DB_NAME}\n`);
 }
 
-await main();
+main().catch((err) => {
+	// `seed-all.ts` already printed a clean one-line diagnosis + log path.
+	// Don't re-dump the `subprocess failed (exit N)` stack on top of it --
+	// just exit non-zero so Playwright's globalSetup sees the failure.
+	const msg = err instanceof Error ? err.message : String(err);
+	process.stderr.write(`integration-setup: ${msg.split('\n')[0]}\n`);
+	process.exit(1);
+});

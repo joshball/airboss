@@ -35,13 +35,18 @@ export interface InlineCardComposerProps {
 </script>
 
 <script lang="ts">
+import { untrack } from 'svelte';
+
 let { prefill, domains, onSave, onClose, busy = false, flash = null, errorMessage = null }: InlineCardComposerProps =
 	$props();
 
-let front = $state(prefill.front);
-let back = $state(prefill.back);
-let domain = $state(prefill.domain ?? '');
-let tagsRaw = $state(prefill.tags?.join(', ') ?? '');
+// Seed from the toolbar capture. The `$effect` below re-syncs on every
+// prefill change, so the initializer only needs the first value --
+// `untrack` makes that intent explicit and silences `state_referenced_locally`.
+let front = $state(untrack(() => prefill.front));
+let back = $state(untrack(() => prefill.back));
+let domain = $state(untrack(() => prefill.domain ?? ''));
+let tagsRaw = $state(untrack(() => prefill.tags?.join(', ') ?? ''));
 let frontEl = $state<HTMLTextAreaElement | null>(null);
 
 const canSubmit = $derived(
@@ -86,6 +91,9 @@ function handleKeyDown(event: KeyboardEvent) {
 const hasUnsavedContent = $derived(front.trim().length > 0 || back.trim().length > 0);
 </script>
 
+<!-- Forms bubble keydown from their inputs; Cmd+Enter-to-submit is an
+     intentional shortcut. -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <form class="composer" onsubmit={submit} onkeydown={handleKeyDown} data-testid="inline-card-composer">
 	<header class="composer-head">
 		<h2>Card now</h2>
