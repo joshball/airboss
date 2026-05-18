@@ -1,9 +1,9 @@
 ---
 type: unfinished-rollup
-sessions: 19
-items: 41
+sessions: 24
+items: 44
 first_rolled: 2026-05-17T21:02:21Z
-last_rolled: 2026-05-17T21:02:21Z
+last_rolled: 2026-05-18T03:10:00Z
 consumed:
   - 0160f787-1218-43bd-8d38-56fb67570489
   - 20260515-180643-56167
@@ -25,17 +25,40 @@ consumed:
   - 20260517-163554-26560
   - 9b64fd7c-3daa-4190-a412-0f87197e476e
   - e76c9f78-a389-4c89-8c61-10fc4ee1e108
+  - 20260517-212403-79769
+  - 20260517-212610-82094
+  - 20260517-215641-9754
+  - 20260517-222752-41597
+  - 5756488e-807a-478e-91ad-f15964f9d39e
 ---
 
 # Unfinished Work -- Rollup
 
-Consolidated from 19 sessions across 2 days (2026-05-15, 2026-05-17). Each item lists the session(s) that flagged it. De-duplicated by topic; highest severity kept.
+Consolidated from 24 sessions across 2 days (2026-05-15, 2026-05-17). Each item lists the session(s) that flagged it. De-duplicated by topic; highest severity kept.
 
 ## Critical (0)
 
 None.
 
-## High (6)
+## High (8)
+
+### `integration --full` never verified green on merged main
+
+- **What**: `bun run test integration --full` (~3484-URL prod-build sweep -- the original crash repro) has never had a clean uninterrupted pass. Attempts were interrupted by a port conflict from orphan webServer processes, then a background run killed (SIGTERM to the DB pool; `last-run.json` showed `wallMs: 15`, `total: 0`, `status: failed`). The default 209-URL sample sweep passes cleanly, proving the prod server + zod-4 fix work under load -- but the full run is the explicit gate.
+- **Where**: `bun run test integration --full`; artefacts at `tests/integration/.out/last-run.json` + `coverage-summary.json`.
+- **Why deferred**: sessions ended before a clean run; the parent tree was being thrashed by concurrent agents.
+- **Next action**: `pkill -f 'build/index.js'; pkill -f playwright`, confirm port 9647 free, then run `bun run test integration --full` to completion from a clean worktree off `main`; confirm it survives without the server OOM-crashing.
+- **Severity**: high
+- **Sessions**: 20260517-212403-79769, 20260517-222752-41597, 5756488e-807a-478e-91ad-f15964f9d39e
+
+### `@ab/sources/regs/ingest` subpath export missing -- breaks register.test.ts
+
+- **What**: `scripts/sources/register.test.ts` fails -- `Cannot find package '@ab/sources/regs/ingest'`. PR #1056 changed `scripts/sources/register/cfr.ts` to import `@ab/sources/regs/ingest`, but `libs/sources/package.json` `exports` only declares `.` and `./server` -- no `./regs/ingest` entry.
+- **Where**: `libs/sources/package.json` exports map; `scripts/sources/register/cfr.ts:15`; `libs/sources/src/regs/ingest.ts` (target file exists).
+- **Why deferred**: pre-existing breakage from merged sibling PR #1056; unrelated to the zod work that surfaced it.
+- **Next action**: add a `"./regs/ingest"` (and likely `"./regs"`) entry to the `exports` map in `libs/sources/package.json` pointing at `./src/regs/ingest.ts`; re-run `scripts/sources/register.test.ts`.
+- **Severity**: high
+- **Sessions**: 20260517-222752-41597, 5756488e-807a-478e-91ad-f15964f9d39e
 
 ### 15 WP walkthroughs owed human sign-off
 
@@ -56,12 +79,12 @@ None.
 
 ### Real-browser hydration verification owed across recent surfaces
 
-- **What**: Agents ran `bun run check` + svelte-check + unit/integration tests (green) but never loaded the actual pages in a real browser for the rich-reader + reader-prefs surface and the weather-comprehensive s11 course flow (PRs #932, #948, #944). Sandbox/worktree agents have no DATABASE_URL.
+- **What**: Agents ran `bun run check` + svelte-check + unit/integration tests (green) but never loaded the actual pages in a real browser for the rich-reader + reader-prefs surface and the weather-comprehensive s11 course flow (PRs #932, #948, #944). The rich-reader WP `wp-flightbag-rich-reader` is on main but still `status: draft` with pending human review, and NOW.md flags its shipped code has never been loaded in a real browser. Sandbox/worktree agents have no DATABASE_URL.
 - **Where**: flightbag PHAK reader + study `/notes`; `https://study.airboss.test/courses/weather-comprehensive/s11.*`.
 - **Why deferred**: agents lack DATABASE_URL in worktrees; CLAUDE.md requires a real-browser load before claiming browser-correctness.
 - **Next action**: spin up the dev server with DB, click through the affected pages, watch the devtools console.
 - **Severity**: high
-- **Sessions**: 20260515-181801-71712, 80d9ef12
+- **Sessions**: 20260515-181801-71712, 80d9ef12, 5756488e-807a-478e-91ad-f15964f9d39e
 
 ### ADR 028 (content-intent frontmatter) awaits human approval
 
@@ -90,7 +113,34 @@ None.
 - **Severity**: high
 - **Sessions**: cd16e567
 
-## Medium (16)
+## Medium (17)
+
+### `14cfr14` missing CFR section rows (failing seed-shape test)
+
+- **What**: `scripts/db/seed-references-from-manifest.test.ts` fails -- "every CFR reference with sections has at least one top-level section row", missing `14cfr14`. Likely the same class of environment-dependent failure as the "3 pre-existing test failures" / "CFR body derivatives missing in fresh worktrees" items below.
+- **Where**: `scripts/db/seed-references-from-manifest.test.ts:1456`.
+- **Why deferred**: missing-source-corpus / environment-dependent; the test message says to run `bun run sources register cfr --title=14 --edition=<date>` then re-seed.
+- **Next action**: determine whether Title 14 CFR Part 14 should be in the registered corpus; if so register + re-seed it, otherwise scope the test to the parts actually present (see the "CFR body derivatives" low item -- option c).
+- **Severity**: medium
+- **Sessions**: 20260517-222752-41597, 5756488e-807a-478e-91ad-f15964f9d39e
+
+### `bun run check branch` not run on the zod-4 merged end-state
+
+- **What**: the integration-sweep brief asked for `bun run check branch` clean as the end gate. The zod-4 PRs (#1064/#1065) passed `check dirty` individually pre-merge, but a final `check branch` against merged `main` was not run. (The later contrast PR #1067 did pass a full `check branch` from its worktree.)
+- **Where**: repo root, `bun run check branch`.
+- **Why deferred**: session ended before the final verification pass.
+- **Next action**: from a clean worktree on latest `main`, run `bun run check branch` and confirm 0 errors / 0 warnings.
+- **Severity**: medium
+- **Sessions**: 20260517-222752-41597
+
+### `ball-worktree/guard.sh` syntax error blocked all tool calls
+
+- **What**: the `ball-worktree` PreToolUse guard hook crashed on a bash syntax error at line 331 -- `unexpected token ';&'`. Because it is a PreToolUse hook it blocked EVERY Bash and Read call until fixed out-of-band. `;&` is a `case`-fallthrough operator, invalid inside a `[[ ]]` conditional.
+- **Where**: `~/src/_me/ai/agent-skills/skills/worktree/ball-worktree/guard.sh:331` (a shared skills repo, outside airboss).
+- **Why deferred**: not an airboss-repo file; fixed out-of-band mid-session so work could continue, but the root cause should be confirmed.
+- **Next action**: verify line 331 of guard.sh (likely `;&` -> `;;`, or a misplaced `[[`/`case` boundary); confirm `bash -n guard.sh` parses cleanly.
+- **Severity**: medium
+- **Sessions**: 5756488e-807a-478e-91ad-f15964f9d39e
 
 ### AvWx citation review queue grind (17 rows)
 
@@ -112,7 +162,7 @@ None.
 
 ### Implement flightbag-citation-url-migration WP
 
-- **What**: WP #979 authored `status: draft`, 7 docs. Retires the 6 live `LIBRARY_*` constants via `urlForReference()` adoption across 18 call sites; Phase C includes the POH umbrella card chrome-only fix.
+- **What**: WP #979 authored `status: draft`, 7 docs. Retires the 6 live `LIBRARY_*` constants via `urlForReference()` adoption across 18 call sites; Phase C includes the POH umbrella card chrome-only fix. (Note: a duplicate spec branch `wp-flightbag-citation-url-migration-spec` was triaged as stale and deleted on 2026-05-17 -- the spec is already on main via #979.)
 - **Where**: `docs/work-packages/flightbag-citation-url-migration/`.
 - **Why deferred**: architectural decisions captured; implementation is a separate effort.
 - **Next action**: `/ball-wp-build`.
@@ -130,7 +180,7 @@ None.
 
 ### Build faa-documentation-navigation course from its WP
 
-- **What**: the "Navigating FAA Documentation" course WP docs exist (PR #1022) but per two sessions there is ambiguity -- one session says the course was built across 5 worktrees with 8 PRs (#1022, #1024, #1027-#1031, #1036, #1037), another says only the WP was authored. Reconcile: the build PRs landed; what remains is the manual test pass.
+- **What**: the "Navigating FAA Documentation" course WP docs exist (PR #1022); per two sessions there is ambiguity -- one says the course was built across 5 worktrees with 8 PRs (#1022, #1024, #1027-#1031, #1036, #1037), another says only the WP was authored. Reconcile: the build PRs landed; what remains is the manual test pass.
 - **Where**: `docs/work-packages/faa-documentation-navigation/`.
 - **Why deferred**: WP authoring vs building are separate; if built, the 13-scenario manual test plan is unwalked.
 - **Next action**: confirm build status; if built, user walks `test-plan.md` (13 FDN scenarios) and flips `human_review_status`.
@@ -202,7 +252,7 @@ None.
 
 ### legacy-citation-shape warnings (200 occurrences)
 
-- **What**: the knowledge build emits 200 `legacy-citation-shape` warnings -- citations using `source:` instead of structured `ref:` per ADR 019. (Note: the wx-product reference pages were separately verified in PR #1020; this item is the knowledge-graph corpus.)
+- **What**: the knowledge build emits 200 `legacy-citation-shape` warnings -- citations using `source:` instead of structured `ref:` per ADR 019. (The wx-product reference pages were separately verified in PR #1020; this item is the knowledge-graph corpus.)
 - **Where**: `course/knowledge/weather/*/node.md` and others (ACs, AIM paragraphs, ACS, NTSB, POH cites).
 - **Why deferred**: migration is intentionally human-in-the-loop; dry-run finds 0 auto-migratable rows.
 - **Next action**: deliberate authoring pass mapping each legacy citation to a canonical `airboss-ref:` URI. These warnings become errors per the ADR 019 graduation plan.
@@ -217,15 +267,6 @@ None.
 - **Next action**: the edition-writer / promotion-batches WP owner triages -- fix or rewrite the assertion.
 - **Severity**: medium
 - **Sessions**: afc4eeb6
-
-### fix/contrast-skips-deep-ink branch -- unmerged, needs rebase
-
-- **What**: 38 advisory contrast skips fixed via a `deepInk` token + `edge.default` tightening; branch pushed to origin, never PR'd (agent killed mid-task). Subsequent main activity added consumer-page `deepInk` references, so a rebase is now required.
-- **Where**: branch `fix/contrast-skips-deep-ink` (origin + local), 1 commit ahead / many behind.
-- **Why deferred**: agent process killed before `gh pr create`.
-- **Next action**: rebase against current main, resolve theme-palette + ~30 consumer-page conflicts, `bun run check` clean, 0 skipped tests, PR + merge. Or delete and redo.
-- **Severity**: medium
-- **Sessions**: cd16e567-tests-validator
 
 ### card-question-tier Phase 3 UI surfaces
 
@@ -267,7 +308,7 @@ None.
 
 ### Stale merged local branches blocked from deletion
 
-- **What**: several merged local branches cannot be deleted -- `git branch -d` refuses squash-merged branches and a coordination hook blocks `git branch -D` on worktree-style names. Named instances: `feat/flightbag-rich-reader`, `feat/flightbag-integration-suite`, `worktree-agent-a71596afef5fefea5`, plus ~28 stale `worktree-agent-*` refs.
+- **What**: several merged local branches cannot be deleted -- `git branch -d` refuses squash-merged branches and a coordination hook blocks `git branch -D` on worktree-style names. Named instances: `feat/flightbag-rich-reader`, `feat/flightbag-integration-suite`, `worktree-agent-a71596afef5fefea5`, plus ~28 stale `worktree-agent-*` refs. (Note: the 2026-05-17 branch-triage session cleared its own four -- `feat/flightbag-rich-reader`, `wp-flightbag-citation-url-migration-spec`, `fix/contrast-skips-deep-ink`, plus the rebase worktree -- so the named set here may be smaller now.)
 - **Where**: `git branch --list`.
 - **Why deferred**: squash-merge SHA mismatch + hook block; agents do not work around hooks.
 - **Next action**: user verifies each has no live worktree / no unmerged work, then batch `git branch -D`.
@@ -285,7 +326,7 @@ None.
 
 ### 3 pre-existing test failures (ac-conformance, seed-references)
 
-- **What**: `ac-conformance.test.ts` (x2) and `seed-references-from-manifest.test.ts` (x1) -- environmental DB-state issues, pass in isolation.
+- **What**: `ac-conformance.test.ts` (x2) and `seed-references-from-manifest.test.ts` (x1) -- environmental DB-state issues, pass in isolation. Related to the `14cfr14` medium item and the CFR-body-derivatives item below.
 - **Where**: `libs/bc/study/src/ac-conformance.test.ts`, `scripts/db/seed-references-from-manifest.test.ts`.
 - **Why deferred**: not introduced by the flagging session.
 - **Next action**: investigate test isolation; may be addressed by the `airboss_unit_test` isolated DB (PR #982).
@@ -299,146 +340,58 @@ None.
 - **Why deferred**: not a code bug -- passes in any environment that has run `bun run sources register cfr`.
 - **Next action**: cleanest is option (c) -- make the test skip the CFR-section assertion when no CFR body files are present, so a cache-less environment reports "skipped" not "failed".
 - **Severity**: low
-- **Sessions**: 9b64fd7c
-
-### Comment-vs-code mismatch in build-knowledge-index.ts
-
-- **What**: the comment at ~line 1086 says the index writes on dry-run; the `if (!args.dryRun)` gate contradicts it.
-- **Where**: `scripts/build-knowledge-index.ts:1086`.
-- **Why deferred**: pre-existing, out of scope.
-- **Next action**: fix the gate or fix the comment.
-- **Severity**: low
-- **Sessions**: 20260515-180643-56167
-
-### Run /ball-wp-coverage
-
-- **What**: scan for cohesive features that shipped without a work package.
-- **Where**: no artifact yet; `/ball-wp-coverage` skill.
-- **Why deferred**: bigger investigation, more product judgement; user did not request it.
-- **Next action**: run `/ball-wp-coverage`, then per gap decide retroactive WP / archive / punt.
-- **Severity**: low
-- **Sessions**: 20260515-181752-71057
-
-### Retention-bearing callouts -- Phase B + C
-
-- **What**: the retention-bearing-callouts plan has Phase A done (PR #1016); Phase B (path-scoped build validator requiring `:::cards` in study-content `:::tip`/`:::warn`) and Phase C (author-guidance doc) are not built.
-- **Where**: `docs/work/plans/2026-05-retention-bearing-callouts.md`.
-- **Why deferred**: future work; no backfill needed (study corpus has zero callouts today).
-- **Next action**: add the build-time validator rule scoped to `course/knowledge/**`, update authoring guidance.
-- **Severity**: low
-- **Sessions**: 20260517-163554-26560
-
-### wx-charts ADR 027 deferred chart families
-
-- **What**: 4 of 17 chart families (radar-mosaic, satellite IR/VIS/WV) lack engine-side wx-scenario derivations.
-- **Where**: `docs/decisions/027-wx-charts-artifact-layout/`; `docs/work-packages/wx-engine/OUT-OF-SCOPE.md`.
-- **Why deferred**: raster pipelines need separate authoring; not blocking v1.
-- **Next action**: revisit when satellite or radar pedagogy is exercised.
-- **Severity**: low
-- **Sessions**: 80d9ef12
-
-### Catalog coverage -- 44 uncovered METAR/TAF token families
-
-- **What**: 44 of 87 token families have no generated example because the wx-engine does not model the producing synoptic conditions (`+FC`, `VA`, `SQ`, `WS`, `BECMG`, ...).
-- **Where**: `/content/wx-catalog` gap view; `hangar-content-census/tasks.md` "Known follow-ups".
-- **Why deferred**: each is a small incremental engine feature.
-- **Next action**: prioritise + add engine features per token family.
-- **Severity**: low
-- **Sessions**: e76c9f78
-
-### frontal-pressure-march contributes 0 catalog examples
-
-- **What**: the temporal scenario `frontal-pressure-march` is not represented in the encoded-text catalog.
-- **Where**: `hangar-content-census/tasks.md` "Known follow-ups".
-- **Why deferred**: one authoring pass not yet done.
-- **Next action**: author `frontal-pressure-march` products into the catalog.
-- **Severity**: low
-- **Sessions**: e76c9f78
-
-### Walkthrough docs may drift from code
-
-- **What**: six feature walkthroughs in `docs/work/walkthroughs/20260513-flight/` were written against a 2026-05-13 snapshot; lens-ui and goal-composer were "in flight" then, so those docs describe intended shape. Also: 4 walkthrough scaffolds from PR #1012 (wx-engine, course-tree-arbitrary-depth, card-question-tier, weather-comprehensive) await the user running them.
-- **Where**: `docs/work/walkthroughs/20260513-flight/*.md`; `docs/work/walkthroughs/2026-05-16-*-walkthrough.md`.
-- **Why deferred**: point-in-time docs; manual testing is a human action.
-- **Next action**: after lens-ui / goal-composer ship signed-off, `/ball-wp-drift` reconcile `02-lens-ui.md` + `03-goal-composer.md`; user runs the 4 scaffolds.
-- **Severity**: low
-- **Sessions**: 20260515-180930-60283, 20260517-163554-26560
-
-### Svelte component tests fail under bun test
-
-- **What**: `bun test libs/help libs/aviation` reports ~118 failing svelte component tests -- they need vitest (happy-dom), not bun's runner; they pass under vitest.
-- **Where**: `libs/help/src/**/*.test.ts`, `libs/aviation/src/**/*.test.ts`.
-- **Why deferred**: pre-existing; cosmetic, does not gate `bun run check`.
-- **Next action**: skip `*.svelte.test.ts` from the `bun test` path (a `bunfig.toml` change).
-- **Severity**: low
-- **Sessions**: afc4eeb6
-
-### cleanup-cfr-part-14-orphan.ts is dead weight on fresh DBs
-
-- **What**: `scripts/db/cleanup-cfr-part-14-orphan.ts` was a one-shot repair; PR #986 fixed the seed pipeline so it is now a no-op on fresh DBs. Still useful for long-lived DBs with the orphan baked in.
-- **Where**: `scripts/db/cleanup-cfr-part-14-orphan.ts`.
-- **Why deferred**: deleting now strips the repair path for un-reseeded dev DBs.
-- **Next action**: once all dev DBs are confirmed reseeded, delete the script + its test (per "no legacy" rule).
-- **Severity**: low
 - **Sessions**: 9d89e07b
 
-### Uncommitted test-runner logging changes
+### Other agents' worktrees / branches accumulated in shared tree
 
-- **What**: `runTee` added to `scripts/lib/spawn.ts` + `scripts/test.ts` wired to write each unit-test run to `.cache/test/<label>-<timestamp>.log`. Verified working; was uncommitted on main at the flagging session's end.
-- **Where**: `scripts/lib/spawn.ts`, `scripts/test.ts`.
-- **Why deferred**: user did not ask to commit. NOTE: a later session (17883a4e) observed these two files dirty at its start and not its own -- likely the same uncommitted change; verify whether it has since landed.
-- **Next action**: confirm current state of the two files vs origin/main; if still uncommitted, `/qs` to ship or discard.
+- **What**: multiple sessions flagged ~8-12 other-agent branches and locked worktrees in the shared repo (`worktree-agent-*`, `track-a/*`, `track-c/*`, `feat/flightbag-*`, `feat/integration-sweep-*`, `chore/zod-4-upgrade`, etc.). The 2026-05-17 branch-triage session resolved the four it owned; most of the rest were cleared by a concurrent cleanup. Worktree-boundary rule means non-owning agents leave them alone.
+- **Where**: `git worktree list`, `git branch`.
+- **Why deferred**: not the flagging sessions' worktrees.
+- **Next action**: `/audit-worktrees` or `/loose-ends`; owning agents clean up. As of the last 2026-05-17 session only `main` remained locally.
 - **Severity**: low
-- **Sessions**: d83e4218, 17883a4e
+- **Sessions**: 20260517-212403-79769, 20260517-212610-82094
 
-### unresolved-edge warnings (11 occurrences)
+### Stale session-todo files on disk
 
-- **What**: 11 knowledge-graph edges across 3 nodes (`vfr-weather-minimums`, `crosswind-component`, `engine-failure-after-takeoff`) point at unauthored target nodes.
-- **Where**: per-node `node.md` frontmatter; `.reports/build-knowledge/warnings.json`.
-- **Why deferred**: each edge is a content judgement call.
-- **Next action**: walk the 11 with a content owner -- author the target or drop the edge.
+- **What**: the 2026-05-17 review + cleanup sessions wrote ~8 session todos under `docs/work/todos/` (`20260517-{03,04,05,06,10,11,12,14}-TODO.md`). Committed to main as part of their PRs but now spent.
+- **Where**: `docs/work/todos/20260517-*-TODO.md`.
+- **Why deferred**: not deferred work -- completed-session scratch; the `bun run track archive` 60-day rolling convention sweeps them.
+- **Next action**: none required; they archive automatically. A future scan should treat all `20260517-*` todo files as closed.
 - **Severity**: low
-- **Sessions**: cd16e567-tests-validator
+- **Sessions**: 20260517-215641-9754
 
-### Stale generated docs (SHIPPED.md, faa-docs.ts)
+## Resolved since the previous roll
 
-- **What**: (a) `docs/work/SHIPPED.md` is stale; `bun run track generate` refreshes it. (b) the FAA doc-registry generator was patched after Phase 1 shipped and may not have been re-run -- `libs/aviation/src/references/faa-docs.ts` may not reflect the patch (note: a later session 20260517-145336-25547 reports the generator drift was fixed at the root in PR #1013 -- likely resolved; verify).
-- **Where**: `docs/work/SHIPPED.md`; `scripts/generate-faa-doc-registry.ts`, `libs/aviation/src/references/faa-docs.ts`.
-- **Why deferred**: generated artifacts, out of scope of feature PRs.
-- **Next action**: `bun run track generate` for SHIPPED.md; confirm faa-docs.ts is current (likely already fixed by PR #1013).
-- **Severity**: low
-- **Sessions**: 20260517-163554-26560, 20260515-223922-1639, 20260517-145336-25547
-
-### Flaky hangar-jobs worker test
-
-- **What**: `libs/hangar-jobs/src/worker.test.ts:273` failed once under parallel load, passed in isolation and on retry -- a race on `hangar_job_log` row visibility.
-- **Where**: `libs/hangar-jobs/src/worker.test.ts:273`.
-- **Why deferred**: intermittent, not deterministically reproducible.
-- **Next action**: `bun run bug new flaky-worker-audit-log-race` if it recurs; likely fix is `await` the log insertion in the worker.
-- **Severity**: low
-- **Sessions**: cd16e567-tests-validator
+- **`fix/contrast-skips-deep-ink` branch** -- was a medium item ("unmerged, needs rebase"). Resolved 2026-05-17: the branch was rebased onto current main, the theme-palette conflict resolved, `bun run check branch` ran clean (contrast-matrix 119 passed / 0 skipped), and it merged as **PR #1067**. The branch is deleted.
+- **zod 3->4 / better-auth prod-build boot crash** -- the adapter-node servers crashed at boot (`z.coerce.boolean().meta is not a function`). Resolved via **PR #1064** (catalog zod -> 4, migration fixes). Both flightbag + study build and boot clean.
+- **`integration list` wrong exit code** -- resolved via **PR #1065** (`--pass-with-no-tests`).
 
 ## Per-session contributions
 
-| Session | Date | Branch | Items |
-|---------|------|--------|-------|
-| 0160f787-1218-43bd-8d38-56fb67570489 | 2026-05-15 | main | 0 |
-| 20260515-180643-56167 | 2026-05-15 | main | 9 |
-| 20260515-180930-60283 | 2026-05-15 | main | 1 |
-| 20260515-181752-71057 | 2026-05-15 | main | 3 |
-| 20260515-181801-71712 | 2026-05-15 | main | 10 |
-| 20260515-223922-1639 | 2026-05-15 | main | 3 |
-| 80d9ef12-fb09-413b-8ec5-22edba98423c | 2026-05-15 | main | 8 |
-| 9d89e07b-d64e-478c-bf06-b7658c4674b5 | 2026-05-15 | main | 2 |
-| afc4eeb6-67f0-4d4e-b34e-5401e4a18613 | 2026-05-15 | main | 3 |
-| ba6a23ad-37e1-49b3-ad2e-e11bdee12068 | 2026-05-15 | main | 1 |
-| cd16e567-...-tests-validator | 2026-05-15 | main | 4 |
-| cd16e567-1d20-4267-86c4-750e4beac0fb | 2026-05-15 | main | 7 |
-| d83e4218-eda8-4ec0-bb92-2faf2f55eddc | 2026-05-15 | main | 1 |
-| 17883a4e-b98f-46fb-9528-2749da908b71 | 2026-05-17 | main | 3 |
-| 20260517-145336-25547 | 2026-05-17 | main | 0 |
-| 20260517-155020-81423 | 2026-05-17 | main | 2 |
-| 20260517-160100-94636 | 2026-05-17 | main | 4 |
-| 20260517-163554-26560 | 2026-05-17 | main | 5 |
-| 9b64fd7c-3daa-4190-a412-0f87197e476e | 2026-05-17 | main | 1 |
-| e76c9f78-a389-4c89-8c61-10fc4ee1e108 | 2026-05-17 | main | 8 |
+| Session | Date | Branch | Items contributed |
+|----------------------------------------|------------|--------|-------------------|
+| 0160f787                               | 2026-05-15 | -      | 0                 |
+| 20260515-180643-56167                  | 2026-05-15 | -      | 6                 |
+| 20260515-180930-60283                  | 2026-05-15 | -      | 1                 |
+| 20260515-181752-71057                  | 2026-05-15 | -      | 2                 |
+| 20260515-181801-71712                  | 2026-05-15 | -      | 3                 |
+| 20260515-223922-1639                   | 2026-05-15 | -      | 0                 |
+| 80d9ef12                               | 2026-05-15 | -      | 2                 |
+| 9d89e07b                               | 2026-05-15 | -      | 2                 |
+| afc4eeb6                               | 2026-05-15 | -      | 1                 |
+| ba6a23ad                               | 2026-05-15 | -      | 1                 |
+| cd16e567-tests-validator               | 2026-05-15 | -      | 2                 |
+| cd16e567                               | 2026-05-15 | -      | 6                 |
+| d83e4218                               | 2026-05-15 | -      | 0                 |
+| 17883a4e                               | 2026-05-17 | main   | 2                 |
+| 20260517-145336-25547                  | 2026-05-17 | main   | 0                 |
+| 20260517-155020-81423                  | 2026-05-17 | main   | 2                 |
+| 20260517-160100-94636                  | 2026-05-17 | main   | 4                 |
+| 20260517-163554-26560                  | 2026-05-17 | main   | 3                 |
+| 9b64fd7c                               | 2026-05-17 | main   | 0                 |
+| e76c9f78                               | 2026-05-17 | main   | 5                 |
+| 20260517-212403-79769                  | 2026-05-17 | main   | 3                 |
+| 20260517-212610-82094                  | 2026-05-17 | main   | 1                 |
+| 20260517-215641-9754                   | 2026-05-17 | main   | 1                 |
+| 20260517-222752-41597                  | 2026-05-17 | main   | 5                 |
+| 5756488e-807a-478e-91ad-f15964f9d39e   | 2026-05-17 | main   | 4                 |
