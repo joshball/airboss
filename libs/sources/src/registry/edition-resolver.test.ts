@@ -194,16 +194,26 @@ describe('upsertEdition idempotency', () => {
 		// on. ADR 026 §6 / `editions_source_label_uq` partial of `db/schema.ts`.
 		const id = sourceId('uq-collision');
 		await upsertEdition({ sourceId: id, editionLabel: 'rev-a', publishedAt: new Date('2024-01-01') });
-		await expect(
-			db.insert(editionsTable).values({
+		// The insert builder is a Drizzle thenable, not a native Promise; the
+		// `expect(...).rejects` matcher only accepts a real Promise (rejecting a
+		// thenable -- or an async fn wrapping it -- with "expected a promise").
+		// Drive the query through an explicit `await` and assert on the caught
+		// error instead.
+		let collisionError: unknown;
+		try {
+			await db.insert(editionsTable).values({
 				id: createId('edition'),
 				sourceId: id,
 				editionLabel: 'rev-a',
 				publishedAt: new Date('2024-02-01'),
 				retiredAt: null,
 				metadata: null,
-			}),
-		).rejects.toThrow(/Failed query: insert into "sources_registry"\."editions"/);
+			});
+		} catch (err) {
+			collisionError = err;
+		}
+		expect(collisionError).toBeInstanceOf(Error);
+		expect((collisionError as Error).message).toMatch(/Failed query: insert into "sources_registry"\."editions"/);
 
 		// Pair with a different label is allowed -- the constraint is per-pair.
 		await expect(
