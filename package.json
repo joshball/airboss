@@ -26,6 +26,7 @@
 		"sources": "bun scripts/sources.ts",
 		"references": "bun scripts/references.ts",
 		"charts": "bun scripts/charts.ts",
+		"hazards": "bun scripts/hazards.ts",
 		"wx-scenario": "bun scripts/wx-scenario.ts",
 		"xc-scenario": "bun scripts/xc-scenario.ts",
 		"sectionals": "bun scripts/sectionals.ts",
